@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Quasar App</string>
+    <string name="title_activity_main">Quasar App</string>
+    <string name="package_name">git.shin.animevsub</string>
+    <string name="custom_url_scheme">git.shin.animevsub</string>
+</resources>
