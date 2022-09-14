@@ -1,0 +1,16 @@
+{
+  "name": "git.shin.animevsub",
+  "version": "0.0.1",
+  "description": "A Quasar Project",
+  "author": "Tachibana Shin <45375496+tachibana-shin@users.noreply.github.com>",
+  "private": true,
+  "scripts": {
+    "cap:add": "cap add",
+    "cap:sync": "cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "2.5.0",
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  }
+}

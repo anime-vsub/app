@@ -1,0 +1,10 @@
+{
+  "appId": "git.shin.animevsub",
+  "appName": "Quasar App",
+  "bundledWebRuntime": false,
+  "server": {
+    "hostname": "animevietsub.cc",
+    "androidScheme": "https"
+  },
+  "webDir": "www"
+}
