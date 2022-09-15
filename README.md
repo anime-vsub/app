@@ -1,41 +1,11 @@
-# Quasar App (git.shin.animevsub)
+# Informal AnimeVsub Application!
 
-A Quasar Project
+> The goal of this application is to allow users to interact intuitively and explore new Anime sets in place of the outdated web interface of [animevsub](https://animevietsub.tv). 
+> 
+> And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `downloading...` enjoy the best quality animation episodes and no `downloading...`
 
-## Install the dependencies
-```bash
-yarn
-# or
-npm install
-```
+## Development
+### To be on
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
-
-
-### Lint the files
-```bash
-yarn lint
-# or
-npm run lint
-```
-
-
-### Format the files
-```bash
-yarn format
-# or
-npm run format
-```
-
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+- [ ] API system
+- [ ] UI
