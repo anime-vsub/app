@@ -1,4 +1,5 @@
-import { test, describe, expect } from "vitest"
+import { describe, expect, test } from "vitest"
+
 import { getText } from "./getText"
 import { parserDOM } from "./parserDOM"
 

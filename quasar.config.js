@@ -8,10 +8,12 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const { configure } = require("quasar/wrappers")
 const path = require("path")
-const { extend } = require("quasar")
 
+const { extend } = require("quasar")
+const { configure } = require("quasar/wrappers")
+
+// eslint-disable-next-line functional/immutable-data
 module.exports = configure(function (/* ctx */) {
   return {
     eslint: {

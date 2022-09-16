@@ -24,6 +24,7 @@
     "@capacitor/cli": "^4.2.0",
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
     "@quasar/app-vite": "^1.0.0",
+    "@tachibana-shin/eslint-config": "^1.0.7",
     "@types/node": "^12.20.21",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",

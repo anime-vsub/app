@@ -1,5 +1,8 @@
-import { describe, test, expect } from "vitest"
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { describe, expect, test } from "vitest"
+
 import { parserDOM } from "../utils/parserDOM"
+
 import { getInfoTPost } from "./getInfoTPost"
 
 describe("getInfoTPost", () => {
