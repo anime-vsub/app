@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tập 01 Ma Vương Đi Làm Mùa 2 (Hataraku Maou-sama!!, The Devil is a Part-Timer! Season 2, The Devil is a Part-Timer! 2nd Season, The Devil is a Part-Timer!!) 2022 HD-VietSub</title>
+<meta name="description" content="[Tập 10] Ma Vương Đi Làm Mùa 2: Mùa thứ 2 của&nbsp;Hataraku Maou-sama! nha quý vị." />
+<meta name="keywords" content="Ma Vương Đi Làm Mùa 2, Ma Vương Đi Làm Mùa 2 vietsub, Ma Vương Đi Làm Mùa 2 tap 01" />
+<meta itemprop="name" content="Tập 01 Ma Vương Đi Làm Mùa 2 (Hataraku Maou-sama!!, The Devil is a Part-Timer! Season 2, The Devil is a Part-Timer! 2nd Season, The Devil is a Part-Timer!!) 2022 HD-VietSub" />
+<meta itemprop="description" content="[Tập 10] Ma Vương Đi Làm Mùa 2: Mùa thứ 2 của&nbsp;Hataraku Maou-sama! nha quý vị." />
+<meta itemprop="image" content="http://cdn.animevietsub.cc/data/banner/2022/06/03/animevsub-ixE7rWSfjK.jpg" />
+<meta itemprop="image" content="http://cdn.animevietsub.cc/data/poster/2022/06/17/animevsub-SfrMOcBfZn.jpg" />
+<meta property="og:title" content="Tập 01 Ma Vương Đi Làm Mùa 2 (Hataraku Maou-sama!!, The Devil is a Part-Timer! Season 2, The Devil is a Part-Timer! 2nd Season, The Devil is a Part-Timer!!) 2022 HD-VietSub" />
+<meta property="og:type" content="video.movie" />
+<meta property="og:description" content="[Tập 10] Ma Vương Đi Làm Mùa 2: Mùa thứ 2 của&nbsp;Hataraku Maou-sama! nha quý vị." />
+<meta property="og:url" content="http://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-01-85227.html" />
+<link rel="canonical" href="http://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-01-85227.html" />
+<meta property="og:image" content="http://cdn.animevietsub.cc/data/banner/2022/06/03/animevsub-ixE7rWSfjK.jpg" />
+<meta property="og:image" content="http://cdn.animevietsub.cc/data/poster/2022/06/17/animevsub-SfrMOcBfZn.jpg" />
+<meta property="og:updated_time" content="1663253122" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<base href="https://animevietsub.cc" />
+<meta name="robots" content="index,follow" />
+<meta name="revisit-after" content="1 days" />
+<meta name="ROBOTS" content="index,follow,noodp" />
+<meta name="googlebot" content="index,follow" />
+<meta name="BingBOT" content="index,follow" />
+<meta name="yahooBOT" content="index,follow" />
+<meta name="slurp" content="index,follow" />
+<meta name="msnbot" content="index,follow" />
+<meta name="language" content="Vietnamese, English" />
+<meta property="og:site_name" content="AnimeVietSub.cc" />
+<meta property="fb:app_id" content="1214104412028762" />
+<meta property="fb:pages" content="114595880190017" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+
+
+<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/fonts.css?v=1.1" />
+<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/style.css?v=1.6.2" />
+<script type="text/javascript">
+    var  MAIN_URL  =  'https://animevietsub.cc';
+    var  AjaxURL  =  'https://animevietsub.cc/ajax/all';
+  </script>
+<script type="text/javascript">
+        function w3tc_load_js(u) {
+            var d = document,
+                p = d.getElementsByTagName('HEAD')[0],
+                c = d.createElement('script');
+            c.type = 'text/javascript';
+            c.src = u;
+            p.appendChild(c);
+        }
+    </script>
+<script type="text/javascript">
+        w3tc_load_js('https://animevietsub.cc/statics/default/js/04538.default.include-footer.2dcd18.js?v=1.0.092022');
+    </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/bootstrap.min.js?v=1.0"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.raty.js?v=1.0"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.md5.js"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/fx/util.js?_1.2"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/home-v1.js?v=1.5.1"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.cookie.js?v=1.1"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/schedule.js"></script>
+<script type="text/javascript"> $(document).ready(function(){ !function () { /*referans:box*/ navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) || (devtoolsDetector.addListener(function (t, e) { t && (document.location.href = "http://animevietsub.cc") }), devtoolsDetector.lanuch()) }(); }); </script>
+<script src="https://animevietsub.cc/statics/default/js/detect.dev.js?v=1.0" type="text/javascript"></script>
+<script async src"https: static.amcdn.vn tka cdn.js" type"text javascript"></script>
+<script>
+  var arfAsync = arfAsync || [];
+</script>
+<script id="arf-core-js" onerror="window.arferrorload=true;" src="//media1.admicro.vn/cms/Arf.min.js" async></script>
+<link rel="stylesheet" href="https://animevietsub.cc/statics/default/css/lobibox.min.css" />
+<script src="https://animevietsub.cc/statics/default/js/Lobibox.js" type="text/javascript"></script>
+<script type='application/ld+json'>
+  {
+    "@context": "http:\\/\\/schema.org\\/",
+    "@type": "VideoObject",
+    "name": "T\\u1eadp 01 Ma V\\u01b0\\u01a1ng \\u0110i L\\u00e0m M\\u00f9a 2 (Hataraku Maou-sama!!, The Devil is a Part-Timer! Season 2, The Devil is a Part-Timer! 2nd Season, The Devil is a Part-Timer!!) 2022 HD-VietSub",
+    "description": "[T\\u1eadp 10] Ma V\\u01b0\\u01a1ng \\u0110i L\\u00e0m M\\u00f9a 2: M\\u00f9a th\\u1ee9 2 c\\u1ee7a&nbsp;Hataraku Maou-sama! nha qu\\u00fd v\\u1ecb.",
+    "contentUrl": "http:\\/\\/animevietsub.cc\\/phim\\/hataraku-maou-sama-2nd-season-a4257\\/tap-01-85227.html",
+    "thumbnailUrl": "http:\\/\\/cdn.animevietsub.cc\\/data\\/banner\\/2022\\/06\\/03\\/animevsub-ixE7rWSfjK.jpg",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "bestRating": "10",
+      "worstRating": "1",
+      "ratingCount": "2666",
+      "ratingValue": "8.1"
+    },
+    "uploadDate": "2022-09-15T21:45:22+07:00",
+    "duration": "PT1H"
+  }
+  </script>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": "http:\\/\\/animevietsub.cc\\/phim\\/hataraku-maou-sama-2nd-season-a4257\\/tap-01-85227.html",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "http://animevietsub.cc/tim-kiem/{keyword}/",
+            "query-input": "required name=keyword"
+        }
+    }
+    </script>
+<script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{"@type":"ListItem","position":1,"name":"Trang ch\\u1ee7","item":"http:\\/\\/animevietsub.cc"},{"@type":"ListItem","position":2,"name":"Anime b\\u1ed9","item":"http:\\/\\/animevietsub.cc\\/anime-bo\\/"},{"@type":"ListItem","position":3,"name":"Ma V\\u01b0\\u01a1ng \\u0110i L\\u00e0m M\\u00f9a 2","item":"http:\\/\\/animevietsub.cc\\/phim\\/hataraku-maou-sama-2nd-season-a4257\\/"}]  }
+  </script>
+<script type="text/javascript">
+            filmInfo.episodeID = parseInt('85227');
+            filmInfo.filmID = parseInt('4257');
+            filmInfo.filmVIEWED = parseInt('529,945');
+            filmInfo.playTech = 'auto';
+            filmInfo.isAdult = parseInt('0');
+            filmInfo.slug = 'http://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/';
+      
+    </script>
+<script src="https://animevietsub.cc/statics/default/js/pl.watch.js?v=3.3.1" type="text/javascript"></script>
+<script src="https://animevietsub.cc/statics/default/jw/jwplayer.js?v=1.0" type="text/javascript"></script>
+<script type="text/javascript">
+ $(document).ready(function() {AnimeVsub('yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl1LZQ_lmkExwXiefaR9wlhU3YYe9nTqplD9fAw6SD4nZ5AG2RtnGLidlP0NzS5RiYlQTgURgeS_i5DTU8TZCHG7',filmInfo.filmID);LoadLinksBackup(85227);});
+  </script>
+</head>
+<body class="post-template-default single single-post NoBrdRa">
+<div class="Tp-Wp" id="Tp-Wp">
+<script data-cfasync="false" type="text/javascript" src="//i8xkjci7nd.com/aas/r45d/vki/1923111/9d801fab.js"></script><header class="Header MnBrCn BgA">
+<div class="MnBr EcBgA">
+<div class="Container">
+<figure class="Logo">
+<a href="/" title="Xem anime Vietsub" rel="home"><img src="http://cdn.animevietsub.cc/data/logo/logoz.png" alt="Logo"></a>
+</figure>
+<span class="Button MenuBtn AAShwHdd-lnk CXHd" data-shwhdd="Tp-Wp"><i></i><i></i><i></i></span>
+<span class="MenuBtnClose AAShwHdd-lnk CXHd" data-shwhdd="Tp-Wp"></span>
+<div class="Search" id="SearchMobile" style="display:none">
+<form method="post" id="form-search1" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchMobile')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>
+<div class="search-suggest" style="display: none;">
+<ul style="margin-bottom: 0;" id="search-suggest-list"></ul>
+</div>
+</div>
+<div class="Rght BgA">
+<div class="Search" id="SearchDesktop">
+<form method="post" id="form-search" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchDesktop')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>
+<div class="search-suggest" style="display: none;">
+<ul style="margin-bottom: 0;" id="search-suggest-list"></ul>
+</div>
+</div>
+<div class="Login">
+<input type="checkbox" hidden="hidden" id="LnkUser">
+<label for="LnkUser" class="LnkUser fa-chevron-down"><img src="http://cdn.animevietsub.cc/data/avatar/user-35738.jpg" alt=""></label>
+<div class="user-name-text" style="display:none;">tachib.shin</div>
+<ul>
+<li><a href="/account/info/" class="fa-user">Thông tin tài khoản</a></li>
+<li><a href="/tu-phim" class="fa-film">Hộp phim</a></li>
+<li><a href="/thoat?_fxRef=http://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-01-85227.html" class="fa-power-off">Thoát</a></li>
+</ul>
+</div><div class="Notice navbar-notice">
+<a href="javascript:void(0);" class="navbar-notice-toggle"></a>
+<div class="manage-notifi"></div>
+</div>
+<nav class="Menu">
+<ul>
+<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home menu-item-490"><a href="/">Trang chủ</a></li>
+<li id="menu-item-495" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-495"><a href="#">Dạng Anime</a>
+<ul class="sub-menu">
+<li><a href="/anime-bo/">TV/Series</a></li>
+<li><a href="/anime-le/">Movie/OVA</a></li>
+<li><a href="/hoat-hinh-trung-quoc/">HH Trung Quốc</a></li>
+<li><a href="/anime-sap-chieu/">Anime Sắp Chiếu</a></li>
+<li><a href="/danh-sach/list-dang-chieu/">Anime Đang Chiếu</a></li>
+<li><a href="/danh-sach/list-tron-bo/">Anime Trọn Bộ</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-493"><a href="/bang-xep-hang.html">Top Anime</a>
+<ul class="sub-menu">
+<li><a href="/bang-xep-hang/day.html">Theo Ngày</a></li>
+<li><a href="/bang-xep-hang/voted.html">Yêu Thích</a></li>
+<li><a href="/bang-xep-hang/month.html">Theo Tháng</a></li>
+<li><a href="/bang-xep-hang/season.html">Theo Mùa</a></li>
+<li><a href="/bang-xep-hang/year.html">Theo Năm</a></li>
+</ul>
+</li>
+<li id="menu-item-494" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-494"><a href="#">THỂ LOẠI</a>
+<ul class="sub-menu"><li><a href="http://animevietsub.cc/the-loai/hanh-dong/">Action</a></li><li><a href="http://animevietsub.cc/the-loai/phieu-luu/">Adventure</a></li><li><a href="http://animevietsub.cc/the-loai/cartoon/">Cartoon</a></li><li><a href="http://animevietsub.cc/the-loai/hai-huoc/">Comedy</a></li><li><a href="http://animevietsub.cc/the-loai/dien-loan/">Dementia</a></li><li><a href="http://animevietsub.cc/the-loai/demons/">Demons</a></li><li><a href="http://animevietsub.cc/the-loai/drama/">Drama</a></li><li><a href="http://animevietsub.cc/the-loai/ecchi/">Ecchi</a></li><li><a href="http://animevietsub.cc/the-loai/phep-thuat/">Fantasy</a></li><li><a href="http://animevietsub.cc/the-loai/tro-choi/">Game</a></li><li><a href="http://animevietsub.cc/the-loai/harem/">Harem</a></li><li><a href="http://animevietsub.cc/the-loai/lich-su/">Historical</a></li><li><a href="http://animevietsub.cc/the-loai/kinh-di/">Horror</a></li><li><a href="http://animevietsub.cc/the-loai/josei/">Josei</a></li><li><a href="http://animevietsub.cc/the-loai/tre-em/">Kids</a></li><li><a href="http://animevietsub.cc/the-loai/live-action/">Live Action</a></li><li><a href="http://animevietsub.cc/the-loai/ma-thuat/">Magic</a></li><li><a href="http://animevietsub.cc/the-loai/martial-arts/">Martial Arts</a></li><li><a href="http://animevietsub.cc/the-loai/mecha/">Mecha</a></li><li><a href="http://animevietsub.cc/the-loai/quan-doi/">Military</a></li><li><a href="http://animevietsub.cc/the-loai/am-nhac/">Music</a></li><li><a href="http://animevietsub.cc/the-loai/mystery/">Mystery</a></li><li><a href="http://animevietsub.cc/the-loai/parody/">Parody</a></li><li><a href="http://animevietsub.cc/the-loai/police/">Police</a></li><li><a href="http://animevietsub.cc/the-loai/psychological/">Psychological</a></li><li><a href="http://animevietsub.cc/the-loai/tinh-cam/">Romance</a></li><li><a href="http://animevietsub.cc/the-loai/samurai/">Samurai</a></li><li><a href="http://animevietsub.cc/the-loai/truong-hoc/">School</a></li><li><a href="http://animevietsub.cc/the-loai/sci-fi/">Sci-Fi</a></li><li><a href="http://animevietsub.cc/the-loai/seinen/">Seinen</a></li><li><a href="http://animevietsub.cc/the-loai/shoujo/">Shoujo</a></li><li><a href="http://animevietsub.cc/the-loai/shoujo-ai/">Shoujo Ai</a></li><li><a href="http://animevietsub.cc/the-loai/shounen/">Shounen</a></li><li><a href="http://animevietsub.cc/the-loai/shounen-ai/">Shounen Ai</a></li><li><a href="http://animevietsub.cc/the-loai/doi-thuong/">Slice of Life</a></li><li><a href="http://animevietsub.cc/the-loai/space/">Space</a></li><li><a href="http://animevietsub.cc/the-loai/the-thao/">Sports</a></li><li><a href="http://animevietsub.cc/the-loai/super-power/">Super Power</a></li><li><a href="http://animevietsub.cc/the-loai/sieu-nhien/">Supernatural</a></li><li><a href="http://animevietsub.cc/the-loai/thriller/">Thriller</a></li><li><a href="http://animevietsub.cc/the-loai/tokusatsu/">Tokusatsu</a></li><li><a href="http://animevietsub.cc/the-loai/vampire/">Vampire</a></li><li><a href="http://animevietsub.cc/the-loai/yaoi/">Yaoi</a></li><li><a href="http://animevietsub.cc/the-loai/yuri/">Yuri</a></li></ul>
+</li>
+<li id="menu-item-497" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-497"><a href="#">Season</a>
+<ul class="sub-menu">
+<li><a href="/season/winter/2022/">Mùa Đông 2022</a></li>
+<li><a href="/season/spring/2022/">Mùa Xuân 2022</a></li>
+<li><a href="/season/summer/2022/">Mùa Hạ 2022</a></li>
+<li><a href="/season/autumn/2022/">Mùa Thu 2022</a></li>
+<li><a href="/season/winter/2021/">Mùa Đông 2021</a></li>
+<li><a href="/season/spring/2021/">Mùa Xuân 2021</a></li>
+<li><a href="/season/summer/2021/">Mùa Hạ 2021</a></li>
+<li><a href="/season/autumn/2021/">Mùa Thu 2021</a></li>
+<li><a href="/season/winter/2020/">Mùa Đông 2020</a></li>
+<li><a href="/season/spring/2020/">Mùa Xuân 2020</a></li>
+<li><a href="/season/summer/2020/">Mùa Hạ 2020</a></li>
+<li><a href="/season/autumn/2020/">Mùa Thu 2020</a></li>
+<li><a href="/season/winter/2019/">Mùa Đông 2019</a></li>
+<li><a href="/season/spring/2019/">Mùa Xuân 2019</a></li>
+<li><a href="/season/summer/2019/">Mùa Hạ 2019</a></li>
+<li><a href="/season/autumn/2019/">Mùa Thu 2019</a></li>
+<li><a href="/season/winter/2018/">Mùa Đông 2018</a></li>
+<li><a href="/season/spring/2018/">Mùa Xuân 2018</a></li>
+<li><a href="/season/summer/2018/">Mùa Hạ 2018</a></li>
+<li><a href="/season/autumn/2018/">Mùa Thu 2018</a></li>
+<li><a href="/season/winter/2017/">Mùa Đông 2017</a></li>
+<li><a href="/season/spring/2017/">Mùa Xuân 2017</a></li>
+<li><a href="/season/summer/2017/">Mùa Hạ 2017</a></li>
+<li><a href="/season/autumn/2017/">Mùa Thu 2017</a></li>
+<li><a href="/season/winter/2016/">Mùa Đông 2016</a></li>
+<li><a href="/season/spring/2016/">Mùa Xuân 2016</a></li>
+<li><a href="/season/summer/2016/">Mùa Hạ 2016</a></li>
+<li><a href="/season/autumn/2016/">Mùa Thu 2016</a></li>
+<li><a href="/season/winter/2015/">Mùa Đông 2015</a></li>
+<li><a href="/season/spring/2015/">Mùa Xuân 2015</a></li>
+<li><a href="/season/summer/2015/">Mùa Hạ 2015</a></li>
+<li><a href="/season/autumn/2015/">Mùa Thu 2015</a></li>
+<li><a href="/season/winter/2014/">Mùa Đông 2014</a></li>
+<li><a href="/season/spring/2014/">Mùa Xuân 2014</a></li>
+<li><a href="/season/summer/2014/">Mùa Hạ 2014</a></li>
+<li><a href="/season/autumn/2014/">Mùa Thu 2014</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/anime/library/0-9/">Thư viện</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/lich-chieu-phim.html">Lịch chiếu</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</header> <div class="Body Container">
+<div class="Content">
+<div class="announcement"><span class="ann_title"><i class="fa-bullhorn"></i></span><span class="ann_text"><ul>
+<li>
+<p><span style="font-size:24px"><span style="color:#f3dd3d">Do vấn đề quảng c&aacute;o n&ecirc;n&nbsp;</span><span style="color:#e62117">animevietsub</span><span style="color:#f3dd3d"> bị nh&agrave; mạng chặn&nbsp;mời bạn truy cập</span><span style="color:#ffff66">&nbsp;</span><a href="http://animevietsub.co"><span style="color:#e62117">animevietsub.cc</span></a></span></p>
+</li>
+<li>
+<p><span style="color:#f3dd3d"><span style="font-size:22px">Mời bạn tham gia group của AnimeVietsub </span></span><span style="font-size:22px"><a href="https://www.facebook.com/groups/fananimevietsub"><span style="color:#e62117">tại đ&acirc;y!</span></a></span></p>
+</li>
+<li>
+<p><span style="color:#f3dd3d"><span style="font-size:22px">Do thiếu h&uacute;t kinh ph&iacute; n&ecirc;n quảng c&aacute;o c&oacute; thể g&acirc;y kh&oacute; chịu, rất mong c&aacute;c bạn th&ocirc;ng cảm!</span></span></p>
+</li>
+</ul></span></div> <div class="Ads ad-center-header"><div><center>
+<a href="https://ychibatdiet.onelink.me/tYTw/News" target="_blank"><img src="https://i.imgur.com/8RF5FcF.gif" alt="gosu" width="720px" height="80px"></a>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6186261113573228" crossorigin="anonymous"></script>
+
+<ins class="adsbygoogle" style="display:inline-block;width:1100px;height:150px" data-ad-client="ca-pub-6186261113573228" data-ad-slot="6516846232"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<zone id="kwvia9z0"></zone>
+<script>
+arfAsync.push("kwvia9z0");
+</script>
+</center></div></div>
+<ol class="breadcrumb">
+<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Trang chủ" href="http://animevietsub.cc" itemprop="url"><span itemprop="name">Trang chủ</span></a><meta itemprop="position" content="1" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Anime bộ" href="http://animevietsub.cc/anime-bo/" itemprop="url"><span itemprop="name">Anime bộ</span></a><meta itemprop="position" content="2" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Romance" href="http://animevietsub.cc/the-loai/tinh-cam/" itemprop="url"><span itemprop="name">Romance</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Supernatural" href="http://animevietsub.cc/the-loai/sieu-nhien/" itemprop="url"><span itemprop="name">Supernatural</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Fantasy" href="http://animevietsub.cc/the-loai/phep-thuat/" itemprop="url"><span itemprop="name">Fantasy</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Demons" href="http://animevietsub.cc/the-loai/demons/" itemprop="url"><span itemprop="name">Demons</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Comedy" href="http://animevietsub.cc/the-loai/hai-huoc/" itemprop="url"><span itemprop="name">Comedy</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Phim Ma Vương Đi Làm Mùa 2" href="http://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/" itemprop="url"><span itemprop="name">Ma Vương Đi Làm Mùa 2</span></a><meta itemprop="position" content="4" /></li><li class="active"><span>Xem phim</span></li> </ol>
+<div class="TpRwCont">
+<main>
+<div class="Ads ads_player"><div><script data-cfasync="false" type="text/javascript" src="//jarvispopsu.com/lv/esnk/1832983/code.js" async id="__clb-1832983"></script></div></div>
+<div id="watch-block">
+<div class="media-player uniad-player" id="media-player-box">
+<div id="media-player" style="width: 100%;height: 100%;"><center><img src="./statics/images/loading.heart.gif" class="post-ratings-image" />Đang tải phim, vui lòng đợi trong giây lát..</center></div>
+<div id="player-loading" class="player-loading"><div class="status"></div></div>
+<div id="invideo_wrapper" style="width: 300px; height: 250px; padding: 0px; border-radius: 5px; position: absolute; top: 50%; left: 50%; margin-left: -150px; margin-top: -175px; text-align: center; background: transparent;display:none">
+<a href="https://bom.so/animevietsubtv" target="_blank"><img src="https://i.imgur.com/JHT9zgA.gif" alt="aff" width="300px" height="250px"></a>
+<div id="close-and-play" style="padding: 10px 0px; color: rgb(255, 255, 255); border: 1px solid rgb(255, 255, 255); font-size: 18px; width: 200px; margin: 20px -105px 0px; border-radius: 5px; cursor: pointer; position: absolute; top: 100%; left: 50%; background: rgb(53, 53, 53);">Đóng và Xem Tiếp</div></div> <span class="AAIco-input btn-re-expand" id="btn-re-expand"></span>
+</div>
+<div class="MovieTabNav ControlPlayer">
+<div class="Lnk AAIco-skip_next" id="btn-nextepisode" title="Tập tiếp">Tập tiếp</div>
+<div class="Lnk fa-comments" id="scrollToComment" title="Bình Luận">Bình luận</div>
+<div class="Lnk AAIco-lightbulb_outline" id="btn-light" title="Tắt đèn nền">Tắt đèn</div>
+<div class="Lnk AAIco-bookmark" id="btn-add-favorite" title="Thêm phim vào hộp phim yêu thích của bạn!">Đang theo dõi</div>
+<div class="Lnk AAIco-aspect_ratio" id="btn-expand"><span id="expand-status">Phóng to</span></div>
+<div class="Lnk AAIco-skip_next" style="display:none" id="btn-autonext" title="Bật/ Tắt chức năng tự chuyển tập"><span>Autonext: <span id="autonext-status">Bật</span></span></div>
+<div class="Lnk AAIco-error" id="btn-toggle-error" title="Báo lỗi cho admin!">Báo lỗi</div>
+<div class="Lnk AAIco-camera_enhance" id="btn-toggle-capture" title="Chụp ảnh">Chụp ảnh</div>
+<div class="Lnk AAIco-vertical_align_bottom" id="btn-toggle-download" title="Tải về">Tải về</div>
+<a class="Lnk fa-history" href="http://animevietsub.cc/lich-su/" title="Lịch sử xem">Lịch sử xem</a>
+</div>
+<div id="links-backup" style="position: relative;text-align: center;margin-bottom: 10px;"></div>
+<center><div class="schedule-title-main"><ul>
+<li><h3>Cài DNS 8.8.8.8 và 8.8.4.4 giúp xem anime mượt hơn</h3></li>
+<li><h3>Server DU: có thể hỗ trợ chất lượng 1080p</h3></li>
+<li><h3>Server FB: hỗ trợ tốt nhất xem trên điện thoại</h3></li>
+</ul></div></center>
+</div>
+<div class="Ads bellow_ads_player"><div>
+<zone id="kwvim5do"></zone>
+<script>
+arfAsync.push("kwvim5do");
+</script>
+</div></div>
+<div class="Wdgt list-server" id="list-server">
+<div class="schedule-title-main"><h4><i class="fa fa-calendar" aria-hidden="true"></i> Phim đang chiếu - <strong>Tập 11 </strong>tiếp theo sẽ được chiếu khoảng <strong>Thứ Năm vào lúc 21 giờ 50 phút </strong>tuần tới</h4></div>
+<div class="server clearfix server-group"><h3 class="server-name">AnimeVsub </h3><ul class="list-episode tab-pane"><li class="episode playing"><a data-id="85227" title="Tập 01" class="btn-episode episode-link btn3d active" href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-01-85227.html" data-play="api" data-movie="playing" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl1LZQ_lmkExwXiefaR9wlhU3YYe9nTqplD9fAw6SD4nZ5AG2RtnGLidlP0NzS5RiYlQTgURgeS_i5DTU8TZCHG7">01</a></li><li class="episode "><a data-id="85365" title="Tập 02" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-02-85365.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl38fyrXy2-mBFf1lJ8XIJKcRmdCB5L0m-ht_NnfFSArp_hC_dJd8o1wTl9duOTXCLzEpZyVmMCNwzSCwpscHens">02</a></li><li class="episode "><a data-id="85496" title="Tập 03" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-03-85496.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl3jHuH_lxbS3Arx4aLM5YNVBsQrTYgHPSaKH-46Uc5HSc7AXK-IMTpDE2Z079kINelQGC3R41GCX8iVBK2buSM8">03</a></li><li class="episode "><a data-id="85681" title="Tập 04" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-04-85681.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl1Iv2e0o_M2JPyOEtb4vQgX1LvfQ1UJffg0nBLWCm54soHapT-2tS2lW3isNtNQosI_jWRTlDGyEfRmrhWtcDC2">04</a></li><li class="episode "><a data-id="85831" title="Tập 05" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-05-85831.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl3G8T4y_wtkxdTPkOKmgp7LYIe9-tVqBEf8vLzAKZC8C0KSs1BzlIa5uDk5D_f5eLhgMy-Pl7_4XAa0v6kNxm7v">05</a></li><li class="episode "><a data-id="85992" title="Tập 06" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-06-85992.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl0utkKHEDedDomR2Bk8T_Jsrc90tRDm_MghLQjjWP2z8NdWkyPOE_DN3dVbu4k1psjr4w6_hC4nvehFCULZ-fBo">06</a></li><li class="episode "><a data-id="86136" title="Tập 07" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-07-86136.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl0bQpMub6iyv9V_558wx0q1JUFrHo054gURoCHejskk9mjUxl0ep1BuL9DQaDhajblZDmSYlWXLKzA8QVfoU4AO">07</a></li><li class="episode "><a data-id="86294" title="Tập 08" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-08-86294.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl06MjIEUferAQ9-yTCU6QdoGuvfGEIpovRJiynFjhg1rtJXQHvIDwRkOFG45lNo2n3_q2ijkDxclfR58xecuJrp">08</a></li><li class="episode "><a data-id="86439" title="Tập 09" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-09-86439.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl1ROuyS6M_p_5Xx5NRjZjJdePO5GXv11l3iE3YUENhuxISD4lTnA9UFlhGEF8QLASMl2UXi2QqVOtn8W2udxkga">09</a></li><li class="episode "><a data-id="86597" title="Tập 10" class="btn-episode episode-link btn3d " href="https://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/tap-10-86597.html" data-play="api" data-movie="" data-source="du" data-hash="yYIUcEbWNhNTfgVmsy0mGm12d-u_2ogvAIMZCMh3fl0ONfK2sYuIEGCYHKyV6fE7RiQxUwaXA28lUIqdofrfxy6_WKf-kDQFBHno0IuW4JMuUNGJA3DGI_eXo2U9QB_U">10</a></li></ul></div> </div>
+<div class="watch-notice">
+<div class="box-content alerts">
+<div class="watch-notice">
+<div class="box-content alerts"><div class="alert alert-info">
+<ul>
+<li><span style="font-size:16px"><span style="color:#000000">Xem lịch chiếu những bộ anime kh&aacute;c&nbsp;</span><a href="http://animevietsub.tv/lich-chieu-phim.html"><strong>tại đ&acirc;y!!</strong></a></span></li>
+<li><span style="color:#ff0033"><span style="font-size:16px">Click quảng c&aacute;o hoặc like, share Facebook gi&uacute;p xem Anime mượt hơn!!</span></span></li>
+</ul>
+</div></div>
+</div> </div>
+</div>
+<article class="TPost Single">
+<div class="social-button">
+<div class="item_social"><div class="fb-like" data-href="http://animevietsub.tv/phim/-4257/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div></div>
+<div class="item_social"><div class="fb-save" data-uri="http://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/" data-size="small"></div></div>
+</div>
+<header>
+<h1 class="Title">Ma Vương Đi Làm Mùa 2</h1>
+<h2 class="SubTitle">Hataraku Maou-sama!!, The Devil is a Part-Timer! Season 2, The Devil is a Part-Timer! 2nd Season, The Devil is a Part-Timer!!</h2>
+<div class="Image">
+<figure class="Objf TpMvPlay"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/06/17/animevsub-SfrMOcBfZn.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ma Vương Đi Làm Mùa 2 - Hataraku Maou-sama!!, The Devil is a Part-Timer! Season 2, The Devil is a Part-Timer! 2nd Season, The Devil is a Part-Timer!!" /></figure>
+</div>
+<div class="Description">
+Mùa thứ 2 của&nbsp;Hataraku Maou-sama! nha quý vị. </div>
+</header>
+<footer class="ClFx">
+<div class="VotesCn">
+<div class="Prct">
+<div id="TPVotes" data-percent="81"></div>
+</div>
+<div class="post-ratings">
+<input id="hint_current" type="hidden" value="">
+<input id="score_current" type="hidden" value="8.1">
+<div id="star" data-score="8.1" style="cursor: pointer;"></div>
+(Đánh giá <strong id="average_score">8.1</strong>/10 từ <strong class="num-rating">331</strong> thành viên)<br /><span class="post-ratings-text" id="hint"></span>
+</div>
+<div id="post-ratings-984-loading" class="post-ratings-loading"> <img src="./statics/images/loading.gif" width="16" height="16" class="post-ratings-image" />Đang tải...</div>
+</div>
+<p class="Info"> <span class="Time AAIco-access_time">10/12</span> <span class="Date AAIco-date_range"><a href="http://animevietsub.cc/release/2022/" title="List anime năm 2022 Vietsub">2022</a></span> <span class="View AAIco-remove_red_eye">529,945 Lượt Xem</span></p>
+</footer>
+<br style="clear:both" />
+<div class="MovieInfo TPost SeasonList"><div class="season_item"><a href="http://animevietsub.cc/phim/hataraku-maou-sama-a1365/" title="Phim Ma Vương Đi Làm">Phần 1</a><a href="http://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/" class="active" title="Phim Ma Vương Đi Làm Mùa 2">Phần 2</a></div></div> <div class="TPostBg Objf"><img class="TPostBg" src="http://cdn.animevietsub.cc/data/banner/2022/06/03/animevsub-ixE7rWSfjK.jpg" alt="Background"></div>
+</article>
+<div class="fbcmt" id="comments">
+<div class="fbcmt title">Đừng quên để like page của AnimeVsub <div class="fb-like" data-href="https://www.facebook.com/animevsub/" data-layout="button_count" data-action="like" data-size="large" data-lazy="true" data-show-faces="true"></div> để cập nhật anime mỗi ngày</div>
+<span style="color:#000000">Tham gia Discord <a href="https://bitly.com/discordAVS" target="_blank"><span style="color:#ff5722"><strong>tại đ&acirc;y!!</strong></span></a> hoặc Telegram <a href="https://t.me/animevietsub" target="_blank"><span style="color:#ff5722"><strong>tại đ&acirc;y!!</strong></span></a>để nhận th&ocirc;ng b&aacute;o anime mới nhanh nhất.</span>
+<div class="Comment Wrt" id="respond">
+<div class="fb-comments fb_iframe_widget" data-href="http://animevietsub.tv/phim/-4257/" data-numposts="10" data-width="100%" data-colorscheme="light" data-order-by="reverse_time"></div>
+</div>
+</div> <div id="mv-keywords">
+<strong class="mr10">Keywords:</strong>
+<a href="http://animevietsub.cc/tag/ma-vuong-di-lam-mua-2/" rel="follow, index" title="Xem Phim ma vương đi làm mùa 2">ma vương đi làm mùa 2</a>, <a href="http://animevietsub.cc/tag/hataraku-maou-sama!-2nd-season/" rel="follow, index" title="Xem Phim hataraku maou-sama! 2nd season">hataraku maou-sama! 2nd season</a>, <a href="http://animevietsub.cc/tag/the-devil-is-a-part-timer!-2nd-season/" rel="follow, index" title="Xem Phim the devil is a part-timer! 2nd season">the devil is a part-timer! 2nd season</a> Phim Ma Vương Đi Làm Mùa 2, Hataraku Maou-sama!!, The Devil is a Part-Timer! Season 2, The Devil is a Part-Timer! 2nd Season, The Devil is a Part-Timer!! Vietsub, Ma Vương Đi Làm Mùa 2 Tập 01, Ma Vương Đi Làm Mùa 2 Vuighe, Ma Vương Đi Làm Mùa 2 Anime47, Ma Vương Đi Làm Mùa 2 Youtube, Ma Vương Đi Làm Mùa 2 FPTplay, Ma Vương Đi Làm Mùa 2 Animehay, Ma Vương Đi Làm Mùa 2 bilibili, Ma Vương Đi Làm Mùa 2 iq, Ma Vương Đi Làm Mùa 2 Ep 01 Full Vietsub, Xem Ngay Ma Vương Đi Làm Mùa 2 Tập 01, Ma Vương Đi Làm Mùa 2 Tập 01 Hot, Ma Vương Đi Làm Mùa 2 Tập 01, Phim Ma Vương Đi Làm Mùa 2 Tập 01, Xem Ma Vương Đi Làm Mùa 2 Ep 01, Coi Ma Vương Đi Làm Mùa 2 Tập 01 phim Hataraku Maou-sama!!, The Devil is a Part-Timer! Season 2, The Devil is a Part-Timer! 2nd Season, The Devil is a Part-Timer!!, Phim Ma Vương Đi Làm Mùa 2 2022, Xem Ma Vương Đi Làm Mùa 2
+</div>
+<div class="Wdgt">
+<div class="Title">Phim liên quan</div>
+<div class="MovieListRelated owl-carousel">
+<div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/hataraku-maou-sama-a1365/" title="Ma Vương Đi Làm (2013)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/12/animevsub-jQlpcZ6Hj4.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ma Vương Đi Làm (2013)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.6 trong số 10 dựa trên 155 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.6</div></div>
+</div>
+<div class="Title">Ma Vương Đi Làm</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/jojo-no-kimyou-na-bouken-stardust-crusaders-2nd-season-a1285/" title="JoJo no Kimyou na Bouken: Stardust Crusaders 2nd Season (2015)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/17/animevsub-vF3DJ4laVO.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="JoJo no Kimyou na Bouken: Stardust Crusaders 2nd Season (2015)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.3 trong số 10 dựa trên 26 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.3</div></div>
+</div>
+<div class="Title">JoJo no Kimyou na Bouken: Stardust Crusaders 2nd Season</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/shingeki-no-kyojin-season-3-part-2-r1-a3442/" title="Attack on Titan Season 3 Part 2 (2019)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2019/03/28/animevsub-P1sWUkQ8xs.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Attack on Titan Season 3 Part 2 (2019)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.2 trong số 10 dựa trên 102 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.2</div></div>
+</div>
+<div class="Title">Attack on Titan Season 3 Part 2</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/fairy-gone-2nd-season-a3628/" title="Fairy Gone 2nd Season (2019)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2019/09/29/animevsub-5rlCSt27Jr.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Fairy Gone 2nd Season (2019)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="7.8 trong số 10 dựa trên 8 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.8</div></div>
+</div>
+<div class="Title">Fairy Gone 2nd Season</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/jashin-chan-dropkick-a3697/" title="Jashin-chan Dropkick&#39 (2020)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2020/04/24/animevsub-N3VDV2rdPs.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Jashin-chan Dropkick&#39 (2020)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.8 trong số 10 dựa trên 18 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.8</div></div>
+</div>
+<div class="Title">Jashin-chan Dropkick&#39</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/ginga-eiyuu-densetsu-die-neue-these-seiran-1-a3661/" title="Ginga Eiyuu Densetsu: Die Neue These - Seiran 1 (2019)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2019/10/13/animevsub-Br3poffJKk.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ginga Eiyuu Densetsu: Die Neue These - Seiran 1 (2019)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.5 trong số 10 dựa trên 6 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.5</div></div>
+</div>
+<div class="Title">Ginga Eiyuu Densetsu: Die Neue These - Seiran 1</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/honzuki-no-gekokujou-shisho-ni-naru-tame-ni-wa-shudan-wo-erandeiraremasen-2nd-seasonbrspan-classtitle-englishascendance-of-a-bookworm-part-2-a3684/" title="Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season (2020)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2020/04/22/animevsub-bbnr12qskE.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season (2020)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.2 trong số 10 dựa trên 33 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.2</div></div>
+</div>
+<div class="Title">Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/ginga-eiyuu-densetsu-die-neue-these-seiran-3-a3718/" title="Ginga Eiyuu Densetsu: Die Neue These - Seiran 3 (2019)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2020/04/29/animevsub-cGMiIuNZAS.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ginga Eiyuu Densetsu: Die Neue These - Seiran 3 (2019)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="7.8 trong số 10 dựa trên 4 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.8</div></div>
+</div>
+<div class="Title">Ginga Eiyuu Densetsu: Die Neue These - Seiran 3</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/ginga-eiyuu-densetsu-die-neue-these-seiran-2-a3719/" title="Ginga Eiyuu Densetsu: Die Neue These - Seiran 2 (2019)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2020/04/29/animevsub-UdLGwmOfnm.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ginga Eiyuu Densetsu: Die Neue These - Seiran 2 (2019)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="10 trong số 10 dựa trên 3 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>10</div></div>
+</div>
+<div class="Title">Ginga Eiyuu Densetsu: Die Neue These - Seiran 2</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/sword-art-online-alicization-war-of-underworld-2nd-season-r1-a3724/" title="Sword Art Online: Alicization - War of Underworld 2nd Season (2020)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2020/08/18/animevsub-KDtngToABl.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Sword Art Online: Alicization - War of Underworld 2nd Season (2020)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.5 trong số 10 dựa trên 130 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.5</div></div>
+</div>
+<div class="Title">Sword Art Online: Alicization - War of Underworld 2nd Season</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/tensei-shitara-slime-datta-ken-2nd-season-part-2-a3934/" title="Tensei shitara Slime Datta Ken 2nd Season Part 2 (2021)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2021/04/19/animevsub-kXQpHYedv2.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Tensei shitara Slime Datta Ken 2nd Season Part 2 (2021)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.6 trong số 10 dựa trên 204 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.6</div></div>
+</div>
+<div class="Title">Tensei shitara Slime Datta Ken 2nd Season Part 2</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/rezero-kara-hajimeru-isekai-seikatsu-2nd-season-part-2-a3935/" title="Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season Part 2 (2021)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2020/11/27/animevsub-ZdNYH0HFoq.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season Part 2 (2021)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.3 trong số 10 dựa trên 104 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.3</div></div>
+</div>
+<div class="Title">Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season Part 2</div>
+</a>
+ </div>
+</div>
+</div>
+</div>
+</main>
+<aside class="widget-area" role="complementary">
+<section class="Wdgt">
+<div class="Title">Hôm nay xem gì?</div><p>Nếu bạn buồn phiền không biết xem gì hôm nay. Hãy để chúng tôi chọn cho bạn</p><a href="http://animevietsub.cc/phim/co-len-douki-chan-a4311/" class="Button TPlay AAIco-play_arrow">Xem Anime <strong>Ngẫu Nhiên</strong></a></section>
+<div class="Dvr-300"><div><center>
+<a href="https://fb.com/233536333844133" target="_blank"><img src="https://ci3.googleusercontent.com/mZI_lfpGW9NbuQ4qnbnfClQu3lVKccG067BGTYb6YVzaddILwDKSZ4Y_NIHXlkusgYOOI7ZicXMxk_XnnJEIxp3ovzOULO4RRywdmUNq7TPXkyB0-ZNY7xOHmjohwg=s0" alt="group" width="300px" height="250px"></a>
+<zone id="kwvigxyu"></zone>
+<script>
+arfAsync.push("kwvigxyu");
+</script>
+<script data-cfasync="false" type="text/javascript" src="//i8xkjci7nd.com/lv/esnk/1890933/code.js" async id="__clb-1890933"></script>
+</center></div></div>
+
+<section class="Wdgt" id="showChonLoc">
+<div class="Title">ANIME MỚI CẬP NHẬT</div>
+<ul class="MovieList Newepisode">
+<li><a href="http://animevietsub.cc/phim/bucchigire-a4592/" title="Xem Anime Nổi Loạn!"><span>Nổi Loạn!</span><span>Tập 11</span></a></li><li><a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/" title="Xem Anime Ame wo Tsugeru Hyouryuu Danchi"><span>Ame wo Tsugeru Hyouryuu Danchi</span><span>Full</span></a></li><li><a href="http://animevietsub.cc/phim/nho-ban-do-he-thong-chien-than-a4669/" title="Xem Anime Nhờ Bạn Đó! Hệ Thống Chiến Thần"><span>Nhờ Bạn Đó! Hệ Thống Chiến Thần</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/bay-vien-ngoc-rong-heroes-a3290/" title="Xem Anime Bảy Viên Ngọc Rồng Heroes"><span>Bảy Viên Ngọc Rồng Heroes</span><span>Tập 44</span></a></li><li><a href="http://animevietsub.cc/phim/hac-mon-a4672/" title="Xem Anime Hắc Môn"><span>Hắc Môn</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/digimon-ghost-game-a4348/" title="Xem Anime Digimon Ghost Game"><span>Digimon Ghost Game</span><span>Tập 42</span></a></li><li><a href="http://animevietsub.cc/phim/long-toc-a4695/" title="Xem Anime Long Tộc"><span>Long Tộc</span><span>Tập 06</span></a></li><li><a href="http://animevietsub.cc/phim/qi-jie-diyi-xian-that-gioi-de-nhat-tien-a4492/" title="Xem Anime Thất Giới Đệ Nhất Tiên"><span>Thất Giới Đệ Nhất Tiên</span><span>Tập 63</span></a></li><li><a href="http://animevietsub.cc/phim/thuong-lan-quyet-r1-a4648/" title="Xem Anime Thương Lan Quyết"><span>Thương Lan Quyết</span><span>Tập 11</span></a></li><li><a href="http://animevietsub.cc/phim/linh-kiem-ton-a3396/" title="Xem Anime Linh Kiếm Tôn"><span>Linh Kiếm Tôn</span><span>Tập 315</span></a></li>
+<li><a href="/anime-moi/">Xem thêm..</a></li>
+</ul>
+</section>
+ <section class="Wdgt">
+<div class="Title">Hỏi/đáp anime</div>
+<div class="fbcmt" id="comments">
+<div class="fbcmt title">Đừng quên để like page của AnimeVsub <div class="fb-like" data-href="https://www.facebook.com/animevsub/" data-layout="button_count" data-action="like" data-size="large" data-lazy="true" data-show-faces="true"></div> để cập nhật anime mỗi ngày</div>
+<span style="color:#000000">Nếu bạn không truy cập được animevietsub.tv mời truy cập <a href="http://animevietsub.cc" target="_blank"><span style="color:#ff5722"><strong>animevietsub.cc</strong></span></a></span>
+<div class="Comment Wrt" id="respond">
+<div class="fb-comments fb_iframe_widget" data-href="http://animevietsub.tv" data-numposts="3" data-width="100%" data-colorscheme="light" data-order-by="reverse_time"></div>
+</div>
+</div> </section>
+
+<section class="Wdgt" id="showTopPhim">
+<div class="Title">HOT TUẦN<div class="Top">
+<a href="/anime-bo/" class="STPb Current" title="Anime TV/Series xem nhiều nhất tuần" data-tag="top-bo-week">TV/Series</a>
+<a href="/anime-le/" class="STPb" title="Movie/OVA xem nhiều nhất tuần" data-tag="top-le-week">Movie/OVA</a>
+</div></div>
+<ul class="MovieList">
+<li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/overlord-iv-a4263/"> <span class="Top">#1<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2022/06/16/animevsub-N3lu0GaZTE.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Overlord IV - Overlord 4, Overlord SS4"></figure></div><div class="Title">Overlord IV</div> </a><p class="Info"> <span class="Vote AAIco-star">9.6</span><span class="Time AAIco-access_time">11/13</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/one-piece-dao-hai-tac-a1/"> <span class="Top">#2<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2019/09/27/animevsub-sQCBqYz9ve.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="One Piece - Đảo Hải Tặc - Vua Hải Tặc"></figure></div><div class="Title">One Piece - Đảo Hải Tặc</div> </a><p class="Info"> <span class="Vote AAIco-star">9.1</span><span class="Time AAIco-access_time">1032/???</span> <span class="Date AAIco-date_range">1999</span> <span class="Qlty">FHD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/kinsou-no-vermeil-gakeppuchi-majutsushi-wa-saikyou-no-yakusai-to-mahou-sekai-wo-tsukisusumu-r2-a4603/"> <span class="Top">#3<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2022/07/20/animevsub-7lXaym9oxN.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu - Vermeil in Gold"></figure></div><div class="Title">Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu</div> </a><p class="Info"> <span class="Vote AAIco-star">8.3</span><span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/the-gioi-phep-thuat-a474/"> <span class="Top">#4<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2020/10/17/animevsub-IoEzyCjdCJ.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Black Clover (TV) - Black Clover (2017), Black Clover, Thế Giới Phép Thuật, Cỏ Ba Lá Đen"></figure></div><div class="Title">Black Clover (TV)</div> </a><p class="Info"> <span class="Vote AAIco-star">9.5</span><span class="Time AAIco-access_time">170/170</span> <span class="Date AAIco-date_range">2017</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-r3-a3/"> <span class="Top">#5<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2019/08/26/animevsub-bGw5lnUHTC.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Thám Tử Lừng Danh Conan - Detective Conan, Case Closed, Meitantei Conan"></figure></div><div class="Title">Thám Tử Lừng Danh Conan</div> </a><p class="Info"> <span class="Vote AAIco-star">9.4</span><span class="Time AAIco-access_time">1055/????</span> <span class="Date AAIco-date_range">1996</span> <span class="Qlty">HD</span></p></div></li>
+</ul>
+</section>
+ <div class="Dvr-300"> </div>
+<div class="tag-list-main"><ul><li class="tag-item"><a class="tag-link" title="List anime thể loại Action - Comedy" href="http://animevietsub.cc/danh-sach/all/1-3/all/all/">List anime thể loại Action - Comedy</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title="List anime thể loại Action  -Romance" href="http://animevietsub.cc/danh-sach/all/1-24/all/all/">List anime thể loại Action -Romance</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title=" List anime thể loại Harem - Comedy" href="http://animevietsub.cc/danh-sach/all/3-10/all/all/"> List anime thể loại Harem - Comedy</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title=" List Phim Hoạt Hình Trung Quốc" href="http://animevietsub.cc/hoat-hinh-trung-quoc/"> List Phim Hoạt Hình Trung Quốc</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title="List anime Ghibli " href="http://animevietsub.cc/tag/ghibli/">List anime Ghibli </a><span class="tag-end">&nbsp;</span></li>
+</ul></div> </aside> </div>
+</div>
+</div>
+<footer class="Footer">
+<div class="Container">
+<div class="MnBrCn BgA">
+<div class="MnBr EcBgA">
+<div class="Container">
+<figure class="Logo">
+<a href="http://animevietsub.cc" title="Xem anime online" rel="home"><img src="http://cdn.animevietsub.cc/data/logo/logoz.png" alt="logo"></a>
+</figure>
+<div class="Rght">
+<nav class="Menu">
+<ul>
+<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home menu-item-490"><a href="<?=$web_link;?>">XEM PHIM</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/yeu-cau-phim.html">YÊU CẦU ANIME</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/pages/discord.html">Chat Anime/Discord</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/pages/thuat-ngu.html">THUẬT NGỮ</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="https://fb.com/233536333844133">GROUP THẢO LUẬN</a></li>
+</ul>
+</nav>
+<ul class="ListSocial">
+<li>
+<a target="_blank" href="https://www.facebook.com/animevsub/" class="fa fa-facebook"></a>
+</li>
+<li>
+<a target="_blank" href="https://www.instagram.com/animevsub/" class="fa fa-instagram"></a>
+</li>
+<li>
+<a target="_blank" href="https://twitter.com/AnimeVsub" class="fa-twitter"></a>
+</li>
+<li>
+<a target="_blank" href="https://www.youtube.com/channel/UCtpcar8l0Tv51xlpwwGVpvA" class="fa-youtube-play"></a>
+</li>
+<li>
+<a href="#Tp-Wp" class="Up AAIco-arrow_upward"></a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="WebDescription">
+<p><a href="http://www.kanefusafs.net/" rel="dofollow" target="_blank" title="Kanefusa Fansub">Kanefusa Fansub </a>&nbsp;<a href="http://animevietsub.cc/phim/dao-hai-tac-a1/" target="_blank" title="One Piece - Đảo Hải Tặc">One Piece, Vua Hải Tặc&nbsp;Đảo Hải Tặc</a>&nbsp;<a href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-a3/" target="_blank" title="Thám Tử Lừng Danh Conan">Th&aacute;m Tử Lừng Danh Conan</a>&nbsp;<a href="http://animevietsub.cc/hoat-hinh-trung-quoc" target="_blank" title="Hoạt Hình Trung Quốc">Hoạt H&igrave;nh Trung Quốc</a></p>
+</div>
+<div class="WebDescription">
+Liên Hệ Quảng Cáo: <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dabbbea99abbb4b3b7bfacb3bfaea9afb8f4aeac">[email&#160;protected]</a></b>
+</div>
+<p class="Copy"><a target="_blank" href="<?=$web_link;?>">© Copyright 2022 AnimeVietSub.TV. All rights reserved.</a></p>
+</div></footer>
+<div id="loading">
+<div id="loading-center">
+<div id="loading-center-absolute">
+<div class="object" id="object_one"></div>
+<div class="object" id="object_two"></div>
+<div class="object" id="object_three"></div>
+<div class="object" id="object_four"></div>
+</div>
+</div>
+</div>
+<div class="top-message"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-68882454-10"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-68882454-10');
+</script>
+<div style="position: fixed; top: 60px; right: 40px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: -700px; margin-right: 0px; visibility: visible;"><zone id="kwybox12"></zone>
+<script>
+arfAsync.push("kwybox12");
+</script></div></div>
+<div style="position: fixed; top: 60px; left: 70px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: 500px; margin-right: 0px; visibility: visible;"><zone id="kwybpkrw"></zone>
+<script>
+arfAsync.push("kwybpkrw");
+</script></div></div> <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0&appId=1214104412028762&autoLogAppEvents=1" nonce="zNEV1awW"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/film.notiny.js?v=1.0"></script>
+<!--[if lt IE 9]><script type="text/javascript" src="https://animevietsub.cc/statics/default/js/ie/css3mq.js"></script><![endif]-->
+<!--[if lte IE 9]><script type="text/javascript" src="https://animevietsub.cc/statics/default/js/ie/ie.js"></script><![endif]-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6186261113573228" crossorigin="anonymous"></script> </div>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/film.rating.js"></script>
+<div style="position: fixed; top: 60px; right: 40px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: -700px; margin-right: 0px; visibility: visible;"><zone id="kwybox12"></zone>
+<script>
+arfAsync.push("kwybox12");
+</script></div></div>
+<div style="position: fixed; top: 60px; left: 70px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: 500px; margin-right: 0px; visibility: visible;"><zone id="kwybpkrw"></zone>
+<script>
+arfAsync.push("kwybpkrw");
+</script></div></div></body>
+</html>
