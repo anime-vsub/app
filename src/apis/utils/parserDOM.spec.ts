@@ -1,4 +1,5 @@
-import { describe, test, expect } from "vitest"
+import { describe, expect, test } from "vitest"
+
 import { parserDOM } from "./parserDOM"
 
 describe("parserDOM", () => {

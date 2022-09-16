@@ -6,10 +6,11 @@ import { getPathName } from "../utils/getPathName"
 import { getText } from "../utils/getText"
 import { parserDOM } from "../utils/parserDOM"
 
+// eslint-disable-next-line camelcase
 export async function Phim_Id(html: string) {
   const dom = parserDOM(html)
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   const name = getText(dom.querySelector(".Title")!)
   const othername = dom.querySelector(".SubTitle")?.textContent
 
@@ -22,6 +23,7 @@ export async function Phim_Id(html: string) {
     : null
   const description = getText(dom.querySelector(".Description")!)
   const rate = int(dom.querySelector("#average_score")?.textContent)
+  // eslint-disable-next-line camelcase
   const count_rate = int(dom.querySelector(".num-rating")?.textContent)
   const duration = dom.querySelector(".AAIco-access_time")?.textContent
   const yearOf = int(dom.querySelector(".AAIco-date_range > a")?.textContent)
@@ -78,6 +80,7 @@ export async function Phim_Id(html: string) {
     pathToView,
     description,
     rate,
+    // eslint-disable-next-line camelcase
     count_rate,
     duration,
     yearOf,

@@ -2,6 +2,7 @@ import { int } from "../utils/float"
 import { getAttrs } from "../utils/getAttrs"
 import { getPathName } from "../utils/getPathName"
 import { getText } from "../utils/getText"
+
 import { getInfoAnchor } from "./getInfoAnchor"
 
 export function getInfoTPost(item: Element) {
@@ -11,7 +12,7 @@ export function getInfoTPost(item: Element) {
   const { src: image } = getAttrs(item.querySelector("img")!, ["src"])
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const name = getText(item.querySelector(".Title")!)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   const chap = int(item.querySelector(".mli-eps > i")?.textContent)
   const rate = parseFloat(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -26,7 +27,7 @@ export function getInfoTPost(item: Element) {
 
   // =============== more =====================
   const quality = item.querySelector(".Qlty")?.textContent
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   const process = item
     .querySelector(".AAIco-access_time")
     ?.textContent?.split("/")
@@ -35,12 +36,12 @@ export function getInfoTPost(item: Element) {
       if (Number.isNaN(val)) return "?"
       return val
     })
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   const year = int(item.querySelector(".AAIco-date_range")?.textContent)
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   const description = item.querySelector(".Description > p")?.textContent
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   const studio = item.querySelector(".Studio")?.childNodes[1].nodeValue
   const genre = Array.from(item.querySelectorAll(".genre > a")).map(getInfoAnchor)
   const countdown =
