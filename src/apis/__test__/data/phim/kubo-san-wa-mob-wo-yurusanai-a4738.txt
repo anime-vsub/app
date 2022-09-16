@@ -81,7 +81,7 @@
 </div>
 </div>
 <div class="Rght BgA">
- <div class="Search" id="SearchDesktop">
+<div class="Search" id="SearchDesktop">
 <form method="post" id="form-search" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchDesktop')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>
 <div class="search-suggest" style="display: none;">
 <ul style="margin-bottom: 0;" id="search-suggest-list"></ul>
@@ -179,29 +179,40 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6186261113573228" crossorigin="anonymous"></script>
 
 <ins class="adsbygoogle" style="display:inline-block;width:1100px;height:150px" data-ad-client="ca-pub-6186261113573228" data-ad-slot="6516846232"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
+<script>\r
+     (adsbygoogle = window.adsbygoogle || []).push({});\r
 </script>
 <zone id="kwvia9z0"></zone>
-<script>
-arfAsync.push("kwvia9z0");
+<script>\r
+arfAsync.push("kwvia9z0");\r
 </script>
 </center></div></div>
 <div class="MovieListTopCn">
 <div class="MovieListTop owl-carousel">
 <div class="TPostMv">
 <div class="TPost B">
+<a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/" title="Ame wo Tsugeru Hyouryuu Danchi (2022)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/09/16/animevsub-puzlsiihbq.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ame wo Tsugeru Hyouryuu Danchi (2022)" /></figure>
+<span class="mli-quality">HD</span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="10 trong số 10 dựa trên 2 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>10</div></div>
+</div>
+<div class="Title">Ame wo Tsugeru Hyouryuu Danchi</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
 <a href="http://animevietsub.cc/phim/call-of-the-night-a4536/" title="Yofukashi no Uta (2022)">
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/06/03/animevsub-FOWOKDAhpl.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Yofukashi no Uta (2022)" /></figure>
 <span class="mli-eps">TẬP<i>11</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 479 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 480 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
 </div>
 <div class="Title">Yofukashi no Uta</div>
 </a>
 </div>
 </div><div class="TPostMv">
- <div class="TPost B">
+<div class="TPost B">
 <a href="http://animevietsub.cc/phim/hataraku-maou-sama-2nd-season-a4257/" title="Ma Vương Đi Làm Mùa 2 (2022)">
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/06/17/animevsub-SfrMOcBfZn.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ma Vương Đi Làm Mùa 2 (2022)" /></figure>
@@ -226,7 +237,7 @@ arfAsync.push("kwvia9z0");
 <div class="TPost B">
 <a href="http://animevietsub.cc/phim/bastard-ankoku-no-hakaishin-a4633/" title="Bastard!! Ankoku no Hakaishin (2022)">
 <div class="Image">
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/07/02/animevsub-pvXNmGAaot.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Bastard!! Ankoku no Hakaishin (2022)" /></figure>
+ <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/07/02/animevsub-pvXNmGAaot.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Bastard!! Ankoku no Hakaishin (2022)" /></figure>
 <span class="mli-eps">HOÀN<i>TẤT</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.5 trong số 10 dựa trên 14 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.5</div></div>
 </div>
@@ -239,7 +250,7 @@ arfAsync.push("kwvia9z0");
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/06/18/animevsub-sIvt7WHi4C.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Bảy Viên Ngọc Rồng Siêu Cấp: Siêu Anh Hùng (2022)" /></figure>
 <span class="mli-quality">HD</span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.4 trong số 10 dựa trên 60 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.4</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.5 trong số 10 dựa trên 61 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.5</div></div>
 </div>
 <div class="Title">Bảy Viên Ngọc Rồng Siêu Cấp: Siêu Anh Hùng</div>
 </a>
@@ -250,7 +261,7 @@ arfAsync.push("kwvia9z0");
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2021/06/14/animevsub-FM2yyp9aUo.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Jujutsu Kaisen 0: Chú Thuật Hồi Chiến (2021)" /></figure>
 <span class="mli-quality">HD</span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 346 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 347 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
 </div>
 <div class="Title">Jujutsu Kaisen 0: Chú Thuật Hồi Chiến</div>
 </a>
@@ -263,7 +274,7 @@ arfAsync.push("kwvia9z0");
 <span class="mli-eps">TẬP<i>11</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="8.3 trong số 10 dựa trên 470 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.3</div></div>
 </div>
-<div class="Title">Lập Harem Chốn Mê Cung Ở Dị Giới</div>
+ <div class="Title">Lập Harem Chốn Mê Cung Ở Dị Giới</div>
 </a>
 </div>
 </div><div class="TPostMv">
@@ -272,7 +283,7 @@ arfAsync.push("kwvia9z0");
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/06/03/animevsub-58Am65Vzfz.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ (2022)" /></figure>
 <span class="mli-eps">TẬP<i>11</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 784 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 786 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
 </div>
 <div class="Title">Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ</div>
 </a>
@@ -283,7 +294,7 @@ arfAsync.push("kwvia9z0");
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/07/20/animevsub-7lXaym9oxN.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu (2022)" /></figure>
 <span class="mli-eps">TẬP<i>11</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.3 trong số 10 dựa trên 905 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.3</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.3 trong số 10 dựa trên 907 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.3</div></div>
 </div>
 <div class="Title">Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu</div>
 </a>
@@ -350,19 +361,8 @@ arfAsync.push("kwvia9z0");
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2019/08/26/animevsub-bGw5lnUHTC.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thám Tử Lừng Danh Conan (1996)" /></figure>
 <span class="mli-eps">TẬP<i>1055</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 429 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
- </div>
+</div>
 <div class="Title">Thám Tử Lừng Danh Conan</div>
-</a>
-</div>
-</div><div class="TPostMv">
-<div class="TPost B">
-<a href="http://animevietsub.cc/phim/isekai-akkyoku-a4602/" title="Hiệu Thuốc Tại Dị Giới (2022)">
-<div class="Image">
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/07/24/animevsub-DdcB6QUpj5.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Hiệu Thuốc Tại Dị Giới (2022)" /></figure>
-<span class="mli-eps">TẬP<i>10</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.5 trong số 10 dựa trên 285 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.5</div></div>
-</div>
-<div class="Title">Hiệu Thuốc Tại Dị Giới</div>
 </a>
 </div>
 </div>
@@ -374,6 +374,25 @@ arfAsync.push("kwvia9z0");
 <div class="MovieListSld owl-carousel">
 <div class="TPostMv">
 <div class="TPost D">
+<a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/">
+<div class="Image">
+<figure class="Objf"><img class="TPostBg" src="http://cdn.animevietsub.cc/data/big_banner/2022/09/16/animevsub-iJ7ev8pskM.jpg" alt="Background"></figure>
+</div>
+</a>
+<div class="TPMvCn">
+<a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/">
+<div class="Title">Ame wo Tsugeru Hyouryuu Danchi</div>
+</a>
+<p class="Info"> <span class="Vote AAIco-star">2</span> <span class="Time AAIco-access_time">2 giờ</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
+<div class="Description">
+<p>Kousuke và Natsume là bạn từ khi còn nhỏ, nhưng theo thời gian, mối quan hệ giữa hai người trở nên căng thẳng nên...</p>
+<p class="Studio AAIco-videocam"><span>Studio:</span> Studio Colorido</p>
+<p class="Genre AAIco-movie_creation"><span>Thể Loại:</span> <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/phieu-luu/" title="Adventure">Adventure</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
+</div>
+<div class="Cast"> <img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Haba Reina" title="Nhân vật Haba Reina"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Andou Juri" title="Nhân vật Andou Juri"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Koiwai Taishi" title="Nhân vật Koiwai Taishi"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Tachibana Yuzuru" title="Nhân vật Tachibana Yuzuru"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Tonai Natsume" title="Nhân vật Tonai Natsume"> <button type="button" class="Button STPa AAIco-more_horiz"></button></div> <a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/" class="Button TPlay AAIco-play_arrow">Xem <strong>Phim</strong></a></div>
+</div>
+</div><div class="TPostMv">
+<div class="TPost D">
 <a href="http://animevietsub.cc/phim/call-of-the-night-a4536/">
 <div class="Image">
 <figure class="Objf"><img class="TPostBg" src="http://cdn.animevietsub.cc/data/big_banner/2022/07/08/animevsub-WeAcGmb85A.jpg" alt="Background"></figure>
@@ -383,7 +402,7 @@ arfAsync.push("kwvia9z0");
 <a href="http://animevietsub.cc/phim/call-of-the-night-a4536/">
 <div class="Title">Yofukashi no Uta</div>
 </a>
-<p class="Info"> <span class="Vote AAIco-star">479</span> <span class="Time AAIco-access_time">11/13</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
+<p class="Info"> <span class="Vote AAIco-star">480</span> <span class="Time AAIco-access_time">11/13</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
 <div class="Description">
 <p>Kou Yamori bề ngoài có vẻ giống như một học sinh cấp hai điển hình. Tương đối tốt trong học tập và hòa nhã với...</p>
 <p class="Studio AAIco-videocam"><span>Studio:</span> LIDENFILMS</p>
@@ -412,7 +431,7 @@ arfAsync.push("kwvia9z0");
 </div>
 </div><div class="TPostMv">
 <div class="TPost D">
-<a href="http://animevietsub.cc/phim/kumichou-musume-to-sewagakari-a4594/">
+ <a href="http://animevietsub.cc/phim/kumichou-musume-to-sewagakari-a4594/">
 <div class="Image">
 <figure class="Objf"><img class="TPostBg" src="http://cdn.animevietsub.cc/data/big_banner/2022/06/17/animevsub-OlUDXAxcIY.jpg" alt="Background"></figure>
 </div>
@@ -442,7 +461,7 @@ arfAsync.push("kwvia9z0");
 </a>
 <p class="Info"> <span class="Vote AAIco-star">14</span> <span class="Time AAIco-access_time">24/24</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
 <div class="Description">
-<p>
+ <p>
 Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nhân vật phản diện này - bậc thầy ninja Gara, nữ...</p>
 <p class="Studio AAIco-videocam"><span>Studio:</span> LIDENFILMS</p>
 <p class="Genre AAIco-movie_creation"><span>Thể Loại:</span> <a href="http://animevietsub.cc/the-loai/seinen/" title="Seinen">Seinen</a>, <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/ecchi/" title="Ecchi">Ecchi</a>, <a href="http://animevietsub.cc/the-loai/hai-huoc/" title="Comedy">Comedy</a>, <a href="http://animevietsub.cc/the-loai/phieu-luu/" title="Adventure">Adventure</a>, <a href="http://animevietsub.cc/the-loai/hanh-dong/" title="Action">Action</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
@@ -460,7 +479,7 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 <a href="http://animevietsub.cc/phim/dragon-ball-super-super-hero-a4605/">
 <div class="Title">Bảy Viên Ngọc Rồng Siêu Cấp: Siêu Anh Hùng</div>
 </a>
-<p class="Info"> <span class="Vote AAIco-star">60</span> <span class="Time AAIco-access_time">99 phút</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
+<p class="Info"> <span class="Vote AAIco-star">61</span> <span class="Time AAIco-access_time">99 phút</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
 <div class="Description">
 <p>Phần tiếp theo của phim Dragon Ball Super: Broly.</p>
 <p class="Studio AAIco-videocam"><span>Studio:</span> Toei Animation</p>
@@ -479,7 +498,7 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 <a href="http://animevietsub.cc/phim/chu-thuat-hoi-chien-jujutsu-kaisen-0-a4157/">
 <div class="Title">Jujutsu Kaisen 0: Chú Thuật Hồi Chiến</div>
 </a>
-<p class="Info"> <span class="Vote AAIco-star">346</span> <span class="Time AAIco-access_time">105 Phút</span> <span class="Date AAIco-date_range">2021</span> <span class="Qlty">HD</span></p>
+<p class="Info"> <span class="Vote AAIco-star">347</span> <span class="Time AAIco-access_time">105 Phút</span> <span class="Date AAIco-date_range">2021</span> <span class="Qlty">HD</span></p>
 <div class="Description">
 <p>Cho những ai chưa biết, Jujutsu Kaisen 0 là là tập truyện ngắn ra mắt trước khi Chú Thuật Hồi Chiến được sáng tác....</p>
 <p class="Studio AAIco-videocam"><span>Studio:</span> MAPPA</p>
@@ -517,7 +536,7 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 <a href="http://animevietsub.cc/phim/mamahaha-no-tsurego-ga-motokano-datta-a4562/">
 <div class="Title">Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ</div>
 </a>
-<p class="Info"> <span class="Vote AAIco-star">784</span> <span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
+<p class="Info"> <span class="Vote AAIco-star">786</span> <span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
 <div class="Description">
 <p>Thời học trung học, Idori Mizuto và Ayai Yume tình cờ quen nhau và trở thành người yêu của nhau. Nhưng vì vài biến cố...</p>
 <p class="Studio AAIco-videocam"><span>Studio:</span> Project No.9</p>
@@ -536,32 +555,13 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 <a href="http://animevietsub.cc/phim/kinsou-no-vermeil-gakeppuchi-majutsushi-wa-saikyou-no-yakusai-to-mahou-sekai-wo-tsukisusumu-r2-a4603/">
 <div class="Title">Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu</div>
 </a>
-<p class="Info"> <span class="Vote AAIco-star">905</span> <span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
+<p class="Info"> <span class="Vote AAIco-star">907</span> <span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
 <div class="Description">
 <p>Học viện Phép thuật Hoàng gia Ortigia.Alto, đang trên bờ vực thất bại trong lớp học ma thuật triệu hồi và phải...</p>
 <p class="Studio AAIco-videocam"><span>Studio:</span> Staple Entertainment</p>
 <p class="Genre AAIco-movie_creation"><span>Thể Loại:</span> <a href="http://animevietsub.cc/the-loai/shounen/" title="Shounen">Shounen</a>, <a href="http://animevietsub.cc/the-loai/truong-hoc/" title="School">School</a>, <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/ecchi/" title="Ecchi">Ecchi</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
 </div>
 <div class="Cast"> <img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Vermeil" title="Nhân vật Vermeil"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Goldfilled Alto" title="Nhân vật Goldfilled Alto"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Kudelfate Lilia" title="Nhân vật Kudelfate Lilia"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật François" title="Nhân vật François"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Westland Chris" title="Nhân vật Westland Chris"> <button type="button" class="Button STPa AAIco-more_horiz"></button></div> <a href="http://animevietsub.cc/phim/kinsou-no-vermeil-gakeppuchi-majutsushi-wa-saikyou-no-yakusai-to-mahou-sekai-wo-tsukisusumu-r2-a4603/" class="Button TPlay AAIco-play_arrow">Xem <strong>Phim</strong></a></div>
-</div>
-</div><div class="TPostMv">
-<div class="TPost D">
-<a href="http://animevietsub.cc/phim/overlord-iv-a4263/">
-<div class="Image">
-<figure class="Objf"><img class="TPostBg" src="http://cdn.animevietsub.cc/data/big_banner/2022/06/16/animevsub-lQOffL5gsP.jpg" alt="Background"></figure>
-</div>
-</a>
-<div class="TPMvCn">
-<a href="http://animevietsub.cc/phim/overlord-iv-a4263/">
-<div class="Title">Overlord IV</div>
-</a>
-<p class="Info"> <span class="Vote AAIco-star">1002</span> <span class="Time AAIco-access_time">11/13</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p>
-<div class="Description">
-<p>Đây là phần 4 của&nbsp;Overlord.</p>
-<p class="Studio AAIco-videocam"><span>Studio:</span> Madhouse</p>
-<p class="Genre AAIco-movie_creation"><span>Thể Loại:</span> <a href="http://animevietsub.cc/the-loai/sieu-nhien/" title="Supernatural">Supernatural</a>, <a href="http://animevietsub.cc/the-loai/tro-choi/" title="Game">Game</a>, <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/ma-thuat/" title="Magic">Magic</a>, <a href="http://animevietsub.cc/the-loai/hanh-dong/" title="Action">Action</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
-</div>
-<div class="Cast"> <img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Momonga" title="Nhân vật Momonga"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Albedo" title="Nhân vật Albedo"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Bloodfallen Shalltear" title="Nhân vật Bloodfallen Shalltear"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Demiurge" title="Nhân vật Demiurge"><img src="https://animevietsub.cc/statics/default/images/cast-image_40.png" alt="Nhân vật Pandora&#39s Actor" title="Nhân vật Pandora&#39s Actor"> <button type="button" class="Button STPa AAIco-more_horiz"></button></div> <a href="http://animevietsub.cc/phim/overlord-iv-a4263/" class="Button TPlay AAIco-play_arrow">Xem <strong>Phim</strong></a></div>
 </div>
 </div> </div>
 </div>
@@ -577,6 +577,26 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 </div>
 <ul class="MovieList Rows AX A06 B04 C03 E20">
 <li class="TPostMv">
+<article id="post-4740" class="TPost C post-4740 post type-post status-publish format-standard has-post-thumbnail hentry">
+<a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/09/16/animevsub-puzlsiihbq.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Ame wo Tsugeru Hyouryuu Danchi - Drifting Home (2022)" title="Ame wo Tsugeru Hyouryuu Danchi (2022)" /></figure>
+<span class="mli-quality">HD</span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="10 trong số 10 dựa trên 2 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>10</div></div>
+</div>
+<h2 class="Title">Ame wo Tsugeru Hyouryuu Danchi</h2> <span class="Year">Lượt xem: 570</span> </a>
+<div class="TPMvCn anmt">
+<div class="Title">Ame wo Tsugeru Hyouryuu Danchi</div>
+<p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">10</span> <span class="Time AAIco-access_time">2 giờ</span> <span class="Date AAIco-date_range">2022</span></p>
+<div class="Description">
+<p>Kousuke và Natsume là bạn từ khi còn nhỏ, nhưng theo thời gian, mối quan hệ giữa hai người trở nên căng thẳng nên...</p>
+<p class="Studio AAIco-videocam"><span>Studio:</span> Studio Colorido <i class="Button STPa AAIco-more_horiz"></i></p>
+<p class="Genre AAIco-movie_creation"><span>Thể loại:</span> <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/phieu-luu/" title="Adventure">Adventure</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
+<p class="Actors AAIco-person"><span>Diễn viên:</span> Haba Reina,  <i class="Button STPa AAIco-more_horiz"></i></p>
+</div>
+</div>
+</article>
+</li><li class="TPostMv">
 <article id="post-4669" class="TPost C post-4669 post type-post status-publish format-standard has-post-thumbnail hentry">
 <a href="http://animevietsub.cc/phim/nho-ban-do-he-thong-chien-than-a4669/">
 <div class="Image">
@@ -584,7 +604,7 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 <span class="mli-eps">TẬP<i>09</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="8.7 trong số 10 dựa trên 39 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.7</div></div>
 </div>
-<h2 class="Title">Nhờ Bạn Đó! Hệ Thống Chiến Thần</h2> <span class="Year">Lượt xem: 235,674</span> </a>
+<h2 class="Title">Nhờ Bạn Đó! Hệ Thống Chiến Thần</h2> <span class="Year">Lượt xem: 238,390</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Nhờ Bạn Đó! Hệ Thống Chiến Thần</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">8.7</span> <span class="Time AAIco-access_time">09/??</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -602,12 +622,12 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2018/10/28/animevsub-vLEPhEPGkk.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Bảy Viên Ngọc Rồng Heroes - Dragon Ball Heroes, Super Dragon Ball Heroes: Universe Mission (2018)" title="Bảy Viên Ngọc Rồng Heroes (2018)" /></figure>
 <span class="mli-eps">TẬP<i>44</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="7.4 trong số 10 dựa trên 36 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.4</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="7.5 trong số 10 dựa trên 37 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.5</div></div>
 </div>
-<h2 class="Title">Bảy Viên Ngọc Rồng Heroes</h2> <span class="Year">Lượt xem: 986,928</span> </a>
+<h2 class="Title">Bảy Viên Ngọc Rồng Heroes</h2> <span class="Year">Lượt xem: 989,050</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Bảy Viên Ngọc Rồng Heroes</div>
-<p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">7.4</span> <span class="Time AAIco-access_time">44/??</span> <span class="Date AAIco-date_range">2018</span></p>
+<p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">7.5</span> <span class="Time AAIco-access_time">44/??</span> <span class="Date AAIco-date_range">2018</span></p>
 <div class="Description">
 <p>
 Super Saiyan 4 Son Goku vs Super Saiyan God Super Saiyan ( Super Saiyan Blue ) Son Goku - Trận Chiến Đỉnh Cao tại &#39&#39 Hành...</p>
@@ -621,11 +641,11 @@ Super Saiyan 4 Son Goku vs Super Saiyan God Super Saiyan ( Super Saiyan Blue ) S
 <article id="post-4672" class="TPost C post-4672 post type-post status-publish format-standard has-post-thumbnail hentry">
 <a href="http://animevietsub.cc/phim/hac-mon-a4672/">
 <div class="Image">
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/08/10/animevsub-OKYu6g5tSn.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Hắc Môn - Hei Men, Swarm (2022)" title="Hắc Môn (2022)" /></figure>
+ <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/08/10/animevsub-OKYu6g5tSn.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Hắc Môn - Hei Men, Swarm (2022)" title="Hắc Môn (2022)" /></figure>
 <span class="mli-eps">TẬP<i>09</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="6.3 trong số 10 dựa trên 6 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>6.3</div></div>
 </div>
-<h2 class="Title">Hắc Môn</h2> <span class="Year">Lượt xem: 19,568</span> </a>
+<h2 class="Title">Hắc Môn</h2> <span class="Year">Lượt xem: 19,678</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Hắc Môn</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">6.3</span> <span class="Time AAIco-access_time">09/12</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -645,14 +665,14 @@ Super Saiyan 4 Son Goku vs Super Saiyan God Super Saiyan ( Super Saiyan Blue ) S
 <span class="mli-eps">TẬP<i>42</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="8.3 trong số 10 dựa trên 11 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.3</div></div>
 </div>
-<h2 class="Title">Digimon Ghost Game</h2> <span class="Year">Lượt xem: 96,689</span> </a>
+<h2 class="Title">Digimon Ghost Game</h2> <span class="Year">Lượt xem: 96,829</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Digimon Ghost Game</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">8.3</span> <span class="Time AAIco-access_time">42/??</span> <span class="Date AAIco-date_range">2021</span></p>
 <div class="Description">
-<p>
+ <p>
 Hiro có thể nhìn thấy Digimon sau khi kích hoạt một "Digivice" mà cha anh đã để lại cho anh. Cùng với Digimon Gammamon,...</p>
- <p class="Studio AAIco-videocam"><span>Studio:</span> Toei Animation <i class="Button STPa AAIco-more_horiz"></i></p>
+<p class="Studio AAIco-videocam"><span>Studio:</span> Toei Animation <i class="Button STPa AAIco-more_horiz"></i></p>
 <p class="Genre AAIco-movie_creation"><span>Thể loại:</span> <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/hai-huoc/" title="Comedy">Comedy</a>, <a href="http://animevietsub.cc/the-loai/phieu-luu/" title="Adventure">Adventure</a>, <a href="http://animevietsub.cc/the-loai/hanh-dong/" title="Action">Action</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
 <p class="Actors AAIco-person"><span>Diễn viên:</span> Gammamon,  <i class="Button STPa AAIco-more_horiz"></i></p>
 </div>
@@ -664,9 +684,9 @@ Hiro có thể nhìn thấy Digimon sau khi kích hoạt một "Digivice" mà ch
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="https://puui.qpic.cn/vcover_vt_pic/0/mzc00200fr1ry1o1656480935127/0" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Long Tộc - 龙族, Dragon Raja (2022)" title="Long Tộc (2022)" /></figure>
 <span class="mli-eps">TẬP<i>06</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.1 trong số 10 dựa trên 73 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.1</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.1 trong số 10 dựa trên 74 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.1</div></div>
 </div>
-<h2 class="Title">Long Tộc</h2> <span class="Year">Lượt xem: 116,302</span> </a>
+<h2 class="Title">Long Tộc</h2> <span class="Year">Lượt xem: 118,410</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Long Tộc</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.1</span> <span class="Time AAIco-access_time">06/??</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -677,7 +697,7 @@ Hiro có thể nhìn thấy Digimon sau khi kích hoạt một "Digivice" mà ch
 <p class="Actors AAIco-person"><span>Diễn viên:</span> <div class="alert alert-warning">Nhân vật đang được cập nhật</div> <i class="Button STPa AAIco-more_horiz"></i></p>
 </div>
 </div>
- </article>
+</article>
 </li><li class="TPostMv">
 <article id="post-4492" class="TPost C post-4492 post type-post status-publish format-standard has-post-thumbnail hentry">
 <a href="http://animevietsub.cc/phim/qi-jie-diyi-xian-that-gioi-de-nhat-tien-a4492/">
@@ -686,7 +706,7 @@ Hiro có thể nhìn thấy Digimon sau khi kích hoạt một "Digivice" mà ch
 <span class="mli-eps">TẬP<i>63</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="7.9 trong số 10 dựa trên 41 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.9</div></div>
 </div>
-<h2 class="Title">Thất Giới Đệ Nhất Tiên</h2> <span class="Year">Lượt xem: 421,066</span> </a>
+<h2 class="Title">Thất Giới Đệ Nhất Tiên</h2> <span class="Year">Lượt xem: 421,560</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Thất Giới Đệ Nhất Tiên</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">7.9</span> <span class="Time AAIco-access_time">63/60</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -706,7 +726,7 @@ Hiro có thể nhìn thấy Digimon sau khi kích hoạt một "Digivice" mà ch
 <span class="mli-eps">TẬP<i>11</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.2 trong số 10 dựa trên 21 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.2</div></div>
 </div>
-<h2 class="Title">Thương Lan Quyết</h2> <span class="Year">Lượt xem: 103,760</span> </a>
+<h2 class="Title">Thương Lan Quyết</h2> <span class="Year">Lượt xem: 104,262</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Thương Lan Quyết</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.2</span> <span class="Time AAIco-access_time">11/24</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -726,7 +746,7 @@ Hiro có thể nhìn thấy Digimon sau khi kích hoạt một "Digivice" mà ch
 <span class="mli-eps">TẬP<i>315</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="7.4 trong số 10 dựa trên 131 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.4</div></div>
 </div>
-<h2 class="Title">Linh Kiếm Tôn</h2> <span class="Year">Lượt xem: 4,065,370</span> </a>
+<h2 class="Title">Linh Kiếm Tôn</h2> <span class="Year">Lượt xem: 4,066,449</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Linh Kiếm Tôn</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">7.4</span> <span class="Time AAIco-access_time">315/???</span> <span class="Date AAIco-date_range">2019</span></p>
@@ -746,7 +766,7 @@ Hiro có thể nhìn thấy Digimon sau khi kích hoạt một "Digivice" mà ch
 <span class="mli-eps">TẬP<i>128</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="7.7 trong số 10 dựa trên 92 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.7</div></div>
 </div>
-<h2 class="Title">Nghịch Thiên Chí Tôn</h2> <span class="Year">Lượt xem: 1,776,381</span> </a>
+<h2 class="Title">Nghịch Thiên Chí Tôn</h2> <span class="Year">Lượt xem: 1,777,678</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Nghịch Thiên Chí Tôn</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">7.7</span> <span class="Time AAIco-access_time">128/???</span> <span class="Date AAIco-date_range">2021</span></p>
@@ -759,28 +779,8 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 </div>
 </div>
 </article>
-</li><li class="TPostMv">
-<article id="post-4098" class="TPost C post-4098 post type-post status-publish format-standard has-post-thumbnail hentry">
-<a href="http://animevietsub.cc/phim/the-gioi-hoan-my-a4098/">
-<div class="Image">
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/04/01/animevsub-JcN7KtFxCe.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Thế Giới Hoàn Mỹ - Perfect World, Wanmei Shijie (2021)" title="Thế Giới Hoàn Mỹ (2021)" /></figure>
-<span class="mli-eps">TẬP<i>76</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.2 trong số 10 dựa trên 320 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.2</div></div>
-</div>
-<h2 class="Title">Thế Giới Hoàn Mỹ</h2> <span class="Year">Lượt xem: 4,820,806</span> </a>
-<div class="TPMvCn anmt">
-<div class="Title">Thế Giới Hoàn Mỹ</div>
-<p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.2</span> <span class="Time AAIco-access_time">76/78</span> <span class="Date AAIco-date_range">2021</span></p>
-<div class="Description">
-<p>Một hạt bụi có thể lấp biển, một cọng cỏ chém hết mặt trời mặt trăng và ngôi sao, trong nháy mắt ở giữa...</p>
-<p class="Studio AAIco-videocam"><span>Studio:</span> Shanghai Foch Film and TV Culture Investment <i class="Button STPa AAIco-more_horiz"></i></p>
-<p class="Genre AAIco-movie_creation"><span>Thể loại:</span> <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/phieu-luu/" title="Adventure">Adventure</a>, <a href="http://animevietsub.cc/the-loai/hanh-dong/" title="Action">Action</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
-<p class="Actors AAIco-person"><span>Diễn viên:</span> <div class="alert alert-warning">Nhân vật đang được cập nhật</div> <i class="Button STPa AAIco-more_horiz"></i></p>
-</div>
-</div>
-</article>
 </li>
- </ul>
+</ul>
 <a href="/anime-moi/" class="viewall">Xem thêm.. <i class="ion-ios-arrow-right"></i></a>
 </section>
 <section id="new-home">
@@ -793,10 +793,10 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <a href="http://animevietsub.cc/phim/detective-conan-movie-25-halloween-no-hanayome-a4418/">
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/02/14/animevsub-hvhxNxwXwf.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Thám Tử Lừng Danh Conan: Nàng dâu Halloween - Detective Conan Movie 25: Halloween no Hanayome, Meitantei Conan: Halloween no Hanayome (2022)" title="Thám Tử Lừng Danh Conan: Nàng dâu Halloween (2022)" /></figure>
-<span class="mli-timeschedule" data-timer_second="4610167">7w 4d 8h 36m 7s</span><span class="b">2022-11-09</span>
+<span class="mli-timeschedule" data-timer_second="4598414">7w 4d 5h 20m 14s</span><span class="b">2022-11-09</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.6 trong số 10 dựa trên 75 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.6</div></div>
 </div>
-<h2 class="Title">Thám Tử Lừng Danh Conan: Nàng dâu Halloween</h2> <span class="Year">Lượt xem: 1,129,335</span> </a>
+<h2 class="Title">Thám Tử Lừng Danh Conan: Nàng dâu Halloween</h2> <span class="Year">Lượt xem: 1,130,396</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Thám Tử Lừng Danh Conan: Nàng dâu Halloween</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.6</span> <span class="Time AAIco-access_time">110 Phút</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -816,7 +816,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-timeschedule">SẮP CHIẾU</span><span class="b">2022</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 23 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
 </div>
-<h2 class="Title">Spy x Family Part 2</h2> <span class="Year">Lượt xem: 7,737</span> </a>
+<h2 class="Title">Spy x Family Part 2</h2> <span class="Year">Lượt xem: 7,819</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Spy x Family Part 2</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.4</span> <span class="Time AAIco-access_time">PV/13</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -836,7 +836,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-timeschedule">SẮP CHIẾU</span><span class="b">2022</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="8.2 trong số 10 dựa trên 21 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.2</div></div>
 </div>
-<h2 class="Title">Chuyển Sinh Thành Kiếm</h2> <span class="Year">Lượt xem: 4,953</span> </a>
+<h2 class="Title">Chuyển Sinh Thành Kiếm</h2> <span class="Year">Lượt xem: 5,010</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Chuyển Sinh Thành Kiếm</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">8.2</span> <span class="Time AAIco-access_time">PV/??</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -856,9 +856,9 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-timeschedule">SẮP CHIẾU</span><span class="b">2023</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="7.6 trong số 10 dựa trên 157 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.6</div></div>
 </div>
-<h2 class="Title">Thám Tử Đã Chết Mùa 2</h2> <span class="Year">Lượt xem: 23,370</span> </a>
+<h2 class="Title">Thám Tử Đã Chết Mùa 2</h2> <span class="Year">Lượt xem: 23,405</span> </a>
 <div class="TPMvCn anmt">
- <div class="Title">Thám Tử Đã Chết Mùa 2</div>
+<div class="Title">Thám Tử Đã Chết Mùa 2</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">7.6</span> <span class="Time AAIco-access_time">PV/??</span> <span class="Date AAIco-date_range">2023</span></p>
 <div class="Description">
 <p>Mùa 2 của&nbsp;Tantei wa Mou, Shindeiru.&nbsp;</p>
@@ -876,7 +876,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-timeschedule">SẮP CHIẾU</span><span class="b">2023</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.1 trong số 10 dựa trên 21 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.1</div></div>
 </div>
-<h2 class="Title">Kubo-san wa Mob wo Yurusanai</h2> <span class="Year">Lượt xem: 1,683</span> </a>
+<h2 class="Title">Kubo-san wa Mob wo Yurusanai</h2> <span class="Year">Lượt xem: 1,712</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Kubo-san wa Mob wo Yurusanai</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.1</span> <span class="Time AAIco-access_time">Chưa Biết</span> <span class="Date AAIco-date_range">2023</span></p>
@@ -889,14 +889,14 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 </div>
 </article>
 </li><li class="TPostMv">
-<article id="post-4737" class="TPost C post-4737 post type-post status-publish format-standard has-post-thumbnail hentry">
+ <article id="post-4737" class="TPost C post-4737 post type-post status-publish format-standard has-post-thumbnail hentry">
 <a href="http://animevietsub.cc/phim/berserk-ougon-jidai-hen-memorial-edition-a4737/">
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/09/09/animevsub-3NslLYz5z6.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Berserk: Ougon Jidai-hen MEMORIAL EDITION - Berserk: The Golden Age Arc MEMORIAL EDITION, BERSERK: Ougon Jidai-hen MEMORIAL EDITION (2022)" title="Berserk: Ougon Jidai-hen MEMORIAL EDITION (2022)" /></figure>
-<span class="mli-timeschedule" data-timer_second="1240567">2w 8h 36m 7s</span><span class="b">2022-10-01</span>
+<span class="mli-timeschedule" data-timer_second="1228814">2w 5h 20m 14s</span><span class="b">2022-10-01</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="7.8 trong số 10 dựa trên 4 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.8</div></div>
 </div>
-<h2 class="Title">Berserk: Ougon Jidai-hen MEMORIAL EDITION</h2> <span class="Year">Lượt xem: 1,927</span> </a>
+<h2 class="Title">Berserk: Ougon Jidai-hen MEMORIAL EDITION</h2> <span class="Year">Lượt xem: 1,947</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Berserk: Ougon Jidai-hen MEMORIAL EDITION</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">7.8</span> <span class="Time AAIco-access_time">PV/??</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -916,7 +916,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-timeschedule">SẮP CHIẾU</span><span class="b">2022</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="10 trong số 10 dựa trên 2 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>10</div></div>
 </div>
-<h2 class="Title">Akiba Maid Sensou</h2> <span class="Year">Lượt xem: 1,318</span> </a>
+<h2 class="Title">Akiba Maid Sensou</h2> <span class="Year">Lượt xem: 1,332</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Akiba Maid Sensou</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">10</span> <span class="Time AAIco-access_time">PV/??</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -933,11 +933,11 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <a href="http://animevietsub.cc/phim/cool-doji-danshi-a4735/">
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/09/09/animevsub-LLEuV3pB5Q.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Cool Doji Danshi - Play It Cool, Guys (2022)" title="Cool Doji Danshi (2022)" /></figure>
-<span class="mli-timeschedule" data-timer_second="2104567">3w 3d 8h 36m 7s</span><span class="b">2022-10-11</span>
+<span class="mli-timeschedule" data-timer_second="2092814">3w 3d 5h 20m 14s</span><span class="b">2022-10-11</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="5 trong số 10 dựa trên 0 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>5</div></div>
 </div>
-<h2 class="Title">Cool Doji Danshi</h2> <span class="Year">Lượt xem: 1,148</span> </a>
- <div class="TPMvCn anmt">
+<h2 class="Title">Cool Doji Danshi</h2> <span class="Year">Lượt xem: 1,164</span> </a>
+<div class="TPMvCn anmt">
 <div class="Title">Cool Doji Danshi</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">5</span> <span class="Time AAIco-access_time">PV/??</span> <span class="Date AAIco-date_range">2022</span></p>
 <div class="Description">
@@ -956,7 +956,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-timeschedule">SẮP CHIẾU</span><span class="b">2022</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="5 trong số 10 dựa trên 0 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>5</div></div>
 </div>
-<h2 class="Title">Uchi no Shishou wa Shippo ga Nai</h2> <span class="Year">Lượt xem: 871</span> </a>
+<h2 class="Title">Uchi no Shishou wa Shippo ga Nai</h2> <span class="Year">Lượt xem: 884</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Uchi no Shishou wa Shippo ga Nai</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">5</span> <span class="Time AAIco-access_time">PV/??</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -973,10 +973,10 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <a href="http://animevietsub.cc/phim/yama-no-susume-next-summit-a4733/">
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/09/09/animevsub-SwhzzfoUL8.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Yama no Susume: Next Summit - Encouragement of Climb: Next Summit (2022)" title="Yama no Susume: Next Summit (2022)" /></figure>
-<span class="mli-timeschedule" data-timer_second="1586167">2w 4d 8h 36m 7s</span><span class="b">2022-10-05</span>
+<span class="mli-timeschedule" data-timer_second="1574414">2w 4d 5h 20m 14s</span><span class="b">2022-10-05</span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="6.7 trong số 10 dựa trên 3 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>6.7</div></div>
 </div>
-<h2 class="Title">Yama no Susume: Next Summit</h2> <span class="Year">Lượt xem: 912</span> </a>
+<h2 class="Title">Yama no Susume: Next Summit</h2> <span class="Year">Lượt xem: 922</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Yama no Susume: Next Summit</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">6.7</span> <span class="Time AAIco-access_time">PV/12</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -1012,7 +1012,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-eps">TẬP<i>1032</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.1 trong số 10 dựa trên 1700 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.1</div></div>
 </div>
-<h2 class="Title">One Piece - Đảo Hải Tặc</h2> <span class="Year">Lượt xem: 57,884,346</span> </a>
+<h2 class="Title">One Piece - Đảo Hải Tặc</h2> <span class="Year">Lượt xem: 57,894,269</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">One Piece - Đảo Hải Tặc</div>
 <p class="Info"><span class="Qlty">FHD</span> <span class="Vote AAIco-star">9.1</span> <span class="Time AAIco-access_time">1032/???</span> <span class="Date AAIco-date_range">1999</span></p>
@@ -1026,13 +1026,13 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 </article>
 </li><li class="TPostMv">
 <article id="post-4263" class="TPost C post-4263 post type-post status-publish format-standard has-post-thumbnail hentry">
- <a href="http://animevietsub.cc/phim/overlord-iv-a4263/">
+<a href="http://animevietsub.cc/phim/overlord-iv-a4263/">
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/06/16/animevsub-N3lu0GaZTE.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Overlord IV - Overlord 4, Overlord SS4 (2022)" title="Overlord IV (2022)" /></figure>
 <span class="mli-eps">TẬP<i>11</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.6 trong số 10 dựa trên 1002 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.6</div></div>
 </div>
-<h2 class="Title">Overlord IV</h2> <span class="Year">Lượt xem: 3,652,501</span> </a>
+<h2 class="Title">Overlord IV</h2> <span class="Year">Lượt xem: 3,658,728</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Overlord IV</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.6</span> <span class="Time AAIco-access_time">11/13</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -1045,14 +1045,34 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 </div>
 </article>
 </li><li class="TPostMv">
+<article id="post-474" class="TPost C post-474 post type-post status-publish format-standard has-post-thumbnail hentry">
+<a href="http://animevietsub.cc/phim/the-gioi-phep-thuat-a474/">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2020/10/17/animevsub-IoEzyCjdCJ.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Black Clover (TV) - Black Clover (2017), Black Clover, Thế Giới Phép Thuật, Cỏ Ba Lá Đen (2017)" title="Black Clover (TV) (2017)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.5 trong số 10 dựa trên 1014 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.5</div></div>
+</div>
+<h2 class="Title">Black Clover (TV)</h2> <span class="Year">Lượt xem: 33,599,268</span> </a>
+<div class="TPMvCn anmt">
+<div class="Title">Black Clover (TV)</div>
+<p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.5</span> <span class="Time AAIco-access_time">170/170</span> <span class="Date AAIco-date_range">2017</span></p>
+<div class="Description">
+<p>Asta và Yuno đã bị bỏ rơi cùng nhau tại cùng một nhà thờ và đã không thể tách rời kể từ đó. Khi còn trẻ, họ...</p>
+<p class="Studio AAIco-videocam"><span>Studio:</span> Studio Pierrot <i class="Button STPa AAIco-more_horiz"></i></p>
+<p class="Genre AAIco-movie_creation"><span>Thể loại:</span> <a href="http://animevietsub.cc/the-loai/shounen/" title="Shounen">Shounen</a>, <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/hai-huoc/" title="Comedy">Comedy</a>, <a href="http://animevietsub.cc/the-loai/ma-thuat/" title="Magic">Magic</a>, <a href="http://animevietsub.cc/the-loai/hanh-dong/" title="Action">Action</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
+<p class="Actors AAIco-person"><span>Diễn viên:</span> Asta,  <i class="Button STPa AAIco-more_horiz"></i></p>
+</div>
+</div>
+</article>
+</li><li class="TPostMv">
 <article id="post-4603" class="TPost C post-4603 post type-post status-publish format-standard has-post-thumbnail hentry">
 <a href="http://animevietsub.cc/phim/kinsou-no-vermeil-gakeppuchi-majutsushi-wa-saikyou-no-yakusai-to-mahou-sekai-wo-tsukisusumu-r2-a4603/">
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/07/20/animevsub-7lXaym9oxN.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu - Vermeil in Gold (2022)" title="Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu (2022)" /></figure>
 <span class="mli-eps">TẬP<i>11</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.3 trong số 10 dựa trên 905 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.3</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.3 trong số 10 dựa trên 907 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.3</div></div>
 </div>
- <h2 class="Title">Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu</h2> <span class="Year">Lượt xem: 3,291,523</span> </a>
+<h2 class="Title">Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu</h2> <span class="Year">Lượt xem: 3,295,793</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">8.3</span> <span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -1072,7 +1092,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-eps">TẬP<i>1055</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 429 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
 </div>
-<h2 class="Title">Thám Tử Lừng Danh Conan</h2> <span class="Year">Lượt xem: 20,065,317</span> </a>
+<h2 class="Title">Thám Tử Lừng Danh Conan</h2> <span class="Year">Lượt xem: 20,069,307</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Thám Tử Lừng Danh Conan</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.4</span> <span class="Time AAIco-access_time">1055/????</span> <span class="Date AAIco-date_range">1996</span></p>
@@ -1085,26 +1105,6 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 </div>
 </article>
 </li><li class="TPostMv">
-<article id="post-474" class="TPost C post-474 post type-post status-publish format-standard has-post-thumbnail hentry">
-<a href="http://animevietsub.cc/phim/the-gioi-phep-thuat-a474/">
-<div class="Image">
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2020/10/17/animevsub-IoEzyCjdCJ.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Black Clover (TV) - Black Clover (2017), Black Clover, Thế Giới Phép Thuật, Cỏ Ba Lá Đen (2017)" title="Black Clover (TV) (2017)" /></figure>
-<span class="mli-eps">HOÀN<i>TẤT</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.5 trong số 10 dựa trên 1014 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.5</div></div>
-</div>
-<h2 class="Title">Black Clover (TV)</h2> <span class="Year">Lượt xem: 33,594,876</span> </a>
-<div class="TPMvCn anmt">
-<div class="Title">Black Clover (TV)</div>
-<p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.5</span> <span class="Time AAIco-access_time">170/170</span> <span class="Date AAIco-date_range">2017</span></p>
-<div class="Description">
-<p>Asta và Yuno đã bị bỏ rơi cùng nhau tại cùng một nhà thờ và đã không thể tách rời kể từ đó. Khi còn trẻ, họ...</p>
-<p class="Studio AAIco-videocam"><span>Studio:</span> Studio Pierrot <i class="Button STPa AAIco-more_horiz"></i></p>
-<p class="Genre AAIco-movie_creation"><span>Thể loại:</span> <a href="http://animevietsub.cc/the-loai/shounen/" title="Shounen">Shounen</a>, <a href="http://animevietsub.cc/the-loai/phep-thuat/" title="Fantasy">Fantasy</a>, <a href="http://animevietsub.cc/the-loai/hai-huoc/" title="Comedy">Comedy</a>, <a href="http://animevietsub.cc/the-loai/ma-thuat/" title="Magic">Magic</a>, <a href="http://animevietsub.cc/the-loai/hanh-dong/" title="Action">Action</a>, <i class="Button STPa AAIco-more_horiz"></i></p>
-<p class="Actors AAIco-person"><span>Diễn viên:</span> Asta,  <i class="Button STPa AAIco-more_horiz"></i></p>
-</div>
-</div>
-</article>
-</li><li class="TPostMv">
 <article id="post-4098" class="TPost C post-4098 post type-post status-publish format-standard has-post-thumbnail hentry">
 <a href="http://animevietsub.cc/phim/the-gioi-hoan-my-a4098/">
 <div class="Image">
@@ -1112,7 +1112,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-eps">TẬP<i>76</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.2 trong số 10 dựa trên 320 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.2</div></div>
 </div>
-<h2 class="Title">Thế Giới Hoàn Mỹ</h2> <span class="Year">Lượt xem: 4,820,806</span> </a>
+<h2 class="Title">Thế Giới Hoàn Mỹ</h2> <span class="Year">Lượt xem: 4,824,115</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Thế Giới Hoàn Mỹ</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.2</span> <span class="Time AAIco-access_time">76/78</span> <span class="Date AAIco-date_range">2021</span></p>
@@ -1130,9 +1130,9 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/06/03/animevsub-58Am65Vzfz.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ - Mamahaha no Tsurego ga Motokano datta, My Stepsister is My Ex-Girlfriend, Tsurekano (2022)" title="Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ (2022)" /></figure>
 <span class="mli-eps">TẬP<i>11</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 784 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 786 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
 </div>
-<h2 class="Title">Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ</h2> <span class="Year">Lượt xem: 1,717,232</span> </a>
+<h2 class="Title">Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ</h2> <span class="Year">Lượt xem: 1,720,064</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.4</span> <span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -1152,7 +1152,7 @@ Tàn khốc nguyền rủa, vạn thế...</p>
 <span class="mli-eps">HOÀN<i>TẤT</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="9.5 trong số 10 dựa trên 14 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.5</div></div>
 </div>
-<h2 class="Title">Bastard!! Ankoku no Hakaishin</h2> <span class="Year">Lượt xem: 126,613</span> </a>
+<h2 class="Title">Bastard!! Ankoku no Hakaishin</h2> <span class="Year">Lượt xem: 129,102</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Bastard!! Ankoku no Hakaishin</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.5</span> <span class="Time AAIco-access_time">24/24</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -1173,7 +1173,7 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 <span class="mli-eps">TẬP<i>11</i></span>
 <div class="anime-extras"><div class="anime-avg-user-rating" title="8.3 trong số 10 dựa trên 470 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.3</div></div>
 </div>
-<h2 class="Title">Lập Harem Chốn Mê Cung Ở Dị Giới</h2> <span class="Year">Lượt xem: 1,606,338</span> </a>
+<h2 class="Title">Lập Harem Chốn Mê Cung Ở Dị Giới</h2> <span class="Year">Lượt xem: 1,608,722</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Lập Harem Chốn Mê Cung Ở Dị Giới</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">8.3</span> <span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -1191,9 +1191,9 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 <div class="Image">
 <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/06/03/animevsub-FOWOKDAhpl.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Yofukashi no Uta - Call of the Night (2022)" title="Yofukashi no Uta (2022)" /></figure>
 <span class="mli-eps">TẬP<i>11</i></span>
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 479 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.4 trong số 10 dựa trên 480 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.4</div></div>
 </div>
-<h2 class="Title">Yofukashi no Uta</h2> <span class="Year">Lượt xem: 1,148,836</span> </a>
+<h2 class="Title">Yofukashi no Uta</h2> <span class="Year">Lượt xem: 1,151,465</span> </a>
 <div class="TPMvCn anmt">
 <div class="Title">Yofukashi no Uta</div>
 <p class="Info"><span class="Qlty">HD</span> <span class="Vote AAIco-star">9.4</span> <span class="Time AAIco-access_time">11/13</span> <span class="Date AAIco-date_range">2022</span></p>
@@ -1211,13 +1211,13 @@ Vương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nh�
 </section>
 </main>
 <aside class="widget-area" role="complementary">
- <section class="Wdgt">
-<div class="Title">Hôm nay xem gì?</div><p>Nếu bạn buồn phiền không biết xem gì hôm nay. Hãy để chúng tôi chọn cho bạn</p><a href="http://animevietsub.cc/phim/afro-samurai-movie-i1-a133/" class="Button TPlay AAIco-play_arrow">Xem Anime <strong>Ngẫu Nhiên</strong></a></section>
-<div class="Dvr-300"><div><center>
+<section class="Wdgt">
+<div class="Title">Hôm nay xem gì?</div><p>Nếu bạn buồn phiền không biết xem gì hôm nay. Hãy để chúng tôi chọn cho bạn</p><a href="http://animevietsub.cc/phim/saiki-kusuo-no-nan-tv-a2309/" class="Button TPlay AAIco-play_arrow">Xem Anime <strong>Ngẫu Nhiên</strong></a></section>
+ <div class="Dvr-300"><div><center>
 <a href="https://fb.com/233536333844133" target="_blank"><img src="https://ci3.googleusercontent.com/mZI_lfpGW9NbuQ4qnbnfClQu3lVKccG067BGTYb6YVzaddILwDKSZ4Y_NIHXlkusgYOOI7ZicXMxk_XnnJEIxp3ovzOULO4RRywdmUNq7TPXkyB0-ZNY7xOHmjohwg=s0" alt="group" width="300px" height="250px"></a>
 <zone id="kwvigxyu"></zone>
-<script>
-arfAsync.push("kwvigxyu");
+<script>\r
+arfAsync.push("kwvigxyu");\r
 </script>
 <script data-cfasync="false" type="text/javascript" src="//i8xkjci7nd.com/lv/esnk/1890933/code.js" async id="__clb-1890933"></script>
 </center></div></div>
@@ -1234,14 +1234,14 @@ arfAsync.push("kwvigxyu");
 <section class="Wdgt" id="showChonLoc">
 <div class="Title">ANIME MỚI CẬP NHẬT</div>
 <ul class="MovieList Newepisode">
-<li><a href="http://animevietsub.cc/phim/nho-ban-do-he-thong-chien-than-a4669/" title="Xem Anime Nhờ Bạn Đó! Hệ Thống Chiến Thần"><span>Nhờ Bạn Đó! Hệ Thống Chiến Thần</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/bay-vien-ngoc-rong-heroes-a3290/" title="Xem Anime Bảy Viên Ngọc Rồng Heroes"><span>Bảy Viên Ngọc Rồng Heroes</span><span>Tập 44</span></a></li><li><a href="http://animevietsub.cc/phim/hac-mon-a4672/" title="Xem Anime Hắc Môn"><span>Hắc Môn</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/digimon-ghost-game-a4348/" title="Xem Anime Digimon Ghost Game"><span>Digimon Ghost Game</span><span>Tập 42</span></a></li><li><a href="http://animevietsub.cc/phim/long-toc-a4695/" title="Xem Anime Long Tộc"><span>Long Tộc</span><span>Tập 06</span></a></li><li><a href="http://animevietsub.cc/phim/qi-jie-diyi-xian-that-gioi-de-nhat-tien-a4492/" title="Xem Anime Thất Giới Đệ Nhất Tiên"><span>Thất Giới Đệ Nhất Tiên</span><span>Tập 63</span></a></li><li><a href="http://animevietsub.cc/phim/thuong-lan-quyet-r1-a4648/" title="Xem Anime Thương Lan Quyết"><span>Thương Lan Quyết</span><span>Tập 11</span></a></li><li><a href="http://animevietsub.cc/phim/linh-kiem-ton-a3396/" title="Xem Anime Linh Kiếm Tôn"><span>Linh Kiếm Tôn</span><span>Tập 315</span></a></li><li><a href="http://animevietsub.cc/phim/nghich-thien-chi-ton-a4194/" title="Xem Anime Nghịch Thiên Chí Tôn"><span>Nghịch Thiên Chí Tôn</span><span>Tập 128</span></a></li><li><a href="http://animevietsub.cc/phim/the-gioi-hoan-my-a4098/" title="Xem Anime Thế Giới Hoàn Mỹ"><span>Thế Giới Hoàn Mỹ</span><span>Tập 76</span></a></li>
+<li><a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/" title="Xem Anime Ame wo Tsugeru Hyouryuu Danchi"><span>Ame wo Tsugeru Hyouryuu Danchi</span><span>Full</span></a></li><li><a href="http://animevietsub.cc/phim/nho-ban-do-he-thong-chien-than-a4669/" title="Xem Anime Nhờ Bạn Đó! Hệ Thống Chiến Thần"><span>Nhờ Bạn Đó! Hệ Thống Chiến Thần</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/bay-vien-ngoc-rong-heroes-a3290/" title="Xem Anime Bảy Viên Ngọc Rồng Heroes"><span>Bảy Viên Ngọc Rồng Heroes</span><span>Tập 44</span></a></li><li><a href="http://animevietsub.cc/phim/hac-mon-a4672/" title="Xem Anime Hắc Môn"><span>Hắc Môn</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/digimon-ghost-game-a4348/" title="Xem Anime Digimon Ghost Game"><span>Digimon Ghost Game</span><span>Tập 42</span></a></li><li><a href="http://animevietsub.cc/phim/long-toc-a4695/" title="Xem Anime Long Tộc"><span>Long Tộc</span><span>Tập 06</span></a></li><li><a href="http://animevietsub.cc/phim/qi-jie-diyi-xian-that-gioi-de-nhat-tien-a4492/" title="Xem Anime Thất Giới Đệ Nhất Tiên"><span>Thất Giới Đệ Nhất Tiên</span><span>Tập 63</span></a></li><li><a href="http://animevietsub.cc/phim/thuong-lan-quyet-r1-a4648/" title="Xem Anime Thương Lan Quyết"><span>Thương Lan Quyết</span><span>Tập 11</span></a></li><li><a href="http://animevietsub.cc/phim/linh-kiem-ton-a3396/" title="Xem Anime Linh Kiếm Tôn"><span>Linh Kiếm Tôn</span><span>Tập 315</span></a></li><li><a href="http://animevietsub.cc/phim/nghich-thien-chi-ton-a4194/" title="Xem Anime Nghịch Thiên Chí Tôn"><span>Nghịch Thiên Chí Tôn</span><span>Tập 128</span></a></li>
 <li><a href="/anime-moi/">Xem thêm..</a></li>
 </ul>
 </section>
-
+ 
 <section class="Wdgt" id="showTopPhim">
 <div class="Title">HOT TUẦN<div class="Top">
-<a href="/anime-bo/" class="STPb Current" title="Anime TV/Series xem nhiều nhất tuần" data-tag="top-bo-week">TV/Series</a>
+ <a href="/anime-bo/" class="STPb Current" title="Anime TV/Series xem nhiều nhất tuần" data-tag="top-bo-week">TV/Series</a>
 <a href="/anime-le/" class="STPb" title="Movie/OVA xem nhiều nhất tuần" data-tag="top-le-week">Movie/OVA</a>
 </div></div>
 <ul class="MovieList">
@@ -1284,11 +1284,11 @@ arfAsync.push("kwvigxyu");
 </li>
 <li>
 <a target="_blank" href="https://twitter.com/AnimeVsub" class="fa-twitter"></a>
- </li>
+</li>
 <li>
 <a target="_blank" href="https://www.youtube.com/channel/UCtpcar8l0Tv51xlpwwGVpvA" class="fa-youtube-play"></a>
 </li>
-<li>
+ <li>
 <a href="#Tp-Wp" class="Up AAIco-arrow_upward"></a>
 </li>
 </ul>
@@ -1300,7 +1300,7 @@ arfAsync.push("kwvigxyu");
 <p><a href="http://www.kanefusafs.net/" rel="dofollow" target="_blank" title="Kanefusa Fansub">Kanefusa Fansub </a>&nbsp;<a href="http://animevietsub.cc/phim/dao-hai-tac-a1/" target="_blank" title="One Piece - Đảo Hải Tặc">One Piece, Vua Hải Tặc&nbsp;Đảo Hải Tặc</a>&nbsp;<a href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-a3/" target="_blank" title="Thám Tử Lừng Danh Conan">Th&aacute;m Tử Lừng Danh Conan</a>&nbsp;<a href="http://animevietsub.cc/hoat-hinh-trung-quoc" target="_blank" title="Hoạt Hình Trung Quốc">Hoạt H&igrave;nh Trung Quốc</a></p>
 </div>
 <div class="WebDescription">
-Liên Hệ Quảng Cáo: <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3554514675545b5c5850435c50414640571b4143">[email&#160;protected]</a></b>
+Liên Hệ Quảng Cáo: <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3253564172535c5b5f57445b57464147501c4644">[email&#160;protected]</a></b>
 </div>
 <p class="Copy"><a target="_blank" href="<?=$web_link;?>">© Copyright 2022 AnimeVietSub.TV. All rights reserved.</a></p>
 </div></footer>
@@ -1325,12 +1325,12 @@ Liên Hệ Quảng Cáo: <b><a href="/cdn-cgi/l/email-protection" class="__cf_em
   gtag('config', 'UA-68882454-10');
 </script>
 <div style="position: fixed; top: 60px; right: 40px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: -700px; margin-right: 0px; visibility: visible;"><zone id="kwybox12"></zone>
-<script>
-arfAsync.push("kwybox12");
+<script>\r
+arfAsync.push("kwybox12");\r
 </script></div></div>
 <div style="position: fixed; top: 60px; left: 70px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: 500px; margin-right: 0px; visibility: visible;"><zone id="kwybpkrw"></zone>
-<script>
-arfAsync.push("kwybpkrw");
+<script>\r
+arfAsync.push("kwybpkrw");\r
 </script></div></div> <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0&appId=1214104412028762&autoLogAppEvents=1" nonce="zNEV1awW"></script>
 <script type="text/javascript" src="https://animevietsub.cc/statics/default/js/film.notiny.js?v=1.0"></script>
