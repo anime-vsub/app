@@ -44,7 +44,7 @@
   <q-page v-if="data" class="mt-[-50px]">
     <swiper
       :slides-per-view="1"
-      :space-between="50"
+      :space-between="0"
       :modules="modules"
       :autoplay="{
         delay: 5000,
@@ -53,96 +53,189 @@
       :pagination="{
         clickable: true,
       }"
-      class="swiper"
+      class="swiper-hot"
     >
       <swiper-slide v-for="(item, index) in data.carousel" :key="index">
-        <q-img :aspect-ratio="aspectRatio" :src="item.image" />
+        <q-img :ratio="aspectRatio" :src="item.image" />
         <div class="drop-left"></div>
         <div class="drop-center"></div>
         <div class="drop-right"></div>
-        {{ item }}
-
         <div class="info">
-          <span class="focus-item-quality">HD</span>
+          <div class="flex line-clamp-2 items-center">
+            <span class="focus-item-quality">{{ item.quality }}</span>
+            <div class="text-weight-medium">{{ item.name }}</div>
+          </div>
           <div class="focus-item-info">
             <span class="focus-item-score">
-              <svg
-                width="16px"
-                height="16px"
-                viewBox="0 0 28 27"
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g
-                  id="V1.12.0_UI_4391_Watch-Page-Add-Rating"
-                  stroke="none"
-                  stroke-width="1"
-                  fill="none"
-                  fill-rule="evenodd"
-                >
-                  <g
-                    id="4391-6_1920_info"
-                    transform="translate(-948.000000, -906.000000)"
-                    fill="#1CC749"
-                    fill-rule="nonzero"
-                  >
-                    <g
-                      id="Group-10-Copy-10"
-                      transform="translate(906.000000, 880.000000)"
-                    >
-                      <g
-                        id="ic/star_green"
-                        transform="translate(40.000000, 24.000000)"
-                      >
-                        <path
-                          d="M16.7983826,2.56356746 L19.7968803,11.2875241 L29.1657516,11.3941138 C29.9719564,11.4033379 30.3057022,12.4128653 29.6590696,12.8853446 L22.1424877,18.3829131 L24.9344802,27.1724634 C25.17436,27.9288402 24.3014061,28.55198 23.643301,28.0938493 L16.0005215,22.7674392 L8.35669898,28.0928244 C7.69963687,28.5509551 6.82563997,27.9267904 7.06551979,27.1714385 L9.85751226,18.3818882 L2.34093036,12.8843197 C1.69429781,12.4118404 2.02804364,11.402313 2.83424842,11.3930889 L12.2031197,11.2864992 L15.2016174,2.56254256 C15.4602704,1.81231509 16.5407725,1.81231509 16.7983826,2.56356746 Z"
-                          id="Star"
-                        ></path>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>
-              9.7
+              <Star />
+              {{ item.rate }}
             </span>
-            <span class="focus-item-year">2022</span>
-            <span class="focus-item-update">36 tập</span>
+            <span class="focus-item-year">{{ item.year }}</span>
+            <span class="focus-item-update">
+              <template v-if="item.process[0] === item.process[1]">
+                {{ item.process[0] }} tập
+              </template>
+              <template v-else>
+                Tập {{ item.process[0] }} / {{ item.process[1] ?? "??" }}
+              </template>
+            </span>
           </div>
-          <div class="focus-item-tags">
-            <span>Cổ Đại</span>
-            <span>Tiếng Phổ Thông</span>
-            <span>Hư Cấu</span><span>Viễn Tưởng</span>
-            <span>Cổ Trang</span>
+          <div class="focus-item-tags" v-if="item.genre.length > 0">
+            <span v-for="item in item.genre" :key="item">{{ item }}</span>
           </div>
           <div class="focus-item-desc">
-            "Thương Lan Quyết" do Y Tranh đạo diễn với sự tham gia của các diễn
-            viên Ngu Thư Hân, Vương Hạc Đệ, Từ Hải Kiều, Phó Bạch Hàm, Quách
-            Hiểu Đình, Trương Lăng Hác, Lâm Bá Duệ. Là một bộ phim truyền hình
-            Trung Quốc, được chuyển thể từ tiểu thuyết Ma tôn của tác giả Cửu Lộ
-            Phi Hương. Câu chuyện kể về mối
+            {{ item.description }}
           </div>
         </div>
       </swiper-slide>
     </swiper>
-    {{ data }}
+
+    <div class="px-4">
+      <swiper :slides-per-view="'auto'">
+        <swiper-slide
+          v-for="item in data.thisSeason"
+          :key="item.name"
+          class="!w-auto card-wrap"
+        >
+          <Card :data="item" />
+        </swiper-slide>
+      </swiper>
+    </div>
+
+    <div class="px-4 mt-4">
+      <h2 class="text-h6">Đề xuất</h2>
+
+      <swiper
+        :slides-per-view="3"
+        :breakpoints="{
+          0: {
+            slidesPerView: 3.1,
+            spaceBetween: 8,
+          },
+          767: {
+            slidesPerView: 4.1,
+            spaceBetween: 8,
+          },
+          1023: {
+            slidesPerView: 6.1,
+            spaceBetween: 16,
+          },
+        }"
+        :grid="{
+          rows: 2,
+          fill: 'row',
+        }"
+        :modules="[Grid]"
+      >
+        <swiper-slide v-for="item in data.nominate" :key="item.name">
+          <Card :data="item" />
+        </swiper-slide>
+      </swiper>
+    </div>
+
+    <div class="px-4 mt-4">
+      <h2 class="text-h6">Top</h2>
+
+      <swiper :slides-per-view="'auto'">
+        <swiper-slide
+          v-for="(item, index) in data.hotUpdate"
+          :key="item.name"
+          class="!w-auto card-wrap"
+        >
+          <Card :data="item" :trending="index + 1" />
+        </swiper-slide>
+      </swiper>
+    </div>
+
+    <div class="px-4 mt-4">
+      <h2 class="text-h6">Sắp chiếu</h2>
+
+      <swiper :slides-per-view="'auto'">
+        <swiper-slide
+          v-for="item in data.preRelease"
+          :key="item.name"
+          class="!w-auto card-wrap"
+        >
+          {{
+            item.countdown
+              ? dayjs(item.countdown * 1_000 + Date.now()).format("HH:MM")
+              : "Sắp chiếu"
+          }}
+          <Card :data="item" />
+        </swiper-slide>
+      </swiper>
+    </div>
+
+    <div class="px-4 mt-4">
+      <h2 class="text-h6">Mới cập nhật</h2>
+
+      <swiper
+        :slides-per-view="3"
+        :breakpoints="{
+          0: {
+            slidesPerView: 3.1,
+            spaceBetween: 8,
+          },
+          767: {
+            slidesPerView: 4.1,
+            spaceBetween: 8,
+          },
+          1023: {
+            slidesPerView: 6.1,
+            spaceBetween: 16,
+          },
+        }"
+        :grid="{
+          rows: 2,
+          fill: 'row',
+        }"
+        :modules="[Grid]"
+      >
+        <swiper-slide v-for="item in data.lastUpdate" :key="item.name">
+          <Card :data="item" />
+        </swiper-slide>
+      </swiper>
+    </div>
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.card-wrap {
+  $offset: 0.1;
+
+  // width: 155.25px !important;
+  width: calc((100% - 80px) / #{6 + $offset}) !important;
+  margin-right: 16px;
+
+  @media screen and (max-width: 767px) {
+    width: calc((100% - 16px) / #{3 + $offset}) !important;
+    margin-right: 8px;
+  }
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    width: calc((100% - 48px) / #{4 + $offset}) !important;
+  }
+}
+</style>
 
 <script setup lang="ts">
 import { shallowRef } from "vue"
 import { Index } from "src/apis/index"
 import { useRequest } from "vue-request"
+import Star from "components/Star.vue"
+import Card from "components/Card.vue"
+import dayjs from "dayjs"
 
 import html from "src/apis/__test__/data/index.txt?raw"
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue"
 
-import { Pagination, Autoplay } from "swiper"
+import { Pagination, Autoplay, Navigation, Grid } from "swiper"
 
 // Import Swiper styles
 import "swiper/css"
 import "swiper/css/pagination"
 import "swiper/css/autoplay"
+import "swiper/css/grid"
 
 const modules = [Pagination, Autoplay]
 
@@ -152,7 +245,7 @@ const { data, loading, error } = useRequest(() => Index(html))
 </script>
 
 <style lang="scss" scoped>
-.swiper {
+.swiper-hot {
   position: relative;
   overflow: hidden;
   margin-bottom: -15.5%;
@@ -204,6 +297,7 @@ const { data, loading, error } = useRequest(() => Index(html))
       top: 0px;
       width: 100%;
       height: 120px;
+      opacity: 0.7;
       background-image: linear-gradient(
         179.5deg,
         rgba(17, 19, 25, 0.88) 0%,
@@ -263,7 +357,7 @@ const { data, loading, error } = useRequest(() => Index(html))
     color: rgb(255, 255, 255);
     width: 100%;
     padding: 60px 30px calc(32% + 24px + 3.5vw) (30px + 64);
-
+    // padding-top: 0;
     background-image: linear-gradient(
       -180deg,
       rgba(0, 0, 0, 0) 0,
@@ -347,7 +441,7 @@ const { data, loading, error } = useRequest(() => Index(html))
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       text-shadow: rgb(0 0 0 / 50%) 0px 1px 2px;
-      font-weight: 500;
+      font-weight: 400; //500;
       @media screen and (max-width: 1023px) and (min-width: 768px) {
         font-size: 12px;
       }

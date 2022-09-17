@@ -5,6 +5,8 @@ import { getText } from "../utils/getText"
 
 import { getInfoAnchor } from "./getInfoAnchor"
 
+export type TPost = ReturnType<typeof getInfoTPost>
+
 export function getInfoTPost(item: Element) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const path = getPathName(item.querySelector("a")!.getAttribute("href")!)
@@ -12,8 +14,8 @@ export function getInfoTPost(item: Element) {
   const { src: image } = getAttrs(item.querySelector("img")!, ["src"])
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const name = getText(item.querySelector(".Title")!)
-   
-  const chap = int(item.querySelector(".mli-eps > i")?.textContent)
+
+  const chap = item.querySelector(".mli-eps > i")?.textContent
   const rate = parseFloat(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     getText(item.querySelector(".anime-avg-user-rating, .AAIco-star")!)
@@ -27,7 +29,7 @@ export function getInfoTPost(item: Element) {
 
   // =============== more =====================
   const quality = item.querySelector(".Qlty")?.textContent
-   
+
   const process = item
     .querySelector(".AAIco-access_time")
     ?.textContent?.split("/")
@@ -36,18 +38,19 @@ export function getInfoTPost(item: Element) {
       if (Number.isNaN(val)) return "?"
       return val
     })
-   
+
   const year = int(item.querySelector(".AAIco-date_range")?.textContent)
 
-   
   const description = item.querySelector(".Description > p")?.textContent
-   
+
   const studio = item.querySelector(".Studio")?.childNodes[1].nodeValue
-  const genre = Array.from(item.querySelectorAll(".genre > a")).map(getInfoAnchor)
+  const genre = Array.from(item.querySelectorAll(".genre > a")).map(
+    getInfoAnchor
+  )
   const countdown =
-    item
-      .querySelector(".mli-timeschedule")
-      ?.getAttribute("data-timer_second") ?? undefined
+    int(
+      item.querySelector(".mli-timeschedule")?.getAttribute("data-timer_second")
+    ) ?? undefined
 
   return {
     path,
