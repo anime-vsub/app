@@ -47,16 +47,81 @@
       :space-between="50"
       :modules="modules"
       :autoplay="{
-        delay: 2500,
+        delay: 5000,
         disableOnInteraction: false,
       }"
       :pagination="{
         clickable: true,
       }"
+      class="swiper"
     >
       <swiper-slide v-for="(item, index) in data.carousel" :key="index">
-        <q-img :aspect-ratio="622 / 354" :src="item.image" />
+        <q-img :aspect-ratio="aspectRatio" :src="item.image" />
+        <div class="drop-left"></div>
+        <div class="drop-center"></div>
+        <div class="drop-right"></div>
         {{ item }}
+
+        <div class="info">
+          <span class="focus-item-quality">HD</span>
+          <div class="focus-item-info">
+            <span class="focus-item-score">
+              <svg
+                width="16px"
+                height="16px"
+                viewBox="0 0 28 27"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  id="V1.12.0_UI_4391_Watch-Page-Add-Rating"
+                  stroke="none"
+                  stroke-width="1"
+                  fill="none"
+                  fill-rule="evenodd"
+                >
+                  <g
+                    id="4391-6_1920_info"
+                    transform="translate(-948.000000, -906.000000)"
+                    fill="#1CC749"
+                    fill-rule="nonzero"
+                  >
+                    <g
+                      id="Group-10-Copy-10"
+                      transform="translate(906.000000, 880.000000)"
+                    >
+                      <g
+                        id="ic/star_green"
+                        transform="translate(40.000000, 24.000000)"
+                      >
+                        <path
+                          d="M16.7983826,2.56356746 L19.7968803,11.2875241 L29.1657516,11.3941138 C29.9719564,11.4033379 30.3057022,12.4128653 29.6590696,12.8853446 L22.1424877,18.3829131 L24.9344802,27.1724634 C25.17436,27.9288402 24.3014061,28.55198 23.643301,28.0938493 L16.0005215,22.7674392 L8.35669898,28.0928244 C7.69963687,28.5509551 6.82563997,27.9267904 7.06551979,27.1714385 L9.85751226,18.3818882 L2.34093036,12.8843197 C1.69429781,12.4118404 2.02804364,11.402313 2.83424842,11.3930889 L12.2031197,11.2864992 L15.2016174,2.56254256 C15.4602704,1.81231509 16.5407725,1.81231509 16.7983826,2.56356746 Z"
+                          id="Star"
+                        ></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+              9.7
+            </span>
+            <span class="focus-item-year">2022</span>
+            <span class="focus-item-update">36 tập</span>
+          </div>
+          <div class="focus-item-tags">
+            <span>Cổ Đại</span>
+            <span>Tiếng Phổ Thông</span>
+            <span>Hư Cấu</span><span>Viễn Tưởng</span>
+            <span>Cổ Trang</span>
+          </div>
+          <div class="focus-item-desc">
+            "Thương Lan Quyết" do Y Tranh đạo diễn với sự tham gia của các diễn
+            viên Ngu Thư Hân, Vương Hạc Đệ, Từ Hải Kiều, Phó Bạch Hàm, Quách
+            Hiểu Đình, Trương Lăng Hác, Lâm Bá Duệ. Là một bộ phim truyền hình
+            Trung Quốc, được chuyển thể từ tiểu thuyết Ma tôn của tác giả Cửu Lộ
+            Phi Hương. Câu chuyện kể về mối
+          </div>
+        </div>
       </swiper-slide>
     </swiper>
     {{ data }}
@@ -80,5 +145,225 @@ import "swiper/css/pagination"
 import "swiper/css/autoplay"
 
 const modules = [Pagination, Autoplay]
+
+const aspectRatio = 622 / 350
+
 const { data, loading, error } = useRequest(() => Index(html))
 </script>
+
+<style lang="scss" scoped>
+.swiper {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -15.5%;
+  cursor: pointer;
+  z-index: 0;
+  height: 56vw;
+  max-height: 1012px;
+  @media screen and (max-width: 767px) {
+    margin-bottom: 16px;
+  }
+  @media screen and (max-width: 1023px) and (min-width: 768px) {
+    margin-bottom: -8.59%;
+  }
+
+  .drop {
+    &-left {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 30%;
+      height: 100%;
+      background: linear-gradient(
+        269deg,
+        rgba(20, 30, 51, 0) 1%,
+        rgba(20, 30, 51, 0.02) 10%,
+        rgba(20, 30, 51, 0.05) 18%,
+        rgba(20, 30, 51, 0.12) 25%,
+        rgba(20, 30, 51, 0.2) 32%,
+        rgba(20, 30, 51, 0.29) 38%,
+        rgba(20, 30, 51, 0.39) 44%,
+        rgba(20, 30, 51, 0.5) 50%,
+        rgba(20, 30, 51, 0.61) 57%,
+        rgba(20, 30, 51, 0.71) 63%,
+        rgba(20, 30, 51, 0.8) 69%,
+        rgba(20, 30, 51, 0.88) 76%,
+        rgba(20, 30, 51, 0.95) 83%,
+        rgba(20, 30, 51, 0.98) 91%,
+        rgb(20, 30, 51) 100%
+      );
+      z-index: 101;
+
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
+    }
+    &-center {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 120px;
+      background-image: linear-gradient(
+        179.5deg,
+        rgba(17, 19, 25, 0.88) 0%,
+        rgba(17, 19, 25, 0.89) 9%,
+        rgba(17, 19, 25, 0.85) 17%,
+        rgba(17, 19, 25, 0.79) 24%,
+        rgba(17, 19, 25, 0.72) 31%,
+        rgba(17, 19, 25, 0.64) 37%,
+        rgba(17, 19, 25, 0.55) 44%,
+        rgba(17, 19, 25, 0.45) 50%,
+        rgba(17, 19, 25, 0.35) 56%,
+        rgba(17, 19, 25, 0.26) 63%,
+        rgba(17, 19, 25, 0.18) 69%,
+        rgba(17, 19, 25, 0.11) 76%,
+        rgba(17, 19, 25, 0.05) 83%,
+        rgba(17, 19, 25, 0.01) 91%,
+        rgba(17, 19, 25, 0) 100%
+      );
+    }
+    &-right {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 15%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        rgba(20, 30, 51, 0) 1%,
+        rgba(20, 30, 51, 0.02) 10%,
+        rgba(20, 30, 51, 0.05) 18%,
+        rgba(20, 30, 51, 0.12) 25%,
+        rgba(20, 30, 51, 0.2) 32%,
+        rgba(20, 30, 51, 0.29) 38%,
+        rgba(20, 30, 51, 0.39) 44%,
+        rgba(20, 30, 51, 0.5) 50%,
+        rgba(20, 30, 51, 0.61) 57%,
+        rgba(20, 30, 51, 0.71) 63%,
+        rgba(20, 30, 51, 0.8) 69%,
+        rgba(20, 30, 51, 0.88) 76%,
+        rgba(20, 30, 51, 0.95) 83%,
+        rgba(20, 30, 51, 0.98) 91%,
+        rgb(20, 30, 51) 100%
+      );
+      z-index: 101;
+
+      @media screen and (max-width: 1808px) {
+        display: none;
+      }
+    }
+  }
+
+  .info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 102;
+    color: rgb(255, 255, 255);
+    width: 100%;
+    padding: 60px 30px calc(32% + 24px + 3.5vw) (30px + 64);
+
+    background-image: linear-gradient(
+      -180deg,
+      rgba(0, 0, 0, 0) 0,
+      #000000 100%
+    );
+
+    @media screen and (max-width: 1023px) and (min-width: 768px) {
+      padding: {
+        left: 56px;
+        bottom: calc(18% + 16px + 36px);
+      }
+    }
+    @media screen and (max-width: 767px) {
+      padding: {
+        bottom: 20px;
+        left: 15px;
+      }
+    }
+
+    .focus-item-info {
+      font-weight: 500;
+      margin-top: 12px;
+      display: flex;
+      font-size: 12px;
+      -webkit-box-align: center;
+      align-items: center;
+      .focus-item-score {
+        font-size: 14px;
+        color: rgb(28, 199, 73);
+        font-weight: 700;
+        svg {
+          width: 12px;
+          height: 12px;
+          margin-right: 4px;
+        }
+      }
+      .focus-item-year,
+      .focus-item-update {
+        text-shadow: rgb(0 0 0 / 50%) 0px 1px 2px;
+      }
+
+      .focus-item-score,
+      .focus-item-year {
+        display: inline-flex;
+        line-height: 17px;
+        align-items: center;
+        &:after {
+          content: "";
+          margin: 0px 6px;
+          height: 10px;
+          width: 2px;
+          background: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+    .focus-item-tags {
+      margin-top: 13px;
+      font-size: 12px;
+      line-height: 16px;
+      color: rgb(236, 236, 236);
+      font-weight: 500;
+      text-shadow: rgb(0 0 0 / 50%) 0px 1px 2px;
+      span {
+        display: inline-block;
+        margin-right: 6px;
+        padding: 0px 5px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 2px;
+      }
+    }
+    .focus-item-desc {
+      width: 31.25vw;
+      min-width: 320px;
+      overflow: hidden;
+      height: 32px;
+      line-height: 16px;
+      margin-top: 12px;
+      font-size: 14px;
+      display: -webkit-box;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      text-shadow: rgb(0 0 0 / 50%) 0px 1px 2px;
+      font-weight: 500;
+      @media screen and (max-width: 1023px) and (min-width: 768px) {
+        font-size: 12px;
+      }
+    }
+    .focus-item-quality {
+      background-image: linear-gradient(
+        90deg,
+        rgb(0, 214, 57) 0%,
+        rgb(0, 194, 52) 100%
+      );
+      border-radius: 2px 0px 0px 2px;
+      padding: 0px 4px;
+      margin-right: 4px;
+      height: 18px;
+      line-height: 18px;
+    }
+  }
+}
+</style>
