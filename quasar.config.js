@@ -21,8 +21,8 @@ module.exports = configure(function (/* ctx */) {
       // include = [],
       // exclude = [],
       // rawOptions = {},
-      warnings: true,
-      errors: true,
+      warnings: false,
+      errors: false,
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
