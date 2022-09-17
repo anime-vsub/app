@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "dev": "quasar dev",
     "test:watch": "vitest"
   },
   "dependencies": {
