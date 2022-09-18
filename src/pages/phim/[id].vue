@@ -6,7 +6,7 @@
       :poster="data.poster"
     />
 
-    <div class="px-2 py-4">
+    <div class="px-2 pt-4">
       <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
         {{ data.name }}
       </h1>
@@ -17,11 +17,17 @@
         />
         {{ data.seasonOf }}
       </h5>
-
-      <span class="text-gray-400">Tác giả </span>
-      <router-link :to="data.author.path" class="text-[rgb(28,199,73)]">
-        {{ data.author.name }}
-      </router-link>
+      <div class="text-gray-400">
+        Tác giả
+        <template v-for="(item, index) in data.authors" :key="item.name">
+          <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
+            item.name
+          }}</router-link
+          ><template v-if="index < data.authors.length - 1">, </template>
+        </template>
+        <div class="divider"></div>
+        sản xuất bởi {{ data.studio }}
+      </div>
 
       <div class="text-[rgb(230,230,230)] mt-3">
         <Quality>{{ data.quality }}</Quality>
@@ -57,49 +63,93 @@
         </span>
       </div>
 
-      <div class="tags mt-1 text-[12px]">
+      <div class="tags mt-1">
         <router-link
           v-for="item in data.genre"
           :key="item.name"
           :to="item.path"
-          class="text-[rgb(28,199,73)] mr-3"
+          class="text-[rgb(28,199,73)]"
         >
           #{{ item.name.replace(/ /, "_") }}
         </router-link>
       </div>
+    </div>
 
-      <ul class="properties mt-1">
-        <li>
-          <span class="key">Studio: </span>
-          <span class="value">{{ data.studio }}</span>
-        </li>
-      </ul>
+    <div v-if="chapters?.update" class="text-gray-300 px-2">
+      Tập mới cập nhật lúc {{ chapters.update }}
+    </div>
+
+    <q-btn flat no-caps class="w-full !px-2 mt-4">
+      <div class="flex items-center justify-between text-subtitle2 w-full">
+        Tập
+
+        <span class="flex items-center text-gray-300 font-weight-normal">
+          Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
+        </span>
+      </div>
+    </q-btn>
+    <div class="relative mx-2">
+      <EndOfBackdrop
+        class="absolute !h-full top-0 left-0"
+        reverse
+        v-if="statusChaptersScroll !== 'start'"
+      />
+      <div class="overflow-x-scroll scrollbar-hide" @scroll="onChaptersScroll">
+        <div class="whitespace-nowrap">
+          <button
+            v-for="item in chapters.chaps"
+            :key="item.name"
+            class="btn-chap"
+          >
+            {{ item.name }}
+          </button>
+        </div>
+      </div>
+      <EndOfBackdrop
+        class="absolute !h-full top-0 right-0"
+        v-if="
+          statusChaptersScroll !== 'end' && statusChaptersScroll !== 'startImp'
+        "
+      />
     </div>
 
     <!--
-      author
-      follows
-      language
-      studio
-      seasonOf
       trailer
+      toPut
       followed
     -->
-
-    <div style="white-space: pre">
-      {{ JSON.stringify(data, null, 2) }}
-    </div>
   </q-page>
 </template>
 
+<style lang="scss" scoped>
+.btn-chap {
+  display: inline-block;
+  @apply h-8 rounded-[2px] text-4 border border-[rgb(35,37,43)] text-[14px] px-2 mr-2;
+  line-height: 40px;
+  white-space: nowrap;
+  text-align: center;
+
+  &.active {
+    color: rgb(28, 199, 73);
+    border-color: rgb(28, 199, 73);
+  }
+}
+</style>
+
 <script lang="ts" setup>
 import { Phim_Id } from "src/apis/phim/[id]"
+import { Phim_Id_Chap } from "src/apis/phim/[id]/[chap]"
 import { useRequest } from "vue-request"
 import html from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860.txt?raw"
+import htmlx from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860/xem-phim-72839.txt?raw"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
+import EndOfBackdrop from "components/EndOfBackdrop.vue"
+import { ref } from "vue"
+import { debounce } from "quasar"
 
 const { data } = useRequest(() => Phim_Id(html))
+const { data: chapters } = useRequest(() => Phim_Id_Chap(htmlx))
 
 const levels = ["N", "Tr", "T", "V"]
 function formatView(view: number) {
@@ -116,6 +166,27 @@ function formatView(view: number) {
 
   return `${view.toFixed(2).replace(/\./, ",")}${levels[index]}`
 }
+
+const statusChaptersScroll = ref<"start" | "startImp" | "end" | "pending">(
+  "start"
+)
+const onChaptersScroll = debounce(function ({ target }: MouseEvent) {
+  const { scrollLeft, offsetWidth, scrollWidth } = target
+
+  if (scrollLeft === 0) {
+    statusChaptersScroll.value =
+      scrollWidth <= offsetWidth ? "startImp" : "start"
+
+    return
+  }
+  if (offsetWidth + scrollLeft === scrollWidth) {
+    statusChaptersScroll.value = "end"
+
+    return
+  }
+
+  statusChaptersScroll.value = "pending"
+}, 70)
 </script>
 
 <style lang="scss" scoped>
@@ -132,13 +203,16 @@ function formatView(view: number) {
     margin: 0px 6px;
   }
 }
-</style>
 
-<style lang="scss" scoped>
-.key {
-  color: rgb(149, 149, 149);
-}
-.value {
-  color: rgb(230, 230, 230);
+.tags {
+  > * {
+    @apply mr-3;
+  }
+  @media (max-width: 767px) {
+    font-size: 13px;
+    > * {
+      @apply mr-1 mt-1;
+    }
+  }
 }
 </style>
