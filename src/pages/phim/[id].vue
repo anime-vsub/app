@@ -113,6 +113,21 @@
       />
     </div>
 
+    <!-- bottom sheet -->
+
+    <div
+      class="h-[calc(100%-(9/16*100vw))] bottom-0 fixed left-0 w-full bg-dark"
+    >
+      <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
+        Season
+        <q-btn dense icon="close" />
+      </div>
+
+      <div>
+        <button class="chap-name">TV Show 1</button>
+        <button class="chap-name active">TV Show 2</button>
+      </div>
+    </div>
     <!--
       trailer
       toPut
@@ -132,6 +147,26 @@
   &.active {
     color: rgb(28, 199, 73);
     border-color: rgb(28, 199, 73);
+  }
+}
+.chap-name {
+  height: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: rgb(130, 131, 135);
+  font-weight: 500;
+  @apply px-2;
+  &.active {
+    color: rgb(0, 190, 6);
+  }
+  &:after {
+    content: "";
+    width: 100%;
+    height: 2px;
+    border-radius: 1px;
+    bottom: 0px;
+    margin-top: 8px;
+    background: rgb(0, 190, 6);
   }
 }
 </style>
@@ -187,6 +222,8 @@ const onChaptersScroll = debounce(function ({ target }: MouseEvent) {
 
   statusChaptersScroll.value = "pending"
 }, 70)
+
+const tab = ref("mails")
 </script>
 
 <style lang="scss" scoped>
