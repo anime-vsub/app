@@ -5,6 +5,7 @@ import { getAttrs } from "../utils/getAttrs"
 import { getPathName } from "../utils/getPathName"
 import { getText } from "../utils/getText"
 import { parserDOM } from "../utils/parserDOM"
+import { getInfoTPost } from "src/apis/helpers/getInfoTPost"
 
 // eslint-disable-next-line camelcase
 export async function Phim_Id(html: string) {
@@ -44,11 +45,11 @@ export async function Phim_Id(html: string) {
   const status = dom
     .querySelector(".mvici-left > .InfoList > .AAIco-adjust:nth-child(2)")
     ?.childNodes[1].textContent?.trim()
-  const author = getInfoAnchor(
-    dom.querySelector(
+  const authors = Array.from(
+    dom.querySelectorAll<HTMLAnchorElement>(
       ".mvici-left > .InfoList > .AAIco-adjust:nth-child(4) > a"
     )
-  )
+  ).map(getInfoAnchor)
   const contries = Array.from(
     dom.querySelectorAll(
       ".mvici-left > .InfoList > .AAIco-adjust:nth-child(5) > a"
@@ -73,6 +74,8 @@ export async function Phim_Id(html: string) {
 
   const followed = dom.querySelector(".added") !== null
 
+  const toPut = Array.from(dom.querySelectorAll(".MovieListRelated .TPostMv")).map(getInfoTPost)
+
   return {
     name,
     othername,
@@ -90,7 +93,7 @@ export async function Phim_Id(html: string) {
     genre,
     quality,
     status,
-    author,
+    authors,
     contries,
     follows,
     language,
@@ -98,5 +101,6 @@ export async function Phim_Id(html: string) {
     seasonOf,
     trailer,
     followed,
+    toPut
   }
 }
