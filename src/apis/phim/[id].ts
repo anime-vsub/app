@@ -10,7 +10,6 @@ import { parserDOM } from "../utils/parserDOM"
 export async function Phim_Id(html: string) {
   const dom = parserDOM(html)
 
-   
   const name = getText(dom.querySelector(".Title")!)
   const othername = dom.querySelector(".SubTitle")?.textContent
 
@@ -45,9 +44,11 @@ export async function Phim_Id(html: string) {
   const status = dom
     .querySelector(".mvici-left > .InfoList > .AAIco-adjust:nth-child(2)")
     ?.childNodes[1].textContent?.trim()
-  const author = dom
-    .querySelector(".mvici-left > .InfoList > .AAIco-adjust:nth-child(4) > a")
-    ?.textContent?.trim()
+  const author = getInfoAnchor(
+    dom.querySelector(
+      ".mvici-left > .InfoList > .AAIco-adjust:nth-child(4) > a"
+    )
+  )
   const contries = Array.from(
     dom.querySelectorAll(
       ".mvici-left > .InfoList > .AAIco-adjust:nth-child(5) > a"
