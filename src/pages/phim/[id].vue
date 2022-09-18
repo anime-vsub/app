@@ -53,10 +53,10 @@ const { data } = useRequest(() => Phim_Id(html))
 const levels = ["K", "M", "G", "T"]
 function formatView(view: number) {
   let index = 0
-  while (view > 1000 && i < levels.length - 1) {
-    view /= 1000
-    i++
-  }
+  // while (view > 1000 && i < levels.length - 1) {
+  //   view /= 1000
+  //   i++
+  // }
 
   return view
 }
