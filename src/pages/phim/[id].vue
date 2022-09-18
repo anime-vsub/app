@@ -12,16 +12,35 @@
       </h1>
       <h5 class="text-gray-400 text-weight-normal">
         {{ formatView(data.views) }} lượt xem
+        <span
+          class="inline-block w-1 h-1 rounded bg-[currentColor] mb-1 mx-1"
+        />
+        {{ data.seasonOf }}
       </h5>
+
+      <span class="text-gray-400">Tác giả </span>
+      <router-link :to="data.author.path" class="text-[rgb(28,199,73)]">
+        {{ data.author.name }}
+      </router-link>
 
       <div class="text-[rgb(230,230,230)] mt-3">
         <Quality>{{ data.quality }}</Quality>
         <div class="divider"></div>
         {{ data.yearOf }}
         <div class="divider"></div>
-        Cập nhật tới tập {{ data.duration.split("/")[0] }}
+        Cập nhật tới tập {{ data.duration }}
         <div class="divider"></div>
+        <router-link
+          v-for="item in data.contries"
+          :key="item.name"
+          :to="item.path"
+          class="text-[rgb(28,199,73)]"
+          >{{ item.name }}</router-link
+        >
+        <div class="divider"></div>
+
         <br />
+
         <div class="inline-flex items-center">
           <div class="text-[16px] text-weight-medium mr-1">
             {{ data.rate }}
@@ -30,10 +49,42 @@
         </div>
         <div class="divider"></div>
         <span class="text-gray-400">
-          {{ data.count_rate }} người đánh giá
+          {{ formatView(data.count_rate) }} người đánh giá
+        </span>
+        <div class="divider"></div>
+        <span class="text-gray-400">
+          {{ formatView(data.follows) }} người theo dõi
         </span>
       </div>
+
+      <div class="tags mt-1 text-[12px]">
+        <router-link
+          v-for="item in data.genre"
+          :key="item.name"
+          :to="item.path"
+          class="text-[rgb(28,199,73)] mr-3"
+        >
+          #{{ item.name.replace(/ /, "_") }}
+        </router-link>
+      </div>
+
+      <ul class="properties mt-1">
+        <li>
+          <span class="key">Studio: </span>
+          <span class="value">{{ data.studio }}</span>
+        </li>
+      </ul>
     </div>
+
+    <!--
+      author
+      follows
+      language
+      studio
+      seasonOf
+      trailer
+      followed
+    -->
 
     <div style="white-space: pre">
       {{ JSON.stringify(data, null, 2) }}
@@ -50,15 +101,20 @@ import Star from "components/Star.vue"
 
 const { data } = useRequest(() => Phim_Id(html))
 
-const levels = ["K", "M", "G", "T"]
+const levels = ["N", "Tr", "T", "V"]
 function formatView(view: number) {
-  let index = 0
+  if (view < 1000) return view
+  const index = levels.findIndex((item, index) => {
+    view /= 1000
+
+    if (view < 1000) return true
+  })
   // while (view > 1000 && i < levels.length - 1) {
   //   view /= 1000
   //   i++
   // }
 
-  return view
+  return `${view.toFixed(2).replace(/\./, ",")}${levels[index]}`
 }
 </script>
 
@@ -75,5 +131,14 @@ function formatView(view: number) {
   @media screen and (max-width: 1023px) {
     margin: 0px 6px;
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.key {
+  color: rgb(149, 149, 149);
+}
+.value {
+  color: rgb(230, 230, 230);
 }
 </style>

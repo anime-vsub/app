@@ -1,0 +1,10 @@
+.end-of-backdrop {
+  display: block;
+  width: 32px;
+  height: 24px;
+  background-image: linear-gradient(
+    90deg,
+    rgba(17, 19, 25, 0) 0%,
+    rgb(17, 19, 25) 100%
+  );
+}
