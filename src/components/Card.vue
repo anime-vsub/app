@@ -29,7 +29,7 @@
           {{ data.rate }}
         </div>
       </div>
-      <span v-if="data.quality" class="quality">{{ data.quality }}</span>
+      <Quality v-if="data.quality">{{ data.quality }}</Quality>
     </q-img>
     <a v-if="!trending" href="#" class="name line-clamp-2 min-h-10">{{ data.name }}</a>
   </q-card>
@@ -38,6 +38,7 @@
 <script lang="ts" setup>
 import { TPost } from "src/apis/helpers/getInfoTPost"
 import Star from "./Star.vue"
+import Quality from "./Quality.vue"
 
 defineProps<{
   data: TPost
@@ -100,18 +101,6 @@ a {
     // right: 10px;
     bottom: 10px;
   }
-}
-.quality {
-  background-image: linear-gradient(
-    90deg,
-    rgb(0, 214, 57) 0%,
-    rgb(0, 194, 52) 100%
-  );
-  border-radius: 2px 0px 0px 2px;
-  padding: 0px 4px;
-  margin-right: 4px;
-  height: 18px;
-  line-height: 18px;
 }
 .card-title {
   color: rgb(255, 255, 255);

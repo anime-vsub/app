@@ -15,7 +15,7 @@ export async function Phim_Id(html: string) {
   const othername = dom.querySelector(".SubTitle")?.textContent
 
   const { src: image } = getAttrs(dom.querySelector(".Image img")!, ["src"])
-  const { src: poster } = getAttrs(dom.querySelector(".TPostBg")!, ["src"])
+  const { src: poster } = getAttrs(dom.querySelector(".TPostBg img")!, ["src"])
   const pathToView = dom.querySelector(".watch_button_more")
     ? getPathName(
         dom.querySelector(".watch_button_more")!.getAttribute("href")!
