@@ -67,6 +67,6 @@ export function getInfoTPost(item: Element) {
     description,
     studio,
     genre,
-    countdown,
+    time_release: countdown === undefined ? undefined : (Date.now() + countdown * 1e3)
   }
 }
