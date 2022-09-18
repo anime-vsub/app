@@ -156,11 +156,46 @@
           :key="item.name"
           class="!w-auto card-wrap"
         >
-          {{
-            item.countdown
-              ? dayjs(item.countdown * 1_000 + Date.now()).format("HH:MM")
-              : "Sắp chiếu"
-          }}
+          <div class="coming_soon-timeline">
+            <div class="coming_soon-line"></div>
+            <div class="coming_soon-dot"></div>
+            <div class="coming_soon-time-wrapper">
+              <div
+                v-if="
+                  (tmp = item.time_release ? dayjs(item.time_release) : null)
+                "
+              >
+                <!-- if in today or tomorrow -->
+                <template v-if="(isToday = tmp.isToday()) || tmp.isTomorrow()">
+                  <div class="coming_soon-text-date">
+                    {{ tmp.format("HH:mm") }}
+                  </div>
+                  <div class="coming_soon-text-day">
+                    <template v-if="isToday"> Hôm nay </template>
+                    <template v-else> Ngày mai </template>
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="coming_soon-text-date">
+                    {{
+                      tmp.format(
+                        tmp.year() === new Date().getFullYear()
+                          ? "M-DD"
+                          : "YYYY-MM-DD"
+                      )
+                    }}
+                  </div>
+                  <div class="coming_soon-text-day capitalize">
+                    {{ tmp.locale("vi").format("dddd") }}
+                  </div>
+                </template>
+
+                <!-- <template v-else>{{ tmp.format("DD/MM") }}</template> -->
+              </div>
+              <span v-else class="coming_soon-text-unknown">Sắp chiếu</span>
+            </div>
+          </div>
+
           <Card :data="item" />
         </swiper-slide>
       </swiper>
@@ -200,6 +235,89 @@
 </template>
 
 <style lang="scss" scoped>
+.coming_soon {
+  &-timeline {
+    @apply relative mt-[6px] mb-[14px];
+
+    @media screen and (max-width: 767px) {
+      @apply mb-[6px] flex items-center;
+      @apply mr-[-8px];
+    }
+  }
+  &-line {
+    @apply w-[calc(100%+16px)] h-[2px] bg-[rgb(45,47,52)];
+    @media screen and (max-width: 767px) {
+      @apply w-full;
+    }
+    @media screen and (max-width: 767px) {
+      order: 2;
+    }
+  }
+  &-dot {
+    @apply w-[10px] h-[10px] mx-auto mt-[-6px];
+    background: rgb(130, 131, 135);
+    border: 2px solid rgb(17, 19, 25);
+    border-radius: 50%;
+
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+  &-time-wrapper {
+    @media screen and (max-width: 767px) {
+      order: 1;
+    }
+    @apply text-center h-[42px] mt-4;
+    // @apply absolute;
+
+    @media screen and (max-width: 767px) {
+      @apply flex items-center ml-[-14px];
+      // position: absolute;
+      height: 30px;
+      margin: 0;
+      padding-right: 8px;
+      padding-left: 8px;
+      text-align: left;
+      font-size: 11px;
+      color: rgb(188, 189, 190);
+      white-space: nowrap;
+    }
+  }
+}
+.coming_soon-text {
+  &-date {
+    font-size: 14px;
+    color: rgb(188, 189, 190);
+
+    @media screen and (max-width: 767px) {
+      display: inline-block;
+      padding: 0px 2px;
+      margin-left: -2px;
+      background: rgb(17, 19, 25);
+      font-size: 12px;
+    }
+  }
+  &-day {
+    font-size: 14px;
+    color: rgb(130, 131, 135);
+
+    @media screen and (max-width: 767px) {
+      font-size: 12px;
+    }
+  }
+  &-unknown {
+    font-size: 14px;
+    color: rgb(188, 189, 190);
+
+    @media screen and (min-width: 768px) and (max-width: 1023px) {
+      font-size: 12px;
+      line-height: 0;
+    }
+  }
+}
+</style>
+
+<style lang="scss" scoped>
 .card-wrap {
   $offset: 0.1;
 
@@ -224,6 +342,12 @@ import { useRequest } from "vue-request"
 import Star from "components/Star.vue"
 import Card from "components/Card.vue"
 import dayjs from "dayjs"
+import isToday from "dayjs/plugin/isToday"
+import isTomorrow from "dayjs/plugin/isTomorrow"
+import "dayjs/locale/vi"
+
+dayjs.extend(isToday)
+dayjs.extend(isTomorrow)
 
 import html from "src/apis/__test__/data/index.txt?raw"
 // Import Swiper Vue.js components

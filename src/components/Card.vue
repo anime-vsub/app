@@ -31,7 +31,7 @@
       </div>
       <span v-if="data.quality" class="quality">{{ data.quality }}</span>
     </q-img>
-    <a v-if="!trending" href="#" class="name line-clamp-2">{{ data.name }}</a>
+    <a v-if="!trending" href="#" class="name line-clamp-2 min-h-10">{{ data.name }}</a>
   </q-card>
 </template>
 
