@@ -62,7 +62,7 @@
         <div class="drop-right"></div>
         <div class="info">
           <div class="flex line-clamp-2 items-center">
-            <span class="focus-item-quality">{{ item.quality }}</span>
+            <Quality>{{ item.quality }}</Quality>
             <div class="text-weight-medium">{{ item.name }}</div>
           </div>
           <div class="focus-item-info">
@@ -341,6 +341,7 @@ import { Index } from "src/apis/index"
 import { useRequest } from "vue-request"
 import Star from "components/Star.vue"
 import Card from "components/Card.vue"
+import Quality from "components/Quality.vue"
 import SearchBtn from "components/SearchBtn.vue"
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
@@ -530,6 +531,7 @@ const { data, loading, error } = useRequest(() => Index(html))
         display: inline-flex;
         line-height: 17px;
         align-items: center;
+
         &:after {
           content: "";
           margin: 0px 6px;
@@ -571,18 +573,6 @@ const { data, loading, error } = useRequest(() => Index(html))
       @media screen and (max-width: 1023px) and (min-width: 768px) {
         font-size: 12px;
       }
-    }
-    .focus-item-quality {
-      background-image: linear-gradient(
-        90deg,
-        rgb(0, 214, 57) 0%,
-        rgb(0, 194, 52) 100%
-      );
-      border-radius: 2px 0px 0px 2px;
-      padding: 0px 4px;
-      margin-right: 4px;
-      height: 18px;
-      line-height: 18px;
     }
   }
 }
