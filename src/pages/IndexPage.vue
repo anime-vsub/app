@@ -36,7 +36,7 @@
       </svg>
 
       <q-space />
-      <q-btn flat round dense icon="search" class="q-mr-xs" />
+      <SearchBtn />
       <q-btn flat round dense icon="account_circle" />
     </q-toolbar>
   </q-header>
@@ -341,9 +341,11 @@ import { Index } from "src/apis/index"
 import { useRequest } from "vue-request"
 import Star from "components/Star.vue"
 import Card from "components/Card.vue"
+import SearchBtn from "components/SearchBtn.vue"
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
 import isTomorrow from "dayjs/plugin/isTomorrow"
+
 import "dayjs/locale/vi"
 
 dayjs.extend(isToday)
