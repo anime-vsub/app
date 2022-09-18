@@ -1,10 +1,19 @@
-import type { RouteRecordRaw } from "vue-router";
+import type { RouteRecordRaw } from "vue-router"
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("pages/IndexPage.vue") }],
+    children: [
+      {
+        path: "",
+        component: () => import("pages/IndexPage.vue"),
+      },
+      {
+        path: "phim/:id",
+        component: () => import("pages/phim/[id].vue"),
+      },
+    ],
   },
 
   // Always leave this as last one,
@@ -13,6 +22,6 @@ const routes: RouteRecordRaw[] = [
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),
   },
-];
+]
 
-export default routes;
+export default routes
