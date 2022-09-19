@@ -1,6 +1,8 @@
 import { parserDOM } from "../../utils/parserDOM"
 
-export async function Phim_Id_Chap(html: string) {
+import html from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860/xem-phim-72839.txt?raw"
+
+export async function Phim_Id_Chap() {
   const dom = parserDOM(html)
 
   const chaps = Array.from(
