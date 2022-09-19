@@ -10,8 +10,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import("pages/IndexPage.vue"),
       },
       {
-        path: "phim/:id",
-        component: () => import("pages/phim/[id].vue"),
+        name: "phim_[season]_[chap]",
+        path: "phim/:season/:chap?",
+        alias: ["phim/:season"],
+        component: () => import("pages/phim/[season].vue"),
       },
     ],
   },
