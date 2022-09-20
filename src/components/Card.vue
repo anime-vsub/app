@@ -1,5 +1,6 @@
 <template>
-  <q-card flat dense class="bg-transparent">
+  <q-card flat dense class="bg-transparent" @click="router.push(data.path)">
+    {{ typeof router.push }}
     <q-img
       :src="data.image"
       :ratio="280 / 400"
@@ -39,6 +40,9 @@
 import { TPost } from "src/apis/helpers/getInfoTPost"
 import Star from "./Star.vue"
 import Quality from "./Quality.vue"
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 defineProps<{
   data: TPost

@@ -46,7 +46,7 @@
 <script lang="ts" setup>
 import { ref, watchEffect } from "vue"
 
-const open = ref(true)
+const open = ref(false)
 const query = ref("")
 
 watchEffect(() => {

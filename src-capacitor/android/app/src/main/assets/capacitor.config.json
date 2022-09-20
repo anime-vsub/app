@@ -4,7 +4,8 @@
   "bundledWebRuntime": false,
   "server": {
     "hostname": "animevietsub.cc",
-    "androidScheme": "https"
+    "androidScheme": "https",
+    "url": "http://192.168.0.104:9500"
   },
   "webDir": "www"
 }
