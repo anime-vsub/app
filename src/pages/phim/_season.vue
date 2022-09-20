@@ -246,9 +246,7 @@ import OverScrollX from "components/OverScrollX.vue"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
 import html from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860.txt?raw"
-// eslint-disable-next-line camelcase
 import { PhimId } from "src/apis/phim/[id]"
-// eslint-disable-next-line camelcase
 import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import { formatView } from "src/logic/formatView"
 import { computed, reactive, ref, shallowReactive, watchEffect } from "vue"
@@ -258,10 +256,7 @@ import { useRoute, useRouter } from "vue-router"
 const route = useRoute()
 const router = useRouter()
 
-// eslint-disable-next-line camelcase
-const { data } = useRequest<Awaited<ReturnType<typeof PhPhimId>(() =>
-  PhPhimIdtml)
-)
+const { data } = useRequest(() => PhimId(html))
 
 const datasSeason = shallowReactive<
   Record<
@@ -271,7 +266,6 @@ const datasSeason = shallowReactive<
       }
     | {
         status: "succ"
-        // eslint-disable-next-line camelcase
         response: Awaited<ReturnType<typeof PhimIdChap>>
       }
   >
@@ -304,14 +298,14 @@ const currentChap = computed(
   () =>
     route.params.chap ??
     (
-      datasSeason[currentSeason.value] as unknown as  // eslint-disable-next-line camelcase
+      datasSeason[currentSeason.value] as unknown as
         | { response: Awaited<ReturnType<typeof PhimIdChap>> }
         | undefined
     )?.response?.chaps[0]?.id
 )
 const currentStream = computed(() => {
   return (
-    datasSeason[currentSeason.value] as unknown as  // eslint-disable-next-line camelcase
+    datasSeason[currentSeason.value] as unknown as
       | { response: Awaited<ReturnType<typeof PhimIdChap>> }
       | undefined
   )?.response?.chaps.find((item) => item.id === currentChap.value)
