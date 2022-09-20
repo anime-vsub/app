@@ -3,6 +3,16 @@
   <head>
     <title><%= productName %></title>
 
+    <script type="text/javascript">
+      window.fetchText = url => {
+        return fetch(url).then(res => res.text())
+      }
+      alert(location.href)
+      fetchText("https://animevietsub.cc/random")
+      .then(e => alert(e))
+    </script>
+
+
     <meta charset="utf-8">
     <meta name="description" content="<%= productDescription %>">
     <meta name="format-detection" content="telephone=no">

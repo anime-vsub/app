@@ -1,7 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@capacitor/cli': ^4.2.0
+  '@capacitor-community/http': ^1.4.1
+  '@capacitor/android': 3.8.0
+  '@capacitor/cli': 3.8.0
+  '@capacitor/core': 3.8.0
   '@intlify/vite-plugin-vue-i18n': ^3.3.1
   '@quasar/app-vite': ^1.0.0
   '@quasar/extras': ^1.0.0
@@ -12,6 +15,7 @@ specifiers:
   autoprefixer: ^10.4.2
   axios: ^0.21.1
   dayjs: ^1.11.5
+  eruda2: 0.0.2-b8
   eslint: ^8.10.0
   eslint-config-prettier: ^8.1.0
   eslint-plugin-vue: ^9.0.0
@@ -32,9 +36,13 @@ specifiers:
   windicss: ^3.5.6
 
 dependencies:
+  '@capacitor-community/http': 1.4.1
+  '@capacitor/android': 3.8.0_@capacitor+core@3.8.0
+  '@capacitor/core': 3.8.0
   '@quasar/extras': 1.15.3
   axios: 0.21.4
   dayjs: 1.11.5
+  eruda2: 0.0.2-b8
   jwplayer8: 0.0.1-b1
   pinia: 2.0.22_arz4dztosvwy2ghjrlh2wdhejm
   quasar: 2.7.7
@@ -45,7 +53,7 @@ dependencies:
   vue-router: 4.1.5_vue@3.2.39
 
 devDependencies:
-  '@capacitor/cli': 4.2.0
+  '@capacitor/cli': 3.8.0
   '@intlify/vite-plugin-vue-i18n': 3.4.0_vue-i18n@9.2.2
   '@quasar/app-vite': 1.0.6_g7rlcj6hauiyl7pdyuy6qjwmpi
   '@tachibana-shin/eslint-config': 1.0.7_irgkl5vooow2ydyo6aokmferha
@@ -93,8 +101,25 @@ packages:
       '@babel/helper-validator-identifier': 7.18.6
       to-fast-properties: 2.0.0
 
-  /@capacitor/cli/4.2.0:
-    resolution: {integrity: sha512-34L/BoDe3BmWBdrXRoF7lszT27ho6ikMdCeMePohU+cEn4ceqiURN7tnPZRyUlpc/1TO+d8d+qb1QQQSTq2oPA==}
+  /@capacitor-community/http/1.4.1:
+    resolution: {integrity: sha512-+pCkBXrwfm97UfjOgjV950H/qZ8SE36Mrcb46BlL1ps3VIsGuIO+AulL8GqTC6LewheRVtGJpRspNtneXQotNA==}
+    dependencies:
+      '@capacitor/android': 3.8.0_@capacitor+core@3.8.0
+      '@capacitor/core': 3.8.0
+      '@capacitor/filesystem': 1.1.0_@capacitor+core@3.8.0
+      '@capacitor/ios': 3.8.0_@capacitor+core@3.8.0
+    dev: false
+
+  /@capacitor/android/3.8.0_@capacitor+core@3.8.0:
+    resolution: {integrity: sha512-FwHCiWOkPmqI/K4rnIBSyRUy39zqDmgK62yR3DSfEMVgXVvUkzRgYQfDxCn+lq8vPiT/CbnI/iEoudBorJFQkw==}
+    peerDependencies:
+      '@capacitor/core': ^3.8.0
+    dependencies:
+      '@capacitor/core': 3.8.0
+    dev: false
+
+  /@capacitor/cli/3.8.0:
+    resolution: {integrity: sha512-pLqYkbf3J2mVihlxpUliI8k+2czJswRgISrBHksbL1nIdKHZSrFxronIDJk6wahqXOgPccKGv8WH+J+Q2E0Wcg==}
     engines: {node: '>=12.4.0'}
     hasBin: true
     dependencies:
@@ -102,15 +127,14 @@ packages:
       '@ionic/utils-fs': 3.1.6
       '@ionic/utils-subprocess': 2.1.11
       '@ionic/utils-terminal': 2.3.3
-      commander: 9.4.0
+      commander: 6.2.1
       debug: 4.3.4
       env-paths: 2.2.1
       kleur: 4.1.5
       native-run: 1.7.0
-      open: 8.4.0
+      open: 7.4.2
       plist: 3.0.6
       prompts: 2.4.2
-      rimraf: 3.0.2
       semver: 7.3.7
       tar: 6.1.11
       tslib: 2.4.0
@@ -118,6 +142,28 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@capacitor/core/3.8.0:
+    resolution: {integrity: sha512-Z7iHM+1CBbuIK+74bS4ZjpPUOdcKb7Gf7j8xK9WegcrUeHZQl4O6hAAn6nT60kDoeAyutsr3PP25542Ur0wLBg==}
+    dependencies:
+      tslib: 2.4.0
+    dev: false
+
+  /@capacitor/filesystem/1.1.0_@capacitor+core@3.8.0:
+    resolution: {integrity: sha512-8O3UuvL8HNUEJvZnmn8yUmvgB1evtXfcF0oxIo3YbSlylqywJwS3JTiuhKmsvSxCdpbTy8IaTsutVh3gZgWbKg==}
+    peerDependencies:
+      '@capacitor/core': ^3.0.0
+    dependencies:
+      '@capacitor/core': 3.8.0
+    dev: false
+
+  /@capacitor/ios/3.8.0_@capacitor+core@3.8.0:
+    resolution: {integrity: sha512-a2/inoVG+4L1diOxTK8oXOMliT5tXwJSg5KelJh8YuouYjH8duVRx560qoKQPE9rUbo9VG3pqOK0w3gROSk2yQ==}
+    peerDependencies:
+      '@capacitor/core': ^3.8.0
+    dependencies:
+      '@capacitor/core': 3.8.0
+    dev: false
 
   /@eslint/eslintrc/1.3.2:
     resolution: {integrity: sha512-AXYd23w1S/bv3fTs3Lz0vjiYemS08jWkI3hYyS9I1ry+0f+Yjs1wm+sU0BS8qDOPrBIkp4qHYC16I8uVtpLajQ==}
@@ -1322,9 +1368,9 @@ packages:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
     dev: true
 
-  /commander/9.4.0:
-    resolution: {integrity: sha512-sRPT+umqkz90UA8M1yqYfnHlZA7fF6nSphDtxeywPZ49ysjxDQybzk13CL+mXekDRG92skbcqCLVovuCusNmFw==}
-    engines: {node: ^12.20.0 || >=14}
+  /commander/6.2.1:
+    resolution: {integrity: sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==}
+    engines: {node: '>= 6'}
     dev: true
 
   /compress-commons/4.1.1:
@@ -1624,6 +1670,10 @@ packages:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
     dev: true
+
+  /eruda2/0.0.2-b8:
+    resolution: {integrity: sha512-Ur6Vvbixz8JrCJTU5mSmoQ2P/zQXLiJi8u3XPX6Gs+fqGpcZjKcGs5fmvwZK4kj82ICA2EXxNOa0PQ+7je1Aeg==}
+    dev: false
 
   /es-abstract/1.20.2:
     resolution: {integrity: sha512-XxXQuVNrySBNlEkTYJoDNFe5+s2yIOpzq80sUHEdPdQr0S5nTLz4ZPPPswNIpKseDDUS5yghX1gfLIHQZ1iNuQ==}
@@ -3361,6 +3411,14 @@ packages:
       mimic-fn: 2.1.0
     dev: true
 
+  /open/7.4.2:
+    resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
+    engines: {node: '>=8'}
+    dependencies:
+      is-docker: 2.2.1
+      is-wsl: 2.2.0
+    dev: true
+
   /open/8.4.0:
     resolution: {integrity: sha512-XgFPPM+B28FtCCgSb9I+s9szOC1vZRSwgWsRUA5ylIxRTgKozqjOCrVOqGsYABPYK5qnfqClxZTFBa8PKt2v6Q==}
     engines: {node: '>=12'}
@@ -4155,7 +4213,6 @@ packages:
 
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
-    dev: true
 
   /tsutils/3.21.0_typescript@4.8.3:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
