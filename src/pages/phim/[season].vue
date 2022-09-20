@@ -86,7 +86,7 @@
       @click="openBottomSheetChap = true"
     >
       <div class="flex items-center justify-between text-subtitle2 w-full">
-        {{ seasons?.find((item) => item.value === currentSeason).name }} Tập
+        {{ seasons?.find((item) => item.value === currentSeason)?.name }} Tập
 
         <span class="flex items-center text-gray-300 font-weight-normal">
           Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
@@ -305,9 +305,10 @@ const seasons = computed(() => {
   })
 })
 watchEffect(() => {
-  if (seasons.value)
+const { value } = seasons ;
+  if (value)
     switchToTabSeason(
-      seasons.value.findIndex((item) => item.value === route.params.season)
+      value.findIndex((item) => item?.value === route.params.season)
     )
 })
 
@@ -341,6 +342,8 @@ const tabsBtnSeasonRefs = reactive([])
 const lineSeasonStyle = reactive({})
 
 function switchToTabSeason(index: number) {
+  if (!seasons.value?.[index]) return 
+  
   seasonSelect.value = seasons.value[index].value
 
   const itemBtn = tabsBtnSeasonRefs[index]
@@ -354,6 +357,12 @@ function switchToTabSeason(index: number) {
 }
 
 const openBottomSheetChap = ref(false)
+
+fetch("https://animevietsub.cc")
+.then(res => res.text())
+.then(e => {
+  console.log(e)
+})
 </script>
 
 <style lang="scss" scoped>
