@@ -1,3 +1,5 @@
 export function getHTML(url: string) {
-   return url
+  return new Promise<string>((resolve) => {
+    setTimeout(() => resolve(url), 500)
+  })
 }
