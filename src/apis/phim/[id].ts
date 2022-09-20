@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { getInfoTPost } from "src/apis/helpers/getInfoTPost"
+
 import { getInfoAnchor } from "../helpers/getInfoAnchor"
 import { int } from "../utils/float"
 import { getAttrs } from "../utils/getAttrs"
 import { getPathName } from "../utils/getPathName"
 import { getText } from "../utils/getText"
 import { parserDOM } from "../utils/parserDOM"
-import { getInfoTPost } from "src/apis/helpers/getInfoTPost"
 
 // eslint-disable-next-line camelcase
 export async function Phim_Id(html: string) {
@@ -24,7 +25,7 @@ export async function Phim_Id(html: string) {
   const description = getText(dom.querySelector(".Description")!)
   const rate = int(dom.querySelector("#average_score")?.textContent)
   // eslint-disable-next-line camelcase
-  const count_rate = int(dom.querySelector(".num-rating")?.textContent)
+  const count_rate = int(dom.querySelector(".num-rating")?.textContent)!
   const duration = dom.querySelector(".AAIco-access_time")?.textContent
   const yearOf = int(dom.querySelector(".AAIco-date_range > a")?.textContent)
   const views = int(
@@ -32,7 +33,7 @@ export async function Phim_Id(html: string) {
       .querySelector(".AAIco-remove_red_eye")
       ?.textContent?.match(/[\d,]+/)?.[0]
       ?.replace(/,/g, "")
-  )
+  )!
   const season = Array.from(dom.querySelectorAll(".season_item > a")).map(
     getInfoAnchor
   )
@@ -60,7 +61,7 @@ export async function Phim_Id(html: string) {
       .querySelector(".mvici-left > .InfoList > .AAIco-adjust:nth-child(6)")
       ?.childNodes[1].textContent?.trim()
       ?.replace(/,/g, "")
-  )
+  )!
   const language = dom
     .querySelector(".mvici-right > .InfoList > .AAIco-adjust:nth-child(4)")
     ?.childNodes[1].textContent?.trim()
