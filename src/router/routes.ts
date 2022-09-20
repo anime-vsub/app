@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
         name: "phim_[season]_[chap]",
         path: "phim/:season/:chap?",
         alias: ["phim/:season"],
-        component: () => import("pages/phim/[season].vue"),
+        component: () => import("pages/phim/_season.vue"),
       },
     ],
   },

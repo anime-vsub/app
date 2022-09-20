@@ -1,6 +1,6 @@
 <template>
   <q-page v-if="data">
-    <q-video :ratio="16 / 9" :poster="data.poster" />
+    <q-video :ratio="16 / 9" :poster="data.poster" src="" />
 
     <div class="px-2 pt-4">
       {{ currentStream }}
@@ -72,8 +72,15 @@
       </div>
     </div>
 
-    <div v-if="datasSeason[currentSeason]?.response?.update" class="text-gray-300 px-2">
-      Tập mới cập nhật lúc {{ datasSeason[currentSeason].update }}
+    <div
+      v-if="
+        datasSeason[currentSeason]?.status ==='succ' &&
+       ( datasSeason[currentSeason] as any).response?.update
+      "
+      class="text-gray-300 px-2"
+    >
+      Tập mới cập nhật lúc
+      {{ (datasSeason[currentSeason] as any).response?.update }}
     </div>
 
     <q-btn
@@ -92,7 +99,7 @@
     </q-btn>
     <OverScrollX>
       <router-link
-        v-for="item in datasSeason[currentSeason]?.response?.chaps"
+        v-for="item in  ( datasSeason[currentSeason] as any).response?.chaps"
         :key="item.name"
         class="btn-chap"
         :class="{
@@ -136,7 +143,7 @@
                 active: item.value === seasonSelect,
               }"
               @click="switchToTabSeason(index)"
-              :ref="(el) => (tabsBtnSeasonRefs[index] = el)"
+              :ref="(el) => (tabsBtnSeasonRefs[index] = el as unknown as HTMLButtonElement)"
             >
               {{ item.name }}
             </button>
@@ -178,7 +185,7 @@
               </div>
               <router-link
                 v-else
-                v-for="item in datasSeason[value].response?.chaps"
+                v-for="item in  ( datasSeason[currentSeason] as any).response?.chaps"
                 :key="item.name"
                 class="btn-chap mt-1 light"
                 :class="{
@@ -238,7 +245,6 @@
 import OverScrollX from "components/OverScrollX.vue"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
-import { debounce } from "quasar"
 import html from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860.txt?raw"
 // eslint-disable-next-line camelcase
 import { Phim_Id } from "src/apis/phim/[id]"
