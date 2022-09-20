@@ -56,7 +56,7 @@
       class="swiper-hot"
     >
       <swiper-slide v-for="(item, index) in data.carousel" :key="index">
-        <q-img :ratio="aspectRatio" :src="item.image" />
+        <q-img :ratio="aspectRatio" :src="item.image!" />
         <div class="drop-left"></div>
         <div class="drop-center"></div>
         <div class="drop-right"></div>
@@ -81,7 +81,12 @@
             </span>
           </div>
           <div class="focus-item-tags" v-if="item.genre.length > 0">
-            <span v-for="item in item.genre" :key="item">{{ item }}</span>
+            <router-link
+              v-for="tag in item.genre"
+              :key="tag.name"
+              :to="tag.path"
+              >{{ tag.name }}</router-link
+            >
           </div>
           <div class="focus-item-desc">
             {{ item.description }}
@@ -166,12 +171,12 @@
                 "
               >
                 <!-- if in today or tomorrow -->
-                <template v-if="(isToday = tmp.isToday()) || tmp.isTomorrow()">
+                <template v-if="(isTodayF = tmp.isToday()) || tmp.isTomorrow()">
                   <div class="coming_soon-text-date">
                     {{ tmp.format("HH:mm") }}
                   </div>
                   <div class="coming_soon-text-day">
-                    <template v-if="isToday"> Hôm nay </template>
+                    <template v-if="isTodayF"> Hôm nay </template>
                     <template v-else> Ngày mai </template>
                   </div>
                 </template>
@@ -336,27 +341,28 @@
 </style>
 
 <script setup lang="ts">
-import { shallowRef } from "vue"
+// eslint-disable-next-line import/order
 import { Index } from "src/apis/index"
+// eslint-disable-next-line import/order
 import { useRequest } from "vue-request"
+// eslint-disable-next-line import/order
 import Star from "components/Star.vue"
 import Card from "components/Card.vue"
 import Quality from "components/Quality.vue"
 import SearchBtn from "components/SearchBtn.vue"
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
+// eslint-disable-next-line import/order
 import isTomorrow from "dayjs/plugin/isTomorrow"
 
 import "dayjs/locale/vi"
 
-dayjs.extend(isToday)
-dayjs.extend(isTomorrow)
-
+// eslint-disable-next-line import/order
 import html from "src/apis/__test__/data/index.txt?raw"
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from "swiper/vue"
 
-import { Pagination, Autoplay, Navigation, Grid } from "swiper"
+import { Autoplay, Grid, Navigation, Pagination } from "swiper"
+import { Swiper, SwiperSlide } from "swiper/vue"
 
 // Import Swiper styles
 import "swiper/css"
@@ -364,11 +370,19 @@ import "swiper/css/pagination"
 import "swiper/css/autoplay"
 import "swiper/css/grid"
 
+dayjs.extend(isToday)
+dayjs.extend(isTomorrow)
+
 const modules = [Pagination, Autoplay]
 
 const aspectRatio = 622 / 350
 
 const { data, loading, error } = useRequest(() => Index(html))
+
+// eslint-disable-next-line functional/no-let
+let tmp: any
+// eslint-disable-next-line functional/no-let, prefer-const
+let isTodayF = false;
 </script>
 
 <style lang="scss" scoped>

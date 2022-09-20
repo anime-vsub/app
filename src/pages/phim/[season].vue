@@ -1,12 +1,9 @@
 <template>
   <q-page v-if="data">
-    <q-video
-      :ratio="16 / 9"
-      :poster="data.poster"
-    />
+    <q-video :ratio="16 / 9" :poster="data.poster" />
 
     <div class="px-2 pt-4">
-    {{ currentStream }}
+      {{ currentStream }}
       <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
         {{ data.name }}
       </h1>
@@ -75,7 +72,7 @@
       </div>
     </div>
 
-    <div v-if="datasSeason[currentSeason]?.update" class="text-gray-300 px-2">
+    <div v-if="datasSeason[currentSeason]?.response?.update" class="text-gray-300 px-2">
       Tập mới cập nhật lúc {{ datasSeason[currentSeason].update }}
     </div>
 
@@ -117,17 +114,7 @@
     <transition name="slide">
       <div
         v-show="openBottomSheetChap"
-        class="
-          h-[calc(100%-100vmin/16*9)]
-          bottom-0
-          fixed
-          left-0
-          w-full
-          bg-dark
-          flex
-          column
-          flex-nowrap
-        "
+        class="h-[calc(100%-100vmin/16*9)] bottom-0 fixed left-0 w-full bg-dark flex column flex-nowrap"
       >
         <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
           Season
@@ -171,26 +158,13 @@
                 v-if="
                   !datasSeason[value] || datasSeason[value].status === 'pending'
                 "
-                class="
-                  absolute
-                  top-[50%]
-                  left-[50%]
-                  transform
-                  -translate-x-1/2 -translate-y-1/2
-                "
+                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
               >
                 <q-spinner style="color: #00be06" size="3em" :thickness="3" />
               </div>
               <div
                 v-else-if="datasSeason[value].status === 'fail'"
-                class="
-                  absolute
-                  top-[50%]
-                  left-[50%]
-                  text-center
-                  transform
-                  -translate-x-1/2 -translate-y-1/2
-                "
+                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
               >
                 Lỗi khi lấy dữ liệu
                 <br />
@@ -261,23 +235,27 @@
 }
 </style>
 <script lang="ts" setup>
-import { Phim_Id } from "src/apis/phim/[id]"
-import { Phim_Id_Chap } from "src/apis/phim/[id]/[chap]"
-import { useRequest } from "vue-request"
-import html from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860.txt?raw"
+import OverScrollX from "components/OverScrollX.vue"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
-import OverScrollX from "components/OverScrollX.vue"
-import { computed, ref, watchEffect, reactive, shallowReactive } from "vue"
 import { debounce } from "quasar"
+import html from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860.txt?raw"
+// eslint-disable-next-line camelcase
+import { Phim_Id } from "src/apis/phim/[id]"
+// eslint-disable-next-line camelcase
+import { Phim_Id_Chap } from "src/apis/phim/[id]/[chap]"
 import { formatView } from "src/logic/formatView"
-
+import { computed, reactive, ref, shallowReactive, watchEffect } from "vue"
+import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 const route = useRoute()
 const router = useRouter()
 
-const { data } = useRequest(() => Phim_Id(html))
+// eslint-disable-next-line camelcase
+const { data } = useRequest<Awaited<ReturnType<typeof Phim_Id>>>(() =>
+  Phim_Id(html)
+)
 
 const datasSeason = shallowReactive<
   Record<
@@ -287,7 +265,8 @@ const datasSeason = shallowReactive<
       }
     | {
         status: "succ"
-        response: unknown
+        // eslint-disable-next-line camelcase
+        response: Awaited<ReturnType<typeof Phim_Id_Chap>>
       }
   >
 >({})
@@ -300,37 +279,52 @@ watchEffect(() => {
 
 const seasons = computed(() => {
   return data.value?.season.map((item) => {
-    item.value = router.resolve(item.path).params.season
-    return item
+    return {
+      ...item,
+      value: router.resolve(item.path).params.season as string,
+    }
   })
 })
 watchEffect(() => {
-const { value } = seasons ;
+  const { value } = seasons
   if (value)
     switchToTabSeason(
       value.findIndex((item) => item?.value === route.params.season)
     )
 })
 
-const currentSeason = computed(() => route.params.season)
+const currentSeason = computed(() => route.params.season as string)
 const currentChap = computed(
   () =>
     route.params.chap ??
-    datasSeason[currentSeason.value]?.response?.chaps[0]?.id
+    (
+      datasSeason[currentSeason.value] as unknown as  // eslint-disable-next-line camelcase
+        | { response: Awaited<ReturnType<typeof Phim_Id_Chap>> }
+        | undefined
+    )?.response?.chaps[0]?.id
 )
 const currentStream = computed(() => {
-  return datasSeason[currentSeason.value]?.response?.chaps.find(item => item.id === currentChap.value)
+  return (
+    datasSeason[currentSeason.value] as unknown as  // eslint-disable-next-line camelcase
+      | { response: Awaited<ReturnType<typeof Phim_Id_Chap>> }
+      | undefined
+  )?.response?.chaps.find((item) => item.id === currentChap.value)
 })
 
 function fetchChaptersInSeason(val: string) {
+  // eslint-disable-next-line functional/immutable-data
   datasSeason[val] = {
     status: "pending",
   }
   Phim_Id_Chap(val)
+    // eslint-disable-next-line promise/always-return
     .then((response) => {
+      // eslint-disable-next-line functional/immutable-data
       datasSeason[val] = { status: "succ", response }
     })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, n/handle-callback-err
     .catch((err) => {
+      // eslint-disable-next-line functional/immutable-data
       datasSeason[val] = {
         status: "fail",
       }
@@ -338,12 +332,19 @@ function fetchChaptersInSeason(val: string) {
 }
 // ===== setup =====
 
-const tabsBtnSeasonRefs = reactive([])
-const lineSeasonStyle = reactive({})
+const tabsBtnSeasonRefs = reactive<HTMLButtonElement[]>([])
+const lineSeasonStyle = reactive<{
+  left: string
+  width: string
+}>({
+  left: "0px",
+  width: "0px",
+})
 
 function switchToTabSeason(index: number) {
-  if (!seasons.value?.[index]) return 
-  
+  if (!seasons.value?.[index]) return
+
+  // eslint-disable-next-line functional/immutable-data
   seasonSelect.value = seasons.value[index].value
 
   const itemBtn = tabsBtnSeasonRefs[index]
@@ -352,17 +353,21 @@ function switchToTabSeason(index: number) {
   const left = itemBtn.offsetLeft
   const width = itemBtn.offsetWidth
 
+  // eslint-disable-next-line functional/immutable-data
   lineSeasonStyle.left = left + width / 2 + "px"
+  // eslint-disable-next-line functional/immutable-data
   lineSeasonStyle.width = width * 0.8 + "px"
 }
 
 const openBottomSheetChap = ref(false)
 
+// eslint-disable-next-line promise/catch-or-return
 fetch("https://animevietsub.cc")
-.then(res => res.text())
-.then(e => {
-  console.log(e)
-})
+  .then((res) => res.text())
+  // eslint-disable-next-line promise/always-return
+  .then((e) => {
+    console.log(e)
+  })
 </script>
 
 <style lang="scss" scoped>

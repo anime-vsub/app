@@ -32,12 +32,7 @@ export function getInfoTPost(item: Element) {
 
   const process = item
     .querySelector(".AAIco-access_time")
-    ?.textContent?.split("/")
-    .map((t) => {
-      const val = parseFloat(t)
-      if (Number.isNaN(val)) return "?"
-      return val
-    })
+    ?.textContent?.split("/") as unknown as ([string, string])
 
   const year = int(item.querySelector(".AAIco-date_range")?.textContent)
 
@@ -67,6 +62,7 @@ export function getInfoTPost(item: Element) {
     description,
     studio,
     genre,
-    time_release: countdown === undefined ? undefined : (Date.now() + countdown * 1e3)
+    time_release:
+      countdown === undefined ? undefined : Date.now() + countdown * 1e3,
   }
 }
