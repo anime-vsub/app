@@ -9,12 +9,14 @@
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "dev": "quasar dev",
+    "build": "quasar build",
     "test:watch": "vitest"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "dayjs": "^1.11.5",
+    "eruda2": "0.0.2-b8",
     "jwplayer8": "0.0.1-b1",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
@@ -25,7 +27,6 @@
     "vue-router": "^4.0.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^4.2.0",
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
     "@quasar/app-vite": "^1.0.0",
     "@tachibana-shin/eslint-config": "^1.0.7",

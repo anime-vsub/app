@@ -75,12 +75,12 @@
     <div
       v-if="
         datasSeason[currentSeason]?.status ==='succ' &&
-       ( datasSeason[currentSeason] as any).response?.update
+       ( datasSeason[currentSeason] as any)?.response?.update
       "
       class="text-gray-300 px-2"
     >
       Tập mới cập nhật lúc
-      {{ (datasSeason[currentSeason] as any).response?.update }}
+      {{ (datasSeason[currentSeason] as any)?.response?.update }}
     </div>
 
     <q-btn
@@ -99,7 +99,7 @@
     </q-btn>
     <OverScrollX>
       <router-link
-        v-for="item in  ( datasSeason[currentSeason] as any).response?.chaps"
+        v-for="item in  ( datasSeason[currentSeason] as any)?.response?.chaps"
         :key="item.name"
         class="btn-chap"
         :class="{
@@ -185,7 +185,7 @@
               </div>
               <router-link
                 v-else
-                v-for="item in  ( datasSeason[currentSeason] as any).response?.chaps"
+                v-for="item in  ( datasSeason[currentSeason] as any)?.response?.chaps"
                 :key="item.name"
                 class="btn-chap mt-1 light"
                 :class="{
@@ -362,8 +362,7 @@ function switchToTabSeason(index: number) {
 const openBottomSheetChap = ref(false)
 
 // eslint-disable-next-line promise/catch-or-return
-fetch("https://animevietsub.cc")
-  .then((res) => res.text())
+fetchText("https://animevietsub.cc")
   // eslint-disable-next-line promise/always-return
   .then((e) => {
     console.log(e)
