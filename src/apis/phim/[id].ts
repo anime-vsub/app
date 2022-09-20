@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { getInfoTPost } from "src/apis/helpers/getInfoTPost"
 
+import { getHTML } from "../helpers/getHTML"
 import { getInfoAnchor } from "../helpers/getInfoAnchor"
+import { getInfoTPost } from "../helpers/getInfoTPost"
 import { int } from "../utils/float"
 import { getAttrs } from "../utils/getAttrs"
 import { getPathName } from "../utils/getPathName"
 import { getText } from "../utils/getText"
 import { parserDOM } from "../utils/parserDOM"
 
-// eslint-disable-next-line camelcase
-export async function Phim_Id(html: string) {
-  const dom = parserDOM(html)
+export async function PhimId(url: string) {
+  const dom = parserDOM(await getHTML(url))
 
   const name = getText(dom.querySelector(".Title")!)
   const othername = dom.querySelector(".SubTitle")?.textContent
@@ -75,7 +75,9 @@ export async function Phim_Id(html: string) {
 
   const followed = dom.querySelector(".added") !== null
 
-  const toPut = Array.from(dom.querySelectorAll(".MovieListRelated .TPostMv")).map(getInfoTPost)
+  const toPut = Array.from(
+    dom.querySelectorAll(".MovieListRelated .TPostMv")
+  ).map(getInfoTPost)
 
   return {
     name,
@@ -102,6 +104,6 @@ export async function Phim_Id(html: string) {
     seasonOf,
     trailer,
     followed,
-    toPut
+    toPut,
   }
 }

@@ -361,7 +361,7 @@ import "dayjs/locale/vi"
 import html from "src/apis/__test__/data/index.txt?raw"
 // Import Swiper Vue.js components
 
-import { Autoplay, Grid, Navigation, Pagination } from "swiper"
+import { Autoplay, Grid, Pagination } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 
 // Import Swiper styles
