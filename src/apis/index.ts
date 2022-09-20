@@ -1,8 +1,9 @@
+import { getHTML } from "./helpers/getHTML"
 import { getInfoTPost } from "./helpers/getInfoTPost"
 import { parserDOM } from "./utils/parserDOM"
 
-export async function Index(html: string) {
-  const dom = parserDOM(html)
+export async function Index(url: string) {
+  const dom = parserDOM(await getHTML(url))
 
   const thisSeason = Array.from(
     dom.querySelectorAll(".MovieListTopCn .TPostMv")

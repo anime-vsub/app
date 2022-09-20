@@ -1,9 +1,8 @@
+import { getHTML } from "../../helpers/getHTML"
 import { parserDOM } from "../../utils/parserDOM"
 
-import html from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860/xem-phim-72839.txt?raw"
-
-export async function Phim_Id_Chap() {
-  const dom = parserDOM(html)
+export async function PhimIdChap(url: string) {
+  const dom = parserDOM(await getHTML(url))
 
   const chaps = Array.from(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

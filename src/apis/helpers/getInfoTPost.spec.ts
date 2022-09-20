@@ -8,8 +8,10 @@ import { getInfoTPost } from "./getInfoTPost"
 describe("getInfoTPost", () => {
   test("simple", () => {
     expect(
-      getInfoTPost(
-        parserDOM(`<div class="TPost B">
+      JSON.parse(
+        JSON.stringify(
+          getInfoTPost(
+            parserDOM(`<div class="TPost B">
         <a href="http://animevietsub.cc/phim/call-of-the-night-a4536/" title="Yofukashi no Uta (2022)">
         <div class="Image">
         <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/06/03/animevsub-FOWOKDAhpl.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Yofukashi no Uta (2022)"></figure>
@@ -19,28 +21,25 @@ describe("getInfoTPost", () => {
         <div class="Title">Yofukashi no Uta</div>
         </a>
         </div>`).querySelector("div")!
+          )
+        )
       )
     ).toEqual({
       path: "/phim/call-of-the-night-a4536/",
       image:
         "http://cdn.animevietsub.cc/data/poster/2022/06/03/animevsub-FOWOKDAhpl.jpg",
       name: "Yofukashi no Uta",
-      chap: 11,
+      chap: "11",
       rate: 9.4,
-      views: undefined,
-      quality: undefined,
-      process: undefined,
-      year: undefined,
-      description: undefined,
-      studio: undefined,
       genre: [],
-      countdown: undefined,
     })
   })
   test("full", () => {
     expect(
-      getInfoTPost(
-        parserDOM(`<article id="post-3396" class="TPost C post-3396 post type-post status-publish format-standard has-post-thumbnail hentry">
+      JSON.parse(
+        JSON.stringify(
+          getInfoTPost(
+            parserDOM(`<article id="post-3396" class="TPost C post-3396 post type-post status-publish format-standard has-post-thumbnail hentry">
    <a href="http://animevietsub.cc/phim/linh-kiem-ton-a3396/">
    <div class="Image">
    <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2019/01/15/animevsub-oDJnM8xrdd.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Linh Kiếm Tôn - Ling Jian Zun, Spirit Sword Sovereign (2019)" title="Linh Kiếm Tôn (2019)"></figure>
@@ -59,17 +58,19 @@ describe("getInfoTPost", () => {
    </div>
    </div>
    </article>`).querySelector("article")!
+          )
+        )
       )
     ).toEqual({
       path: "/phim/linh-kiem-ton-a3396/",
       image:
         "http://cdn.animevietsub.cc/data/poster/2019/01/15/animevsub-oDJnM8xrdd.jpg",
       name: "Linh Kiếm Tôn",
-      chap: 315,
+      chap: "315",
       rate: 7.4,
       views: 4066095,
       quality: "HD",
-      process: [315, "?"],
+      process: ["315", "???"],
       year: 2019,
       description:
         "Cường giả bị tập kích, phản lão hoàn đồng, trở thành thiếu chủ phế vật. Kẻ thù từ đời trước kiếp này,...",
@@ -78,13 +79,16 @@ describe("getInfoTPost", () => {
         { path: "/the-loai/phep-thuat/", name: "Fantasy" },
         { path: "/the-loai/hanh-dong/", name: "Action" },
       ],
-      countdown: undefined,
     })
   })
   test("countdown", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-let
+    let tmp: any
     expect(
-      getInfoTPost(
-        parserDOM(`<article id="post-4418" class="TPost C post-4418 post type-post status-publish format-standard has-post-thumbnail hentry">
+      JSON.parse(
+        JSON.stringify(
+          (tmp = getInfoTPost(
+            parserDOM(`<article id="post-4418" class="TPost C post-4418 post type-post status-publish format-standard has-post-thumbnail hentry">
       <a href="http://animevietsub.cc/phim/detective-conan-movie-25-halloween-no-hanayome-a4418/">
       <div class="Image">
       <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="215" height="320" src="http://cdn.animevietsub.cc/data/poster/2022/02/14/animevsub-hvhxNxwXwf.jpg" class="attachment-thumbnail size-thumbnail wp-post-image" alt="Thám Tử Lừng Danh Conan: Nàng dâu Halloween - Detective Conan Movie 25: Halloween no Hanayome, Meitantei Conan: Halloween no Hanayome (2022)" title="Thám Tử Lừng Danh Conan: Nàng dâu Halloween (2022)"></figure>
@@ -103,17 +107,18 @@ describe("getInfoTPost", () => {
       </div>
       </div>
       </article>`).querySelector("article")!
+          ))
+        )
       )
     ).toEqual({
       path: "/phim/detective-conan-movie-25-halloween-no-hanayome-a4418/",
       image:
         "http://cdn.animevietsub.cc/data/poster/2022/02/14/animevsub-hvhxNxwXwf.jpg",
       name: "Thám Tử Lừng Danh Conan: Nàng dâu Halloween",
-      chap: undefined,
       rate: 9.6,
       views: 1130021,
       quality: "HD",
-      process: [110],
+      process: ["110 Phút"],
       year: 2022,
       description:
         "Bối cảnh lần này diễn ra tại Shibuya, Tokyo đang nhộn nhịp mùa Halloween.Một hôn lễ được tổ chức ở Shibuya Hikarie....",
@@ -127,7 +132,7 @@ describe("getInfoTPost", () => {
         { path: "/the-loai/mystery/", name: "Mystery" },
         { path: "/the-loai/hanh-dong/", name: "Action" },
       ],
-      countdown: "4601735",
+      time_release: tmp.time_release,
     })
   })
 })

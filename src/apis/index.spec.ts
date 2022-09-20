@@ -8,11 +8,17 @@ import { Index } from "."
 
 describe("Index", () => {
   test("normal", async () => {
-    expect(JSON.parse(JSON.stringify(await Index(html)))).toEqual(
-      JSON.parse(
-        // eslint-disable-next-line n/no-path-concat
-        await fs.readFile(`${__dirname}/__test__/assets/index.json`, "utf8")
-      )
-    )
+    const asset = JSON.parse(
+      // eslint-disable-next-line n/no-path-concat
+      await fs.readFile(`${__dirname}/__test__/assets/index.json`, "utf8")
+    ) as Awaited<ReturnType<typeof Index>>
+    const result = JSON.parse(JSON.stringify(await Index(html)))
+
+    asset.preRelease.forEach((item, index) => {
+      // eslint-disable-next-line functional/immutable-data
+      item.time_release = result.preRelease[index].time_release
+    })
+
+    expect(result).toEqual(asset)
   })
 })
