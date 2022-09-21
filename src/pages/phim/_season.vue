@@ -1,5 +1,13 @@
 <template>
-  <q-page v-if="data">
+  <q-page v-if="loading || !data" class="fit flex items-center justify-between">
+    <q-spinner style="color: #00be06" size="3em" :thickness="3" />
+  </q-page>
+
+  <q-page v-else-if="error">
+    {{ error }}
+  </q-page>
+
+  <q-page v-else>
     <q-video :ratio="16 / 9" :poster="data.poster" src="" />
 
     <div class="px-2 pt-4">
@@ -118,94 +126,83 @@
     </OverScrollX>
 
     <!-- bottom sheet -->
-    <transition name="slide">
-      <div
-        v-show="openBottomSheetChap"
-        class="h-[calc(100%-100vmin/16*9)] bottom-0 fixed left-0 w-full bg-dark flex column flex-nowrap"
-      >
-        <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
-          Season
-          <q-btn
-            dense
-            flat
-            round
-            icon="close"
-            @click="openBottomSheetChap = false"
-          />
-        </div>
-        <div class="relative h-[100%]">
-          <OverScrollX>
-            <button
-              v-for="(item, index) in seasons"
-              :key="item.value"
-              class="chap-name"
+    <BottomSheet
+      class="h-[calc(100%-100vmin/16*9)]"
+      :open="openBottomSheetChap"
+    >
+      <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
+        Season
+        <q-btn
+          dense
+          flat
+          round
+          icon="close"
+          @click="openBottomSheetChap = false"
+        />
+      </div>
+      <div class="relative h-[100%]">
+        <OverScrollX>
+          <button
+            v-for="(item, index) in seasons"
+            :key="item.value"
+            class="chap-name"
+            :class="{
+              active: item.value === seasonSelect,
+            }"
+            @click="switchToTabSeason(index)"
+            :ref="(el) => (tabsBtnSeasonRefs[index] = el as unknown as HTMLButtonElement)"
+          >
+            {{ item.name }}
+          </button>
+          <div class="tabs-season-line" :style="lineSeasonStyle" />
+        </OverScrollX>
+
+        <q-tab-panels v-model="seasonSelect" animated keep-alive class="h-full">
+          <q-tab-panel v-for="{ value } in seasons" :key="value" :name="value">
+            <div
+              v-if="
+                !datasSeason[value] || datasSeason[value].status === 'pending'
+              "
+              class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+            >
+              <q-spinner style="color: #00be06" size="3em" :thickness="3" />
+            </div>
+            <div
+              v-else-if="datasSeason[value].status === 'fail'"
+              class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
+            >
+              Lỗi khi lấy dữ liệu
+              <br />
+              <q-btn
+                dense
+                no-caps
+                style="color: #00be06"
+                @click="fetchChaptersInSeason(value)"
+                >Thử lại</q-btn
+              >
+            </div>
+            <router-link
+              v-else
+              v-for="item in  ( datasSeason[currentSeason] as any)?.response?.chaps"
+              :key="item.name"
+              class="btn-chap mt-1 light"
               :class="{
-                active: item.value === seasonSelect,
+                active: currentSeason === value && item.id === currentChap,
               }"
-              @click="switchToTabSeason(index)"
-              :ref="(el) => (tabsBtnSeasonRefs[index] = el as unknown as HTMLButtonElement)"
+              :to="{
+                name: 'phim_[season]_[chap]',
+                params: {
+                  season: value,
+                  chap: item.id,
+                },
+              }"
             >
               {{ item.name }}
-            </button>
-            <div class="tabs-season-line" :style="lineSeasonStyle" />
-          </OverScrollX>
-
-          <q-tab-panels
-            v-model="seasonSelect"
-            animated
-            keep-alive
-            class="h-full"
-          >
-            <q-tab-panel
-              v-for="{ value } in seasons"
-              :key="value"
-              :name="value"
-            >
-              <div
-                v-if="
-                  !datasSeason[value] || datasSeason[value].status === 'pending'
-                "
-                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
-              >
-                <q-spinner style="color: #00be06" size="3em" :thickness="3" />
-              </div>
-              <div
-                v-else-if="datasSeason[value].status === 'fail'"
-                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-              >
-                Lỗi khi lấy dữ liệu
-                <br />
-                <q-btn
-                  dense
-                  no-caps
-                  style="color: #00be06"
-                  @click="fetchChaptersInSeason(value)"
-                  >Thử lại</q-btn
-                >
-              </div>
-              <router-link
-                v-else
-                v-for="item in  ( datasSeason[currentSeason] as any)?.response?.chaps"
-                :key="item.name"
-                class="btn-chap mt-1 light"
-                :class="{
-                  active: currentSeason === value && item.id === currentChap,
-                }"
-                :to="{
-                  name: 'phim_[season]_[chap]',
-                  params: {
-                    season: value,
-                    chap: item.id,
-                  },
-                }"
-              >
-                {{ item.name }}
-              </router-link>
-            </q-tab-panel>
-          </q-tab-panels>
-        </div>
+            </router-link>
+          </q-tab-panel>
+        </q-tab-panels>
       </div>
-    </transition>
+    </BottomSheet>
 
     <!--
       trailer
@@ -215,39 +212,13 @@
   </q-page>
 </template>
 
-<style lang="scss">
-.slide {
-  &-enter-active {
-    animation: slide-up 0.44s ease;
-    @keyframes slide-up {
-      from {
-        transform: translateY(100%);
-      }
-      to {
-        transform: translateY(0);
-      }
-    }
-  }
-  &-leave-active {
-    animation: slide-down 0.44s ease;
-    @keyframes slide-down {
-      from {
-        transform: translateY(0);
-      }
-      to {
-        transform: translateY(100%);
-      }
-    }
-  }
-}
-</style>
 <script lang="ts" setup>
 import OverScrollX from "components/OverScrollX.vue"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
-import html from "src/apis/__test__/data/phim/tonikaku-kawaii-a3860.txt?raw"
 import { PhimId } from "src/apis/phim/[id]"
 import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
+import BottomSheet from "src/components/BottomSheet.vue"
 import { formatView } from "src/logic/formatView"
 import { computed, reactive, ref, shallowReactive, watchEffect } from "vue"
 import { useRequest } from "vue-request"
@@ -256,7 +227,14 @@ import { useRoute, useRouter } from "vue-router"
 const route = useRoute()
 const router = useRouter()
 
-const { data } = useRequest(() => PhimId(html))
+const currentSeason = computed(() => route.params.season as string)
+
+const { data, loading, error } = useRequest(
+  () => PhimId(`/phim/${currentSeason.value}`),
+  {
+    refreshDeps: [currentSeason],
+  }
+)
 
 const datasSeason = shallowReactive<
   Record<
@@ -293,7 +271,6 @@ watchEffect(() => {
     )
 })
 
-const currentSeason = computed(() => route.params.season as string)
 const currentChap = computed(
   () =>
     route.params.chap ??
@@ -311,24 +288,24 @@ const currentStream = computed(() => {
   )?.response?.chaps.find((item) => item.id === currentChap.value)
 })
 
-function fetchChaptersInSeason(val: string) {
+async function fetchChaptersInSeason(val: string) {
   // eslint-disable-next-line functional/immutable-data
   datasSeason[val] = {
     status: "pending",
   }
-  PhimIdChap(val)
-    // eslint-disable-next-line promise/always-return
-    .then((response) => {
-      // eslint-disable-next-line functional/immutable-data
-      datasSeason[val] = { status: "succ", response }
-    })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, n/handle-callback-err
-    .catch((err) => {
-      // eslint-disable-next-line functional/immutable-data
-      datasSeason[val] = {
-        status: "fail",
-      }
-    })
+
+  try {
+    // eslint-disable-next-line functional/immutable-data
+    datasSeason[val] = {
+      status: "succ",
+      response: await PhimIdChap(`/phim/${val}/xem-phim.html`),
+    }
+  } catch (err) {
+    // eslint-disable-next-line functional/immutable-data
+    datasSeason[val] = {
+      status: "fail",
+    }
+  }
 }
 // ===== setup =====
 
@@ -360,13 +337,6 @@ function switchToTabSeason(index: number) {
 }
 
 const openBottomSheetChap = ref(false)
-
-// eslint-disable-next-line promise/catch-or-return
-fetchText("https://animevietsub.cc")
-  // eslint-disable-next-line promise/always-return
-  .then((e) => {
-    console.log(e)
-  })
 </script>
 
 <style lang="scss" scoped>
