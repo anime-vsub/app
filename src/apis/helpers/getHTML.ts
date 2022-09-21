@@ -1,5 +1,9 @@
-export function getHTML(url: string) {
-  return new Promise<string>((resolve) => {
-    setTimeout(() => resolve(url), 500)
+import { Http } from "@capacitor-community/http"
+
+export async function getHTML(url: string): Promise<string> {
+  const response = await Http.get({
+    url: `https://animevietsub.cc` + url,
   })
+
+  return response.data
 }
