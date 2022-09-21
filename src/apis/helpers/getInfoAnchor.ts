@@ -1,10 +1,11 @@
+import type { Cheerio, Element } from "cheerio"
+
 import { getPathName } from "../utils/getPathName"
 
-export function getInfoAnchor(a: Element) {
+export function getInfoAnchor(a: Cheerio<Element>) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const path = getPathName(a.getAttribute("href")!)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const name = a.textContent!
+  const path = getPathName(a.attr("href")!)
+  const name = a.text()
 
   return { path, name }
 }

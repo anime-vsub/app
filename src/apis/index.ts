@@ -1,30 +1,31 @@
+import { load } from "cheerio"
+
 import { getHTML } from "./helpers/getHTML"
 import { getInfoTPost } from "./helpers/getInfoTPost"
-import { parserDOM } from "./utils/parserDOM"
 
 export async function Index(url: string) {
-  const dom = parserDOM(await getHTML(url))
+  const $ = load(await getHTML(url))
 
-  const thisSeason = Array.from(
-    dom.querySelectorAll(".MovieListTopCn .TPostMv")
-  ).map(getInfoTPost)
-  const carousel = Array.from(
-    dom.querySelectorAll(".MovieListSldCn .TPostMv")
-  ).map(getInfoTPost)
-  Object.assign(window, { dom })
+  const thisSeason = $(".MovieListTopCn:eq(0)")
+    .find(".TPostMv")
+    .map((_i, item) => getInfoTPost($(item)))
+    .toArray()
+  const carousel = $(".MovieListSldCn .TPostMv")
+    .map((_i, item) => getInfoTPost($(item)))
+    .toArray()
 
-  const lastUpdate = Array.from(
-    dom.querySelectorAll("#single-home .TPostMv")
-  ).map(getInfoTPost)
-  const preRelease = Array.from(dom.querySelectorAll("#new-home .TPostMv")).map(
-    getInfoTPost
-  )
-  const nominate = Array.from(dom.querySelectorAll("#hot-home .TPostMv")).map(
-    getInfoTPost
-  )
-  const hotUpdate = Array.from(dom.querySelectorAll("#showTopPhim .TPost")).map(
-    getInfoTPost
-  )
+  const lastUpdate = $("#single-home .TPostMv")
+    .map((_i, item) => getInfoTPost($(item)))
+    .toArray()
+  const preRelease = $("#new-home .TPostMv")
+    .map((_i, item) => getInfoTPost($(item)))
+    .toArray()
+  const nominate = $("#hot-home .TPostMv")
+    .map((_i, item) => getInfoTPost($(item)))
+    .toArray()
+  const hotUpdate = $("#showTopPhim .TPost")
+    .map((_i, item) => getInfoTPost($(item)))
+    .toArray()
 
   return {
     thisSeason,
