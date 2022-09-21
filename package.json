@@ -10,11 +10,13 @@
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "dev": "quasar dev",
     "build": "quasar build",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "dev:android": "pnpm dev -m capacitor -T android"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
+    "cheerio": "1.0.0-rc.12",
     "dayjs": "^1.11.5",
     "eruda2": "0.0.2-b8",
     "jwplayer8": "0.0.1-b1",

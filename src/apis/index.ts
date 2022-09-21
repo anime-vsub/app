@@ -11,6 +11,8 @@ export async function Index(url: string) {
   const carousel = Array.from(
     dom.querySelectorAll(".MovieListSldCn .TPostMv")
   ).map(getInfoTPost)
+  Object.assign(window, { dom })
+
   const lastUpdate = Array.from(
     dom.querySelectorAll("#single-home .TPostMv")
   ).map(getInfoTPost)
