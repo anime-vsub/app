@@ -1,51 +1,53 @@
+import type { Cheerio, Element } from "cheerio"
+
 import { int } from "../utils/float"
-import { getAttrs } from "../utils/getAttrs"
 import { getPathName } from "../utils/getPathName"
-import { getText } from "../utils/getText"
 
 import { getInfoAnchor } from "./getInfoAnchor"
 
 export type TPost = ReturnType<typeof getInfoTPost>
 
-export function getInfoTPost(item: Element) {
+export function getInfoTPost(cheerio: Cheerio<Element>) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const path = getPathName(item.querySelector("a")!.getAttribute("href")!)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { src: image } = getAttrs(item.querySelector("img")!, ["src"])
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const name = getText(item.querySelector(".Title")!)
+  const path = getPathName(cheerio.find("a").attr("href")!)
+  const image = cheerio.find("img").attr("src")
+  const name = cheerio.find(".Title:eq(0)").text()
 
-  const chap = item.querySelector(".mli-eps > i")?.textContent
+  const _chap = cheerio.find(".mli-eps > i:eq(0)").text()
+  const chap = _chap === "TẤT" ? "Full" : _chap
   const rate = parseFloat(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    getText(item.querySelector(".anime-avg-user-rating, .AAIco-star")!)
+    cheerio.find(".anime-avg-user-rating:eq(0)").text() ??
+      cheerio.find(".AAIco-star:eq(0)").text()
   )
   const views = int(
-    item
-      .querySelector(".Year")
-      ?.textContent?.match(/[\d,]+/)?.[0]
+    cheerio
+      .find(".Year:eq(0)")
+      .text()
+      .match(/[\d,]+/)?.[0]
       ?.replace(/,/g, "")
   )
 
   // =============== more =====================
-  const quality = item.querySelector(".Qlty")?.textContent
+  const quality = cheerio.find(".Qlty:eq(0)").text()
 
-  const process = item
-    .querySelector(".AAIco-access_time")
-    ?.textContent?.split("/") as unknown as ([string, string])
+  const process = cheerio
+    .find(".AAIco-access_time:eq(0)")
+    .text()
+    .split("/") as unknown as [string, string]
 
-  const year = int(item.querySelector(".AAIco-date_range")?.textContent)
+  const year = int(cheerio.find(".AAIco-date_range:eq(0)").text())
 
-  const description = item.querySelector(".Description > p")?.textContent
+  const description = cheerio.find(".Description > p:eq(0)").text()
 
-  const studio = item.querySelector(".Studio")?.childNodes[1].nodeValue
-  const genre = Array.from(item.querySelectorAll(".genre > a")).map(
-    getInfoAnchor
-  )
+  const studio = cheerio.find(".Studio:eq(0)").text().split(":", 2)[1]?.trim()
+
+  const genre = cheerio
+    .find(".Genre > a")
+    .map((_i, item) => getInfoAnchor(cheerio.find(item)))
+    .toArray()
   const countdown =
-    int(
-      item.querySelector(".mli-timeschedule")?.getAttribute("data-timer_second")
-    ) ?? undefined
+    int(cheerio.find(".mli-timeschedule").attr("data-timer_second")) ??
+    undefined
 
   return {
     path,

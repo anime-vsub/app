@@ -11,25 +11,62 @@
   "yearOf": 2020,
   "views": 1538971,
   "season": [
-    { "path": "/phim/tonikaku-kawaii-a3860/", "name": "Phần TV Series" },
-    { "path": "/phim/tonikaku-kawaii-sns-a4229/", "name": "Phần OVA" },
-    { "path": "/phim/tonikaku-kawaii-2nd-season-a4476/", "name": "Phần 2" }
+    {
+      "path": "/phim/tonikaku-kawaii-a3860/",
+      "name": "Phần TV Series"
+    },
+    {
+      "path": "/phim/tonikaku-kawaii-sns-a4229/",
+      "name": "Phần OVA"
+    },
+    {
+      "path": "/phim/tonikaku-kawaii-2nd-season-a4476/",
+      "name": "Phần 2"
+    }
   ],
   "genre": [
-    { "path": "/anime-bo/", "name": "Anime bộ" },
-    { "path": "/the-loai/shounen/", "name": "Shounen" },
-    { "path": "/the-loai/tinh-cam/", "name": "Romance" },
-    { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
-    { "path": "/phim/tonikaku-kawaii-a3860/", "name": "Tonikaku Kawaii [BD]" }
+    {
+      "path": "/anime-bo/",
+      "name": "Anime bộ"
+    },
+    {
+      "path": "/the-loai/shounen/",
+      "name": "Shounen"
+    },
+    {
+      "path": "/the-loai/tinh-cam/",
+      "name": "Romance"
+    },
+    {
+      "path": "/the-loai/hai-huoc/",
+      "name": "Comedy"
+    },
+    {
+      "path": "/phim/tonikaku-kawaii-a3860/",
+      "name": "Tonikaku Kawaii [BD]"
+    }
   ],
   "quality": "HD",
   "status": "Full",
-  "authors": [{ "path": "/tag/ikehata-hiroshi/", "name": "Ikehata Hiroshi" }],
-  "contries": [{ "path": "/quoc-gia/jp/", "name": "Nhật Bản" }],
+  "authors": [
+    {
+      "path": "/tag/ikehata-hiroshi/",
+      "name": "Ikehata Hiroshi"
+    }
+  ],
+  "contries": [
+    {
+      "path": "/quoc-gia/jp/",
+      "name": "Nhật Bản"
+    }
+  ],
   "follows": 2791,
   "language": "VietSub",
   "studio": "Seven Arcs",
-  "seasonOf": "Mùa Thu - 2020",
+  "seasonOf": {
+    "path": "/season/autumn/2020/",
+    "name": "Mùa Thu - 2020"
+  },
   "trailer": "https://www.youtube.com/embed/3M7w-ROU62U",
   "followed": false,
   "toPut": [
@@ -37,95 +74,145 @@
       "path": "/phim/tonikaku-kawaii-2nd-season-a4476/",
       "image": "http://cdn.animevietsub.cc/data/poster/2022/02/24/animevsub-vziyRxKpU1.jpg",
       "name": "Tonikaku Kawaii 2nd Season",
+      "chap": "",
       "rate": 9.7,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": [],
-      "time_release": 4071199945240
+      "time_release": 4071288064265
     },
     {
       "path": "/phim/tonikaku-kawaii-sns-a4229/",
       "image": "http://cdn.animevietsub.cc/data/poster/2021/08/18/animevsub-HXKAyrZo5i.jpg",
       "name": "Tonikaku Kawaii: SNS",
+      "chap": "",
       "rate": 9.8,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/shingetsutan-tsukihime-r1-a216/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/08/18/animevsub-20669.jpg",
       "name": "Shingetsutan Tsukihime",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 8.8,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-a260/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-24875.jpg",
       "name": "Ore no Imouto ga Konnani Kawaii Wake ga Nai",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 8.6,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-a261/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-45769.jpg",
       "name": "Ore no Imouto ga Konnani Kawaii Wake ga Nai.",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 8.1,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-specials-a262/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-51167.jpg",
       "name": "Ore no Imouto ga Konnani Kawaii Wake ga Nai. Specials",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 7.1,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/thuy-thu-mat-trang-r-a460/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-740.jpg",
       "name": "Thuỷ Thủ Mặt Trăng R",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 8.7,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/thuy-thu-mat-trang-s-a461/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-532.jpg",
       "name": "Thuỷ Thủ Mặt Trăng S",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 7.7,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/sailor-moon-special-movie-i3-a465/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-mAJ0DPb.jpg",
       "name": "Sailor Moon (Special - Movie )",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 8.5,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/thuy-thu-mat-trang-a459/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-20250.jpg",
       "name": "Thuỷ Thủ Mặt Trăng",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 9.3,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/thuy-thu-mat-trang-supers-a462/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-40267.jpg",
       "name": "Thuỷ Thủ Mặt Trăng SuperS",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 8.7,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     },
     {
       "path": "/phim/thuy-thu-mat-trang-sailor-stars-a463/",
       "image": "http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-996.jpg",
       "name": "Thuỷ Thủ Mặt Trăng: Sailor Stars",
-      "chap": "TẤT",
+      "chap": "Full",
       "rate": 6.8,
+      "quality": "",
+      "process": [""],
+      "year": null,
+      "description": "",
       "genre": []
     }
   ]
