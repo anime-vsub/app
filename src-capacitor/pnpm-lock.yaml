@@ -2,9 +2,9 @@ lockfileVersion: 5.4
 
 specifiers:
   '@capacitor-community/http': 1.4.1
-  '@capacitor/android': 4.2.0
-  '@capacitor/cli': 4.2.0
-  '@capacitor/core': 4.2.0
+  '@capacitor/android': ^4.0.0
+  '@capacitor/cli': ^4.0.0
+  '@capacitor/core': ^4.0.0
 
 dependencies:
   '@capacitor-community/http': 1.4.1
