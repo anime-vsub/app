@@ -199,29 +199,17 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2022/07/08/animevsub-WeAcGmb85A.jpg",
       "name": "Yofukashi no Uta",
       "chap": "",
-      "rate": null,
+      "rate": 479,
       "quality": "HD",
       "process": ["11", "13"],
       "year": 2022,
       "description": "Kou Yamori bề ngoài có vẻ giống như một học sinh cấp hai điển hình. Tương đối tốt trong học tập và hòa nhã với...",
       "studio": "LIDENFILMS",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/vampire/",
-          "name": "Vampire"
-        },
-        {
-          "path": "/the-loai/sieu-nhien/",
-          "name": "Supernatural"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/vampire/", "name": "Vampire" },
+        { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" }
       ]
     },
     {
@@ -229,33 +217,18 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2022/06/03/animevsub-WeTiLJ3Dbe.jpg",
       "name": "Ma Vương Đi Làm Mùa 2",
       "chap": "",
-      "rate": null,
+      "rate": 330,
       "quality": "HD",
       "process": ["10", "12"],
       "year": 2022,
       "description": "Mùa thứ 2 của Hataraku Maou-sama! nha quý vị.",
       "studio": "Studio 3Hz",
       "genre": [
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/sieu-nhien/",
-          "name": "Supernatural"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/demons/",
-          "name": "Demons"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        }
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/demons/", "name": "Demons" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" }
       ]
     },
     {
@@ -263,21 +236,15 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2022/06/17/animevsub-OlUDXAxcIY.jpg",
       "name": "Con Gái Ông Trùm Và Người Giám Hộ",
       "chap": "",
-      "rate": null,
+      "rate": 341,
       "quality": "HD",
       "process": ["11", "12"],
       "year": 2022,
       "description": "NANNY CỦA BẠN LÀ AI?Tooru Kirishima là cánh tay phải của gia đình tội phạm Sakuragi. Đối với anh ta, công việc là một...",
       "studio": "feel., Gaina",
       "genre": [
-        {
-          "path": "/the-loai/doi-thuong/",
-          "name": "Slice of Life"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        }
+        { "path": "/the-loai/doi-thuong/", "name": "Slice of Life" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" }
       ]
     },
     {
@@ -285,37 +252,19 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2022/07/02/animevsub-94OGM574F3.jpg",
       "name": "Bastard!! Ankoku no Hakaishin",
       "chap": "",
-      "rate": null,
+      "rate": 14,
       "quality": "HD",
       "process": ["24", "24"],
       "year": 2022,
       "description": "\nVương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nhân vật phản diện này - bậc thầy ninja Gara, nữ...",
       "studio": "LIDENFILMS",
       "genre": [
-        {
-          "path": "/the-loai/seinen/",
-          "name": "Seinen"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/ecchi/",
-          "name": "Ecchi"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/seinen/", "name": "Seinen" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/ecchi/", "name": "Ecchi" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -323,25 +272,16 @@
       "image": "http://cdn.animevietsub.cc/data/banner/2022/06/18/animevsub-p8yqXFCSzA.jpg",
       "name": "Bảy Viên Ngọc Rồng Siêu Cấp: Siêu Anh Hùng",
       "chap": "",
-      "rate": null,
+      "rate": 60,
       "quality": "HD",
       "process": ["99 phút"],
       "year": 2022,
       "description": "Phần tiếp theo của phim Dragon Ball Super: Broly.",
       "studio": "Toei Animation",
       "genre": [
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -349,37 +289,19 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2021/06/14/animevsub-MzWiOrTTaY.jpg",
       "name": "Jujutsu Kaisen 0: Chú Thuật Hồi Chiến",
       "chap": "",
-      "rate": null,
+      "rate": 346,
       "quality": "HD",
       "process": ["105 Phút"],
       "year": 2021,
       "description": "Cho những ai chưa biết, Jujutsu Kaisen 0 là là tập truyện ngắn ra mắt trước khi Chú Thuật Hồi Chiến được sáng tác....",
       "studio": "MAPPA",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/truong-hoc/",
-          "name": "School"
-        },
-        {
-          "path": "/the-loai/sieu-nhien/",
-          "name": "Supernatural"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/demons/",
-          "name": "Demons"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/truong-hoc/", "name": "School" },
+        { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/demons/", "name": "Demons" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -387,37 +309,19 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2021/09/23/animevsub-WWQ1A7BEEl.jpg",
       "name": "Lập Harem Chốn Mê Cung Ở Dị Giới",
       "chap": "",
-      "rate": null,
+      "rate": 470,
       "quality": "HD",
       "process": ["11", "12"],
       "year": 2022,
       "description": "Một thanh niên chán đời với ý định tự tử và đang tìm những cách tự tử nhẹ nhàng nhất trên inteet thì vô tình...",
       "studio": "Passione",
       "genre": [
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/harem/",
-          "name": "Harem"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/ecchi/",
-          "name": "Ecchi"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/harem/", "name": "Harem" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/ecchi/", "name": "Ecchi" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -425,25 +329,16 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2022/07/06/animevsub-v0lBovj0kZ.jpg",
       "name": "Đứa Con Mà Mẹ Kế Dẫn Về Từng Là Bạn Gái Cũ",
       "chap": "",
-      "rate": null,
+      "rate": 784,
       "quality": "HD",
       "process": ["11", "12"],
       "year": 2022,
       "description": "Thời học trung học, Idori Mizuto và Ayai Yume tình cờ quen nhau và trở thành người yêu của nhau. Nhưng vì vài biến cố...",
       "studio": "Project No.9",
       "genre": [
-        {
-          "path": "/the-loai/truong-hoc/",
-          "name": "School"
-        },
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        }
+        { "path": "/the-loai/truong-hoc/", "name": "School" },
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" }
       ]
     },
     {
@@ -451,29 +346,17 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2022/06/17/animevsub-MZifjIkJgQ.png",
       "name": "Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu",
       "chap": "",
-      "rate": null,
+      "rate": 905,
       "quality": "HD",
       "process": ["11", "12"],
       "year": 2022,
       "description": "Học viện Phép thuật Hoàng gia Ortigia.Alto, đang trên bờ vực thất bại trong lớp học ma thuật triệu hồi và phải...",
       "studio": "Staple Entertainment",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/truong-hoc/",
-          "name": "School"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/ecchi/",
-          "name": "Ecchi"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/truong-hoc/", "name": "School" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/ecchi/", "name": "Ecchi" }
       ]
     },
     {
@@ -481,33 +364,18 @@
       "image": "http://cdn.animevietsub.cc/data/big_banner/2022/06/16/animevsub-lQOffL5gsP.jpg",
       "name": "Overlord IV",
       "chap": "",
-      "rate": null,
+      "rate": 1002,
       "quality": "HD",
       "process": ["11", "13"],
       "year": 2022,
       "description": "Đây là phần 4 của Overlord.",
       "studio": "Madhouse",
       "genre": [
-        {
-          "path": "/the-loai/sieu-nhien/",
-          "name": "Supernatural"
-        },
-        {
-          "path": "/the-loai/tro-choi/",
-          "name": "Game"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/ma-thuat/",
-          "name": "Magic"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" },
+        { "path": "/the-loai/tro-choi/", "name": "Game" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/ma-thuat/", "name": "Magic" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     }
   ],
@@ -524,12 +392,7 @@
       "year": 2022,
       "description": "Thanh niên bình thường ở đô thị An Lâm tình cờ gặp một người tu hành cực mạnh, đối phương ban cho cậu ấy...",
       "studio": "",
-      "genre": [
-        {
-          "path": "/the-loai/cartoon/",
-          "name": "Cartoon"
-        }
-      ]
+      "genre": [{ "path": "/the-loai/cartoon/", "name": "Cartoon" }]
     },
     {
       "path": "/phim/bay-vien-ngoc-rong-heroes-a3290/",
@@ -544,30 +407,12 @@
       "description": "\nSuper Saiyan 4 Son Goku vs Super Saiyan God Super Saiyan ( Super Saiyan Blue ) Son Goku - Trận Chiến Đỉnh Cao tại '' Hành...",
       "studio": "Toei Animation",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/super-power/",
-          "name": "Super Power"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/martial-arts/",
-          "name": "Martial Arts"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/super-power/", "name": "Super Power" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/martial-arts/", "name": "Martial Arts" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -582,12 +427,7 @@
       "year": 2022,
       "description": "Câu chuyện xảy ra vào năm 2056, ở thành phố Bạch Dương tỉnh Hà Bắc Trung Quốc. Khoa học kỹ thuật tiến bộ khiến...",
       "studio": "Chosen",
-      "genre": [
-        {
-          "path": "/the-loai/sci-fi/",
-          "name": "Sci-Fi"
-        }
-      ]
+      "genre": [{ "path": "/the-loai/sci-fi/", "name": "Sci-Fi" }]
     },
     {
       "path": "/phim/digimon-ghost-game-a4348/",
@@ -602,22 +442,10 @@
       "description": "\nHiro có thể nhìn thấy Digimon sau khi kích hoạt một \"Digivice\" mà cha anh đã để lại cho anh. Cùng với Digimon Gammamon,...",
       "studio": "Toei Animation",
       "genre": [
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -633,22 +461,10 @@
       "description": "Học sinh cấp 3 Lộ Minh Phi bỗng nhận được một bức thư mời đến từ học viện Cassell. Chuyện tốt từ trên trời...",
       "studio": "Đang cập nhập",
       "genre": [
-        {
-          "path": "/the-loai/truong-hoc/",
-          "name": "School"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/truong-hoc/", "name": "School" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -664,18 +480,9 @@
       "description": "Lương Tịch bởi vì lần thứ nhất đột phát thiện tâm mà nhờ có vạn năm chân lực, gia nhập Thiên Linh Môn do đó...",
       "studio": "Soyep",
       "genre": [
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -690,12 +497,7 @@
       "year": 2022,
       "description": "Chuyển thể từ tiểu thuyết Thương Lan Quyết (Ma Tôn) của tác giả Cửu Lộ Phi Hương, nói về một lần vượt ngục...",
       "studio": "GARDEN",
-      "genre": [
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        }
-      ]
+      "genre": [{ "path": "/the-loai/phep-thuat/", "name": "Fantasy" }]
     },
     {
       "path": "/phim/linh-kiem-ton-a3396/",
@@ -710,14 +512,8 @@
       "description": "Cường giả bị tập kích, phản lão hoàn đồng, trở thành thiếu chủ phế vật. Kẻ thù từ đời trước kiếp này,...",
       "studio": "Soyep",
       "genre": [
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -732,12 +528,7 @@
       "year": 2021,
       "description": "Ngày xưa uy chấn chư thiên Thần Vực, vạn thế luân hồi sau thảm tao diệt môn!\nTàn khốc nguyền rủa, vạn thế...",
       "studio": "",
-      "genre": [
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
-      ]
+      "genre": [{ "path": "/the-loai/hanh-dong/", "name": "Action" }]
     },
     {
       "path": "/phim/the-gioi-hoan-my-a4098/",
@@ -752,18 +543,9 @@
       "description": "Một hạt bụi có thể lấp biển, một cọng cỏ chém hết mặt trời mặt trăng và ngôi sao, trong nháy mắt ở giữa...",
       "studio": "Shanghai Foch Film and TV Culture Investment",
       "genre": [
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     }
   ],
@@ -781,36 +563,15 @@
       "description": "Bối cảnh lần này diễn ra tại Shibuya, Tokyo đang nhộn nhịp mùa Halloween.Một hôn lễ được tổ chức ở Shibuya Hikarie....",
       "studio": "TMS Entertainment",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/police/",
-          "name": "Police"
-        },
-        {
-          "path": "/the-loai/drama/",
-          "name": "Drama"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/mystery/",
-          "name": "Mystery"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/police/", "name": "Police" },
+        { "path": "/the-loai/drama/", "name": "Drama" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/mystery/", "name": "Mystery" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ],
-      "time_release": 1668348999107
+      "time_release": 1668475088134
     },
     {
       "path": "/phim/spy-x-family-part-2-a4697/",
@@ -825,14 +586,8 @@
       "description": "Part thứ hai của Spy x Family.",
       "studio": "Wit Studio, CloverWorks",
       "genre": [
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -848,14 +603,8 @@
       "description": "Khi nhận ra thì… tôi đang ở một thế giới khác. Tôi đã trở thành một thanh kiếm? Chuyện quái gì thế này? Chỗ...",
       "studio": "C2C",
       "genre": [
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -871,22 +620,10 @@
       "description": "Mùa 2 của Tantei wa Mou, Shindeiru. ",
       "studio": "ENGI",
       "genre": [
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/drama/",
-          "name": "Drama"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/mystery/",
-          "name": "Mystery"
-        }
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/drama/", "name": "Drama" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/mystery/", "name": "Mystery" }
       ]
     },
     {
@@ -902,14 +639,8 @@
       "description": "Nam sinh cao trung năm nhất Junta Shiraishi là một nhân vật không gây được sự chú ý trước đám đông ngay cả khi có...",
       "studio": "Pine Jam",
       "genre": [
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        }
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" }
       ]
     },
     {
@@ -925,36 +656,15 @@
       "description": "Anh không tin tưởng gì ngoài thanh kiếm của mình. Anh không có nơi nào để gọi là nhà. Người lính đánh thuê đơn...",
       "studio": "Đang cập nhập",
       "genre": [
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/sieu-nhien/",
-          "name": "Supernatural"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/drama/",
-          "name": "Drama"
-        },
-        {
-          "path": "/the-loai/kinh-di/",
-          "name": "Horror"
-        },
-        {
-          "path": "/the-loai/mystery/",
-          "name": "Mystery"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/drama/", "name": "Drama" },
+        { "path": "/the-loai/kinh-di/", "name": "Horror" },
+        { "path": "/the-loai/mystery/", "name": "Mystery" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ],
-      "time_release": 1664979399113
+      "time_release": 1665105488137
     },
     {
       "path": "/phim/akiba-maid-sensou-a4736/",
@@ -968,12 +678,7 @@
       "year": 2022,
       "description": "Anime sẽ có sự tham gia của Reina Kondo trong vai Nagomi Kazuhira, một phụ nữ chuyển đến Tokyo và mơ ước trở thành...",
       "studio": "P.A. Works",
-      "genre": [
-        {
-          "path": "/the-loai/doi-thuong/",
-          "name": "Slice of Life"
-        }
-      ]
+      "genre": [{ "path": "/the-loai/doi-thuong/", "name": "Slice of Life" }]
     },
     {
       "path": "/phim/cool-doji-danshi-a4735/",
@@ -988,16 +693,10 @@
       "description": "Họ là những anh chàng đẹp trai, lạnh lùng nhưng hơi khó tiếp cận. Tuy nhiên, họ... tất cả đều vụng về!!! Bởi...",
       "studio": "Pierrot",
       "genre": [
-        {
-          "path": "/the-loai/doi-thuong/",
-          "name": "Slice of Life"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        }
+        { "path": "/the-loai/doi-thuong/", "name": "Slice of Life" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" }
       ],
-      "time_release": 1665843399115
+      "time_release": 1665969488139
     },
     {
       "path": "/phim/uchi-no-shishou-wa-shippo-ga-nai-a4734/",
@@ -1012,18 +711,9 @@
       "description": "Câu chuyện xoay quanh Mameda, một cô gái tanuki có ước mơ trở thành con người và làm một nghệ nhân rakugo. Để thực...",
       "studio": "LIDENFILMS",
       "genre": [
-        {
-          "path": "/the-loai/seinen/",
-          "name": "Seinen"
-        },
-        {
-          "path": "/the-loai/sieu-nhien/",
-          "name": "Supernatural"
-        },
-        {
-          "path": "/the-loai/lich-su/",
-          "name": "Historical"
-        }
+        { "path": "/the-loai/seinen/", "name": "Seinen" },
+        { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" },
+        { "path": "/the-loai/lich-su/", "name": "Historical" }
       ]
     },
     {
@@ -1039,20 +729,11 @@
       "description": "Phần mới của Series Yama no Susume",
       "studio": "8bit",
       "genre": [
-        {
-          "path": "/the-loai/doi-thuong/",
-          "name": "Slice of Life"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        }
+        { "path": "/the-loai/doi-thuong/", "name": "Slice of Life" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" }
       ],
-      "time_release": 1665324999118
+      "time_release": 1665451088140
     }
   ],
   "nominate": [
@@ -1069,34 +750,13 @@
       "description": "Đảo Hải Tặc - One Piece là chuyện về cậu bé Monkey D. Luffy do ăn nhầm Trái Ác Quỷ, bị biến thành người cao...",
       "studio": "Toei Animation",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/super-power/",
-          "name": "Super Power"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/drama/",
-          "name": "Drama"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/super-power/", "name": "Super Power" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/drama/", "name": "Drama" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -1112,26 +772,11 @@
       "description": "Đây là phần 4 của Overlord.",
       "studio": "Madhouse",
       "genre": [
-        {
-          "path": "/the-loai/sieu-nhien/",
-          "name": "Supernatural"
-        },
-        {
-          "path": "/the-loai/tro-choi/",
-          "name": "Game"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/ma-thuat/",
-          "name": "Magic"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" },
+        { "path": "/the-loai/tro-choi/", "name": "Game" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/ma-thuat/", "name": "Magic" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -1147,22 +792,10 @@
       "description": "Học viện Phép thuật Hoàng gia Ortigia.Alto, đang trên bờ vực thất bại trong lớp học ma thuật triệu hồi và phải...",
       "studio": "Staple Entertainment",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/truong-hoc/",
-          "name": "School"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/ecchi/",
-          "name": "Ecchi"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/truong-hoc/", "name": "School" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/ecchi/", "name": "Ecchi" }
       ]
     },
     {
@@ -1178,26 +811,11 @@
       "description": "Mở đầu câu truyện, cậu học sinh trung học 17 tuổi Shinichi Kudo bị biến thành cậu bé Conan Edogawa. Shinichi trong phần...",
       "studio": "TMS Entertainment",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/police/",
-          "name": "Police"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/mystery/",
-          "name": "Mystery"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/police/", "name": "Police" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/mystery/", "name": "Mystery" }
       ]
     },
     {
@@ -1213,26 +831,11 @@
       "description": "Asta và Yuno đã bị bỏ rơi cùng nhau tại cùng một nhà thờ và đã không thể tách rời kể từ đó. Khi còn trẻ, họ...",
       "studio": "Studio Pierrot",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/ma-thuat/",
-          "name": "Magic"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/ma-thuat/", "name": "Magic" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -1248,18 +851,9 @@
       "description": "Một hạt bụi có thể lấp biển, một cọng cỏ chém hết mặt trời mặt trăng và ngôi sao, trong nháy mắt ở giữa...",
       "studio": "Shanghai Foch Film and TV Culture Investment",
       "genre": [
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -1275,18 +869,9 @@
       "description": "Thời học trung học, Idori Mizuto và Ayai Yume tình cờ quen nhau và trở thành người yêu của nhau. Nhưng vì vài biến cố...",
       "studio": "Project No.9",
       "genre": [
-        {
-          "path": "/the-loai/truong-hoc/",
-          "name": "School"
-        },
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        }
+        { "path": "/the-loai/truong-hoc/", "name": "School" },
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" }
       ]
     },
     {
@@ -1302,30 +887,12 @@
       "description": "\nVương quốc Metallicana đang bị Four Lords of Havoc tấn công. Nhóm nhân vật phản diện này - bậc thầy ninja Gara, nữ...",
       "studio": "LIDENFILMS",
       "genre": [
-        {
-          "path": "/the-loai/seinen/",
-          "name": "Seinen"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/ecchi/",
-          "name": "Ecchi"
-        },
-        {
-          "path": "/the-loai/hai-huoc/",
-          "name": "Comedy"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/seinen/", "name": "Seinen" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/ecchi/", "name": "Ecchi" },
+        { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -1341,30 +908,12 @@
       "description": "Một thanh niên chán đời với ý định tự tử và đang tìm những cách tự tử nhẹ nhàng nhất trên inteet thì vô tình...",
       "studio": "Passione",
       "genre": [
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/harem/",
-          "name": "Harem"
-        },
-        {
-          "path": "/the-loai/phep-thuat/",
-          "name": "Fantasy"
-        },
-        {
-          "path": "/the-loai/ecchi/",
-          "name": "Ecchi"
-        },
-        {
-          "path": "/the-loai/phieu-luu/",
-          "name": "Adventure"
-        },
-        {
-          "path": "/the-loai/hanh-dong/",
-          "name": "Action"
-        }
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/harem/", "name": "Harem" },
+        { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
+        { "path": "/the-loai/ecchi/", "name": "Ecchi" },
+        { "path": "/the-loai/phieu-luu/", "name": "Adventure" },
+        { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ]
     },
     {
@@ -1380,22 +929,10 @@
       "description": "Kou Yamori bề ngoài có vẻ giống như một học sinh cấp hai điển hình. Tương đối tốt trong học tập và hòa nhã với...",
       "studio": "LIDENFILMS",
       "genre": [
-        {
-          "path": "/the-loai/shounen/",
-          "name": "Shounen"
-        },
-        {
-          "path": "/the-loai/tinh-cam/",
-          "name": "Romance"
-        },
-        {
-          "path": "/the-loai/vampire/",
-          "name": "Vampire"
-        },
-        {
-          "path": "/the-loai/sieu-nhien/",
-          "name": "Supernatural"
-        }
+        { "path": "/the-loai/shounen/", "name": "Shounen" },
+        { "path": "/the-loai/tinh-cam/", "name": "Romance" },
+        { "path": "/the-loai/vampire/", "name": "Vampire" },
+        { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" }
       ]
     }
   ],
@@ -1405,7 +942,7 @@
       "image": "http://cdn.animevietsub.cc/data/poster/2022/06/16/animevsub-N3lu0GaZTE.jpg",
       "name": "Overlord IV",
       "chap": "",
-      "rate": null,
+      "rate": 9.6,
       "quality": "HD",
       "process": ["11", "13"],
       "year": 2022,
@@ -1417,7 +954,7 @@
       "image": "http://cdn.animevietsub.cc/data/poster/2019/09/27/animevsub-sQCBqYz9ve.jpg",
       "name": "One Piece - Đảo Hải Tặc",
       "chap": "",
-      "rate": null,
+      "rate": 9.1,
       "quality": "FHD",
       "process": ["1032", "???"],
       "year": 1999,
@@ -1429,7 +966,7 @@
       "image": "http://cdn.animevietsub.cc/data/poster/2022/07/20/animevsub-7lXaym9oxN.jpg",
       "name": "Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu",
       "chap": "",
-      "rate": null,
+      "rate": 8.3,
       "quality": "HD",
       "process": ["11", "12"],
       "year": 2022,
@@ -1441,7 +978,7 @@
       "image": "http://cdn.animevietsub.cc/data/poster/2020/10/17/animevsub-IoEzyCjdCJ.jpg",
       "name": "Black Clover (TV)",
       "chap": "",
-      "rate": null,
+      "rate": 9.5,
       "quality": "HD",
       "process": ["170", "170"],
       "year": 2017,
@@ -1453,7 +990,7 @@
       "image": "http://cdn.animevietsub.cc/data/poster/2019/08/26/animevsub-bGw5lnUHTC.jpg",
       "name": "Thám Tử Lừng Danh Conan",
       "chap": "",
-      "rate": null,
+      "rate": 9.4,
       "quality": "HD",
       "process": ["1055", "????"],
       "year": 1996,

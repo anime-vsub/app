@@ -15,7 +15,6 @@ describe("Index", () => {
     const result = JSON.parse(JSON.stringify(await Index(html)))
 
     asset.preRelease.forEach((item, index) => {
-      // eslint-disable-next-line functional/immutable-data
       item.time_release = result.preRelease[index].time_release
     })
 
