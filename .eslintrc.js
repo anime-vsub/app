@@ -86,5 +86,6 @@ module.exports = {
     // allow debugger during development only
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
     "n/no-unpublished-import": "off",
+    "functional/immutable-data": "off"
   },
 }

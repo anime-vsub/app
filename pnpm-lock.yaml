@@ -19,6 +19,7 @@ specifiers:
   eslint-config-prettier: ^8.1.0
   eslint-plugin-vue: ^9.0.0
   hls.js: 0.14.7
+  js-base64: ^3.7.2
   jsdom: ^20.0.0
   jwplayer8: 0.0.1-b1
   pinia: ^2.0.11
@@ -43,6 +44,7 @@ dependencies:
   dayjs: 1.11.5
   eruda2: 0.0.2-b8
   hls.js: 0.14.7
+  js-base64: 3.7.2
   jwplayer8: 0.0.1-b1
   pinia: 2.0.22_arz4dztosvwy2ghjrlh2wdhejm
   quasar: 2.7.7
@@ -2867,6 +2869,10 @@ packages:
     resolution: {integrity: sha512-cClBkETOCVIpPMjX3ULlivuBvmt8l2Xtz+SHrULO06OqdtV0QFR2cuhc4FJnXByjUUX4CY0pl1nph0aFh9D3yA==}
     hasBin: true
     dev: true
+
+  /js-base64/3.7.2:
+    resolution: {integrity: sha512-NnRs6dsyqUXejqk/yv2aiXlAvOs56sLkX6nUdeaNezI5LFFLlsZjOThmwnrcwh5ZZRwZlCMnVAY3CvhIhoVEKQ==}
+    dev: false
 
   /js-sdsl/4.1.4:
     resolution: {integrity: sha512-Y2/yD55y5jteOAmY50JbUZYwk3CP3wnLPEZnlR1w9oKhITrBEtAxwuWKebFf8hMrPMgbYwFoWK/lH2sBkErELw==}
