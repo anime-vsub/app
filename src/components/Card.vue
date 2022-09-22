@@ -14,7 +14,7 @@
           </div>
         </template>
 
-        <span v-if="data.process">
+        <span v-if="!data.chap">
           <template v-if="data.process[0] === data.process[1]">
             {{ data.process[0] }} tập
           </template>
@@ -22,16 +22,18 @@
             Tập {{ data.process[0] }} / {{ data.process[1] ?? "??" }}
           </template>
         </span>
-        <span v-else-if="data.chap">Tập {{ data.chap }}</span>
-        <span v-else>Hoàn tất</span>
-        <div class="star flex items-center">
-          <Star />
-          {{ data.rate }}
-        </div>
+        <span v-else>Tập {{ data.chap }}</span>
       </div>
       <Quality v-if="data.quality">{{ data.quality }}</Quality>
     </q-img>
-    <a v-if="!trending" href="#" class="name line-clamp-2 min-h-10">{{ data.name }}</a>
+    <a v-if="!trending" href="#" class="name line-clamp-2 min-h-10 ">{{ data.name }}</a>
+      <div v-else class="flex items-center text-weight-medium">
+      
+          {{ data.rate }}
+          
+
+          <Star class="inline" />
+      </div>
   </q-card>
 </template>
 
@@ -62,6 +64,12 @@ a {
   transition: color 0.3s ease 0s;
 
   font-weight: 500;
+
+  @media (max-width: 720px) 
+{
+font-weight: 400;
+font-size: 12.5px;
+  }
 }
 
 .update-info-layer {

@@ -35,7 +35,7 @@ export async function PhimId(url: string) {
     .map((_i, item) => getInfoAnchor($(item)))
     .toArray()
   const genre = $(".breadcrumb > li > a")
-    .slice(1)
+    .slice(1, -1)
     .map((_i, item) => getInfoAnchor($(item)))
     .toArray()
   const quality = $(".Qlty:eq(0)").text()

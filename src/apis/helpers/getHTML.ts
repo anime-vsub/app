@@ -1,13 +1,9 @@
-import { Http } from "@capacitor-community/http"
+import { get } from "../../logic/http"
 
 export async function getHTML(url: string): Promise<string> {
   if (import.meta.env.TEST) {
     return url
   }
 
-  const response = await Http.get({
-    url: "https://animevietsub.cc" + url,
-  })
-
-  return response.data
+  return (await get(url)).data
 }

@@ -16,8 +16,8 @@ export function getInfoTPost(cheerio: Cheerio<Element>) {
   const _chap = cheerio.find(".mli-eps > i:eq(0)").text()
   const chap = _chap === "TẤT" ? "Full" : _chap
   const rate = parseFloat(
-    cheerio.find(".anime-avg-user-rating:eq(0)").text() ??
-      cheerio.find(".AAIco-star:eq(0)").text()
+    cheerio.find(".anime-avg-user-rating:eq(0)").text().trim() ||
+      cheerio.find(".AAIco-star:eq(0)").text().trim()
   )
   const views = int(
     cheerio

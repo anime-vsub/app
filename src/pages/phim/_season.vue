@@ -8,10 +8,15 @@
   </q-page>
 
   <q-page v-else>
-    <q-video :ratio="16 / 9" :poster="data.poster" src="" />
+     <q-responsive :ratio="16/9">
+        <div class="rounded-borders bg-primary text-white flex flex-center" ref="playerRef">
+          {{data.poster}}
+          Ratio 16:9
+          
+        </div>
+      </q-responsive>
 
     <div class="px-2 pt-4">
-      {{ currentStream }}
       <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
         {{ data.name }}
       </h1>
@@ -20,7 +25,7 @@
         <span
           class="inline-block w-1 h-1 rounded bg-[currentColor] mb-1 mx-1"
         />
-        {{ data.seasonOf }}
+        <router-link v-if="data.seasonOf" class="c--main" :to="data.seasonOf.path">{{ data.seasonOf.name }}</router-link>
       </h5>
       <div class="text-gray-400">
         Tác giả
@@ -82,13 +87,12 @@
 
     <div
       v-if="
-        datasSeason[currentSeason]?.status ==='succ' &&
-       ( datasSeason[currentSeason] as any)?.response?.update
+        currentDataSeason?.update 
       "
       class="text-gray-300 px-2"
     >
       Tập mới cập nhật lúc
-      {{ (datasSeason[currentSeason] as any)?.response?.update }}
+      {{ currentDataSeason?.update  }}
     </div>
 
     <q-btn
@@ -98,7 +102,7 @@
       @click="openBottomSheetChap = true"
     >
       <div class="flex items-center justify-between text-subtitle2 w-full">
-        {{ seasons?.find((item) => item.value === currentSeason)?.name }} Tập
+        <template v-if="currentMetaSeason?.name !== '[[DEFAULT]]'">{{ currentMetaSeason?.name }}</template> Tập
 
         <span class="flex items-center text-gray-300 font-weight-normal">
           Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
@@ -107,8 +111,8 @@
     </q-btn>
     <OverScrollX>
       <router-link
-        v-for="item in  ( datasSeason[currentSeason] as any)?.response?.chaps"
-        :key="item.name"
+        v-for="item in  currentDataSeason?.chaps"
+        :key="item.id"
         class="btn-chap"
         :class="{
           active: item.id === currentChap,
@@ -143,11 +147,11 @@
       <div class="relative h-[100%]">
         <OverScrollX>
           <button
-            v-for="(item, index) in seasons"
+            v-for="(item, index) in allSeasons"
             :key="item.value"
             class="chap-name"
             :class="{
-              active: item.value === seasonSelect,
+              active: item.value === seasonActive,
             }"
             @click="switchToTabSeason(index)"
             :ref="(el) => (tabsBtnSeasonRefs[index] = el as unknown as HTMLButtonElement)"
@@ -157,18 +161,18 @@
           <div class="tabs-season-line" :style="lineSeasonStyle" />
         </OverScrollX>
 
-        <q-tab-panels v-model="seasonSelect" animated keep-alive class="h-full">
-          <q-tab-panel v-for="{ value } in seasons" :key="value" :name="value">
+        <q-tab-panels v-model="seasonActive" animated keep-alive class="h-full">
+          <q-tab-panel v-for="{ value } in allSeasons" :key="value" :name="value">
             <div
               v-if="
-                !datasSeason[value] || datasSeason[value].status === 'pending'
+              _cacheDataSeasons.get(value)?.status === 'pending'
               "
               class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
             >
               <q-spinner style="color: #00be06" size="3em" :thickness="3" />
             </div>
             <div
-              v-else-if="datasSeason[value].status === 'fail'"
+              v-else-if=" _cacheDataSeasons.get(value)?.status === 'fail'"
               class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
             >
               Lỗi khi lấy dữ liệu
@@ -183,8 +187,8 @@
             </div>
             <router-link
               v-else
-              v-for="item in  ( datasSeason[currentSeason] as any)?.response?.chaps"
-              :key="item.name"
+              v-for="item in  currentDataSeason?.chaps"
+              :key="item.id"
               class="btn-chap mt-1 light"
               :class="{
                 active: currentSeason === value && item.id === currentChap,
@@ -220,96 +224,344 @@ import { PhimId } from "src/apis/phim/[id]"
 import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import BottomSheet from "src/components/BottomSheet.vue"
 import { formatView } from "src/logic/formatView"
-import { computed, reactive, ref, shallowReactive, watchEffect } from "vue"
+import { computed, reactive, ref, shallowReactive, watchEffect, watch, shallowRef } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+
+const tabsBtnSeasonRefs = reactive<HTMLButtonElement[]>([])
 
 const route = useRoute()
 const router = useRouter()
 
 const currentSeason = computed(() => route.params.season as string)
+const allSeasons    = computed(() => {
+  const season = data.value?.season ?? []
+
+  if (season.length > 0 ) {
+    return season.map(item =>{
+      return {
+        ...item,
+      value: router.resolve(item.path).params.season as string,
+      }
+    })
+  }
+
+
+  return [{
+    path: `/phim/${currentSeason.value}/`,
+    name: "[[DEFAULT]]",
+    value:currentSeason.value
+  }]
+})
+const currentMetaSeason = computed(() => {
+ return allSeasons.value?.find(item => item.value === currentSeason.value)
+})
+const location = window.location
 
 const { data, loading, error } = useRequest(
-  () => PhimId(`/phim/${currentSeason.value}`),
+  () => {
+   return PhimId(`/phim/${currentSeason.value}/`)
+
+  },
   {
     refreshDeps: [currentSeason],
   }
 )
 
-const datasSeason = shallowReactive<
-  Record<
+interface ResponseDataSeasonPending {
+  status: "pending"
+}
+interface ResponseDataSeasonSuccess {
+  status: "success"
+  response: Awaited<ReturnType<typeof PhimIdChap>>
+}
+interface ResponseDataSeasonError {
+  status: "error"
+  response: {
+    status: number
+  }
+}
+const _cacheDataSeasons = reactive<
+  Map<
     string,
-    | {
-        status: "pending" | "fail"
-      }
-    | {
-        status: "succ"
-        response: Awaited<ReturnType<typeof PhimIdChap>>
-      }
+    ResponseDataSeasonPending | ResponseDataSeasonSuccess | ResponseDataSeasonError
   >
->({})
-const seasonSelect = ref<string>()
-watchEffect(() => {
-  if (!seasonSelect.value) return
+>(new Map())
 
-  fetchChaptersInSeason(seasonSelect.value)
+const seasonActive = ref<string>()
+// sync data by active route
+watch(currentSeason , val => seasonActive.value = val )
+
+watch(seasonActive, seasonActive => {
+if (!seasonActive) return 
+
+// download data season active
+  fetchSeason(seasonActive)
+}, {
+  immediate:  true
 })
 
-const seasons = computed(() => {
-  return data.value?.season.map((item) => {
-    return {
-      ...item,
-      value: router.resolve(item.path).params.season as string,
-    }
-  })
-})
 watchEffect(() => {
-  const { value } = seasons
+  const { value } = allSeasons
   if (value)
     switchToTabSeason(
-      value.findIndex((item) => item?.value === route.params.season)
+      value.findIndex((item) => item?.value === currentSeason.value)
     )
 })
 
+const currentDataSeason = computed(() =>{
+  const inCache =  _cacheDataSeasons.get(currentSeason.value)
+
+  if (inCache?.status === "success")
+    return inCache.response
+})
 const currentChap = computed(
-  () =>
-    route.params.chap ??
-    (
-      datasSeason[currentSeason.value] as unknown as
-        | { response: Awaited<ReturnType<typeof PhimIdChap>> }
-        | undefined
-    )?.response?.chaps[0]?.id
+  () => {
+    if (route.params.chap)
+      return route.params.chap
+
+
+    // get first chap in season
+
+    return currentDataSeason.value?.chaps[ 0 ].id 
+  }
 )
 const currentStream = computed(() => {
-  return (
-    datasSeason[currentSeason.value] as unknown as
-      | { response: Awaited<ReturnType<typeof PhimIdChap>> }
-      | undefined
-  )?.response?.chaps.find((item) => item.id === currentChap.value)
+  return currentDataSeason.value?.chaps.find((item) => item.id === currentChap.value)
 })
+const configPlayer = shallowRef<{
+  link: ({
+    file: string
+    label : string
+    preload: string
+    type: "hls"
+  })[]
+  playTech: "api"
+}>()
+import { post } from "src/logic/http"
+watch(currentStream, async currentStream => {
 
-async function fetchChaptersInSeason(val: string) {
-  // eslint-disable-next-line functional/immutable-data
-  datasSeason[val] = {
-    status: "pending",
+  if (!currentStream) return 
+
+try {
+configPlayer .value = JSON.parse(
+  (await post("/ajax/player?v=2019a", {
+      link:currentStream.hash,
+      play: currentStream.play,
+      id: currentStream.id ,
+      backuplinks: "1"
+    })).data
+  )
+
+}catch (err) {
+console.log({ err })
+}
+}, { immediate: true })
+
+import jwplayer from "jwplayer8"
+import { onMounted  }from "vue"
+import Artplayer from "artplayer"
+
+import { get } from "src/logic/http"
+
+import Hls from "hls.js"
+
+function _base64ToArrayBuffer(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
+class XMLHttpRequest {
+currentTarget = this 
+headers = new Headers()
+setRequestHeader(k, v) {
+this.headers.set(k, v)
+}
+open(method, url) {
+this.url  = url
+}
+abort() {
+this.aborted = true
+}
+async send() {
+if (this.aborted) return
+const res = await get({ url: this.url, responseType: this.responseType })
+
+res.data = this.responseType === "arraybuffer" ? typeof res.data === "object" ? res.data  : _base64ToArrayBuffer(res.data) : res.data
+
+if (this.aborted) return
+this.readyState = 2
+this.status = 200
+this.onprogress({ ...this, loaded: 0 })
+this.onreadystatechange(this)
+
+if (this.responseType === "arraybuffer")
+this.response = res.data
+else
+this.responseText = res.data
+
+this.readyState = 4
+this.onprogress({ ...this, loaded: res.data.length, total: res.data.length })
+this.onreadystatechange(this)
+
+
+}
+}
+
+console.log(Hls.DefaultConfig )
+Hls.DefaultConfig.loader = class extends Hls.DefaultConfig.loader {
+  loadInternal() {
+ let xhr, context = this.context;
+    xhr = this.loader = new XMLHttpRequest();
+
+    let stats = this.stats;
+    stats.tfirst = 0;
+    stats.loaded = 0;
+    const xhrSetup = this.xhrSetup;
+
+    try {
+      if (xhrSetup) {
+        try {
+          xhrSetup(xhr, context.url);
+        } catch (e) {
+          // fix xhrSetup: (xhr, url) => {xhr.setRequestHeader("Content-Language", "test");}
+          // not working, as xhr.setRequestHeader expects xhr.readyState === OPEN
+          xhr.open('GET', context.url, true);
+          xhrSetup(xhr, context.url);
+        }
+      }
+      if (!xhr.readyState) {
+        xhr.open('GET', context.url, true);
+      }
+    } catch (e) {
+      // IE11 throws an exception on xhr.open if attempting to access an HTTP resource over HTTPS
+      this.callbacks.onError({ code: xhr.status, text: e.message }, context, xhr);
+      return;
+    }
+
+    if (context.rangeEnd) {
+      xhr.setRequestHeader('Range', 'bytes=' + context.rangeStart + '-' + (context.rangeEnd - 1));
+    }
+
+    xhr.onreadystatechange = this.readystatechange.bind(this);
+    xhr.onprogress = this.loadprogress.bind(this);
+    xhr.responseType = context.responseType;
+
+    // setup timeout before we perform request
+    this.requestTimeout = window.setTimeout(this.loadtimeout.bind(this), this.config.timeout);
+    xhr.send();
   }
+}
 
+const playerRef =ref<HTMLDivElement>()
+
+onMounted(() => {
+watch(configPlayer, async configPlayer => {
+if (!configPlayer) return
+function _base64ToArrayBuffer(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+const { file } = configPlayer.link[0]
+
+
+const art = new Artplayer({
+  container: playerRef.value,
+    autoplay: true,
+    url:file.startsWith('http') ? file : 'https:' + file,//'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    customType: {
+        m3u8: function (video, url) {
+            if (Hls.isSupported()) {
+                const hls = new Hls({
+                  // progressive: true,
+                  // debug: true
+                });
+                // customLoader(hls.config)
+                hls.loadSource(url);
+                hls.attachMedia(video);
+            } else {
+                const canPlay = video.canPlayType('application/vnd.apple.mpegurl');
+                if (canPlay === 'probably' || canPlay === 'maybe') {
+                    video.src = url;
+                } else {
+                    art.notice.show = '不支持播放格式：m3u8';
+                }
+            }
+        },
+    },
+     volume: 0.5,
+    isLive: false,
+    muted: false,
+    autoplay: false,
+    pip: true,
+    autoSize: true,
+    autoMini: true,
+    screenshot: true,
+    setting: true,
+    loop: true,
+    flip: true,
+    playbackRate: true,
+    aspectRatio: true,
+    fullscreen: true,
+    fullscreenWeb: true,
+    subtitleOffset: true,
+    miniProgressBar: true,
+    mutex: true,
+    backdrop: true,
+    playsInline: true,
+    autoPlayback: true,
+    airplay: true,
+    theme: '#23ade5',
+    lang: navigator.language.toLowerCase(),
+    whitelist: ['*'],
+    settings: [
+    ],
+    contextmenu: [
+    ],
+    layers: [
+    ],
+    quality: [
+    ],
+    icons: {
+        loading: '<img src="https://artplayer.org/assets/img/ploading.gif">',
+        state: '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
+        indicator: '<img width="16" heigth="16" src="https://artplayer.org/assets/img/indicator.svg">',
+    },
+});
+}, { immediate: true})
+})
+async function fetchSeason(season: string) {
+
+  if (_cacheDataSeasons.get(season)?.status === "success") return 
+
+
+    _cacheDataSeasons.set(season, {
+      status: "pending"
+    })
   try {
-    // eslint-disable-next-line functional/immutable-data
-    datasSeason[val] = {
-      status: "succ",
-      response: await PhimIdChap(`/phim/${val}/xem-phim.html`),
-    }
+    _cacheDataSeasons.set(season, {
+       status: "success",
+      response: await PhimIdChap(`/phim/${season}/xem-phim.html`),
+    })
   } catch (err) {
-    // eslint-disable-next-line functional/immutable-data
-    datasSeason[val] = {
-      status: "fail",
-    }
+    _cacheDataSeasons.set(season, {
+      status: "error",
+      response: err
+    })
   }
 }
 // ===== setup =====
 
-const tabsBtnSeasonRefs = reactive<HTMLButtonElement[]>([])
 const lineSeasonStyle = reactive<{
   left: string
   width: string
@@ -319,10 +571,10 @@ const lineSeasonStyle = reactive<{
 })
 
 function switchToTabSeason(index: number) {
-  if (!seasons.value?.[index]) return
+  if (!allSeasons.value?.[index]) return
 
   // eslint-disable-next-line functional/immutable-data
-  seasonSelect.value = seasons.value[index].value
+  seasonActive.value = allSeasons.value[index].value
 
   const itemBtn = tabsBtnSeasonRefs[index]
   if (!itemBtn) return

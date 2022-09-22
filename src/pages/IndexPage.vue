@@ -89,12 +89,15 @@
             </span>
           </div>
           <div class="focus-item-tags" v-if="item.genre.length > 0">
+            <template  v-for="(tag, index) in item.genre"
+              :key="tag.name">
             <router-link
-              v-for="tag in item.genre"
-              :key="tag.name"
+             class="c--main"
               :to="tag.path"
               >{{ tag.name }}</router-link
             >
+            <template v-if="index < item.genre.length - 1">, </template>
+          </template>
           </div>
           <div class="focus-item-desc">
             {{ item.description }}
@@ -111,6 +114,7 @@
           class="!w-auto card-wrap"
         >
           <Card :data="item" />
+      
         </swiper-slide>
       </swiper>
     </div>
@@ -301,6 +305,7 @@ let isTodayF = false
   max-height: 1012px;
   @media screen and (max-width: 767px) {
     margin-bottom: 16px;
+    height: auto;
   }
   @media screen and (max-width: 1023px) and (min-width: 768px) {
     margin-bottom: -8.59%;
@@ -399,7 +404,7 @@ let isTodayF = false
     position: absolute;
     bottom: 0;
     left: 0;
-    z-index: 102;
+    z-index: 10;
     color: rgb(255, 255, 255);
     width: 100%;
     padding: 60px 30px calc(32% + 24px + 3.5vw) (30px + 64);
@@ -428,11 +433,10 @@ let isTodayF = false
       margin-top: 12px;
       display: flex;
       font-size: 12px;
-      -webkit-box-align: center;
       align-items: center;
       .focus-item-score {
         font-size: 14px;
-        color: rgb(28, 199, 73);
+        color: rgb(0, 194, 52);//  rgb(0, 214, 57);
         font-weight: 700;
         svg {
           width: 12px;
@@ -442,7 +446,7 @@ let isTodayF = false
       }
       .focus-item-year,
       .focus-item-update {
-        text-shadow: rgb(0 0 0 / 50%) 0px 1px 2px;
+        // text-shadow: rgb(0 0 0 / 50%) 0px 1px 2px;
       }
 
       .focus-item-score,
