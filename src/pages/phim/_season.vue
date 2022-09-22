@@ -8,13 +8,15 @@
   </q-page>
 
   <q-page v-else>
-     <q-responsive :ratio="16/9">
-        <div class="rounded-borders bg-primary text-white flex flex-center" ref="playerRef">
-          {{data.poster}}
-          Ratio 16:9
-          
-        </div>
-      </q-responsive>
+    <q-responsive :ratio="16 / 9">
+      <div
+        class="rounded-borders bg-primary text-white flex flex-center"
+        ref="playerRef"
+      >
+        {{ data.poster }}
+        Ratio 16:9
+      </div>
+    </q-responsive>
 
     <div class="px-2 pt-4">
       <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
@@ -25,7 +27,12 @@
         <span
           class="inline-block w-1 h-1 rounded bg-[currentColor] mb-1 mx-1"
         />
-        <router-link v-if="data.seasonOf" class="c--main" :to="data.seasonOf.path">{{ data.seasonOf.name }}</router-link>
+        <router-link
+          v-if="data.seasonOf"
+          class="c--main"
+          :to="data.seasonOf.path"
+          >{{ data.seasonOf.name }}</router-link
+        >
       </h5>
       <div class="text-gray-400">
         Tác giả
@@ -85,14 +92,9 @@
       </div>
     </div>
 
-    <div
-      v-if="
-        currentDataSeason?.update 
-      "
-      class="text-gray-300 px-2"
-    >
+    <div v-if="currentDataSeason?.update" class="text-gray-300 px-2">
       Tập mới cập nhật lúc
-      {{ currentDataSeason?.update  }}
+      {{ currentDataSeason?.update }}
     </div>
 
     <q-btn
@@ -102,7 +104,10 @@
       @click="openBottomSheetChap = true"
     >
       <div class="flex items-center justify-between text-subtitle2 w-full">
-        <template v-if="currentMetaSeason?.name !== '[[DEFAULT]]'">{{ currentMetaSeason?.name }}</template> Tập
+        <template v-if="currentMetaSeason?.name !== '[[DEFAULT]]'">{{
+          currentMetaSeason?.name
+        }}</template>
+        Tập
 
         <span class="flex items-center text-gray-300 font-weight-normal">
           Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
@@ -111,7 +116,7 @@
     </q-btn>
     <OverScrollX>
       <router-link
-        v-for="item in  currentDataSeason?.chaps"
+        v-for="item in currentDataSeason?.chaps"
         :key="item.id"
         class="btn-chap"
         :class="{
@@ -162,17 +167,19 @@
         </OverScrollX>
 
         <q-tab-panels v-model="seasonActive" animated keep-alive class="h-full">
-          <q-tab-panel v-for="{ value } in allSeasons" :key="value" :name="value">
+          <q-tab-panel
+            v-for="{ value } in allSeasons"
+            :key="value"
+            :name="value"
+          >
             <div
-              v-if="
-              _cacheDataSeasons.get(value)?.status === 'pending'
-              "
+              v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
               class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
             >
               <q-spinner style="color: #00be06" size="3em" :thickness="3" />
             </div>
             <div
-              v-else-if=" _cacheDataSeasons.get(value)?.status === 'fail'"
+              v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
               class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
             >
               Lỗi khi lấy dữ liệu
@@ -181,13 +188,13 @@
                 dense
                 no-caps
                 style="color: #00be06"
-                @click="fetchChaptersInSeason(value)"
+                @click="fetchSeason(value)"
                 >Thử lại</q-btn
               >
             </div>
             <router-link
               v-else
-              v-for="item in  currentDataSeason?.chaps"
+              v-for="item in currentDataSeason?.chaps"
               :key="item.id"
               class="btn-chap mt-1 light"
               :class="{
@@ -217,6 +224,7 @@
 </template>
 
 <script lang="ts" setup>
+import Artplayer from "artplayer"
 import OverScrollX from "components/OverScrollX.vue"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
@@ -224,7 +232,17 @@ import { PhimId } from "src/apis/phim/[id]"
 import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import BottomSheet from "src/components/BottomSheet.vue"
 import { formatView } from "src/logic/formatView"
-import { computed, reactive, ref, shallowReactive, watchEffect, watch, shallowRef } from "vue"
+import { Hls } from "src/logic/hls"
+import { post } from "src/logic/http"
+import {
+  computed,
+  onMounted,
+  reactive,
+  ref,
+  shallowRef,
+  watch,
+  watchEffect,
+} from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
@@ -234,34 +252,33 @@ const route = useRoute()
 const router = useRouter()
 
 const currentSeason = computed(() => route.params.season as string)
-const allSeasons    = computed(() => {
+const allSeasons = computed(() => {
   const season = data.value?.season ?? []
 
-  if (season.length > 0 ) {
-    return season.map(item =>{
+  if (season.length > 0) {
+    return season.map((item) => {
       return {
         ...item,
-      value: router.resolve(item.path).params.season as string,
+        value: router.resolve(item.path).params.season as string,
       }
     })
   }
 
-
-  return [{
-    path: `/phim/${currentSeason.value}/`,
-    name: "[[DEFAULT]]",
-    value:currentSeason.value
-  }]
+  return [
+    {
+      path: `/phim/${currentSeason.value}/`,
+      name: "[[DEFAULT]]",
+      value: currentSeason.value,
+    },
+  ]
 })
 const currentMetaSeason = computed(() => {
- return allSeasons.value?.find(item => item.value === currentSeason.value)
+  return allSeasons.value?.find((item) => item.value === currentSeason.value)
 })
-const location = window.location
 
 const { data, loading, error } = useRequest(
   () => {
-   return PhimId(`/phim/${currentSeason.value}/`)
-
+    return PhimId(`/phim/${currentSeason.value}/`)
   },
   {
     refreshDeps: [currentSeason],
@@ -284,22 +301,28 @@ interface ResponseDataSeasonError {
 const _cacheDataSeasons = reactive<
   Map<
     string,
-    ResponseDataSeasonPending | ResponseDataSeasonSuccess | ResponseDataSeasonError
+    | ResponseDataSeasonPending
+    | ResponseDataSeasonSuccess
+    | ResponseDataSeasonError
   >
 >(new Map())
 
 const seasonActive = ref<string>()
 // sync data by active route
-watch(currentSeason , val => seasonActive.value = val )
+watch(currentSeason, (val) => (seasonActive.value = val))
 
-watch(seasonActive, seasonActive => {
-if (!seasonActive) return 
+watch(
+  seasonActive,
+  (seasonActive) => {
+    if (!seasonActive) return
 
-// download data season active
-  fetchSeason(seasonActive)
-}, {
-  immediate:  true
-})
+    // download data season active
+    fetchSeason(seasonActive)
+  },
+  {
+    immediate: true,
+  }
+)
 
 watchEffect(() => {
   const { value } = allSeasons
@@ -309,254 +332,150 @@ watchEffect(() => {
     )
 })
 
-const currentDataSeason = computed(() =>{
-  const inCache =  _cacheDataSeasons.get(currentSeason.value)
+const currentDataSeason = computed(() => {
+  const inCache = _cacheDataSeasons.get(currentSeason.value)
 
-  if (inCache?.status === "success")
-    return inCache.response
+  if (inCache?.status === "success") return inCache.response
+
+  return undefined
 })
-const currentChap = computed(
-  () => {
-    if (route.params.chap)
-      return route.params.chap
+const currentChap = computed(() => {
+  if (route.params.chap) return route.params.chap
 
+  // get first chap in season
 
-    // get first chap in season
-
-    return currentDataSeason.value?.chaps[ 0 ].id 
-  }
-)
+  return currentDataSeason.value?.chaps[0].id
+})
 const currentStream = computed(() => {
-  return currentDataSeason.value?.chaps.find((item) => item.id === currentChap.value)
+  return currentDataSeason.value?.chaps.find(
+    (item) => item.id === currentChap.value
+  )
 })
 const configPlayer = shallowRef<{
-  link: ({
+  link: {
     file: string
-    label : string
+    label: string
     preload: string
     type: "hls"
-  })[]
+  }[]
   playTech: "api"
 }>()
-import { post } from "src/logic/http"
-watch(currentStream, async currentStream => {
-
-  if (!currentStream) return 
-
-try {
-configPlayer .value = JSON.parse(
-  (await post("/ajax/player?v=2019a", {
-      link:currentStream.hash,
-      play: currentStream.play,
-      id: currentStream.id ,
-      backuplinks: "1"
-    })).data
-  )
-
-}catch (err) {
-console.log({ err })
-}
-}, { immediate: true })
-
-import jwplayer from "jwplayer8"
-import { onMounted  }from "vue"
-import Artplayer from "artplayer"
-
-import { get } from "src/logic/http"
-
-import Hls from "hls.js"
-
-function _base64ToArrayBuffer(base64) {
-    var binary_string = window.atob(base64);
-    var len = binary_string.length;
-    var bytes = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
-        bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
-
-class XMLHttpRequest {
-currentTarget = this 
-headers = new Headers()
-setRequestHeader(k, v) {
-this.headers.set(k, v)
-}
-open(method, url) {
-this.url  = url
-}
-abort() {
-this.aborted = true
-}
-async send() {
-if (this.aborted) return
-const res = await get({ url: this.url, responseType: this.responseType })
-
-res.data = this.responseType === "arraybuffer" ? typeof res.data === "object" ? res.data  : _base64ToArrayBuffer(res.data) : res.data
-
-if (this.aborted) return
-this.readyState = 2
-this.status = 200
-this.onprogress({ ...this, loaded: 0 })
-this.onreadystatechange(this)
-
-if (this.responseType === "arraybuffer")
-this.response = res.data
-else
-this.responseText = res.data
-
-this.readyState = 4
-this.onprogress({ ...this, loaded: res.data.length, total: res.data.length })
-this.onreadystatechange(this)
-
-
-}
-}
-
-console.log(Hls.DefaultConfig )
-Hls.DefaultConfig.loader = class extends Hls.DefaultConfig.loader {
-  loadInternal() {
- let xhr, context = this.context;
-    xhr = this.loader = new XMLHttpRequest();
-
-    let stats = this.stats;
-    stats.tfirst = 0;
-    stats.loaded = 0;
-    const xhrSetup = this.xhrSetup;
+watch(
+  currentStream,
+  async (currentStream) => {
+    if (!currentStream) return
 
     try {
-      if (xhrSetup) {
-        try {
-          xhrSetup(xhr, context.url);
-        } catch (e) {
-          // fix xhrSetup: (xhr, url) => {xhr.setRequestHeader("Content-Language", "test");}
-          // not working, as xhr.setRequestHeader expects xhr.readyState === OPEN
-          xhr.open('GET', context.url, true);
-          xhrSetup(xhr, context.url);
-        }
-      }
-      if (!xhr.readyState) {
-        xhr.open('GET', context.url, true);
-      }
-    } catch (e) {
-      // IE11 throws an exception on xhr.open if attempting to access an HTTP resource over HTTPS
-      this.callbacks.onError({ code: xhr.status, text: e.message }, context, xhr);
-      return;
+      configPlayer.value = JSON.parse(
+        (
+          await post("/ajax/player?v=2019a", {
+            link: currentStream.hash,
+            play: currentStream.play,
+            id: currentStream.id,
+            backuplinks: "1",
+          })
+        ).data
+      )
+    } catch (err) {
+      console.log({ err })
     }
+  },
+  { immediate: true }
+)
 
-    if (context.rangeEnd) {
-      xhr.setRequestHeader('Range', 'bytes=' + context.rangeStart + '-' + (context.rangeEnd - 1));
-    }
-
-    xhr.onreadystatechange = this.readystatechange.bind(this);
-    xhr.onprogress = this.loadprogress.bind(this);
-    xhr.responseType = context.responseType;
-
-    // setup timeout before we perform request
-    this.requestTimeout = window.setTimeout(this.loadtimeout.bind(this), this.config.timeout);
-    xhr.send();
-  }
-}
-
-const playerRef =ref<HTMLDivElement>()
+const playerRef = ref<HTMLDivElement>()
 
 onMounted(() => {
-watch(configPlayer, async configPlayer => {
-if (!configPlayer) return
-function _base64ToArrayBuffer(base64) {
-    var binary_string = window.atob(base64);
-    var len = binary_string.length;
-    var bytes = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
-        bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
-const { file } = configPlayer.link[0]
+  watch(
+    configPlayer,
+    async (configPlayer) => {
+      if (!configPlayer) return
 
+      const { file } = configPlayer.link[0]
 
-const art = new Artplayer({
-  container: playerRef.value,
-    autoplay: true,
-    url:file.startsWith('http') ? file : 'https:' + file,//'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    customType: {
-        m3u8: function (video, url) {
+      const art = new Artplayer({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        container: playerRef.value!,
+        autoplay: true,
+        id: "player",
+        url: file.startsWith("http") ? file : "https:" + file, // 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+        customType: {
+          m3u8: function (video, url) {
             if (Hls.isSupported()) {
-                const hls = new Hls({
-                  // progressive: true,
-                  // debug: true
-                });
-                // customLoader(hls.config)
-                hls.loadSource(url);
-                hls.attachMedia(video);
+              const hls = new Hls({
+                // progressive: true,
+                // debug: true
+              })
+              // customLoader(hls.config)
+              hls.loadSource(url)
+              hls.attachMedia(video)
             } else {
-                const canPlay = video.canPlayType('application/vnd.apple.mpegurl');
-                if (canPlay === 'probably' || canPlay === 'maybe') {
-                    video.src = url;
-                } else {
-                    art.notice.show = '不支持播放格式：m3u8';
-                }
+              const canPlay = video.canPlayType("application/vnd.apple.mpegurl")
+              if (canPlay === "probably" || canPlay === "maybe") {
+                video.src = url
+              } else {
+                art.notice.show = "不支持播放格式：m3u8"
+              }
             }
+          },
         },
+        poster: data.value!.poster,
+        volume: 1,
+        isLive: false,
+        muted: false,
+        pip: true,
+        autoSize: true,
+        autoMini: true,
+        screenshot: true,
+        setting: true,
+        loop: true,
+        flip: true,
+        playbackRate: true,
+        aspectRatio: true,
+        fullscreen: true,
+        fullscreenWeb: true,
+        subtitleOffset: true,
+        miniProgressBar: true,
+        mutex: true,
+        backdrop: true,
+        playsInline: true,
+        autoPlayback: true,
+        airplay: true,
+        theme: "#23ade5",
+        lang: navigator.language.toLowerCase(),
+        whitelist: ["*"],
+        settings: [],
+        contextmenu: [],
+        layers: [],
+        quality: [],
+        icons: {
+          loading: '<img src="https://artplayer.org/assets/img/ploading.gif">',
+          state:
+            '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
+          indicator:
+            '<img width="16" heigth="16" src="https://artplayer.org/assets/img/indicator.svg">',
+        },
+      })
     },
-     volume: 0.5,
-    isLive: false,
-    muted: false,
-    autoplay: false,
-    pip: true,
-    autoSize: true,
-    autoMini: true,
-    screenshot: true,
-    setting: true,
-    loop: true,
-    flip: true,
-    playbackRate: true,
-    aspectRatio: true,
-    fullscreen: true,
-    fullscreenWeb: true,
-    subtitleOffset: true,
-    miniProgressBar: true,
-    mutex: true,
-    backdrop: true,
-    playsInline: true,
-    autoPlayback: true,
-    airplay: true,
-    theme: '#23ade5',
-    lang: navigator.language.toLowerCase(),
-    whitelist: ['*'],
-    settings: [
-    ],
-    contextmenu: [
-    ],
-    layers: [
-    ],
-    quality: [
-    ],
-    icons: {
-        loading: '<img src="https://artplayer.org/assets/img/ploading.gif">',
-        state: '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
-        indicator: '<img width="16" heigth="16" src="https://artplayer.org/assets/img/indicator.svg">',
-    },
-});
-}, { immediate: true})
+    { immediate: true }
+  )
 })
 async function fetchSeason(season: string) {
+  if (_cacheDataSeasons.get(season)?.status === "success") return
 
-  if (_cacheDataSeasons.get(season)?.status === "success") return 
-
-
-    _cacheDataSeasons.set(season, {
-      status: "pending"
-    })
+  _cacheDataSeasons.set(season, {
+    status: "pending",
+  })
   try {
     _cacheDataSeasons.set(season, {
-       status: "success",
+      status: "success",
       response: await PhimIdChap(`/phim/${season}/xem-phim.html`),
     })
   } catch (err) {
     _cacheDataSeasons.set(season, {
       status: "error",
-      response: err
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      response: err as any,
     })
   }
 }
@@ -573,7 +492,6 @@ const lineSeasonStyle = reactive<{
 function switchToTabSeason(index: number) {
   if (!allSeasons.value?.[index]) return
 
-  // eslint-disable-next-line functional/immutable-data
   seasonActive.value = allSeasons.value[index].value
 
   const itemBtn = tabsBtnSeasonRefs[index]
@@ -582,9 +500,8 @@ function switchToTabSeason(index: number) {
   const left = itemBtn.offsetLeft
   const width = itemBtn.offsetWidth
 
-  // eslint-disable-next-line functional/immutable-data
   lineSeasonStyle.left = left + width / 2 + "px"
-  // eslint-disable-next-line functional/immutable-data
+
   lineSeasonStyle.width = width * 0.8 + "px"
 }
 
