@@ -1,28 +1,29 @@
 import { getHTML } from "../../helpers/getHTML"
 import { parserDOM } from "../../utils/parserDOM"
+import { load } from "cheerio"
 
 export async function PhimIdChap(url: string) {
-  const dom = parserDOM(await getHTML(url))
+  const $ = load(await getHTML(url))
 
-  const chaps = Array.from(
+  const chaps = (
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    dom.querySelector(".list-episode")!.querySelectorAll("a")
-  ).map((item) => {
+    $(".list-episode:eq(0)").find("a")
+  ).map((_i, item) => {
+    const $item = $(item)
     return {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      id: item.getAttribute("data-id")!,
+      id: $item.attr("data-id")!,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      play: item.getAttribute("data-play")!,
+      play: $item.attr("data-play")!,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      hash: item.getAttribute("data-hash")!,
+      hash: $item.attr("data-hash")!,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      name: item.textContent!,
+      name: $item.text().trim()
     }
-  })
+  }).toArray()
   const [day, hour, minus] =
-    dom
-      .querySelector(".schedule-title-main > h4 > strong:nth-child(3)")
-      ?.textContent?.match(/Thứ ([^\s]+) vào lúc (\d+) giờ (\d+) phút/i)
+    $(".schedule-title-main > h4 > strong:nth-child(3)")
+      .text().match(/Thứ ([^\s]+) vào lúc (\d+) giờ (\d+) phút/i)
       ?.slice(1) ?? []
 
   return {

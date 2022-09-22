@@ -15,10 +15,12 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "artplayer": "^4.5.6",
     "axios": "^0.21.1",
     "cheerio": "1.0.0-rc.12",
     "dayjs": "^1.11.5",
     "eruda2": "0.0.2-b8",
+    "hls.js": "0.14.7",
     "jwplayer8": "0.0.1-b1",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
