@@ -22,6 +22,7 @@
       <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
         {{ data.name }}
       </h1>
+      {{ configPlayer }}
       <h5 class="text-gray-400 text-weight-normal">
         {{ formatView(data.views) }} lượt xem
         <span
@@ -92,9 +93,24 @@
       </div>
     </div>
 
-    <div v-if="currentDataSeason?.update" class="text-gray-300 px-2">
+    <div
+      v-if="currentDataSeason?.update"
+      class="text-gray-300 px-2 text-center pt-1 text-weight-medium text-[14px]"
+    >
       Tập mới cập nhật lúc
-      {{ currentDataSeason?.update }}
+      {{
+        dayjs(
+          new Date(
+            `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
+          )
+        ).format("HH:MM")
+      }}
+      {{
+        currentDataSeason.update[0] === 7
+          ? "Chủ nhật"
+          : `Thứ ${currentDataSeason.update[0]}`
+      }}
+      {{ currentDataSeason.update[0] > new Date().getDay() ? "tuần sau" : "" }}
     </div>
 
     <q-btn
@@ -245,6 +261,7 @@ import {
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import dayjs from "dayjs"
 
 const tabsBtnSeasonRefs = reactive<HTMLButtonElement[]>([])
 
@@ -385,20 +402,33 @@ watch(
 
 const playerRef = ref<HTMLDivElement>()
 
+const labelToQuality = {
+  HD: "720p",
+  SD: "480p",
+}
+
 onMounted(() => {
   watch(
     configPlayer,
     async (configPlayer) => {
       if (!configPlayer) return
 
-      const { file } = configPlayer.link[0]
+      const sources = configPlayer.link.map((item) => {
+        return {
+          html: labelToQuality[item.label] ?? item.label,
+          url: item.file.startsWith("http") ? item.file : `https:${item.file}`,
+        }
+      })
 
       const art = new Artplayer({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         container: playerRef.value!,
-        autoplay: true,
+        url: sources[0].url, // 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+        poster: data.value!.poster,
         id: "player",
-        url: file.startsWith("http") ? file : "https:" + file, // 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+        quality: sources,
+        autoplay: true,
+
         customType: {
           m3u8: function (video, url) {
             if (Hls.isSupported()) {
@@ -419,39 +449,142 @@ onMounted(() => {
             }
           },
         },
-        poster: data.value!.poster,
+
         volume: 1,
+        fastForward: true,
+        // autoOrientation: true,
+
+        notice: false,
+
         isLive: false,
         muted: false,
-        pip: true,
+        pip: false,
         autoSize: true,
         autoMini: true,
-        screenshot: true,
+        screenshot: false,
         setting: true,
-        loop: true,
+        loop: false,
         flip: true,
-        playbackRate: true,
+        playbackRate: false,
         aspectRatio: true,
         fullscreen: true,
-        fullscreenWeb: true,
-        subtitleOffset: true,
-        miniProgressBar: true,
+        fullscreenWeb: false,
+        miniProgressBar: false,
         mutex: true,
         backdrop: true,
         playsInline: true,
-        autoPlayback: true,
+        autoPlayback: false,
         airplay: true,
         theme: "#23ade5",
+        lock: true,
         lang: navigator.language.toLowerCase(),
         whitelist: ["*"],
-        settings: [],
-        contextmenu: [],
-        layers: [],
-        quality: [],
+        settings: [
+          {
+            html: "Select Quality",
+            width: 150,
+            tooltip: "1080P",
+            selector: [
+              {
+                default: true,
+                html: "1080P",
+                url: "/assets/sample/video.mp4?id=1080",
+              },
+              {
+                html: "720P",
+                url: "/assets/sample/video.mp4?id=720",
+              },
+              {
+                html: "360P",
+                url: "/assets/sample/video.mp4?id=360",
+              },
+            ],
+            onSelect: function (item, $dom, event) {
+              console.info(item, $dom, event)
+              art.switchQuality(item.url, item.html)
+
+              // Change the tooltip
+              return item.html
+            },
+          },
+        ],
+        contextFmenu: [],
+        layers: [
+          {
+            name: "controller",
+            style: {
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+            },
+            html: `
+
+<div class="toolbar-top">
+<button class="back">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+</svg>
+</button>
+<button class="settings">
+<svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+  <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+</svg>
+</button>
+</div>
+
+
+
+<button class="play">
+<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="45" width="45" viewBox="0 0 22 22">
+  <path d="M17.982 9.275L8.06 3.27A2.013 2.013 0 0 0 5 4.994v12.011a2.017 2.017 0 0 0 3.06 1.725l9.922-6.005a2.017 2.017 0 0 0 0-3.45z"></path>
+</svg>
+</button>
+<button class="pause" style="display: none"> 
+<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="45" width="45" viewBox="0 0 22 22">
+    <path d="M7 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2zM15 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2z"></path>
+</svg>
+</button>
+`,
+            mounted(layer) {
+              this.on("video:loadstart", () => {
+                layer.classList.add("loading")
+              })
+              this.on("video:loadeddata", () => {
+                layer.classList.remove("loading")
+              })
+              this.on("play", () => {
+                btnPlay.style.display = "none"
+                btnPause.style.display = ""
+              })
+              this.on("pause", () => {
+                btnPlay.style.display = ""
+                btnPause.style.display = "none"
+              })
+
+              const btnPlay = layer.querySelector("button.play")
+              const btnPause = layer.querySelector("button.pause")
+
+              btnPlay.addEventListener("click", (event) => {
+                event.stopPropagation()
+                this.play()
+              })
+              btnPause.addEventListener("click", (event) => {
+                event.stopPropagation()
+                this.pause()
+              })
+
+              layer.querySelector(".settings").addEventListener("click", () => {
+                console.log("setting")
+              })
+            },
+          },
+        ],
         icons: {
           loading: '<img src="https://artplayer.org/assets/img/ploading.gif">',
-          state:
-            '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
+          state: "", //
+          //      '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
           indicator:
             '<img width="16" heigth="16" src="https://artplayer.org/assets/img/indicator.svg">',
         },
@@ -580,5 +713,66 @@ const openBottomSheetChap = ref(false)
   transition: width 0.22s ease, left 0.22s ease;
   transform: translateX(-50%);
   z-index: 12;
+}
+</style>
+
+<style lang="scss">
+.art-control-playAndPause,
+.art-control-volume {
+  display: none !important;
+}
+
+.art-layer-controller {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: linear-gradient(to bottom, #0006, #0000);
+  transition: all 0.2s ease-in-out;
+}
+.art-control-show .art-layer-controller {
+  opacity: 1;
+  visibility: visible;
+}
+.art-bottom {
+  flex-direction: column-reverse !important;
+}
+.art-layer-controller button {
+  background: none;
+  outline: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+.art-layer-controller .toolbar-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.art-layer-controller .toolbar-top svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.art-notice {
+  display: none !important;
+}
+.art-layer-controller.loading {
+  .play,
+  .pause {
+    display: none !important;
+  }
 }
 </style>

@@ -5,12 +5,12 @@
 </template>
 
 <script setup lang="ts">
-  import eruda from "eruda2"
-  eruda.init()
+import eruda from "eruda2"
+eruda.init()
 
-  import { Http } from '@capacitor-community/http';
+import { Http } from "@capacitor-community/http"
 
-  Object.assign(window, { Http })
+Object.assign(window, { Http })
 function reload() {
   location.reload()
 }

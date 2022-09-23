@@ -26,14 +26,14 @@
       </div>
       <Quality v-if="data.quality">{{ data.quality }}</Quality>
     </q-img>
-    <a v-if="!trending" href="#" class="name line-clamp-2 min-h-10 ">{{ data.name }}</a>
-      <div v-else class="flex items-center text-weight-medium">
-      
-          {{ data.rate }}
-          
+    <a v-if="!trending" href="#" class="name line-clamp-2 min-h-10">{{
+      data.name
+    }}</a>
+    <div v-else class="flex items-center text-weight-medium">
+      {{ data.rate }}
 
-          <Star class="inline" />
-      </div>
+      <Star class="inline" />
+    </div>
   </q-card>
 </template>
 
@@ -41,7 +41,7 @@
 import { TPost } from "src/apis/helpers/getInfoTPost"
 import Star from "./Star.vue"
 import Quality from "./Quality.vue"
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router"
 
 const router = useRouter()
 
@@ -65,10 +65,9 @@ a {
 
   font-weight: 500;
 
-  @media (max-width: 720px) 
-{
-font-weight: 400;
-font-size: 12.5px;
+  @media (max-width: 720px) {
+    font-weight: 400;
+    font-size: 12.5px;
   }
 }
 

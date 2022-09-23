@@ -89,15 +89,12 @@
             </span>
           </div>
           <div class="focus-item-tags" v-if="item.genre.length > 0">
-            <template  v-for="(tag, index) in item.genre"
-              :key="tag.name">
-            <router-link
-             class="c--main"
-              :to="tag.path"
-              >{{ tag.name }}</router-link
-            >
-            <template v-if="index < item.genre.length - 1">, </template>
-          </template>
+            <template v-for="(tag, index) in item.genre" :key="tag.name">
+              <router-link class="c--main" :to="tag.path">{{
+                tag.name
+              }}</router-link>
+              <template v-if="index < item.genre.length - 1">, </template>
+            </template>
           </div>
           <div class="focus-item-desc">
             {{ item.description }}
@@ -114,7 +111,6 @@
           class="!w-auto card-wrap"
         >
           <Card :data="item" />
-      
         </swiper-slide>
       </swiper>
     </div>
@@ -436,7 +432,7 @@ let isTodayF = false
       align-items: center;
       .focus-item-score {
         font-size: 14px;
-        color: rgb(0, 194, 52);//  rgb(0, 214, 57);
+        color: rgb(0, 194, 52); //  rgb(0, 214, 57);
         font-weight: 700;
         svg {
           width: 12px;
@@ -502,103 +498,102 @@ let isTodayF = false
 </style>
 
 <style lang="scss" scoped>
-  .coming_soon {
-    &-timeline {
-      @apply relative mt-[6px] mb-[14px];
-  
-      @media screen and (max-width: 767px) {
-        @apply mb-[6px] flex items-center;
-        @apply mr-[-8px];
-      }
-    }
-    &-line {
-      @apply w-[calc(100%+16px)] h-[2px] bg-[rgb(45,47,52)];
-      @media screen and (max-width: 767px) {
-        @apply w-full;
-      }
-      @media screen and (max-width: 767px) {
-        order: 2;
-      }
-    }
-    &-dot {
-      @apply w-[10px] h-[10px] mx-auto mt-[-6px];
-      background: rgb(130, 131, 135);
-      border: 2px solid rgb(17, 19, 25);
-      border-radius: 50%;
-  
-      @media screen and (max-width: 767px) {
-        display: none;
-      }
-    }
-    &-time-wrapper {
-      @media screen and (max-width: 767px) {
-        order: 1;
-      }
-      @apply text-center h-[42px] mt-4;
-      // @apply absolute;
-  
-      @media screen and (max-width: 767px) {
-        @apply flex items-center ml-[-14px];
-        // position: absolute;
-        height: 30px;
-        margin: 0;
-        padding-right: 8px;
-        padding-left: 8px;
-        text-align: left;
-        font-size: 11px;
-        color: rgb(188, 189, 190);
-        white-space: nowrap;
-      }
-    }
-  }
-  .coming_soon-text {
-    &-date {
-      font-size: 14px;
-      color: rgb(188, 189, 190);
-  
-      @media screen and (max-width: 767px) {
-        display: inline-block;
-        padding: 0px 2px;
-        margin-left: -2px;
-        background: rgb(17, 19, 25);
-        font-size: 12px;
-      }
-    }
-    &-day {
-      font-size: 14px;
-      color: rgb(130, 131, 135);
-  
-      @media screen and (max-width: 767px) {
-        font-size: 12px;
-      }
-    }
-    &-unknown {
-      font-size: 14px;
-      color: rgb(188, 189, 190);
-  
-      @media screen and (min-width: 768px) and (max-width: 1023px) {
-        font-size: 12px;
-        line-height: 0;
-      }
-    }
-  }
-  </style>
-  
-  <style lang="scss" scoped>
-  .card-wrap {
-    $offset: 0.1;
-  
-    // width: 155.25px !important;
-    width: calc((100% - 80px) / #{6 + $offset}) !important;
-    margin-right: 16px;
-  
+.coming_soon {
+  &-timeline {
+    @apply relative mt-[6px] mb-[14px];
+
     @media screen and (max-width: 767px) {
-      width: calc((100% - 16px) / #{3 + $offset}) !important;
-      margin-right: 8px;
-    }
-    @media screen and (min-width: 768px) and (max-width: 1023px) {
-      width: calc((100% - 48px) / #{4 + $offset}) !important;
+      @apply mb-[6px] flex items-center;
+      @apply mr-[-8px];
     }
   }
-  </style>
-  
+  &-line {
+    @apply w-[calc(100%+16px)] h-[2px] bg-[rgb(45,47,52)];
+    @media screen and (max-width: 767px) {
+      @apply w-full;
+    }
+    @media screen and (max-width: 767px) {
+      order: 2;
+    }
+  }
+  &-dot {
+    @apply w-[10px] h-[10px] mx-auto mt-[-6px];
+    background: rgb(130, 131, 135);
+    border: 2px solid rgb(17, 19, 25);
+    border-radius: 50%;
+
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+  &-time-wrapper {
+    @media screen and (max-width: 767px) {
+      order: 1;
+    }
+    @apply text-center h-[42px] mt-4;
+    // @apply absolute;
+
+    @media screen and (max-width: 767px) {
+      @apply flex items-center ml-[-14px];
+      // position: absolute;
+      height: 30px;
+      margin: 0;
+      padding-right: 8px;
+      padding-left: 8px;
+      text-align: left;
+      font-size: 11px;
+      color: rgb(188, 189, 190);
+      white-space: nowrap;
+    }
+  }
+}
+.coming_soon-text {
+  &-date {
+    font-size: 14px;
+    color: rgb(188, 189, 190);
+
+    @media screen and (max-width: 767px) {
+      display: inline-block;
+      padding: 0px 2px;
+      margin-left: -2px;
+      background: rgb(17, 19, 25);
+      font-size: 12px;
+    }
+  }
+  &-day {
+    font-size: 14px;
+    color: rgb(130, 131, 135);
+
+    @media screen and (max-width: 767px) {
+      font-size: 12px;
+    }
+  }
+  &-unknown {
+    font-size: 14px;
+    color: rgb(188, 189, 190);
+
+    @media screen and (min-width: 768px) and (max-width: 1023px) {
+      font-size: 12px;
+      line-height: 0;
+    }
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+.card-wrap {
+  $offset: 0.1;
+
+  // width: 155.25px !important;
+  width: calc((100% - 80px) / #{6 + $offset}) !important;
+  margin-right: 16px;
+
+  @media screen and (max-width: 767px) {
+    width: calc((100% - 16px) / #{3 + $offset}) !important;
+    margin-right: 8px;
+  }
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    width: calc((100% - 48px) / #{4 + $offset}) !important;
+  }
+}
+</style>

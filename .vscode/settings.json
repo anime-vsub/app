@@ -3,21 +3,10 @@
   "editor.guides.bracketPairs": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": [
-    "source.fixAll.eslint"
-  ],
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "vue"
-  ],
+  "editor.codeActionsOnSave": ["source.fixAll.eslint"],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "i18n-ally.localesPaths": [
-    "src/i18n"
-  ],
-  "cSpell.words": [
-    "phút"
-  ],
+  "i18n-ally.localesPaths": ["src/i18n"],
+  "cSpell.words": ["phút"],
   "ionic.previewInEditor": true
 }

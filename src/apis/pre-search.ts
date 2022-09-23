@@ -26,7 +26,8 @@ interface DataItem {
 
   */
 export async function preSearch(key: string) {
-  const dom = parserDOM(`<li><a style="background-image: url('http://cdn.animevietsub.cc/data/poster/2022/02/24/animevsub-vziyRxKpU1.jpg')" class="thumb" href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/"></a>
+  const dom =
+    parserDOM(`<li><a style="background-image: url('http://cdn.animevietsub.cc/data/poster/2022/02/24/animevsub-vziyRxKpU1.jpg')" class="thumb" href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/"></a>
   <div class="ss-info">
   <a href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/" class="ss-title">Tonikaku Kawaii 2nd Season</a>
   
