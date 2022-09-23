@@ -10,7 +10,7 @@ export class XMLHttpRequestJava {
   private aborted = false
 
   public responseType?: HttpOptions["responseType"]
-  public readyState: 1 | 2 | 3 | 4 = 1
+  public readyState: 0 | 1 | 2 | 3 | 4 = 0
   public status = 0
   public response?: ArrayBuffer
   public responseText?: string

@@ -1,6 +1,6 @@
 import { createPinia } from "pinia"
 import { store } from "quasar/wrappers"
-import type { Router } from "vue-router";
+import type { Router } from "vue-router"
 
 /*
  * When adding new properties to stores, you should also
@@ -9,7 +9,7 @@ import type { Router } from "vue-router";
  */
 declare module "pinia" {
   export interface PiniaCustomProperties {
-    readonly router: Router;
+    readonly router: Router
   }
 }
 

@@ -3,9 +3,15 @@
     <EndOfBackdrop
       class="absolute !h-full top-0 left-0"
       reverse
-      v-if="statusChaptersScroll !== 'start' && statusChaptersScroll !== 'startImp'"
+      v-if="
+        statusChaptersScroll !== 'start' && statusChaptersScroll !== 'startImp'
+      "
     />
-    <div class="overflow-x-scroll scrollbar-hide" @scroll="onChaptersScroll" ref="wapScrollRef">
+    <div
+      class="overflow-x-scroll scrollbar-hide"
+      @scroll="onChaptersScroll"
+      ref="wapScrollRef"
+    >
       <div class="whitespace-nowrap">
         <slot />
       </div>
@@ -20,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref,onMounted } from "vue"
+import { ref, onMounted } from "vue"
 import { debounce } from "quasar"
 import EndOfBackdrop from "components/EndOfBackdrop.vue"
 

@@ -33,3 +33,5 @@ yarn-error.log*
 *.sln
 
 package-lock.json
+build
+/src-capacitor/android/app/src/main/assets

@@ -1,4 +1,4 @@
-import type { HttpOptions } from "@capacitor-community/http";
+import type { HttpOptions } from "@capacitor-community/http"
 import { Http } from "@capacitor-community/http"
 
 export async function get(url: string | HttpOptions) {

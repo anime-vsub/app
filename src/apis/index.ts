@@ -13,7 +13,7 @@ export async function Index(url: string) {
   const carousel = $(".MovieListSldCn .TPostMv")
     .map((_i, item) => getInfoTPost($(item)))
     .toArray()
-    Object.assign(window, { $ })
+  Object.assign(window, { $ })
   const lastUpdate = $("#single-home .TPostMv")
     .map((_i, item) => getInfoTPost($(item)))
     .toArray()

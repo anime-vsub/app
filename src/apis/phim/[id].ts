@@ -8,6 +8,14 @@ import { getInfoTPost } from "../helpers/getInfoTPost"
 import { int } from "../utils/float"
 import { getPathName } from "../utils/getPathName"
 
+function findInfo($, infoList, q: string) {
+  return $(
+    infoList.toArray().find((item) => {
+      return $(item).find("strong").text().toLowerCase().startsWith(q)
+    })
+  )
+}
+
 export async function PhimId(url: string) {
   const $ = load(await getHTML(url))
 
@@ -41,34 +49,36 @@ export async function PhimId(url: string) {
   const quality = $(".Qlty:eq(0)").text()
 
   // ==== info ====
-  const status = $(".mvici-left > .InfoList > .AAIco-adjust:nth-child(2)")
+  const infoListLeft = $(".mvici-left > .InfoList > .AAIco-adjust")
+  const infoListRight = $(".mvici-right > .InfoList > .AAIco-adjust")
+  const status = findInfo($, infoListLeft, "trạng thái")
     .text()
     .split(":", 2)[1]
     ?.trim()
-  const authors = $(".mvici-left > .InfoList > .AAIco-adjust:nth-child(4) > a")
+  const authors = findInfo($, infoListLeft, "đạo diễn")
+    .find("a")
     .map((_i, item) => getInfoAnchor($(item)))
     .toArray()
-  const contries = $(".mvici-left > .InfoList > .AAIco-adjust:nth-child(5) > a")
+  const contries = findInfo($, infoListLeft, "quốc gia")
+    .find("a")
     .map((_i, item) => getInfoAnchor($(item)))
     .toArray()
   const follows = int(
-    $(".mvici-left > .InfoList > .AAIco-adjust:nth-child(6)")
+    findInfo($, infoListLeft, "số người theo dõi")
       .text()
       .split(":", 2)[1]
       ?.trim()
       ?.replace(/,/g, "")
   )!
-  const language = $(".mvici-right > .InfoList > .AAIco-adjust:nth-child(4)")
+  const language = findInfo($, infoListRight, "ngôn ngữ")
     .text()
     .split(":", 2)[1]
     ?.trim()
-  const studio = $(".mvici-right > .InfoList > .AAIco-adjust:nth-child(5)")
+  const studio = findInfo($, infoListRight, "studio")
     .text()
     .split(":", 2)[1]
     ?.trim()
-  const seasonOf = getInfoAnchor(
-    $(".mvici-right > .InfoList > .AAIco-adjust:nth-child(6) > a")
-  )
+  const seasonOf = getInfoAnchor(findInfo($, infoListRight, "season").find("a"))
   const trailer = $("#Opt1 iframe").attr("src")
 
   const followed = $(".added").length > 0
