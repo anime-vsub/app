@@ -6,8 +6,10 @@ export async function PhimIdChap(url: string) {
   const $ = load(await getHTML(url))
 
   const chaps = $(".list-episode:eq(0)")
-    .find// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    ("a")
+    .find(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      "a"
+    )
     .map((_i, item) => {
       const $item = $(item)
       return {

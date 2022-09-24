@@ -5,6 +5,7 @@ specifiers:
   '@intlify/vite-plugin-vue-i18n': ^3.3.1
   '@quasar/app-vite': ^1.0.0
   '@quasar/extras': ^1.0.0
+  '@tachibana-shin/artplayer': 4.5.7
   '@tachibana-shin/eslint-config': ^1.0.7
   '@types/node': ^12.20.21
   '@typescript-eslint/eslint-plugin': ^5.10.0
@@ -38,6 +39,7 @@ specifiers:
 
 dependencies:
   '@quasar/extras': 1.15.3
+  '@tachibana-shin/artplayer': 4.5.7
   artplayer: 4.5.6
   axios: 0.21.4
   cheerio: 1.0.0-rc.12
@@ -389,6 +391,13 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
+
+  /@tachibana-shin/artplayer/4.5.7:
+    resolution: {integrity: sha512-5byP2cppZzT3FfyIr5n1YSmzx2zDXuJ9Ba9/BvOzUTBjEKOzNCrpdVnpufzc94f6/vynmRLGh/ihKfIAHbUzTg==}
+    dependencies:
+      option-validator: 2.0.6
+      screenfull: 6.0.2
+    dev: false
 
   /@tachibana-shin/eslint-config/1.0.7_irgkl5vooow2ydyo6aokmferha:
     resolution: {integrity: sha512-7ARVH4ax+AnML5NL6p0DanLrDxpYsqXzOYO4janpnmgK8BtYAKPQpRa/WfevdfK265Gnd+STc/KCDRZkdUdZHw==}
