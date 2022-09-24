@@ -80,25 +80,25 @@
                 <div
                   class="art-progress-loaded"
                   :style="{
-                    width: `${(percentageResourceLoaded)* 100}%`,
-                  }"/>
+                    width: `${percentageResourceLoaded * 100}%`,
+                  }"
+                />
                 <div
                   class="art-progress-played"
                   :style="{
                     width: `${(currentTime / duration) * 100}%`,
                   }"
                 >
-
                   <div
                     class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)]"
                   >
                     <img
                       width="16"
                       heigth="16"
-                      src="https://artplayer.org/assets/img/indicator.svg"
+                      src="src/assets/img/indicator.svg"
                     />
                   </div>
-              </div>
+                </div>
               </div>
             </div>
 
@@ -394,6 +394,7 @@ import Artplayer from "artplayer"
 import OverScrollX from "components/OverScrollX.vue"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
+import dayjs from "dayjs"
 import { PhimId } from "src/apis/phim/[id]"
 import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import BottomSheet from "src/components/BottomSheet.vue"
@@ -411,7 +412,6 @@ import {
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import dayjs from "dayjs"
 
 const tabsBtnSeasonRefs = reactive<HTMLButtonElement[]>([])
 
@@ -549,197 +549,189 @@ watch(
   },
   { immediate: true }
 )
+const sources = computed(() =>
+  configPlayer.value?.link.map((item) => {
+    return {
+      html: labelToQuality[item.label] ?? item.label,
+      url: item.file.startsWith("http") ? item.file : `https:${item.file}`,
+    }
+  })
+)
+
+// ===================== player =========================
 
 const playerRef = ref<HTMLDivElement>()
 
-const labelToQuality = {
+const labelToQuality: Record<string, string> = {
   HD: "720p",
   SD: "480p",
 }
 
 const art = shallowRef<Artplayer | null>(null)
+const handlersArtMounted = new Set<(art: Artplayer) => void>()
+const watcherArt = watch(art, (art) => {
+  if (!art) return
+  watcherArt()
+  handlersArtMounted.forEach((handler) => handler(art))
+  handlersArtMounted.clear()
+})
+function onArtMounted(handler: (art: Artplayer) => void) {
+  if (art.value) handler(art.value)
+  else handlersArtMounted.add(handler)
+}
 
+// value control set
 const artControlShow = ref(true)
 const artPlaying = ref(true)
 
+// value control get
 const duration = ref<number>(0)
 const currentTime = ref<number>(0)
 const percentageResourceLoaded = ref<number>(0)
 
-watch(art, () => {
-  if (!art.value) return
-
-  art.value.on("video:durationchange", () => {
-    duration.value = art.value.duration
+// bind value control get
+onArtMounted((art) => {
+  art.on("video:durationchange", () => {
+    duration.value = art.duration
   })
-  art.value.on("video:timeupdate", () => {
-    currentTime.value = art.value.currentTime
-
-    if (artControlShow.value && Date.now() - activeTime >= 2e3) {
-      artControlShow.value = false
-    }
+  art.on("video:timeupdate", () => {
+    currentTime.value = art.currentTime
   })
 
-  art.value.on("video:progress", ({ target }) => {
-    var range = 0
-    var bf = target.buffered
-    var time = target.currentTime
+  art.on("video:progress", (event: Event) => {
+    const target = event.target as HTMLVideoElement
+    // eslint-disable-next-line functional/no-let
+    let range = 0
+    const bf = target.buffered
+    const time = target.currentTime
 
     while (!(bf.start(range) <= time && time <= bf.end(range))) {
       range += 1
     }
-    var loadStartPercentage = bf.start(range) / target.duration
-    var loadEndPercentage = bf.end(range) / target.duration
-    var loadPercentage = loadEndPercentage - loadStartPercentage
+    // const loadStartPercentage = bf.start(range) / target.duration
+    const loadEndPercentage = bf.end(range) / target.duration
+    // const loadPercentage = loadEndPercentage - loadStartPercentage
 
     percentageResourceLoaded.value = loadEndPercentage
-    console.log({ loadStartPercentage, loadEndPercentage, loadPercentage, hmm: bf.end(0) / target.duration })
   })
 })
-watch(artPlaying, (val) => {
-  if (val) {
-    art.value?.play()
-  } else {
-    art.value?.pause()
-  }
-})
-import { debounce } from "quasar"
-const hideArtControlShow = debounce(() => {
-  artControlShow.value = false
-}, 1500)
 
-let activeTime = Date.now()
-
-watch(artControlShow, (val) => {
-  if (val) {
-    activeTime = Date.now()
-  }
+// bind value control set
+onArtMounted((art) => {
+  watch(artPlaying, (val) => {
+    if (val) {
+      art.play()
+    } else {
+      art.pause()
+    }
+  })
+  // eslint-disable-next-line functional/no-let
+  let activeTime = Date.now()
+  watch(artControlShow, (val) => {
+    if (val) {
+      activeTime = Date.now()
+    }
+  })
+  art.on("video:timeupdate", () => {
+    if (artControlShow.value && Date.now() - activeTime >= 2e3) {
+      artControlShow.value = false
+    }
+  })
 })
 
 onMounted(() => {
   watch(
-    configPlayer,
-    async (configPlayer) => {
-      if (!configPlayer) return
+    sources,
+    async (sources) => {
+      if (!sources) return
 
-      const sources = configPlayer.link.map((item) => {
-        return {
-          html: labelToQuality[item.label] ?? item.label,
-          url: item.file.startsWith("http") ? item.file : `https:${item.file}`,
-        }
-      })
-
-      art.value = new Artplayer({
+      if (art.value) {
+        art.value.url = sources[0].url
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        container: playerRef.value!,
-        url: sources[0].url, // 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-        poster: data.value!.poster,
-        id: "player",
-        quality: sources,
-        autoplay: true,
+        art.value.poster = data.value!.poster!
+      } else {
+        art.value = new Artplayer({
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          container: playerRef.value!,
+          url: sources[0].url, // 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          poster: data.value!.poster,
+          id: "player",
+          autoplay: true,
 
-        customType: {
-          m3u8: function (video, url) {
-            if (Hls.isSupported()) {
-              const hls = new Hls({
-                // progressive: true,
-                // debug: true
-              })
-              // customLoader(hls.config)
-              hls.loadSource(url)
-              hls.attachMedia(video)
-            } else {
-              const canPlay = video.canPlayType("application/vnd.apple.mpegurl")
-              if (canPlay === "probably" || canPlay === "maybe") {
-                video.src = url
+          customType: {
+            m3u8: function (video, url) {
+              if (Hls.isSupported()) {
+                const hls = new Hls({
+                  // progressive: true,
+                  // debug: true
+                })
+                // customLoader(hls.config)
+                hls.loadSource(url)
+                hls.attachMedia(video)
               } else {
-                art.notice.show = "不支持播放格式：m3u8"
+                const canPlay = video.canPlayType(
+                  "application/vnd.apple.mpegurl"
+                )
+                if (canPlay === "probably" || canPlay === "maybe") {
+                  video.src = url
+                }
               }
-            }
-          },
-        },
-
-        volume: 1,
-        fastForward: true,
-        // autoOrientation: true,
-
-        notice: false,
-
-        isLive: false,
-        muted: false,
-        pip: false,
-        autoSize: true,
-        autoMini: true,
-        screenshot: false,
-        setting: true,
-        loop: false,
-        flip: true,
-        playbackRate: false,
-        aspectRatio: true,
-        fullscreen: true,
-        fullscreenWeb: false,
-        miniProgressBar: false,
-        mutex: true,
-        backdrop: true,
-        playsInline: true,
-        autoPlayback: false,
-        airplay: true,
-        theme: "#23ade5",
-        lock: true,
-        lang: navigator.language.toLowerCase(),
-        whitelist: ["*"],
-        settings: [
-          {
-            html: "Select Quality",
-            width: 150,
-            tooltip: "1080P",
-            selector: [
-              {
-                default: true,
-                html: "1080P",
-                url: "/assets/sample/video.mp4?id=1080",
-              },
-              {
-                html: "720P",
-                url: "/assets/sample/video.mp4?id=720",
-              },
-              {
-                html: "360P",
-                url: "/assets/sample/video.mp4?id=360",
-              },
-            ],
-            onSelect: function (item, $dom, event) {
-              console.info(item, $dom, event)
-              art.switchQuality(item.url, item.html)
-
-              // Change the tooltip
-              return item.html
             },
           },
-        ],
-        contextFmenu: [],
-        layers: [],
-        icons: {
-          loading: '<img src="https://artplayer.org/assets/img/ploading.gif">',
-          state: "", //
-          //      '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
-          indicator:
-            '<img width="16" heigth="16" src="https://artplayer.org/assets/img/indicator.svg">',
-        },
-      })
 
-      Object.defineProperty(art.value.controls, "show", {
-        get() {
-          return artControlShow.value
-        },
-        set(val) {
-          // empty
-        },
-      })
+          volume: 1,
+          fastForward: true,
+          // autoOrientation: true,
+
+          isLive: false,
+          muted: false,
+          pip: false,
+          autoSize: true,
+          autoMini: true,
+          screenshot: false,
+          setting: true,
+          loop: false,
+          flip: true,
+          playbackRate: false,
+          aspectRatio: true,
+          fullscreen: true,
+          fullscreenWeb: false,
+          miniProgressBar: false,
+          mutex: true,
+          backdrop: true,
+          playsInline: true,
+          autoPlayback: false,
+          airplay: true,
+          theme: "#23ade5",
+          lock: true,
+          lang: navigator.language.toLowerCase(),
+          whitelist: ["*"],
+          layers: [],
+          icons: {
+            loading:
+              '<img src="https://artplayer.org/assets/img/ploading.gif">',
+            state: "", //
+            //      '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
+            indicator: "",
+          },
+        })
+
+        Object.defineProperty(art.value.controls, "show", {
+          get() {
+            return artControlShow.value
+          },
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          set(_val) {
+            // empty
+          },
+        })
+      }
     },
     { immediate: true }
   )
 })
+// =======================================================
 async function fetchSeason(season: string) {
   if (_cacheDataSeasons.get(season)?.status === "success") return
 
