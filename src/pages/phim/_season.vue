@@ -76,7 +76,7 @@
 
           <div class="toolbar-bottom">
             <div class="art-control-progress" data-index="10">
-              <div class="art-control-progress-inner">
+              <div class="art-control-progress-inner" ref="progressInnerRef" @click="onIndicatorMove">
                 <div
                   class="art-progress-loaded"
                   :style="{
@@ -91,6 +91,7 @@
                 >
                   <div
                     class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)]"
+                    @touchmove="onIndicatorMove"
                   >
                     <img
                       width="16"
@@ -731,6 +732,15 @@ onMounted(() => {
     { immediate: true }
   )
 })
+
+const progressInnerRef  = ref<HTMLDivElement>()
+function onIndicatorMove(event: TouchEvent | MouseEvent) {
+  const {clientX} = event.changedTouches?.[0] ?? event.touches?.[0] ?? event 
+  
+  const maxX =progressInnerRef.value.offsetWidth
+
+  art.value!.currentTime = art.value.duration * clientX/maxX
+}
 // =======================================================
 async function fetchSeason(season: string) {
   if (_cacheDataSeasons.get(season)?.status === "success") return
