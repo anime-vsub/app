@@ -8,10 +8,160 @@
   </q-page>
 
   <q-page v-else>
-    <q-responsive :ratio="16 / 9">
+    <q-responsive :ratio="16 / 9" class="">
+      <transition name="fade__ease-in-out">
+        <div
+          class="art-layer-controller z-67"
+          v-show="artControlShow"
+          @click="artControlShow = false"
+        >
+          <div class="toolbar-top">
+            <button class="back">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-chevron-left"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+                />
+              </svg>
+            </button>
+            <button class="settings">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-gear-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <button @click.prevent.stop="artPlaying = !artPlaying">
+            <svg
+              v-if="!artPlaying"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              height="45"
+              width="45"
+              viewBox="0 0 22 22"
+            >
+              <path
+                d="M17.982 9.275L8.06 3.27A2.013 2.013 0 0 0 5 4.994v12.011a2.017 2.017 0 0 0 3.06 1.725l9.922-6.005a2.017 2.017 0 0 0 0-3.45z"
+              ></path>
+            </svg>
+            <svg
+              v-else
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              height="45"
+              width="45"
+              viewBox="0 0 22 22"
+            >
+              <path
+                d="M7 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2zM15 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2z"
+              ></path>
+            </svg>
+          </button>
+
+          <div class="toolbar-bottom">
+            <div class="art-control-progress" data-index="10">
+              <div class="art-control-progress-inner">
+                <div
+                  class="art-progress-loaded"
+                  :style="{
+                    width: `${(percentageResourceLoaded)* 100}%`,
+                  }"/>
+                <div
+                  class="art-progress-played"
+                  :style="{
+                    width: `${(currentTime / duration) * 100}%`,
+                  }"
+                >
+
+                  <div
+                    class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)]"
+                  >
+                    <img
+                      width="16"
+                      heigth="16"
+                      src="https://artplayer.org/assets/img/indicator.svg"
+                    />
+                  </div>
+              </div>
+              </div>
+            </div>
+
+            <div class="art-controls">
+              <div class="art-controls-left">
+                <div
+                  class="art-control art-control-time art-control-onlyText"
+                  data-index="30"
+                  style="cursor: auto"
+                >
+                  {{ currentTime }} / {{ duration }}
+                </div>
+              </div>
+              <div class="art-controls-center"></div>
+              <div class="art-controls-right">
+                <div
+                  class="art-control art-control-fullscreen hint--rounded hint--top"
+                  data-index="70"
+                  aria-label="Fullscreen"
+                >
+                  <i class="art-icon art-icon-fullscreenOn">
+                    <svg
+                      class="icon"
+                      width="22"
+                      height="22"
+                      viewBox="0 0 1024 1024"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill="#ffffff"
+                        d="M625.777778 256h142.222222V398.222222h113.777778V142.222222H625.777778v113.777778zM256 398.222222V256H398.222222v-113.777778H142.222222V398.222222h113.777778zM768 625.777778v142.222222H625.777778v113.777778h256V625.777778h-113.777778zM398.222222 768H256V625.777778h-113.777778v256H398.222222v-113.777778z"
+                      />
+                    </svg>
+                  </i>
+                  <i class="art-icon art-icon-fullscreenOff">
+                    <svg
+                      class="icon"
+                      width="22"
+                      height="22"
+                      viewBox="0 0 1024 1024"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill="#ffffff"
+                        d="M768 298.666667h170.666667v85.333333h-256V128h85.333333v170.666667zM341.333333 384H85.333333V298.666667h170.666667V128h85.333333v256z m426.666667 341.333333v170.666667h-85.333333v-256h256v85.333333h-170.666667zM341.333333 640v256H256v-170.666667H85.333333v-85.333333h256z"
+                      />
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
       <div
-        class="rounded-borders bg-primary text-white flex flex-center"
+        class="rounded-borders text-white flex flex-center"
         ref="playerRef"
+        @click="artControlShow = true"
+        :class="{
+          'control-show': artControlShow,
+        }"
       >
         {{ data.poster }}
         Ratio 16:9
@@ -407,6 +557,65 @@ const labelToQuality = {
   SD: "480p",
 }
 
+const art = shallowRef<Artplayer | null>(null)
+
+const artControlShow = ref(true)
+const artPlaying = ref(true)
+
+const duration = ref<number>(0)
+const currentTime = ref<number>(0)
+const percentageResourceLoaded = ref<number>(0)
+
+watch(art, () => {
+  if (!art.value) return
+
+  art.value.on("video:durationchange", () => {
+    duration.value = art.value.duration
+  })
+  art.value.on("video:timeupdate", () => {
+    currentTime.value = art.value.currentTime
+
+    if (artControlShow.value && Date.now() - activeTime >= 2e3) {
+      artControlShow.value = false
+    }
+  })
+
+  art.value.on("video:progress", ({ target }) => {
+    var range = 0
+    var bf = target.buffered
+    var time = target.currentTime
+
+    while (!(bf.start(range) <= time && time <= bf.end(range))) {
+      range += 1
+    }
+    var loadStartPercentage = bf.start(range) / target.duration
+    var loadEndPercentage = bf.end(range) / target.duration
+    var loadPercentage = loadEndPercentage - loadStartPercentage
+
+    percentageResourceLoaded.value = loadEndPercentage
+    console.log({ loadStartPercentage, loadEndPercentage, loadPercentage, hmm: bf.end(0) / target.duration })
+  })
+})
+watch(artPlaying, (val) => {
+  if (val) {
+    art.value?.play()
+  } else {
+    art.value?.pause()
+  }
+})
+import { debounce } from "quasar"
+const hideArtControlShow = debounce(() => {
+  artControlShow.value = false
+}, 1500)
+
+let activeTime = Date.now()
+
+watch(artControlShow, (val) => {
+  if (val) {
+    activeTime = Date.now()
+  }
+})
+
 onMounted(() => {
   watch(
     configPlayer,
@@ -420,7 +629,7 @@ onMounted(() => {
         }
       })
 
-      const art = new Artplayer({
+      art.value = new Artplayer({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         container: playerRef.value!,
         url: sources[0].url, // 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
@@ -509,84 +718,22 @@ onMounted(() => {
           },
         ],
         contextFmenu: [],
-        layers: [
-          {
-            name: "controller",
-            style: {
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-            },
-            html: `
-
-<div class="toolbar-top">
-<button class="back">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-</svg>
-</button>
-<button class="settings">
-<svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
-  <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
-</svg>
-</button>
-</div>
-
-
-
-<button class="play">
-<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="45" width="45" viewBox="0 0 22 22">
-  <path d="M17.982 9.275L8.06 3.27A2.013 2.013 0 0 0 5 4.994v12.011a2.017 2.017 0 0 0 3.06 1.725l9.922-6.005a2.017 2.017 0 0 0 0-3.45z"></path>
-</svg>
-</button>
-<button class="pause" style="display: none"> 
-<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="45" width="45" viewBox="0 0 22 22">
-    <path d="M7 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2zM15 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2z"></path>
-</svg>
-</button>
-`,
-            mounted(layer) {
-              this.on("video:loadstart", () => {
-                layer.classList.add("loading")
-              })
-              this.on("video:loadeddata", () => {
-                layer.classList.remove("loading")
-              })
-              this.on("play", () => {
-                btnPlay.style.display = "none"
-                btnPause.style.display = ""
-              })
-              this.on("pause", () => {
-                btnPlay.style.display = ""
-                btnPause.style.display = "none"
-              })
-
-              const btnPlay = layer.querySelector("button.play")
-              const btnPause = layer.querySelector("button.pause")
-
-              btnPlay.addEventListener("click", (event) => {
-                event.stopPropagation()
-                this.play()
-              })
-              btnPause.addEventListener("click", (event) => {
-                event.stopPropagation()
-                this.pause()
-              })
-
-              layer.querySelector(".settings").addEventListener("click", () => {
-                console.log("setting")
-              })
-            },
-          },
-        ],
+        layers: [],
         icons: {
           loading: '<img src="https://artplayer.org/assets/img/ploading.gif">',
           state: "", //
           //      '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
           indicator:
             '<img width="16" heigth="16" src="https://artplayer.org/assets/img/indicator.svg">',
+        },
+      })
+
+      Object.defineProperty(art.value.controls, "show", {
+        get() {
+          return artControlShow.value
+        },
+        set(val) {
+          // empty
         },
       })
     },
@@ -717,14 +864,7 @@ const openBottomSheetChap = ref(false)
 </style>
 
 <style lang="scss">
-.art-control-playAndPause,
-.art-control-volume {
-  display: none !important;
-}
-
 .art-layer-controller {
-  opacity: 0;
-  visibility: hidden;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -735,44 +875,346 @@ const openBottomSheetChap = ref(false)
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
   background-image: linear-gradient(to bottom, #0006, #0000);
-  transition: all 0.2s ease-in-out;
+  button {
+    background: none;
+    outline: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .toolbar-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    svg {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+  .toolbar-bottom {
+    padding: 50px 7px 0;
+    @apply h-[100px] z-60;
+    background-image: linear-gradient(to top, #000, #0006, #0000);
+    background-position: bottom;
+    background-repeat: repeat-x;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    display: flex;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .art-control-progress {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 4px;
+      cursor: pointer;
+
+      .art-control-progress-inner {
+        display: flex;
+        align-items: center;
+        position: relative;
+        height: 50%;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.2);
+
+        .art-progress-loaded {
+          position: absolute;
+          z-index: 10;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          height: 100%;
+          width: 0;
+          background: rgba(255, 255, 255, 0.4);
+        }
+
+        .art-progress-played {
+          position: absolute;
+          z-index: 20;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          height: 100%;
+          width: 0;
+          background-color: rgb(0, 194, 52);
+        }
+
+        .art-progress-highlight {
+          position: absolute;
+          z-index: 30;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          height: 100%;
+          pointer-events: none;
+
+          span {
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 7px;
+            height: 100%;
+            background: #fff;
+            pointer-events: auto;
+          }
+        }
+
+        .art-progress-indicator {
+          visibility: hidden;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          z-index: 40;
+          border-radius: 50%;
+          transform: scale(0.1, 0.1);
+          transition: transform 0.1s ease-in-out;
+
+          transform: scale(1, 1) !important;
+          visibility: visible !important;
+          .art-icon {
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            user-select: none;
+          }
+        }
+
+        .art-progress-tip {
+          display: none;
+          position: absolute;
+          z-index: 50;
+          top: -25px;
+          left: 0;
+          height: 20px;
+          padding: 0 5px;
+          line-height: 20px;
+          color: #fff;
+          font-size: 12px;
+          text-align: center;
+          background: rgba(0, 0, 0, 0.7);
+          border-radius: 3px;
+          font-weight: bold;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .art-control-thumbnails {
+      display: none;
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      pointer-events: none;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .art-control-loop {
+      display: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+
+      .art-loop-point {
+        position: absolute;
+        left: 0;
+        top: -2px;
+        width: 2px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.75);
+      }
+    }
+
+    .art-controls {
+      position: relative;
+      z-index: 1;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 40px;
+
+      .art-controls-left,
+      .art-controls-right {
+        display: flex;
+      }
+
+      .art-controls-center {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+      }
+
+      .art-controls-right {
+        justify-content: flex-end;
+      }
+
+      .art-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.9;
+        font-size: 12px;
+        min-height: 36px;
+        min-width: 36px;
+        line-height: 1;
+        text-align: center;
+        cursor: pointer;
+        white-space: nowrap;
+        .art-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          float: left;
+          height: 36px;
+          width: 36px;
+        }
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .art-control-onlyText {
+        padding: 0 10px;
+      }
+
+      .art-control-volume {
+        .art-volume-panel {
+          position: relative;
+          float: left;
+          width: 0;
+          height: 100%;
+          transition: margin 0.2s cubic-bezier(0.4, 0, 1, 1),
+            width 0.2s cubic-bezier(0.4, 0, 1, 1);
+          overflow: hidden;
+
+          .art-volume-slider-handle {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 12px;
+            margin-top: -6px;
+            background: #fff;
+
+            &::before {
+              left: -54px;
+              background: #fff;
+            }
+
+            &::after {
+              left: 6px;
+              background: rgba(255, 255, 255, 0.2);
+            }
+
+            &::before,
+            &::after {
+              content: "";
+              position: absolute;
+              display: block;
+              top: 50%;
+              height: 3px;
+              margin-top: -2px;
+              width: 60px;
+            }
+          }
+        }
+
+        &:hover .art-volume-panel {
+          width: 60px;
+        }
+      }
+
+      .art-control-quality {
+        position: relative;
+        z-index: 30;
+        .art-qualitys {
+          display: none;
+          position: absolute;
+          bottom: 35px;
+          width: 100px;
+          padding: 5px 0;
+          text-align: center;
+          color: #fff;
+          background: rgba(0, 0, 0, 0.8);
+          border-radius: 3px;
+          .art-quality-item {
+            height: 30px;
+            line-height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.1);
+            }
+          }
+        }
+        &:hover .art-qualitys {
+          display: block;
+        }
+      }
+    }
+
+    &:hover {
+      .art-progress .art-control-progress .art-control-progress-inner {
+        height: 100%;
+        .art-progress-indicator {
+          transform: scale(1, 1);
+          visibility: visible;
+        }
+      }
+    }
+  }
 }
-.art-control-show .art-layer-controller {
-  opacity: 1;
-  visibility: visible;
-}
-.art-bottom {
-  flex-direction: column-reverse !important;
-}
-.art-layer-controller button {
-  background: none;
-  outline: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-}
-.art-layer-controller .toolbar-top {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 2;
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.art-layer-controller .toolbar-top svg {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-.art-notice {
+.art-notice,
+.art-bottom,
+.art-layer-lock {
   display: none !important;
 }
-.art-layer-controller.loading {
-  .play,
-  .pause {
-    display: none !important;
+</style>
+
+<style lang="scss">
+.fade__ease-in-out {
+  @keyframes fade__ease-in-out {
+    from {
+      opacity: 0;
+      visibility: hidden;
+    }
+    to {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &-enter-active {
+    animation: fade__ease-in-out 0.2s ease-in-out;
+  }
+  &-leave-active {
+    animation: fade__ease-in-out 0.2s ease-in-out reverse;
   }
 }
 </style>
