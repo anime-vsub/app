@@ -8,10 +8,10 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const path = require("path")
+const path = require("path");
 
-const { extend } = require("quasar")
-const { configure } = require("quasar/wrappers")
+const { extend } = require("quasar");
+const { configure } = require("quasar/wrappers");
 
 // eslint-disable-next-line functional/immutable-data
 module.exports = configure(function (/* ctx */) {
@@ -94,7 +94,7 @@ module.exports = configure(function (/* ctx */) {
                 }
               : true,
           },
-        })
+        });
       },
       // viteVuePluginOptions: {},
 
@@ -136,7 +136,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ["Notify"],
     },
 
     // animations: 'all', // --- includes all animations
@@ -233,5 +233,5 @@ module.exports = configure(function (/* ctx */) {
       // extendBexScriptsConf (esbuildConf) {}
       // extendBexManifestJson (json) {}
     },
-  }
-})
+  };
+});

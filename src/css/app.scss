@@ -1,4 +1,7 @@
 // app global css in SCSS form
+* {
+  user-select: none;
+}
 
 .c--main {
   color: rgb(0, 194, 52);

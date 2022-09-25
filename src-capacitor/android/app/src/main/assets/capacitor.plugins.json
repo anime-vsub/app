@@ -1,6 +1,18 @@
 [
-  {
-    "pkg": "@capacitor-community/http",
-    "classpath": "com.getcapacitor.plugin.http.Http"
-  }
+	{
+		"pkg": "@capacitor-community/http",
+		"classpath": "com.getcapacitor.plugin.http.Http"
+	},
+	{
+		"pkg": "@capacitor/app",
+		"classpath": "com.capacitorjs.plugins.app.AppPlugin"
+	},
+	{
+		"pkg": "@capacitor/status-bar",
+		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
+	},
+	{
+		"pkg": "@hugotomazi/capacitor-navigation-bar",
+		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
+	}
 ]

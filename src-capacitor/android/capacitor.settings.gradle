@@ -4,3 +4,12 @@ project(':capacitor-android').projectDir = new File('../node_modules/.pnpm/@capa
 
 include ':capacitor-community-http'
 project(':capacitor-community-http').projectDir = new File('../node_modules/.pnpm/@capacitor-community+http@1.4.1/node_modules/@capacitor-community/http/android')
+
+include ':capacitor-app'
+project(':capacitor-app').projectDir = new File('../node_modules/.pnpm/@capacitor+app@4.0.1_@capacitor+core@4.2.0/node_modules/@capacitor/app/android')
+
+include ':capacitor-status-bar'
+project(':capacitor-status-bar').projectDir = new File('../node_modules/.pnpm/@capacitor+status-bar@4.0.1_@capacitor+core@4.2.0/node_modules/@capacitor/status-bar/android')
+
+include ':hugotomazi-capacitor-navigation-bar'
+project(':hugotomazi-capacitor-navigation-bar').projectDir = new File('../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@2.0.0_@capacitor+core@4.2.0/node_modules/@hugotomazi/capacitor-navigation-bar/android')
