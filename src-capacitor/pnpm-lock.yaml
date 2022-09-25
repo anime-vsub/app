@@ -3,14 +3,22 @@ lockfileVersion: 5.4
 specifiers:
   '@capacitor-community/http': 1.4.1
   '@capacitor/android': ^4.0.0
+  '@capacitor/app': ^4.0.0
   '@capacitor/cli': ^4.0.0
   '@capacitor/core': ^4.0.0
+  '@capacitor/status-bar': ^4.0.0
+  '@hugotomazi/capacitor-navigation-bar': ^2.0.0
+  cordova-plugin-screen-orientation: ^3.0.2
 
 dependencies:
   '@capacitor-community/http': 1.4.1
   '@capacitor/android': 4.2.0_@capacitor+core@4.2.0
+  '@capacitor/app': 4.0.1_@capacitor+core@4.2.0
   '@capacitor/cli': 4.2.0
   '@capacitor/core': 4.2.0
+  '@capacitor/status-bar': 4.0.1_@capacitor+core@4.2.0
+  '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.2.0
+  cordova-plugin-screen-orientation: 3.0.2
 
 packages:
 
@@ -33,6 +41,14 @@ packages:
 
   /@capacitor/android/4.2.0_@capacitor+core@4.2.0:
     resolution: {integrity: sha512-LWZhM31DoQuNSW8ZGslJ8gZfOAZS2A5TLq30HP1bn0OQTJGvOFIizQysraVRSOOq5FRptykf2nZWu6WEwoKMlA==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.2.0
+    dev: false
+
+  /@capacitor/app/4.0.1_@capacitor+core@4.2.0:
+    resolution: {integrity: sha512-frPft9TMJL70jWq5jmxwGSBddZVvsWxX5Agj2i19WJerk37aTgljB05HRr/YLg6mF1G/NIXmmFJZDY8MEgirDg==}
     peerDependencies:
       '@capacitor/core': ^4.0.0
     dependencies:
@@ -91,6 +107,22 @@ packages:
       '@capacitor/core': ^3.8.0
     dependencies:
       '@capacitor/core': 3.5.0
+    dev: false
+
+  /@capacitor/status-bar/4.0.1_@capacitor+core@4.2.0:
+    resolution: {integrity: sha512-BmEyOf3m/hAf8bO4hCX0m5gpQPSgd05mGYl+9E841WUZeJjcYlmiG/EBshAUb2uGCVtyNaG36yPXB0r0Ypg+rw==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.2.0
+    dev: false
+
+  /@hugotomazi/capacitor-navigation-bar/2.0.0_@capacitor+core@4.2.0:
+    resolution: {integrity: sha512-hebf0ixGPugiZfH6g7HS/hrDzkKmNdJV/pV2jUz5lfoZXFMjE+7aeAr1AqwW6EGNej65WcEP8VUL5YUc3wSCjw==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.1
+    dependencies:
+      '@capacitor/core': 4.2.0
     dev: false
 
   /@ionic/cli-framework-output/2.2.5:
@@ -283,6 +315,11 @@ packages:
 
   /concat-map/0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    dev: false
+
+  /cordova-plugin-screen-orientation/3.0.2:
+    resolution: {integrity: sha512-2w6CMC+HGvbhogJetalwGurL2Fx8DQCCPy3wlSZHN1/W7WoQ5n9ujVozcoKrY4VaagK6bxrPFih+ElkO8Uqfzg==}
+    engines: {cordovaDependencies: {4.0.0: {cordova: '>100'}}}
     dev: false
 
   /cross-spawn/7.0.3:
