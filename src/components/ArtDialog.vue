@@ -45,14 +45,14 @@
 
 <script lang="ts" setup>
 defineProps<{
-  modelValue: boolean;
-  title: string;
-  fit?: boolean;
-}>();
+  modelValue: boolean
+  title: string
+  fit?: boolean
+}>()
 
 const emit = defineEmits<{
-  (name: "update:model-value", v: false): void;
-}>();
+  (name: "update:model-value", v: false): void
+}>()
 </script>
 
 <style lang="scss">
@@ -69,7 +69,10 @@ const emit = defineEmits<{
 }
 
 .bottom-drop {
-  background-image: linear-gradient( rgba(17, 19, 25, 0) 0%, rgb(17, 19, 25) 100%);
+  background-image: linear-gradient(
+    rgba(17, 19, 25, 0) 0%,
+    rgb(17, 19, 25) 100%
+  );
   // background: red;
   @apply absolute w-full h-[20px] bottom-0 left-0;
 }

@@ -26,26 +26,26 @@
 
 <script lang="ts" setup>
 defineProps<{
-  find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean;
-  chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"];
-  season: string;
-  classActive?: string;
-}>();
-import { ref, watchEffect, useAttrs } from "vue";
+  find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
+  chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"]
+  season: string
+  classActive?: string
+}>()
+import { ref, watchEffect, useAttrs } from "vue"
 
-const attrs = useAttrs();
+const attrs = useAttrs()
 
-const activeRef = ref<QBtn>();
+const activeRef = ref<QBtn>()
 
 watchEffect(() => {
   activeRef.value?.$el.scrollIntoView({
     inline: "center",
-  });
-});
+  })
+})
 </script>
 
 <script lang="ts">
 export default {
   inheritAttrs: false,
-};
+}
 </script>
