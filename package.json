@@ -36,6 +36,7 @@
   "devDependencies": {
     "@capacitor-community/http": "^1.4.1",
     "@capacitor/status-bar": "^4.0.1",
+    "@hugotomazi/capacitor-navigation-bar": "^2.0.0",
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
     "@quasar/app-vite": "^1.0.0",
     "@tachibana-shin/eslint-config": "^1.0.7",
