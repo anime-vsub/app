@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@capacitor-community/http': ^1.4.1
   '@capacitor/status-bar': ^4.0.1
+  '@hugotomazi/capacitor-navigation-bar': ^2.0.0
   '@iconify/vue': ^4.0.0
   '@intlify/vite-plugin-vue-i18n': ^3.3.1
   '@quasar/app-vite': ^1.0.0
@@ -62,6 +63,7 @@ dependencies:
 devDependencies:
   '@capacitor-community/http': 1.4.1
   '@capacitor/status-bar': 4.0.1
+  '@hugotomazi/capacitor-navigation-bar': 2.0.0
   '@intlify/vite-plugin-vue-i18n': 3.4.0_vue-i18n@9.2.2
   '@quasar/app-vite': 1.0.6_g7rlcj6hauiyl7pdyuy6qjwmpi
   '@tachibana-shin/eslint-config': 1.0.7_irgkl5vooow2ydyo6aokmferha
@@ -169,6 +171,12 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@hugotomazi/capacitor-navigation-bar/2.0.0:
+    resolution: {integrity: sha512-hebf0ixGPugiZfH6g7HS/hrDzkKmNdJV/pV2jUz5lfoZXFMjE+7aeAr1AqwW6EGNej65WcEP8VUL5YUc3wSCjw==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.1
     dev: true
 
   /@humanwhocodes/config-array/0.10.4:

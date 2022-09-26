@@ -13,8 +13,11 @@
       :current-season="currentSeason"
       :current-chap="currentChap"
       :name="data.name"
-      :chap-name="currentMetaChap.name"
+      :chap-name="currentMetaChap?.name"
       :poster="data.poster"
+      :all-seasons="allSeasons"
+      :_cache-data-seasons="_cacheDataSeasons"
+      :fetch-season="fetchSeason"
     />
 
     <div class="px-2 pt-4">
@@ -167,7 +170,7 @@
         </div>
         <ChapsGridQBtn
           v-else
-          :chaps="_cacheDataSeasons.get(value)?.response.chaps"
+          :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
           :season="value"
           :find="(item) => value === currentSeason && item.id === currentChap"
         />
@@ -189,7 +192,7 @@
         :label="item.name"
         class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[6px]"
         content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-        :ref="(el) => item.value === currentSeason && (tabsRef = el)"
+        :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
       />
     </q-tabs>
 
@@ -217,7 +220,7 @@
           active-class="c--main"
         >
           <q-tab
-            v-for="(item, index) in allSeasons"
+            v-for="item in allSeasons"
             :key="item.value"
             :name="item.value"
             :label="item.name"
@@ -253,7 +256,7 @@
 
             <ChapsGridQBtn
               v-else
-              :chaps="_cacheDataSeasons.get(value)?.response.chaps"
+              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
               :season="value"
               :find="
                 (item) => value === currentSeason && item.id === currentChap
@@ -274,36 +277,21 @@
 </template>
 
 <script lang="ts" setup>
-import Artplayer from "artplayer"
-import OverScrollX from "components/OverScrollX.vue"
+import BrtPlayer from "components/BrtPlayer.vue"
+import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
 import dayjs from "dayjs"
+import { QTab } from "quasar"
 import { PhimId } from "src/apis/phim/[id]"
 import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import BottomSheet from "src/components/BottomSheet.vue"
+import { labelToQuality } from "src/constants"
 import { formatView } from "src/logic/formatView"
-import { Hls } from "src/logic/hls"
 import { post } from "src/logic/http"
-import {
-  computed,
-  onMounted,
-  reactive,
-  ref,
-  shallowRef,
-  watch,
-  watchEffect,
-  shallowReactive,
-} from "vue"
+import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import { parseTime } from "src/logic/parseTime"
-import { Icon } from "@iconify/vue"
-import ArtDialog from "components/ArtDialog.vue"
-import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import BrtPlayer from "components/BrtPlayer.vue"
-
-const tabsBtnSeasonRefs = reactive<HTMLButtonElement[]>([])
 
 const route = useRoute()
 const router = useRouter()
@@ -389,7 +377,7 @@ const currentDataSeason = computed(() => {
   return undefined
 })
 const currentChap = computed(() => {
-  if (route.params.chap) return route.params.chap
+  if (route.params.chap) return route.params.chap as string
 
   // get first chap in season
 

@@ -37,7 +37,7 @@
                 <div class="line-clamp-1 text-[18px] text-weight-medium">
                   {{ name }}
                 </div>
-                <div v-if="currentMetaChap" class="text-gray-300">
+                <div v-if="chapName" class="text-gray-300">
                   Tập
                   {{ chapName }}
                 </div>
@@ -123,7 +123,7 @@
                     width="18"
                     height="18"
                   />
-                  EP {{ currentMetaChap?.name }}
+                  EP {{ chapName }}
                 </q-btn>
               </div>
 
@@ -323,7 +323,7 @@
               :label="item.name"
               class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[3px]"
               content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-              :ref="(el) => item.value === currentSeason && (tabsRef = el)"
+              :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
             />
           </q-tabs>
 
@@ -367,7 +367,7 @@
                 v-else
                 class="!px-3 !py-2 !mx-1"
                 class-active="!bg-[rgba(0,194,52,.15)]"
-                :chaps="_cacheDataSeasons.get(value)?.response.chaps"
+                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
                 :season="value"
                 :find="
                   (item) => value === currentSeason && item.id === currentChap
@@ -415,161 +415,170 @@
 </template>
 
 <script lang="ts" setup>
-    defineProps<{
-        sources?: {html: string; url: string}[]
-        currentSeason?: string ;
-        currentChap?: string;
-        name: string
-        chapName?: string
-        poster?: string
-    }>()
+import { StatusBar } from "@capacitor/status-bar"
+import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
+import { Icon } from "@iconify/vue"
+import Artplayer from "artplayer"
+import ArtDialog from "components/ArtDialog.vue"
+import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import { QTab } from "quasar"
+import type { PhimIdChap } from "src/apis/phim/[id]/[chap]"
+import { playbackRates } from "src/constants"
+import { Hls } from "src/logic/hls"
+import { parseTime } from "src/logic/parseTime"
+import {
+  computed,
+  onMounted,
+  ref,
+  shallowReactive,
+  shallowRef,
+  watch,
+  watchEffect,
+} from "vue"
 
+interface ResponseDataSeasonPending {
+  status: "pending"
+}
+interface ResponseDataSeasonSuccess {
+  status: "success"
+  response: Awaited<ReturnType<typeof PhimIdChap>>
+}
+interface ResponseDataSeasonError {
+  status: "error"
+  response: {
+    status: number
+  }
+}
 
-const playerRef = ref<HTMLDivElement>();
+const props = defineProps<{
+  sources?: { html: string; url: string }[]
+  currentSeason?: string
+  currentChap?: string
+  name: string
+  chapName?: string
+  poster?: string
+  allSeasons?: {
+    value: string
+    path: string
+    name: string
+  }[]
+  _cacheDataSeasons: Map<
+    string,
+    | ResponseDataSeasonPending
+    | ResponseDataSeasonSuccess
+    | ResponseDataSeasonError
+  >
+  fetchSeason: (season: string) => Promise<void>
+}>()
 
-const labelToQuality: Record<string, string> = {
-  HD: "720p",
-  SD: "480p",
-};
-const playbackRates = [
-  {
-    name: "0.5x",
-    value: 0.5,
-  },
-  {
-    name: "0.75x",
-    value: 0.75,
-  },
-  {
-    name: "1.0x",
-    value: 1,
-  },
-  {
-    name: "1.25x",
-    value: 1.25,
-  },
-  {
-    name: "1.5x",
-    value: 1.5,
-  },
-  {
-    name: "2.0x",
-    value: 2,
-  },
-];
+const playerRef = ref<HTMLDivElement>()
 
-const art = shallowRef<Artplayer | null>(null);
-const handlersArtMounted = new Set<(art: Artplayer) => void>();
+const art = shallowRef<Artplayer | null>(null)
+const handlersArtMounted = new Set<(art: Artplayer) => void>()
 const watcherArt = watch(art, (art) => {
-  if (!art) return;
-  watcherArt();
-  handlersArtMounted.forEach((handler) => handler(art));
-  handlersArtMounted.clear();
-});
+  if (!art) return
+  watcherArt()
+  handlersArtMounted.forEach((handler) => handler(art))
+  handlersArtMounted.clear()
+})
 function onArtMounted(handler: (art: Artplayer) => void) {
-  if (art.value) handler(art.value);
-  else handlersArtMounted.add(handler);
+  if (art.value) handler(art.value)
+  else handlersArtMounted.add(handler)
 }
 
 // value control set
-const artControlShow = ref(true);
+const artControlShow = ref(true)
 watch(artControlShow, (artControlShow) => {
-  if (artControlShow && artFullscreen.value) StatusBar.hide();
-});
-const artPlaying = ref(true);
-const artFullscreen = ref(false);
-const artPlaybackRate = ref(1);
+  if (artControlShow && artFullscreen.value) StatusBar.hide()
+})
+const artPlaying = ref(true)
+const artFullscreen = ref(false)
+const artPlaybackRate = ref(1)
 const setArtPlaybackRate = (value: number) => {
-  artPlaybackRate.value = value;
-  addNotice(`${value}x`);
-};
-const artQuality = ref<string>();
+  artPlaybackRate.value = value
+  addNotice(`${value}x`)
+}
+const artQuality = ref<string>()
 const setArtQuality = (value: string) => {
-  artQuality.value = value;
-  addNotice(`Chất lượng đã chuyển sang ${value}`);
-};
+  artQuality.value = value
+  addNotice(`Chất lượng đã chuyển sang ${value}`)
+}
 const currentStream = computed(() => {
-  return props.sources?.find((item) => item.html === artQuality.value);
-});
+  return props.sources?.find((item) => item.html === artQuality.value)
+})
 // re-set quality if quality not in sources
 watch(
   () => props.sources,
   (sources) => {
-    if (!sources || sources.length === 0) return;
+    if (!sources || sources.length === 0) return
     // not ready quality on this
-    if (!artQuality || !currentStream.value) {
-      artQuality.value = sources[0].html;
+    if (!artQuality.value || !currentStream.value) {
+      artQuality.value = sources[0].html
     }
   },
   { immediate: true }
-);
+)
 
 // value control get
-const duration = ref<number>(0);
-const currentTime = ref<number>(0);
-const percentageResourceLoaded = ref<number>(0);
+const duration = ref<number>(0)
+const currentTime = ref<number>(0)
+const percentageResourceLoaded = ref<number>(0)
 
 // bind value control get
 onArtMounted((art) => {
   art.on("video:durationchange", () => {
-    duration.value = art.duration;
-  });
+    duration.value = art.duration
+  })
   art.on("video:timeupdate", () => {
-    if (currentingTime.value) return;
-    currentTime.value = art.currentTime;
-  });
+    if (currentingTime.value) return
+    currentTime.value = art.currentTime
+  })
 
   art.on("video:progress", (event: Event) => {
-    const target = event.target as HTMLVideoElement;
+    const target = event.target as HTMLVideoElement
     // eslint-disable-next-line functional/no-let
-    let range = 0;
-    const bf = target.buffered;
-    const time = target.currentTime;
+    let range = 0
+    const bf = target.buffered
+    const time = target.currentTime
 
     try {
       while (!(bf.start(range) <= time && time <= bf.end(range))) {
-        range += 1;
+        range += 1
       }
       // const loadStartPercentage = bf.start(range) / target.duration
-      const loadEndPercentage = bf.end(range) / target.duration;
+      const loadEndPercentage = bf.end(range) / target.duration
       // const loadPercentage = loadEndPercentage - loadStartPercentage
 
-      percentageResourceLoaded.value = loadEndPercentage;
+      percentageResourceLoaded.value = loadEndPercentage
     } catch {
-      percentageResourceLoaded.value = bf.end(0) / target.duration;
+      percentageResourceLoaded.value = bf.end(0) / target.duration
     }
-  });
-});
+  })
+})
 
 // eslint-disable-next-line functional/no-let
-let activeTime = Date.now();
+let activeTime = Date.now()
 function showControl() {
-  artControlShow.value = true;
-  activeTime = Date.now();
+  artControlShow.value = true
+  activeTime = Date.now()
 }
 
-import { StatusBar, Style } from "@capacitor/status-bar";
-import { useQuasar } from "quasar";
-import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
-
-const $q = useQuasar();
-
-const playerWrapRef = ref<HTMLDivElement>();
+const playerWrapRef = ref<HTMLDivElement>()
 // bind value control set
 onArtMounted((art) => {
   watch(
     artPlaying,
     (val) => {
       if (val) {
-        art.play();
+        art.play()
       } else {
-        art.pause();
+        art.pause()
       }
     },
     { immediate: true }
-  );
-  art.on("play", () => (artPlaying.value = true));
-  art.on("pause", () => (artPlaying.value = false));
+  )
+  art.on("play", () => (artPlaying.value = true))
+  art.on("pause", () => (artPlaying.value = false))
   art.on("video:timeupdate", () => {
     if (
       artPlaying.value &&
@@ -577,68 +586,62 @@ onArtMounted((art) => {
       artControlShow.value &&
       Date.now() - activeTime >= 3000
     ) {
-      artControlShow.value = false;
+      artControlShow.value = false
     }
-  });
+  })
   watch(
     artFullscreen,
     async (artFullscreen) => {
+      if (!playerWrapRef.value) return
+
       if (artFullscreen) {
-        await playerWrapRef.value.requestFullscreen();
-        screen.orientation.lock("landscape");
-        StatusBar.hide();
-        NavigationBar.hide();
+        await playerWrapRef.value.requestFullscreen()
+        screen.orientation.lock("landscape")
+        StatusBar.hide()
+        NavigationBar.hide()
         StatusBar.setOverlaysWebView({
           overlay: true,
-        });
+        })
       } else {
-        await document.exitFullscreen().catch(() => {});
-        screen.orientation.unlock("landscape");
-        StatusBar.show();
-        NavigationBar.show();
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await document.exitFullscreen().catch(() => {})
+        screen.orientation.unlock()
+        StatusBar.show()
+        NavigationBar.show()
         StatusBar.setOverlaysWebView({
           overlay: false,
-        });
+        })
       }
     },
     { immediate: true }
-  );
+  )
   watch(artPlaybackRate, (artPlaybackRate) => {
-    art.playbackRate = artPlaybackRate;
-  });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    art.playbackRate = artPlaybackRate as unknown as any
+  })
   watch(
-    () => currentStream?.url,
+    () => currentStream.value?.url,
     (url) => {
-      console.log("set url art ");
-      if (url) art.url = url;
+      console.log("set url art ")
+      if (url) art.url = url
     },
     { immediate: true }
-  );
-  watch(
-    () => props.poster,
-    (poster) => {
-      // if (poster) art.poster = poster
-    },
-    { immediate: true }
-  );
-});
-
-/// save currentTime play
-onArtMounted(() => {});
+  )
+})
 
 onMounted(() => {
   const watcher = watch(
-    sources,
+    () => props.sources,
     async (sources) => {
-      if (!sources) return;
+      if (!sources) return
 
       if (!art.value) {
-        watcher();
+        watcher()
         art.value = new Artplayer({
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           container: playerRef.value!,
           url: sources[0].url, // 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
           // poster: data.value!.poster,
           id: "player",
           autoplay: true,
@@ -649,16 +652,16 @@ onMounted(() => {
                 const hls = new Hls({
                   // progressive: true,
                   // debug: true
-                });
+                })
                 // customLoader(hls.config)
-                hls.loadSource(url);
-                hls.attachMedia(video);
+                hls.loadSource(url)
+                hls.attachMedia(video)
               } else {
                 const canPlay = video.canPlayType(
                   "application/vnd.apple.mpegurl"
-                );
+                )
                 if (canPlay === "probably" || canPlay === "maybe") {
-                  video.src = url;
+                  video.src = url
                 }
               }
             },
@@ -699,71 +702,98 @@ onMounted(() => {
             //      '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
             indicator: "",
           },
-        });
+        })
 
         Object.defineProperty(art.value.controls, "show", {
           get() {
-            return artControlShow.value;
+            return artControlShow.value
           },
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           set(_val) {
             // empty
           },
-        });
+        })
       }
     },
     { immediate: true }
-  );
-});
+  )
+})
 
-const currentingTime = ref(false);
-const progressInnerRef = ref<HTMLDivElement>();
+const currentingTime = ref(false)
+const progressInnerRef = ref<HTMLDivElement>()
 function onIndicatorMove(event: TouchEvent | MouseEvent) {
-  currentingTime.value = true;
-  const maxX = progressInnerRef.value.offsetWidth;
+  currentingTime.value = true
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const maxX = progressInnerRef.value!.offsetWidth
 
   const clientX = Math.min(
     maxX,
     Math.max(
       0,
-      (event.changedTouches?.[0] ?? event.touches?.[0] ?? event).clientX - 10
+      (
+        (event as TouchEvent).changedTouches?.[0] ??
+        (event as TouchEvent).touches?.[0] ??
+        event
+      ).clientX
     )
-  );
+  )
 
-  currentTime.value = (art.value.duration * clientX) / maxX;
-  activeTime = Date.now();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  currentTime.value = (art.value!.duration * clientX) / maxX
+  activeTime = Date.now()
 }
 function onIndicatorEnd() {
-  currentingTime.value = false;
+  currentingTime.value = false
 
-  art.value.currentTime = currentTime.value;
-  activeTime = Date.now();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  art.value!.currentTime = currentTime.value
+  activeTime = Date.now()
   if (artPlaying.value) {
-    art.value.play();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    art.value!.play()
   }
-
+}
 
 const notices = shallowReactive<
   {
-    id: number;
-    text: string;
+    id: number
+    text: string
   }[]
->([]);
-let id = 1;
+>([])
+// eslint-disable-next-line functional/no-let
+let id = 1
 function addNotice(text: string) {
-  const uuid = id++;
-  notices.push({ id: uuid, text });
+  const uuid = id++
+  notices.push({ id: uuid, text })
   setTimeout(() => {
-    notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1);
-  }, 5000);
+    notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1)
+  }, 5000)
 }
 
+// @scrollIntoView
+const tabsRef = ref<QTab>()
+watchEffect(() => {
+  if (!tabsRef.value) return
+  if (!props.currentSeason) return
 
+  setTimeout(() => {
+    tabsRef.value?.$el.scrollIntoView({
+      inline: "center",
+    })
+  }, 70)
+})
+const seasonActive = ref<string>()
+// sync data by active route
+watch(
+  () => props.currentSeason,
+  (val) => (seasonActive.value = val),
+  { immediate: true }
+)
 
-const showDialogSetting = ref(false);
-const showDialogChapter = ref(false);
-const showDialogPlayback = ref(false);
-const showDialogQuality = ref(false);
+const showDialogSetting = ref(false)
+const showDialogChapter = ref(false)
+const showDialogPlayback = ref(false)
+const showDialogQuality = ref(false)
 </script>
 
 <style lang="scss" scoped>
