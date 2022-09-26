@@ -3,7 +3,7 @@
     <q-responsive :ratio="16 / 9" class="player__wrap">
       <div
         class="absolute top-0 left-0 w-full h-full z-98"
-        @click="showControl"
+        @click="setArtControlShow(true)"
         v-show="!artControlShow"
       />
       <transition name="fade__ease-in-out">
@@ -13,7 +13,7 @@
             'currenting-time': currentingTime,
           }"
           v-show="artControlShow"
-          @click="artControlShow = false"
+          @click="setArtControlShow(false)"
         >
           <div class="toolbar-top">
             <div class="flex items-start w-max-[70%] flex-nowrap">
@@ -62,7 +62,7 @@
           <button
             class="absolute top-[50%] left-[50%] transform translate-y-[-50%] translate-x-[-50%] art-control-playPause z-120"
             @click.stop
-            @touchstart.prevent.stop="artPlaying = !artPlaying"
+            @touchstart.prevent.stop="setArtPlaying(artPlaying)"
             @touchmove.prevent.stop
           >
             <svg
@@ -171,18 +171,18 @@
                 <div
                   class="art-progress-loaded"
                   :style="{
-                    width: `${percentageResourceLoaded * 100}%`,
+                    width: `${artPercentageResourceLoaded * 100}%`,
                   }"
                 />
                 <div
                   class="art-progress-played"
                   :style="{
-                    width: `${(currentTime / duration) * 100}%`,
+                    width: `${(artCurrentTime / artDuration) * 100}%`,
                   }"
                 >
                   <div
                     class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
-                    :data-title="parseTime(currentTime)"
+                    :data-title="parseTime(artCurrentTime)"
                     @touchstart.prevent.stop="currentingTime = true"
                     @touchmove.prevent.stop="onIndicatorMove"
                     @touchend.prevent.stop="onIndicatorEnd"
@@ -204,7 +204,7 @@
                   data-index="30"
                   style="cursor: auto"
                 >
-                  {{ parseTime(currentTime) }} / {{ parseTime(duration) }}
+                  {{ parseTime(artCurrentTime) }} / {{ parseTime(artDuration) }}
                 </div>
               </div>
               <div class="art-controls-center"></div>
@@ -408,24 +408,24 @@
         </ul>
       </ArtDialog>
       <!-- /dialogs -->
-
       <div ref="playerRef" />
     </q-responsive>
+    <video ref="video" controls class="z-200" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { StatusBar } from "@capacitor/status-bar"
-import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
-import { Icon } from "@iconify/vue"
-import Artplayer from "artplayer"
-import ArtDialog from "components/ArtDialog.vue"
-import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { QTab } from "quasar"
-import type { PhimIdChap } from "src/apis/phim/[id]/[chap]"
-import { playbackRates } from "src/constants"
-import { Hls } from "src/logic/hls"
-import { parseTime } from "src/logic/parseTime"
+import { StatusBar } from "@capacitor/status-bar";
+import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
+import { Icon } from "@iconify/vue";
+import Artplayer from "artplayer";
+import ArtDialog from "components/ArtDialog.vue";
+import ChapsGridQBtn from "components/ChapsGridQBtn.vue";
+import { QTab } from "quasar";
+import type { PhimIdChap } from "src/apis/phim/[id]/[chap]";
+import { playbackRates } from "src/constants";
+import { Hls } from "src/logic/hls";
+import { parseTime } from "src/logic/parseTime";
 import {
   computed,
   onMounted,
@@ -434,297 +434,311 @@ import {
   shallowRef,
   watch,
   watchEffect,
-} from "vue"
+} from "vue";
 
 interface ResponseDataSeasonPending {
-  status: "pending"
+  status: "pending";
 }
 interface ResponseDataSeasonSuccess {
-  status: "success"
-  response: Awaited<ReturnType<typeof PhimIdChap>>
+  status: "success";
+  response: Awaited<ReturnType<typeof PhimIdChap>>;
 }
 interface ResponseDataSeasonError {
-  status: "error"
+  status: "error";
   response: {
-    status: number
-  }
+    status: number;
+  };
 }
 
 const props = defineProps<{
-  sources?: { html: string; url: string }[]
-  currentSeason?: string
-  currentChap?: string
-  name: string
-  chapName?: string
-  poster?: string
+  sources?: { html: string; url: string }[];
+  currentSeason?: string;
+  currentChap?: string;
+  name: string;
+  chapName?: string;
+  poster?: string;
   allSeasons?: {
-    value: string
-    path: string
-    name: string
-  }[]
+    value: string;
+    path: string;
+    name: string;
+  }[];
   _cacheDataSeasons: Map<
     string,
     | ResponseDataSeasonPending
     | ResponseDataSeasonSuccess
     | ResponseDataSeasonError
-  >
-  fetchSeason: (season: string) => Promise<void>
-}>()
-
-const playerRef = ref<HTMLDivElement>()
-
-const art = shallowRef<Artplayer | null>(null)
-const handlersArtMounted = new Set<(art: Artplayer) => void>()
-const watcherArt = watch(art, (art) => {
-  if (!art) return
-  watcherArt()
-  handlersArtMounted.forEach((handler) => handler(art))
-  handlersArtMounted.clear()
-})
-function onArtMounted(handler: (art: Artplayer) => void) {
-  if (art.value) handler(art.value)
-  else handlersArtMounted.add(handler)
-}
-
-// value control set
-const artControlShow = ref(true)
-watch(artControlShow, (artControlShow) => {
-  if (artControlShow && artFullscreen.value) StatusBar.hide()
-})
-const artPlaying = ref(true)
-const artFullscreen = ref(false)
-const artPlaybackRate = ref(1)
-const setArtPlaybackRate = (value: number) => {
-  artPlaybackRate.value = value
-  addNotice(`${value}x`)
-}
-const artQuality = ref<string>()
-const setArtQuality = (value: string) => {
-  artQuality.value = value
-  addNotice(`Chất lượng đã chuyển sang ${value}`)
-}
+  >;
+  fetchSeason: (season: string) => Promise<void>;
+}>();
 const currentStream = computed(() => {
-  return props.sources?.find((item) => item.html === artQuality.value)
-})
-// re-set quality if quality not in sources
+  return props.sources?.find((item) => item.html === artQuality.value);
+});
+
+const video = ref<HTMLVideoElement>();
+// value control get play
+const artPlaying = ref(false);
+const setArtPlaying = (playing: boolean) => {
+  if (playing) {
+    // video.value.load();
+    video.value.play();
+  } else {
+    video.value.pause();
+  }
+};
+const artDuration = ref<number>(0);
+const artCurrentTime = ref<number>(0);
+const setArtCurrentTime = (currentTime: number) => {
+  video.value.currentTime = currentTime;
+};
+const artPercentageResourceLoaded = ref<number>(0);
+const artPlaybackRate = ref(1);
+const setArtPlaybackRate = (value: number) => {
+  video.value.playbackRate = value;
+  addNotice(`${value}x`);
+};
+
+// value control other
+const artControlShow = ref(true);
+let activeTime = Date.now();
+const setArtControlShow = (show: boolean) => {
+  artControlShow.value = show;
+  if (show) activeTime = Date.now();
+};
 watch(
-  () => props.sources,
-  (sources) => {
-    if (!sources || sources.length === 0) return
-    // not ready quality on this
-    if (!artQuality.value || !currentStream.value) {
-      artQuality.value = sources[0].html
-    }
-  },
-  { immediate: true }
-)
+  artControlShow,
+  (artControlShow) => artControlShow && artFullscreen.value && StatusBar.hide()
+);
+const artFullscreen = ref(false);
+const setArtFullscreen = async (fullscreen: boolean) => {
+  if (fullscreen) {
+    await playerWrapRef.value.requestFullscreen();
+    screen.orientation.lock("landscape");
+    StatusBar.hide();
+    NavigationBar.hide();
+    StatusBar.setOverlaysWebView({
+      overlay: true,
+    });
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    await document.exitFullscreen().catch(() => {});
+    screen.orientation.unlock();
+    StatusBar.show();
+    NavigationBar.show();
+    StatusBar.setOverlaysWebView({
+      overlay: false,
+    });
+  }
+};
+const artQuality = ref<string>();
+const setArtQuality = (value: string) => {
+  artQuality.value = value;
+  addNotice(`Chất lượng đã chuyển sang ${value}`);
+};
+const hls = new Hls();
 
-// value control get
-const duration = ref<number>(0)
-const currentTime = ref<number>(0)
-const percentageResourceLoaded = ref<number>(0)
+watch(video, (video) => {
+  if (!video) return;
 
-// bind value control get
-onArtMounted((art) => {
-  art.on("video:durationchange", () => {
-    duration.value = art.duration
-  })
-  art.on("video:timeupdate", () => {
-    if (currentingTime.value) return
-    currentTime.value = art.currentTime
-  })
-
-  art.on("video:progress", (event: Event) => {
-    const target = event.target as HTMLVideoElement
+  video.addEventListener("play", () => (artPlaying.value = true));
+  video.addEventListener("pause", () => (artPlaying.value = false));
+  video.addEventListener(
+    "durationchange",
+    () => (artDuration.value = video.duration)
+  );
+  video.addEventListener(
+    "timeupdate",
+    () => (artCurrentTime.value = video.currentTime)
+  );
+  video.addEventListener("progress", () => {
+    const target = event.target as HTMLVideoElement;
     // eslint-disable-next-line functional/no-let
-    let range = 0
-    const bf = target.buffered
-    const time = target.currentTime
+    let range = 0;
+    const bf = target.buffered;
+    const time = target.currentTime;
 
     try {
       while (!(bf.start(range) <= time && time <= bf.end(range))) {
-        range += 1
+        range += 1;
       }
       // const loadStartPercentage = bf.start(range) / target.duration
-      const loadEndPercentage = bf.end(range) / target.duration
+      const loadEndPercentage = bf.end(range) / target.duration;
       // const loadPercentage = loadEndPercentage - loadStartPercentage
 
-      percentageResourceLoaded.value = loadEndPercentage
+      artPercentageResourceLoaded.value = loadEndPercentage;
     } catch {
-      percentageResourceLoaded.value = bf.end(0) / target.duration
+      try {
+        artPercentageResourceLoaded.value = bf.end(0) / target.duration;
+      } catch {}
     }
-  })
-})
-
-// eslint-disable-next-line functional/no-let
-let activeTime = Date.now()
-function showControl() {
-  artControlShow.value = true
-  activeTime = Date.now()
-}
-
-const playerWrapRef = ref<HTMLDivElement>()
-// bind value control set
-onArtMounted((art) => {
-  watch(
-    artPlaying,
-    (val) => {
-      if (val) {
-        art.play()
-      } else {
-        art.pause()
-      }
-    },
-    { immediate: true }
-  )
-  art.on("play", () => (artPlaying.value = true))
-  art.on("pause", () => (artPlaying.value = false))
-  art.on("video:timeupdate", () => {
+  });
+  video.addEventListener(
+    "ratechange",
+    () => (artPlaybackRate.value = video.playbackRate)
+  );
+  playerWrapRef.value.addEventListener(
+    "fullscreenchange",
+    () =>
+      (artFullscreen.value = document.fullscreenElement?.nodeName === "VIDEO")
+  );
+  // controls
+  video.addEventListener("canplay", () => (activeTime = Date.now()));
+  video.addEventListener("timeupdate", () => {
     if (
       artPlaying.value &&
       !currentingTime.value &&
       artControlShow.value &&
-      Date.now() - activeTime >= 3000
+      Date.now() - activeTime >= 3e3
     ) {
-      artControlShow.value = false
+      artControlShow.value = false;
     }
-  })
-  watch(
-    artFullscreen,
-    async (artFullscreen) => {
-      if (!playerWrapRef.value) return
+  });
 
-      if (artFullscreen) {
-        await playerWrapRef.value.requestFullscreen()
-        screen.orientation.lock("landscape")
-        StatusBar.hide()
-        NavigationBar.hide()
-        StatusBar.setOverlaysWebView({
-          overlay: true,
-        })
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await document.exitFullscreen().catch(() => {})
-        screen.orientation.unlock()
-        StatusBar.show()
-        NavigationBar.show()
-        StatusBar.setOverlaysWebView({
-          overlay: false,
-        })
-      }
-    },
-    { immediate: true }
-  )
-  watch(artPlaybackRate, (artPlaybackRate) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    art.playbackRate = artPlaybackRate as unknown as any
-  })
   watch(
     () => currentStream.value?.url,
     (url) => {
-      console.log("set url art ")
-      if (url) art.url = url
-    },
-    { immediate: true }
-  )
-})
+      if (!url) return;
 
-onMounted(() => {
-  const watcher = watch(
-    () => props.sources,
-    async (sources) => {
-      if (!sources) return
+      console.log("set url art %s", url);
 
-      if (!art.value) {
-        watcher()
-        art.value = new Artplayer({
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          container: playerRef.value!,
-          url: sources[0].url, // 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-
-          // poster: data.value!.poster,
-          id: "player",
-          autoplay: true,
-
-          customType: {
-            m3u8: function (video, url) {
-              if (Hls.isSupported()) {
-                const hls = new Hls({
-                  // progressive: true,
-                  // debug: true
-                })
-                // customLoader(hls.config)
-                hls.loadSource(url)
-                hls.attachMedia(video)
-              } else {
-                const canPlay = video.canPlayType(
-                  "application/vnd.apple.mpegurl"
-                )
-                if (canPlay === "probably" || canPlay === "maybe") {
-                  video.src = url
-                }
-              }
-            },
-          },
-
-          volume: 1,
-          fastForward: true,
-          // autoOrientation: true,
-
-          isLive: false,
-          muted: false,
-          pip: false,
-          autoSize: true,
-          autoMini: true,
-          screenshot: false,
-          setting: true,
-          loop: false,
-          flip: true,
-          playbackRate: false,
-          aspectRatio: true,
-          fullscreen: true,
-          fullscreenWeb: false,
-          miniProgressBar: false,
-          mutex: true,
-          backdrop: true,
-          playsInline: true,
-          autoPlayback: false,
-          airplay: true,
-          theme: "#23ade5",
-          lock: true,
-          lang: navigator.language.toLowerCase(),
-          whitelist: ["*"],
-          layers: [],
-          icons: {
-            loading:
-              '<img src="https://artplayer.org/assets/img/ploading.gif">',
-            state: "", //
-            //      '<img width="150" heigth="150" src="https://artplayer.org/assets/img/state.svg">',
-            indicator: "",
-          },
-        })
-
-        Object.defineProperty(art.value.controls, "show", {
-          get() {
-            return artControlShow.value
-          },
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          set(_val) {
-            // empty
-          },
-        })
+      if (Hls.isSupported()) {
+        // customLoader(hls.config)
+        hls.loadSource(url);
+        hls.attachMedia(video);
+      } else {
+        const canPlay = video.canPlayType("application/vnd.apple.mpegurl");
+        if (canPlay === "probably" || canPlay === "maybe") {
+          video.src = url;
+        }
       }
     },
     { immediate: true }
-  )
-})
+  );
+});
+const playerRef = ref<HTMLDivElement>();
+watch(playerRef, (playerRef) => {
+  if (!playerRef) return;
 
-const currentingTime = ref(false)
-const progressInnerRef = ref<HTMLDivElement>()
+  const art = new Artplayer({
+    container: playerRef,
+    autoplay: true,
+    url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+    customType: {
+      m3u8: function (video, url) {
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(url);
+          hls.attachMedia(video);
+        } else {
+          const canPlay = video.canPlayType("application/vnd.apple.mpegurl");
+          if (canPlay === "probably" || canPlay === "maybe") {
+            video.src = url;
+          } else {
+            art.notice.show = "不支持播放格式：m3u8";
+          }
+        }
+      },
+    },
+    volume: 0.5,
+    isLive: false,
+    muted: false,
+    autoplay: false,
+    pip: true,
+    autoSize: true,
+    autoMini: true,
+    screenshot: true,
+    setting: true,
+    loop: true,
+    flip: true,
+    playbackRate: true,
+    aspectRatio: true,
+    fullscreen: true,
+    fullscreenWeb: true,
+    subtitleOffset: true,
+    miniProgressBar: true,
+    mutex: true,
+    backdrop: true,
+    playsInline: true,
+    autoPlayback: true,
+    airplay: true,
+    theme: "#23ade5",
+    lang: navigator.language.toLowerCase(),
+    whitelist: ["*"],
+    moreVideoAttr: {
+      crossOrigin: "anonymous",
+    },
+    icons: {
+      loading: '<img src="/assets/img/ploading.gif">',
+      state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
+      indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
+    },
+    volume: 0.5,
+    isLive: false,
+    muted: false,
+    autoplay: false,
+    pip: true,
+    autoSize: true,
+    autoMini: true,
+    screenshot: true,
+    setting: true,
+    loop: true,
+    flip: true,
+    playbackRate: true,
+    aspectRatio: true,
+    fullscreen: true,
+    fullscreenWeb: true,
+    subtitleOffset: true,
+    miniProgressBar: true,
+    mutex: true,
+    backdrop: true,
+    playsInline: true,
+    autoPlayback: true,
+    airplay: true,
+    theme: "#23ade5",
+    lang: navigator.language.toLowerCase(),
+    whitelist: ["*"],
+    moreVideoAttr: {
+      crossOrigin: "anonymous",
+    },
+    icons: {
+      loading: '<img src="/assets/img/ploading.gif">',
+      state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
+      indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
+    },
+  });
+
+  watch(
+    () => currentStream.value?.url,
+    (url) => {
+      if (!url) return;
+
+      console.log("set url art %s", url);
+      art.url = url;
+    },
+    { immediate: true }
+  );
+});
+
+// re-set quality if quality not in sources
+watch(
+  () => props.sources,
+  (sources) => {
+    if (!sources || sources.length === 0) return;
+    // not ready quality on this
+    if (!artQuality.value || !currentStream.value) {
+      setArtQuality(sources[0].html);
+    }
+  },
+  { immediate: true }
+);
+
+const playerWrapRef = ref<HTMLDivElement>();
+
+const currentingTime = ref(false);
+const progressInnerRef = ref<HTMLDivElement>();
 function onIndicatorMove(event: TouchEvent | MouseEvent) {
-  currentingTime.value = true
+  currentingTime.value = true;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const maxX = progressInnerRef.value!.offsetWidth
+  const maxX = progressInnerRef.value!.offsetWidth;
 
   const clientX = Math.min(
     maxX,
@@ -736,64 +750,60 @@ function onIndicatorMove(event: TouchEvent | MouseEvent) {
         event
       ).clientX
     )
-  )
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  currentTime.value = (art.value!.duration * clientX) / maxX
-  activeTime = Date.now()
+  artCurrentTime.value = (video.value!.duration * clientX) / maxX;
+  activeTime = Date.now();
 }
 function onIndicatorEnd() {
-  currentingTime.value = false
+  currentingTime.value = false;
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  art.value!.currentTime = currentTime.value
-  activeTime = Date.now()
-  if (artPlaying.value) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    art.value!.play()
-  }
+  setArtCurrentTime(artCurrentTime.value);
+  activeTime = Date.now();
 }
 
 const notices = shallowReactive<
   {
-    id: number
-    text: string
+    id: number;
+    text: string;
   }[]
->([])
+>([]);
 // eslint-disable-next-line functional/no-let
-let id = 1
+let id = 1;
 function addNotice(text: string) {
-  const uuid = id++
-  notices.push({ id: uuid, text })
+  const uuid = id++;
+  notices.push({ id: uuid, text });
   setTimeout(() => {
-    notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1)
-  }, 5000)
+    notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1);
+  }, 5000);
 }
 
 // @scrollIntoView
-const tabsRef = ref<QTab>()
+const tabsRef = ref<QTab>();
 watchEffect(() => {
-  if (!tabsRef.value) return
-  if (!props.currentSeason) return
+  if (!tabsRef.value) return;
+  if (!props.currentSeason) return;
 
   setTimeout(() => {
     tabsRef.value?.$el.scrollIntoView({
       inline: "center",
-    })
-  }, 70)
-})
-const seasonActive = ref<string>()
+    });
+  }, 70);
+});
+const seasonActive = ref<string>();
 // sync data by active route
 watch(
   () => props.currentSeason,
   (val) => (seasonActive.value = val),
   { immediate: true }
-)
+);
 
-const showDialogSetting = ref(false)
-const showDialogChapter = ref(false)
-const showDialogPlayback = ref(false)
-const showDialogQuality = ref(false)
+const showDialogSetting = ref(false);
+const showDialogChapter = ref(false);
+const showDialogPlayback = ref(false);
+const showDialogQuality = ref(false);
 </script>
 
 <style lang="scss" scoped>
