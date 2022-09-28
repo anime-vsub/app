@@ -18,5 +18,9 @@
 	{
 		"pkg": "@hugotomazi/capacitor-navigation-bar",
 		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
+	},
+	{
+		"pkg": "@capacitor/preferences",
+		"classpath": "com.capacitorjs.plugins.preferences.PreferencesPlugin"
 	}
 ]
