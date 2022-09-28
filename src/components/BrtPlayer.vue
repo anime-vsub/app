@@ -1,451 +1,447 @@
 <template>
-	
+  <div
+    class="w-full overflow-hidden fixed top-0 left-0 z-200"
+    ref="playerWrapRef"
+  >
+    <q-responsive :ratio="16 / 9" class="player__wrap">
+      <video
+        ref="video"
+        :poster="poster"
+        @play="artPlaying = true"
+        @pause="artPlaying = false"
+        @durationchange="
+          artDuration = ($event.target as HTMLVideoElement).duration
+        "
+        @timeupdate="
+          !currentingTime &&
+            (artCurrentTime = ($event.target as HTMLVideoElement).currentTime),
+            onVideoTimeUpdate()
+        "
+        @progress="onVideoProgress"
+        @ratechange="
+          artPlaybackRate = ($event.target as HTMLVideoElement).playbackRate
+        "
+        @canplay=";(artLoading = false), onVideoCanPlay()"
+        @canplaythrough="artLoading = false"
+        @waiting="artLoading = true"
+        @error="onVideoError"
+      />
 
-    <div
-      class="w-full overflow-hidden fixed top-0 left-0 z-200"
-      ref="playerWrapRef"
-    >
-      <q-responsive :ratio="16 / 9" class="player__wrap">
-        <video
-          ref="video"
-          :poster="poster"
-          @play="artPlaying = true"
-          @pause="artPlaying = false"
-          @durationchange="artDuration = $event.target.duration"
-          @timeupdate="
-            !currentingTime && (artCurrentTime = $event.target.currentTime),
-              onVideoTimeUpdate()
-          "
-          @progress="onVideoProgress"
-          @ratechange="artPlaybackRate = $event.target.playbackRate"
-          @canplay=";(artLoading = false), onVideoCanPlay()"
-          @canplaythrough="artLoading = false"
-          @waiting="artLoading = true"
-          @error="onVideoError"
-        />
-
+      <div
+        class="absolute top-0 left-0 w-full h-full"
+        @click="setArtControlShow(true)"
+        v-show="!artControlShow"
+      />
+      <transition name="fade__ease-in-out">
         <div
-          class="absolute top-0 left-0 w-full h-full"
-          @click="setArtControlShow(true)"
-          v-show="!artControlShow"
-        />
-        <transition name="fade__ease-in-out">
-          <div
-            class="art-layer-controller overflow-hidden flex items-center justify-center"
-            :class="{
-              'currenting-time': currentingTime,
-            }"
-            v-show="artControlShow"
-            @click="setArtControlShow(false)"
-          >
-            <div class="toolbar-top">
-              <div class="flex items-start w-max-[70%] flex-nowrap">
-                <q-btn
-                  flat
-                  dense
-                  round
-                  class="mr-2"
-                  @click.stop="router.back()"
-                >
-                  <Icon
-                    icon="fluent:chevron-left-24-regular"
-                    width="25"
-                    height="25"
-                  />
-                </q-btn>
+          class="art-layer-controller overflow-hidden flex items-center justify-center"
+          :class="{
+            'currenting-time': currentingTime,
+          }"
+          v-show="artControlShow"
+          @click="setArtControlShow(false)"
+        >
+          <div class="toolbar-top">
+            <div class="flex items-start w-max-[70%] flex-nowrap">
+              <q-btn flat dense round class="mr-2" @click.stop="router.back()">
+                <Icon
+                  icon="fluent:chevron-left-24-regular"
+                  width="25"
+                  height="25"
+                />
+              </q-btn>
 
-                <div class="">
-                  <div class="line-clamp-1 text-[18px] text-weight-medium">
-                    {{ name }}
-                  </div>
-                  <div v-if="nameCurrentChap" class="text-gray-300">
-                    Tập
-                    {{ nameCurrentChap }}
-                  </div>
+              <div class="">
+                <div class="line-clamp-1 text-[18px] text-weight-medium">
+                  {{ name }}
+                </div>
+                <div v-if="nameCurrentChap" class="text-gray-300">
+                  Tập
+                  {{ nameCurrentChap }}
                 </div>
               </div>
+            </div>
+            <div>
+              <q-btn
+                dense
+                flat
+                round
+                @click="runRemount"
+                :disable="!currentStream"
+                class="mr-2"
+              >
+                <Icon
+                  icon="fluent:flash-flow-24-regular"
+                  width="25"
+                  height="25"
+                />
+              </q-btn>
+              <q-btn dense flat round @click="showDialogSetting = true">
+                <Icon
+                  icon="fluent:settings-24-regular"
+                  width="25"
+                  height="25"
+                />
+              </q-btn>
+            </div>
+          </div>
+
+          <!-- fix spacing 2px -->
+          <button
+            class="p-2 w-[72px] h-[72px]"
+            @click.stop
+            @touchstart.prevent.stop="setArtPlaying(!artPlaying)"
+            @touchmove.prevent.stop
+          >
+            <template v-if="!artLoading">
+              <Icon
+                v-show="!artPlaying"
+                icon="fluent:play-circle-20-regular"
+                width="60"
+                height="60"
+              />
+              <Icon
+                v-show="artPlaying"
+                icon="fluent:pause-circle-20-regular"
+                width="60"
+                height="60"
+              />
+            </template>
+          </button>
+
+          <div class="toolbar-bottom">
+            <div class="art-more-controls flex items-center justify-between">
+              <div class="flex items-center">
+                <q-btn
+                  dense
+                  flat
+                  no-caps
+                  class="mr-6 text-weight-normal art-btn"
+                  :disable="!nextChap"
+                  :to="{
+                    name: 'phim_[season]_[chap]',
+                    params: nextChap,
+                  }"
+                >
+                  <Icon
+                    icon="fluent:next-24-regular"
+                    class="mr-2 art-icon"
+                    width="18"
+                    height="18"
+                  />
+                  Tiếp
+                </q-btn>
+
+                <q-btn
+                  dense
+                  flat
+                  no-caps
+                  @click="showDialogChapter = true"
+                  class="text-weight-normal art-btn"
+                >
+                  <Icon
+                    icon="fluent:list-24-regular"
+                    class="mr-2 art-icon"
+                    width="18"
+                    height="18"
+                  />
+                  EP {{ nameCurrentChap }}
+                </q-btn>
+              </div>
+
               <div>
                 <q-btn
                   dense
                   flat
-                  round
-                  @click="runRemount"
-                  :disable="!currentStream"
-                  class="mr-2"
+                  no-caps
+                  class="mr-6 text-weight-normal art-btn"
+                  @click="showDialogQuality = true"
                 >
                   <Icon
-                    icon="fluent:flash-flow-24-regular"
-                    width="25"
-                    height="25"
+                    icon="bi:badge-hd"
+                    class="mr-2 art-icon"
+                    width="18"
+                    height="18"
                   />
+                  {{ artQuality }}
                 </q-btn>
-                <q-btn dense flat round @click="showDialogSetting = true">
+                <q-btn
+                  dense
+                  flat
+                  no-caps
+                  @click="showDialogPlayback = true"
+                  class="text-weight-normal art-btn"
+                >
                   <Icon
-                    icon="fluent:settings-24-regular"
-                    width="25"
-                    height="25"
+                    icon="fluent:top-speed-24-regular"
+                    class="mr-2 art-icon"
+                    width="18"
+                    height="18"
                   />
+                  {{ artPlaybackRate }}x
                 </q-btn>
               </div>
             </div>
 
-            <!-- fix spacing 2px -->
-            <button
-              class="p-2 w-[72px] h-[72px]"
-              @click.stop
-              @touchstart.prevent.stop="setArtPlaying(!artPlaying)"
-              @touchmove.prevent.stop
+            <div
+              class="art-control-progress"
+              @touchstart.prevent.stop="onIndicatorMove"
+              @touchmove.prevent.stop="onIndicatorMove"
+              @touchend.prevent.stop="onIndicatorEnd"
             >
-              <template v-if="!artLoading">
-                <Icon
-                  v-show="!artPlaying"
-                  icon="fluent:play-circle-20-regular"
-                  width="60"
-                  height="60"
+              <div class="art-control-progress-inner" ref="progressInnerRef">
+                <div
+                  class="art-progress-loaded"
+                  :style="{
+                    width: `${artPercentageResourceLoaded * 100}%`,
+                  }"
                 />
-                <Icon
-                  v-show="artPlaying"
-                  icon="fluent:pause-circle-20-regular"
-                  width="60"
-                  height="60"
-                />
-              </template>
-            </button>
-
-            <div class="toolbar-bottom">
-              <div class="art-more-controls flex items-center justify-between">
-                <div class="flex items-center">
-                  <q-btn
-                    dense
-                    flat
-                    no-caps
-                    class="mr-6 text-weight-normal art-btn"
-                    :disable="!nextChap"
-                    :to="{
-                      name: 'phim_[season]_[chap]',
-                      params: nextChap,
-                    }"
-                  >
-                    <Icon
-                      icon="fluent:next-24-regular"
-                      class="mr-2 art-icon"
-                      width="18"
-                      height="18"
-                    />
-                    Tiếp
-                  </q-btn>
-
-                  <q-btn
-                    dense
-                    flat
-                    no-caps
-                    @click="showDialogChapter = true"
-                    class="text-weight-normal art-btn"
-                  >
-                    <Icon
-                      icon="fluent:list-24-regular"
-                      class="mr-2 art-icon"
-                      width="18"
-                      height="18"
-                    />
-                    EP {{nameCurrentChap}}
-                  </q-btn>
-                </div>
-
-                <div>
-                  <q-btn
-                    dense
-                    flat
-                    no-caps
-                    class="mr-6 text-weight-normal art-btn"
-                    @click="showDialogQuality = true"
-                  >
-                    <Icon
-                      icon="bi:badge-hd"
-                      class="mr-2 art-icon"
-                      width="18"
-                      height="18"
-                    />
-                    {{ artQuality }}
-                  </q-btn>
-                  <q-btn
-                    dense
-                    flat
-                    no-caps
-                    @click="showDialogPlayback = true"
-                    class="text-weight-normal art-btn"
-                  >
-                    <Icon
-                      icon="fluent:top-speed-24-regular"
-                      class="mr-2 art-icon"
-                      width="18"
-                      height="18"
-                    />
-                    {{ artPlaybackRate }}x
-                  </q-btn>
-                </div>
-              </div>
-
-              <div
-                class="art-control-progress"
-                @touchstart.prevent.stop="onIndicatorMove"
-                @touchmove.prevent.stop="onIndicatorMove"
-                @touchend.prevent.stop="onIndicatorEnd"
-              >
-                <div class="art-control-progress-inner" ref="progressInnerRef">
+                <div
+                  class="art-progress-played"
+                  :style="{
+                    width: `${(artCurrentTime / artDuration) * 100}%`,
+                  }"
+                >
                   <div
-                    class="art-progress-loaded"
-                    :style="{
-                      width: `${artPercentageResourceLoaded * 100}%`,
-                    }"
-                  />
-                  <div
-                    class="art-progress-played"
-                    :style="{
-                      width: `${(artCurrentTime / artDuration) * 100}%`,
-                    }"
+                    class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
+                    :data-title="parseTime(artCurrentTime)"
+                    @touchstart.prevent.stop="currentingTime = true"
+                    @touchmove.prevent.stop="onIndicatorMove"
+                    @touchend.prevent.stop="onIndicatorEnd"
                   >
-                    <div
-                      class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
-                      :data-title="parseTime(artCurrentTime)"
-                      @touchstart.prevent.stop="currentingTime = true"
-                      @touchmove.prevent.stop="onIndicatorMove"
-                      @touchend.prevent.stop="onIndicatorEnd"
-                    >
-                      <img
-                        width="16"
-                        heigth="16"
-                        src="src/assets/indicator.svg"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="art-controls">
-                <div class="art-controls-left">
-                  <div
-                    class="art-control art-control-time art-control-onlyText"
-                    data-index="30"
-                    style="cursor: auto"
-                  >
-                    {{ parseTime(artCurrentTime) }} /
-                    {{ parseTime(artDuration) }}
-                  </div>
-                </div>
-                <div class="art-controls-center"></div>
-                <div class="art-controls-right">
-                  <div
-                    class="art-control art-control-fullscreen hint--rounded hint--top"
-                    data-index="70"
-                    aria-label="Fullscreen"
-                    @click="setArtFullscreen(!artFullscreen)"
-                  >
-                    <i
-                      v-if="!artFullscreen"
-                      class="art-icon art-icon-fullscreenOn"
-                    >
-                      <Icon
-                        icon="fluent:full-screen-maximize-24-regular"
-                        width="22"
-                        height="22"
-                      />
-                    </i>
-                    <i v-else class="art-icon art-icon-fullscreenOff">
-                      <Icon
-                        icon="fluent:full-screen-minimize-24-regular"
-                        width="22"
-                        height="22"
-                      />
-                    </i>
+                    <img
+                      width="16"
+                      heigth="16"
+                      src="src/assets/indicator.svg"
+                    />
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </transition>
 
-        <!-- notices -->
-        <transition-group
-          tag="div"
-          name="notices"
-          class="absolute top-0 left-0 w-full flex column justify-end ml-10 text-[14px] pointer-events-none"
-        >
-          <div v-for="item in notices" :key="item.id" class="pb-2 last:mb-36">
-            <span
-              class="text-[#fff] bg-[#0009] rounded-[3px] px-[16px] py-[10px] inline-block"
-              >{{ item.text }}</span
-            >
+            <div class="art-controls">
+              <div class="art-controls-left">
+                <div
+                  class="art-control art-control-time art-control-onlyText"
+                  data-index="30"
+                  style="cursor: auto"
+                >
+                  {{ parseTime(artCurrentTime) }} /
+                  {{ parseTime(artDuration) }}
+                </div>
+              </div>
+              <div class="art-controls-center"></div>
+              <div class="art-controls-right">
+                <div
+                  class="art-control art-control-fullscreen hint--rounded hint--top"
+                  data-index="70"
+                  aria-label="Fullscreen"
+                  @click="setArtFullscreen(!artFullscreen)"
+                >
+                  <i
+                    v-if="!artFullscreen"
+                    class="art-icon art-icon-fullscreenOn"
+                  >
+                    <Icon
+                      icon="fluent:full-screen-maximize-24-regular"
+                      width="22"
+                      height="22"
+                    />
+                  </i>
+                  <i v-else class="art-icon art-icon-fullscreenOff">
+                    <Icon
+                      icon="fluent:full-screen-minimize-24-regular"
+                      width="22"
+                      height="22"
+                    />
+                  </i>
+                </div>
+              </div>
+            </div>
           </div>
-        </transition-group>
+        </div>
+      </transition>
 
-        <div
-          v-if="artLoading"
-          class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
-        >
-          <q-spinner size="60px" :thickness="3" />
+      <!-- notices -->
+      <transition-group
+        tag="div"
+        name="notices"
+        class="absolute top-0 left-0 w-full flex column justify-end ml-10 text-[14px] pointer-events-none"
+      >
+        <div v-for="item in notices" :key="item.id" class="pb-2 last:mb-36">
+          <span
+            class="text-[#fff] bg-[#0009] rounded-[3px] px-[16px] py-[10px] inline-block"
+            >{{ item.text }}</span
+          >
+        </div>
+      </transition-group>
+
+      <div
+        v-if="artLoading"
+        class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
+      >
+        <q-spinner size="60px" :thickness="3" />
+      </div>
+
+      <!-- /notices -->
+
+      <!-- dialogs -->
+      <!--    dialog is settings    -->
+      <ArtDialog
+        :model-value="artFullscreen && showDialogSetting"
+        @update:model-value="showDialogSetting = $event"
+        title="Xem thêm"
+        fit
+      >
+        <div class="text-zinc-500 text-[12px] mb-2">Chất lượng</div>
+        <div>
+          <q-btn
+            dense
+            flat
+            no-caps
+            class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
+            v-for="({ html }, index) in sources"
+            :class="{
+              'c--main': html === artQuality || (!artQuality && index === 0),
+            }"
+            :key="html"
+            @click="setArtQuality(html)"
+            >{{ html }}</q-btn
+          >
         </div>
 
-        <!-- /notices -->
+        <div class="text-zinc-500 text-[12px] mt-4 mb-2">Tốc độ phát lại</div>
+        <div class="flex flex-nowrap mx-[-8px]">
+          <q-btn
+            dense
+            flat
+            no-caps
+            class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
+            v-for="{ name, value } in playbackRates"
+            :key="name"
+            :class="artPlaybackRate === value ? 'c--main' : 'text-stone-200'"
+            @click="setArtPlaybackRate(value)"
+            >{{ name }}</q-btn
+          >
+        </div>
+      </ArtDialog>
+      <ArtDialog
+        :model-value="artFullscreen && showDialogChapter"
+        @update:model-value="showDialogChapter = $event"
+        title="Danh sách tập"
+        fit
+      >
+        <div class="h-full w-full flex column flex-nowrap">
+          <q-tabs
+            v-model="seasonActive"
+            no-caps
+            dense
+            inline-label
+            active-class="c--main"
+            indicator-color="transparent"
+          >
+            <q-tab
+              v-for="item in allSeasons"
+              :key="item.value"
+              :name="item.value"
+              :label="item.name"
+              class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[3px]"
+              content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
+              :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
+            />
+          </q-tabs>
 
-        <!-- dialogs -->
-        <!--    dialog is settings    -->
-        <ArtDialog
-          :model-value="artFullscreen && showDialogSetting"
-          @update:model-value="showDialogSetting = $event"
-          title="Xem thêm"
-          fit
-        >
-          <div class="text-zinc-500 text-[12px] mb-2">Chất lượng</div>
-          <div>
-            <q-btn
-              dense
-              flat
-              no-caps
-              class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
-              v-for="({ html }, index) in sources"
-              :class="{
-                'c--main': html === artQuality || (!artQuality && index === 0),
-              }"
-              :key="html"
-              @click="setArtQuality(html)"
-              >{{ html }}</q-btn
-            >
-          </div>
-
-          <div class="text-zinc-500 text-[12px] mt-4 mb-2">Tốc độ phát lại</div>
-          <div class="flex flex-nowrap mx-[-8px]">
-            <q-btn
-              dense
-              flat
-              no-caps
-              class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
-              v-for="{ name, value } in playbackRates"
-              :key="name"
-              :class="artPlaybackRate === value ? 'c--main' : 'text-stone-200'"
-              @click="setArtPlaybackRate(value)"
-              >{{ name }}</q-btn
-            >
-          </div>
-        </ArtDialog>
-        <ArtDialog
-          :model-value="artFullscreen && showDialogChapter"
-          @update:model-value="showDialogChapter = $event"
-          title="Danh sách tập"
-          fit
-        >
-          <div class="h-full w-full flex column flex-nowrap">
-            <q-tabs
-              v-model="seasonActive"
-              no-caps
-              dense
-              inline-label
-              active-class="c--main"
-              indicator-color="transparent"
-            >
-              <q-tab
-                v-for="item in allSeasons"
-                :key="item.value"
-                :name="item.value"
-                :label="item.name"
-                class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[3px]"
-                content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-                :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
-              />
-            </q-tabs>
-
-            <q-tab-panels
-              v-model="seasonActive"
-              animated
-              keep-alive
-              class="overflow-y-scroll flex-1 mt-4 bg-transparent"
-            >
-              <q-tab-panel
-                v-for="{ value } in allSeasons"
-                :key="value"
-                :name="value"
-                class="!h-[45px] py-0 !px-0"
-              >
-                <div
-                  v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
-                  class="flex justify-center"
-                >
-                  <q-spinner-infinity
-                    style="color: #00be06"
-                    size="3em"
-                    :thickness="3"
-                  />
-                </div>
-                <div
-                  v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-                  class="text-center"
-                >
-                  Lỗi khi lấy dữ liệu
-                  <br />
-                  <q-btn
-                    dense
-                    no-caps
-                    style="color: #00be06"
-                    @click="fetchSeason(value)"
-                    >Thử lại</q-btn
-                  >
-                </div>
-                <ChapsGridQBtn
-                  v-else
-                  class="!px-3 !py-2 !mx-1"
-                  class-active="!bg-[rgba(0,194,52,.15)]"
-                  :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-                  :season="value"
-                  :find="
-                    (item) => value === currentSeason && item.id === currentChap
-                  "
-                />
-              </q-tab-panel>
-            </q-tab-panels>
-          </div>
-        </ArtDialog>
-        <ArtDialog
-          :model-value="artFullscreen && showDialogPlayback"
-          @update:model-value="showDialogPlayback = $event"
-          title="Tốc độ"
-        >
-          <ul>
-            <li
-              v-for="{ name, value } in [...playbackRates].reverse()"
+          <q-tab-panels
+            v-model="seasonActive"
+            animated
+            keep-alive
+            class="overflow-y-scroll flex-1 mt-4 bg-transparent"
+          >
+            <q-tab-panel
+              v-for="{ value } in allSeasons"
               :key="value"
-              class="py-2 text-center px-12"
-              :class="{
-                'c--main': value === artPlaybackRate,
-              }"
-              @click="setArtPlaybackRate(value)"
+              :name="value"
+              class="!h-[45px] py-0 !px-0"
             >
-              {{ name }}
-            </li>
-          </ul>
-        </ArtDialog>
-        <ArtDialog
-          :model-value="artFullscreen && showDialogQuality"
-          @update:model-value="showDialogQuality = $event"
-          title="Chất lượng"
-        >
-          <ul>
-            <li
-              v-for="({ html }, index) in sources"
-              :key="html"
-              class="py-2 text-center px-15"
-              :class="{
-                'c--main': html === artQuality || (!artQuality && index === 0),
-              }"
-              @click="setArtQuality(html)"
-            >
-              {{ html }}
-            </li>
-          </ul>
-        </ArtDialog>
-        <!-- /dialogs -->
-      </q-responsive>
-    </div>
-
+              <div
+                v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
+                class="flex justify-center"
+              >
+                <q-spinner-infinity
+                  style="color: #00be06"
+                  size="3em"
+                  :thickness="3"
+                />
+              </div>
+              <div
+                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+                class="text-center"
+              >
+                Lỗi khi lấy dữ liệu
+                <br />
+                <q-btn
+                  dense
+                  no-caps
+                  style="color: #00be06"
+                  @click="fetchSeason(value)"
+                  >Thử lại</q-btn
+                >
+              </div>
+              <ChapsGridQBtn
+                v-else
+                class="!px-3 !py-2 !mx-1"
+                class-active="!bg-[rgba(0,194,52,.15)]"
+                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                :season="value"
+                :find="
+                  (item) => value === currentSeason && item.id === currentChap
+                "
+              />
+            </q-tab-panel>
+          </q-tab-panels>
+        </div>
+      </ArtDialog>
+      <ArtDialog
+        :model-value="artFullscreen && showDialogPlayback"
+        @update:model-value="showDialogPlayback = $event"
+        title="Tốc độ"
+      >
+        <ul>
+          <li
+            v-for="{ name, value } in [...playbackRates].reverse()"
+            :key="value"
+            class="py-2 text-center px-12"
+            :class="{
+              'c--main': value === artPlaybackRate,
+            }"
+            @click="setArtPlaybackRate(value)"
+          >
+            {{ name }}
+          </li>
+        </ul>
+      </ArtDialog>
+      <ArtDialog
+        :model-value="artFullscreen && showDialogQuality"
+        @update:model-value="showDialogQuality = $event"
+        title="Chất lượng"
+      >
+        <ul>
+          <li
+            v-for="({ html }, index) in sources"
+            :key="html"
+            class="py-2 text-center px-15"
+            :class="{
+              'c--main': html === artQuality || (!artQuality && index === 0),
+            }"
+            @click="setArtQuality(html)"
+          >
+            {{ html }}
+          </li>
+        </ul>
+      </ArtDialog>
+      <!-- /dialogs -->
+    </q-responsive>
+  </div>
 
   <!-- teleporting -->
   <q-dialog
@@ -556,84 +552,20 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{
-  sources?: { html: string; url: string }[]
-  currentSeason?: string
-  currentChap?: string
- nameCurrentChap?: string 
-  nextChap?: {
-  	season: string
-  	chap?: string 
-  };
-  name: string
-  poster?: string
-  allSeasons?: {
-    value: string
-    path: string
-    name: string
-  }[]
-  _cacheDataSeasons: Map<
-    string,
-    | ResponseDataSeasonPending
-    | ResponseDataSeasonSuccess
-    | ResponseDataSeasonError
-  >
-  fetchSeason: (season: string) => Promise<void>
-}>()
-import { toRefs , ref, reactive, watch, watchEffect, computed , onMounted , shallowReactive, shallowRef } from "vue"
-const { sources, currentSeason, _cacheDataSeasons } = toRefs(props)
-
-import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { onBeforeRouteLeave, useRouter } from "vue-router"
-
-const router = useRouter()
-
-
-// ===== setup =====
-
-const seasonActive = ref<string>()
-// sync data by active route
-watch(currentSeason, (val) => (seasonActive.value = val), { immediate: true })
-
-watch(
-  seasonActive,
-  (seasonActive) => {
-    if (!seasonActive) return
-
-    // download data season active
-    props.fetchSeason(seasonActive)
-  },
-  {
-    immediate: true,
-  }
-)
-
-
-// @scrollIntoView
-const tabsRef = ref<QTab>()
-watchEffect(() => {
-  if (!tabsRef.value) return
-  if (!currentSeason.value) return
-
-  setTimeout(() => {
-    tabsRef.value?.$el.scrollIntoView({
-      inline: "center",
-    })
-  }, 70)
-})
-
-// ================ status ================
-const openBottomSheetChap = ref(false)
-
-// =========================== huuuu player API。馬鹿馬鹿しい ====================================
-
 import { StatusBar } from "@capacitor/status-bar"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
-import Artplayer from "artplayer"
 import ArtDialog from "components/ArtDialog.vue"
+import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import { QTab, useQuasar } from "quasar"
+import type { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
+import { Hls } from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
+import { computed, ref, shallowReactive, watch, watchEffect } from "vue"
+import { onBeforeRouteLeave, useRouter } from "vue-router"
+
+import type { Source } from "./sources"
 
 interface ResponseDataSeasonPending {
   status: "pending"
@@ -649,15 +581,84 @@ interface ResponseDataSeasonError {
   }
 }
 
+const router = useRouter()
+const $q = useQuasar()
+
+const props = defineProps<{
+  sources?: Source[]
+  currentSeason?: string
+  currentChap?: string
+  nameCurrentChap?: string
+  nextChap?: {
+    season: string
+    chap?: string
+  }
+  name: string
+  poster?: string
+  allSeasons?: {
+    value: string
+    path: string
+    name: string
+  }[]
+  _cacheDataSeasons: Map<
+    string,
+    | ResponseDataSeasonPending
+    | ResponseDataSeasonSuccess
+    | ResponseDataSeasonError
+  >
+  fetchSeason: (season: string) => Promise<void>
+}>()
+
+// ===== setup effect =====
+
+const seasonActive = ref<string>()
+// sync data by active route
+watch(
+  () => props.currentSeason,
+  (val) => (seasonActive.value = val),
+  { immediate: true }
+)
+
+watch(
+  seasonActive,
+  (seasonActive) => {
+    if (!seasonActive) return
+
+    // download data season active
+    props.fetchSeason(seasonActive)
+  },
+  {
+    immediate: true,
+  }
+)
+
+// @scrollIntoView
+const tabsRef = ref<QTab>()
+watchEffect(() => {
+  if (!tabsRef.value) return
+  if (!props.currentSeason) return
+
+  setTimeout(() => {
+    tabsRef.value?.$el.scrollIntoView({
+      inline: "center",
+    })
+  }, 70)
+})
+
+// =========================== huuuu player API。馬鹿馬鹿しい ====================================
+
 const currentStream = computed(() => {
-  return sources.value?.find((item) => item.html === artQuality.value)
+  return props.sources?.find((item) => item.html === artQuality.value)
 })
 
 const video = ref<HTMLVideoElement>()
-const player = ref()
 // value control get play
 const artPlaying = ref(true)
 const setArtPlaying = (playing: boolean) => {
+  if (!video.value) {
+    console.log("video element not ready")
+    return
+  }
   if (playing) {
     // video.value.load();
     if (video.value.paused) video.value.play()
@@ -669,17 +670,26 @@ const artLoading = ref(true)
 const artDuration = ref<number>(0)
 const artCurrentTime = ref<number>(0)
 const setArtCurrentTime = (currentTime: number) => {
+  if (!video.value) {
+    console.warn("video not ready")
+    return
+  }
   video.value.currentTime = currentTime
 }
 const artPercentageResourceLoaded = ref<number>(0)
 const artPlaybackRate = ref(1)
 const setArtPlaybackRate = (value: number) => {
+  if (!video.value) {
+    console.warn("video not ready")
+    return
+  }
   video.value.playbackRate = value
   addNotice(`${value}x`)
 }
 
 // value control other
 const artControlShow = ref(true)
+// eslint-disable-next-line functional/no-let
 let activeTime = Date.now()
 const setArtControlShow = (show: boolean) => {
   artControlShow.value = show
@@ -687,12 +697,14 @@ const setArtControlShow = (show: boolean) => {
 }
 watch(
   artControlShow,
-  (artControlShow) => artControlShow && artFullscreen.value && StatusBar.hide()
+  (artControlShow) => artControlShow && artFullscreen.value && StatusBar.hide(),
+  { immediate: true }
 )
 const artFullscreen = ref(false)
 const setArtFullscreen = async (fullscreen: boolean) => {
   if (fullscreen) {
-    await playerWrapRef.value.requestFullscreen()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await playerWrapRef.value!.requestFullscreen()
     screen.orientation.lock("landscape")
     StatusBar.hide()
     NavigationBar.hide()
@@ -700,7 +712,6 @@ const setArtFullscreen = async (fullscreen: boolean) => {
       overlay: true,
     })
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     await document.exitFullscreen()
     screen.orientation.unlock()
     StatusBar.show()
@@ -713,15 +724,14 @@ const setArtFullscreen = async (fullscreen: boolean) => {
   artFullscreen.value = document.fullscreenElement !== null
 }
 
+onBeforeRouteLeave(() => {
+  if (artFullscreen.value) {
+    setArtFullscreen(false)
 
-onBeforeRouteLeave((to, from) => {
-	if (artFullscreen.value) {
-		setArtFullscreen(false)
+    return false
+  }
 
-		return false
-	}
-
-	return true
+  return true
 })
 
 const artQuality = ref<string>()
@@ -752,9 +762,6 @@ function onVideoProgress(event: Event) {
     } catch {}
   }
 }
-import { useQuasar } from "quasar"
-const $q = useQuasar()
-
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
@@ -768,7 +775,7 @@ function onVideoTimeUpdate() {
     artControlShow.value = false
   }
 }
-function onVideoError(event: EventError) {
+function onVideoError(event: Event) {
   console.log("video error ", event)
 
   $q.notify({
@@ -781,46 +788,73 @@ function onVideoError(event: EventError) {
         color: "white",
         handler() {
           console.log("retry force")
-          video.value.load()
-          video.value.play()
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          video.value!.load()
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          video.value!.play()
         },
       },
-      ...(true
-        ? [
-            {
-              label: "Remount",
-              color: "white",
-              handler() {
-                const currentTime = artCurrentTime.value
-                remount()
-                video.value.play()
-                video.value.currentTime = currentTime
-              },
-            },
-          ]
-        : []),
+      {
+        label: "Remount",
+        color: "white",
+        handler: remount,
+      },
     ],
   })
 }
+
 function runRemount() {
   $q.dialog({
     title: "Relay change",
     message: "Bạn đang muốn đổi relay khác?",
     cancel: true,
     persistent: false,
-  }).onOk(() => {
-    const hls = new Hls()
-    // customLoader(hls.config)
-    hls.loadSource(currentStream.value.url)
-    hls.attachMedia(video.value)
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      if (artPlaying.value) video.value.play()
-    })
-  })
+  }).onOk(remount)
 }
 
-watch(video, (video) => {
+function remount() {
+  if (!currentStream.value) {
+    $q.notify({
+      position: "bottom-left",
+      message: "Video tạm thời không khả dụng",
+    })
+
+    return
+  }
+
+  const { url, type } = currentStream.value
+
+  const currentTime = artCurrentTime.value
+  const playing = artPlaying.value
+
+  switch (type) {
+    case "hls":
+    case "m3u":
+      // eslint-disable-next-line no-case-declarations
+      const hls = new Hls()
+      // customLoader(hls.config)
+      hls.loadSource(url)
+      hls.attachMedia(video.value)
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        if (playing) video.value!.play()
+      })
+      break
+    default:
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      video.value!.src = url
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  if (playing) video.value!.play()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  video.value!.currentTime = currentTime
+}
+const watcherVideoTagReady = watch(video, (video) => {
   if (!video) return
+
+  // eslint-disable-next-line promise/catch-or-return
+  Promise.resolve().then(watcherVideoTagReady) // fix this not ready value
 
   watch(
     () => currentStream.value?.url,
@@ -830,16 +864,9 @@ watch(video, (video) => {
       console.log("set url art %s", url)
 
       if (Hls.isSupported()) {
-        window.remount = () => {
-          const hls = new Hls()
-          // customLoader(hls.config)
-          hls.loadSource(url)
-          hls.attachMedia(video)
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            if (artPlaying.value) video.play()
-          })
-        }
-        remount()
+        setTimeout(() => {
+          remount()
+        }, 100)
       } else {
         const canPlay = video.canPlayType("application/vnd.apple.mpegurl")
         if (canPlay === "probably" || canPlay === "maybe") {
@@ -850,29 +877,10 @@ watch(video, (video) => {
     { immediate: true }
   )
 })
-import jwplayer from "src/logic/jwplayer"
-import { Hls } from "src/logic/hls"
-
-onMounted(() => {
-  watch(
-    () => currentStream.value?.url,
-    (url) => {
-      if (!url) return
-      setTimeout(() => {
-        const hls = new Hls({
-          // debug: true,
-        })
-        hls.loadSource(url)
-        hls.attachMedia(video.value)
-      }, 100)
-    },
-    { immediate: true }
-  )
-})
 
 // re-set quality if quality not in sources
 watch(
-  sources,
+  () => props.sources,
   (sources) => {
     if (!sources || sources.length === 0) return
     // not ready quality on this
@@ -891,7 +899,6 @@ function onIndicatorMove(event: TouchEvent | MouseEvent) {
   currentingTime.value = true
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const maxX = progressInnerRef.value!.offsetWidth
-  const offX = progressInnerRef.value!.offsetLeft
   const { left } = (
     progressInnerRef.value as HTMLDivElement
   ).getBoundingClientRect()
@@ -915,7 +922,6 @@ function onIndicatorMove(event: TouchEvent | MouseEvent) {
 function onIndicatorEnd() {
   currentingTime.value = false
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   setArtCurrentTime(artCurrentTime.value)
   activeTime = Date.now()
 }
@@ -940,9 +946,7 @@ const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)
 const showDialogPlayback = ref(false)
 const showDialogQuality = ref(false)
-
 </script>
-
 
 <style lang="scss" scoped>
 .art-layer-controller {

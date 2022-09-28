@@ -1,19 +1,18 @@
 <template>
   <q-page>
     <BrtPlayer
-    v-if="data"
-:sources="sources"
-:current-season="currentSeason"
-:current-chap="currentChap"
-:next-chap="nextChap"
-:name="data.name"
-:name-current-chap="currentMetaChap?.name"
-:poster="data.poster"
-:all-seasons="allSeasons"
-:_cache-data-seasons="_cacheDataSeasons"
-:fetch-season="fetchSeason"
-     />
-
+      v-if="data"
+      :sources="sources"
+      :current-season="currentSeason"
+      :current-chap="currentChap"
+      :next-chap="nextChap"
+      :name="data.name"
+      :name-current-chap="currentMetaChap?.name"
+      :poster="data.poster"
+      :all-seasons="allSeasons"
+      :_cache-data-seasons="_cacheDataSeasons"
+      :fetch-season="fetchSeason"
+    />
 
     <q-responsive :ratio="16 / 9">fake element</q-responsive>
 
@@ -279,7 +278,6 @@
       followed
     -->
   </q-page>
-
 </template>
 
 <script lang="ts" setup>
@@ -307,6 +305,7 @@ import {
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 import BrtPlayer from "components/BrtPlayer.vue"
+import { Source } from "src/components/sources"
 
 const route = useRoute()
 const router = useRouter()
@@ -430,12 +429,12 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
-const nextChap = computed<{ season: string; chap: string }>(() => {
+const nextChap = computed<{ season: string; chap?: string } | undefined>(() => {
   if (!currentDataSeason.value) return
   // get index currentChap
-  const indexCurrentChap = currentDataSeason.value.chaps.indexOf(
-    currentMetaChap.value
-  )
+  const indexCurrentChap = !currentMetaChap.value
+    ? -1
+    : currentDataSeason.value.chaps.indexOf(currentMetaChap.value)
   if (indexCurrentChap === -1) {
     console.warn("current index not found %i", indexCurrentChap)
     return
@@ -453,7 +452,9 @@ const nextChap = computed<{ season: string; chap: string }>(() => {
   if (!allSeasons.value) return
   // if current last chap of season
   // check season of last
-  const indexSeason = allSeasons.value.indexOf(currentMetaSeason.value)
+  const indexSeason = !currentMetaSeason.value
+    ? -1
+    : allSeasons.value.indexOf(currentMetaSeason.value)
   if (indexSeason === -1) {
     console.warn("current index not found %i", indexSeason)
     return
@@ -501,11 +502,27 @@ watch(
   },
   { immediate: true }
 )
-const sources = computed(() =>
-  configPlayer.value?.link.map((item) => {
+const sources = computed<Source[] | undefined>(() =>
+  configPlayer.value?.link.map((item): Source => {
     return {
       html: labelToQuality[item.label] ?? item.label,
       url: item.file.startsWith("http") ? item.file : `https:${item.file}`,
+      type: item.type as
+        | "aac"
+        | "f4a"
+        | "mp4"
+        | "f4v"
+        | "hls"
+        | "m3u"
+        | "m4v"
+        | "mov"
+        | "mp3"
+        | "mpeg"
+        | "oga"
+        | "ogg"
+        | "ogv"
+        | "vorbis"
+        | "webm",
     }
   })
 )
@@ -529,7 +546,6 @@ watchEffect(() => {
 const openBottomSheetChap = ref(false)
 
 // ===================== player =========================
-
 </script>
 
 <style lang="scss" scoped>
