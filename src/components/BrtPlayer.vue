@@ -1,744 +1,900 @@
 <template>
-  <div class="w-full overflow-hidden" ref="playerWrapRef">
-    <q-responsive :ratio="16 / 9" class="player__wrap">
-      <div
-        class="absolute top-0 left-0 w-full h-full z-98"
-        @click="setArtControlShow(true)"
-        v-show="!artControlShow"
-      />
-      <transition name="fade__ease-in-out">
+	
+
+    <div
+      class="w-full overflow-hidden fixed top-0 left-0 z-200"
+      ref="playerWrapRef"
+    >
+      <q-responsive :ratio="16 / 9" class="player__wrap">
+        <video
+          ref="video"
+          :poster="poster"
+          @play="artPlaying = true"
+          @pause="artPlaying = false"
+          @durationchange="artDuration = $event.target.duration"
+          @timeupdate="
+            !currentingTime && (artCurrentTime = $event.target.currentTime),
+              onVideoTimeUpdate()
+          "
+          @progress="onVideoProgress"
+          @ratechange="artPlaybackRate = $event.target.playbackRate"
+          @canplay=";(artLoading = false), onVideoCanPlay()"
+          @canplaythrough="artLoading = false"
+          @waiting="artLoading = true"
+          @error="onVideoError"
+        />
+
         <div
-          class="art-layer-controller z-99 overflow-hidden"
-          :class="{
-            'currenting-time': currentingTime,
-          }"
-          v-show="artControlShow"
-          @click="setArtControlShow(false)"
-        >
-          <div class="toolbar-top">
-            <div class="flex items-start w-max-[70%] flex-nowrap">
-              <button class="back mr-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-chevron-left"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
-                  />
-                </svg>
-              </button>
-
-              <div class="">
-                <div class="line-clamp-1 text-[18px] text-weight-medium">
-                  {{ name }}
-                </div>
-                <div v-if="chapName" class="text-gray-300">
-                  Tập
-                  {{ chapName }}
-                </div>
-              </div>
-            </div>
-            <button @click="showDialogSetting = true">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-gear-fill"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <button
-            class="absolute top-[50%] left-[50%] transform translate-y-[-50%] translate-x-[-50%] art-control-playPause z-120"
-            @click.stop
-            @touchstart.prevent.stop="setArtPlaying(artPlaying)"
-            @touchmove.prevent.stop
+          class="absolute top-0 left-0 w-full h-full"
+          @click="setArtControlShow(true)"
+          v-show="!artControlShow"
+        />
+        <transition name="fade__ease-in-out">
+          <div
+            class="art-layer-controller overflow-hidden flex items-center justify-center"
+            :class="{
+              'currenting-time': currentingTime,
+            }"
+            v-show="artControlShow"
+            @click="setArtControlShow(false)"
           >
-            <svg
-              v-if="!artPlaying"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              height="45"
-              width="45"
-              viewBox="0 0 22 22"
-            >
-              <path
-                d="M17.982 9.275L8.06 3.27A2.013 2.013 0 0 0 5 4.994v12.011a2.017 2.017 0 0 0 3.06 1.725l9.922-6.005a2.017 2.017 0 0 0 0-3.45z"
-              ></path>
-            </svg>
-            <svg
-              v-else
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              height="45"
-              width="45"
-              viewBox="0 0 22 22"
-            >
-              <path
-                d="M7 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2zM15 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2z"
-              ></path>
-            </svg>
-          </button>
-
-          <div class="toolbar-bottom">
-            <div class="art-more-controls flex items-center justify-between">
-              <div class="flex items-center">
+            <div class="toolbar-top">
+              <div class="flex items-start w-max-[70%] flex-nowrap">
                 <q-btn
-                  dense
                   flat
-                  no-caps
-                  class="mr-6 text-weight-normal art-btn"
-                  @click.stop
+                  dense
+                  round
+                  class="mr-2"
+                  @click.stop="router.back()"
                 >
                   <Icon
-                    icon="fluent:next-24-filled"
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
+                    icon="fluent:chevron-left-24-regular"
+                    width="25"
+                    height="25"
                   />
-                  Tiếp
                 </q-btn>
 
-                <q-btn
-                  dense
-                  flat
-                  no-caps
-                  @click="showDialogChapter = true"
-                  class="text-weight-normal art-btn"
-                >
-                  <Icon
-                    icon="fluent:list-24-filled"
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
-                  />
-                  EP {{ chapName }}
-                </q-btn>
+                <div class="">
+                  <div class="line-clamp-1 text-[18px] text-weight-medium">
+                    {{ name }}
+                  </div>
+                  <div v-if="nameCurrentChap" class="text-gray-300">
+                    Tập
+                    {{ nameCurrentChap }}
+                  </div>
+                </div>
               </div>
-
               <div>
                 <q-btn
                   dense
                   flat
-                  no-caps
-                  class="mr-6 text-weight-normal art-btn"
-                  @click="showDialogQuality = true"
+                  round
+                  @click="runRemount"
+                  :disable="!currentStream"
+                  class="mr-2"
                 >
                   <Icon
-                    icon="bi:badge-hd"
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
+                    icon="fluent:flash-flow-24-regular"
+                    width="25"
+                    height="25"
                   />
-                  {{ artQuality }}
                 </q-btn>
-                <q-btn
-                  dense
-                  flat
-                  no-caps
-                  @click="showDialogPlayback = true"
-                  class="text-weight-normal art-btn"
-                >
+                <q-btn dense flat round @click="showDialogSetting = true">
                   <Icon
-                    icon="fluent:top-speed-24-regular"
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
+                    icon="fluent:settings-24-regular"
+                    width="25"
+                    height="25"
                   />
-                  {{ artPlaybackRate }}x
                 </q-btn>
               </div>
             </div>
 
-            <div
-              class="art-control-progress"
-              @touchstart.prevent.stop="onIndicatorMove"
-              @touchmove.prevent.stop="onIndicatorMove"
-              @touchend.prevent.stop="onIndicatorEnd"
+            <!-- fix spacing 2px -->
+            <button
+              class="p-2 w-[72px] h-[72px]"
+              @click.stop
+              @touchstart.prevent.stop="setArtPlaying(!artPlaying)"
+              @touchmove.prevent.stop
             >
-              <div class="art-control-progress-inner" ref="progressInnerRef">
-                <div
-                  class="art-progress-loaded"
-                  :style="{
-                    width: `${artPercentageResourceLoaded * 100}%`,
-                  }"
+              <template v-if="!artLoading">
+                <Icon
+                  v-show="!artPlaying"
+                  icon="fluent:play-circle-20-regular"
+                  width="60"
+                  height="60"
                 />
-                <div
-                  class="art-progress-played"
-                  :style="{
-                    width: `${(artCurrentTime / artDuration) * 100}%`,
-                  }"
-                >
-                  <div
-                    class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
-                    :data-title="parseTime(artCurrentTime)"
-                    @touchstart.prevent.stop="currentingTime = true"
-                    @touchmove.prevent.stop="onIndicatorMove"
-                    @touchend.prevent.stop="onIndicatorEnd"
+                <Icon
+                  v-show="artPlaying"
+                  icon="fluent:pause-circle-20-regular"
+                  width="60"
+                  height="60"
+                />
+              </template>
+            </button>
+
+            <div class="toolbar-bottom">
+              <div class="art-more-controls flex items-center justify-between">
+                <div class="flex items-center">
+                  <q-btn
+                    dense
+                    flat
+                    no-caps
+                    class="mr-6 text-weight-normal art-btn"
+                    :disable="!nextChap"
+                    :to="{
+                      name: 'phim_[season]_[chap]',
+                      params: nextChap,
+                    }"
                   >
-                    <img
-                      width="16"
-                      heigth="16"
-                      src="src/assets/indicator.svg"
+                    <Icon
+                      icon="fluent:next-24-regular"
+                      class="mr-2 art-icon"
+                      width="18"
+                      height="18"
                     />
+                    Tiếp
+                  </q-btn>
+
+                  <q-btn
+                    dense
+                    flat
+                    no-caps
+                    @click="showDialogChapter = true"
+                    class="text-weight-normal art-btn"
+                  >
+                    <Icon
+                      icon="fluent:list-24-regular"
+                      class="mr-2 art-icon"
+                      width="18"
+                      height="18"
+                    />
+                    EP {{nameCurrentChap}}
+                  </q-btn>
+                </div>
+
+                <div>
+                  <q-btn
+                    dense
+                    flat
+                    no-caps
+                    class="mr-6 text-weight-normal art-btn"
+                    @click="showDialogQuality = true"
+                  >
+                    <Icon
+                      icon="bi:badge-hd"
+                      class="mr-2 art-icon"
+                      width="18"
+                      height="18"
+                    />
+                    {{ artQuality }}
+                  </q-btn>
+                  <q-btn
+                    dense
+                    flat
+                    no-caps
+                    @click="showDialogPlayback = true"
+                    class="text-weight-normal art-btn"
+                  >
+                    <Icon
+                      icon="fluent:top-speed-24-regular"
+                      class="mr-2 art-icon"
+                      width="18"
+                      height="18"
+                    />
+                    {{ artPlaybackRate }}x
+                  </q-btn>
+                </div>
+              </div>
+
+              <div
+                class="art-control-progress"
+                @touchstart.prevent.stop="onIndicatorMove"
+                @touchmove.prevent.stop="onIndicatorMove"
+                @touchend.prevent.stop="onIndicatorEnd"
+              >
+                <div class="art-control-progress-inner" ref="progressInnerRef">
+                  <div
+                    class="art-progress-loaded"
+                    :style="{
+                      width: `${artPercentageResourceLoaded * 100}%`,
+                    }"
+                  />
+                  <div
+                    class="art-progress-played"
+                    :style="{
+                      width: `${(artCurrentTime / artDuration) * 100}%`,
+                    }"
+                  >
+                    <div
+                      class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
+                      :data-title="parseTime(artCurrentTime)"
+                      @touchstart.prevent.stop="currentingTime = true"
+                      @touchmove.prevent.stop="onIndicatorMove"
+                      @touchend.prevent.stop="onIndicatorEnd"
+                    >
+                      <img
+                        width="16"
+                        heigth="16"
+                        src="src/assets/indicator.svg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="art-controls">
+                <div class="art-controls-left">
+                  <div
+                    class="art-control art-control-time art-control-onlyText"
+                    data-index="30"
+                    style="cursor: auto"
+                  >
+                    {{ parseTime(artCurrentTime) }} /
+                    {{ parseTime(artDuration) }}
+                  </div>
+                </div>
+                <div class="art-controls-center"></div>
+                <div class="art-controls-right">
+                  <div
+                    class="art-control art-control-fullscreen hint--rounded hint--top"
+                    data-index="70"
+                    aria-label="Fullscreen"
+                    @click="setArtFullscreen(!artFullscreen)"
+                  >
+                    <i
+                      v-if="!artFullscreen"
+                      class="art-icon art-icon-fullscreenOn"
+                    >
+                      <Icon
+                        icon="fluent:full-screen-maximize-24-regular"
+                        width="22"
+                        height="22"
+                      />
+                    </i>
+                    <i v-else class="art-icon art-icon-fullscreenOff">
+                      <Icon
+                        icon="fluent:full-screen-minimize-24-regular"
+                        width="22"
+                        height="22"
+                      />
+                    </i>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div class="art-controls">
-              <div class="art-controls-left">
-                <div
-                  class="art-control art-control-time art-control-onlyText"
-                  data-index="30"
-                  style="cursor: auto"
-                >
-                  {{ parseTime(artCurrentTime) }} / {{ parseTime(artDuration) }}
-                </div>
-              </div>
-              <div class="art-controls-center"></div>
-              <div class="art-controls-right">
-                <div
-                  class="art-control art-control-fullscreen hint--rounded hint--top"
-                  data-index="70"
-                  aria-label="Fullscreen"
-                  @click="artFullscreen = !artFullscreen"
-                >
-                  <i
-                    v-if="!artFullscreen"
-                    class="art-icon art-icon-fullscreenOn"
-                  >
-                    <svg
-                      class="icon"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 1024 1024"
-                      version="1.1"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill="#ffffff"
-                        d="M625.777778 256h142.222222V398.222222h113.777778V142.222222H625.777778v113.777778zM256 398.222222V256H398.222222v-113.777778H142.222222V398.222222h113.777778zM768 625.777778v142.222222H625.777778v113.777778h256V625.777778h-113.777778zM398.222222 768H256V625.777778h-113.777778v256H398.222222v-113.777778z"
-                      />
-                    </svg>
-                  </i>
-                  <i v-else class="art-icon art-icon-fullscreenOff">
-                    <svg
-                      class="icon"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 1024 1024"
-                      version="1.1"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill="#ffffff"
-                        d="M768 298.666667h170.666667v85.333333h-256V128h85.333333v170.666667zM341.333333 384H85.333333V298.666667h170.666667V128h85.333333v256z m426.666667 341.333333v170.666667h-85.333333v-256h256v85.333333h-170.666667zM341.333333 640v256H256v-170.666667H85.333333v-85.333333h256z"
-                      />
-                    </svg>
-                  </i>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
-      </transition>
+        </transition>
 
-      <!-- notices -->
-      <transition-group
-        tag="div"
-        name="notices"
-        class="absolute z-101 top-0 left-0 w-full flex column justify-end ml-10 text-[14px] pointer-events-none"
-      >
-        <div v-for="item in notices" :key="item.id" class="pb-2 last:mb-36">
-          <span
-            class="text-[#fff] bg-[#0009] rounded-[3px] px-[16px] py-[10px] inline-block"
-            >{{ item.text }}</span
-          >
-        </div>
-      </transition-group>
-
-      <!-- /notices -->
-
-      <!-- dialogs -->
-      <!--    dialog is settings    -->
-      <ArtDialog v-model="showDialogSetting" title="Xem thêm" fit>
-        <div class="text-zinc-500 text-[12px] mb-2">Chất lượng</div>
-        <div>
-          <q-btn
-            dense
-            flat
-            no-caps
-            class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
-            v-for="({ html }, index) in sources"
-            :class="{
-              'c--main': html === artQuality || (!artQuality && index === 0),
-            }"
-            :key="html"
-            @click="setArtQuality(html)"
-            >{{ html }}</q-btn
-          >
-        </div>
-
-        <div class="text-zinc-500 text-[12px] mt-4 mb-2">Tốc độ phát lại</div>
-        <div class="flex flex-nowrap mx-[-8px]">
-          <q-btn
-            dense
-            flat
-            no-caps
-            class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
-            v-for="{ name, value } in playbackRates"
-            :key="name"
-            :class="artPlaybackRate === value ? 'c--main' : 'text-stone-200'"
-            @click="setArtPlaybackRate(value)"
-            >{{ name }}</q-btn
-          >
-        </div>
-      </ArtDialog>
-      <ArtDialog v-model="showDialogChapter" title="Danh sách tập" fit>
-        <div class="h-full w-full flex column flex-nowrap">
-          <q-tabs
-            v-model="seasonActive"
-            no-caps
-            dense
-            inline-label
-            active-class="c--main"
-            indicator-color="transparent"
-          >
-            <q-tab
-              v-for="item in allSeasons"
-              :key="item.value"
-              :name="item.value"
-              :label="item.name"
-              class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[3px]"
-              content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-              :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
-            />
-          </q-tabs>
-
-          <q-tab-panels
-            v-model="seasonActive"
-            animated
-            keep-alive
-            class="overflow-y-scroll flex-1 mt-4 bg-transparent"
-          >
-            <q-tab-panel
-              v-for="{ value } in allSeasons"
-              :key="value"
-              :name="value"
-              class="!h-[45px] py-0 !px-0"
+        <!-- notices -->
+        <transition-group
+          tag="div"
+          name="notices"
+          class="absolute top-0 left-0 w-full flex column justify-end ml-10 text-[14px] pointer-events-none"
+        >
+          <div v-for="item in notices" :key="item.id" class="pb-2 last:mb-36">
+            <span
+              class="text-[#fff] bg-[#0009] rounded-[3px] px-[16px] py-[10px] inline-block"
+              >{{ item.text }}</span
             >
-              <div
-                v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
-                class="flex justify-center"
-              >
-                <q-spinner-infinity
-                  style="color: #00be06"
-                  size="3em"
-                  :thickness="3"
-                />
-              </div>
-              <div
-                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-                class="text-center"
-              >
-                Lỗi khi lấy dữ liệu
-                <br />
-                <q-btn
-                  dense
-                  no-caps
-                  style="color: #00be06"
-                  @click="fetchSeason(value)"
-                  >Thử lại</q-btn
-                >
-              </div>
-              <ChapsGridQBtn
-                v-else
-                class="!px-3 !py-2 !mx-1"
-                class-active="!bg-[rgba(0,194,52,.15)]"
-                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-                :season="value"
-                :find="
-                  (item) => value === currentSeason && item.id === currentChap
-                "
-              />
-            </q-tab-panel>
-          </q-tab-panels>
+          </div>
+        </transition-group>
+
+        <div
+          v-if="artLoading"
+          class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
+        >
+          <q-spinner size="60px" :thickness="3" />
         </div>
-      </ArtDialog>
-      <ArtDialog v-model="showDialogPlayback" title="Tốc độ">
-        <ul>
-          <li
-            v-for="{ name, value } in [...playbackRates].reverse()"
-            :key="value"
-            class="py-2 text-center px-12"
-            :class="{
-              'c--main': value === artPlaybackRate,
-            }"
-            @click="setArtPlaybackRate(value)"
-          >
+
+        <!-- /notices -->
+
+        <!-- dialogs -->
+        <!--    dialog is settings    -->
+        <ArtDialog
+          :model-value="artFullscreen && showDialogSetting"
+          @update:model-value="showDialogSetting = $event"
+          title="Xem thêm"
+          fit
+        >
+          <div class="text-zinc-500 text-[12px] mb-2">Chất lượng</div>
+          <div>
+            <q-btn
+              dense
+              flat
+              no-caps
+              class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
+              v-for="({ html }, index) in sources"
+              :class="{
+                'c--main': html === artQuality || (!artQuality && index === 0),
+              }"
+              :key="html"
+              @click="setArtQuality(html)"
+              >{{ html }}</q-btn
+            >
+          </div>
+
+          <div class="text-zinc-500 text-[12px] mt-4 mb-2">Tốc độ phát lại</div>
+          <div class="flex flex-nowrap mx-[-8px]">
+            <q-btn
+              dense
+              flat
+              no-caps
+              class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
+              v-for="{ name, value } in playbackRates"
+              :key="name"
+              :class="artPlaybackRate === value ? 'c--main' : 'text-stone-200'"
+              @click="setArtPlaybackRate(value)"
+              >{{ name }}</q-btn
+            >
+          </div>
+        </ArtDialog>
+        <ArtDialog
+          :model-value="artFullscreen && showDialogChapter"
+          @update:model-value="showDialogChapter = $event"
+          title="Danh sách tập"
+          fit
+        >
+          <div class="h-full w-full flex column flex-nowrap">
+            <q-tabs
+              v-model="seasonActive"
+              no-caps
+              dense
+              inline-label
+              active-class="c--main"
+              indicator-color="transparent"
+            >
+              <q-tab
+                v-for="item in allSeasons"
+                :key="item.value"
+                :name="item.value"
+                :label="item.name"
+                class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[3px]"
+                content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
+                :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
+              />
+            </q-tabs>
+
+            <q-tab-panels
+              v-model="seasonActive"
+              animated
+              keep-alive
+              class="overflow-y-scroll flex-1 mt-4 bg-transparent"
+            >
+              <q-tab-panel
+                v-for="{ value } in allSeasons"
+                :key="value"
+                :name="value"
+                class="!h-[45px] py-0 !px-0"
+              >
+                <div
+                  v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
+                  class="flex justify-center"
+                >
+                  <q-spinner-infinity
+                    style="color: #00be06"
+                    size="3em"
+                    :thickness="3"
+                  />
+                </div>
+                <div
+                  v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+                  class="text-center"
+                >
+                  Lỗi khi lấy dữ liệu
+                  <br />
+                  <q-btn
+                    dense
+                    no-caps
+                    style="color: #00be06"
+                    @click="fetchSeason(value)"
+                    >Thử lại</q-btn
+                  >
+                </div>
+                <ChapsGridQBtn
+                  v-else
+                  class="!px-3 !py-2 !mx-1"
+                  class-active="!bg-[rgba(0,194,52,.15)]"
+                  :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                  :season="value"
+                  :find="
+                    (item) => value === currentSeason && item.id === currentChap
+                  "
+                />
+              </q-tab-panel>
+            </q-tab-panels>
+          </div>
+        </ArtDialog>
+        <ArtDialog
+          :model-value="artFullscreen && showDialogPlayback"
+          @update:model-value="showDialogPlayback = $event"
+          title="Tốc độ"
+        >
+          <ul>
+            <li
+              v-for="{ name, value } in [...playbackRates].reverse()"
+              :key="value"
+              class="py-2 text-center px-12"
+              :class="{
+                'c--main': value === artPlaybackRate,
+              }"
+              @click="setArtPlaybackRate(value)"
+            >
+              {{ name }}
+            </li>
+          </ul>
+        </ArtDialog>
+        <ArtDialog
+          :model-value="artFullscreen && showDialogQuality"
+          @update:model-value="showDialogQuality = $event"
+          title="Chất lượng"
+        >
+          <ul>
+            <li
+              v-for="({ html }, index) in sources"
+              :key="html"
+              class="py-2 text-center px-15"
+              :class="{
+                'c--main': html === artQuality || (!artQuality && index === 0),
+              }"
+              @click="setArtQuality(html)"
+            >
+              {{ html }}
+            </li>
+          </ul>
+        </ArtDialog>
+        <!-- /dialogs -->
+      </q-responsive>
+    </div>
+
+
+  <!-- teleporting -->
+  <q-dialog
+    :model-value="!artFullscreen && showDialogSetting"
+    @update:model-value="showDialogSetting = $event"
+    position="bottom"
+    full-width
+  >
+    <q-card flat class="w-full pt-3">
+      <q-list>
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <Icon
+              icon="fluent:text-bullet-list-square-warning-24-regular"
+              width="22"
+              height="22"
+            />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label> Báo lỗi </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <Icon
+              icon="fluent:person-feedback-24-regular"
+              width="22"
+              height="22"
+            />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label> Phản hồi </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple @click="showDialogQuality = true">
+          <q-item-section avatar>
+            <Icon icon="bi:badge-hd" width="22" height="22" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label> Chất lượng </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple @click="showDialogPlayback = true">
+          <q-item-section avatar>
+            <Icon icon="fluent:top-speed-24-regular" width="22" height="22" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label> Tốc độ </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-btn flat no-caps class="w-full py-2 mt-2" v-close-popup>Hủy</q-btn>
+      </q-list>
+    </q-card>
+  </q-dialog>
+  <!-- quality -->
+  <q-dialog
+    :model-value="!artFullscreen && showDialogQuality"
+    @update:model-value="showDialogQuality = $event"
+    position="bottom"
+    full-width
+  >
+    <q-card flat class="w-full text-[16px]">
+      <q-list>
+        <q-item v-for="item in sources" :key="item.html" clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon v-if="artQuality === item.html" name="check" />
+          </q-item-section>
+          <q-item-section>
+            {{ item.html }}
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-card>
+  </q-dialog>
+  <!-- playback -->
+  <q-dialog
+    :model-value="!artFullscreen && showDialogPlayback"
+    @update:model-value="showDialogPlayback = $event"
+    position="bottom"
+    full-width
+  >
+    <q-card flat class="w-full text-[16px]">
+      <q-list>
+        <q-item
+          v-for="{ name, value } in playbackRates"
+          :key="value"
+          clickable
+          v-ripple
+          @click="setArtPlaybackRate(value)"
+        >
+          <q-item-section avatar>
+            <q-icon v-if="artPlaybackRate === value" name="check" />
+          </q-item-section>
+          <q-item-section>
             {{ name }}
-          </li>
-        </ul>
-      </ArtDialog>
-      <ArtDialog v-model="showDialogQuality" title="Chất lượng">
-        <ul>
-          <li
-            v-for="({ html }, index) in sources"
-            :key="html"
-            class="py-2 text-center px-15"
-            :class="{
-              'c--main': html === artQuality || (!artQuality && index === 0),
-            }"
-            @click="setArtQuality(html)"
-          >
-            {{ html }}
-          </li>
-        </ul>
-      </ArtDialog>
-      <!-- /dialogs -->
-      <div ref="playerRef" />
-    </q-responsive>
-    <video ref="video" controls class="z-200" />
-  </div>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts" setup>
-import { StatusBar } from "@capacitor/status-bar";
-import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
-import { Icon } from "@iconify/vue";
-import Artplayer from "artplayer";
-import ArtDialog from "components/ArtDialog.vue";
-import ChapsGridQBtn from "components/ChapsGridQBtn.vue";
-import { QTab } from "quasar";
-import type { PhimIdChap } from "src/apis/phim/[id]/[chap]";
-import { playbackRates } from "src/constants";
-import { Hls } from "src/logic/hls";
-import { parseTime } from "src/logic/parseTime";
-import {
-  computed,
-  onMounted,
-  ref,
-  shallowReactive,
-  shallowRef,
-  watch,
-  watchEffect,
-} from "vue";
-
-interface ResponseDataSeasonPending {
-  status: "pending";
-}
-interface ResponseDataSeasonSuccess {
-  status: "success";
-  response: Awaited<ReturnType<typeof PhimIdChap>>;
-}
-interface ResponseDataSeasonError {
-  status: "error";
-  response: {
-    status: number;
-  };
-}
-
 const props = defineProps<{
-  sources?: { html: string; url: string }[];
-  currentSeason?: string;
-  currentChap?: string;
-  name: string;
-  chapName?: string;
-  poster?: string;
+  sources?: { html: string; url: string }[]
+  currentSeason?: string
+  currentChap?: string
+ nameCurrentChap?: string 
+  nextChap?: {
+  	season: string
+  	chap?: string 
+  };
+  name: string
+  poster?: string
   allSeasons?: {
-    value: string;
-    path: string;
-    name: string;
-  }[];
+    value: string
+    path: string
+    name: string
+  }[]
   _cacheDataSeasons: Map<
     string,
     | ResponseDataSeasonPending
     | ResponseDataSeasonSuccess
     | ResponseDataSeasonError
-  >;
-  fetchSeason: (season: string) => Promise<void>;
-}>();
-const currentStream = computed(() => {
-  return props.sources?.find((item) => item.html === artQuality.value);
-});
+  >
+  fetchSeason: (season: string) => Promise<void>
+}>()
+import { toRefs , ref, reactive, watch, watchEffect, computed , onMounted , shallowReactive, shallowRef } from "vue"
+const { sources, currentSeason, _cacheDataSeasons } = toRefs(props)
 
-const video = ref<HTMLVideoElement>();
+import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import { onBeforeRouteLeave, useRouter } from "vue-router"
+
+const router = useRouter()
+
+
+// ===== setup =====
+
+const seasonActive = ref<string>()
+// sync data by active route
+watch(currentSeason, (val) => (seasonActive.value = val), { immediate: true })
+
+watch(
+  seasonActive,
+  (seasonActive) => {
+    if (!seasonActive) return
+
+    // download data season active
+    props.fetchSeason(seasonActive)
+  },
+  {
+    immediate: true,
+  }
+)
+
+
+// @scrollIntoView
+const tabsRef = ref<QTab>()
+watchEffect(() => {
+  if (!tabsRef.value) return
+  if (!currentSeason.value) return
+
+  setTimeout(() => {
+    tabsRef.value?.$el.scrollIntoView({
+      inline: "center",
+    })
+  }, 70)
+})
+
+// ================ status ================
+const openBottomSheetChap = ref(false)
+
+// =========================== huuuu player API。馬鹿馬鹿しい ====================================
+
+import { StatusBar } from "@capacitor/status-bar"
+import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
+import { Icon } from "@iconify/vue"
+import Artplayer from "artplayer"
+import ArtDialog from "components/ArtDialog.vue"
+import { playbackRates } from "src/constants"
+import { parseTime } from "src/logic/parseTime"
+
+interface ResponseDataSeasonPending {
+  status: "pending"
+}
+interface ResponseDataSeasonSuccess {
+  status: "success"
+  response: Awaited<ReturnType<typeof PhimIdChap>>
+}
+interface ResponseDataSeasonError {
+  status: "error"
+  response: {
+    status: number
+  }
+}
+
+const currentStream = computed(() => {
+  return sources.value?.find((item) => item.html === artQuality.value)
+})
+
+const video = ref<HTMLVideoElement>()
+const player = ref()
 // value control get play
-const artPlaying = ref(false);
+const artPlaying = ref(true)
 const setArtPlaying = (playing: boolean) => {
   if (playing) {
     // video.value.load();
-    video.value.play();
+    if (video.value.paused) video.value.play()
   } else {
-    video.value.pause();
+    if (!video.value.paused) video.value.pause()
   }
-};
-const artDuration = ref<number>(0);
-const artCurrentTime = ref<number>(0);
+}
+const artLoading = ref(true)
+const artDuration = ref<number>(0)
+const artCurrentTime = ref<number>(0)
 const setArtCurrentTime = (currentTime: number) => {
-  video.value.currentTime = currentTime;
-};
-const artPercentageResourceLoaded = ref<number>(0);
-const artPlaybackRate = ref(1);
+  video.value.currentTime = currentTime
+}
+const artPercentageResourceLoaded = ref<number>(0)
+const artPlaybackRate = ref(1)
 const setArtPlaybackRate = (value: number) => {
-  video.value.playbackRate = value;
-  addNotice(`${value}x`);
-};
+  video.value.playbackRate = value
+  addNotice(`${value}x`)
+}
 
 // value control other
-const artControlShow = ref(true);
-let activeTime = Date.now();
+const artControlShow = ref(true)
+let activeTime = Date.now()
 const setArtControlShow = (show: boolean) => {
-  artControlShow.value = show;
-  if (show) activeTime = Date.now();
-};
+  artControlShow.value = show
+  if (show) activeTime = Date.now()
+}
 watch(
   artControlShow,
   (artControlShow) => artControlShow && artFullscreen.value && StatusBar.hide()
-);
-const artFullscreen = ref(false);
+)
+const artFullscreen = ref(false)
 const setArtFullscreen = async (fullscreen: boolean) => {
   if (fullscreen) {
-    await playerWrapRef.value.requestFullscreen();
-    screen.orientation.lock("landscape");
-    StatusBar.hide();
-    NavigationBar.hide();
+    await playerWrapRef.value.requestFullscreen()
+    screen.orientation.lock("landscape")
+    StatusBar.hide()
+    NavigationBar.hide()
     StatusBar.setOverlaysWebView({
       overlay: true,
-    });
+    })
   } else {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    await document.exitFullscreen().catch(() => {});
-    screen.orientation.unlock();
-    StatusBar.show();
-    NavigationBar.show();
+    await document.exitFullscreen()
+    screen.orientation.unlock()
+    StatusBar.show()
+    NavigationBar.show()
     StatusBar.setOverlaysWebView({
       overlay: false,
-    });
+    })
   }
-};
-const artQuality = ref<string>();
+
+  artFullscreen.value = document.fullscreenElement !== null
+}
+
+
+onBeforeRouteLeave((to, from) => {
+	if (artFullscreen.value) {
+		setArtFullscreen(false)
+
+		return false
+	}
+
+	return true
+})
+
+const artQuality = ref<string>()
 const setArtQuality = (value: string) => {
-  artQuality.value = value;
-  addNotice(`Chất lượng đã chuyển sang ${value}`);
-};
-const hls = new Hls();
+  artQuality.value = value
+  addNotice(`Chất lượng đã chuyển sang ${value}`)
+}
+
+function onVideoProgress(event: Event) {
+  const target = event.target as HTMLVideoElement
+  // eslint-disable-next-line functional/no-let
+  let range = 0
+  const bf = target.buffered
+  const time = target.currentTime
+
+  try {
+    while (!(bf.start(range) <= time && time <= bf.end(range))) {
+      range += 1
+    }
+    // const loadStartPercentage = bf.start(range) / target.duration
+    const loadEndPercentage = bf.end(range) / target.duration
+    // const loadPercentage = loadEndPercentage - loadStartPercentage
+
+    artPercentageResourceLoaded.value = loadEndPercentage
+  } catch {
+    try {
+      artPercentageResourceLoaded.value = bf.end(0) / target.duration
+    } catch {}
+  }
+}
+import { useQuasar } from "quasar"
+const $q = useQuasar()
+
+function onVideoCanPlay() {
+  activeTime = Date.now()
+}
+function onVideoTimeUpdate() {
+  if (
+    artPlaying.value &&
+    !currentingTime.value &&
+    artControlShow.value &&
+    Date.now() - activeTime >= 3e3
+  ) {
+    artControlShow.value = false
+  }
+}
+function onVideoError(event: EventError) {
+  console.log("video error ", event)
+
+  $q.notify({
+    message: "Đã gặp sự cố khi phát lại",
+    position: "bottom-left",
+    timeout: 0,
+    actions: [
+      {
+        label: "Thử lại",
+        color: "white",
+        handler() {
+          console.log("retry force")
+          video.value.load()
+          video.value.play()
+        },
+      },
+      ...(true
+        ? [
+            {
+              label: "Remount",
+              color: "white",
+              handler() {
+                const currentTime = artCurrentTime.value
+                remount()
+                video.value.play()
+                video.value.currentTime = currentTime
+              },
+            },
+          ]
+        : []),
+    ],
+  })
+}
+function runRemount() {
+  $q.dialog({
+    title: "Relay change",
+    message: "Bạn đang muốn đổi relay khác?",
+    cancel: true,
+    persistent: false,
+  }).onOk(() => {
+    const hls = new Hls()
+    // customLoader(hls.config)
+    hls.loadSource(currentStream.value.url)
+    hls.attachMedia(video.value)
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      if (artPlaying.value) video.value.play()
+    })
+  })
+}
 
 watch(video, (video) => {
-  if (!video) return;
-
-  video.addEventListener("play", () => (artPlaying.value = true));
-  video.addEventListener("pause", () => (artPlaying.value = false));
-  video.addEventListener(
-    "durationchange",
-    () => (artDuration.value = video.duration)
-  );
-  video.addEventListener(
-    "timeupdate",
-    () => (artCurrentTime.value = video.currentTime)
-  );
-  video.addEventListener("progress", () => {
-    const target = event.target as HTMLVideoElement;
-    // eslint-disable-next-line functional/no-let
-    let range = 0;
-    const bf = target.buffered;
-    const time = target.currentTime;
-
-    try {
-      while (!(bf.start(range) <= time && time <= bf.end(range))) {
-        range += 1;
-      }
-      // const loadStartPercentage = bf.start(range) / target.duration
-      const loadEndPercentage = bf.end(range) / target.duration;
-      // const loadPercentage = loadEndPercentage - loadStartPercentage
-
-      artPercentageResourceLoaded.value = loadEndPercentage;
-    } catch {
-      try {
-        artPercentageResourceLoaded.value = bf.end(0) / target.duration;
-      } catch {}
-    }
-  });
-  video.addEventListener(
-    "ratechange",
-    () => (artPlaybackRate.value = video.playbackRate)
-  );
-  playerWrapRef.value.addEventListener(
-    "fullscreenchange",
-    () =>
-      (artFullscreen.value = document.fullscreenElement?.nodeName === "VIDEO")
-  );
-  // controls
-  video.addEventListener("canplay", () => (activeTime = Date.now()));
-  video.addEventListener("timeupdate", () => {
-    if (
-      artPlaying.value &&
-      !currentingTime.value &&
-      artControlShow.value &&
-      Date.now() - activeTime >= 3e3
-    ) {
-      artControlShow.value = false;
-    }
-  });
+  if (!video) return
 
   watch(
     () => currentStream.value?.url,
     (url) => {
-      if (!url) return;
+      if (!url) return
 
-      console.log("set url art %s", url);
+      console.log("set url art %s", url)
 
       if (Hls.isSupported()) {
-        // customLoader(hls.config)
-        hls.loadSource(url);
-        hls.attachMedia(video);
+        window.remount = () => {
+          const hls = new Hls()
+          // customLoader(hls.config)
+          hls.loadSource(url)
+          hls.attachMedia(video)
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            if (artPlaying.value) video.play()
+          })
+        }
+        remount()
       } else {
-        const canPlay = video.canPlayType("application/vnd.apple.mpegurl");
+        const canPlay = video.canPlayType("application/vnd.apple.mpegurl")
         if (canPlay === "probably" || canPlay === "maybe") {
-          video.src = url;
+          video.src = url
         }
       }
     },
     { immediate: true }
-  );
-});
-const playerRef = ref<HTMLDivElement>();
-watch(playerRef, (playerRef) => {
-  if (!playerRef) return;
+  )
+})
+import jwplayer from "src/logic/jwplayer"
+import { Hls } from "src/logic/hls"
 
-  const art = new Artplayer({
-    container: playerRef,
-    autoplay: true,
-    url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-    customType: {
-      m3u8: function (video, url) {
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(url);
-          hls.attachMedia(video);
-        } else {
-          const canPlay = video.canPlayType("application/vnd.apple.mpegurl");
-          if (canPlay === "probably" || canPlay === "maybe") {
-            video.src = url;
-          } else {
-            art.notice.show = "不支持播放格式：m3u8";
-          }
-        }
-      },
-    },
-    volume: 0.5,
-    isLive: false,
-    muted: false,
-    autoplay: false,
-    pip: true,
-    autoSize: true,
-    autoMini: true,
-    screenshot: true,
-    setting: true,
-    loop: true,
-    flip: true,
-    playbackRate: true,
-    aspectRatio: true,
-    fullscreen: true,
-    fullscreenWeb: true,
-    subtitleOffset: true,
-    miniProgressBar: true,
-    mutex: true,
-    backdrop: true,
-    playsInline: true,
-    autoPlayback: true,
-    airplay: true,
-    theme: "#23ade5",
-    lang: navigator.language.toLowerCase(),
-    whitelist: ["*"],
-    moreVideoAttr: {
-      crossOrigin: "anonymous",
-    },
-    icons: {
-      loading: '<img src="/assets/img/ploading.gif">',
-      state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
-      indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
-    },
-    volume: 0.5,
-    isLive: false,
-    muted: false,
-    autoplay: false,
-    pip: true,
-    autoSize: true,
-    autoMini: true,
-    screenshot: true,
-    setting: true,
-    loop: true,
-    flip: true,
-    playbackRate: true,
-    aspectRatio: true,
-    fullscreen: true,
-    fullscreenWeb: true,
-    subtitleOffset: true,
-    miniProgressBar: true,
-    mutex: true,
-    backdrop: true,
-    playsInline: true,
-    autoPlayback: true,
-    airplay: true,
-    theme: "#23ade5",
-    lang: navigator.language.toLowerCase(),
-    whitelist: ["*"],
-    moreVideoAttr: {
-      crossOrigin: "anonymous",
-    },
-    icons: {
-      loading: '<img src="/assets/img/ploading.gif">',
-      state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
-      indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
-    },
-  });
-
+onMounted(() => {
   watch(
     () => currentStream.value?.url,
     (url) => {
-      if (!url) return;
-
-      console.log("set url art %s", url);
-      art.url = url;
+      if (!url) return
+      setTimeout(() => {
+        const hls = new Hls({
+          // debug: true,
+        })
+        hls.loadSource(url)
+        hls.attachMedia(video.value)
+      }, 100)
     },
     { immediate: true }
-  );
-});
+  )
+})
 
 // re-set quality if quality not in sources
 watch(
-  () => props.sources,
+  sources,
   (sources) => {
-    if (!sources || sources.length === 0) return;
+    if (!sources || sources.length === 0) return
     // not ready quality on this
     if (!artQuality.value || !currentStream.value) {
-      setArtQuality(sources[0].html);
+      setArtQuality(sources[0].html)
     }
   },
   { immediate: true }
-);
+)
 
-const playerWrapRef = ref<HTMLDivElement>();
+const playerWrapRef = ref<HTMLDivElement>()
 
-const currentingTime = ref(false);
-const progressInnerRef = ref<HTMLDivElement>();
+const currentingTime = ref(false)
+const progressInnerRef = ref<HTMLDivElement>()
 function onIndicatorMove(event: TouchEvent | MouseEvent) {
-  currentingTime.value = true;
+  currentingTime.value = true
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const maxX = progressInnerRef.value!.offsetWidth;
+  const maxX = progressInnerRef.value!.offsetWidth
+  const offX = progressInnerRef.value!.offsetLeft
+  const { left } = (
+    progressInnerRef.value as HTMLDivElement
+  ).getBoundingClientRect()
 
   const clientX = Math.min(
     maxX,
@@ -748,63 +904,45 @@ function onIndicatorMove(event: TouchEvent | MouseEvent) {
         (event as TouchEvent).changedTouches?.[0] ??
         (event as TouchEvent).touches?.[0] ??
         event
-      ).clientX
+      ).clientX - left
     )
-  );
+  )
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  artCurrentTime.value = (video.value!.duration * clientX) / maxX;
-  activeTime = Date.now();
+  artCurrentTime.value = (video.value!.duration * clientX) / maxX
+  activeTime = Date.now()
 }
 function onIndicatorEnd() {
-  currentingTime.value = false;
+  currentingTime.value = false
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  setArtCurrentTime(artCurrentTime.value);
-  activeTime = Date.now();
+  setArtCurrentTime(artCurrentTime.value)
+  activeTime = Date.now()
 }
 
 const notices = shallowReactive<
   {
-    id: number;
-    text: string;
+    id: number
+    text: string
   }[]
->([]);
+>([])
 // eslint-disable-next-line functional/no-let
-let id = 1;
+let id = 1
 function addNotice(text: string) {
-  const uuid = id++;
-  notices.push({ id: uuid, text });
+  const uuid = id++
+  notices.push({ id: uuid, text })
   setTimeout(() => {
-    notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1);
-  }, 5000);
+    notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1)
+  }, 5000)
 }
 
-// @scrollIntoView
-const tabsRef = ref<QTab>();
-watchEffect(() => {
-  if (!tabsRef.value) return;
-  if (!props.currentSeason) return;
+const showDialogSetting = ref(false)
+const showDialogChapter = ref(false)
+const showDialogPlayback = ref(false)
+const showDialogQuality = ref(false)
 
-  setTimeout(() => {
-    tabsRef.value?.$el.scrollIntoView({
-      inline: "center",
-    });
-  }, 70);
-});
-const seasonActive = ref<string>();
-// sync data by active route
-watch(
-  () => props.currentSeason,
-  (val) => (seasonActive.value = val),
-  { immediate: true }
-);
-
-const showDialogSetting = ref(false);
-const showDialogChapter = ref(false);
-const showDialogPlayback = ref(false);
-const showDialogQuality = ref(false);
 </script>
+
 
 <style lang="scss" scoped>
 .art-layer-controller {
@@ -822,9 +960,6 @@ const showDialogQuality = ref(false);
     border: none;
     color: inherit;
     cursor: pointer;
-  }
-  .art-control-playPause {
-    padding: 8px;
   }
 
   .toolbar-top,
@@ -853,10 +988,6 @@ const showDialogQuality = ref(false);
     opacity: 1;
     visibility: visible;
     transition: all 0.2s ease-in-out;
-    svg {
-      width: 1.2rem;
-      height: 1.2rem;
-    }
   }
   &.currenting-time {
     .toolbar-top,

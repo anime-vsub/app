@@ -1,19 +1,19 @@
 function toFixed(num: number): string {
-  if (num < 10) return `0${num}`;
+  if (num < 10) return `0${num}`
 
-  return `${num}`;
+  return `${num}`
 }
 
 export function parseTime(seconds: number): string {
-  let minutes = ~~(seconds / 60);
-  seconds -= minutes * 60;
+  let minutes = ~~(seconds / 60)
+  seconds -= minutes * 60
 
   if (minutes < 60) {
-    return `${toFixed(minutes)}:${toFixed(~~seconds)}`;
+    return `${toFixed(minutes)}:${toFixed(~~seconds)}`
   }
 
-  let hours = ~~(minutes / 60);
-  minutes -= hours * 60;
+  let hours = ~~(minutes / 60)
+  minutes -= hours * 60
 
-  return `${toFixed(hours)}:${toFixed(minutes)}:${toFixed(~~seconds)}}`;
+  return `${toFixed(hours)}:${toFixed(minutes)}:${toFixed(~~seconds)}}`
 }

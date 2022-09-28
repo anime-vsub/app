@@ -10,12 +10,13 @@
   },
   "dependencies": {
     "@capacitor-community/http": "1.4.1",
-    "@capacitor/android": "^4.0.0",
-    "@capacitor/app": "^4.0.0",
-    "@capacitor/cli": "^4.0.0",
-    "@capacitor/core": "^4.0.0",
-    "@capacitor/status-bar": "^4.0.0",
+    "@capacitor/android": "^4.3.0",
+    "@capacitor/app": "^4.0.1",
+    "@capacitor/cli": "^4.3.0",
+    "@capacitor/core": "^4.3.0",
+    "@capacitor/status-bar": "^4.0.1",
     "@hugotomazi/capacitor-navigation-bar": "^2.0.0",
+    "@ionic/vue": "^6.2.8",
     "cordova-plugin-screen-orientation": "^3.0.2"
   }
 }
