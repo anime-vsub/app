@@ -19,5 +19,8 @@
     "@hugotomazi/capacitor-navigation-bar": "^2.0.0",
     "@ionic/vue": "^6.2.8",
     "cordova-plugin-screen-orientation": "^3.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/preferences": "^4.0.1"
   }
 }
