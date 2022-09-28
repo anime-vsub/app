@@ -13,7 +13,6 @@ const path = require("path")
 const { extend } = require("quasar")
 const { configure } = require("quasar/wrappers")
 
-// eslint-disable-next-line functional/immutable-data
 module.exports = configure(function (/* ctx */) {
   return {
     eslint: {

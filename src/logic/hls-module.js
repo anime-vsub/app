@@ -1,3 +1,6 @@
+// eslint-comments/no-unlimited-disable
+/* eslint-disable */
+
 import { XMLHttpRequestJava } from "./XMLHttpRequestJava"
 
 export default (function () {

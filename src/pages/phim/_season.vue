@@ -281,6 +281,7 @@
 </template>
 
 <script lang="ts" setup>
+import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import Quality from "components/Quality.vue"
 import Star from "components/Star.vue"
@@ -289,6 +290,7 @@ import { QTab } from "quasar"
 import { PhimId } from "src/apis/phim/[id]"
 import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import BottomSheet from "src/components/BottomSheet.vue"
+import type { Source } from "src/components/sources"
 import { labelToQuality } from "src/constants"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
@@ -299,13 +301,9 @@ import {
   shallowRef,
   watch,
   watchEffect,
-  onMounted,
-  shallowReactive,
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import BrtPlayer from "components/BrtPlayer.vue"
-import { Source } from "src/components/sources"
 
 const route = useRoute()
 const router = useRouter()
@@ -335,8 +333,8 @@ const currentMetaSeason = computed(() => {
   return allSeasons.value?.find((item) => item.value === currentSeason.value)
 })
 
-const { data, loading, error, run } = useRequest(
-  (...args) => {
+const { data, run } = useRequest(
+  () => {
     return PhimId(`/phim/${currentSeason.value}/`)
   },
   {
@@ -429,6 +427,7 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
+// eslint-disable-next-line vue/return-in-computed-property
 const nextChap = computed<{ season: string; chap?: string } | undefined>(() => {
   if (!currentDataSeason.value) return
   // get index currentChap

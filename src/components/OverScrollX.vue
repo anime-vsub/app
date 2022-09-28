@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue"
-import { debounce } from "quasar"
 import EndOfBackdrop from "components/EndOfBackdrop.vue"
+import { debounce } from "quasar"
+import { onMounted, ref } from "vue"
 
 const statusChaptersScroll = ref<"start" | "startImp" | "end" | "pending">(
   "start"
