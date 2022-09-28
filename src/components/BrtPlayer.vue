@@ -29,6 +29,9 @@
 
       <div
         class="absolute top-0 left-0 w-full h-full"
+        @touchstart="onBDTouchStart"
+        @touchmove="onBDTouchMove"
+        @touchend="onBDTouchEnd"
         @click="setArtControlShow(true)"
         v-show="!artControlShow"
       />
@@ -927,6 +930,41 @@ function onIndicatorEnd() {
 
   setArtCurrentTime(artCurrentTime.value)
   activeTime = Date.now()
+}
+
+// ==== addons swipe backdrop ====
+// eslint-disable-next-line functional/no-let, no-undef
+let timeoutHoldBD: number | NodeJS.Timeout | null = null
+// eslint-disable-next-line functional/no-let
+let holdedBD = false
+function onBDTouchStart() {
+  holdedBD = false
+  timeoutHoldBD && clearTimeout(timeoutHoldBD)
+
+  timeoutHoldBD = setTimeout(() => {
+    holdedBD = true
+    // vibrate
+    navigator.vibrate?.(150)
+  }, 600)
+}
+function onBDTouchMove(event: TouchEvent) {
+if (timeoutHoldBD) {
+  clearTimeout(timeoutHoldBD)
+  timeoutHoldBD  = null
+}
+
+  onIndicatorMove(event)
+}
+function onBDTouchEnd() {
+if (timeoutHoldBD) {
+  clearTimeout(timeoutHoldBD)
+  timeoutHoldBD  = null
+}
+
+  if (holdedBD) {
+    holdedBD = false
+    onIndicatorEnd()
+  }
 }
 
 const notices = shallowReactive<
