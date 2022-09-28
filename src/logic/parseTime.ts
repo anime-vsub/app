@@ -9,13 +9,11 @@ export function parseTime(seconds: number): string {
   seconds -= minutes * 60
 
   if (minutes < 60) {
-    return `${toFixed(minutes)}:${toFixed(Math.round(seconds))}`
+    return `${toFixed(minutes)}:${toFixed(~~seconds)}`
   }
 
   let hours = ~~(minutes / 60)
   minutes -= hours * 60
 
-  return `${toFixed(hours)}:${toFixed(minutes)}:${toFixed(
-    Math.round(seconds)
-  )}}`
+  return `${toFixed(hours)}:${toFixed(minutes)}:${toFixed(~~seconds)}}`
 }

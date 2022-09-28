@@ -1,13 +1,15 @@
 <template>
-  <transition name="slide">
-    <div
-      v-show="open"
-      v-bind="attrs"
-      class="h-[calc(100%-100vmin/16*9)] bottom-0 fixed left-0 w-full bg-dark flex column flex-nowrap"
-    >
-      <slot />
-    </div>
-  </transition>
+  <teleport to="body">
+    <transition name="slide">
+      <div
+        v-show="open"
+        v-bind="attrs"
+        class="h-[calc(100%-100vmin/16*9)] bottom-0 fixed left-0 w-full bg-dark flex column flex-nowrap"
+      >
+        <slot />
+      </div>
+    </transition>
+  </teleport>
 </template>
 
 <script lang="ts" setup>
