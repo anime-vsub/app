@@ -33,7 +33,7 @@
         @touchmove="onBDTouchMove"
         @touchend="onBDTouchEnd"
         @click="setArtControlShow(true)"
-        v-show="!artControlShow"
+        v-show="holdedBD || !artControlShow"
       />
       <transition name="fade__ease-in-out">
         <div
@@ -41,8 +41,11 @@
           :class="{
             'currenting-time': currentingTime,
           }"
-          v-show="artControlShow"
+             @touchstart="onBDTouchStart"
+        @touchmove="onBDTouchMove"
+        @touchend="onBDTouchEnd"
           @click="setArtControlShow(false)"
+          v-show="holdedBD || artControlShow"
         >
           <div class="toolbar-top">
             <div class="flex items-start w-max-[70%] flex-nowrap">
@@ -90,14 +93,10 @@
           </div>
 
           <!-- fix spacing 2px -->
-          <q-btn
-            flat
-            dense
-            round
-            class="p-2 w-[72px] h-[72px]"
-            @click.stop
-            @touchstart.prevent.stop="setArtPlaying(!artPlaying)"
-            @touchmove.prevent.stop
+          <q-btn flat dense round v-ripple="false"
+            class="p-2 w-[72px] h-[72px] relative z-199"
+            @click.stop="setArtPlaying(!artPlaying)"
+            v-show="!holdedBD"
           >
             <template v-if="!artLoading">
               <Icon
@@ -191,9 +190,9 @@
 
             <div
               class="art-control-progress"
-              @touchstart.prevent.stop="onIndicatorMove"
-              @touchmove.prevent.stop="onIndicatorMove"
-              @touchend.prevent.stop="onIndicatorEnd"
+              @touchstart.stop="onIndicatorMove"
+              @touchmove.stop="onIndicatorMove"
+              @touchend.stop="onIndicatorEnd"
             >
               <div class="art-control-progress-inner" ref="progressInnerRef">
                 <div
@@ -211,9 +210,9 @@
                   <div
                     class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
                     :data-title="parseTime(artCurrentTime)"
-                    @touchstart.prevent.stop="currentingTime = true"
-                    @touchmove.prevent.stop="onIndicatorMove"
-                    @touchend.prevent.stop="onIndicatorEnd"
+                    @touchstart.stop="currentingTime = true"
+                    @touchmove.stop="onIndicatorMove"
+                    @touchend.stop="onIndicatorEnd"
                   >
                     <img
                       width="16"
@@ -559,6 +558,7 @@
 
 <script lang="ts" setup>
 import { StatusBar } from "@capacitor/status-bar"
+import { Haptics } from "@capacitor/haptics"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
 import ArtDialog from "components/ArtDialog.vue"
@@ -703,8 +703,7 @@ const setArtControlShow = (show: boolean) => {
 }
 watch(
   artControlShow,
-  (artControlShow) => artControlShow && artFullscreen.value && StatusBar.hide(),
-  { immediate: true }
+  (artControlShow) => artControlShow && artFullscreen.value && StatusBar.hide()
 )
 const artFullscreen = ref(false)
 const setArtFullscreen = async (fullscreen: boolean) => {
@@ -831,7 +830,7 @@ function remount() {
   const { url, type } = currentStream.value
 
   const currentTime = artCurrentTime.value
-  const playing = artPlaying.value
+  const playing = !video.value.paused || artPlaying.value 
 
   switch (type) {
     case "hls":
@@ -901,14 +900,31 @@ const playerWrapRef = ref<HTMLDivElement>()
 
 const currentingTime = ref(false)
 const progressInnerRef = ref<HTMLDivElement>()
-function onIndicatorMove(event: TouchEvent | MouseEvent) {
+function onIndicatorMove(event: TouchEvent | MouseEvent, innerEl: HTMLDivElement = progressInnerRef.value!,offsetX?: number, curTimeStart?: number) {
   currentingTime.value = true
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const maxX = progressInnerRef.value!.offsetWidth
+  const maxX = innerEl.offsetWidth
   const { left } = (
-    progressInnerRef.value as HTMLDivElement
+  innerEl
   ).getBoundingClientRect()
 
+console.log( offsetX )
+
+if (offsetX) {
+  const clientX = 
+      (
+        (event as TouchEvent).changedTouches?.[0] ??
+        (event as TouchEvent).touches?.[0] ??
+        event
+      ).clientX  - offsetX - left
+    
+
+  // patch x exists -> enable mode add
+  artCurrentTime.value = Math.max(0, Math.min(
+video.value!.duration,
+ curTimeStart + (video.value!.duration * clientX) / maxX
+  ))
+} else {
   const clientX = Math.min(
     maxX,
     Math.max(
@@ -923,6 +939,8 @@ function onIndicatorMove(event: TouchEvent | MouseEvent) {
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   artCurrentTime.value = (video.value!.duration * clientX) / maxX
+}
+
   activeTime = Date.now()
 }
 function onIndicatorEnd() {
@@ -936,16 +954,26 @@ function onIndicatorEnd() {
 // eslint-disable-next-line functional/no-let, no-undef
 let timeoutHoldBD: number | NodeJS.Timeout | null = null
 // eslint-disable-next-line functional/no-let
-let holdedBD = false
-function onBDTouchStart() {
-  holdedBD = false
+const holdedBD  =ref(false)
+let xStart : number | null = null
+let curTimeStart : number | null = null
+function onBDTouchStart(event: TouchEvent) {
+  holdedBD .value = false
   timeoutHoldBD && clearTimeout(timeoutHoldBD)
 
   timeoutHoldBD = setTimeout(() => {
-    holdedBD = true
+    holdedBD .value = true
+    currentingTime.value = true 
+    xStart =  (
+        (event as TouchEvent).changedTouches?.[0] ??
+        (event as TouchEvent).touches?.[0] ??
+        event
+      ).clientX
+    curTimeStart = artCurrentTime.value
     // vibrate
-    navigator.vibrate?.(150)
-  }, 600)
+    console.log("hold")
+    Haptics.vibrate({ duration: 90 })
+  }, 400)
 }
 function onBDTouchMove(event: TouchEvent) {
 if (timeoutHoldBD) {
@@ -953,7 +981,10 @@ if (timeoutHoldBD) {
   timeoutHoldBD  = null
 }
 
-  onIndicatorMove(event)
+if (holdedBD.value) {
+console.log("bd move")
+  onIndicatorMove(event, event.target as HTMLDivElement, xStart, curTimeStart)
+}
 }
 function onBDTouchEnd() {
 if (timeoutHoldBD) {
@@ -961,10 +992,13 @@ if (timeoutHoldBD) {
   timeoutHoldBD  = null
 }
 
-  if (holdedBD) {
-    holdedBD = false
+  if (holdedBD.value) {
+    holdedBD.value  = false
     onIndicatorEnd()
   }
+
+  xStart = null
+  curTimeStart = null
 }
 
 const notices = shallowReactive<
@@ -1057,6 +1091,8 @@ const showDialogQuality = ref(false)
       right: 16px;
       bottom: 8px;
     }
+    display: flex;
+    flex-direction: column-reverse;
     @media (orientation: landscape) {
       padding-bottom: 32px !important;
     }
@@ -1072,12 +1108,13 @@ const showDialogQuality = ref(false)
     bottom: 0;
     left: 0;
     right: 0;
-    display: flex;
-    flex-direction: column-reverse;
     // background-color: red;
 
     .art-more-controls {
+    display: none;
+    @media (orientation: landscape) {
       display: flex;
+    }
       margin-top: 16px;
     }
 
@@ -1088,6 +1125,7 @@ const showDialogQuality = ref(false)
       align-items: center;
       padding: 16px 4px;
       cursor: pointer;
+      z-index: 30;
 
       .art-control-progress-inner {
         display: flex;
@@ -1288,28 +1326,21 @@ const showDialogQuality = ref(false)
 </style>
 
 <style lang="scss">
-.art-notice,
-.art-bottom,
-.art-layer-lock {
-  display: none !important;
-}
 .fade__ease-in-out {
   @keyframes fade__ease-in-out {
     from {
-      opacity: 0;
-      visibility: hidden;
+      opacity: 0
     }
     to {
       opacity: 1;
-      visibility: visible;
     }
   }
 
   &-enter-active {
-    animation: fade__ease-in-out 0.44s ease-in-out;
+    animation: fade__ease-in-out 0.22s ease-in-out;
   }
   &-leave-active {
-    animation: fade__ease-in-out 0.44s ease-in-out reverse;
+    animation: fade__ease-in-out 0.22s ease-in-out reverse;
   }
 }
 </style>

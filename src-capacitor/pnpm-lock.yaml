@@ -6,6 +6,7 @@ specifiers:
   '@capacitor/app': ^4.0.1
   '@capacitor/cli': ^4.3.0
   '@capacitor/core': ^4.3.0
+  '@capacitor/haptics': ^4.0.1
   '@capacitor/status-bar': ^4.0.1
   '@hugotomazi/capacitor-navigation-bar': ^2.0.0
   '@ionic/vue': ^6.2.8
@@ -17,6 +18,7 @@ dependencies:
   '@capacitor/app': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/cli': 4.3.0
   '@capacitor/core': 4.3.0
+  '@capacitor/haptics': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/status-bar': 4.0.1_@capacitor+core@4.3.0
   '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.3.0
   '@ionic/vue': 6.2.8
@@ -101,6 +103,14 @@ packages:
       '@capacitor/core': ^3.0.0
     dependencies:
       '@capacitor/core': 3.8.0
+    dev: false
+
+  /@capacitor/haptics/4.0.1_@capacitor+core@4.3.0:
+    resolution: {integrity: sha512-ZLVoLdK1Md/xIRRrDOnrLCKGRg8UENY1ShpKcysPN1z1MgcpvB/9Nbqczm3RH24zyo3MP/7homkqMzUGxPBlwQ==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: false
 
   /@capacitor/ios/3.8.0_@capacitor+core@3.8.0:
