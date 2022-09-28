@@ -38,6 +38,7 @@
   "devDependencies": {
     "@capacitor-community/http": "^1.4.1",
     "@capacitor/haptics": "^4.0.1",
+    "@capacitor/preferences": "^4.0.1",
     "@capacitor/status-bar": "^4.0.1",
     "@hugotomazi/capacitor-navigation-bar": "^2.0.0",
     "@intlify/vite-plugin-vue-i18n": "^6.0.1",

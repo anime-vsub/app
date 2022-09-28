@@ -25,6 +25,7 @@
         @canplaythrough="artLoading = false"
         @waiting="artLoading = true"
         @error="onVideoError"
+        @ended="onVideoEnded"
       />
 
       <div
@@ -32,7 +33,7 @@
         @touchstart="onBDTouchStart"
         @touchmove="onBDTouchMove"
         @touchend="onBDTouchEnd"
-        @click="setArtControlShow(true)"
+        @click="onClickSkip($event, true)"
         v-show="holdedBD || !artControlShow"
       />
       <transition name="fade__ease-in-out">
@@ -41,10 +42,10 @@
           :class="{
             'currenting-time': currentingTime,
           }"
-             @touchstart="onBDTouchStart"
-        @touchmove="onBDTouchMove"
-        @touchend="onBDTouchEnd"
-          @click="setArtControlShow(false)"
+          @touchstart="onBDTouchStart"
+          @touchmove="onBDTouchMove"
+          @touchend="onBDTouchEnd"
+          @click="onClickSkip($event, false)"
           v-show="holdedBD || artControlShow"
         >
           <div class="toolbar-top">
@@ -93,7 +94,11 @@
           </div>
 
           <!-- fix spacing 2px -->
-          <q-btn flat dense round v-ripple="false"
+          <q-btn
+            flat
+            dense
+            round
+            v-ripple="false"
             class="p-2 w-[72px] h-[72px] relative z-199"
             @click.stop="setArtPlaying(!artPlaying)"
             v-show="!holdedBD"
@@ -271,9 +276,9 @@
       <transition-group
         tag="div"
         name="notices"
-        class="absolute top-0 left-0 w-full flex column justify-end ml-10 text-[14px] pointer-events-none"
+        class="absolute bottom-[40%] left-0 w-full flex column justify-end ml-10 text-[14px] pointer-events-none"
       >
-        <div v-for="item in notices" :key="item.id" class="pb-2 last:mb-36">
+        <div v-for="item in notices" :key="item.id" class="pb-2">
           <span
             class="text-[#fff] bg-[#0009] rounded-[3px] px-[16px] py-[10px] inline-block"
             >{{ item.text }}</span
@@ -560,6 +565,7 @@
 import { StatusBar } from "@capacitor/status-bar"
 import { Haptics } from "@capacitor/haptics"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
+import { Preferences } from "@capacitor/preferences"
 import { Icon } from "@iconify/vue"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
@@ -614,6 +620,11 @@ const props = defineProps<{
   >
   fetchSeason: (season: string) => Promise<void>
 }>()
+const uniqueCurChap = computed(() =>
+  props.currentChap && props.currentSeason
+    ? `${props.currentChap}@${props.currentSeason}`
+    : undefined
+)
 
 // ===== setup effect =====
 
@@ -672,6 +683,7 @@ const setArtPlaying = (playing: boolean) => {
     if (!video.value.paused) video.value.pause()
   }
 }
+let artEnded = false
 const artLoading = ref(true)
 const artDuration = ref<number>(0)
 const artCurrentTime = ref<number>(0)
@@ -682,6 +694,7 @@ const setArtCurrentTime = (currentTime: number) => {
   }
   video.value.currentTime = currentTime
 }
+watch(uniqueCurChap, () => setArtCurrentTime(0), { immediate: true })
 const artPercentageResourceLoaded = ref<number>(0)
 const artPlaybackRate = ref(1)
 const setArtPlaybackRate = (value: number) => {
@@ -707,6 +720,7 @@ watch(
 )
 const artFullscreen = ref(false)
 const setArtFullscreen = async (fullscreen: boolean) => {
+  console.log("set art fullscreen ", fullscreen)
   if (fullscreen) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await playerWrapRef.value!.requestFullscreen()
@@ -770,6 +784,14 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
+import { debounce } from "quasar"
+const saveCurTimeToPer = debounce(async () => {
+  localStorage.setItem(
+    `cur_time:${uniqueCurChap.value}`,
+    JSON.stringify(artCurrentTime.value)
+  )
+  console.log("saaved to per")
+}, 900)
 function onVideoTimeUpdate() {
   if (
     artPlaying.value &&
@@ -779,6 +801,7 @@ function onVideoTimeUpdate() {
   ) {
     artControlShow.value = false
   }
+  saveCurTimeToPer()
 }
 function onVideoError(event: Event) {
   console.log("video error ", event)
@@ -807,6 +830,21 @@ function onVideoError(event: Event) {
     ],
   })
 }
+function onVideoEnded() {
+  artEnded = true
+  if (props.nextChap) {
+    addNotice(
+      props.currentSeason !== props.nextChap.season
+        ? `Đang phát ${props.nextChap.season}`
+        : "Đang phát tập tiếp theo"
+    )
+
+    router.push({
+      name: "phim_[season]_[chap]",
+      params: props.nextChap,
+    })
+  }
+}
 
 function runRemount() {
   $q.dialog({
@@ -830,7 +868,8 @@ function remount() {
   const { url, type } = currentStream.value
 
   const currentTime = artCurrentTime.value
-  const playing = !video.value.paused || artPlaying.value 
+  const playing = !video.value.paused || artPlaying.value || artEnded
+  artEnded = false
 
   switch (type) {
     case "hls":
@@ -890,7 +929,7 @@ watch(
     if (!sources || sources.length === 0) return
     // not ready quality on this
     if (!artQuality.value || !currentStream.value) {
-      setArtQuality(sources[0].html)
+      artQuality.value = sources[0].html // not use setArtQuality because skip notify
     }
   },
   { immediate: true }
@@ -900,46 +939,53 @@ const playerWrapRef = ref<HTMLDivElement>()
 
 const currentingTime = ref(false)
 const progressInnerRef = ref<HTMLDivElement>()
-function onIndicatorMove(event: TouchEvent | MouseEvent, innerEl: HTMLDivElement = progressInnerRef.value!,offsetX?: number, curTimeStart?: number) {
+function onIndicatorMove(
+  event: TouchEvent | MouseEvent,
+  innerEl: HTMLDivElement = progressInnerRef.value!,
+  offsetX?: number,
+  curTimeStart?: number
+) {
   currentingTime.value = true
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const maxX = innerEl.offsetWidth
-  const { left } = (
-  innerEl
-  ).getBoundingClientRect()
+  const { left } = innerEl.getBoundingClientRect()
 
-console.log( offsetX )
+  console.log(offsetX)
 
-if (offsetX) {
-  const clientX = 
+  if (offsetX) {
+    const clientX =
       (
         (event as TouchEvent).changedTouches?.[0] ??
         (event as TouchEvent).touches?.[0] ??
         event
-      ).clientX  - offsetX - left
-    
+      ).clientX -
+      offsetX -
+      left
 
-  // patch x exists -> enable mode add
-  artCurrentTime.value = Math.max(0, Math.min(
-video.value!.duration,
- curTimeStart + (video.value!.duration * clientX) / maxX
-  ))
-} else {
-  const clientX = Math.min(
-    maxX,
-    Math.max(
+    // patch x exists -> enable mode add
+    artCurrentTime.value = Math.max(
       0,
-      (
-        (event as TouchEvent).changedTouches?.[0] ??
-        (event as TouchEvent).touches?.[0] ??
-        event
-      ).clientX - left
+      Math.min(
+        video.value!.duration,
+        curTimeStart + (video.value!.duration * clientX) / maxX
+      )
     )
-  )
+  } else {
+    const clientX = Math.min(
+      maxX,
+      Math.max(
+        0,
+        (
+          (event as TouchEvent).changedTouches?.[0] ??
+          (event as TouchEvent).touches?.[0] ??
+          event
+        ).clientX - left
+      )
+    )
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  artCurrentTime.value = (video.value!.duration * clientX) / maxX
-}
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    artCurrentTime.value = (video.value!.duration * clientX) / maxX
+  }
 
   activeTime = Date.now()
 }
@@ -954,21 +1000,21 @@ function onIndicatorEnd() {
 // eslint-disable-next-line functional/no-let, no-undef
 let timeoutHoldBD: number | NodeJS.Timeout | null = null
 // eslint-disable-next-line functional/no-let
-const holdedBD  =ref(false)
-let xStart : number | null = null
-let curTimeStart : number | null = null
+const holdedBD = ref(false)
+let xStart: number | null = null
+let curTimeStart: number | null = null
 function onBDTouchStart(event: TouchEvent) {
-  holdedBD .value = false
+  holdedBD.value = false
   timeoutHoldBD && clearTimeout(timeoutHoldBD)
 
   timeoutHoldBD = setTimeout(() => {
-    holdedBD .value = true
-    currentingTime.value = true 
-    xStart =  (
-        (event as TouchEvent).changedTouches?.[0] ??
-        (event as TouchEvent).touches?.[0] ??
-        event
-      ).clientX
+    holdedBD.value = true
+    currentingTime.value = true
+    xStart = (
+      (event as TouchEvent).changedTouches?.[0] ??
+      (event as TouchEvent).touches?.[0] ??
+      event
+    ).clientX
     curTimeStart = artCurrentTime.value
     // vibrate
     console.log("hold")
@@ -976,29 +1022,78 @@ function onBDTouchStart(event: TouchEvent) {
   }, 400)
 }
 function onBDTouchMove(event: TouchEvent) {
-if (timeoutHoldBD) {
-  clearTimeout(timeoutHoldBD)
-  timeoutHoldBD  = null
-}
-
-if (holdedBD.value) {
-console.log("bd move")
-  onIndicatorMove(event, event.target as HTMLDivElement, xStart, curTimeStart)
-}
-}
-function onBDTouchEnd() {
-if (timeoutHoldBD) {
-  clearTimeout(timeoutHoldBD)
-  timeoutHoldBD  = null
-}
+  if (timeoutHoldBD) {
+    clearTimeout(timeoutHoldBD)
+    timeoutHoldBD = null
+  }
 
   if (holdedBD.value) {
-    holdedBD.value  = false
+    console.log("bd move")
+    onIndicatorMove(event, event.target as HTMLDivElement, xStart, curTimeStart)
+  }
+}
+function onBDTouchEnd() {
+  if (timeoutHoldBD) {
+    clearTimeout(timeoutHoldBD)
+    timeoutHoldBD = null
+  }
+
+  if (holdedBD.value) {
+    holdedBD.value = false
     onIndicatorEnd()
   }
 
   xStart = null
   curTimeStart = null
+}
+
+let lastTimeClick: number
+let lastPositionClickIsLeft: boolean | null = null
+let timeoutDbClick: number | NodeJS.number | null = null
+function onClickSkip(event: MouseEvent, orFalse: boolean) {
+  // click
+  const now = Date.now()
+
+  const isLeft =
+    Math.round(
+      (event.changedTouches?.[0] ?? event.touches?.[0] ?? event).clientX
+    ) < Math.round((event.target as HTMLDivElement).offsetWidth / 2)
+
+  if (
+    (lastPositionClickIsLeft === null || lastPositionClickIsLeft === isLeft) &&
+    now - lastTimeClick <= 300
+  ) {
+    // is double click
+    clearTimeout(timeoutDbClick)
+
+    if (artControlShow.value) activeTime = Date.now() // fix for if control show continue show
+
+    if (isLeft) {
+      // previous 10s
+      setArtCurrentTime(
+        (artCurrentTime.value = Math.max(0, artCurrentTime.value - 10))
+      )
+    } else {
+      // next 10s
+      setArtCurrentTime(
+        (artCurrentTime.value = Math.min(
+          artCurrentTime.value + 10,
+          artDuration.value
+        ))
+      )
+    }
+    // soku
+  } else {
+    clearTimeout(timeoutDbClick)
+    timeoutDbClick = setTimeout(() => {
+      setArtControlShow(orFalse)
+      lastTimeClick = 0
+      lastPositionClickIsLeft = null
+    }, 300)
+  }
+
+  lastTimeClick = now
+  lastPositionClickIsLeft = isLeft
 }
 
 const notices = shallowReactive<
@@ -1111,10 +1206,10 @@ const showDialogQuality = ref(false)
     // background-color: red;
 
     .art-more-controls {
-    display: none;
-    @media (orientation: landscape) {
-      display: flex;
-    }
+      display: none;
+      @media (orientation: landscape) {
+        display: flex;
+      }
       margin-top: 16px;
     }
 
@@ -1329,7 +1424,7 @@ const showDialogQuality = ref(false)
 .fade__ease-in-out {
   @keyframes fade__ease-in-out {
     from {
-      opacity: 0
+      opacity: 0;
     }
     to {
       opacity: 1;

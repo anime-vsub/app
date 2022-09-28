@@ -7,6 +7,7 @@ specifiers:
   '@capacitor/cli': ^4.3.0
   '@capacitor/core': ^4.3.0
   '@capacitor/haptics': ^4.0.1
+  '@capacitor/preferences': ^4.0.1
   '@capacitor/status-bar': ^4.0.1
   '@hugotomazi/capacitor-navigation-bar': ^2.0.0
   '@ionic/vue': ^6.2.8
@@ -23,6 +24,9 @@ dependencies:
   '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.3.0
   '@ionic/vue': 6.2.8
   cordova-plugin-screen-orientation: 3.0.2
+
+devDependencies:
+  '@capacitor/preferences': 4.0.1_@capacitor+core@4.3.0
 
 packages:
 
@@ -95,7 +99,6 @@ packages:
     resolution: {integrity: sha512-zb225feaiHYcttHqw7SnKVj9gjOh3yoM2ol0Efky4kd80qZvqPHt7nRI1XZmGUKid5j3AVggULd5rRke5OEOXQ==}
     dependencies:
       tslib: 2.4.0
-    dev: false
 
   /@capacitor/filesystem/1.1.0_@capacitor+core@3.8.0:
     resolution: {integrity: sha512-8O3UuvL8HNUEJvZnmn8yUmvgB1evtXfcF0oxIo3YbSlylqywJwS3JTiuhKmsvSxCdpbTy8IaTsutVh3gZgWbKg==}
@@ -120,6 +123,14 @@ packages:
     dependencies:
       '@capacitor/core': 3.8.0
     dev: false
+
+  /@capacitor/preferences/4.0.1_@capacitor+core@4.3.0:
+    resolution: {integrity: sha512-FffJjKS4XcodUj/rtFtWizQ9q/oYDSn5opZ+JYwj/EkjiMWMhY/Pk9lN3vwQfp+VJrTt3hjr+bwKXjhTbYBqKw==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
+    dev: true
 
   /@capacitor/status-bar/4.0.1_@capacitor+core@4.3.0:
     resolution: {integrity: sha512-BmEyOf3m/hAf8bO4hCX0m5gpQPSgd05mGYl+9E841WUZeJjcYlmiG/EBshAUb2uGCVtyNaG36yPXB0r0Ypg+rw==}
@@ -727,7 +738,6 @@ packages:
 
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
-    dev: false
 
   /universalify/2.0.0:
     resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
