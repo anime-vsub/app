@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@capacitor-community/http': ^1.4.1
+  '@capacitor/haptics': ^4.0.1
   '@capacitor/status-bar': ^4.0.1
   '@hugotomazi/capacitor-navigation-bar': ^2.0.0
   '@iconify/vue': ^4.0.0
@@ -63,6 +64,7 @@ dependencies:
 
 devDependencies:
   '@capacitor-community/http': 1.4.1
+  '@capacitor/haptics': 4.0.1
   '@capacitor/status-bar': 4.0.1
   '@hugotomazi/capacitor-navigation-bar': 2.0.0
   '@intlify/vite-plugin-vue-i18n': 6.0.1_vue-i18n@9.2.2
@@ -142,6 +144,12 @@ packages:
       '@capacitor/core': ^3.0.0
     dependencies:
       '@capacitor/core': 3.8.0
+    dev: true
+
+  /@capacitor/haptics/4.0.1:
+    resolution: {integrity: sha512-ZLVoLdK1Md/xIRRrDOnrLCKGRg8UENY1ShpKcysPN1z1MgcpvB/9Nbqczm3RH24zyo3MP/7homkqMzUGxPBlwQ==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
     dev: true
 
   /@capacitor/ios/3.8.0_@capacitor+core@3.8.0:

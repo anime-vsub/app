@@ -14,6 +14,7 @@
     "@capacitor/app": "^4.0.1",
     "@capacitor/cli": "^4.3.0",
     "@capacitor/core": "^4.3.0",
+    "@capacitor/haptics": "^4.0.1",
     "@capacitor/status-bar": "^4.0.1",
     "@hugotomazi/capacitor-navigation-bar": "^2.0.0",
     "@ionic/vue": "^6.2.8",
