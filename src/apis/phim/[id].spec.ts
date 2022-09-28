@@ -18,7 +18,6 @@ describe("[id]", () => {
     const result = JSON.parse(JSON.stringify(await PhimId(html)))
 
     asset.toPut.forEach((item, index) => {
-      // eslint-disable-next-line functional/immutable-data
       item.time_release = result.toPut[index].time_release
     })
 

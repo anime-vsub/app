@@ -1,13 +1,13 @@
-import { getHTML } from "../../helpers/getHTML"
-import { parserDOM } from "../../utils/parserDOM"
 import { load } from "cheerio"
+
+import { getHTML } from "../../helpers/getHTML"
 
 export async function PhimIdChap(url: string) {
   const $ = load(await getHTML(url))
 
   const chaps = $(".list-episode:eq(0)")
     .find(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       "a"
     )
     .map((_i, item) => {
@@ -19,7 +19,7 @@ export async function PhimIdChap(url: string) {
         play: $item.attr("data-play")!,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         hash: $item.attr("data-hash")!,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
         name: $item.text().trim(),
       }
     })

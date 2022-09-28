@@ -18,20 +18,22 @@
         chap: item.id,
       },
     }"
-    :ref="(el) => find(item) && (activeRef = el)"
+    :ref="(el) => find(item) && (activeRef = el as QTab)"
   >
     {{ item.name }}
   </q-btn>
 </template>
 
 <script lang="ts" setup>
+import { QBtn } from "quasar";
+import type { PhimIdChap } from "src/apis/phim/[id]/[chap]";
+import { ref, useAttrs, watchEffect } from "vue"
 defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
   chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"]
   season: string
   classActive?: string
 }>()
-import { ref, watchEffect, useAttrs } from "vue"
 
 const attrs = useAttrs()
 

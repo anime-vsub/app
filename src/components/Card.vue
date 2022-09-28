@@ -38,10 +38,11 @@
 </template>
 
 <script lang="ts" setup>
-import { TPost } from "src/apis/helpers/getInfoTPost"
-import Star from "./Star.vue"
-import Quality from "./Quality.vue"
+import type { TPost } from "src/apis/helpers/getInfoTPost"
 import { useRouter } from "vue-router"
+
+import Quality from "./Quality.vue"
+import Star from "./Star.vue"
 
 const router = useRouter()
 

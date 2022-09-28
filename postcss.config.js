@@ -1,6 +1,5 @@
 // https://github.com/michael-ciniawsky/postcss-load-config
 
-// eslint-disable-next-line functional/immutable-data
 module.exports = {
   plugins: [
     // https://github.com/postcss/autoprefixer

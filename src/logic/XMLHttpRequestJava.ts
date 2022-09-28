@@ -1,7 +1,7 @@
 import type { HttpOptions } from "@capacitor-community/http"
+import { get } from "src/logic/http"
 
 import { base64ToArrayBuffer } from "./base64ToArrayBuffer"
-import { get } from "src/logic/http"
 
 export class XMLHttpRequestJava {
   currentTarget = this
@@ -21,15 +21,24 @@ export class XMLHttpRequestJava {
   ) => void
 
   public onreadystatechange?: (event: typeof this) => void
+  public onerror?: (event: typeof this) => void
 
   setRequestHeader(k: string, v: string) {
     this.headers.set(k, v)
   }
+
   getResponseHeader(k: string) {
     return this.resHeaders?.get(k)
   }
+
   getAllResponseHeaders(): string {
-    return Array.from(this.res?.entries() ?? [])
+    return (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Array.from((this.headers as unknown as any).entries() ?? []) as [
+        string,
+        string
+      ][]
+    )
       .map(([key, val]) => `${key}: ${val}`)
       .join("\r\n")
   }
@@ -51,7 +60,8 @@ export class XMLHttpRequestJava {
       const res = await get({
         url: this.url,
         responseType: this.responseType,
-        headers: Object.fromEntries(this.headers.entries()),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        headers: Object.fromEntries((this.headers as unknown as any).entries()),
       })
 
       res.data =
@@ -79,7 +89,8 @@ export class XMLHttpRequestJava {
         loaded: res.data.length,
         total: res.data.length,
       })
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       this.onerror?.(err)
     }
   }
