@@ -294,14 +294,7 @@ import type { Source } from "src/components/sources"
 import { labelToQuality } from "src/constants"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
-import {
-  computed,
-  reactive,
-  ref,
-  shallowRef,
-  watch,
-  watchEffect,
-} from "vue"
+import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 

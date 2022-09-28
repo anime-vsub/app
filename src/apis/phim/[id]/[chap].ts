@@ -6,10 +6,7 @@ export async function PhimIdChap(url: string) {
   const $ = load(await getHTML(url))
 
   const chaps = $(".list-episode:eq(0)")
-    .find(
-
-      "a"
-    )
+    .find("a")
     .map((_i, item) => {
       const $item = $(item)
       return {

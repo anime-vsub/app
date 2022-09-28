@@ -33,14 +33,16 @@ export class XMLHttpRequestJava {
 
   getAllResponseHeaders(): string {
     return (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Array.from((this.headers as unknown as any).entries() ?? []) as [
-        string,
-        string
-      ][]
+      (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Array.from((this.headers as unknown as any).entries() ?? []) as [
+          string,
+          string
+        ][]
+      )
+        .map(([key, val]) => `${key}: ${val}`)
+        .join("\r\n")
     )
-      .map(([key, val]) => `${key}: ${val}`)
-      .join("\r\n")
   }
 
   open(method: "get" | "post", url: string) {
@@ -89,7 +91,7 @@ export class XMLHttpRequestJava {
         loaded: res.data.length,
         total: res.data.length,
       })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       this.onerror?.(err)
     }

@@ -88,6 +88,6 @@ module.exports = {
     "n/no-unpublished-import": "off",
     "functional/immutable-data": "off",
     "vue/multi-word-component-names": "off",
-    "eslint-comments/no-unlimited-disable": "off"
+    "eslint-comments/no-unlimited-disable": "off",
   },
 }

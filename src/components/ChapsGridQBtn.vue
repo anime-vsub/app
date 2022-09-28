@@ -25,8 +25,8 @@
 </template>
 
 <script lang="ts" setup>
-import { QBtn } from "quasar";
-import type { PhimIdChap } from "src/apis/phim/[id]/[chap]";
+import { QBtn } from "quasar"
+import type { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import { ref, useAttrs, watchEffect } from "vue"
 defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
