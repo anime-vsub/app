@@ -87,7 +87,10 @@
           </div>
 
           <!-- fix spacing 2px -->
-          <button
+          <q-btn
+            flat
+            dense
+            round
             class="p-2 w-[72px] h-[72px]"
             @click.stop
             @touchstart.prevent.stop="setArtPlaying(!artPlaying)"
@@ -107,7 +110,7 @@
                 height="60"
               />
             </template>
-          </button>
+          </q-btn>
 
           <div class="toolbar-bottom">
             <div class="art-more-controls flex items-center justify-between">
