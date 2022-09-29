@@ -104,145 +104,118 @@
     </swiper>
 
     <div class="px-4">
-      <swiper :slides-per-view="'auto'">
-        <swiper-slide
-          v-for="item in data.thisSeason"
-          :key="item.name"
-          class="!w-auto card-wrap"
-        >
-          <Card :data="item" />
-        </swiper-slide>
-      </swiper>
+      <div class="wpa-grid">
+        <div class="ctnr">
+          <Card
+            v-for="item in data.thisSeason"
+            :key="item.name"
+            class="card-wrap"
+            :data="item"
+          />
+        </div>
+      </div>
     </div>
 
     <div class="px-4 mt-4">
       <h2 class="text-h6">Đề xuất</h2>
 
-      <swiper
-        :slides-per-view="3"
-        :breakpoints="{
-          0: {
-            slidesPerView: 3.1,
-            spaceBetween: 8,
-          },
-          767: {
-            slidesPerView: 4.1,
-            spaceBetween: 8,
-          },
-          1023: {
-            slidesPerView: 6.1,
-            spaceBetween: 16,
-          },
-        }"
-        :grid="{
-          rows: 2,
-          fill: 'row',
-        }"
-        :modules="[Grid]"
-      >
-        <swiper-slide v-for="item in data.nominate" :key="item.name">
+      <div class="relative row">
+        <div
+          v-for="item in data.nominate"
+          :key="item.name"
+          class="col-4 px-1 py-1"
+        >
           <Card :data="item" />
-        </swiper-slide>
-      </swiper>
+        </div>
+      </div>
     </div>
 
     <div class="px-4 mt-4">
       <h2 class="text-h6">Top</h2>
 
-      <swiper :slides-per-view="'auto'">
-        <swiper-slide
-          v-for="(item, index) in data.hotUpdate"
-          :key="item.name"
-          class="!w-auto card-wrap"
-        >
-          <Card :data="item" :trending="index + 1" />
-        </swiper-slide>
-      </swiper>
+      <div class="wpa-grid">
+        <div class="ctnr">
+          <Card
+            v-for="(item, index) in data.hotUpdate"
+            :key="item.name"
+            class="card-wrap"
+            :data="item"
+            :trending="index + 1"
+          />
+        </div>
+      </div>
     </div>
 
     <div class="px-4 mt-4">
       <h2 class="text-h6">Sắp chiếu</h2>
 
-      <swiper :slides-per-view="'auto'">
-        <swiper-slide
-          v-for="item in data.preRelease"
-          :key="item.name"
-          class="!w-auto card-wrap"
-        >
-          <div class="coming_soon-timeline">
-            <div class="coming_soon-line"></div>
-            <div class="coming_soon-dot"></div>
-            <div class="coming_soon-time-wrapper">
-              <div
-                v-if="
-                  (tmp = item.time_release ? dayjs(item.time_release) : null)
-                "
-              >
-                <!-- if in today or tomorrow -->
-                <template v-if="(isTodayF = tmp.isToday()) || tmp.isTomorrow()">
-                  <div class="coming_soon-text-date">
-                    {{ tmp.format("HH:mm") }}
-                  </div>
-                  <div class="coming_soon-text-day">
-                    <template v-if="isTodayF"> Hôm nay </template>
-                    <template v-else> Ngày mai </template>
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="coming_soon-text-date">
-                    {{
-                      tmp.format(
-                        tmp.year() === new Date().getFullYear()
-                          ? "M-DD"
-                          : "YYYY-MM-DD"
-                      )
-                    }}
-                  </div>
-                  <div class="coming_soon-text-day capitalize">
-                    {{ tmp.locale("vi").format("dddd") }}
-                  </div>
-                </template>
+      <div class="wpa-grid">
+        <div class="ctnr">
+          <div
+            v-for="item in data.preRelease"
+            :key="item.name"
+            class="relative card-wrap"
+          >
+            <div class="coming_soon-timeline absolute top-0 left-0">
+              <div class="coming_soon-line"></div>
+              <div class="coming_soon-dot"></div>
+              <div class="coming_soon-time-wrapper">
+                <div
+                  v-if="
+                    (tmp = item.time_release ? dayjs(item.time_release) : null)
+                  "
+                >
+                  <!-- if in today or tomorrow -->
+                  <template
+                    v-if="(isTodayF = tmp.isToday()) || tmp.isTomorrow()"
+                  >
+                    <div class="coming_soon-text-date">
+                      {{ tmp.format("HH:mm") }}
+                    </div>
+                    <div class="coming_soon-text-day">
+                      <template v-if="isTodayF"> Hôm nay </template>
+                      <template v-else> Ngày mai </template>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div class="coming_soon-text-date">
+                      {{
+                        tmp.format(
+                          tmp.year() === new Date().getFullYear()
+                            ? "M-DD"
+                            : "YYYY-MM-DD"
+                        )
+                      }}
+                    </div>
+                    <div class="coming_soon-text-day capitalize">
+                      {{ tmp.locale("vi").format("dddd") }}
+                    </div>
+                  </template>
 
-                <!-- <template v-else>{{ tmp.format("DD/MM") }}</template> -->
+                  <!-- <template v-else>{{ tmp.format("DD/MM") }}</template> -->
+                </div>
+                <span v-else class="coming_soon-text-unknown">Sắp chiếu</span>
               </div>
-              <span v-else class="coming_soon-text-unknown">Sắp chiếu</span>
             </div>
-          </div>
 
-          <Card :data="item" />
-        </swiper-slide>
-      </swiper>
+            <Card :data="item" />
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="px-4 mt-4">
       <h2 class="text-h6">Mới cập nhật</h2>
 
-      <swiper
-        :slides-per-view="3"
-        :breakpoints="{
-          0: {
-            slidesPerView: 3.1,
-            spaceBetween: 8,
-          },
-          767: {
-            slidesPerView: 4.1,
-            spaceBetween: 8,
-          },
-          1023: {
-            slidesPerView: 6.1,
-            spaceBetween: 16,
-          },
-        }"
-        :grid="{
-          rows: 2,
-          fill: 'row',
-        }"
-        :modules="[Grid]"
-      >
-        <swiper-slide v-for="item in data.lastUpdate" :key="item.name">
+      <div class="relative row">
+        <div
+          v-for="item in data.lastUpdate"
+          :key="item.name"
+          class="col-4 px-1 py-1"
+        >
           <Card :data="item" />
-        </swiper-slide>
-      </swiper>
+        </div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -581,19 +554,32 @@ let isTodayF = false
 </style>
 
 <style lang="scss" scoped>
+.wpa-grid {
+  //  display: flex;
+  overflow-x: scroll;
+  position: relative;
+  .ctnr {
+    max-width: initial;
+    white-space: nowrap;
+  }
+}
 .card-wrap {
   $offset: 0.1;
+  display: inline-block;
+  white-space: initial;
 
   // width: 155.25px !important;
-  width: calc((100% - 80px) / #{6 + $offset}) !important;
+  max-width: calc((100% - 80px) / #{6 + $offset}) !important;
   margin-right: 16px;
 
   @media screen and (max-width: 767px) {
-    width: calc((100% - 16px) / #{3 + $offset}) !important;
+    max-width: calc((100% - 16px) / #{3 + $offset}) !important;
     margin-right: 8px;
   }
   @media screen and (min-width: 768px) and (max-width: 1023px) {
-    width: calc((100% - 48px) / #{4 + $offset}) !important;
+    max-width: calc((100% - 48px) / #{4 + $offset}) !important;
   }
+
+  width: 280px;
 }
 </style>

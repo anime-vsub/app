@@ -1481,6 +1481,14 @@ const showDialogQuality = ref(false)
       transform: translateX(-100%);
       //margin-left: 40px
     }
+
+    .prev,
+    .next {
+      display: none;
+      @media (orientation: landscape) {
+        display: inline-block;
+      }
+    }
   }
 }
 .player__wrap {
