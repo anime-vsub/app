@@ -147,11 +147,7 @@
             v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
             class="flex justify-center"
           >
-            <q-spinner-infinity
-              style="color: #00be06"
-              size="3em"
-              :thickness="3"
-            />
+            <q-spinner-infinity class="c--main" size="3em" :thickness="3" />
           </div>
           <div
             v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
@@ -326,7 +322,7 @@ const currentMetaSeason = computed(() => {
   return allSeasons.value?.find((item) => item.value === currentSeason.value)
 })
 
-const { data, run } = useRequest(
+const { data, run, error } = useRequest(
   () => {
     return PhimId(`/phim/${currentSeason.value}/`)
   },
@@ -337,6 +333,13 @@ const { data, run } = useRequest(
     },
   }
 )
+watch(error, (error) => {
+  if (error)
+    router.push({
+      name: "not_found",
+      path: route.path,
+    })
+})
 
 interface ResponseDataSeasonPending {
   status: "pending"

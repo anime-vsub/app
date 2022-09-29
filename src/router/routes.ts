@@ -12,8 +12,18 @@ const routes: RouteRecordRaw[] = [
       {
         name: "phim_[season]_[chap]",
         path: "phim/:season/:chap?",
-        alias: ["phim/:season"],
         component: () => import("pages/phim/_season.vue"),
+      },
+      {
+        path: ":type_normal(anime-bo|anime-le|hoat-hinh-trung-quoc|anime-sap-chieu)",
+        redirect(to) {
+          return `/danh-sach/${to.params.type_normal}`
+        },
+      },
+      {
+        path: ":type_normal(danh-sach|the-loai|quoc-gia|tag)/:value",
+        alias: [":type_normal(season)/:value+"],
+        component: () => import("pages/[_type-normal]/[value].vue"),
       },
     ],
   },

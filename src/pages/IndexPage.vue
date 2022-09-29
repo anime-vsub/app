@@ -119,15 +119,7 @@
     <div class="px-4 mt-4">
       <h2 class="text-h6">Đề xuất</h2>
 
-      <div class="relative row">
-        <div
-          v-for="item in data.nominate"
-          :key="item.name"
-          class="col-4 px-1 py-1"
-        >
-          <Card :data="item" />
-        </div>
-      </div>
+      <GridCard :items="data.nominate" />
     </div>
 
     <div class="px-4 mt-4">
@@ -207,15 +199,7 @@
     <div class="px-4 mt-4">
       <h2 class="text-h6">Mới cập nhật</h2>
 
-      <div class="relative row">
-        <div
-          v-for="item in data.lastUpdate"
-          :key="item.name"
-          class="col-4 px-1 py-1"
-        >
-          <Card :data="item" />
-        </div>
-      </div>
+      <GridCard :items="data.lastUpdate" />
     </div>
   </q-page>
 </template>
@@ -234,8 +218,10 @@ import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
 // eslint-disable-next-line import/order
 import isTomorrow from "dayjs/plugin/isTomorrow"
-
+import { watch } from "vue"
 import "dayjs/locale/vi"
+import GridCard from "components/GridCard.vue"
+import SkeletonGridCard from "components/SkeletonGridCard.vue"
 
 // Import Swiper Vue.js components
 
@@ -256,6 +242,13 @@ const modules = [Pagination, Autoplay]
 const aspectRatio = 622 / 350
 
 const { data, loading, error } = useRequest(() => Index("/"))
+watch(error, (error) => {
+  if (error)
+    router.push({
+      name: "not_found",
+      path: route.path,
+    })
+})
 
 // eslint-disable-next-line functional/no-let, @typescript-eslint/no-explicit-any
 let tmp: any

@@ -6,3 +6,11 @@
 .c--main {
   color: rgb(0, 194, 52);
 }
+
+.bg-dark-page {
+  background-color: var(--q-dark-page, #121212) !important;
+}
+
+.bg-main {
+  background-color: rgb(0, 194, 52) !important;
+}
