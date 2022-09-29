@@ -36,6 +36,40 @@
         @click="onClickSkip($event, true)"
         v-show="holdedBD || !artControlShow"
       />
+
+      <!-- backdrop show skip icon -->
+      <div
+        v-if="doubleClicking"
+        class="absolute top-0 left-0 w-full h-full pointer-events-none flex items-center justify-center text-[16px]"
+      >
+        <div
+          v-if="doubleClicking === 'left'"
+          class="flex items-center bg-[rgba(0,0,0,.5)] py-1 px-2 rounded-md"
+        >
+          <Icon
+            icon="fluent:fast-forward-24-regular"
+            :rotate="2"
+            width="24"
+            height="24"
+            class="mr-1"
+          />
+          -10
+        </div>
+
+        <div
+          v-else
+          class="flex items-center bg-[rgba(0,0,0,.5)] py-1 px-2 rounded-md"
+        >
+          +10
+          <Icon
+            icon="fluent:fast-forward-24-regular"
+            width="24"
+            height="24"
+            class="ml-1"
+          />
+        </div>
+      </div>
+
       <transition name="fade__ease-in-out">
         <div
           class="art-layer-controller overflow-hidden flex items-center justify-center"
@@ -93,31 +127,62 @@
             </div>
           </div>
 
-          <!-- fix spacing 2px -->
-          <q-btn
-            flat
-            dense
-            round
-            v-ripple="false"
-            class="p-2 w-[72px] h-[72px] relative z-199"
-            @click.stop="setArtPlaying(!artPlaying)"
-            v-show="!holdedBD"
-          >
-            <template v-if="!artLoading">
+          <div class="art-controls-main">
+            <q-btn
+              flat
+              dense
+              round
+              :ripple="false"
+              class="prev"
+              @click.stop="skipBack"
+            >
               <Icon
-                v-show="!artPlaying"
-                icon="fluent:play-circle-20-regular"
-                width="60"
-                height="60"
+                icon="fluent:skip-back-10-20-regular"
+                width="35"
+                height="35"
               />
+            </q-btn>
+
+            <q-btn
+              flat
+              dense
+              round
+              :ripple="false"
+              class="relative z-199 w-[60px] h-[60px]"
+              @click.stop="setArtPlaying(!artPlaying)"
+              v-show="!holdedBD"
+            >
+              <template v-if="!artLoading">
+                <Icon
+                  v-show="!artPlaying"
+                  icon="fluent:play-circle-20-regular"
+                  width="60"
+                  height="60"
+                />
+                <Icon
+                  v-show="artPlaying"
+                  icon="fluent:pause-circle-20-regular"
+                  width="60"
+                  height="60"
+                />
+              </template>
+            </q-btn>
+
+            <q-btn
+              flat
+              dense
+              round
+              :ripple="false"
+              class="next"
+              @click.stop="skipForward"
+            >
               <Icon
-                v-show="artPlaying"
-                icon="fluent:pause-circle-20-regular"
-                width="60"
-                height="60"
+                icon="fluent:skip-forward-10-20-regular"
+                width="35"
+                height="35"
               />
-            </template>
-          </q-btn>
+            </q-btn>
+          </div>
 
           <div class="toolbar-bottom">
             <div class="art-more-controls flex items-center justify-between">
@@ -1047,6 +1112,22 @@ function onBDTouchEnd() {
   curTimeStart = null
 }
 
+function skipBack() {
+  setArtCurrentTime(
+    (artCurrentTime.value = Math.max(0, artCurrentTime.value - 10))
+  )
+}
+function skipForward() {
+  setArtCurrentTime(
+    (artCurrentTime.value = Math.min(
+      artCurrentTime.value + 10,
+      artDuration.value
+    ))
+  )
+}
+
+const doubleClicking = ref<"left" | "right" | false>(false)
+let timeoutResetDoubleClicking: number | NodeJS.number | null = null
 let lastTimeClick: number
 let lastPositionClickIsLeft: boolean | null = null
 let timeoutDbClick: number | NodeJS.number | null = null
@@ -1068,19 +1149,19 @@ function onClickSkip(event: MouseEvent, orFalse: boolean) {
 
     if (artControlShow.value) activeTime = Date.now() // fix for if control show continue show
 
+    // on double click
+    doubleClicking.value = isLeft ? "left" : "right"
+    clearTimeout(timeoutResetDoubleClicking)
+    timeoutResetDoubleClicking = setTimeout(() => {
+      doubleClicking.value = false
+    }, 700)
+
     if (isLeft) {
       // previous 10s
-      setArtCurrentTime(
-        (artCurrentTime.value = Math.max(0, artCurrentTime.value - 10))
-      )
+      skipBack()
     } else {
       // next 10s
-      setArtCurrentTime(
-        (artCurrentTime.value = Math.min(
-          artCurrentTime.value + 10,
-          artDuration.value
-        ))
-      )
+      skipForward()
     }
     // soku
   } else {
@@ -1382,6 +1463,23 @@ const showDialogQuality = ref(false)
           opacity: 1;
         }
       }
+    }
+  }
+
+  .art-controls-main {
+    white-space: nowrap;
+    width: 100%;
+    max-width: 720px;
+    text-align: center;
+    // 20
+    .prev {
+      margin-right: 20%;
+      transform: translateX(100%);
+    }
+    .next {
+      margin-left: 20%;
+      transform: translateX(-100%);
+      //margin-left: 40px
     }
   }
 }
