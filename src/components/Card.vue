@@ -26,7 +26,7 @@
       </div>
       <Quality v-if="data.quality">{{ data.quality }}</Quality>
     </q-img>
-    <a v-if="!trending" href="#" class="name line-clamp-2 min-h-10">{{
+    <a v-if="!trending" href="#" class="line-clamp-2 min-h-10">{{
       data.name
     }}</a>
     <div v-else class="flex items-center text-weight-medium">
@@ -61,6 +61,10 @@ a {
   height: 40px;
   position: relative;
   padding: 0.1rem 0px 0px;
+  padding: {
+    left: 4px;
+    right: 4px;
+  }
   font-size: 14px;
   transition: color 0.3s ease 0s;
 
@@ -68,7 +72,6 @@ a {
 
   @media (max-width: 720px) {
     font-weight: 400;
-    font-size: 12.5px;
   }
 }
 
