@@ -11,3 +11,4 @@
 - [ ] API system
 - [ ] UI
 - [ ] Tabs option type in Index.vue
+- [ ] router: bang-xep-hang
