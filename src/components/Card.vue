@@ -98,7 +98,7 @@ a {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 300;
+  z-index: 2;
 
   font-size: 14px;
   font-weight: 500;

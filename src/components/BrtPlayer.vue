@@ -466,6 +466,7 @@
                 v-else
                 class="!px-3 !py-2 !mx-1"
                 class-active="!bg-[rgba(0,194,52,.15)]"
+                grid
                 :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
                 :season="value"
                 :find="
@@ -713,7 +714,7 @@ watch(
     immediate: true,
   }
 )
-
+import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 // @scrollIntoView
 const tabsRef = ref<QTab>()
 watchEffect(() => {
@@ -721,9 +722,7 @@ watchEffect(() => {
   if (!props.currentSeason) return
 
   setTimeout(() => {
-    tabsRef.value?.$el.scrollIntoView({
-      inline: "center",
-    })
+    if (tabsRef.value?.$el) scrollXIntoView(tabsRef.value.$el)
   }, 70)
 })
 
@@ -748,6 +747,7 @@ const setArtPlaying = (playing: boolean) => {
     if (!video.value.paused) video.value.pause()
   }
 }
+watch(uniqueCurChap, () => setArtPlaying(true), { immediate: true })
 let artEnded = false
 const artLoading = ref(true)
 const artDuration = ref<number>(0)

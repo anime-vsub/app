@@ -7,10 +7,12 @@
     v-for="item in chaps"
     :key="item.id"
     outline
-    class="px-4 py-[10px] mx-2 mb-3 rounded-md before:text-[#3a3a3a]"
+    class="px-4 py-[10px] mx-2 rounded-md before:text-[#3a3a3a]"
     :class="{
-      [`c--main before:text-[rgb(0,194,52)] ${classActive}`]: find(item),
+      [`c--main before:text-[rgb(0,194,52)] ${classActive ?? ''}`]: find(item),
+      'mb-3': grid,
     }"
+    replace
     :to="{
       name: 'phim_[season]_[chap]',
       params: {
@@ -33,16 +35,16 @@ defineProps<{
   chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"]
   season: string
   classActive?: string
+  grid?: boolean
 }>()
 
 const attrs = useAttrs()
+import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 
 const activeRef = ref<QBtn>()
 
 watchEffect(() => {
-  activeRef.value?.$el.scrollIntoView({
-    inline: "center",
-  })
+  if (activeRef.value?.$el) scrollXIntoView(activeRef.value.$el)
 })
 </script>
 
