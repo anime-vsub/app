@@ -162,7 +162,7 @@
         flat
         no-caps
         class="w-full !px-2 mt-4"
-        @click="openBottomSheetChap = true"
+        @click="showDialogChapter = true"
       >
         <div class="flex items-center justify-between text-subtitle2 w-full">
           Tập
@@ -245,7 +245,7 @@
       v-if="data"
       position="bottom"
       full-width
-      v-model="openBottomSheetChap"
+      v-model="showDialogChapter"
     >
       <q-card
         style="height: calc(100vh - 100vw * 9 / 16)"
@@ -258,7 +258,7 @@
             flat
             round
             icon="close"
-            @click="openBottomSheetChap = false"
+            @click="showDialogChapter = false"
           />
         </div>
         <div class="relative flex-1 min-h-0">
@@ -634,9 +634,8 @@ watchEffect(() => {
 })
 
 // ================ status ================
-const openBottomSheetChap = ref(false)
-
-// ===================== player =========================
+const showDialogChapter = ref(false)
+const showDialogInforma = ref(false)
 </script>
 
 <style lang="scss" scoped>
