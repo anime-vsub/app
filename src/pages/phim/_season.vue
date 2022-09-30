@@ -1,20 +1,65 @@
 <template>
   <q-page>
-    <BrtPlayer
-      v-if="data"
-      :sources="sources"
-      :current-season="currentSeason"
-      :current-chap="currentChap"
-      :next-chap="nextChap"
-      :name="data.name"
-      :name-current-chap="currentMetaChap?.name"
-      :poster="data.poster"
-      :all-seasons="allSeasons"
-      :_cache-data-seasons="_cacheDataSeasons"
-      :fetch-season="fetchSeason"
-    />
+    <!-- skeleton first load -->
+    <template v-if="!data">
+      <div class="w-full overflow-hidden fixed top-0 left-0 z-200">
+        <div
+          class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
+        >
+          <q-spinner size="60px" :thickness="3" />
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <BrtPlayer
+        v-if="configPlayer?.playTech !== 'trailer'"
+        :sources="sources"
+        :current-season="currentSeason"
+        :current-chap="currentChap"
+        :next-chap="nextChap"
+        :name="data.name"
+        :name-current-chap="currentMetaChap?.name"
+        :poster="data.poster"
+        :all-seasons="allSeasons"
+        :_cache-data-seasons="_cacheDataSeasons"
+        :fetch-season="fetchSeason"
+      />
+      <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
+        <q-video :ratio="16 / 9" :src="sources?.[0]?.url" />
+      </div>
+    </template>
 
-    <q-responsive :ratio="16 / 9">fake element</q-responsive>
+    <q-responsive :ratio="16 / 9"> </q-responsive>
+
+    <div v-if="!data" class="px-2 pt-4 text-[28px]">
+      <q-skeleton type="text" class="text-[35px]" width="80%" />
+      <q-skeleton type="text" width="100px" class="mt-[-10px]" />
+
+      <div class="flex flex-nowrap">
+        <q-skeleton type="text" width="100px" class="mr-2" />
+        <q-skeleton type="text" width="140px" class="mr-1" />
+      </div>
+
+      <div class="flex mt-1 flex-nowrap mt-[-10px]">
+        <q-skeleton type="text" width="38px" class="mr-2" />
+        <q-skeleton type="text" width="38px" class="mr-2" />
+        <q-skeleton type="text" width="70px" class="mr-2" />
+        <q-skeleton type="text" width="40px" />
+      </div>
+
+      <div class="flex flex-nowrap mt-[-10px]">
+        <q-skeleton type="text" width="3em" class="mr-2" />
+        <q-skeleton type="text" width="4em" class="mr-2" />
+        <q-skeleton type="text" width="5em" class="mr-2" />
+        <q-skeleton type="text" width="5em" />
+      </div>
+
+      <div class="mt-3">
+        <q-skeleton type="rect" width="100%" height="48px" />
+      </div>
+
+      <SkeletonGridCard class="mt-3" :count="12" />
+    </div>
 
     <template v-if="data">
       <div class="px-2 pt-4">
@@ -192,81 +237,86 @@
       </q-tabs>
 
       <!-- bottom sheet -->
-      <BottomSheet
-        class="h-[calc(100%-100vmin/16*9)]"
-        :open="openBottomSheetChap"
-      >
-        <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
-          Season
-          <q-btn
-            dense
-            flat
-            round
-            icon="close"
-            @click="openBottomSheetChap = false"
-          />
-        </div>
-        <div class="relative h-[100%]">
-          <q-tabs
-            v-model="seasonActive"
-            no-caps
-            dense
-            inline-label
-            active-class="c--main"
+
+      <q-dialog position="bottom" full-width v-model="openBottomSheetChap">
+        <q-card
+          style="height: calc(100vh - 100vw * 9 / 16)"
+          class="!overflow-visible flex column flex-nowrap py-0"
+        >
+          <div
+            class="flex items-center justify-between text-subtitle1 px-2 py-2"
           >
-            <q-tab
-              v-for="item in allSeasons"
-              :key="item.value"
-              :name="item.value"
-              :label="item.name"
+            Season
+            <q-btn
+              dense
+              flat
+              round
+              icon="close"
+              @click="openBottomSheetChap = false"
             />
-          </q-tabs>
-
-          <q-tab-panels
-            v-model="seasonActive"
-            animated
-            keep-alive
-            class="h-full"
-          >
-            <q-tab-panel
-              v-for="({ value }, index) in allSeasons"
-              :key="index"
-              :name="value"
+          </div>
+          <div class="relative flex-1 min-h-0">
+            <q-tabs
+              v-model="seasonActive"
+              no-caps
+              dense
+              inline-label
+              active-class="c--main"
             >
-              <div
-                v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
-                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
-              >
-                <q-spinner style="color: #00be06" size="3em" :thickness="3" />
-              </div>
-              <div
-                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-              >
-                Lỗi khi lấy dữ liệu
-                <br />
-                <q-btn
-                  dense
-                  no-caps
-                  style="color: #00be06"
-                  @click="fetchSeason(value)"
-                  >Thử lại</q-btn
-                >
-              </div>
-
-              <ChapsGridQBtn
-                v-else
-                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-                :season="value"
-                :find="
-                  (item) => value === currentSeason && item.id === currentChap
-                "
-                class="px-4 py-[10px] mx-2 mb-3"
+              <q-tab
+                v-for="item in allSeasons"
+                :key="item.value"
+                :name="item.value"
+                :label="item.name"
               />
-            </q-tab-panel>
-          </q-tab-panels>
-        </div>
-      </BottomSheet>
+            </q-tabs>
+
+            <q-tab-panels
+              v-model="seasonActive"
+              animated
+              keep-alive
+              class="h-full"
+            >
+              <q-tab-panel
+                v-for="({ value }, index) in allSeasons"
+                :key="index"
+                :name="value"
+              >
+                <div
+                  v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
+                  class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+                >
+                  <q-spinner style="color: #00be06" size="3em" :thickness="3" />
+                </div>
+                <div
+                  v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+                  class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
+                >
+                  Lỗi khi lấy dữ liệu
+                  <br />
+                  <q-btn
+                    dense
+                    no-caps
+                    style="color: #00be06"
+                    @click="fetchSeason(value)"
+                    >Thử lại</q-btn
+                  >
+                </div>
+
+                <ChapsGridQBtn
+                  v-else
+                  :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                  :season="value"
+                  :find="
+                    (item) => value === currentSeason && item.id === currentChap
+                  "
+                  class="px-4 py-[10px] mx-2 mb-3"
+                />
+              </q-tab-panel>
+            </q-tab-panels>
+          </div>
+        </q-card>
+      </q-dialog>
     </template>
     <!--
       trailer
@@ -293,6 +343,7 @@ import { post } from "src/logic/http"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import SkeletonGridCard from "components/SkeletonGridCard.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -322,7 +373,7 @@ const currentMetaSeason = computed(() => {
   return allSeasons.value?.find((item) => item.value === currentSeason.value)
 })
 
-const { data, run, error } = useRequest(
+const { data, run, error, loading } = useRequest(
   () => {
     return PhimId(`/phim/${currentSeason.value}/`)
   },
@@ -374,9 +425,26 @@ async function fetchSeason(season: string) {
   })
   try {
     console.log("fetch chaps on season")
+
+    const response = await PhimIdChap(season)
+
+    console.log(response)
+
+    if (response.chaps.length === 0) {
+      console.warn("chaps not found")
+      response.chaps = [
+        {
+          id: "#youtube",
+          play: "1",
+          hash: data.value!.trailer,
+          name: "Trailer",
+        },
+      ]
+    }
+
     _cacheDataSeasons.set(season, {
       status: "success",
-      response: await PhimIdChap(`/phim/${season}/xem-phim.html`),
+      response,
     })
   } catch (err) {
     _cacheDataSeasons.set(season, {
@@ -480,6 +548,24 @@ watch(
   async (currentMetaChap) => {
     if (!currentMetaChap) return
 
+    configPlayer.value = undefined
+
+    if (currentMetaChap.id === "#youtube") {
+      configPlayer.value = {
+        link: [
+          {
+            file: currentMetaChap.hash,
+            label: "HD",
+            preload: "auto",
+            type: "youtube",
+          },
+        ],
+        playTech: "trailer",
+      }
+
+      return
+    }
+
     try {
       configPlayer.value = JSON.parse(
         (
@@ -517,7 +603,8 @@ const sources = computed<Source[] | undefined>(() =>
         | "ogg"
         | "ogv"
         | "vorbis"
-        | "webm",
+        | "webm"
+        | "youtube",
     }
   })
 )

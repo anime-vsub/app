@@ -2,8 +2,8 @@ import { load } from "cheerio"
 
 import { getHTML } from "../../helpers/getHTML"
 
-export async function PhimIdChap(url: string) {
-  const $ = load(await getHTML(url))
+export async function PhimIdChap(season: string) {
+  const $ = load(await getHTML(`/phim/${season}/xem-phim.html`))
 
   const chaps = $(".list-episode:eq(0)")
     .find("a")

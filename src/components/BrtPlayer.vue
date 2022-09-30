@@ -352,7 +352,7 @@
       </transition-group>
 
       <div
-        v-if="artLoading"
+        v-if="!sources || artLoading"
         class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
       >
         <q-spinner size="60px" :thickness="3" />
