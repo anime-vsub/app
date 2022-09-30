@@ -73,6 +73,7 @@ export async function TypeNormalValue(
     .toArray()
     .join(" ")
     .replace(/:/g, "")
+    .replace(/^Danh sách /i, "")
 
   const filter = {
     sorter: $("#filter")

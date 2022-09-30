@@ -31,7 +31,7 @@
 
     <q-responsive :ratio="16 / 9"> </q-responsive>
 
-    <div v-if="!data" class="px-2 pt-4 text-[28px]">
+    <div v-if="loading || !data" class="px-2 pt-4 text-[28px]">
       <q-skeleton type="text" class="text-[35px]" width="80%" />
       <q-skeleton type="text" width="100px" class="mt-[-10px]" />
 
@@ -61,7 +61,7 @@
       <SkeletonGridCard class="mt-3" :count="12" />
     </div>
 
-    <template v-if="data">
+    <template v-else>
       <div class="px-2 pt-4">
         <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
           {{ data.name }}
@@ -165,9 +165,6 @@
         @click="openBottomSheetChap = true"
       >
         <div class="flex items-center justify-between text-subtitle2 w-full">
-          <template v-if="currentMetaSeason?.name !== '[[DEFAULT]]'">{{
-            currentMetaSeason?.name
-          }}</template>
           Tập
 
           <span class="flex items-center text-gray-300 font-weight-normal">
@@ -180,13 +177,13 @@
         v-model="seasonActive"
         animated
         keep-alive
-        class="h-full bg-transparent overflow-scroll whitespace-nowrap mb-3"
+        class="h-full bg-transparent overflow-y-visible whitespace-nowrap mb-3"
       >
         <q-tab-panel
           v-for="{ value } in allSeasons"
           :key="value"
           :name="value"
-          class="!h-[47px] py-0 !px-0"
+          class="!h-[47px] overflow-y-visible py-0 !px-0"
         >
           <div
             v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
@@ -224,6 +221,10 @@
         inline-label
         active-class="c--main"
         indicator-color="transparent"
+        v-if="
+          allSeasons.length > 1 ||
+          (allSeasons.length === 0 && allSeasons[0].name !== '#default')
+        "
       >
         <q-tab
           v-for="item in allSeasons"
@@ -235,92 +236,99 @@
           :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
         />
       </q-tabs>
-
-      <!-- bottom sheet -->
-
-      <q-dialog position="bottom" full-width v-model="openBottomSheetChap">
-        <q-card
-          style="height: calc(100vh - 100vw * 9 / 16)"
-          class="!overflow-visible flex column flex-nowrap py-0"
-        >
-          <div
-            class="flex items-center justify-between text-subtitle1 px-2 py-2"
-          >
-            Season
-            <q-btn
-              dense
-              flat
-              round
-              icon="close"
-              @click="openBottomSheetChap = false"
-            />
-          </div>
-          <div class="relative flex-1 min-h-0">
-            <q-tabs
-              v-model="seasonActive"
-              no-caps
-              dense
-              inline-label
-              active-class="c--main"
-            >
-              <q-tab
-                v-for="item in allSeasons"
-                :key="item.value"
-                :name="item.value"
-                :label="item.name"
-              />
-            </q-tabs>
-
-            <q-tab-panels
-              v-model="seasonActive"
-              animated
-              keep-alive
-              class="h-full"
-            >
-              <q-tab-panel
-                v-for="({ value }, index) in allSeasons"
-                :key="index"
-                :name="value"
-              >
-                <div
-                  v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
-                  class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
-                >
-                  <q-spinner style="color: #00be06" size="3em" :thickness="3" />
-                </div>
-                <div
-                  v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-                  class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-                >
-                  Lỗi khi lấy dữ liệu
-                  <br />
-                  <q-btn
-                    dense
-                    no-caps
-                    style="color: #00be06"
-                    @click="fetchSeason(value)"
-                    >Thử lại</q-btn
-                  >
-                </div>
-
-                <ChapsGridQBtn
-                  v-else
-                  :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-                  :season="value"
-                  :find="
-                    (item) => value === currentSeason && item.id === currentChap
-                  "
-                  class="px-4 py-[10px] mx-2 mb-3"
-                />
-              </q-tab-panel>
-            </q-tab-panels>
-          </div>
-        </q-card>
-      </q-dialog>
     </template>
+
+    <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
+
+    <!-- bottom sheet -->
+    <q-dialog
+      v-if="data"
+      position="bottom"
+      full-width
+      v-model="openBottomSheetChap"
+    >
+      <q-card
+        style="height: calc(100vh - 100vw * 9 / 16)"
+        class="!overflow-visible flex column flex-nowrap py-0"
+      >
+        <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
+          Season
+          <q-btn
+            dense
+            flat
+            round
+            icon="close"
+            @click="openBottomSheetChap = false"
+          />
+        </div>
+        <div class="relative flex-1 min-h-0">
+          <q-tabs
+            v-model="seasonActive"
+            no-caps
+            dense
+            inline-label
+            active-class="c--main"
+            v-if="
+              allSeasons.length > 1 ||
+              (allSeasons.length === 0 && allSeasons[0].name !== '#default')
+            "
+          >
+            <q-tab
+              v-for="item in allSeasons"
+              :key="item.value"
+              :name="item.value"
+              :label="item.name"
+            />
+          </q-tabs>
+
+          <q-tab-panels
+            v-model="seasonActive"
+            animated
+            keep-alive
+            class="h-full"
+          >
+            <q-tab-panel
+              v-for="({ value }, index) in allSeasons"
+              :key="index"
+              :name="value"
+            >
+              <div
+                v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
+                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+              >
+                <q-spinner style="color: #00be06" size="3em" :thickness="3" />
+              </div>
+              <div
+                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
+              >
+                Lỗi khi lấy dữ liệu
+                <br />
+                <q-btn
+                  dense
+                  no-caps
+                  style="color: #00be06"
+                  @click="fetchSeason(value)"
+                  >Thử lại</q-btn
+                >
+              </div>
+
+              <ChapsGridQBtn
+                v-else
+                grid
+                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                :season="value"
+                :find="
+                  (item) => value === currentSeason && item.id === currentChap
+                "
+                class="px-4 py-[10px] mx-2 mb-3"
+              />
+            </q-tab-panel>
+          </q-tab-panels>
+        </div>
+      </q-card>
+    </q-dialog>
     <!--
-      trailer
-      toPut
       followed
     -->
   </q-page>
@@ -344,6 +352,7 @@ import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
+import GridCard from "components/GridCard.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -364,7 +373,7 @@ const allSeasons = computed(() => {
   return [
     {
       path: `/phim/${currentSeason.value}/`,
-      name: "[[DEFAULT]]",
+      name: "#default",
       value: currentSeason.value,
     },
   ]
@@ -611,6 +620,7 @@ const sources = computed<Source[] | undefined>(() =>
 
 // ============================================
 
+import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 // @scrollIntoView
 const tabsRef = ref<QTab>()
 watchEffect(() => {
@@ -618,9 +628,8 @@ watchEffect(() => {
   if (!currentSeason.value) return
 
   setTimeout(() => {
-    tabsRef.value?.$el.scrollIntoView({
-      inline: "center",
-    })
+    console.log("scroll now")
+    if (tabsRef.value?.$el) scrollXIntoView(tabsRef.value.$el)
   }, 70)
 })
 
