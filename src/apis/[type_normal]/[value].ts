@@ -15,15 +15,12 @@ export async function TypeNormalValue(
     typer: string | null
     year: string | null
   },
-  defaultOptions?:
-    | {
-        type_normal: "danh-sach" | "the-loai" | "season"
-        value: string
-      }
-    | {
-        type_normal: "season"
-        value: string | string[]
-      }
+  defaultsOptions?: {
+    genres?: string
+    seaser?: string
+    typer?: string
+    year?: string
+  }
 ) {
   const isCustom =
     options &&
@@ -38,14 +35,14 @@ export async function TypeNormalValue(
       await getHTML(
         [
           "/danh-sach",
-          options.typer ?? "all",
-          options.genres.join("-"),
-          options.seaser,
-          options.year,
+          options.typer ?? defaultsOptions.typer ?? "all",
+          options.genres
+            .concat(defaultsOptions.typer ? [defaultsOptions.typer] : [])
+            .join("-") || "all",
+          options.seaser ?? defaultsOptions.seaser ?? "all",
+          options.year ?? defaultsOptions.year ?? "all",
           `/trang-${page}.html`,
-        ]
-          .filter(Boolean)
-          .join("/") + (options.sorter ? "?sort=" + options.sorter : "")
+        ].join("/") + (options.sorter ? "?sort=" + options.sorter : "")
       )
     )
   } else {
