@@ -10,8 +10,8 @@
     </div>
 
     <span class="line-clamp-2 min-h-10">
-      <q-skeleton type="text" width="100%" />
-      <q-skeleton type="text" width="60%" />
+      <q-skeleton type="text" width="100%" class="py-0 my-0" height="20px" />
+      <q-skeleton type="text" width="60%" class="py-0 my-0" height="20px" />
     </span>
   </q-card>
 </template>
@@ -29,7 +29,7 @@ span {
     left: 4px;
     right: 4px;
   }
-  font-size: 14px;
+  // font-size: ;
   transition: color 0.3s ease 0s;
 
   font-weight: 500;

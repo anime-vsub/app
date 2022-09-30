@@ -17,4 +17,5 @@ export interface Source {
     | "ogv"
     | "vorbis"
     | "webm"
+    | "youtube"
 }
