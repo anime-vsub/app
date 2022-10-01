@@ -31,7 +31,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "lich-chieu-phim",
-        component: () => null,
+        component: () => import("pages/lich-chieu-phim.vue"),
       },
       {
         path: "bang-xep-hang/:type(day|voted|month|season|year)",
