@@ -1,9 +1,9 @@
 import type { Cheerio, Element } from "cheerio"
 
-import { int } from "../utils/float"
-import { getPathName } from "../utils/getPathName"
 
 import { getInfoAnchor } from "./getInfoAnchor"
+import { getPathName } from "./getPathName"
+import { int } from "./int"
 
 export type TPost = ReturnType<typeof getInfoTPost>
 
@@ -35,7 +35,7 @@ export function getInfoTPost(cheerio: Cheerio<Element>) {
     .text()
     .split("/") as unknown as [string, string]
 
-  const year = int(cheerio.find(".AAIco-date_range:eq(0)").text())
+  const year = parseInt(cheerio.find(".AAIco-date_range:eq(0)").text())
 
   const description = cheerio.find(".Description > p:eq(0)").text()
 

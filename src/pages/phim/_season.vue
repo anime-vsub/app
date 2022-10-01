@@ -25,7 +25,13 @@
         :fetch-season="fetchSeason"
       />
       <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
-        <q-img v-if="sources?.[0]?.url" :ratio="16/9" src="src/assets/ic_question_result_error.png" width="100" class="max-w-[100px]" />
+        <q-img
+          v-if="sources?.[0]?.url"
+          :ratio="16 / 9"
+          src="src/assets/ic_question_result_error.png"
+          width="100"
+          class="max-w-[100px]"
+        />
         <q-video v-else :ratio="16 / 9" :src="sources![0]!.url" />
       </div>
     </template>
@@ -447,7 +453,6 @@ import { useRoute, useRouter } from "vue-router"
 
 // ============================================
 
-
 const route = useRoute()
 const router = useRouter()
 
@@ -477,9 +482,7 @@ const currentMetaSeason = computed(() => {
 })
 
 const { data, run, error, loading } = useRequest(
-  () => {
-    return PhimId(currentSeason.value)
-  },
+  () => PhimId(currentSeason.value),
   {
     refreshDeps: [currentSeason],
     refreshDepsAction() {
@@ -491,10 +494,10 @@ watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      params: {pathMatch:route.path},
+      params: { pathMatch: route.path },
       query: {
-        message : error.message,
-        cause: error.cause + ""
+        message: error.message,
+        cause: error.cause + "",
       },
     })
 })

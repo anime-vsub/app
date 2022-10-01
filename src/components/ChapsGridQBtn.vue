@@ -20,7 +20,7 @@
         chap: item.id,
       },
     }"
-    :ref="(el) => find(item) && (activeRef = el as QTab)"
+    :ref="(el) => find(item) && (activeRef = el as QBtn)"
   >
     {{ item.name }}
   </q-btn>
@@ -31,6 +31,8 @@ import { QBtn } from "quasar"
 import type { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { ref, useAttrs, watchEffect } from "vue"
+
+
 defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
   chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"]

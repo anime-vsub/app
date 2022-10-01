@@ -3,11 +3,11 @@
 import type { Cheerio, CheerioAPI, Element } from "cheerio"
 import { load } from "cheerio"
 
-import { getHTML } from "../helpers/getHTML"
-import { getInfoAnchor } from "../helpers/getInfoAnchor"
-import { getInfoTPost } from "../helpers/getInfoTPost"
-import { int } from "../utils/float"
-import { getPathName } from "../utils/getPathName"
+import { getHTML } from "../../helpers/getHTML"
+import { getInfoAnchor } from "../../helpers/getInfoAnchor"
+import { getInfoTPost } from "../../helpers/getInfoTPost"
+import { getPathName } from "../../helpers/getPathName"
+import { int } from "../../helpers/int"
 
 function findInfo($: CheerioAPI, infoList: Cheerio<Element>, q: string) {
   return $(
@@ -29,11 +29,11 @@ export async function PhimId(seasonId: string) {
     ? getPathName($(".watch_button_more").attr("href")!)
     : null
   const description = $(".Description:eq(0)").text().trim()
-  const rate = int($("#average_score:eq(0)").text())
+  const rate = parseInt($("#average_score:eq(0)").text())
   // eslint-disable-next-line camelcase
-  const count_rate = int($(".num-rating:eq(0)").text())!
+  const count_rate = parseInt($(".num-rating:eq(0)").text())
   const duration = $(".AAIco-access_time:eq(0)").text()
-  const yearOf = int($(".AAIco-date_range:eq(0) > a").text())
+  const yearOf = parseInt($(".AAIco-date_range:eq(0) > a").text())
   const views = int(
     $(".AAIco-remove_red_eye:eq(0)")
       .text()

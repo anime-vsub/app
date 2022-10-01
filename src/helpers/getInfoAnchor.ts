@@ -1,6 +1,6 @@
 import type { Cheerio, Element } from "cheerio"
 
-import { getPathName } from "../utils/getPathName"
+import { getPathName } from "./getPathName"
 
 export function getInfoAnchor(a: Cheerio<Element>) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

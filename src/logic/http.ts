@@ -1,7 +1,10 @@
-import type { HttpOptions } from "@capacitor-community/http"
+import type { HttpOptions, HttpResponse } from "@capacitor-community/http"
 import { Http } from "@capacitor-community/http"
 
 export async function get(url: string | HttpOptions) {
+  if (import.meta.env.TEST)
+    return { data: import.meta.env.DATA } as HttpResponse
+
   const response = await Http.get(
     typeof url === "object"
       ? url
@@ -14,7 +17,8 @@ export async function get(url: string | HttpOptions) {
             "accept-language": "vi-VN,vi;q=0.9,en;q=0.8,ja;q=0.7",
             "cache-control": "max-age=0",
             dnt: "1",
-            "sec-ch-ua": "\"Google Chrome\";v=\"105\", \"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"105\"",
+            "sec-ch-ua":
+              '"Google Chrome";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": "Windows",
             "sec-fetch-dest": "document",
@@ -39,6 +43,9 @@ export async function post(
   url: string,
   data: Record<string, number | string | boolean>
 ) {
+  if (import.meta.env.TEST)
+    return { data: import.meta.env.DATA } as HttpResponse
+
   const response = await Http.post({
     url: "https://animevietsub.cc" + url,
     headers: {
