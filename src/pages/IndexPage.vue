@@ -318,23 +318,24 @@ import { useRequest } from "vue-request"
 // eslint-disable-next-line import/order
 import Star from "components/Star.vue"
 import Card from "components/Card.vue"
-import Quality from "components/Quality.vue"
-import SearchBtn from "components/SearchBtn.vue"
-import dayjs from "dayjs"
-import isToday from "dayjs/plugin/isToday"
 // eslint-disable-next-line import/order
 import isTomorrow from "dayjs/plugin/isTomorrow"
-import { watch } from "vue"
 import "dayjs/locale/vi"
 import GridCard from "components/GridCard.vue"
-import SkeletonGridCard from "components/SkeletonGridCard.vue"
+import Quality from "components/Quality.vue"
+import SearchBtn from "components/SearchBtn.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
+import SkeletonGridCard from "components/SkeletonGridCard.vue"
+import dayjs from "dayjs"
+// eslint-disable-next-line import/order
+import isToday from "dayjs/plugin/isToday"
 
 // Import Swiper Vue.js components
 
-import { Autoplay, Grid, Pagination } from "swiper"
+import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
-import { useRoute } from "vue-router"
+import { watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
 // Import Swiper styles
 import "swiper/css"
@@ -346,17 +347,19 @@ dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
 
 const route = useRoute()
+const router = useRouter()
 
 const aspectRatio = 622 / 350
 
-const { data, loading, error } = useRequest(() => Index("/"))
+const { data, loading, error } = useRequest(() => Index())
 watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      path: [route.path],
+      params: { pathMatch: route.path },
       query: {
-        error,
+        message: error.message,
+        cause: error.cause + "",
       },
     })
 })

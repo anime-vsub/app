@@ -24,8 +24,8 @@
         <q-toolbar-title
           class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
           >{{
-            route.params.type_normal?.toLowerCase() === "danh-sach" &&
-            route.params.value?.toLowerCase() === "all"
+            route.params.type_normal === "danh-sach" &&
+            route.params.value === "all"
               ? "Mục lục"
               : title
           }}</q-toolbar-title
@@ -111,218 +111,170 @@
     </template>
   </q-page>
 
-  <!-- gener -->
-  <q-dialog
-    v-model="showDialogGener"
-    position="bottom"
-    no-route-dismiss
-    full-width
-  >
-    <q-card flat class="w-full pt-3 !max-h-[60vh]">
-      <q-card-section class="py-0 flex items-center justify-between">
-        <div class="text-subtitle1 mx-1">Loại</div>
-
-        <q-btn
-          dense
-          flat
-          no-caps
-          class="text-weight-normal"
-          @click="geners.splice(0)"
-          >Đặt lại</q-btn
-        >
-      </q-card-section>
-
-      <q-card-section class="row">
-        <div
-          v-for="item in data?.filter.gener"
-          :key="item.value"
-          class="col-4 col-sm-3 col-md-4 px-1 py-1"
-        >
-          <q-btn
-            dense
-            no-caps
-            flat
-            class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-            :disable="defaultsOptions.gener === item.value"
-            @click="toggleGenres(item.value)"
-            :class="{
-              'bg-main':
-                defaultsOptions.gener === item.value ||
-                indexInGenres(item.value) > -1,
-            }"
-            >{{ item.text }}</q-btn
-          >
-        </div>
-        <!-- -->
-      </q-card-section>
-
-      <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-    </q-card>
-  </q-dialog>
-
-  <!-- seaser -->
-  <q-dialog
-    v-model="showDialogSeaser"
-    position="bottom"
-    no-route-dismiss
-    full-width
-  >
-    <q-card flat class="w-full pt-3">
-      <q-card-section class="py-0 flex items-center justify-between">
-        <div class="text-subtitle1 mx-1">Mùa</div>
-
-        <q-btn
-          dense
-          flat
-          no-caps
-          class="text-weight-normal"
-          @click="seaser = null"
-          >Đặt lại</q-btn
-        >
-      </q-card-section>
-
-      <q-card-section class="row">
-        <div
-          v-for="item in data?.filter.seaser"
-          :key="item.value"
-          class="col-4 col-sm-3 col-md-4 px-1 py-1"
-        >
-          <q-btn
-            dense
-            no-caps
-            flat
-            class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-            :disable="!!defaultsOptions.seaser"
-            @click="seaser = item.value"
-            :class="{
-              'bg-main':
-                defaultsOptions.seaser === item.value || seaser === item.value,
-            }"
-            >{{ item.text }}</q-btn
-          >
-        </div>
-        <!-- -->
-      </q-card-section>
-
-      <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-    </q-card>
-  </q-dialog>
-
-  <!-- typer -->
-  <q-dialog
-    v-model="showDialogTyper"
-    position="bottom"
-    no-route-dismiss
-    full-width
-  >
-    <q-card flat class="w-full pt-3">
-      <q-card-section class="py-0 flex items-center justify-between">
-        <div class="text-subtitle1 mx-1">Loại</div>
-
-        <q-btn
-          dense
-          flat
-          no-caps
-          class="text-weight-normal"
-          @click="typer = null"
-          >Đặt lại</q-btn
-        >
-      </q-card-section>
-
-      <q-card-section class="row">
-        <div
-          v-for="item in data?.filter.typer"
-          :key="item.value"
-          class="col-4 col-sm-3 col-md-4 px-1 py-1"
-        >
-          <q-btn
-            dense
-            no-caps
-            flat
-            class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-            :disable="!!defaultsOptions.typer"
-            @click="typer = item.value"
-            :class="{
-              'bg-main':
-                defaultsOptions.typer === item.value || typer === item.value,
-            }"
-            >{{ item.text }}</q-btn
-          >
-        </div>
-        <!-- -->
-      </q-card-section>
-
-      <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-    </q-card>
-  </q-dialog>
-
-  <!-- sorter -->
-  <q-dialog
-    v-model="showDialogSorter"
-    position="bottom"
-    no-route-dismiss
-    full-width
-  >
-    <q-card flat class="w-full pt-3">
-      <q-card-section class="py-0 flex items-center justify-between">
-        <div class="text-subtitle1 mx-1">Sắp xếp</div>
-
-        <q-btn
-          dense
-          flat
-          no-caps
-          class="text-weight-normal"
-          @click="sorter = null"
-          >Đặt lại</q-btn
-        >
-      </q-card-section>
-
-      <q-card-section class="row">
-        <div
-          v-for="item in data?.filter.sorter"
-          :key="item.value"
-          class="col-4 col-sm-3 col-md-4 px-1 py-1"
-        >
-          <q-btn
-            dense
-            no-caps
-            flat
-            class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-            :disable="!!defaultsOptions.sorter"
-            @click="sorter = item.value"
-            :class="{
-              'bg-main':
-                defaultsOptions.sorter === item.value || sorter === item.value,
-            }"
-            >{{ item.text }}</q-btn
-          >
-        </div>
-        <!-- -->
-      </q-card-section>
-
-      <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-    </q-card>
-  </q-dialog>
-
-  <!-- filter -->
-  <q-dialog
-    v-model="showDialogSorter"
-    position="bottom"
-    no-route-dismiss
-    full-width
-  >
-    <q-card flat class="w-full pt-3 !max-h-[60vh]">
-      <div class="relative">
-        <!-- sorter -->
+  <template v-if="data?.filter">
+    <!-- gener -->
+    <q-dialog
+      v-model="showDialogGener"
+      position="bottom"
+      no-route-dismiss
+      full-width
+    >
+      <q-card flat class="w-full pt-3 !max-h-[60vh]">
         <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Sắp xếp theo</div>
+          <div class="text-subtitle1 mx-1">Loại</div>
 
           <q-btn
             dense
             flat
             no-caps
             class="text-weight-normal"
-            @click="resetFilter"
+            @click="genres.splice(0)"
+            >Đặt lại</q-btn
+          >
+        </q-card-section>
+
+        <q-card-section class="row">
+          <div
+            v-for="item in data?.filter.gener"
+            :key="item.value"
+            class="col-4 col-sm-3 col-md-4 px-1 py-1"
+          >
+            <q-btn
+              dense
+              no-caps
+              flat
+              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
+              :disable="defaultsOptions.gener === item.value"
+              @click="toggleGenres(item.value)"
+              :class="{
+                'bg-main':
+                  defaultsOptions.gener === item.value ||
+                  indexInGenres(item.value) > -1,
+              }"
+              >{{ item.text }}</q-btn
+            >
+          </div>
+          <!-- -->
+        </q-card-section>
+
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+      </q-card>
+    </q-dialog>
+
+    <!-- seaser -->
+    <q-dialog
+      v-model="showDialogSeaser"
+      position="bottom"
+      no-route-dismiss
+      full-width
+    >
+      <q-card flat class="w-full pt-3">
+        <q-card-section class="py-0 flex items-center justify-between">
+          <div class="text-subtitle1 mx-1">Mùa</div>
+
+          <q-btn
+            dense
+            flat
+            no-caps
+            class="text-weight-normal"
+            @click="seaser = null"
+            >Đặt lại</q-btn
+          >
+        </q-card-section>
+
+        <q-card-section class="row">
+          <div
+            v-for="item in data?.filter.seaser"
+            :key="item.value"
+            class="col-4 col-sm-3 col-md-4 px-1 py-1"
+          >
+            <q-btn
+              dense
+              no-caps
+              flat
+              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
+              :disable="!!defaultsOptions.seaser"
+              @click="seaser = item.value"
+              :class="{
+                'bg-main':
+                  defaultsOptions.seaser === item.value ||
+                  seaser === item.value,
+              }"
+              >{{ item.text }}</q-btn
+            >
+          </div>
+          <!-- -->
+        </q-card-section>
+
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+      </q-card>
+    </q-dialog>
+
+    <!-- typer -->
+    <q-dialog
+      v-model="showDialogTyper"
+      position="bottom"
+      no-route-dismiss
+      full-width
+    >
+      <q-card flat class="w-full pt-3">
+        <q-card-section class="py-0 flex items-center justify-between">
+          <div class="text-subtitle1 mx-1">Loại</div>
+
+          <q-btn
+            dense
+            flat
+            no-caps
+            class="text-weight-normal"
+            @click="typer = null"
+            >Đặt lại</q-btn
+          >
+        </q-card-section>
+
+        <q-card-section class="row">
+          <div
+            v-for="item in data?.filter.typer"
+            :key="item.value"
+            class="col-4 col-sm-3 col-md-4 px-1 py-1"
+          >
+            <q-btn
+              dense
+              no-caps
+              flat
+              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
+              :disable="!!defaultsOptions.typer"
+              @click="typer = item.value"
+              :class="{
+                'bg-main':
+                  defaultsOptions.typer === item.value || typer === item.value,
+              }"
+              >{{ item.text }}</q-btn
+            >
+          </div>
+          <!-- -->
+        </q-card-section>
+
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+      </q-card>
+    </q-dialog>
+
+    <!-- sorter -->
+    <q-dialog
+      v-model="showDialogSorter"
+      position="bottom"
+      no-route-dismiss
+      full-width
+    >
+      <q-card flat class="w-full pt-3">
+        <q-card-section class="py-0 flex items-center justify-between">
+          <div class="text-subtitle1 mx-1">Sắp xếp</div>
+
+          <q-btn
+            dense
+            flat
+            no-caps
+            class="text-weight-normal"
+            @click="sorter = null"
             >Đặt lại</q-btn
           >
         </q-card-section>
@@ -348,149 +300,197 @@
           <!-- -->
         </q-card-section>
 
-        <!-- gener -->
-        <q-card-section class="py-0">
-          <div class="text-subtitle1 mx-1">Thể loại</div>
-        </q-card-section>
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+      </q-card>
+    </q-dialog>
 
-        <q-card-section class="row">
-          <div
-            v-for="item in showFullGener
-              ? data?.filter.gener
-              : data?.filter.gener.slice(0, 11)"
-            :key="item.value"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
+    <!-- filter -->
+    <q-dialog
+      v-model="showDialogFilter"
+      position="bottom"
+      no-route-dismiss
+      full-width
+    >
+      <q-card flat class="w-full pt-3 !max-h-[60vh]">
+        <div class="relative">
+          <!-- sorter -->
+          <q-card-section class="py-0 flex items-center justify-between">
+            <div class="text-subtitle1 mx-1">Sắp xếp theo</div>
+
             <q-btn
               dense
-              no-caps
               flat
-              class="py-2 bg-[#292929] text-weight-normal w-full min-h-10 ease-bg"
-              :disable="defaultsOptions.gener === item.value"
-              @click="toggleGenres(item.value)"
-              :class="{
-                'bg-main':
-                  defaultsOptions.gener === item.value ||
-                  indexInGenres(item.value) > -1,
-              }"
-              >{{ item.text }}</q-btn
-            >
-          </div>
-
-          <div
-            v-if="!showFullGener"
-            @click="showFullGener = true"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
-            <q-btn
-              dense
               no-caps
-              flat
-              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg min-h-10"
+              class="text-weight-normal"
+              @click="resetFilter"
+              >Đặt lại</q-btn
             >
-              <Icon icon="fluent:chevron-down-24-regular" />
-            </q-btn>
-          </div>
-        </q-card-section>
+          </q-card-section>
 
-        <!-- typer -->
-        <q-card-section class="py-0">
-          <div class="text-subtitle1 mx-1">Loại</div>
-        </q-card-section>
-
-        <q-card-section class="row">
-          <div
-            v-for="item in data?.filter.typer"
-            :key="item.value"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
-            <q-btn
-              dense
-              no-caps
-              flat
-              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-              :disable="!!defaultsOptions.typer"
-              @click="typer = item.value"
-              :class="{
-                'bg-main':
-                  defaultsOptions.typer === item.value || typer === item.value,
-              }"
-              >{{ item.text }}</q-btn
+          <q-card-section class="row">
+            <div
+              v-for="item in data?.filter.sorter"
+              :key="item.value"
+              class="col-4 col-sm-3 col-md-4 px-1 py-1"
             >
-          </div>
-        </q-card-section>
+              <q-btn
+                dense
+                no-caps
+                flat
+                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
+                @click="sorter = item.value"
+                :class="{
+                  'bg-main': sorter === item.value,
+                }"
+                >{{ item.text }}</q-btn
+              >
+            </div>
+            <!-- -->
+          </q-card-section>
 
-        <!-- seaser -->
-        <q-card-section class="py-0">
-          <div class="text-subtitle1 mx-1">Mùa</div>
-        </q-card-section>
+          <!-- gener -->
+          <q-card-section class="py-0">
+            <div class="text-subtitle1 mx-1">Thể loại</div>
+          </q-card-section>
 
-        <q-card-section class="row">
-          <div
-            v-for="item in data?.filter.seaser"
-            :key="item.value"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
-            <q-btn
-              dense
-              no-caps
-              flat
-              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-              :disable="!!defaultsOptions.seaser"
-              @click="seaser = item.value"
-              :class="{
-                'bg-main':
-                  defaultsOptions.seaser === item.value ||
-                  seaser === item.value,
-              }"
-              >{{ item.text }}</q-btn
+          <q-card-section class="row">
+            <div
+              v-for="item in showFullGener
+                ? data?.filter.gener
+                : data?.filter.gener.slice(0, 11)"
+              :key="item.value"
+              class="col-4 col-sm-3 col-md-4 px-1 py-1"
             >
-          </div>
-        </q-card-section>
+              <q-btn
+                dense
+                no-caps
+                flat
+                class="py-2 bg-[#292929] text-weight-normal w-full min-h-10 ease-bg"
+                :disable="defaultsOptions.gener === item.value"
+                @click="toggleGenres(item.value)"
+                :class="{
+                  'bg-main':
+                    defaultsOptions.gener === item.value ||
+                    indexInGenres(item.value) > -1,
+                }"
+                >{{ item.text }}</q-btn
+              >
+            </div>
 
-        <!-- year -->
-        <q-card-section class="py-0">
-          <div class="text-subtitle1 mx-1">Năm</div>
-        </q-card-section>
-
-        <q-card-section class="row">
-          <div
-            v-for="item in data?.filter.year"
-            :key="item.value"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
-            <q-btn
-              dense
-              no-caps
-              flat
-              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-              :disable="!!defaultsOptions.year"
-              @click="year = item.value"
-              :class="{
-                'bg-main':
-                  defaultsOptions.year === item.value || year === item.value,
-              }"
-              >{{ item.text }}</q-btn
+            <div
+              v-if="!showFullGener"
+              @click="showFullGener = true"
+              class="col-4 col-sm-3 col-md-4 px-1 py-1"
             >
-          </div>
-        </q-card-section>
-      </div>
+              <q-btn
+                dense
+                no-caps
+                flat
+                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg min-h-10"
+              >
+                <Icon icon="fluent:chevron-down-24-regular" />
+              </q-btn>
+            </div>
+          </q-card-section>
 
-      <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-    </q-card>
-  </q-dialog>
+          <!-- typer -->
+          <q-card-section class="py-0">
+            <div class="text-subtitle1 mx-1">Loại</div>
+          </q-card-section>
+
+          <q-card-section class="row">
+            <div
+              v-for="item in data?.filter.typer"
+              :key="item.value"
+              class="col-4 col-sm-3 col-md-4 px-1 py-1"
+            >
+              <q-btn
+                dense
+                no-caps
+                flat
+                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
+                :disable="!!defaultsOptions.typer"
+                @click="typer = item.value"
+                :class="{
+                  'bg-main':
+                    defaultsOptions.typer === item.value ||
+                    typer === item.value,
+                }"
+                >{{ item.text }}</q-btn
+              >
+            </div>
+          </q-card-section>
+
+          <!-- seaser -->
+          <q-card-section class="py-0">
+            <div class="text-subtitle1 mx-1">Mùa</div>
+          </q-card-section>
+
+          <q-card-section class="row">
+            <div
+              v-for="item in data?.filter.seaser"
+              :key="item.value"
+              class="col-4 col-sm-3 col-md-4 px-1 py-1"
+            >
+              <q-btn
+                dense
+                no-caps
+                flat
+                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
+                :disable="!!defaultsOptions.seaser"
+                @click="seaser = item.value"
+                :class="{
+                  'bg-main':
+                    defaultsOptions.seaser === item.value ||
+                    seaser === item.value,
+                }"
+                >{{ item.text }}</q-btn
+              >
+            </div>
+          </q-card-section>
+
+          <!-- year -->
+          <q-card-section class="py-0">
+            <div class="text-subtitle1 mx-1">Năm</div>
+          </q-card-section>
+
+          <q-card-section class="row">
+            <div
+              v-for="item in data?.filter.year"
+              :key="item.value"
+              class="col-4 col-sm-3 col-md-4 px-1 py-1"
+            >
+              <q-btn
+                dense
+                no-caps
+                flat
+                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
+                :disable="!!defaultsOptions.year"
+                @click="year = item.value"
+                :class="{
+                  'bg-main':
+                    defaultsOptions.year === item.value || year === item.value,
+                }"
+                >{{ item.text }}</q-btn
+              >
+            </div>
+          </q-card-section>
+        </div>
+
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+      </q-card>
+    </q-dialog>
+  </template>
 </template>
 
 <script lang="ts" setup>
-import { useRouter, useRoute } from "vue-router"
 import { Icon } from "@iconify/vue"
-
-import { TypeNormalValue } from "src/apis/[type_normal]/[value]"
-import { watch, computed } from "vue"
-import { useRequest } from "vue-request"
 import GridCard from "components/GridCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
-import { ref, reactive, watchEffect } from "vue"
+import { TypeNormalValue } from "src/apis/[type_normal]/[value]"
+import { computed, reactive, ref, watch } from "vue"
+import { useRequest } from "vue-request"
+import { useRoute, useRouter } from "vue-router"
 
 const route = useRoute()
 const router = useRouter()
@@ -518,7 +518,9 @@ function setup() {
   } = route.query
 
   if (qGenres) {
-    const _qgen = (Array.isArray(qGenres) ? qGenres : [qGenres]).filter(Boolean)
+    const _qgen = (Array.isArray(qGenres) ? qGenres : [qGenres]).filter(
+      Boolean
+    ) as string[]
 
     if (
       genres.length !== _qgen.length ||
@@ -528,10 +530,10 @@ function setup() {
       genres.push(..._qgen)
     }
   }
-  if (qSeaser) seaser.value = qSeaser
-  if (qSorter) sorter.value = qSorter
-  if (qTyper) typer.value = qTyper
-  if (qYear) year.value = qYear
+  if (qSeaser) seaser.value = qSeaser as string
+  if (qSorter) sorter.value = qSorter as string
+  if (qTyper) typer.value = qTyper as string
+  if (qYear) year.value = qYear as string
 }
 watch(
   [genres, seaser, sorter, typer, year],
@@ -553,6 +555,7 @@ watch(
 const textFilter = computed(() => {
   return (
     data.value &&
+    data.value.filter &&
     [
       data.value.filter.gener
         .filter((item) => genres.includes(item.value))
@@ -570,11 +573,18 @@ const textFilter = computed(() => {
   )
 })
 
-const defaultsOptions = computed(() => {
-  const { type_normal, value } = route.params
+const defaultsOptions = computed<{
+  typer?: string
+  gener?: string
+  seaser?: string
+  year?: string
+}>(() => {
+  // eslint-disable-next-line camelcase
+  const { type_normal, value } = route.params as Record<string, string>
 
   // ":type_normal(quoc-gia|tag)/:value",
   // [":type_normal(season)/:value+"
+  // eslint-disable-next-line camelcase
   switch (type_normal) {
     case "danh-sach":
       return { typer: value }
@@ -597,8 +607,7 @@ const defaultsOptions = computed(() => {
 const showFullGener = ref(false)
 
 function resetFilter() {
-  if (!textFilter.value)
-    return TypeNormalValue(route.params.type_normal, route.params.value, 1)
+  if (!textFilter.value) return
 
   genres.splice(0)
   seaser.value = sorter.value = null
@@ -621,12 +630,12 @@ function toggleGenres(item: string) {
 
 function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   return TypeNormalValue(
-    route.params.type_normal,
+    route.params.type_normal as string,
     route.params.value,
     page,
     onlyItems,
     {
-      genres: genres,
+      genres,
       seaser: seaser.value,
       sorter: sorter.value,
       typer: typer.value,
@@ -643,16 +652,20 @@ watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      path: [route.path],
+      params: { pathMatch: route.path },
       query: {
-        error,
+        message: error.message,
+        cause: error.cause + "",
       },
     })
 })
 
 const title = ref("")
 const watcherData = watch(data, (data) => {
-  title.value = data.title
+  if (!data) return
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  title.value = data.title!
   watcherData()
 })
 watch(
@@ -664,20 +677,20 @@ watch(
   { deep: true }
 )
 
+// eslint-disable-next-line functional/no-let
 let nextPage = 2
-async function onLoad(index, done: (stop: boolean) => void) {
+async function onLoad(_index: number, done: (stop: boolean) => void) {
   const { curPage, maxPage, items } = await fetchTypeNormalValue(
     nextPage++,
     true
   )
 
-  data.value = {
-    title: data.value!.title,
-    filter: data.value!.filter,
+  data.value = Object.assign(data.value ?? {}, {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     items: [...data.value!.items, ...items],
     curPage,
     maxPage,
-  }
+  })
   done(curPage === maxPage)
 }
 </script>

@@ -3,8 +3,8 @@ import { load } from "cheerio"
 import { getHTML } from "./helpers/getHTML"
 import { getInfoTPost } from "./helpers/getInfoTPost"
 
-export async function Index(url: string) {
-  const $ = load(await getHTML(url))
+export async function Index() {
+  const $ = load(await getHTML("/"))
 
   const thisSeason = $(".MovieListTopCn:eq(0)")
     .find(".TPostMv")

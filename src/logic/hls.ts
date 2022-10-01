@@ -1,6 +1,7 @@
-// eslint-disable-next-line import/no-named-default
-import type { default as HlsJs } from "hls.js"
+import type Hls from "hls.js"
 
 import _Hls from "./hls-module.js"
 
-export const Hls = _Hls as HlsJs
+const Hlsjs = _Hls as typeof Hls
+
+export default Hlsjs

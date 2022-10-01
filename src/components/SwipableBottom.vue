@@ -16,16 +16,19 @@
   </q-card>
 </template>
 <script lang="ts" setup>
-import { ref, computed } from "vue"
+import { computed, ref } from "vue"
 
 const breakpoints = [0, innerHeight - (innerWidth * 9) / 16, innerHeight]
 
 const height = ref(breakpoints[1])
 
 const indexAbsHeight = computed(() => {
-  let diff = Infinity,
-    index = -1
+  // eslint-disable-next-line functional/no-let
+  let diff = Infinity
+  // eslint-disable-next-line functional/no-let
+  let index = -1
   const h = height.value
+  // eslint-disable-next-line array-callback-return
   breakpoints.some((item, curIndex) => {
     const curDiff = Math.abs(item - h)
 
@@ -43,27 +46,30 @@ const indexAbsHeight = computed(() => {
 const interacting = ref(false)
 addEventListener("mousedown", () => (interacting.value = true))
 addEventListener("touchstart", () => (interacting.value = true))
-addEventListener("mouseup", (event) => {
+addEventListener("mouseup", () => {
   interacting.value = false
-  onTouchEnd(event)
+  onTouchEnd()
 })
-addEventListener("touchend", (event) => {
+addEventListener("touchend", () => {
   interacting.value = false
-  onTouchEnd(event)
+  onTouchEnd()
 })
-let hStart, iStart, yStart
-let yLast, tLast
-function onTouchStart(event) {
-  yLast = yStart = (event.changedTouches?.[0] || event).clientY
+// eslint-disable-next-line functional/no-let
+let hStart: number, iStart: number, yStart: number
+// eslint-disable-next-line functional/no-let
+let yLast: number, tLast: number
+function onTouchStart(event: TouchEvent | MouseEvent) {
+  yLast = yStart = ((event as TouchEvent).changedTouches?.[0] || event).clientY
   hStart = height.value
   tLast = performance.now()
   iStart = indexAbsHeight.value
 }
-let lastSpeed
-function onTouchMove(event) {
+// eslint-disable-next-line functional/no-let
+let lastSpeed: number
+function onTouchMove(event: TouchEvent | MouseEvent) {
   if (!interacting.value) return
 
-  const { clientY } = event.changedTouches?.[0] || event
+  const { clientY } = (event as TouchEvent).changedTouches?.[0] || event
 
   const diff = clientY - yStart
   height.value = hStart - diff
@@ -77,7 +83,7 @@ function onTouchMove(event) {
   tLast = now
 }
 const space = 0.7
-function onTouchEnd(event) {
+function onTouchEnd() {
   setTimeout(() => {
     if (lastSpeed > space) {
       // move to down
