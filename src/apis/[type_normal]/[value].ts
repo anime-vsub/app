@@ -1,8 +1,8 @@
 import type { CheerioAPI } from "cheerio"
 import { load } from "cheerio"
 
-import { getHTML } from "../helpers/getHTML"
-import { getInfoTPost } from "../helpers/getInfoTPost"
+import { getHTML } from "../../helpers/getHTML"
+import { getInfoTPost } from "../../helpers/getInfoTPost"
 
 export async function TypeNormalValue(
   type: string,

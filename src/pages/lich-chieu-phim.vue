@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { LichChieuPhim } from "src/apis/lich-chieu-phim"
+import { LichChieuPhim } from "src/apis/src/lich-chieu-phim"
 import { watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"

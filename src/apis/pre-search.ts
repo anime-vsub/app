@@ -1,8 +1,10 @@
-import { getPathName } from "./utils/getPathName"
-import { parserDOM } from "./utils/parserDOM"
+import { load } from "cheerio"
+import { post } from "src/logic/http"
+
+import { getPathName } from "../helpers/getPathName"
 
 interface DataItem {
-  poster: string
+  image: string
   path: string
   name: string
   status: string
@@ -25,43 +27,37 @@ interface DataItem {
   ).then((e) => e.text())
 
   */
-export async function preSearch(key: string) {
-  const dom =
-    parserDOM(`<li><a style="background-image: url('http://cdn.animevietsub.cc/data/poster/2022/02/24/animevsub-vziyRxKpU1.jpg')" class="thumb" href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/"></a>
-  <div class="ss-info">
-  <a href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/" class="ss-title">Tonikaku Kawaii 2nd Season</a>
-  
-  <p>Preview VietSub</p>
-  </div>
-  <div class="clearfix"></div>
-  </li><li><a style="background-image: url('http://cdn.animevietsub.cc/data/poster/2021/08/18/animevsub-HXKAyrZo5i.jpg')" class="thumb" href="http://animevietsub.cc/phim/tonikaku-kawaii-sns-a4229/"></a>
-  <div class="ss-info">
-  <a href="http://animevietsub.cc/phim/tonikaku-kawaii-sns-a4229/" class="ss-title">Tonikaku Kawaii: SNS</a>
-  
-  <p>HD-VietSub</p>
-  </div>
-  <div class="clearfix"></div>
-  </li><li><a style="background-image: url('http://cdn.animevietsub.cc/data/poster/2020/09/30/animevsub-1NmQPMC9x0.jpg')" class="thumb" href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/"></a>
-  <div class="ss-info">
-  <a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" class="ss-title">Tonikaku Kawaii [BD]</a>
-  
-  <p>Full VietSub</p>
-  </div>
-  <div class="clearfix"></div>
-  </li><li class="ss-bottom" style="padding: 0; border-bottom: none;"><a href="/tim-kiem/toni/" id="suggest-all">Enter để tìm kiếm</a></li>`)
-
-  return Array.from(dom.querySelectorAll("li:not(.ss-bottom)")).map(
-    (li): DataItem => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const anchor = li.querySelector("a")!
-      const poster = anchor.style.backgroundImage
-        .replace(/^url\((?:'|")?/, "")
-        .replace(/(?:'|")?\)$/, "")
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const path = getPathName(anchor.getAttribute("href")!)
-      const name = li.querySelector(".ss-title")?.textContent ?? "unknown"
-      const status = li.querySelector("p")?.textContent ?? "unknown"
-      return { poster, path, name, status }
-    }
+export async function PreSearch(query: string) {
+  const $ = load(
+    (
+      await post("/ajax/suggest", {
+        ajaxSearch: "1",
+        keysearch: query,
+      })
+    ).data
   )
+
+  return $("li:not(.ss-bottom)")
+    .map((_i, li): DataItem => {
+      const $li = $(li)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const anchor = $li.find("a")!
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const image = anchor
+        .attr("style")!
+        .split(";")
+        .find((item) => item.startsWith("background-image"))!
+        .split(":", 3)
+        .slice(1)
+        .join(":")
+        .trim()
+        .replace(/^url\((?:'|")?/, "")
+        .replace(/(?:'|")?\)$/, "")!
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const path = getPathName(anchor.attr("href")!)
+      const name = $li.find(".ss-title").text() ?? "unknown"
+      const status = $li.find("p").text() ?? "unknown"
+      return { image, path, name, status }
+    })
+    .toArray()
 }

@@ -1,6 +1,6 @@
 import { load } from "cheerio"
 
-import { getHTML } from "../../helpers/getHTML"
+import { getHTML } from "../../../helpers/getHTML"
 
 export async function PhimIdChap(season: string) {
   const $ = load(await getHTML(`/phim/${season}/xem-phim.html`))
