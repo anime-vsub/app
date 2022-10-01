@@ -8,8 +8,8 @@
     @mousemove="onTouchMove"
     @mouseup="onTouchEnd"
     :style="{
-      transition: interacting ? 'height 0.1s ease' : undefined,
-      height: height + 'px',
+      transition: interacting ? 'height 0s ease' : undefined,
+      'max-height': height + 'px',
     }"
   >
     <slot />
@@ -96,9 +96,12 @@ function onTouchEnd(event) {
 </script>
 <style lang="scss" scoped>
 .bottom {
+  max-height: 100%;
   width: 100%;
   user-select: none;
-  transition: height 0.11s linear;
-  will-change: height;
+  transition: max-height 0.33s linear;
+  will-change: max-height;
+  transform: translate3d(0px, 0px, 0px);
+  backface-visibility: hidden;
 }
 </style>

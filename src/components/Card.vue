@@ -8,7 +8,7 @@
     >
       <div class="update-info-layer">
         <template v-if="trending">
-          <div class="text-[30px]">#{{ trending }}</div>
+          <!-- <div class="text-[30px]">#{{ trending }}</div> -->
           <div class="card-title line-clamp-2 h-[42px]">
             {{ data.name }}
           </div>
@@ -24,7 +24,16 @@
         </span>
         <span v-else>Tập {{ data.chap }}</span>
       </div>
-      <Quality v-if="data.quality">{{ data.quality }}</Quality>
+      <Quality
+        v-if="data.quality"
+        :class="trending ? 'right-0 absolute' : undefined"
+        >{{ data.quality }}</Quality
+      >
+      <img
+        v-if="trending"
+        :src="`src/assets/bangumi_rank_ic_${trending}.png`"
+        class="h-[1.5rem]"
+      />
     </q-img>
     <a v-if="!trending" href="#" class="line-clamp-2 min-h-10 mt-1">{{
       data.name

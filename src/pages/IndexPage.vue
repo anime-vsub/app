@@ -41,30 +41,109 @@
     </q-toolbar>
   </q-header>
 
-  <q-page v-if="loading || !data" class="fit flex items-center justify-between">
-    <q-spinner style="color: #00be06" size="3em" :thickness="3" />
-  </q-page>
+  <q-page v-if="loading || !data" class="mt-[-50px] loader">
+    <div class="swiper-hot">
+      <q-responsive :ratio="aspectRatio" class="poster">
+        <q-skeleton type="rect" width="100%" height="100%" />
+      </q-responsive>
+    </div>
 
-  <q-page v-else-if="error">
-    {{ error }}
-  </q-page>
+    <div class="row text-grey text-[14px] mx-4 text-center mb-4">
+      <div class="col-4 relative py-2">
+        <q-skeleton type="circle" size="40px" class="mx-auto mb-2" />
+        <q-skeleton
+          type="text"
+          width="3.5rem"
+          height="1rem"
+          class="mt-2 mx-auto"
+        />
+      </div>
+      <div class="col-4 relative py-2">
+        <q-skeleton type="circle" size="40px" class="mx-auto mb-2" />
+        <q-skeleton
+          type="text"
+          width="3.5rem"
+          height="1rem"
+          class="mt-2 mx-auto"
+        />
+      </div>
+      <div class="col-4 relative py-2">
+        <q-skeleton type="circle" size="40px" class="mx-auto mb-2" />
+        <q-skeleton
+          type="text"
+          width="3.5rem"
+          height="1rem"
+          class="mt-2 mx-auto"
+        />
+      </div>
+    </div>
 
+    <div class="px-4 mt-4">
+      <div class="wpa-grid">
+        <div class="ctnr">
+          <SkeletonCard
+            v-for="item in 12"
+            :key="item"
+            class="card-wrap inline-block"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 mt-4">
+      <q-skeleton type="text" width="7rem" class="text-h6" />
+
+      <SkeletonGridCard :count="6" />
+    </div>
+
+    <div class="px-4 mt-4">
+      <q-skeleton type="text" width="7rem" class="text-h6" />
+
+      <div class="wpa-grid">
+        <div class="ctnr">
+          <SkeletonCard
+            v-for="item in 12"
+            :key="item"
+            class="card-wrap inline-block"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 mt-4">
+      <q-skeleton type="text" width="7rem" class="text-h6" />
+
+      <div class="wpa-grid">
+        <q-skeleton type="text" width="100%" />
+        <div class="ctnr">
+          <SkeletonCard
+            v-for="item in 12"
+            :key="item"
+            class="card-wrap inline-block"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 mt-4">
+      <q-skeleton type="text" width="7rem" class="text-h6" />
+
+      <SkeletonGridCard :count="6" />
+    </div>
+  </q-page>
   <q-page v-else class="mt-[-50px]">
     <swiper
       :slides-per-view="1"
       :space-between="0"
-      :modules="modules"
+      :modules="[Autoplay]"
       :autoplay="{
         delay: 5000,
         disableOnInteraction: false,
       }"
-      :pagination="{
-        clickable: true,
-      }"
       class="swiper-hot"
     >
       <swiper-slide v-for="(item, index) in data.carousel" :key="index">
-        <q-img :ratio="aspectRatio" :src="item.image!" />
+        <q-img :ratio="aspectRatio" :src="item.image!" class="poster" />
         <div class="drop-left"></div>
         <div class="drop-center"></div>
         <div class="drop-right"></div>
@@ -102,6 +181,33 @@
         </div>
       </swiper-slide>
     </swiper>
+
+    <div class="row text-grey text-[12px] mx-4 text-center mb-4">
+      <router-link to="/muc-luc" class="col-4 relative py-2" v-ripple>
+        <img
+          src="src/assets/icon_tool_alp.png"
+          width="30"
+          class="mx-auto mb-2"
+        />
+        <span class="mt-2">Mục lục</span>
+      </router-link>
+      <router-link to="/lich-chieu-phim" class="col-4 relative py-2" v-ripple>
+        <img
+          src="src/assets/icon_tool_calc.png"
+          width="30"
+          class="mx-auto mb-2"
+        />
+        <span>Lịch chiếu</span>
+      </router-link>
+      <router-link to="/bang-xep-hang/day" class="col-4 relative py-2" v-ripple>
+        <img
+          src="src/assets/icon_tool_rank.png"
+          width="30"
+          class="mx-auto mb-2"
+        />
+        <span>Bảng xếp hạng</span>
+      </router-link>
+    </div>
 
     <div class="px-4">
       <div class="wpa-grid">
@@ -222,11 +328,13 @@ import { watch } from "vue"
 import "dayjs/locale/vi"
 import GridCard from "components/GridCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
+import SkeletonCard from "components/SkeletonCard.vue"
 
 // Import Swiper Vue.js components
 
 import { Autoplay, Grid, Pagination } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
+import { useRoute } from "vue-router"
 
 // Import Swiper styles
 import "swiper/css"
@@ -237,7 +345,7 @@ import "swiper/css/grid"
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
 
-const modules = [Pagination, Autoplay]
+const route = useRoute()
 
 const aspectRatio = 622 / 350
 
@@ -246,7 +354,10 @@ watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      path: route.path,
+      path: [route.path],
+      query: {
+        error,
+      },
     })
 })
 
@@ -268,6 +379,10 @@ let isTodayF = false
   @media screen and (max-width: 767px) {
     margin-bottom: 16px;
     height: auto;
+
+    .poster {
+      height: max(calc(100vw / v-bind("aspectRatio")), 40vh, 56vw);
+    }
   }
   @media screen and (max-width: 1023px) and (min-width: 768px) {
     margin-bottom: -8.59%;
@@ -561,18 +676,22 @@ let isTodayF = false
   display: inline-block;
   white-space: initial;
 
-  // width: 155.25px !important;
-  max-width: calc((100% - 80px) / #{6 + $offset}) !important;
-  margin-right: 16px;
-
-  @media screen and (max-width: 767px) {
-    max-width: calc((100% - 16px) / #{3 + $offset}) !important;
-    margin-right: 8px;
-  }
-  @media screen and (min-width: 768px) and (max-width: 1023px) {
-    max-width: calc((100% - 48px) / #{4 + $offset}) !important;
-  }
-
   width: 280px;
+  // class="col-4 col-lg-3 col-xl-2 px-[5px] py-2"
+  max-width: calc((100% - 16px) / #{3 + $offset});
+  margin-right: 8px;
+
+  @media (min-width: $breakpoint-lg-min) {
+    max-width: calc((100% - 48px) / #{4 + $offset});
+    margin-right: 24px;
+  }
+  @media (min-width: $breakpoint-xl-min) {
+    max-width: calc((100% - 80px) / #{6 + $offset});
+    margin-right: 40px;
+  }
+}
+
+.loader .wpa-grid {
+  overflow-x: hidden;
 }
 </style>

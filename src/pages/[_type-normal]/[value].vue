@@ -23,7 +23,12 @@
 
         <q-toolbar-title
           class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
-          >{{ title }}</q-toolbar-title
+          >{{
+            route.params.type_normal?.toLowerCase() === "danh-sach" &&
+            route.params.value?.toLowerCase() === "all"
+              ? "Mục lục"
+              : title
+          }}</q-toolbar-title
         >
 
         <q-btn flat dense round @click="showDialogSorter = true">
@@ -82,17 +87,13 @@
 
     <div v-if="data?.items.length === 0" class="text-center py-20">
       <img
-        src="src/assets/monkey.png"
+        src="src/assets/img_tips_error_not_foud.png"
         width="186"
         height="174"
         class="mx-auto"
       />
 
-      <div class="text-subtitle1 mt-1">
-        Không tìm thấy gì cả.
-        <br />
-        Thứ này đã biến mất và chúng tôi không thể tìm thấy
-      </div>
+      <div class="text-subtitle1 mt-1">Không tìm thấy gì cả.</div>
     </div>
 
     <template v-else>
@@ -111,7 +112,12 @@
   </q-page>
 
   <!-- gener -->
-  <q-dialog v-model="showDialogGener" position="bottom" full-width>
+  <q-dialog
+    v-model="showDialogGener"
+    position="bottom"
+    no-route-dismiss
+    full-width
+  >
     <q-card flat class="w-full pt-3 !max-h-[60vh]">
       <q-card-section class="py-0 flex items-center justify-between">
         <div class="text-subtitle1 mx-1">Loại</div>
@@ -138,11 +144,11 @@
             flat
             class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
             :disable="defaultsOptions.gener === item.value"
-            @click="toggleGenres(item)"
+            @click="toggleGenres(item.value)"
             :class="{
               'bg-main':
                 defaultsOptions.gener === item.value ||
-                indexInGenres(item) > -1,
+                indexInGenres(item.value) > -1,
             }"
             >{{ item.text }}</q-btn
           >
@@ -155,7 +161,12 @@
   </q-dialog>
 
   <!-- seaser -->
-  <q-dialog v-model="showDialogSeaser" position="bottom" full-width>
+  <q-dialog
+    v-model="showDialogSeaser"
+    position="bottom"
+    no-route-dismiss
+    full-width
+  >
     <q-card flat class="w-full pt-3">
       <q-card-section class="py-0 flex items-center justify-between">
         <div class="text-subtitle1 mx-1">Mùa</div>
@@ -198,7 +209,12 @@
   </q-dialog>
 
   <!-- typer -->
-  <q-dialog v-model="showDialogTyper" position="bottom" full-width>
+  <q-dialog
+    v-model="showDialogTyper"
+    position="bottom"
+    no-route-dismiss
+    full-width
+  >
     <q-card flat class="w-full pt-3">
       <q-card-section class="py-0 flex items-center justify-between">
         <div class="text-subtitle1 mx-1">Loại</div>
@@ -241,7 +257,12 @@
   </q-dialog>
 
   <!-- sorter -->
-  <q-dialog v-model="showDialogSorter" position="bottom" full-width>
+  <q-dialog
+    v-model="showDialogSorter"
+    position="bottom"
+    no-route-dismiss
+    full-width
+  >
     <q-card flat class="w-full pt-3">
       <q-card-section class="py-0 flex items-center justify-between">
         <div class="text-subtitle1 mx-1">Sắp xếp</div>
@@ -284,7 +305,12 @@
   </q-dialog>
 
   <!-- filter -->
-  <q-dialog v-model="showDialogSorter" position="bottom" full-width>
+  <q-dialog
+    v-model="showDialogSorter"
+    position="bottom"
+    no-route-dismiss
+    full-width
+  >
     <q-card flat class="w-full pt-3 !max-h-[60vh]">
       <div class="relative">
         <!-- sorter -->
@@ -341,11 +367,11 @@
               flat
               class="py-2 bg-[#292929] text-weight-normal w-full min-h-10 ease-bg"
               :disable="defaultsOptions.gener === item.value"
-              @click="toggleGenres(item)"
+              @click="toggleGenres(item.value)"
               :class="{
                 'bg-main':
                   defaultsOptions.gener === item.value ||
-                  indexInGenres(item) > -1,
+                  indexInGenres(item.value) > -1,
               }"
               >{{ item.text }}</q-btn
             >
@@ -464,7 +490,7 @@ import { watch, computed } from "vue"
 import { useRequest } from "vue-request"
 import GridCard from "components/GridCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
-import { ref, reactive } from "vue"
+import { ref, reactive, watchEffect } from "vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -475,17 +501,63 @@ const showDialogTyper = ref(false)
 const showDialogSorter = ref(false)
 const showDialogFilter = ref(false)
 
-const genres = reactive<{ text: string; value: string }[]>([])
+const genres = reactive<string[]>([])
 const seaser = ref<string | null>(null)
 const sorter = ref<string | null>(null)
 const typer = ref<string | null>(null)
 const year = ref<string | null>(null)
 
+setup() // call if free memory
+function setup() {
+  const {
+    genres: qGenres,
+    seaser: qSeaser,
+    sorter: qSorter,
+    typer: qTyper,
+    year: qYear,
+  } = route.query
+
+  if (qGenres) {
+    const _qgen = (Array.isArray(qGenres) ? qGenres : [qGenres]).filter(Boolean)
+
+    if (
+      genres.length !== _qgen.length ||
+      genres.some((item) => !_qgen.includes(item))
+    ) {
+      genres.splice(0)
+      genres.push(..._qgen)
+    }
+  }
+  if (qSeaser) seaser.value = qSeaser
+  if (qSorter) sorter.value = qSorter
+  if (qTyper) typer.value = qTyper
+  if (qYear) year.value = qYear
+}
+watch(
+  [genres, seaser, sorter, typer, year],
+  ([genres, seaser, sorter, typer, year]) => {
+    router.replace({
+      ...route,
+      query: {
+        genres,
+        seaser,
+        sorter,
+        typer,
+        year,
+      },
+    })
+  },
+  { deep: true }
+)
+
 const textFilter = computed(() => {
   return (
     data.value &&
     [
-      genres.map((item) => item.text).join(", "),
+      data.value.filter.gener
+        .filter((item) => genres.includes(item.value))
+        .map((item) => item.text)
+        .join(", "),
       data.value.filter.seaser.find((item) => item.value === seaser.value)
         ?.text,
       data.value.filter.sorter.find((item) => item.value === sorter.value)
@@ -534,10 +606,10 @@ function resetFilter() {
   year.value = null
 }
 
-function indexInGenres(item: { text: stirng; value: string }) {
-  return genres.findIndex(({ value }) => value === item.value)
+function indexInGenres(item: string) {
+  return genres.indexOf(item)
 }
-function toggleGenres(item: { text: string; value: string }) {
+function toggleGenres(item: string) {
   const index = indexInGenres(item)
   if (index > -1) {
     // remove
@@ -554,7 +626,7 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
     page,
     onlyItems,
     {
-      genres: genres.map((item) => item.value),
+      genres: genres,
       seaser: seaser.value,
       sorter: sorter.value,
       typer: typer.value,
@@ -567,6 +639,17 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
 const { data, error, run, loading } = useRequest(() =>
   fetchTypeNormalValue(1, false)
 )
+watch(error, (error) => {
+  if (error)
+    router.push({
+      name: "not_found",
+      path: [route.path],
+      query: {
+        error,
+      },
+    })
+})
+
 const title = ref("")
 const watcherData = watch(data, (data) => {
   title.value = data.title
@@ -580,14 +663,6 @@ watch(
   },
   { deep: true }
 )
-
-watch(error, (error) => {
-  if (error)
-    router.push({
-      name: "not_found",
-      path: route.path,
-    })
-})
 
 let nextPage = 2
 async function onLoad(index, done: (stop: boolean) => void) {
