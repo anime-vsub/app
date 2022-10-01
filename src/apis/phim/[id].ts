@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
+import type { Cheerio, CheerioAPI, Element } from "cheerio"
 import { load } from "cheerio"
 
 import { getHTML } from "../helpers/getHTML"
@@ -8,7 +9,7 @@ import { getInfoTPost } from "../helpers/getInfoTPost"
 import { int } from "../utils/float"
 import { getPathName } from "../utils/getPathName"
 
-function findInfo($, infoList, q: string) {
+function findInfo($: CheerioAPI, infoList: Cheerio<Element>, q: string) {
   return $(
     infoList.toArray().find((item) => {
       return $(item).find("strong").text().toLowerCase().startsWith(q)
@@ -16,8 +17,8 @@ function findInfo($, infoList, q: string) {
   )
 }
 
-export async function PhimId(url: string) {
-  const $ = load(await getHTML(url))
+export async function PhimId(seasonId: string) {
+  const $ = load(await getHTML(`/phim/${seasonId}/`))
 
   const name = $(".Title:eq(0)").text()
   const othername = $(".SubTitle:eq(0)").text()
@@ -79,7 +80,7 @@ export async function PhimId(url: string) {
     .split(":", 2)[1]
     ?.trim()
   const seasonOf = getInfoAnchor(findInfo($, infoListRight, "season").find("a"))
-  const trailer = $("#Opt1 iframe").attr("src")
+  const trailer = $("#Opt1 iframe").attr("src")!
 
   const followed = $(".added").length > 0
 

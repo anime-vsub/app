@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "muc-luc",
-        redirect: `/danh-sach/all`,
+        redirect: "/danh-sach/all",
       },
       {
         path: "lich-chieu-phim",

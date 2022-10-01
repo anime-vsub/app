@@ -25,7 +25,8 @@
         :fetch-season="fetchSeason"
       />
       <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
-        <q-video :ratio="16 / 9" :src="sources?.[0]?.url" />
+        <q-img v-if="sources?.[0]?.url" :ratio="16/9" src="src/assets/ic_question_result_error.png" width="100" class="max-w-[100px]" />
+        <q-video v-else :ratio="16 / 9" :src="sources![0]!.url" />
       </div>
     </template>
 
@@ -410,7 +411,7 @@
             />
 
             <div class="mt-5 text-[#eee] text-[16px]">Trailer</div>
-            <q-video class="mt-3" :src="data.trailer" :ratio="16 / 9" />
+            <q-video class="mt-3" :src="data.trailer!" :ratio="16 / 9" />
           </div>
         </q-card-section>
       </q-card>
@@ -422,9 +423,12 @@
 </template>
 
 <script lang="ts" setup>
+import { Icon } from "@iconify/vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import GridCard from "components/GridCard.vue"
 import Quality from "components/Quality.vue"
+import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
 import dayjs from "dayjs"
 import { QTab } from "quasar"
@@ -433,15 +437,16 @@ import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
 import { labelToQuality } from "src/constants"
+import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import SkeletonGridCard from "components/SkeletonGridCard.vue"
 // import SwipableBottom from "components/SwipableBottom.vue"
-import GridCard from "components/GridCard.vue"
-import { Icon } from "@iconify/vue"
+
+// ============================================
+
 
 const route = useRoute()
 const router = useRouter()
@@ -473,7 +478,7 @@ const currentMetaSeason = computed(() => {
 
 const { data, run, error, loading } = useRequest(
   () => {
-    return PhimId(`/phim/${currentSeason.value}/`)
+    return PhimId(currentSeason.value)
   },
   {
     refreshDeps: [currentSeason],
@@ -486,9 +491,10 @@ watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      path: [route.path],
+      params: {pathMatch:route.path},
       query: {
-        error,
+        message : error.message,
+        cause: error.cause + ""
       },
     })
 })
@@ -537,6 +543,7 @@ async function fetchSeason(season: string) {
         {
           id: "#youtube",
           play: "1",
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           hash: data.value!.trailer,
           name: "Trailer",
         },
@@ -640,9 +647,9 @@ const configPlayer = shallowRef<{
     file: string
     label: string
     preload: string
-    type: "hls"
+    type: "hls" | "youtube"
   }[]
-  playTech: "api"
+  playTech: "api" | "trailer"
 }>()
 watch(
   currentMetaChap,
@@ -709,10 +716,6 @@ const sources = computed<Source[] | undefined>(() =>
     }
   })
 )
-
-// ============================================
-
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 // @scrollIntoView
 const tabsRef = ref<QTab>()
 watchEffect(() => {

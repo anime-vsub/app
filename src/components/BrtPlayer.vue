@@ -628,17 +628,17 @@
 </template>
 
 <script lang="ts" setup>
-import { StatusBar } from "@capacitor/status-bar"
 import { Haptics } from "@capacitor/haptics"
+import { StatusBar } from "@capacitor/status-bar"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
-import { Preferences } from "@capacitor/preferences"
 import { Icon } from "@iconify/vue"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { QTab, useQuasar } from "quasar"
+import { debounce, QTab, useQuasar } from "quasar"
 import type { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
-import { Hls } from "src/logic/hls"
+import { scrollXIntoView } from "src/helpers/scrollXIntoView"
+import Hls from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
 import { computed, ref, shallowReactive, watch, watchEffect } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
@@ -714,7 +714,6 @@ watch(
     immediate: true,
   }
 )
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 // @scrollIntoView
 const tabsRef = ref<QTab>()
 watchEffect(() => {
@@ -748,6 +747,7 @@ const setArtPlaying = (playing: boolean) => {
   }
 }
 watch(uniqueCurChap, () => setArtPlaying(true), { immediate: true })
+// eslint-disable-next-line functional/no-let
 let artEnded = false
 const artLoading = ref(true)
 const artDuration = ref<number>(0)
@@ -849,7 +849,6 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
-import { debounce } from "quasar"
 const saveCurTimeToPer = debounce(async () => {
   localStorage.setItem(
     `cur_time:${uniqueCurChap.value}`,
@@ -933,7 +932,7 @@ function remount() {
   const { url, type } = currentStream.value
 
   const currentTime = artCurrentTime.value
-  const playing = !video.value.paused || artPlaying.value || artEnded
+  const playing = !video.value?.paused || artPlaying.value || artEnded
   artEnded = false
 
   switch (type) {
@@ -943,7 +942,8 @@ function remount() {
       const hls = new Hls()
       // customLoader(hls.config)
       hls.loadSource(url)
-      hls.attachMedia(video.value)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      hls.attachMedia(video.value!)
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (playing) video.value!.play()
@@ -1004,12 +1004,25 @@ const currentingTime = ref(false)
 const progressInnerRef = ref<HTMLDivElement>()
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
+  innerEl?: HTMLDivElement
+): void
+// eslint-disable-next-line no-redeclare
+function onIndicatorMove(
+  event: TouchEvent | MouseEvent,
+  innerEl: HTMLDivElement,
+  offsetX: number,
+  curTimeStart: number
+): void
+// eslint-disable-next-line no-redeclare
+function onIndicatorMove(
+  event: TouchEvent | MouseEvent,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   innerEl: HTMLDivElement = progressInnerRef.value!,
   offsetX?: number,
   curTimeStart?: number
 ) {
   currentingTime.value = true
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
   const maxX = innerEl.offsetWidth
   const { left } = innerEl.getBoundingClientRect()
 
@@ -1029,8 +1042,10 @@ function onIndicatorMove(
     artCurrentTime.value = Math.max(
       0,
       Math.min(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         video.value!.duration,
-        curTimeStart + (video.value!.duration * clientX) / maxX
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        curTimeStart! + (video.value!.duration * clientX) / maxX
       )
     )
   } else {
@@ -1062,9 +1077,11 @@ function onIndicatorEnd() {
 // ==== addons swipe backdrop ====
 // eslint-disable-next-line functional/no-let, no-undef
 let timeoutHoldBD: number | NodeJS.Timeout | null = null
-// eslint-disable-next-line functional/no-let
+
 const holdedBD = ref(false)
+// eslint-disable-next-line functional/no-let
 let xStart: number | null = null
+// eslint-disable-next-line functional/no-let
 let curTimeStart: number | null = null
 function onBDTouchStart(event: TouchEvent) {
   holdedBD.value = false
@@ -1092,7 +1109,14 @@ function onBDTouchMove(event: TouchEvent) {
 
   if (holdedBD.value) {
     console.log("bd move")
-    onIndicatorMove(event, event.target as HTMLDivElement, xStart, curTimeStart)
+    onIndicatorMove(
+      event,
+      event.target as HTMLDivElement,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      xStart!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      curTimeStart!
+    )
   }
 }
 function onBDTouchEnd() {
@@ -1125,31 +1149,34 @@ function skipForward() {
 }
 
 const doubleClicking = ref<"left" | "right" | false>(false)
-let timeoutResetDoubleClicking: number | NodeJS.number | null = null
+// eslint-disable-next-line functional/no-let, no-undef
+let timeoutResetDoubleClicking: number | NodeJS.Timeout | null = null
+// eslint-disable-next-line functional/no-let
 let lastTimeClick: number
+// eslint-disable-next-line functional/no-let
 let lastPositionClickIsLeft: boolean | null = null
-let timeoutDbClick: number | NodeJS.number | null = null
+// eslint-disable-next-line functional/no-let, no-undef
+let timeoutDbClick: number | NodeJS.Timeout | null = null
 function onClickSkip(event: MouseEvent, orFalse: boolean) {
   // click
   const now = Date.now()
 
   const isLeft =
-    Math.round(
-      (event.changedTouches?.[0] ?? event.touches?.[0] ?? event).clientX
-    ) < Math.round((event.target as HTMLDivElement).offsetWidth / 2)
+    Math.round(event.clientX) <
+    Math.round((event.target as HTMLDivElement).offsetWidth / 2)
 
   if (
     (lastPositionClickIsLeft === null || lastPositionClickIsLeft === isLeft) &&
     now - lastTimeClick <= 300
   ) {
     // is double click
-    clearTimeout(timeoutDbClick)
+    timeoutDbClick&&clearTimeout(timeoutDbClick)
 
     if (artControlShow.value) activeTime = Date.now() // fix for if control show continue show
 
     // on double click
     doubleClicking.value = isLeft ? "left" : "right"
-    clearTimeout(timeoutResetDoubleClicking)
+    timeoutResetDoubleClicking&&clearTimeout(timeoutResetDoubleClicking)
     timeoutResetDoubleClicking = setTimeout(() => {
       doubleClicking.value = false
     }, 700)
@@ -1163,7 +1190,7 @@ function onClickSkip(event: MouseEvent, orFalse: boolean) {
     }
     // soku
   } else {
-    clearTimeout(timeoutDbClick)
+    timeoutDbClick&&clearTimeout(timeoutDbClick)
     timeoutDbClick = setTimeout(() => {
       setArtControlShow(orFalse)
       lastTimeClick = 0

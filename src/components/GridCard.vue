@@ -11,8 +11,9 @@
 </template>
 
 <script lang="ts" setup>
-import Card from "./Card.vue"
 import type { TPost } from "src/apis/helpers/getInfoTPost"
+
+import Card from "./Card.vue"
 
 defineProps<{
   items: TPost[]

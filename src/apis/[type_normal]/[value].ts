@@ -1,3 +1,4 @@
+import type { CheerioAPI } from "cheerio"
 import { load } from "cheerio"
 
 import { getHTML } from "../helpers/getHTML"
@@ -8,14 +9,14 @@ export async function TypeNormalValue(
   value: string | string[],
   page = 1,
   onlyItems: boolean,
-  options?: {
+  options: {
     genres: string[]
     seaser: string | null
     sorter: string | null
     typer: string | null
     year: string | null
   },
-  defaultsOptions?: {
+  defaultsOptions: {
     genres?: string
     seaser?: string
     typer?: string
@@ -23,14 +24,13 @@ export async function TypeNormalValue(
   }
 ) {
   const isCustom =
-    (options &&
-      (options.genres.length > 0 ||
-        options.seaser ||
-        options.typer ||
-        options.year)) ||
+    options.genres.length > 0 ||
+    options.seaser ||
+    options.typer ||
+    options.year ||
     /* exclude */ type === "danh-sach"
-  console.log({ type, value, options })
-  let $: Cheerio
+  // eslint-disable-next-line functional/no-let
+  let $: CheerioAPI
   if (isCustom) {
     $ = load(
       await getHTML(
@@ -85,18 +85,21 @@ export async function TypeNormalValue(
       .find(".fc-main-list > li > a")
       .map((_i, anchor) => {
         const text = $(anchor).text()
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const value = new URL(
-          $(anchor).attr("href"),
+          $(anchor).attr("href") ?? "",
           "https://animevietsub.cc"
-        ).searchParams.get("sort")
+        ).searchParams.get("sort")!
         return { text, value }
       })
       .toArray(),
     typer: $("#filter")
       .find(".fc-filmtype label")
       .map((_i, item) => {
-        const value = $(item).find("input").attr("value")
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const value = $(item).find("input").attr("value")!
 
+        // eslint-disable-next-line array-callback-return
         if (value === "all") return
 
         const text = $(item).text()
@@ -111,8 +114,10 @@ export async function TypeNormalValue(
     seaser: $("#filter")
       .find(".fc-quality label")
       .map((_i, item) => {
-        const value = $(item).find("input").attr("value")
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const value = $(item).find("input").attr("value")!
 
+        // eslint-disable-next-line array-callback-return
         if (value === "all") return
 
         const text = $(item).text()
@@ -127,8 +132,10 @@ export async function TypeNormalValue(
     gener: $("#filter")
       .find(".fc-genre label")
       .map((_i, item) => {
-        const value = $(item).find("input").attr("value")
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const value = $(item).find("input").attr("value")!
 
+        // eslint-disable-next-line array-callback-return
         if (value === "all") return
 
         const text = $(item).text()
@@ -143,8 +150,10 @@ export async function TypeNormalValue(
     year: $("#filter")
       .find(".fc-release label")
       .map((_i, item) => {
-        const value = $(item).find("input").attr("value")
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const value = $(item).find("input").attr("value")!
 
+        // eslint-disable-next-line array-callback-return
         if (value === "all") return
 
         const text = $(item).text()
