@@ -23,12 +23,13 @@ export async function TypeNormalValue(
   }
 ) {
   const isCustom =
-    options &&
-    (options.genres.length > 0 ||
-      options.seaser ||
-      options.typer ||
-      options.year)
-
+    (options &&
+      (options.genres.length > 0 ||
+        options.seaser ||
+        options.typer ||
+        options.year)) ||
+    /* exclude */ type === "danh-sach"
+  console.log({ type, value, options })
   let $: Cheerio
   if (isCustom) {
     $ = load(
@@ -37,7 +38,11 @@ export async function TypeNormalValue(
           "/danh-sach",
           options.typer ?? defaultsOptions.typer ?? "all",
           options.genres
-            .concat(defaultsOptions.typer ? [defaultsOptions.typer] : [])
+            .concat(
+              defaultsOptions.typer && defaultsOptions.typer !== "all"
+                ? [defaultsOptions.typer]
+                : []
+            )
             .join("-") || "all",
           options.seaser ?? defaultsOptions.seaser ?? "all",
           options.year ?? defaultsOptions.year ?? "all",

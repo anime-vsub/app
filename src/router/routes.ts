@@ -25,6 +25,18 @@ const routes: RouteRecordRaw[] = [
         alias: [":type_normal(season)/:value+"],
         component: () => import("pages/[_type-normal]/[value].vue"),
       },
+      {
+        path: "muc-luc",
+        redirect: `/danh-sach/all`,
+      },
+      {
+        path: "lich-chieu-phim",
+        component: () => null,
+      },
+      {
+        path: "bang-xep-hang/:type(day|voted|month|season|year)",
+        component: () => null,
+      },
     ],
   },
 

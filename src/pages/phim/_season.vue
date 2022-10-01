@@ -430,7 +430,7 @@ import dayjs from "dayjs"
 import { QTab } from "quasar"
 import { PhimId } from "src/apis/phim/[id]"
 import { PhimIdChap } from "src/apis/phim/[id]/[chap]"
-import BottomSheet from "src/components/BottomSheet.vue"
+// import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
 import { labelToQuality } from "src/constants"
 import { formatView } from "src/logic/formatView"
@@ -439,6 +439,7 @@ import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
+// import SwipableBottom from "components/SwipableBottom.vue"
 import GridCard from "components/GridCard.vue"
 import { Icon } from "@iconify/vue"
 
@@ -485,7 +486,10 @@ watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      path: route.path,
+      path: [route.path],
+      query: {
+        error,
+      },
     })
 })
 
