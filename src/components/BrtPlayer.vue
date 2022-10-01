@@ -973,9 +973,7 @@ const watcherVideoTagReady = watch(video, (video) => {
       console.log("set url art %s", url)
 
       if (Hls.isSupported()) {
-        setTimeout(() => {
-          remount()
-        }, 100)
+        remount()
       } else {
         const canPlay = video.canPlayType("application/vnd.apple.mpegurl")
         if (canPlay === "probably" || canPlay === "maybe") {

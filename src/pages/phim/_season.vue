@@ -62,22 +62,33 @@
     </div>
 
     <template v-else>
-      <div class="px-2 pt-4">
-        <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
-          {{ data.name }}
-        </h1>
-        <h5 class="text-gray-400 text-weight-normal">
-          {{ formatView(data.views) }} lượt xem
-          <span
-            class="inline-block w-1 h-1 rounded bg-[currentColor] mb-1 mx-1"
+      <div v-ripple @click="showDialogInforma = true" class="relative">
+        <div class="relative flex items-end justify-between mx-[10px]">
+          <div class="flex-1 mt-4 mb-2">
+            <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
+              {{ data.name }}
+            </h1>
+            <h5 class="text-gray-400 text-weight-normal">
+              {{ formatView(data.views) }} lượt xem &bull;
+              <router-link
+                v-if="data.seasonOf"
+                class="c--main"
+                :to="data.seasonOf.path"
+                >{{ data.seasonOf.name }}</router-link
+              >
+            </h5>
+          </div>
+
+          <Icon
+            icon="fluent:chevron-right-24-regular"
+            width="18"
+            height="18"
+            class="text-gray-400 mb-4"
           />
-          <router-link
-            v-if="data.seasonOf"
-            class="c--main"
-            :to="data.seasonOf.path"
-            >{{ data.seasonOf.name }}</router-link
-          >
-        </h5>
+        </div>
+      </div>
+
+      <div class="px-[10px]">
         <div class="text-gray-400">
           Tác giả
           <template v-for="(item, index) in data.authors" :key="item.name">
@@ -238,7 +249,9 @@
       </q-tabs>
     </template>
 
-    <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
+    <div class="px-1">
+      <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
+    </div>
 
     <!-- bottom sheet -->
     <q-dialog
@@ -253,13 +266,7 @@
       >
         <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
           Season
-          <q-btn
-            dense
-            flat
-            round
-            icon="close"
-            @click="showDialogChapter = false"
-          />
+          <q-btn dense flat round icon="close" v-close-popup />
         </div>
         <div class="relative flex-1 min-h-0">
           <q-tabs
@@ -278,6 +285,7 @@
               :key="item.value"
               :name="item.value"
               :label="item.name"
+              :ref="(el) => item.value === currentSeason && (tabsDialogRef = el as QTab)"
             />
           </q-tabs>
 
@@ -328,6 +336,85 @@
         </div>
       </q-card>
     </q-dialog>
+
+    <!-- dialog informa -->
+    <q-dialog
+      v-if="data"
+      position="bottom"
+      full-width
+      v-model="showDialogInforma"
+    >
+      <q-card
+        style="height: calc(100vh - 100vw * 9 / 16)"
+        class="!overflow-visible flex column flex-nowrap py-0"
+      >
+        <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
+          Chi tiết
+          <q-btn dense flat round icon="close" v-close-popup />
+        </div>
+        <q-card-section
+          class="relative flex-1 min-h-0 px-2 overflow-y-scroll text-[14px] text-[#9a9a9a] text-weight-normal"
+        >
+          <div>
+            <div class="flex">
+              <q-img
+                :src="data.image"
+                :ratio="280 / 400"
+                width="110px"
+                class="rounded-lg"
+              />
+
+              <div class="pl-2 py-3">
+                <div class="text-[16px] line-clamp-2 text-[#eee]">
+                  {{ data.name }}
+                </div>
+                <div class="mt-4">
+                  {{ data.language }} |
+                  {{ data.contries[0]?.name ?? "unknown" }}
+                </div>
+
+                <div class="mt-2">Phát hành năm {{ data.yearOf }}</div>
+
+                <div class="mt-2">Tập {{ data.duration }} đã cập nhật</div>
+              </div>
+            </div>
+
+            <ul class="mt-8">
+              <li>
+                <span>Tên khác: </span>
+
+                <span class="text-[#eee]">{{ data.othername }}</span>
+              </li>
+              <li class="mt-3">
+                <span>Loại: </span>
+
+                <span class="text-[#eee]">
+                  <q-btn
+                    flat
+                    dense
+                    no-caps
+                    v-for="item in data.genre"
+                    :key="item.name"
+                    class="py-[5px] !min-h-0 px-2 rounded-sm bg-gray-700 mx-1 my-1 inline-block relative"
+                    :to="item.path"
+                    >{{ item.name }}</q-btn
+                  >
+                </span>
+              </li>
+            </ul>
+
+            <div class="mt-5 text-[#eee] text-[16px]">Giới thiệu</div>
+            <p
+              class="mt-3 leading-loose whitespace-pre-wrap"
+              v-html="data.description"
+            />
+
+            <div class="mt-5 text-[#eee] text-[16px]">Trailer</div>
+            <q-video class="mt-3" :src="data.trailer" :ratio="16 / 9" />
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
     <!--
       followed
     -->
@@ -353,6 +440,7 @@ import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import GridCard from "components/GridCard.vue"
+import { Icon } from "@iconify/vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -630,6 +718,16 @@ watchEffect(() => {
   setTimeout(() => {
     console.log("scroll now")
     if (tabsRef.value?.$el) scrollXIntoView(tabsRef.value.$el)
+  }, 70)
+})
+const tabsDialogRef = ref<QTab>()
+watchEffect(() => {
+  if (!tabsDialogRef.value) return
+  if (!currentSeason.value) return
+
+  setTimeout(() => {
+    console.log("scroll now")
+    if (tabsDialogRef.value?.$el) scrollXIntoView(tabsDialogRef.value.$el)
   }, 70)
 })
 
