@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { TPost } from "src/apis/helpers/getInfoTPost"
+import type { TPost } from "src/helpers/getInfoTPost"
 
 import Card from "./Card.vue"
 

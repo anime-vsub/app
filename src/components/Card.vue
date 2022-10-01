@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { TPost } from "src/apis/helpers/getInfoTPost"
+import type { TPost } from "src/helpers/getInfoTPost"
 import { useRouter } from "vue-router"
 
 import Quality from "./Quality.vue"
