@@ -46,10 +46,7 @@
     </div>
   </q-header>
   <q-page v-if="loading" class="flex items-center">
-    <div class="w-full text-center">
-    <div class="loader w-full" />
-    <div>Đang lấy dữ liệu...</div>
-  </div>
+    <LaodingAnim />
   </q-page>
   <q-page
   v-else
@@ -149,6 +146,7 @@ import { Icon } from "@iconify/vue"
 import GridCard from "components/GridCard.vue"
 import Card from "components/Card.vue"
 import CardVertical from "components/CardVertical.vue"
+import LaodingAnim from "components/LaodingAnim.vue"
 
 import { dayTextToNum } from "src/logic/dayTextToNum"
 
@@ -218,31 +216,3 @@ function onSlideChange(swiper) {
   activeIndex.value = swiper.activeIndex
 }
 </script>
-
-
-<style lang="scss" scoped>
-.loader {
-  padding-top: (216 / 393 * 100%);
-  animation: runner 1.5s linear infinite alternate;
-  background: {
-    position: center;
-    size: cover;
-    image: url("src/assets/ic_laoding_anim_01.png")
-  }
-
-
-  @keyframes runner {
-    from {
-      background-image: url("src/assets/ic_laoding_anim_01.png");
-    }
-    50% {
-      background-image: url("src/assets/ic_laoding_anim_02.png");
-    }
-    to {
-      background-image: url("src/assets/ic_laoding_anim_03.png");
-    }
-  }
-
-}
-  </style>
-
