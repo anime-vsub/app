@@ -17,7 +17,8 @@
         v-for="(item, index) in data"
         :ref="(el) => activeIndex === index && (pagItemActiveRef = el)"
         :key="index"
-        class="inline-block px-4"
+        class="relative inline-block px-4"
+        v-ripple
         :class="{
           'c--main text-weight-medium':
             activeIndex === index ||
@@ -25,6 +26,7 @@
               `${item.month}/${item.date}/${new Date().getFullYear()}`
             ).isToday(),
         }"
+        @click="swiperRef?.slideTo(index)"
       >
         T{{ dayTextToNum(item.day) }}
         <br />
@@ -43,7 +45,14 @@
       </div>
     </div>
   </q-header>
+  <q-page v-if="loading" class="flex items-center">
+    <div class="w-full text-center">
+    <div class="loader w-full" />
+    <div>Đang lấy dữ liệu...</div>
+  </div>
+  </q-page>
   <q-page
+  v-else
     :style-fn="
       (offset, height) => ({
         height: `${height - offset}px`,
@@ -207,7 +216,33 @@ function onSwiper(swiper) {
 }
 function onSlideChange(swiper) {
   activeIndex.value = swiper.activeIndex
-
-  console.log(activeIndex.value)
 }
 </script>
+
+
+<style lang="scss" scoped>
+.loader {
+  padding-top: (216 / 393 * 100%);
+  animation: runner 1.5s linear infinite alternate;
+  background: {
+    position: center;
+    size: cover;
+    image: url("src/assets/ic_laoding_anim_01.png")
+  }
+
+
+  @keyframes runner {
+    from {
+      background-image: url("src/assets/ic_laoding_anim_01.png");
+    }
+    50% {
+      background-image: url("src/assets/ic_laoding_anim_02.png");
+    }
+    to {
+      background-image: url("src/assets/ic_laoding_anim_03.png");
+    }
+  }
+
+}
+  </style>
+
