@@ -60,10 +60,11 @@ export async function TypeNormalValue(
       )
     )
   }
+  const now = Date.now()
 
   const items = $(".MovieList:eq(0)")
     .find(".TPostMv")
-    .map((_i, item) => getInfoTPost($(item)))
+    .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
   const curPage = parseInt($(".current").attr("data") ?? "1")
   const maxPage = parseInt($(".larger:last-child").attr("data") ?? "1")

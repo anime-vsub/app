@@ -1,13 +1,12 @@
 import type { Cheerio, Element } from "cheerio"
 
-
 import { getInfoAnchor } from "./getInfoAnchor"
 import { getPathName } from "./getPathName"
 import { int } from "./int"
 
 export type TPost = ReturnType<typeof getInfoTPost>
 
-export function getInfoTPost(cheerio: Cheerio<Element>) {
+export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const path = getPathName(cheerio.find("a").attr("href")!)
   const image = cheerio.find("img").attr("src")
@@ -65,6 +64,8 @@ export function getInfoTPost(cheerio: Cheerio<Element>) {
     studio,
     genre,
     time_release:
-      countdown === undefined ? undefined : Date.now() + countdown * 1e3,
+      countdown === undefined
+        ? undefined
+        : Math.round(now / 1e3 + countdown) * 1e3,
   }
 }

@@ -5,6 +5,7 @@ import { getInfoTPost } from "../helpers/getInfoTPost"
 
 export async function LichChieuPhim() {
   const $ = load(await getHTML("/lich-chieu-phim.html"))
+  const now = Date.now()
 
   return $("#sched-content > .Homeschedule")
     .map((_i, item) => {
@@ -15,16 +16,19 @@ export async function LichChieuPhim() {
         .split(",", 2)[1]
         .match(/\d{1,2}/g)
 
-        const date = _tmp?.[0] ?? null
-        const month = _tmp?.[1] ?? null
+      const date = _tmp?.[0] ?? null
+      const month = _tmp?.[1] ?? null
 
       const items = $(item)
         .find(".MovieList:eq(0)")
         .find(".TPostMv")
-        .map((_i, item) => getInfoTPost($(item)))
+        .map((_i, item) => getInfoTPost($(item), now))
         .toArray()
+
+      if (items.length === 0) return
 
       return { day, date, month, items }
     })
     .toArray()
+    .filter(Boolean)
 }

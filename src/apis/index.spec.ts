@@ -12,7 +12,10 @@ describe("Index", () => {
 
     const asset = JSON.parse(
       // eslint-disable-next-line n/no-path-concat
-      await fs.readFile(`${__dirname}/../__test__/apis/assets/index.json`, "utf8")
+      await fs.readFile(
+        `${__dirname}/../__test__/apis/assets/index.json`,
+        "utf8"
+      )
     ) as Awaited<ReturnType<typeof Index>>
     const result = JSON.parse(JSON.stringify(await Index()))
 

@@ -32,7 +32,6 @@ import type { PhimIdChap } from "src/apis/phim/[id]/[chap]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { ref, useAttrs, watchEffect } from "vue"
 
-
 defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
   chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"]

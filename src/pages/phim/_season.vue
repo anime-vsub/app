@@ -372,11 +372,12 @@
               />
 
               <div class="pl-2 py-3">
-                <div class="text-[16px] line-clamp-2 text-[#eee]">
+                <div class="text-[16px] line-clamp-2 text-[#eee] leading-snug">
                   {{ data.name }}
                 </div>
                 <div class="mt-4">
-                  {{ data.language }} |
+                  {{ data.language }}
+                  <span class="mx-1">|</span>
                   {{ data.contries[0]?.name ?? "unknown" }}
                 </div>
 

@@ -1170,13 +1170,13 @@ function onClickSkip(event: MouseEvent, orFalse: boolean) {
     now - lastTimeClick <= 300
   ) {
     // is double click
-    timeoutDbClick&&clearTimeout(timeoutDbClick)
+    timeoutDbClick && clearTimeout(timeoutDbClick)
 
     if (artControlShow.value) activeTime = Date.now() // fix for if control show continue show
 
     // on double click
     doubleClicking.value = isLeft ? "left" : "right"
-    timeoutResetDoubleClicking&&clearTimeout(timeoutResetDoubleClicking)
+    timeoutResetDoubleClicking && clearTimeout(timeoutResetDoubleClicking)
     timeoutResetDoubleClicking = setTimeout(() => {
       doubleClicking.value = false
     }, 700)
@@ -1190,7 +1190,7 @@ function onClickSkip(event: MouseEvent, orFalse: boolean) {
     }
     // soku
   } else {
-    timeoutDbClick&&clearTimeout(timeoutDbClick)
+    timeoutDbClick && clearTimeout(timeoutDbClick)
     timeoutDbClick = setTimeout(() => {
       setArtControlShow(orFalse)
       lastTimeClick = 0
@@ -1222,6 +1222,10 @@ const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)
 const showDialogPlayback = ref(false)
 const showDialogQuality = ref(false)
+
+watch(showDialogChapter, (status) => {
+  if (!status) seasonActive.value = props.currentSeason
+})
 </script>
 
 <style lang="scss" scoped>
