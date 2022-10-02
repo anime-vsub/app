@@ -81,7 +81,7 @@ export async function PhimId(seasonId: string) {
     .split(":", 2)[1]
     ?.trim()
   const seasonOf = getInfoAnchor(findInfo($, infoListRight, "season").find("a"))
-  const trailer = $("#Opt1 iframe").attr("src")!
+  const trailer = $("#Opt1 iframe").attr("src")
 
   const followed = $(".added").length > 0
 
