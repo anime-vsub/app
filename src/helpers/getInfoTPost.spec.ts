@@ -16,7 +16,9 @@ describe("getInfoTPost", () => {
     </a>
     </div>`)
     $("div")
-    expect(JSON.parse(JSON.stringify(getInfoTPost($("div"))))).toEqual({
+    expect(
+      JSON.parse(JSON.stringify(getInfoTPost($("div"), Date.now())))
+    ).toEqual({
       path: "/phim/call-of-the-night-a4536/",
       image:
         "http://cdn.animevietsub.cc/data/poster/2022/06/03/animevsub-FOWOKDAhpl.jpg",
@@ -51,7 +53,9 @@ describe("getInfoTPost", () => {
     </div>
     </div>
     </article>`)
-    expect(JSON.parse(JSON.stringify(getInfoTPost($("article"))))).toEqual({
+    expect(
+      JSON.parse(JSON.stringify(getInfoTPost($("article"), Date.now())))
+    ).toEqual({
       path: "/phim/linh-kiem-ton-a3396/",
       image:
         "http://cdn.animevietsub.cc/data/poster/2019/01/15/animevsub-oDJnM8xrdd.jpg",
@@ -95,7 +99,7 @@ describe("getInfoTPost", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-let
     let tmp: any
     expect(
-      JSON.parse(JSON.stringify((tmp = getInfoTPost($("article")))))
+      JSON.parse(JSON.stringify((tmp = getInfoTPost($("article"), Date.now()))))
     ).toEqual({
       path: "/phim/detective-conan-movie-25-halloween-no-hanayome-a4418/",
       image:

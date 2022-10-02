@@ -19,6 +19,7 @@ function findInfo($: CheerioAPI, infoList: Cheerio<Element>, q: string) {
 
 export async function PhimId(seasonId: string) {
   const $ = load(await getHTML(`/phim/${seasonId}/`))
+  const now = Date.now()
 
   const name = $(".Title:eq(0)").text()
   const othername = $(".SubTitle:eq(0)").text()
@@ -85,7 +86,7 @@ export async function PhimId(seasonId: string) {
   const followed = $(".added").length > 0
 
   const toPut = $(".MovieListRelated .TPostMv")
-    .map((_i, item) => getInfoTPost($(item)))
+    .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
 
   return {

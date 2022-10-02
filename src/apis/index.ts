@@ -5,25 +5,26 @@ import { getInfoTPost } from "../helpers/getInfoTPost"
 
 export async function Index() {
   const $ = load(await getHTML("/"))
+  const now = Date.now()
 
   const thisSeason = $(".MovieListTopCn:eq(0)")
     .find(".TPostMv")
-    .map((_i, item) => getInfoTPost($(item)))
+    .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
   const carousel = $(".MovieListSldCn .TPostMv")
-    .map((_i, item) => getInfoTPost($(item)))
+    .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
   const lastUpdate = $("#single-home .TPostMv")
-    .map((_i, item) => getInfoTPost($(item)))
+    .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
   const preRelease = $("#new-home .TPostMv")
-    .map((_i, item) => getInfoTPost($(item)))
+    .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
   const nominate = $("#hot-home .TPostMv")
-    .map((_i, item) => getInfoTPost($(item)))
+    .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
   const hotUpdate = $("#showTopPhim .TPost")
-    .map((_i, item) => getInfoTPost($(item)))
+    .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
 
   return {
