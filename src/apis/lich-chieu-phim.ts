@@ -25,6 +25,7 @@ export async function LichChieuPhim() {
         .map((_i, item) => getInfoTPost($(item), now))
         .toArray()
 
+      // eslint-disable-next-line array-callback-return
       if (items.length === 0) return
 
       return { day, date, month, items }
