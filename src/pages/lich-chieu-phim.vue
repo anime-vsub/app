@@ -15,7 +15,7 @@
     >
       <div
         v-for="(item, index) in data"
-        :ref="(el) => activeIndex === index && (pagItemActiveRef = el)"
+        :ref="(el) => activeIndex === index && (pagItemActiveRef = el as HTMLDivElement)"
         :key="index"
         class="relative inline-block px-4"
         v-ripple
@@ -38,7 +38,7 @@
           "
         >
           {{ item.date
-          }}<template v-if="item.month !== data[index - 1]?.month"
+          }}<template v-if="item.month !== data?.[index - 1]?.month"
             >/{{ item.month }}</template
           >
         </span>
@@ -49,7 +49,7 @@
     <LaodingAnim />
   </q-page>
   <q-page
-  v-else
+    v-else
     :style-fn="
       (offset, height) => ({
         height: `${height - offset}px`,
@@ -78,7 +78,7 @@
           <!-- overtime -->
           <template
             v-for="[time, items] in (_tmp = splitOverTime(
-              groupArray(item.items, 'time_release')
+              groupArray(item.items, 'time_release') as unknown as  Record<string, Awaited<ReturnType<typeof LichChieuPhim>>[0]['items']>
             ))[0]"
             :key="time"
           >
@@ -118,7 +118,7 @@
         </template>
         <template
           v-else
-          v-for="(items, time) in groupArray(item.items, 'time_release')"
+          v-for="(items, time) in (groupArray(item.items, 'time_release') as Record<string, typeof item.items>)"
           :key="time"
         >
           <div class="text-[12px] mt-7 mb-2 flex items-center">
@@ -138,25 +138,22 @@
 </template>
 
 <script lang="ts" setup>
-import { LichChieuPhim } from "src/apis/lich-chieu-phim"
-import { watch } from "vue"
-import { useRequest } from "vue-request"
-import { useRoute, useRouter } from "vue-router"
 import { Icon } from "@iconify/vue"
-import GridCard from "components/GridCard.vue"
-import Card from "components/Card.vue"
 import CardVertical from "components/CardVertical.vue"
 import LaodingAnim from "components/LaodingAnim.vue"
-
-import { dayTextToNum } from "src/logic/dayTextToNum"
-
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
-
-import { Swiper, SwiperSlide } from "swiper/vue"
 import groupArray from "group-array"
+import { LichChieuPhim } from "src/apis/lich-chieu-phim"
 // Import Swiper styles
 import "swiper/css"
+import { scrollXIntoView } from "src/helpers/scrollXIntoView"
+import { dayTextToNum } from "src/logic/dayTextToNum"
+import type { Swiper as TSwiper } from "swiper"
+import { Swiper, SwiperSlide } from "swiper/vue"
+import { ref, watch, watchEffect } from "vue"
+import { useRequest } from "vue-request"
+import { useRoute, useRouter } from "vue-router"
 
 dayjs.extend(isToday)
 
@@ -176,7 +173,8 @@ watch(error, (error) => {
     })
 })
 
-let _tmp
+// eslint-disable-next-line functional/no-let
+let _tmp: ReturnType<typeof splitOverTime>
 
 function splitOverTime(
   items: Record<string, Awaited<ReturnType<typeof LichChieuPhim>>[0]["items"]>
@@ -194,8 +192,6 @@ function splitOverTime(
     overWrite.slice(indexFirstItemNextTime),
   ]
 }
-import { ref, watchEffect } from "vue"
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 
 const swiperRef = ref()
 const activeIndex = ref(0)
@@ -208,11 +204,11 @@ watchEffect(() => {
   }
 })
 
-function onSwiper(swiper) {
+function onSwiper(swiper: TSwiper) {
   swiperRef.value = swiper
   activeIndex.value = swiper.activeIndex
 }
-function onSlideChange(swiper) {
+function onSlideChange(swiper: TSwiper) {
   activeIndex.value = swiper.activeIndex
 }
 </script>

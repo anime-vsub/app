@@ -39,6 +39,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import type { getInfoTPost } from "src/helpers/getInfoTPost"
 
 defineProps<{
   data: ReturnType<typeof getInfoTPost>
