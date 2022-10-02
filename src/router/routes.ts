@@ -35,7 +35,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "bang-xep-hang/:type(day|voted|month|season|year)",
-        component: () => null,
+        component: () => import("pages/bang-xep-hang/[type]?.vue"),
       },
     ],
   },
