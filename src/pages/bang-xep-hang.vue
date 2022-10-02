@@ -12,7 +12,6 @@
   </q-header>
   <q-page v-if="loading" class="flex items-center">
     <LaodingAnim />
-  </div>
   </q-page>
   <q-page
   v-else
@@ -22,18 +21,16 @@
 </template>
 
 <script lang="ts" setup>
+import { Icon } from "@iconify/vue"
+import Card from "components/Card.vue"
+import CardVertical from "components/CardVertical.vue"
+import GridCard from "components/GridCard.vue"
+import LaodingAnim from "components/LaodingAnim.vue"
 import { LichChieuPhim } from "src/apis/lich-chieu-phim"
+import { dayTextToNum } from "src/logic/dayTextToNum"
 import { watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import { Icon } from "@iconify/vue"
-import GridCard from "components/GridCard.vue"
-import Card from "components/Card.vue"
-import CardVertical from "components/CardVertical.vue"
-
-import LaodingAnim from "components/LaodingAnim.vue"
-
-import { dayTextToNum } from "src/logic/dayTextToNum"
 
 const route = useRoute()
 const router = useRouter()

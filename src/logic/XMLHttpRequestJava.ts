@@ -33,7 +33,7 @@ export class XMLHttpRequestJava {
 
   getAllResponseHeaders(): string {
     return (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (
         Array.from((this.headers as unknown as any).entries() ?? []) as [
           string,

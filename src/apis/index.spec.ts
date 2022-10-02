@@ -11,8 +11,9 @@ describe("Index", () => {
     import.meta.env.DATA = html
 
     const asset = JSON.parse(
-      // eslint-disable-next-line n/no-path-concat
+
       await fs.readFile(
+        // eslint-disable-next-line n/no-path-concat
         `${__dirname}/../__test__/apis/assets/index.json`,
         "utf8"
       )
