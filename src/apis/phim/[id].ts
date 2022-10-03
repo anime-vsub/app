@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import type { Cheerio, CheerioAPI, Element } from "cheerio"
-import { load } from "cheerio"
 
-
-import { getHTML } from "../../helpers/getHTML"
 import { getInfoAnchor } from "../../helpers/getInfoAnchor"
 import { getInfoTPost } from "../../helpers/getInfoTPost"
 import { getPathName } from "../../helpers/getPathName"

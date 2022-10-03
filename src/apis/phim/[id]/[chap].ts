@@ -1,6 +1,3 @@
-import { load } from "cheerio"
-
-import { getHTML } from "../../../helpers/getHTML"
 import { parserDom } from "../../__helpers__/parserDom"
 
 export async function PhimIdChap(season: string) {
