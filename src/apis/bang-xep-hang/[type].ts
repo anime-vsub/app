@@ -1,4 +1,4 @@
-import { getPathName } from "../../helpers/getPathName"
+import { getPathName } from "../__helpers__/getPathName"
 import { parserDom } from "../__helpers__/parserDom"
 
 
