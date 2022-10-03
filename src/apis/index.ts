@@ -1,10 +1,9 @@
-import { load } from "cheerio"
+import { parserDom } from "./__helpers__/parserDom"
 
-import { getHTML } from "../helpers/getHTML"
 import { getInfoTPost } from "../helpers/getInfoTPost"
 
 export async function Index() {
-  const $ = load(await getHTML("/"))
+  const $ = await parserDom("/")
   const now = Date.now()
 
   const thisSeason = $(".MovieListTopCn:eq(0)")

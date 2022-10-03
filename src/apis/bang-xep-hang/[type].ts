@@ -1,10 +1,9 @@
-import { load } from "cheerio"
+import { parserDom } from "./__helpers__/parserDom"
 
-import { getHTML } from "../../helpers/getHTML"
 import { getPathName } from "../../helpers/getPathName"
 
 export async function BangXepHangType(type?: string) {
-  const $ = load(await getHTML(`/bang-xep-hang/${type ?? ""}`))
+  const $ = await parserDom(`/bang-xep-hang/${type ?? ""}`)
 
   return $(".bxh-movie-phimletv > .group")
     .map((_i, item) => {

@@ -1,7 +1,6 @@
 import type { CheerioAPI } from "cheerio"
-import { load } from "cheerio"
+import { parserDom } from "./__helpers__/parserDom"
 
-import { getHTML } from "../../helpers/getHTML"
 import { getInfoTPost } from "../../helpers/getInfoTPost"
 
 export async function TypeNormalValue(
@@ -32,32 +31,27 @@ export async function TypeNormalValue(
   // eslint-disable-next-line functional/no-let
   let $: CheerioAPI
   if (isCustom) {
-    $ = load(
-      await getHTML(
-        [
-          "/danh-sach",
-          options.typer ?? defaultsOptions.typer ?? "all",
-          options.genres
-            .concat(
-              defaultsOptions.typer && defaultsOptions.typer !== "all"
-                ? [defaultsOptions.typer]
-                : []
-            )
-            .join("-") || "all",
-          options.seaser ?? defaultsOptions.seaser ?? "all",
-          options.year ?? defaultsOptions.year ?? "all",
-          `/trang-${page}.html`,
-        ].join("/") + (options.sorter ? "?sort=" + options.sorter : "")
-      )
+    $ = await parserDom(
+      [
+        "/danh-sach",
+        options.typer ?? defaultsOptions.typer ?? "all",
+        options.genres
+          .concat(
+            defaultsOptions.typer && defaultsOptions.typer !== "all"
+              ? [defaultsOptions.typer]
+              : []
+          )
+          .join("-") || "all",
+        options.seaser ?? defaultsOptions.seaser ?? "all",
+        options.year ?? defaultsOptions.year ?? "all",
+        `/trang-${page}.html`,
+      ].join("/") + (options.sorter ? "?sort=" + options.sorter : "")
     )
   } else {
-    $ = load(
-      await getHTML(
-        `/${type}/${
-          Array.isArray(value) ? value.join("/") : value
-        }/trang-${page}.html` +
-          (options?.sorter ? "?sort=" + options.sorter : "")
-      )
+    $ = await parserDom(
+      `/${type}/${
+        Array.isArray(value) ? value.join("/") : value
+      }/trang-${page}.html` + (options?.sorter ? "?sort=" + options.sorter : "")
     )
   }
   const now = Date.now()
