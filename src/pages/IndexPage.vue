@@ -159,12 +159,7 @@
             </span>
             <span class="focus-item-year">{{ item.year }}</span>
             <span class="focus-item-update">
-              <template v-if="item.process[0] === item.process[1]">
-                {{ item.process[0] }} tập
-              </template>
-              <template v-else>
-                Tập {{ item.process[0] }} / {{ item.process[1] ?? "??" }}
-              </template>
+              {{ item.process }}
             </span>
           </div>
           <div class="focus-item-tags" v-if="item.genre.length > 0">
@@ -199,7 +194,7 @@
         />
         <span>Lịch chiếu</span>
       </router-link>
-      <router-link to="/bang-xep-hang/day" class="col-4 relative py-2" v-ripple>
+      <router-link to="/bang-xep-hang" class="col-4 relative py-2" v-ripple>
         <img
           src="src/assets/icon_tool_rank.png"
           width="30"

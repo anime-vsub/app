@@ -6,7 +6,9 @@
         :ratio="280 / 400"
         width="110px"
         class="rounded-lg"
-      />
+      >
+        <slot name="img-content" />
+      </q-img>
     </div>
 
     <div class="flex-1 h-full overflow-hidden pl-3 py-[3px] text-[#9a9a9a]">
@@ -15,11 +17,15 @@
       </div>
 
       <div class="mt-2">
-        {{ data.year }} <span class="mx-1">|</span> Tập
-        {{ data.process.join("/") }}
+        <template v-if="data.year"
+          >{{ data.year }} <span class="mx-1">|</span> </template
+        >Tập
+        {{ data.process }}
       </div>
 
-      <p class="text-grey mt-2 line-clamp-2">{{ data.description }}</p>
+      <p v-if="data.description" class="text-grey mt-2 line-clamp-2">
+        {{ data.description }}
+      </p>
 
       <q-btn
         dense
@@ -42,6 +48,13 @@ import { Icon } from "@iconify/vue"
 import type { getInfoTPost } from "src/helpers/getInfoTPost"
 
 defineProps<{
-  data: ReturnType<typeof getInfoTPost>
+  data: {
+    path: string
+    image: string
+    name: string
+    year?: string
+    process: string
+    description?: string
+  }
 }>()
 </script>
