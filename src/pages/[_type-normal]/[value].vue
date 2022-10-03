@@ -87,7 +87,7 @@
 
     <div v-if="data?.items.length === 0" class="text-center py-20">
       <img
-        src="src/assets/img_tips_error_not_foud.png"
+        src="~assets/img_tips_error_not_foud.png"
         width="186"
         height="174"
         class="mx-auto"

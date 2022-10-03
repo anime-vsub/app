@@ -1,7 +1,7 @@
 <template>
   <q-page class="text-center flex items-center">
     <div class="w-full pb-15">
-      <img src="src/assets/ic_22_cry.png" width="240" />
+      <img src="~assets/ic_22_cry.png" width="240" />
       <slot />
     </div>
   </q-page>
