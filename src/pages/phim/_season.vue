@@ -549,7 +549,7 @@ async function fetchSeason(season: string) {
         {
           id: "#youtube",
           play: "1",
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+           
           hash:
             data.value!.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
           name: "Trailer",

@@ -27,7 +27,7 @@ describe("getInfoTPost", () => {
       rate: 9.4,
       genre: [],
       description: "",
-      process: [""],
+      process: "",
       quality: "",
       year: null,
     })
@@ -64,7 +64,7 @@ describe("getInfoTPost", () => {
       rate: 7.4,
       views: 4066095,
       quality: "HD",
-      process: ["315", "???"],
+      process: "315/???",
       year: 2019,
       description:
         "Cường giả bị tập kích, phản lão hoàn đồng, trở thành thiếu chủ phế vật. Kẻ thù từ đời trước kiếp này,...",
@@ -109,7 +109,7 @@ describe("getInfoTPost", () => {
       views: 1130021,
       quality: "HD",
       chap: "",
-      process: ["110 Phút"],
+      process: "110 Phút",
       year: 2022,
       description:
         "Bối cảnh lần này diễn ra tại Shibuya, Tokyo đang nhộn nhịp mùa Halloween.Một hôn lễ được tổ chức ở Shibuya Hikarie....",

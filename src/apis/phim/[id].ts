@@ -2,13 +2,14 @@
 
 import type { Cheerio, CheerioAPI, Element } from "cheerio"
 import { load } from "cheerio"
-import { parserDom } from "../__helpers__/parserDom"
+
 
 import { getHTML } from "../../helpers/getHTML"
 import { getInfoAnchor } from "../../helpers/getInfoAnchor"
 import { getInfoTPost } from "../../helpers/getInfoTPost"
 import { getPathName } from "../../helpers/getPathName"
 import { int } from "../../helpers/int"
+import { parserDom } from "../__helpers__/parserDom"
 
 function findInfo($: CheerioAPI, infoList: Cheerio<Element>, q: string) {
   return $(

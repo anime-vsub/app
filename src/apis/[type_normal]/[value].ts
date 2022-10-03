@@ -1,7 +1,9 @@
 import type { CheerioAPI } from "cheerio"
-import { parserDom } from "./__helpers__/parserDom"
 
 import { getInfoTPost } from "../../helpers/getInfoTPost"
+
+import { parserDom } from "./__helpers__/parserDom"
+
 
 export async function TypeNormalValue(
   type: string,

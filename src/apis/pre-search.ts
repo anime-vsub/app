@@ -1,8 +1,10 @@
 import { load } from "cheerio"
 import { post } from "src/logic/http"
-import { parserDom } from "./__helpers__/parserDom"
 
 import { getPathName } from "../helpers/getPathName"
+
+import { parserDom } from "./__helpers__/parserDom"
+
 
 interface DataItem {
   image: string
@@ -29,7 +31,7 @@ interface DataItem {
 
   */
 export async function PreSearch(query: string) {
-  const $ = parserDom(
+  const $ = await parserDom(
     (
       await post("/ajax/suggest", {
         ajaxSearch: "1",
