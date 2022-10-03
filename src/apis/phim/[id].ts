@@ -2,10 +2,10 @@
 
 import type { Cheerio, CheerioAPI, Element } from "cheerio"
 
-import { getInfoAnchor } from "../../helpers/getInfoAnchor"
-import { getInfoTPost } from "../../helpers/getInfoTPost"
-import { getPathName } from "../../helpers/getPathName"
-import { int } from "../../helpers/int"
+import { getInfoAnchor } from "../__helpers__/getInfoAnchor"
+import { getInfoTPost } from "../__helpers__/getInfoTPost"
+import { getPathName } from "../__helpers__/getPathName"
+import { int } from "../__helpers__/int"
 import { parserDom } from "../__helpers__/parserDom"
 
 function findInfo($: CheerioAPI, infoList: Cheerio<Element>, q: string) {
