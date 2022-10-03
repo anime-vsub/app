@@ -180,7 +180,7 @@
     <div class="row text-grey text-[12px] mx-4 text-center mb-4">
       <router-link to="/muc-luc" class="col-4 relative py-2" v-ripple>
         <img
-          src="src/assets/icon_tool_alp.png"
+          src="~assets/icon_tool_alp.png"
           width="30"
           class="mx-auto mb-2"
         />
@@ -188,7 +188,7 @@
       </router-link>
       <router-link to="/lich-chieu-phim" class="col-4 relative py-2" v-ripple>
         <img
-          src="src/assets/icon_tool_calc.png"
+          src="~assets/icon_tool_calc.png"
           width="30"
           class="mx-auto mb-2"
         />
@@ -196,7 +196,7 @@
       </router-link>
       <router-link to="/bang-xep-hang" class="col-4 relative py-2" v-ripple>
         <img
-          src="src/assets/icon_tool_rank.png"
+          src="~assets/icon_tool_rank.png"
           width="30"
           class="mx-auto mb-2"
         />

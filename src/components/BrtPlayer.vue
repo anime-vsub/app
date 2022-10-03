@@ -287,7 +287,7 @@
                     <img
                       width="16"
                       heigth="16"
-                      src="src/assets/indicator.svg"
+                      src="~assets/indicator.svg"
                     />
                   </div>
                 </div>

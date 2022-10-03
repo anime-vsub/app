@@ -28,7 +28,7 @@
         <q-img
           v-if="sources?.[0]?.url"
           :ratio="16 / 9"
-          src="src/assets/ic_question_result_error.png"
+          src="~assets/ic_question_result_error.png"
           width="100"
           class="max-w-[100px]"
         />

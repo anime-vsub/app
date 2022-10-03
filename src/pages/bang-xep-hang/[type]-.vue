@@ -77,14 +77,14 @@
             <div class="update-info-layer" />
             <img
               v-if="index < 10"
-              :src="`src/assets/bangumi_rank_ic_${index + 1}.png`"
+              :src="ranks[index]"
               class="h-[1.5rem]"
             />
           </template>
         </CardVertical>
         <div v-else class="h-full flex items-center">
           <div class="text-center w-full">
-            <img src="src/assets/ic_22_cry.png" width="240" class="mx-auto" />
+            <img src="~assets/ic_22_cry.png" width="240" class="mx-auto" />
             <br />
             <q-btn
               dense
@@ -112,6 +112,8 @@ import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRouter } from "vue-router"
+
+import ranks from "src/logic/ranks"
 
 import "swiper/css"
 

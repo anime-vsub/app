@@ -31,7 +31,7 @@
       >
       <img
         v-if="trending"
-        :src="`src/assets/bangumi_rank_ic_${trending}.png`"
+        :src="ranks[trending]"
         class="h-[1.5rem]"
       />
     </q-img>
@@ -52,6 +52,7 @@ import { useRouter } from "vue-router"
 
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
+import ranks from "src/logic/ranks"
 
 const router = useRouter()
 
