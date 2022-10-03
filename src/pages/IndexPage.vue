@@ -331,7 +331,6 @@ import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import IndexWorker from "src/apis/index.worker?worker"
 
 // Import Swiper styles
 import "swiper/css"
@@ -341,13 +340,6 @@ import "swiper/css/grid"
 
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
-
-
-const indexw = new IndexWorker()
-indexw.addEventListener("message", ({data}) => {
-  console.log(data)
-})
-indexw.postMessage()
 
 const route = useRoute()
 const router = useRouter()
