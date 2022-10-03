@@ -45,14 +45,13 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
-import type { getInfoTPost } from "src/helpers/getInfoTPost"
 
 defineProps<{
   data: {
     path: string
     image: string
     name: string
-    year?: string
+    year?: string | number
     process: string
     description?: string
   }

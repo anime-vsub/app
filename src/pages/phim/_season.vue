@@ -549,9 +549,9 @@ async function fetchSeason(season: string) {
         {
           id: "#youtube",
           play: "1",
-           
+
           hash:
-            data.value!.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
+            data.value?.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
           name: "Trailer",
         },
       ]

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { HttpOptions } from "@capacitor-community/http"
 import { get } from "src/logic/http"
 
@@ -59,7 +60,6 @@ export class XMLHttpRequestJava {
       const res = await get({
         url: this.url,
         responseType: this.responseType,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         headers: Object.fromEntries((this.headers as unknown as any).entries()),
       })
 
@@ -88,7 +88,6 @@ export class XMLHttpRequestJava {
         loaded: res.data.length,
         total: res.data.length,
       })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       this.onerror?.(err)
     }

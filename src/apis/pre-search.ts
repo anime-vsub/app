@@ -1,4 +1,3 @@
-import { load } from "cheerio"
 import { post } from "src/logic/http"
 
 import { getPathName } from "../helpers/getPathName"

@@ -14,7 +14,7 @@
     >
       <div
         v-for="([name, value], index) in types"
-        :ref="(el) => index === activeIndex && (pagItemActiveRef = el)"
+        :ref="(el) => index === activeIndex && (pagItemActiveRef = el as HTMLDivElement)"
         :key="value"
         class="relative inline-block px-4 py-1"
         v-ripple
@@ -55,15 +55,16 @@
       >
         <div
           v-if="
-            !dataStore.get(type) || dataStore.get(type).status === 'pending'
+            !(_dataInStoreTmp = dataStore.get(type)) ||
+            _dataInStoreTmp.status === 'pending'
           "
           class="h-full flex items-center"
         >
           <LaodingAnim />
         </div>
         <CardVertical
-          v-else-if="dataStore.get(type).status === 'success'"
-          v-for="(item, index) in dataStore.get(type).response"
+          v-else-if="_dataInStoreTmp.status === 'success'"
+          v-for="(item, index) in _dataInStoreTmp.response"
           :key="item.name"
           :data="{
             ...item,
@@ -103,23 +104,17 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
-import Card from "components/Card.vue"
 import CardVertical from "components/CardVertical.vue"
-import GridCard from "components/GridCard.vue"
 import LaodingAnim from "components/LaodingAnim.vue"
 import { BangXepHangType } from "src/apis/bang-xep-hang/[type]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
-import { dayTextToNum } from "src/logic/dayTextToNum"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
-import { useRequest } from "vue-request"
-import { useRoute, useRouter } from "vue-router"
-
+import { useRouter } from "vue-router"
 
 import "swiper/css"
 
-const route = useRoute()
 const router = useRouter()
 
 const types = [
@@ -134,12 +129,31 @@ const types = [
 const dataStore = shallowReactive<
   Map<
     string,
-    {
-      status: "pending" | "success" | "error"
-      response: Awaited<ReturnType<typeof BangXepHangType>>
-    }
+    | {
+        status: "pending" | "error"
+        response?: unknown
+      }
+    | {
+        status: "success"
+        response: Awaited<ReturnType<typeof BangXepHangType>>
+      }
   >
 >(new Map())
+// eslint-disable-next-line functional/no-let
+let _dataInStoreTmp:
+  | { status: "pending" | "error"; response?: unknown }
+  | {
+      status: "success"
+      response: {
+        image: string
+        path: string
+        name: string
+        othername: string
+        process: string
+      }[]
+    }
+  | undefined
+
 async function fetchRankType(type: string) {
   if (dataStore.get(type)?.status === "success") return
 
