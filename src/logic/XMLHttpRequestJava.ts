@@ -33,16 +33,13 @@ export class XMLHttpRequestJava {
 
   getAllResponseHeaders(): string {
     return (
-       
-      (
-        Array.from((this.headers as unknown as any).entries() ?? []) as [
-          string,
-          string
-        ][]
-      )
-        .map(([key, val]) => `${key}: ${val}`)
-        .join("\r\n")
+      Array.from((this.headers as unknown as any).entries() ?? []) as [
+        string,
+        string
+      ][]
     )
+      .map(([key, val]) => `${key}: ${val}`)
+      .join("\r\n")
   }
 
   open(method: "get" | "post", url: string) {
