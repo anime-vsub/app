@@ -1,5 +1,6 @@
 import { load } from "cheerio"
 import { post } from "src/logic/http"
+import { parserDom } from "./__helpers__/parserDom"
 
 import { getPathName } from "../helpers/getPathName"
 
@@ -28,13 +29,14 @@ interface DataItem {
 
   */
 export async function PreSearch(query: string) {
-  const $ = load(
+  const $ = parserDom(
     (
       await post("/ajax/suggest", {
         ajaxSearch: "1",
         keysearch: query,
       })
-    ).data
+    ).data,
+    true
   )
 
   return $("li:not(.ss-bottom)")

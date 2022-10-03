@@ -29,6 +29,7 @@ specifiers:
   eslint-plugin-vue: ^9.5.1
   group-array: ^1.0.0
   hls.js: 1.2.3
+  htmlparser2: ^8.0.1
   js-base64: ^3.7.2
   jsdom: ^20.0.0
   jwplayer8: 0.0.1-b1
@@ -58,6 +59,7 @@ dependencies:
   eruda2: 0.0.2-b8
   group-array: 1.0.0
   hls.js: 1.2.3
+  htmlparser2: 8.0.1
   js-base64: 3.7.2
   jwplayer8: 0.0.1-b1
   pinia: 2.0.22_arz4dztosvwy2ghjrlh2wdhejm

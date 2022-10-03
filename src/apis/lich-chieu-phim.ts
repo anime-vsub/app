@@ -1,10 +1,9 @@
-import { load } from "cheerio"
+import { parserDom } from "./__helpers__/parserDom"
 
-import { getHTML } from "../helpers/getHTML"
 import { getInfoTPost } from "../helpers/getInfoTPost"
 
 export async function LichChieuPhim() {
-  const $ = load(await getHTML("/lich-chieu-phim.html"))
+  const $ = await parserDom("/lich-chieu-phim.html")
   const now = Date.now()
 
   return $("#sched-content > .Homeschedule")

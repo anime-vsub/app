@@ -2,6 +2,7 @@
 
 import type { Cheerio, CheerioAPI, Element } from "cheerio"
 import { load } from "cheerio"
+import { parserDom } from "../__helpers__/parserDom"
 
 import { getHTML } from "../../helpers/getHTML"
 import { getInfoAnchor } from "../../helpers/getInfoAnchor"
@@ -18,7 +19,7 @@ function findInfo($: CheerioAPI, infoList: Cheerio<Element>, q: string) {
 }
 
 export async function PhimId(seasonId: string) {
-  const $ = load(await getHTML(`/phim/${seasonId}/`))
+  const $ = await parserDom(`/phim/${seasonId}/`)
   const now = Date.now()
 
   const name = $(".Title:eq(0)").text()
