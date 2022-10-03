@@ -1,6 +1,7 @@
+import { getInfoTPost } from "../helpers/getInfoTPost"
+
 import { parserDom } from "./__helpers__/parserDom"
 
-import { getInfoTPost } from "../helpers/getInfoTPost"
 
 export async function Index() {
   const $ = await parserDom("/")

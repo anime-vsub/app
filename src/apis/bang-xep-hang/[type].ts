@@ -1,6 +1,6 @@
-import { parserDom } from "./__helpers__/parserDom"
-
 import { getPathName } from "../../helpers/getPathName"
+import { parserDom } from "../__helpers__/parserDom"
+
 
 export async function BangXepHangType(type?: string) {
   const $ = await parserDom(`/bang-xep-hang/${type ?? ""}`)
