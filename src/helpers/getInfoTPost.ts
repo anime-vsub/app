@@ -29,10 +29,7 @@ export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
   // =============== more =====================
   const quality = cheerio.find(".Qlty:eq(0)").text()
 
-  const process = cheerio
-    .find(".AAIco-access_time:eq(0)")
-    .text()
-    .split("/") as unknown as [string, string]
+  const process = cheerio.find(".AAIco-access_time:eq(0)").text()
 
   const year = parseInt(cheerio.find(".AAIco-date_range:eq(0)").text())
 

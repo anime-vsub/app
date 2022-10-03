@@ -417,10 +417,10 @@
               v-html="data.description"
             />
 
-<template v-if="data.trailer">
-            <div class="mt-5 text-[#eee] text-[16px]">Trailer</div>
-            <q-video class="mt-3" :src="data.trailer!" :ratio="16 / 9" />
-          </template>
+            <template v-if="data.trailer">
+              <div class="mt-5 text-[#eee] text-[16px]">Trailer</div>
+              <q-video class="mt-3" :src="data.trailer!" :ratio="16 / 9" />
+            </template>
           </div>
         </q-card-section>
       </q-card>
@@ -485,7 +485,7 @@ const currentMetaSeason = computed(() => {
 })
 
 const { data, run, error, loading } = useRequest(
-  () => currentSeason.value ? PhimId(currentSeason.value) : Promise.reject(),
+  () => (currentSeason.value ? PhimId(currentSeason.value) : Promise.reject()),
   {
     refreshDeps: [currentSeason],
     refreshDepsAction() {
@@ -550,7 +550,8 @@ async function fetchSeason(season: string) {
           id: "#youtube",
           play: "1",
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          hash: data.value!.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
+          hash:
+            data.value!.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
           name: "Trailer",
         },
       ]
