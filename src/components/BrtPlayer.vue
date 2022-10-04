@@ -755,7 +755,7 @@ const setArtCurrentTime = (currentTime: number) => {
   }
   video.value.currentTime = currentTime
 }
-watch(uniqueCurChap, () => setArtCurrentTime(0), { immediate: true })
+watch(uniqueCurChap, () => setArtCurrentTime(0))
 const artPercentageResourceLoaded = ref<number>(0)
 const artPlaybackRate = ref(1)
 const setArtPlaybackRate = (value: number) => {
@@ -915,7 +915,14 @@ function runRemount() {
   }).onOk(remount)
 }
 
+import { onBeforeUnmount } from "vue"
+
+let currentHls: Hls
+onBeforeUnmount(() => 
+      currentHls?.destroy())
 function remount() {
+      currentHls?.destroy()
+
   if (!currentStream.value) {
     $q.notify({
       position: "bottom-left",
@@ -936,6 +943,7 @@ function remount() {
     case "m3u":
       // eslint-disable-next-line no-case-declarations
       const hls = new Hls()
+      currentHls = hls
       // customLoader(hls.config)
       hls.loadSource(url)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
