@@ -6,7 +6,7 @@
       :initial-ratio="744 / 530"
       class="!rounded-[4px]"
     >
-      <div class="update-info-layer">
+      <BottomBlur class="update-info-layer">
         <template v-if="trending">
           <!-- <div class="text-[30px]">#{{ trending }}</div> -->
           <div class="card-title line-clamp-2 h-[42px]">
@@ -23,17 +23,13 @@
           </template>
         </span>
         <span v-else>Tập {{ data.chap }}</span>
-      </div>
+      </BottomBlur>
       <Quality
         v-if="data.quality"
         :class="trending ? 'right-0 absolute' : undefined"
         >{{ data.quality }}</Quality
       >
-      <img
-        v-if="trending"
-        :src="ranks[trending]"
-        class="h-[1.5rem]"
-      />
+      <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
     </q-img>
     <a v-if="!trending" href="#" class="line-clamp-2 min-h-10 mt-1">{{
       data.name
@@ -49,7 +45,7 @@
 <script lang="ts" setup>
 import type { TPost } from "src/apis/__helpers__/getInfoTPost"
 import { useRouter } from "vue-router"
-
+import BottomBlur from "components/BottomBlur.vue"
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
 import ranks from "src/logic/ranks"
@@ -86,35 +82,6 @@ a {
 }
 
 .update-info-layer {
-  background-image: linear-gradient(
-    0deg,
-    rgba(10, 12, 15, 0.8) 0%,
-    rgba(10, 12, 15, 0.74) 4%,
-    rgba(10, 12, 15, 0.59) 17%,
-    rgba(10, 12, 15, 0.4) 34%,
-    rgba(10, 12, 15, 0.21) 55%,
-    rgba(10, 12, 15, 0.06) 78%,
-    rgba(10, 12, 15, 0) 100%
-  );
-  background-color: transparent;
-  min-height: 60px;
-  position: absolute;
-  padding: {
-    left: 8px;
-    right: 10px;
-    bottom: 10px;
-    top: 40px;
-  }
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-
-  font-size: 14px;
-  font-weight: 500;
-  @media screen and (max-width: 1680px) {
-    font-size: 12px;
-  }
   span {
     color: rgb(255, 255, 255);
     letter-spacing: 0px;
