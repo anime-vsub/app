@@ -3,7 +3,6 @@ import type { CheerioAPI } from "cheerio"
 import { getInfoTPost } from "../__helpers__/getInfoTPost"
 import { parserDom } from "../__helpers__/parserDom"
 
-
 export async function TypeNormalValue(
   type: string,
   value: string | string[],

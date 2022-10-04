@@ -1,7 +1,6 @@
 import { getInfoTPost } from "./__helpers__/getInfoTPost"
 import { parserDom } from "./__helpers__/parserDom"
 
-
 export async function LichChieuPhim() {
   const $ = await parserDom("/lich-chieu-phim.html")
   const now = Date.now()
