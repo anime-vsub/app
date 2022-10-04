@@ -43,12 +43,14 @@
 </template>
 
 <script lang="ts" setup>
-import type { TPost } from "src/apis/__helpers__/getInfoTPost"
-import { useRouter } from "vue-router"
 import BottomBlur from "components/BottomBlur.vue"
+import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
+import ranks from "src/logic/ranks"
+import { useRouter } from "vue-router"
+
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
-import ranks from "src/logic/ranks"
+
 
 const router = useRouter()
 

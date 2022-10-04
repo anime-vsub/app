@@ -28,7 +28,7 @@
 
 <script lang="ts" setup>
 import { QBtn } from "quasar"
-import type { PhimIdChap } from "src/apis/phim/[id]/[chap]"
+import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { ref, useAttrs, watchEffect } from "vue"
 

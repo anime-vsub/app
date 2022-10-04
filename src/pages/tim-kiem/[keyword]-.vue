@@ -179,7 +179,7 @@ import { ref, shallowReactive, watch, watchEffect } from "vue"
 
 import ranks from "src/logic/ranks"
 
-import { AjaxItem } from "src/apis/ajax/item"
+import { AjaxItem } from "src/apis/runs/ajax/item"
 
 dayjs.extend(relativeTime)
 
@@ -194,7 +194,7 @@ const searching = ref(false)
 const query = ref("")
 
 import { useRequest } from "vue-request"
-import { PreSearch } from "src/apis/pre-search"
+import { PreSearch } from "src/apis/runs/pre-search"
 
 import { useLocalStorage } from "src/composibles/useLocalStorage"
 

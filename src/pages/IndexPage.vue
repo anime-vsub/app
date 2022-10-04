@@ -295,7 +295,7 @@
 
 <script setup lang="ts">
 // eslint-disable-next-line import/order
-import { Index } from "src/apis/index"
+import { Index } from "src/apis/runs/index"
 // eslint-disable-next-line import/order
 import { useRequest } from "vue-request"
 // eslint-disable-next-line import/order

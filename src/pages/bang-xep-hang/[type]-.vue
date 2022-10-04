@@ -99,7 +99,7 @@
 import { Icon } from "@iconify/vue"
 import CardVertical from "components/CardVertical.vue"
 import LaodingAnim from "components/LaodingAnim.vue"
-import { BangXepHangType } from "src/apis/bang-xep-hang/[type]"
+import { BangXepHangType } from "src/apis/runs/bang-xep-hang/[type]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
