@@ -41,7 +41,7 @@
     </q-toolbar>
   </q-header>
 
-  <q-page v-if="loading || !data" class="mt-[-50px] loader">
+  <div v-if="loading || !data" class="mt-[-50px] loader">
     <div class="swiper-hot">
       <q-responsive :ratio="aspectRatio" class="poster">
         <q-skeleton type="rect" width="100%" height="100%" />
@@ -130,8 +130,8 @@
 
       <SkeletonGridCard :count="6" />
     </div>
-  </q-page>
-  <q-page v-else class="mt-[-50px]">
+  </div>
+  <div v-else class="mt-[-50px]">
     <swiper
       :slides-per-view="1"
       :space-between="0"
@@ -179,27 +179,15 @@
 
     <div class="row text-grey text-[12px] mx-4 text-center mb-4">
       <router-link to="/muc-luc" class="col-4 relative py-2" v-ripple>
-        <img
-          src="~assets/icon_tool_alp.png"
-          width="30"
-          class="mx-auto mb-2"
-        />
+        <img src="~assets/icon_tool_alp.png" width="30" class="mx-auto mb-2" />
         <span class="mt-2">Mục lục</span>
       </router-link>
       <router-link to="/lich-chieu-phim" class="col-4 relative py-2" v-ripple>
-        <img
-          src="~assets/icon_tool_calc.png"
-          width="30"
-          class="mx-auto mb-2"
-        />
+        <img src="~assets/icon_tool_calc.png" width="30" class="mx-auto mb-2" />
         <span>Lịch chiếu</span>
       </router-link>
       <router-link to="/bang-xep-hang" class="col-4 relative py-2" v-ripple>
-        <img
-          src="~assets/icon_tool_rank.png"
-          width="30"
-          class="mx-auto mb-2"
-        />
+        <img src="~assets/icon_tool_rank.png" width="30" class="mx-auto mb-2" />
         <span>Bảng xếp hạng</span>
       </router-link>
     </div>
@@ -302,7 +290,7 @@
 
       <GridCard :items="data.lastUpdate" />
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -10,57 +10,55 @@
       >
     </q-toolbar>
 
-    <div
-      class="overflow-x-scroll whitespace-nowrap text-[#9a9a9a] text-center mb-2"
-    >
+    <q-toolbar>
       <div
-        v-for="(item, index) in data"
-        :ref="(el) => activeIndex === index && (pagItemActiveRef = el as HTMLDivElement)"
-        :key="index"
-        class="relative inline-block px-4"
-        v-ripple
-        :class="{
-          'c--main text-weight-medium':
-            activeIndex === index ||
-            dayjs(
-              `${item.month}/${item.date}/${new Date().getFullYear()}`
-            ).isToday(),
-        }"
-        @click="swiperRef?.slideTo(index)"
+        class="overflow-x-scroll whitespace-nowrap text-[#9a9a9a] text-center mb-2"
       >
-        T{{ dayTextToNum(item.day) }}
-        <br />
-        <span
-          :class="
-            activeIndex === index
-              ? 'relative inline-block before:content-DEFAULT before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-0 pb-[2px] before:rounded'
-              : undefined
-          "
+        <div
+          v-for="(item, index) in data"
+          :ref="(el) => activeIndex === index && (pagItemActiveRef = el as HTMLDivElement)"
+          :key="index"
+          class="relative inline-block px-4"
+          v-ripple
+          :class="{
+            'c--main text-weight-medium':
+              activeIndex === index ||
+              dayjs(
+                `${item.month}/${item.date}/${new Date().getFullYear()}`
+              ).isToday(),
+          }"
+          @click="swiperRef?.slideTo(index)"
         >
-          {{ item.date
-          }}<template v-if="item.month !== data?.[index - 1]?.month"
-            >/{{ item.month }}</template
+          T{{ dayTextToNum(item.day) }}
+          <br />
+          <span
+            :class="
+              activeIndex === index
+                ? 'relative inline-block before:content-DEFAULT before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-0 pb-[2px] before:rounded'
+                : undefined
+            "
           >
-        </span>
+            {{ item.date
+            }}<template v-if="item.month !== data?.[index - 1]?.month"
+              >/{{ item.month }}</template
+            >
+          </span>
+        </div>
       </div>
-    </div>
+    </q-toolbar>
   </q-header>
-  <q-page v-if="loading" class="flex items-center">
-    <LaodingAnim />
-  </q-page>
-  <q-page
-    v-else
-    :style-fn="
-      (offset, height) => ({
-        height: `${height - offset}px`,
-      })
-    "
-  >
+
+  <LaodingAnim
+    v-if="loading"
+    class="absolute top-[50%] transform translate-y-[-50%]"
+  />
+
+  <div v-else class="absolute top-0 h-[100%] w-full">
     <swiper
+      class="relative h-full w-full"
       :slides-per-view="1"
       @swiper="onSwiper"
       @slideChange="onSlideChange"
-      class="h-full"
     >
       <swiper-slide
         v-for="(item, index) in data"
@@ -94,7 +92,7 @@
               class="mx-3"
             >
               <template v-slot:img-content>
-                <div class="update-info-layer" />
+                <BottomBlur />
               </template>
             </CardVertical>
           </template>
@@ -121,7 +119,7 @@
               class="mx-3"
             >
               <template v-slot:img-content>
-                <div class="update-info-layer" />
+                <BottomBlur />
               </template>
             </CardVertical>
           </template>
@@ -143,13 +141,13 @@
             class="mx-3"
           >
             <template v-slot:img-content>
-              <div class="update-info-layer" />
+              <BottomBlur />
             </template>
           </CardVertical>
         </template>
       </swiper-slide>
     </swiper>
-  </q-page>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -169,6 +167,7 @@ import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import BottomBlur from "components/BottomBlur.vue"
 
 dayjs.extend(isToday)
 
@@ -227,47 +226,3 @@ function onSlideChange(swiper: TSwiper) {
   activeIndex.value = swiper.activeIndex
 }
 </script>
-
-<style lang="scss" scoped>
-.update-info-layer {
-  background-image: linear-gradient(
-    0deg,
-    rgba(10, 12, 15, 0.8) 0%,
-    rgba(10, 12, 15, 0.74) 4%,
-    rgba(10, 12, 15, 0.59) 17%,
-    rgba(10, 12, 15, 0.4) 34%,
-    rgba(10, 12, 15, 0.21) 55%,
-    rgba(10, 12, 15, 0.06) 78%,
-    rgba(10, 12, 15, 0) 100%
-  );
-  background-color: transparent;
-  min-height: 60px;
-  position: absolute;
-  padding: {
-    left: 8px;
-    right: 10px;
-    bottom: 10px;
-    top: 40px;
-  }
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-
-  font-size: 14px;
-  font-weight: 500;
-  @media screen and (max-width: 1680px) {
-    font-size: 12px;
-  }
-  span {
-    color: rgb(255, 255, 255);
-    letter-spacing: 0px;
-  }
-  .star {
-    position: absolute;
-    right: 8px;
-    // right: 10px;
-    bottom: 10px;
-  }
-}
-</style>

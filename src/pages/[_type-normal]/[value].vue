@@ -82,34 +82,32 @@
     </template>
   </q-header>
 
-  <q-page>
-    <!-- main -->
+  <!-- main -->
 
-    <div v-if="data?.items.length === 0" class="text-center py-20">
-      <img
-        src="~assets/img_tips_error_not_foud.png"
-        width="186"
-        height="174"
-        class="mx-auto"
-      />
+  <div v-if="data?.items.length === 0" class="text-center py-20">
+    <img
+      src="~assets/img_tips_error_not_foud.png"
+      width="186"
+      height="174"
+      class="mx-auto"
+    />
 
-      <div class="text-subtitle1 mt-1">Không tìm thấy gì cả.</div>
-    </div>
+    <div class="text-subtitle1 mt-1">Không tìm thấy gì cả.</div>
+  </div>
 
-    <template v-else>
-      <SkeletonGridCard v-if="loading || !data" :count="12" />
+  <template v-else>
+    <SkeletonGridCard v-if="loading || !data" :count="12" />
 
-      <q-infinite-scroll v-else @load="onLoad" :offset="250">
-        <GridCard :items="data.items" />
+    <q-infinite-scroll v-else @load="onLoad" :offset="250">
+      <GridCard :items="data.items" />
 
-        <template v-slot:loading>
-          <div class="row justify-center q-my-md">
-            <q-spinner class="c--main" size="40px" />
-          </div>
-        </template>
-      </q-infinite-scroll>
-    </template>
-  </q-page>
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner class="c--main" size="40px" />
+        </div>
+      </template>
+    </q-infinite-scroll>
+  </template>
 
   <template v-if="data?.filter">
     <!-- gener -->

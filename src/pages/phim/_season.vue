@@ -1,434 +1,425 @@
 <template>
-  <q-page>
-    <!-- skeleton first load -->
-    <template v-if="!data">
-      <div class="w-full overflow-hidden fixed top-0 left-0 z-200">
-        <div
-          class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
-        >
-          <q-spinner size="60px" :thickness="3" />
-        </div>
-      </div>
-    </template>
-    <template v-else>
-      <BrtPlayer
-        v-if="configPlayer?.playTech !== 'trailer'"
-        :sources="sources"
-        :current-season="currentSeason"
-        :current-chap="currentChap"
-        :next-chap="nextChap"
-        :name="data.name"
-        :name-current-chap="currentMetaChap?.name"
-        :poster="data.poster"
-        :all-seasons="allSeasons"
-        :_cache-data-seasons="_cacheDataSeasons"
-        :fetch-season="fetchSeason"
-      />
-      <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
-        <q-img
-          v-if="sources?.[0]?.url"
-          :ratio="16 / 9"
-          src="~assets/ic_question_result_error.png"
-          width="100"
-          class="max-w-[100px]"
-        />
-        <q-video v-else :ratio="16 / 9" :src="sources![0]!.url" />
-      </div>
-    </template>
-
-    <q-responsive :ratio="16 / 9"> </q-responsive>
-
-    <div v-if="loading || !data" class="px-2 pt-4 text-[28px]">
-      <q-skeleton type="text" class="text-[35px]" width="80%" />
-      <q-skeleton type="text" width="100px" class="mt-[-10px]" />
-
-      <div class="flex flex-nowrap">
-        <q-skeleton type="text" width="100px" class="mr-2" />
-        <q-skeleton type="text" width="140px" class="mr-1" />
-      </div>
-
-      <div class="flex mt-1 flex-nowrap mt-[-10px]">
-        <q-skeleton type="text" width="38px" class="mr-2" />
-        <q-skeleton type="text" width="38px" class="mr-2" />
-        <q-skeleton type="text" width="70px" class="mr-2" />
-        <q-skeleton type="text" width="40px" />
-      </div>
-
-      <div class="flex flex-nowrap mt-[-10px]">
-        <q-skeleton type="text" width="3em" class="mr-2" />
-        <q-skeleton type="text" width="4em" class="mr-2" />
-        <q-skeleton type="text" width="5em" class="mr-2" />
-        <q-skeleton type="text" width="5em" />
-      </div>
-
-      <div class="mt-3">
-        <q-skeleton type="rect" width="100%" height="48px" />
-      </div>
-
-      <SkeletonGridCard class="mt-3" :count="12" />
-    </div>
-
-    <template v-else>
-      <div v-ripple @click="showDialogInforma = true" class="relative">
-        <div class="relative flex items-end justify-between mx-[10px]">
-          <div class="flex-1 mt-4 mb-2">
-            <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
-              {{ data.name }}
-            </h1>
-            <h5 class="text-gray-400 text-weight-normal">
-              {{ formatView(data.views) }} lượt xem &bull;
-              <router-link
-                v-if="data.seasonOf"
-                class="c--main"
-                :to="data.seasonOf.path"
-                >{{ data.seasonOf.name }}</router-link
-              >
-            </h5>
-          </div>
-
-          <Icon
-            icon="fluent:chevron-right-24-regular"
-            width="18"
-            height="18"
-            class="text-gray-400 mb-4"
-          />
-        </div>
-      </div>
-
-      <div class="px-[10px]">
-        <div class="text-gray-400">
-          Tác giả
-          <template v-for="(item, index) in data.authors" :key="item.name">
-            <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
-              item.name
-            }}</router-link
-            ><template v-if="index < data.authors.length - 1">, </template>
-          </template>
-          <div class="divider"></div>
-          sản xuất bởi {{ data.studio }}
-        </div>
-
-        <div class="text-[rgb(230,230,230)] mt-3">
-          <Quality>{{ data.quality }}</Quality>
-          <div class="divider"></div>
-          {{ data.yearOf }}
-          <div class="divider"></div>
-          Cập nhật tới tập {{ data.duration }}
-          <div class="divider"></div>
-          <router-link
-            v-for="item in data.contries"
-            :key="item.name"
-            :to="item.path"
-            class="text-[rgb(28,199,73)]"
-            >{{ item.name }}</router-link
-          >
-          <div class="divider"></div>
-
-          <br />
-
-          <div class="inline-flex items-center">
-            <div class="text-[16px] text-weight-medium mr-1">
-              {{ data.rate }}
-            </div>
-            <Star />
-          </div>
-          <div class="divider"></div>
-          <span class="text-gray-400">
-            {{ formatView(data.count_rate) }} người đánh giá
-          </span>
-          <div class="divider"></div>
-          <span class="text-gray-400">
-            {{ formatView(data.follows) }} người theo dõi
-          </span>
-        </div>
-
-        <div class="tags mt-1">
-          <router-link
-            v-for="item in data.genre"
-            :key="item.name"
-            :to="item.path"
-            class="text-[rgb(28,199,73)]"
-          >
-            #{{ item.name.replace(/ /, "_") }}
-          </router-link>
-        </div>
-      </div>
-
+  <!-- skeleton first load -->
+  <template v-if="!data">
+    <div class="w-full overflow-hidden fixed top-0 left-0 z-200">
       <div
-        v-if="currentDataSeason?.update"
-        class="text-gray-300 px-2 text-center pt-1 text-weight-medium text-[14px]"
+        class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
       >
-        Tập mới cập nhật lúc
-        {{
-          dayjs(
-            new Date(
-              `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
-            )
-          ).format("HH:MM")
-        }}
-        {{
-          currentDataSeason.update[0] === 7
-            ? "Chủ nhật"
-            : `Thứ ${currentDataSeason.update[0]}`
-        }}
-        {{
-          currentDataSeason.update[0] > new Date().getDay() ? "tuần sau" : ""
-        }}
+        <q-spinner size="60px" :thickness="3" />
       </div>
+    </div>
+  </template>
+  <template v-else>
+    <BrtPlayer
+      v-if="configPlayer?.playTech !== 'trailer'"
+      :sources="sources"
+      :current-season="currentSeason"
+      :current-chap="currentChap"
+      :next-chap="nextChap"
+      :name="data.name"
+      :name-current-chap="currentMetaChap?.name"
+      :poster="data.poster"
+      :all-seasons="allSeasons"
+      :_cache-data-seasons="_cacheDataSeasons"
+      :fetch-season="fetchSeason"
+    />
+    <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
+      <q-img
+        v-if="sources?.[0]?.url"
+        :ratio="16 / 9"
+        src="~assets/ic_question_result_error.png"
+        width="100"
+        class="max-w-[100px]"
+      />
+      <q-video v-else :ratio="16 / 9" :src="sources![0]!.url" />
+    </div>
+  </template>
 
-      <q-btn
-        flat
-        no-caps
-        class="w-full !px-2 mt-4"
-        @click="showDialogChapter = true"
-      >
-        <div class="flex items-center justify-between text-subtitle2 w-full">
-          Tập
+  <q-responsive :ratio="16 / 9"> </q-responsive>
 
-          <span class="flex items-center text-gray-300 font-weight-normal">
-            Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
-          </span>
-        </div>
-      </q-btn>
+  <div v-if="loading || !data" class="px-2 pt-4 text-[28px]">
+    <q-skeleton type="text" class="text-[35px]" width="80%" />
+    <q-skeleton type="text" width="100px" class="mt-[-10px]" />
 
-      <q-tab-panels
-        v-model="seasonActive"
-        animated
-        keep-alive
-        class="h-full bg-transparent overflow-y-visible whitespace-nowrap mb-3"
-      >
-        <q-tab-panel
-          v-for="{ value } in allSeasons"
-          :key="value"
-          :name="value"
-          class="!h-[47px] overflow-y-visible py-0 !px-0"
-        >
-          <div
-            v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
-            class="flex justify-center"
-          >
-            <q-spinner-infinity class="c--main" size="3em" :thickness="3" />
-          </div>
-          <div
-            v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-            class="text-center"
-          >
-            Lỗi khi lấy dữ liệu
-            <br />
-            <q-btn
-              dense
-              no-caps
-              style="color: #00be06"
-              @click="fetchSeason(value)"
-              >Thử lại</q-btn
-            >
-          </div>
-          <ChapsGridQBtn
-            v-else
-            :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-            :season="value"
-            :find="(item) => value === currentSeason && item.id === currentChap"
-          />
-        </q-tab-panel>
-      </q-tab-panels>
-
-      <q-tabs
-        v-model="seasonActive"
-        no-caps
-        dense
-        inline-label
-        active-class="c--main"
-        indicator-color="transparent"
-        v-if="
-          allSeasons.length > 1 ||
-          (allSeasons.length === 0 && allSeasons[0].name !== '#default')
-        "
-      >
-        <q-tab
-          v-for="item in allSeasons"
-          :key="item.value"
-          :name="item.value"
-          :label="item.name"
-          class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[6px]"
-          content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-          :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
-        />
-      </q-tabs>
-    </template>
-
-    <div class="px-1">
-      <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
+    <div class="flex flex-nowrap">
+      <q-skeleton type="text" width="100px" class="mr-2" />
+      <q-skeleton type="text" width="140px" class="mr-1" />
     </div>
 
-    <!-- bottom sheet -->
-    <q-dialog
-      v-if="data"
-      position="bottom"
-      full-width
-      v-model="showDialogChapter"
-    >
-      <q-card
-        style="height: calc(100vh - 100vw * 9 / 16)"
-        class="!overflow-visible flex column flex-nowrap py-0"
-      >
-        <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
-          Season
-          <q-btn dense flat round icon="close" v-close-popup />
-        </div>
-        <div class="relative flex-1 min-h-0">
-          <q-tabs
-            v-model="seasonActive"
-            no-caps
-            dense
-            inline-label
-            active-class="c--main"
-            v-if="
-              allSeasons.length > 1 ||
-              (allSeasons.length === 0 && allSeasons[0].name !== '#default')
-            "
-          >
-            <q-tab
-              v-for="item in allSeasons"
-              :key="item.value"
-              :name="item.value"
-              :label="item.name"
-              :ref="(el) => item.value === currentSeason && (tabsDialogRef = el as QTab)"
-            />
-          </q-tabs>
+    <div class="flex mt-1 flex-nowrap mt-[-10px]">
+      <q-skeleton type="text" width="38px" class="mr-2" />
+      <q-skeleton type="text" width="38px" class="mr-2" />
+      <q-skeleton type="text" width="70px" class="mr-2" />
+      <q-skeleton type="text" width="40px" />
+    </div>
 
-          <q-tab-panels
-            v-model="seasonActive"
-            animated
-            keep-alive
-            class="h-full"
-          >
-            <q-tab-panel
-              v-for="({ value }, index) in allSeasons"
-              :key="index"
-              :name="value"
+    <div class="flex flex-nowrap mt-[-10px]">
+      <q-skeleton type="text" width="3em" class="mr-2" />
+      <q-skeleton type="text" width="4em" class="mr-2" />
+      <q-skeleton type="text" width="5em" class="mr-2" />
+      <q-skeleton type="text" width="5em" />
+    </div>
+
+    <div class="mt-3">
+      <q-skeleton type="rect" width="100%" height="48px" />
+    </div>
+
+    <SkeletonGridCard class="mt-3" :count="12" />
+  </div>
+
+  <template v-else>
+    <div v-ripple @click="showDialogInforma = true" class="relative">
+      <div class="relative flex items-end justify-between mx-[10px]">
+        <div class="flex-1 mt-4 mb-2">
+          <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
+            {{ data.name }}
+          </h1>
+          <h5 class="text-gray-400 text-weight-normal">
+            {{ formatView(data.views) }} lượt xem &bull;
+            <router-link
+              v-if="data.seasonOf"
+              class="c--main"
+              :to="data.seasonOf.path"
+              >{{ data.seasonOf.name }}</router-link
             >
-              <div
-                v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
-                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+          </h5>
+        </div>
+
+        <Icon
+          icon="fluent:chevron-right-24-regular"
+          width="18"
+          height="18"
+          class="text-gray-400 mb-4"
+        />
+      </div>
+    </div>
+
+    <div class="px-[10px]">
+      <div class="text-gray-400">
+        Tác giả
+        <template v-for="(item, index) in data.authors" :key="item.name">
+          <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
+            item.name
+          }}</router-link
+          ><template v-if="index < data.authors.length - 1">, </template>
+        </template>
+        <div class="divider"></div>
+        sản xuất bởi {{ data.studio }}
+      </div>
+
+      <div class="text-[rgb(230,230,230)] mt-3">
+        <Quality>{{ data.quality }}</Quality>
+        <div class="divider"></div>
+        {{ data.yearOf }}
+        <div class="divider"></div>
+        Cập nhật tới tập {{ data.duration }}
+        <div class="divider"></div>
+        <router-link
+          v-for="item in data.contries"
+          :key="item.name"
+          :to="item.path"
+          class="text-[rgb(28,199,73)]"
+          >{{ item.name }}</router-link
+        >
+        <div class="divider"></div>
+
+        <br />
+
+        <div class="inline-flex items-center">
+          <div class="text-[16px] text-weight-medium mr-1">
+            {{ data.rate }}
+          </div>
+          <Star />
+        </div>
+        <div class="divider"></div>
+        <span class="text-gray-400">
+          {{ formatView(data.count_rate) }} người đánh giá
+        </span>
+        <div class="divider"></div>
+        <span class="text-gray-400">
+          {{ formatView(data.follows) }} người theo dõi
+        </span>
+      </div>
+
+      <div class="tags mt-1">
+        <router-link
+          v-for="item in data.genre"
+          :key="item.name"
+          :to="item.path"
+          class="text-[rgb(28,199,73)]"
+        >
+          #{{ item.name.replace(/ /, "_") }}
+        </router-link>
+      </div>
+    </div>
+
+    <div
+      v-if="currentDataSeason?.update"
+      class="text-gray-300 px-2 text-center pt-1 text-weight-medium text-[14px]"
+    >
+      Tập mới cập nhật lúc
+      {{
+        dayjs(
+          new Date(
+            `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
+          )
+        ).format("HH:MM")
+      }}
+      {{
+        currentDataSeason.update[0] === 7
+          ? "Chủ nhật"
+          : `Thứ ${currentDataSeason.update[0]}`
+      }}
+      {{ currentDataSeason.update[0] > new Date().getDay() ? "tuần sau" : "" }}
+    </div>
+
+    <q-btn
+      flat
+      no-caps
+      class="w-full !px-2 mt-4"
+      @click="showDialogChapter = true"
+    >
+      <div class="flex items-center justify-between text-subtitle2 w-full">
+        Tập
+
+        <span class="flex items-center text-gray-300 font-weight-normal">
+          Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
+        </span>
+      </div>
+    </q-btn>
+
+    <q-tab-panels
+      v-model="seasonActive"
+      animated
+      keep-alive
+      class="h-full bg-transparent overflow-y-visible whitespace-nowrap mb-3"
+    >
+      <q-tab-panel
+        v-for="{ value } in allSeasons"
+        :key="value"
+        :name="value"
+        class="!h-[47px] overflow-y-visible py-0 !px-0"
+      >
+        <div
+          v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
+          class="flex justify-center"
+        >
+          <q-spinner-infinity class="c--main" size="3em" :thickness="3" />
+        </div>
+        <div
+          v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+          class="text-center"
+        >
+          Lỗi khi lấy dữ liệu
+          <br />
+          <q-btn
+            dense
+            no-caps
+            style="color: #00be06"
+            @click="fetchSeason(value)"
+            >Thử lại</q-btn
+          >
+        </div>
+        <ChapsGridQBtn
+          v-else
+          :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+          :season="value"
+          :find="(item) => value === currentSeason && item.id === currentChap"
+        />
+      </q-tab-panel>
+    </q-tab-panels>
+
+    <q-tabs
+      v-model="seasonActive"
+      no-caps
+      dense
+      inline-label
+      active-class="c--main"
+      indicator-color="transparent"
+      v-if="
+        allSeasons.length > 1 ||
+        (allSeasons.length === 0 && allSeasons[0].name !== '#default')
+      "
+    >
+      <q-tab
+        v-for="item in allSeasons"
+        :key="item.value"
+        :name="item.value"
+        :label="item.name"
+        class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[6px]"
+        content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
+        :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
+      />
+    </q-tabs>
+  </template>
+
+  <div class="px-1">
+    <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
+  </div>
+
+  <!-- bottom sheet -->
+  <q-dialog
+    v-if="data"
+    position="bottom"
+    full-width
+    v-model="showDialogChapter"
+  >
+    <q-card
+      style="height: calc(100vh - 100vw * 9 / 16)"
+      class="!overflow-visible flex column flex-nowrap py-0"
+    >
+      <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
+        Season
+        <q-btn dense flat round icon="close" v-close-popup />
+      </div>
+      <div class="relative flex-1 min-h-0">
+        <q-tabs
+          v-model="seasonActive"
+          no-caps
+          dense
+          inline-label
+          active-class="c--main"
+          v-if="
+            allSeasons.length > 1 ||
+            (allSeasons.length === 0 && allSeasons[0].name !== '#default')
+          "
+        >
+          <q-tab
+            v-for="item in allSeasons"
+            :key="item.value"
+            :name="item.value"
+            :label="item.name"
+            :ref="(el) => item.value === currentSeason && (tabsDialogRef = el as QTab)"
+          />
+        </q-tabs>
+
+        <q-tab-panels v-model="seasonActive" animated keep-alive class="h-full">
+          <q-tab-panel
+            v-for="({ value }, index) in allSeasons"
+            :key="index"
+            :name="value"
+          >
+            <div
+              v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
+              class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+            >
+              <q-spinner style="color: #00be06" size="3em" :thickness="3" />
+            </div>
+            <div
+              v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+              class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
+            >
+              Lỗi khi lấy dữ liệu
+              <br />
+              <q-btn
+                dense
+                no-caps
+                style="color: #00be06"
+                @click="fetchSeason(value)"
+                >Thử lại</q-btn
               >
-                <q-spinner style="color: #00be06" size="3em" :thickness="3" />
+            </div>
+
+            <ChapsGridQBtn
+              v-else
+              grid
+              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+              :season="value"
+              :find="
+                (item) => value === currentSeason && item.id === currentChap
+              "
+              class="px-4 py-[10px] mx-2 mb-3"
+            />
+          </q-tab-panel>
+        </q-tab-panels>
+      </div>
+    </q-card>
+  </q-dialog>
+
+  <!-- dialog informa -->
+  <q-dialog
+    v-if="data"
+    position="bottom"
+    full-width
+    v-model="showDialogInforma"
+  >
+    <q-card
+      style="height: calc(100vh - 100vw * 9 / 16)"
+      class="!overflow-visible flex column flex-nowrap py-0"
+    >
+      <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
+        Chi tiết
+        <q-btn dense flat round icon="close" v-close-popup />
+      </div>
+      <q-card-section
+        class="relative flex-1 min-h-0 px-2 overflow-y-scroll text-[14px] text-[#9a9a9a] text-weight-normal"
+      >
+        <div>
+          <div class="flex">
+            <q-img
+              :src="data.image"
+              :ratio="280 / 400"
+              width="110px"
+              class="rounded-lg"
+            />
+
+            <div class="pl-2 py-3">
+              <div class="text-[16px] line-clamp-2 text-[#eee] leading-snug">
+                {{ data.name }}
               </div>
-              <div
-                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-              >
-                Lỗi khi lấy dữ liệu
-                <br />
+              <div class="mt-4">
+                {{ data.language }}
+                <span class="mx-1">|</span>
+                {{ data.contries[0]?.name ?? "unknown" }}
+              </div>
+
+              <div class="mt-2">Phát hành năm {{ data.yearOf }}</div>
+
+              <div class="mt-2">Tập {{ data.duration }} đã cập nhật</div>
+            </div>
+          </div>
+
+          <ul class="mt-8">
+            <li>
+              <span>Tên khác: </span>
+
+              <span class="text-[#eee]">{{ data.othername }}</span>
+            </li>
+            <li class="mt-3">
+              <span>Loại: </span>
+
+              <span class="text-[#eee]">
                 <q-btn
+                  flat
                   dense
                   no-caps
-                  style="color: #00be06"
-                  @click="fetchSeason(value)"
-                  >Thử lại</q-btn
+                  v-for="item in data.genre"
+                  :key="item.name"
+                  class="py-[5px] !min-h-0 px-2 rounded-sm bg-gray-700 mx-1 my-1 inline-block relative"
+                  :to="item.path"
+                  >{{ item.name }}</q-btn
                 >
-              </div>
+              </span>
+            </li>
+          </ul>
 
-              <ChapsGridQBtn
-                v-else
-                grid
-                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-                :season="value"
-                :find="
-                  (item) => value === currentSeason && item.id === currentChap
-                "
-                class="px-4 py-[10px] mx-2 mb-3"
-              />
-            </q-tab-panel>
-          </q-tab-panels>
+          <div class="mt-5 text-[#eee] text-[16px]">Giới thiệu</div>
+          <p
+            class="mt-3 leading-loose whitespace-pre-wrap"
+            v-html="data.description"
+          />
+
+          <template v-if="data.trailer">
+            <div class="mt-5 text-[#eee] text-[16px]">Trailer</div>
+            <q-video class="mt-3" :src="data.trailer!" :ratio="16 / 9" />
+          </template>
         </div>
-      </q-card>
-    </q-dialog>
-
-    <!-- dialog informa -->
-    <q-dialog
-      v-if="data"
-      position="bottom"
-      full-width
-      v-model="showDialogInforma"
-    >
-      <q-card
-        style="height: calc(100vh - 100vw * 9 / 16)"
-        class="!overflow-visible flex column flex-nowrap py-0"
-      >
-        <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
-          Chi tiết
-          <q-btn dense flat round icon="close" v-close-popup />
-        </div>
-        <q-card-section
-          class="relative flex-1 min-h-0 px-2 overflow-y-scroll text-[14px] text-[#9a9a9a] text-weight-normal"
-        >
-          <div>
-            <div class="flex">
-              <q-img
-                :src="data.image"
-                :ratio="280 / 400"
-                width="110px"
-                class="rounded-lg"
-              />
-
-              <div class="pl-2 py-3">
-                <div class="text-[16px] line-clamp-2 text-[#eee] leading-snug">
-                  {{ data.name }}
-                </div>
-                <div class="mt-4">
-                  {{ data.language }}
-                  <span class="mx-1">|</span>
-                  {{ data.contries[0]?.name ?? "unknown" }}
-                </div>
-
-                <div class="mt-2">Phát hành năm {{ data.yearOf }}</div>
-
-                <div class="mt-2">Tập {{ data.duration }} đã cập nhật</div>
-              </div>
-            </div>
-
-            <ul class="mt-8">
-              <li>
-                <span>Tên khác: </span>
-
-                <span class="text-[#eee]">{{ data.othername }}</span>
-              </li>
-              <li class="mt-3">
-                <span>Loại: </span>
-
-                <span class="text-[#eee]">
-                  <q-btn
-                    flat
-                    dense
-                    no-caps
-                    v-for="item in data.genre"
-                    :key="item.name"
-                    class="py-[5px] !min-h-0 px-2 rounded-sm bg-gray-700 mx-1 my-1 inline-block relative"
-                    :to="item.path"
-                    >{{ item.name }}</q-btn
-                  >
-                </span>
-              </li>
-            </ul>
-
-            <div class="mt-5 text-[#eee] text-[16px]">Giới thiệu</div>
-            <p
-              class="mt-3 leading-loose whitespace-pre-wrap"
-              v-html="data.description"
-            />
-
-            <template v-if="data.trailer">
-              <div class="mt-5 text-[#eee] text-[16px]">Trailer</div>
-              <q-video class="mt-3" :src="data.trailer!" :ratio="16 / 9" />
-            </template>
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-    <!--
+      </q-card-section>
+    </q-card>
+  </q-dialog>
+  <!--
       followed
     -->
-  </q-page>
 </template>
 
 <script lang="ts" setup>

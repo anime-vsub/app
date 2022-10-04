@@ -8,6 +8,9 @@ const routes: RouteRecordRaw[] = [
       {
         path: "",
         component: () => import("pages/IndexPage.vue"),
+        meta: {
+          footer: true 
+        }
       },
       {
         name: "phim_[season]_[chap]",
@@ -37,6 +40,34 @@ const routes: RouteRecordRaw[] = [
         path: "bang-xep-hang/:type(day|voted|month|season|year)?",
         alias: ["bang-xep-hang/:type(day|voted|month|season|year).html"],
         component: () => import("pages/bang-xep-hang/[type]-.vue"),
+      },
+      {
+        path: "tim-kiem/:keyword?",
+        component: () => import("pages/tim-kiem/[keyword]-.vue"),
+        meta: {
+          footer: true 
+        }
+      },
+      {
+        path: "news",
+        component: () => import("pages/news.vue"),
+        meta: {
+          footer: true 
+        }
+      },
+      {
+        path: "thong-bao",
+        component: () => null,
+        meta: {
+          footer: true 
+        }
+      },
+      {
+        path: "tai-khoan",
+        component: () => null,
+        meta: {
+          footer: true 
+        }
       },
     ],
   },
