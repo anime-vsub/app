@@ -14,11 +14,11 @@ project(':capacitor-browser').projectDir = new File('../node_modules/.pnpm/@capa
 include ':capacitor-haptics'
 project(':capacitor-haptics').projectDir = new File('../node_modules/.pnpm/@capacitor+haptics@4.0.1_@capacitor+core@4.3.0/node_modules/@capacitor/haptics/android')
 
+include ':capacitor-preferences'
+project(':capacitor-preferences').projectDir = new File('../node_modules/.pnpm/@capacitor+preferences@4.0.1_@capacitor+core@4.3.0/node_modules/@capacitor/preferences/android')
+
 include ':capacitor-status-bar'
 project(':capacitor-status-bar').projectDir = new File('../node_modules/.pnpm/@capacitor+status-bar@4.0.1_@capacitor+core@4.3.0/node_modules/@capacitor/status-bar/android')
 
 include ':hugotomazi-capacitor-navigation-bar'
 project(':hugotomazi-capacitor-navigation-bar').projectDir = new File('../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@2.0.0_@capacitor+core@4.3.0/node_modules/@hugotomazi/capacitor-navigation-bar/android')
-
-include ':capacitor-preferences'
-project(':capacitor-preferences').projectDir = new File('../node_modules/.pnpm/@capacitor+preferences@4.0.1_@capacitor+core@4.3.0/node_modules/@capacitor/preferences/android')
