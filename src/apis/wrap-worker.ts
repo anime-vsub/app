@@ -2,6 +2,11 @@
 import { v4 } from "uuid"
 import type { ArgumentsType } from "vitest"
 
+
+/**
+ * be a responsible person! kill the worker after you get what you need
+ **/
+
 export function WrapWorker<Fn extends (...args: any) => any>(fn: Fn) {
   addEventListener(
     "message",
@@ -30,10 +35,12 @@ export function PostWorker<Fn extends (...args: any) => any>(
     const worker = new createWorker()
     worker.addEventListener("message", (event: MessageEvent) => {
       if (event.data.id === id) {
+        worker.terminate()
         resolve(event.data.result)
       }
     })
     worker.removeEventListener("message", () => {
+      worker.terminate()
       reject()
     })
 

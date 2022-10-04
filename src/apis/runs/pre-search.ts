@@ -5,13 +5,13 @@ import type PreSearchParser from "../parser/pre-search"
 import { PostWorker } from "../wrap-worker"
 
 export async function PreSearch(query: string) {
-  const { data: html } = await get(
+  const { data: html } = (
     (
       await post("/ajax/suggest", {
         ajaxSearch: "1",
         keysearch: query,
       })
-    ).data
+    )
   )
 
   return PostWorker<typeof PreSearchParser>(Worker, html)
