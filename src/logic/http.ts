@@ -9,7 +9,7 @@ export async function get(url: string | HttpOptions) {
     typeof url === "object"
       ? url
       : {
-          url: "https://animevietsub.cc" + url,
+          url: url.includes("://") ? url : "https://animevietsub.cc" + url,
           headers: {
             accept:
               "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
