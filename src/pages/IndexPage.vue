@@ -142,7 +142,7 @@
       }"
       class="swiper-hot"
     >
-      <swiper-slide v-for="(item, index) in data.carousel" :key="index">
+      <swiper-slide v-for="(item, index) in data.carousel" :key="index" v-ripple @click="router.push(item.path)">
         <q-img :ratio="aspectRatio" :src="item.image!" class="poster" />
         <div class="drop-left"></div>
         <div class="drop-center"></div>
