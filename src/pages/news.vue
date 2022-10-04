@@ -50,7 +50,7 @@
     </q-toolbar>
   </q-header>
 
-  <template v-if="data.length === 0">
+  <div class="absolute fit overflow-hidden" v-if="data.length === 0">
     <q-card
       v-for="item in 12"
       :key="item"
@@ -89,7 +89,7 @@
         </q-card-section>
       </div>
     </q-card>
-  </template>
+  </div>
 
   <q-infinite-scroll v-else @load="onLoad" :offset="250">
     <q-card
