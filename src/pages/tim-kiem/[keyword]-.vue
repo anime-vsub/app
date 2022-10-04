@@ -16,7 +16,7 @@
           class="w-full bg-[#2a2a2a] placeholder-[#818181] h-[39px] rounded-[30px] focus-visible:outline-none pl-6"
           placeholder="Tìm kiếm"
           v-model="query"
-          @keyup="query = $event.target.value"
+          @keyup="query = ($event.target as HTMLInputElement).value"
           @focus="searching = true"
           @keypress.enter="onEnter"
         />
@@ -35,7 +35,7 @@
         <q-list dense>
           <q-item
             v-for="item in data"
-            :key="item.name ?? item"
+            :key="typeof item === 'object' ? item.name : item"
             clickable
             v-ripple
             @click="onClickItemPreLoad(item)"
@@ -50,7 +50,7 @@
             <q-item-section>
               <q-item-label class="flex items-center">
                 <div class="max-w-full line-clamp-1">
-                  {{ item.name ?? item }}
+                  {{ typeof item === "object" ? item.name : item }}
                 </div>
                 <div v-if="typeof item === 'object'" class="text-grey pl-2">
                   - {{ item.status.replace(/vietsub/i, "") }}
@@ -121,7 +121,7 @@
           :key="item.name"
           :data="{
             ...item,
-            description: item.othername,
+            description: '',
             process: item.process.replace('Tập ', ''),
           }"
           class="mt-4 mx-3"
@@ -150,36 +150,27 @@
     </swiper>
   </div>
 </template>
-<style lang="scss" scoped>
-.title {
-  background-image: linear-gradient(0deg, #fbd786, #f7797d 70%);
-  -webkit-background-clip: text;
-  color: transparent;
-  display: inline-block;
-  font-weight: 900;
-  font-style: italic;
-  text-transform: uppercase;
-  font-style: 16px;
-}
-</style>
-<script lang="ts" setup>
-import type { Swiper as TSwiper } from "swiper"
-import { Swiper, SwiperSlide } from "swiper/vue"
-import "swiper/css"
-import BottomBlur from "components/BottomBlur.vue"
-import LaodingAnim from "components/LaodingAnim.vue"
-import "dayjs/locale/vi"
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
 
+<script lang="ts" setup>
+import "swiper/css"
 import { Icon } from "@iconify/vue"
+// eslint-disable-next-line import/order
+import BottomBlur from "components/BottomBlur.vue"
+import "dayjs/locale/vi"
 
 import CardVertical from "components/CardVertical.vue"
-import { ref, shallowReactive, watch, watchEffect } from "vue"
-
-import ranks from "src/logic/ranks"
-
+import LaodingAnim from "components/LaodingAnim.vue"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
 import { AjaxItem } from "src/apis/runs/ajax/item"
+import { PreSearch } from "src/apis/runs/pre-search"
+import { useLocalStorage } from "src/composibles/useLocalStorage"
+import ranks from "src/logic/ranks"
+import type { Swiper as TSwiper } from "swiper"
+import { Swiper, SwiperSlide } from "swiper/vue"
+import { ref, shallowReactive, watch, watchEffect } from "vue"
+import { useRequest } from "vue-request"
+import { useRoute, useRouter } from "vue-router"
 
 dayjs.extend(relativeTime)
 
@@ -190,17 +181,15 @@ const types = [
   ["Movie", "top-le-week"],
 ]
 
+const route = useRoute()
+const router = useRouter()
+
 const searching = ref(false)
 const query = ref("")
 
-import { useRequest } from "vue-request"
-import { PreSearch } from "src/apis/runs/pre-search"
+const historySearch = useLocalStorage<string[]>("history_search", [])
 
-import { useLocalStorage } from "src/composibles/useLocalStorage"
-
-const historySearch = useLocalStorage("history_search", [])
-
-const { data, loading, error, run } = useRequest(
+const { data, error, run } = useRequest(
   async () => [
     ...historySearch.value.filter((item) => item.includes(query.value)),
     ...(await PreSearch(query.value)),
@@ -212,6 +201,17 @@ const { data, loading, error, run } = useRequest(
     },
   }
 )
+watch(error, (error) => {
+  if (error)
+    router.push({
+      name: "not_found",
+      params: { pathMatch: route.path },
+      query: {
+        message: error.message,
+        cause: error.cause + "",
+      },
+    })
+})
 
 watchEffect(() => {
   document.body.style.overflow = searching.value ? "hidden" : ""
@@ -222,12 +222,8 @@ function onEnter() {
   historySearch.value.push(query.value)
 }
 
-import { useRouter } from "vue-router"
-
-const router = useRouter()
-
 async function onClickItemPreLoad(
-  item: String | Awaited<ReturnType<typeof PreSearch>>[0],
+  item: string | Awaited<ReturnType<typeof PreSearch>>[0],
   forceFilled?: boolean
 ) {
   if (typeof item === "string") {
@@ -264,19 +260,7 @@ const dataStore = shallowReactive<
   >
 >(new Map())
 // eslint-disable-next-line functional/no-let
-let _dataInStoreTmp:
-  | { status: "pending" | "error"; response?: unknown }
-  | {
-      status: "success"
-      response: {
-        image: string
-        path: string
-        name: string
-        othername: string
-        process: string
-      }[]
-    }
-  | undefined
+let _dataInStoreTmp: ReturnType<typeof dataStore.get>
 
 async function fetchRankType(type: string) {
   if (dataStore.get(type)?.status === "success") return
@@ -287,7 +271,7 @@ async function fetchRankType(type: string) {
     })
     dataStore.set(type, {
       status: "success",
-      response: await AjaxItem(type),
+      response: await AjaxItem(type as "top-bo-week" | "top-le-week"),
     })
   } catch (err) {
     dataStore.set(type, {
@@ -316,3 +300,16 @@ function onSlideChange(swiper: TSwiper) {
   activeIndex.value = swiper.activeIndex
 }
 </script>
+
+<style lang="scss" scoped>
+.title {
+  background-image: linear-gradient(0deg, #fbd786, #f7797d 70%);
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  font-style: 16px;
+}
+</style>

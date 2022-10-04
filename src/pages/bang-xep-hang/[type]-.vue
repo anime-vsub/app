@@ -97,17 +97,17 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import LaodingAnim from "components/LaodingAnim.vue"
 import { BangXepHangType } from "src/apis/runs/bang-xep-hang/[type]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
+import ranks from "src/logic/ranks"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRouter } from "vue-router"
-import BottomBlur from "components/BottomBlur.vue"
 
-import ranks from "src/logic/ranks"
 
 import "swiper/css"
 

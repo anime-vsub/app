@@ -152,6 +152,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import LaodingAnim from "components/LaodingAnim.vue"
 import dayjs from "dayjs"
@@ -167,7 +168,6 @@ import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import BottomBlur from "components/BottomBlur.vue"
 
 dayjs.extend(isToday)
 
