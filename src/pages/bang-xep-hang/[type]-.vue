@@ -9,38 +9,35 @@
         >Bảng xếp hạng</q-toolbar-title
       >
     </q-toolbar>
-    <div
-      class="overflow-x-scroll whitespace-nowrap text-[#9a9a9a] text-center mb-2"
-    >
+    <q-toolbar>
       <div
-        v-for="([name, value], index) in types"
-        :ref="(el) => index === activeIndex && (pagItemActiveRef = el as HTMLDivElement)"
-        :key="value"
-        class="relative inline-block px-4 py-1"
-        v-ripple
-        :class="{
-          'c--main text-weight-medium': index === activeIndex,
-        }"
-        @click="swiperRef?.slideTo(index)"
+        class="overflow-x-scroll whitespace-nowrap text-[#9a9a9a] text-center mb-2"
       >
-        <span
-          :class="
-            index === activeIndex
-              ? `relative inline-block before:content-DEFAULT before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-0 pb-[2px] before:rounded`
-              : undefined
-          "
-          >{{ name }}</span
+        <div
+          v-for="([name, value], index) in types"
+          :ref="(el) => index === activeIndex && (pagItemActiveRef = el as HTMLDivElement)"
+          :key="value"
+          class="relative inline-block px-4 py-1"
+          v-ripple
+          :class="{
+            'c--main text-weight-medium': index === activeIndex,
+          }"
+          @click="swiperRef?.slideTo(index)"
         >
+          <span
+            :class="
+              index === activeIndex
+                ? `relative inline-block before:content-DEFAULT before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-0 pb-[2px] before:rounded`
+                : undefined
+            "
+            >{{ name }}</span
+          >
+        </div>
       </div>
-    </div>
+    </q-toolbar>
   </q-header>
-  <q-page
-    :style-fn="
-      (offset, height) => ({
-        height: `${height - offset}px`,
-      })
-    "
-  >
+
+  <div class="absolute top-0 h-[100%] w-full">
     <swiper
       :slides-per-view="1"
       @swiper="onSwiper"
@@ -74,12 +71,8 @@
           class="mt-4 mx-3"
         >
           <template v-slot:img-content>
-            <div class="update-info-layer" />
-            <img
-              v-if="index < 10"
-              :src="ranks[index]"
-              class="h-[1.5rem]"
-            />
+            <BottomBlur />
+            <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
           </template>
         </CardVertical>
         <div v-else class="h-full flex items-center">
@@ -99,7 +92,7 @@
         </div>
       </swiper-slide>
     </swiper>
-  </q-page>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -112,6 +105,7 @@ import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRouter } from "vue-router"
+import BottomBlur from "components/BottomBlur.vue"
 
 import ranks from "src/logic/ranks"
 
@@ -202,47 +196,4 @@ function onSlideChange(swiper: TSwiper) {
   activeIndex.value = swiper.activeIndex
 }
 </script>
-
-<style lang="scss" scoped>
-.update-info-layer {
-  background-image: linear-gradient(
-    0deg,
-    rgba(10, 12, 15, 0.8) 0%,
-    rgba(10, 12, 15, 0.74) 4%,
-    rgba(10, 12, 15, 0.59) 17%,
-    rgba(10, 12, 15, 0.4) 34%,
-    rgba(10, 12, 15, 0.21) 55%,
-    rgba(10, 12, 15, 0.06) 78%,
-    rgba(10, 12, 15, 0) 100%
-  );
-  background-color: transparent;
-  min-height: 60px;
-  position: absolute;
-  padding: {
-    left: 8px;
-    right: 10px;
-    bottom: 10px;
-    top: 40px;
-  }
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-
-  font-size: 14px;
-  font-weight: 500;
-  @media screen and (max-width: 1680px) {
-    font-size: 12px;
-  }
-  span {
-    color: rgb(255, 255, 255);
-    letter-spacing: 0px;
-  }
-  .star {
-    position: absolute;
-    right: 8px;
-    // right: 10px;
-    bottom: 10px;
-  }
-}
-</style>
+=
