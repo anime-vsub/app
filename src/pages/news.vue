@@ -136,18 +136,19 @@
 
 <script lang="ts" setup>
 import "dayjs/locale/vi"
+import { Browser } from "@capacitor/browser"
+import { Icon } from "@iconify/vue"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
-
-import { Icon } from "@iconify/vue"
-
+import { AjaxItem } from "src/apis/runs/ajax/item"
+import { NewsAnime } from "src/apis/runs/news-anime"
 import { ref, shallowReactive, watch } from "vue"
 
-import { AjaxItem } from "src/apis/ajax/item"
+
+// https://tinanime.com/api/news/?p=3
+
 
 dayjs.extend(relativeTime)
-
-import { NewsAnime } from "src/apis/news-anime"
 
 const viewMode = ref<1 | 2>(1)
 
@@ -162,9 +163,6 @@ async function onLoad(page: number, done: (noMore: boolean) => void) {
 
   done(news.length === 0)
 }
-//https://tinanime.com/api/news/?p=3
-
-import { Browser } from "@capacitor/browser"
 function open(url: string, title: string) {
   Browser.open({ url, windowName: title })
 }

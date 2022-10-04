@@ -157,7 +157,7 @@ import LaodingAnim from "components/LaodingAnim.vue"
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
 import groupArray from "group-array"
-import { LichChieuPhim } from "src/apis/lich-chieu-phim"
+import { LichChieuPhim } from "src/apis/runs/lich-chieu-phim"
 // Import Swiper styles
 import "swiper/css"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"

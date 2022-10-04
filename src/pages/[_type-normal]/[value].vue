@@ -485,7 +485,7 @@
 import { Icon } from "@iconify/vue"
 import GridCard from "components/GridCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
-import { TypeNormalValue } from "src/apis/[type_normal]/[value]"
+import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, reactive, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
