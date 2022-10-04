@@ -30,8 +30,8 @@
       </div>
     </q-toolbar>
 
-    <q-toolbar>
-      <div v-if="searching" class="overflow-x-auto px-2">
+
+      <div v-if="searching" class="fixed h-full w-full overflow-y-auto px-2 bg-dark-page">
         <q-list dense>
           <q-item
             v-for="item in data"
@@ -67,6 +67,7 @@
         </q-list>
       </div>
 
+    <q-toolbar>
       <div v-if="!searching" class="flex items-center mx-3">
         <div>
           <div class="title">Thịnh hành</div>
