@@ -284,11 +284,7 @@
                     @touchmove.stop="onIndicatorMove"
                     @touchend.stop="onIndicatorEnd"
                   >
-                    <img
-                      width="16"
-                      heigth="16"
-                      src="~assets/indicator.svg"
-                    />
+                    <img width="16" heigth="16" src="~assets/indicator.svg" />
                   </div>
                 </div>
               </div>

@@ -3,7 +3,6 @@ import { post } from "src/logic/http"
 import { getPathName } from "./__helpers__/getPathName"
 import { parserDom } from "./__helpers__/parserDom"
 
-
 interface DataItem {
   image: string
   path: string
