@@ -1,5 +1,7 @@
 <template>
-  <div class="update-info-layer" />
+  <div class="update-info-layer">
+    <slot />
+  </div>
 </template>
 
 <style lang="scss" scoped>
