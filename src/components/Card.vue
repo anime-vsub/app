@@ -51,7 +51,6 @@ import { useRouter } from "vue-router"
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
 
-
 const router = useRouter()
 
 defineProps<{

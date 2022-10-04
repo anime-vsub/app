@@ -20,12 +20,10 @@ import { PostWorker } from "src/apis/wrap-worker"
 import { post } from "src/logic/http"
 
 export async function AjaxItem(type: "top-bo-week" | "top-le-week") {
-  const {data: html} = (
-    await post("/ajax/item", {
-      widget: "list-film",
-      type,
-    })
-  )
+  const { data: html } = await post("/ajax/item", {
+    widget: "list-film",
+    type,
+  })
 
   return PostWorker<typeof AjaxItemParser>(Worker, html)
 }

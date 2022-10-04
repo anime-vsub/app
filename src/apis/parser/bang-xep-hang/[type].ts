@@ -1,8 +1,8 @@
 import { getPathName } from "../__helpers__/getPathName"
 import { parserDom } from "../__helpers__/parserDom"
 
-export default  function BangXepHangType(html: string) {
-  const $ =  parserDom(html)
+export default function BangXepHangType(html: string) {
+  const $ = parserDom(html)
 
   return $(".bxh-movie-phimletv > .group")
     .map((_i, item) => {

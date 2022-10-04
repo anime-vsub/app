@@ -17,7 +17,7 @@ function findInfo($: CheerioAPI, infoList: Cheerio<Element>, q: string) {
 }
 
 export default function PhimId(html: string, now: number) {
-  const $ =parserDom(html)
+  const $ = parserDom(html)
 
   const name = $(".Title:eq(0)").text()
   const othername = $(".SubTitle:eq(0)").text()

@@ -4,7 +4,7 @@ import { describe, expect, test } from "vitest"
 
 import html from "../../__test__/apis/data/lich-chieu-phim.txt?raw"
 
-import  LichChieuPhim from "./lich-chieu-phim"
+import LichChieuPhim from "./lich-chieu-phim"
 
 describe("lich-chieu-phim", () => {
   test("normal", async () => {

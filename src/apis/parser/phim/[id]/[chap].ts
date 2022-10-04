@@ -3,7 +3,7 @@ import { dayTextToNum } from "src/logic/dayTextToNum"
 import { parserDom } from "../../__helpers__/parserDom"
 
 export default function PhimIdChap(html: string) {
-  const $ =  parserDom(html)
+  const $ = parserDom(html)
 
   const chaps = $(".list-episode:eq(0)")
     .find("a")
@@ -29,7 +29,6 @@ export default function PhimIdChap(html: string) {
 
   return {
     chaps,
-    update: !day ? null : [dayTextToNum
-      (day.toLowerCase()), +hour, +minus],
+    update: !day ? null : [dayTextToNum(day.toLowerCase()), +hour, +minus],
   }
 }

@@ -9,8 +9,8 @@ const routes: RouteRecordRaw[] = [
         path: "",
         component: () => import("pages/IndexPage.vue"),
         meta: {
-          footer: true 
-        }
+          footer: true,
+        },
       },
       {
         name: "phim_[season]_[chap]",
@@ -45,29 +45,29 @@ const routes: RouteRecordRaw[] = [
         path: "tim-kiem/:keyword?",
         component: () => import("pages/tim-kiem/[keyword]-.vue"),
         meta: {
-          footer: true 
-        }
+          footer: true,
+        },
       },
       {
         path: "news",
         component: () => import("pages/news.vue"),
         meta: {
-          footer: true 
-        }
+          footer: true,
+        },
       },
       {
         path: "thong-bao",
         component: () => null,
         meta: {
-          footer: true 
-        }
+          footer: true,
+        },
       },
       {
         path: "tai-khoan",
         component: () => null,
         meta: {
-          footer: true 
-        }
+          footer: true,
+        },
       },
     ],
   },

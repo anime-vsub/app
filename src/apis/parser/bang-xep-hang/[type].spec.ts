@@ -4,7 +4,7 @@ import { describe, expect, test } from "vitest"
 
 import html from "../../../__test__/apis/data/bang-xep-hang.txt?raw"
 
-import  BangXepHangType  from "./[type]"
+import BangXepHangType from "./[type]"
 
 describe("bang-xep-hang", () => {
   test("normal", async () => {
