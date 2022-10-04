@@ -41,7 +41,7 @@
     </q-toolbar>
   </q-header>
 
-  <div v-if="loading || !data" class="mt-[-50px] loader">
+  <div v-if="loading || !data" class="mt-[-50px] absolute w-full h-[calc(100%+50px)] overflow-hidden loader">
     <div class="swiper-hot">
       <q-responsive :ratio="aspectRatio" class="poster">
         <q-skeleton type="rect" width="100%" height="100%" />
