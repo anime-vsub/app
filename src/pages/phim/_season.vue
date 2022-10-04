@@ -35,9 +35,12 @@
     </div>
   </template>
 
-  <q-responsive :ratio="16 / 9"> </q-responsive>
+  <div
+    v-if="loading || !data"
+    class="absolute w-full h-full overflow-hidden px-2 pt-4 text-[28px]"
+  >
+    <q-responsive :ratio="16 / 9" />
 
-  <div v-if="loading || !data" class="px-2 pt-4 text-[28px]">
     <q-skeleton type="text" class="text-[35px]" width="80%" />
     <q-skeleton type="text" width="100px" class="mt-[-10px]" />
 
@@ -68,6 +71,8 @@
   </div>
 
   <template v-else>
+    <q-responsive :ratio="16 / 9" />
+
     <div v-ripple @click="showDialogInforma = true" class="relative">
       <div class="relative flex items-end justify-between mx-[10px]">
         <div class="flex-1 mt-4 mb-2">
@@ -251,11 +256,11 @@
         :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
       />
     </q-tabs>
-  </template>
 
-  <div class="px-1">
-    <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
-  </div>
+    <div class="px-1">
+      <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
+    </div>
+  </template>
 
   <!-- bottom sheet -->
   <q-dialog
@@ -298,6 +303,7 @@
             v-for="({ value }, index) in allSeasons"
             :key="index"
             :name="value"
+            class="flex justify-around place-items-center place-content-start"
           >
             <div
               v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
@@ -532,8 +538,6 @@ async function fetchSeason(season: string) {
 
     const response = await PhimIdChap(season)
 
-    console.log(response)
-
     if (response.chaps.length === 0) {
       console.warn("chaps not found")
       response.chaps = [
@@ -546,6 +550,11 @@ async function fetchSeason(season: string) {
           name: "Trailer",
         },
       ]
+    } else if (response.chaps.length > 50) {
+      console.log("large chap. spliting...")
+      const { chaps } = response.chaps
+      response.chaps = chaps.slice(0, 50)
+      console.log("other: ", chaps.slice(50).length)
     }
 
     _cacheDataSeasons.set(season, {
@@ -565,18 +574,12 @@ const seasonActive = ref<string>()
 // sync data by active route
 watch(currentSeason, (val) => (seasonActive.value = val), { immediate: true })
 
-watch(
-  seasonActive,
-  (seasonActive) => {
-    if (!seasonActive) return
+watch(seasonActive, (seasonActive) => {
+  if (!seasonActive) return
 
-    // download data season active
-    fetchSeason(seasonActive)
-  },
-  {
-    immediate: true,
-  }
-)
+  // download data season active
+  fetchSeason(seasonActive)
+})
 
 const currentDataSeason = computed(() => {
   const inCache = _cacheDataSeasons.get(currentSeason.value)
