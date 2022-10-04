@@ -4,7 +4,7 @@ import { describe, expect, test } from "vitest"
 
 import html from "../../../__test__/apis/data/phim/tonikaku-kawaii-a3860.txt?raw"
 
-import  PhimId  from "./[id]"
+import PhimId from "./[id]"
 
 describe("[id]", () => {
   test("normal", async () => {

@@ -1,7 +1,7 @@
 import { getInfoTPost } from "../__helpers__/getInfoTPost"
 import { parserDom } from "../__helpers__/parserDom"
 
-export default  function TypeNormalValue(
+export default function TypeNormalValue(
   html: string,
   now: number,
   onlyItems: boolean

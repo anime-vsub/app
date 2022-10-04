@@ -108,7 +108,6 @@ import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRouter } from "vue-router"
 
-
 import "swiper/css"
 
 const router = useRouter()

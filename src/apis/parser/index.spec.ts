@@ -4,7 +4,7 @@ import { describe, expect, test } from "vitest"
 
 import html from "../../__test__/apis/data/index.txt?raw"
 
-import Index  from "."
+import Index from "."
 
 describe("Index", () => {
   test("normal", async () => {

@@ -6,7 +6,7 @@ import { describe, expect, test } from "vitest"
 import html2 from "../../../../__test__/apis/data/phim/hataraku-maou-sama-2nd-season-a4257/tap-01-85227.txt?raw"
 import html from "../../../../__test__/apis/data/phim/tonikaku-kawaii-a3860/xem-phim-72839.txt?raw"
 
-import PhimIdChap  from "./[chap]"
+import PhimIdChap from "./[chap]"
 
 describe("[chap]", () => {
   test("no update", async () => {

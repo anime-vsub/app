@@ -41,7 +41,10 @@
     </q-toolbar>
   </q-header>
 
-  <div v-if="loading || !data" class="mt-[-50px] absolute w-full h-[calc(100%+50px)] overflow-hidden loader">
+  <div
+    v-if="loading || !data"
+    class="mt-[-50px] absolute w-full h-[calc(100%+50px)] overflow-hidden loader"
+  >
     <div class="swiper-hot">
       <q-responsive :ratio="aspectRatio" class="poster">
         <q-skeleton type="rect" width="100%" height="100%" />
@@ -142,7 +145,12 @@
       }"
       class="swiper-hot"
     >
-      <swiper-slide v-for="(item, index) in data.carousel" :key="index" v-ripple @click="router.push(item.path)">
+      <swiper-slide
+        v-for="(item, index) in data.carousel"
+        :key="index"
+        v-ripple
+        @click="router.push(item.path)"
+      >
         <q-img :ratio="aspectRatio" :src="item.image!" class="poster" />
         <div class="drop-left"></div>
         <div class="drop-center"></div>
