@@ -30,42 +30,44 @@
       </div>
     </q-toolbar>
 
-
-      <div v-if="searching" class="fixed h-full w-full overflow-y-auto px-2 bg-dark-page">
-        <q-list dense>
-          <q-item
-            v-for="item in data"
-            :key="typeof item === 'object' ? item.name : item"
-            clickable
-            v-ripple
-            @click="onClickItemPreLoad(item)"
-          >
-            <q-item-section avatar class="min-w-0">
-              <Icon
-                v-if="typeof item === 'object'"
-                icon="fluent:search-24-regular"
-              />
-              <Icon v-else icon="fluent:history-24-regular" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label class="flex items-center">
-                <div class="max-w-full line-clamp-1">
-                  {{ typeof item === "object" ? item.name : item }}
-                </div>
-                <div v-if="typeof item === 'object'" class="text-grey pl-2">
-                  - {{ item.status.replace(/vietsub/i, "") }}
-                </div>
-              </q-item-label>
-            </q-item-section>
-            <q-item-section avatar class="min-w-0">
-              <Icon
-                icon="fluent:arrow-up-left-24-regular"
-                @click.stop="onClickItemPreLoad(item, true)"
-              />
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </div>
+    <div
+      v-if="searching"
+      class="fixed h-full w-full overflow-y-auto px-2 bg-dark-page"
+    >
+      <q-list dense>
+        <q-item
+          v-for="item in data"
+          :key="typeof item === 'object' ? item.name : item"
+          clickable
+          v-ripple
+          @click="onClickItemPreLoad(item)"
+        >
+          <q-item-section avatar class="min-w-0">
+            <Icon
+              v-if="typeof item === 'object'"
+              icon="fluent:search-24-regular"
+            />
+            <Icon v-else icon="fluent:history-24-regular" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="flex items-center">
+              <div class="max-w-full line-clamp-1">
+                {{ typeof item === "object" ? item.name : item }}
+              </div>
+              <div v-if="typeof item === 'object'" class="text-grey pl-2">
+                - {{ item.status.replace(/vietsub/i, "") }}
+              </div>
+            </q-item-label>
+          </q-item-section>
+          <q-item-section avatar class="min-w-0">
+            <Icon
+              icon="fluent:arrow-up-left-24-regular"
+              @click.stop="onClickItemPreLoad(item, true)"
+            />
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </div>
 
     <q-toolbar>
       <div v-if="!searching" class="flex items-center mx-3">

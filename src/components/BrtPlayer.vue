@@ -426,13 +426,13 @@
             v-model="seasonActive"
             animated
             keep-alive
-            class="overflow-y-scroll flex-1 mt-4 bg-transparent"
+            class="flex-1 mt-4 bg-transparent"
           >
             <q-tab-panel
               v-for="{ value } in allSeasons"
               :key="value"
               :name="value"
-              class="!h-[45px] py-0 !px-0"
+              class="h-full py-0 !px-0 flex justify-around place-items-center place-content-start relative overflow-y-auto pb-3"
             >
               <div
                 v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
@@ -682,11 +682,6 @@ const props = defineProps<{
   >
   fetchSeason: (season: string) => Promise<void>
 }>()
-const uniqueCurChap = computed(() =>
-  props.currentChap && props.currentSeason
-    ? `${props.currentChap}@${props.currentSeason}`
-    : undefined
-)
 
 // ===== setup effect =====
 
@@ -742,7 +737,11 @@ const setArtPlaying = (playing: boolean) => {
     if (!video.value.paused) video.value.pause()
   }
 }
-watch(uniqueCurChap, () => setArtPlaying(true), { immediate: true })
+watch(
+  () => props.currentChap,
+  () => setArtPlaying(true),
+  { immediate: true }
+)
 // eslint-disable-next-line functional/no-let
 let artEnded = false
 const artLoading = ref(true)
@@ -755,7 +754,10 @@ const setArtCurrentTime = (currentTime: number) => {
   }
   video.value.currentTime = currentTime
 }
-watch(uniqueCurChap, () => setArtCurrentTime(0))
+watch(
+  () => props.currentChap,
+  () => setArtCurrentTime(0)
+)
 const artPercentageResourceLoaded = ref<number>(0)
 const artPlaybackRate = ref(1)
 const setArtPlaybackRate = (value: number) => {
@@ -847,7 +849,7 @@ function onVideoCanPlay() {
 }
 const saveCurTimeToPer = debounce(async () => {
   localStorage.setItem(
-    `cur_time:${uniqueCurChap.value}`,
+    `cur_time:${props.currentChap}`,
     JSON.stringify(artCurrentTime.value)
   )
   console.log("saaved to per")
@@ -918,10 +920,9 @@ function runRemount() {
 import { onBeforeUnmount } from "vue"
 
 let currentHls: Hls
-onBeforeUnmount(() => 
-      currentHls?.destroy())
+onBeforeUnmount(() => currentHls?.destroy())
 function remount() {
-      currentHls?.destroy()
+  currentHls?.destroy()
 
   if (!currentStream.value) {
     $q.notify({
