@@ -242,8 +242,9 @@
       active-class="c--main"
       indicator-color="transparent"
       v-if="
-       seasons && ( seasons.length > 1 ||
-        (seasons.length === 0 && seasons[0].name !== '#default') )
+        seasons &&
+        (seasons.length > 1 ||
+          (seasons.length === 0 && seasons[0].name !== '#default'))
       "
     >
       <q-tab
@@ -285,9 +286,9 @@
           inline-label
           active-class="c--main"
           v-if="
-          seasons && (
-            seasons.length > 1 ||
-            (seasons.length === 0 && seasons[0].name !== '#default'))
+            seasons &&
+            (seasons.length > 1 ||
+              (seasons.length === 0 && seasons[0].name !== '#default'))
           "
         >
           <q-tab
@@ -462,24 +463,27 @@ const currentMetaSeason = computed(() => {
   return seasons.value?.find((item) => item.value === currentSeason.value)
 })
 const realIdCurrentSeason = computed(() => {
-  if (!currentSeason.value) return 
+  if (!currentSeason.value) return
 
-  const lastIndexDolar =currentSeason.value.lastIndexOf("$")
+  const lastIndexDolar = currentSeason.value.lastIndexOf("$")
 
-console.log( currentSeason.value.slice(0, lastIndexDolar) )
+  console.log(currentSeason.value.slice(0, lastIndexDolar))
 
-if (lastIndexDolar === -1) return currentSeason.value
+  if (lastIndexDolar === -1) return currentSeason.value
 
   return currentSeason.value.slice(0, lastIndexDolar)
 })
 
 const { data, run, error, loading } = useRequest(
   () => {
-
     // const { }
-  return  (realIdCurrentSeason.value ? PhimId(realIdCurrentSeason.value) : Promise.reject())
+    return realIdCurrentSeason.value
+      ? PhimId(realIdCurrentSeason.value)
+      : Promise.reject()
   },
   {
+    cacheKey: () => `/phim/${realIdCurrentSeason.value}`,
+    cacheTime: 5 * 60 * 1000, // 5 minutes
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
       run()
@@ -499,33 +503,37 @@ watch(error, (error) => {
 })
 
 const seasons = ref()
-watch(data, () => {
-  if (!data.value) {
-    seasons.value = undefined
+watch(
+  data,
+  () => {
+    if (!data.value) {
+      seasons.value = undefined
 
-    return
-  }
+      return
+    }
 
-  console.log("data refreshed")
+    console.log("data refreshed")
 
-  const season = data.value.season ?? []
+    const season = data.value.season ?? []
 
-  if (season.length > 0) {
-    seasons.value = season.map((item) => {
-      return {
-        name: item.name,
-        value: router.resolve(item.path).params.season as string,
-      }
-    })
-  }
+    if (season.length > 0) {
+      seasons.value = season.map((item) => {
+        return {
+          name: item.name,
+          value: router.resolve(item.path).params.season as string,
+        }
+      })
+    }
 
-  seasons.value = [
-    {
-      name: "#default",
-      value: currentSeason.value,
-    },
-  ]
-}, { immediate: true })
+    seasons.value = [
+      {
+        name: "#default",
+        value: currentSeason.value,
+      },
+    ]
+  },
+  { immediate: true }
+)
 
 interface ResponseDataSeasonPending {
   status: "pending"
@@ -563,8 +571,9 @@ async function fetchSeason(season: string) {
   try {
     console.log("fetch chaps on season")
 
-const lastIndexDolar = season.lastIndexOf("$")
-const realIdSeason = lastIndexDolar === -1 ? season : season.slice(0, lastIndexDolar)
+    const lastIndexDolar = season.lastIndexOf("$")
+    const realIdSeason =
+      lastIndexDolar === -1 ? season : season.slice(0, lastIndexDolar)
 
     const response = await PhimIdChap(realIdSeason)
 
@@ -584,38 +593,38 @@ const realIdSeason = lastIndexDolar === -1 ? season : season.slice(0, lastIndexD
       console.log("large chap. spliting...")
       const { chaps } = response
 
-const indexMetaSeason = (seasons.value.findIndex(item => item.value === season) >>> 0)
-const nameSeason  = seasons.value [ indexMetaSeason ].name;
+      const indexMetaSeason =
+        seasons.value.findIndex((item) => item.value === season) >>> 0
+      const nameSeason = seasons.value[indexMetaSeason].name
 
       seasons.value.splice(
         indexMetaSeason,
         1,
-        ...unflat(chaps, 50)
-        .map((chaps, index) => {
-          const value = index === 0 ?realIdSeason : `${realIdSeason}$${index}`
-const name = `${nameSeason} (${chaps[0].name} - ${chaps[chaps.length - 1].name})`
+        ...unflat(chaps, 50).map((chaps, index) => {
+          const value = index === 0 ? realIdSeason : `${realIdSeason}$${index}`
+          const name = `${nameSeason} (${chaps[0].name} - ${
+            chaps[chaps.length - 1].name
+          })`
 
-console.log("set %s by %s", value, chaps[0].id)
-
+          console.log("set %s by %s", value, chaps[0].id)
 
           _cacheDataSeasons.set(value, {
             status: "success",
             response: {
               ...response,
               chaps,
-            }
+            },
           })
 
           return {
             name,
-            value
+            value,
           }
         })
       )
 
-
-      console.log(seasons.value )
-return 
+      console.log(seasons.value)
+      return
     }
 
     _cacheDataSeasons.set(season, {

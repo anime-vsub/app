@@ -37,7 +37,7 @@
       <q-list dense>
         <q-item
           v-for="item in data"
-          :key="typeof item === 'object' ? 'B'+item.name : item"
+          :key="typeof item === 'object' ? 'B' + item.name : item"
           clickable
           v-ripple
           @click="onClickItemPreLoad(item)"
@@ -92,13 +92,12 @@
         </div>
       </div>
     </q-toolbar>
-    <q-toolbar v-else >
-    <div class="text-subtitle2 text-weight-regular mx-2">
-      <span class="text-grey">Kết quả tìm kiếm cho: </span>{{query}}
-    </div>
-  </q-toolbar>
+    <q-toolbar v-else>
+      <div class="text-subtitle2 text-weight-regular mx-2">
+        <span class="text-grey">Kết quả tìm kiếm cho: </span>{{ query }}
+      </div>
+    </q-toolbar>
   </q-header>
-
 
   <div v-if="!route.params.keyword" class="absolute top-0 h-[100%] w-full">
     <!-- swiper -->
@@ -159,31 +158,23 @@
     </swiper>
   </div>
   <template v-else>
-        <div
-          v-if="
-           loadingSearch
-          "
-          class="absolute h-full w-full flex items-center"
-        >
-          <LaodingAnim />
-        </div>
-        <template 
-          v-else-if="resultSearch">
-        
-  <div v-if="resultSearch.items.length === 0" class="text-center py-20">
-    <img
-      src="~assets/img_tips_error_not_foud.png"
-      width="186"
-      height="174"
-      class="mx-auto"
-    />
+    <div v-if="loadingSearch" class="absolute h-full w-full flex items-center">
+      <LaodingAnim />
+    </div>
+    <template v-else-if="resultSearch">
+      <div v-if="resultSearch.items.length === 0" class="text-center py-20">
+        <img
+          src="~assets/img_tips_error_not_foud.png"
+          width="186"
+          height="174"
+          class="mx-auto"
+        />
 
-    <div class="text-subtitle1 mt-1">Không tìm thấy gì cả.</div>
-  </div>
+        <div class="text-subtitle1 mt-1">Không tìm thấy gì cả.</div>
+      </div>
 
-
-  <q-infinite-scroll v-else @load="moreSearch" :offset="250">
-<CardVertical
+      <q-infinite-scroll v-else @load="moreSearch" :offset="250">
+        <CardVertical
           v-for="(item, index) in resultSearch.items"
           :key="item.name"
           :data="{
@@ -196,31 +187,30 @@
           <template v-slot:img-content>
             <BottomBlur />
           </template>
-  </CardVertical>
+        </CardVertical>
 
-    <template v-slot:loading>
-      <div class="row justify-center q-my-md">
-        <q-spinner-dots color="primary" size="40px" />
-      </div>
-    </template>
-
-</q-infinite-scroll>
+        <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner-dots color="primary" size="40px" />
+          </div>
         </template>
-        <div v-else class="absolute h-full w-full flex items-center">
-          <div class="text-center w-full">
-            <img src="~assets/ic_22_cry.png" width="240" class="mx-auto" />
-            <br />
-            <q-btn
-              dense
-              no-caps
-              outline
-              class="px-2"
-              @click="runSearch"
-              style="color: #00be06"
-              >Thử lại</q-btn
-            >
-        </div>
+      </q-infinite-scroll>
+    </template>
+    <div v-else class="absolute h-full w-full flex items-center">
+      <div class="text-center w-full">
+        <img src="~assets/ic_22_cry.png" width="240" class="mx-auto" />
+        <br />
+        <q-btn
+          dense
+          no-caps
+          outline
+          class="px-2"
+          @click="runSearch"
+          style="color: #00be06"
+          >Thử lại</q-btn
+        >
       </div>
+    </div>
   </template>
 </template>
 
@@ -276,7 +266,7 @@ const { data, error, run } = useRequest(
   ],
   {
     refreshDeps: [query],
-    manual: !!route.params.keyword,
+    manual: true,
     refreshDepsAction() {
       debounceRun()
     },
@@ -351,7 +341,9 @@ import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { useRequest } from "vue-request"
 
 
-const { loading : loadingSearch, runSearch, data: resultSearch } = useRequest(() => TypeNormalValue("tim-kiem", route.params.keyword, 1, true), {
+const { loading : loadingSearch, runSearch, data: resultSearch } = useRequest(() => TypeNormalValue("tim-kiem", route.params.keyword, 1, true), {, {
+  cacheKey: () => `tim-kiem/${route.params.keyword}`,
+  cacheTime: 5 * 60 * 1000, // 5 minutes
   refreshDeps: [() => route.params.keyword],    manual: !route.params.keyword,
   refreshDepsAction() {
     run()

@@ -342,7 +342,10 @@ const router = useRouter()
 
 const aspectRatio = 622 / 350
 
-const { data, loading, error } = useRequest(() => Index())
+const { data, loading, error } = useRequest(() => Index(), {
+  cacheKey: "Index",
+  cacheTime: 5 * 60 * 1000, // 5 minutes
+})
 watch(error, (error) => {
   if (error)
     router.push({

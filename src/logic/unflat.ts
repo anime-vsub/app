@@ -1,16 +1,15 @@
 export function unflat<T>(array: T[], size: number): T[][] {
-	const { length } = array
-const max = ~~(length / size)
+  const { length } = array
+  const max = ~~(length / size)
 
-const result: T[][] = []
+  const result: T[][] = []
 
-	for (let i  = 0; i < max; i++) {
-		const index = i * size 
-result.push( array.slice( index, index + size ) )
-	}
+  for (let i = 0; i < max; i++) {
+    const index = i * size
+    result.push(array.slice(index, index + size))
+  }
 
-	if (max * size < length)
-	result.push(array.slice(max * size))
+  if (max * size < length) result.push(array.slice(max * size))
 
-return result 
+  return result
 }

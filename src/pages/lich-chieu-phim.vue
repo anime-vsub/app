@@ -174,7 +174,10 @@ dayjs.extend(isToday)
 const route = useRoute()
 const router = useRouter()
 
-const { data, loading, error } = useRequest(() => LichChieuPhim())
+const { data, loading, error } = useRequest(() => LichChieuPhim(), {
+  cacheKey: "LichChieuPhim",
+  cacheTime: 5 * 60 * 1000, // 5 minutes
+})
 watch(error, (error) => {
   if (error)
     router.push({

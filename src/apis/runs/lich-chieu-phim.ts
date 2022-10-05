@@ -3,10 +3,13 @@ import { get } from "src/logic/http"
 
 import type LichChieuPhimParser from "../parser/lich-chieu-phim"
 import { PostWorker } from "../wrap-worker"
+import { useCache } from "src/apis/useCache"
 
 export async function LichChieuPhim() {
-  const { data: html } = await get("/lich-chieu-phim.html")
-  const now = Date.now()
+  return await useCache("/lich-chieu-phim", async () => {
+    const { data: html } = await get("/lich-chieu-phim.html")
+    const now = Date.now()
 
-  return PostWorker<typeof LichChieuPhimParser>(Worker, html, now)
+    return PostWorker<typeof LichChieuPhimParser>(Worker, html, now)
+  })
 }

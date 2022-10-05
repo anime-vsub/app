@@ -30,11 +30,7 @@
           />
           Trang chủ
         </q-route-tab>
-        <q-route-tab
-          active-class="tab-active"
-          class="pt-1"
-          to="/tim-kiem"
-        >
+        <q-route-tab active-class="tab-active" class="pt-1" to="/tim-kiem">
           <Icon
             icon="fluent:search-24-regular"
             width="24"
