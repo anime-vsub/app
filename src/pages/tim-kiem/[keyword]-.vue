@@ -69,8 +69,8 @@
       </q-list>
     </div>
 
-    <q-toolbar>
-      <div v-if="!route.params.keyword && !searching" class="flex items-center mx-3">
+    <q-toolbar v-if="!route.params.keyword && !searching">
+      <div class="flex items-center mx-3">
         <div>
           <div class="title">Thịnh hành</div>
           <span
@@ -92,7 +92,13 @@
         </div>
       </div>
     </q-toolbar>
+    <q-toolbar v-else >
+    <div class="text-subtitle2 text-weight-regular mx-2">
+      <span class="text-grey">Kết quả tìm kiếm cho: </span>{{query}}
+    </div>
+  </q-toolbar>
   </q-header>
+
 
   <div v-if="!route.params.keyword" class="absolute top-0 h-[100%] w-full">
     <!-- swiper -->
@@ -152,6 +158,70 @@
       </swiper-slide>
     </swiper>
   </div>
+  <template v-else>
+        <div
+          v-if="
+           loadingSearch
+          "
+          class="absolute h-full w-full flex items-center"
+        >
+          <LaodingAnim />
+        </div>
+        <template 
+          v-else-if="resultSearch">
+        
+  <div v-if="resultSearch.items.length === 0" class="text-center py-20">
+    <img
+      src="~assets/img_tips_error_not_foud.png"
+      width="186"
+      height="174"
+      class="mx-auto"
+    />
+
+    <div class="text-subtitle1 mt-1">Không tìm thấy gì cả.</div>
+  </div>
+
+
+  <q-infinite-scroll v-else @load="moreSearch" :offset="250">
+<CardVertical
+          v-for="(item, index) in resultSearch.items"
+          :key="item.name"
+          :data="{
+            ...item,
+            description: '',
+            process: item.process.replace('Tập ', ''),
+          }"
+          class="mt-4 mx-3"
+        >
+          <template v-slot:img-content>
+            <BottomBlur />
+          </template>
+  </CardVertical>
+
+    <template v-slot:loading>
+      <div class="row justify-center q-my-md">
+        <q-spinner-dots color="primary" size="40px" />
+      </div>
+    </template>
+
+</q-infinite-scroll>
+        </template>
+        <div v-else class="absolute h-full w-full flex items-center">
+          <div class="text-center w-full">
+            <img src="~assets/ic_22_cry.png" width="240" class="mx-auto" />
+            <br />
+            <q-btn
+              dense
+              no-caps
+              outline
+              class="px-2"
+              @click="runSearch"
+              style="color: #00be06"
+              >Thử lại</q-btn
+            >
+        </div>
+      </div>
+  </template>
 </template>
 
 <script lang="ts" setup>
@@ -271,10 +341,29 @@ async function onClickItemPreLoad(
   searching.value = false
 }
 
+
+// ================= unknown ===============
+
+
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
-watch(() => route.params.keyword, async keyword => {
-  console.log(await TypeNormalValue("tim-kiem", keyword, 1, true))
-}, { immediate: true })
+
+
+import { useRequest } from "vue-request"
+
+
+const { loading : loadingSearch, runSearch, data: resultSearch } = useRequest(() => TypeNormalValue("tim-kiem", route.params.keyword, 1, true), {
+  refreshDeps: [() => route.params.keyword],    manual: !route.params.keyword,
+  refreshDepsAction() {
+    run()
+  }
+})
+
+
+async function moreSearch(page: number, done: (noMore: boolean) => void) {
+  if (runSearch.value.curPage === runSearch.value.maxPage) done(true)
+
+resultSearch.value = await TypeNormalValue("tim-kiem", route.params.keyword, page + 1, true)
+}
 
 // =========== load top anime ============
 
@@ -321,7 +410,7 @@ watch(
   (activeIndex) => {
     fetchRankType(types[activeIndex][1])
   },
-  { immediate: true }
+  { immediate: !route.params.keyword }
 )
 
 function onSwiper(swiper: TSwiper) {
