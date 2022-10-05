@@ -412,7 +412,7 @@
             indicator-color="transparent"
           >
             <q-tab
-              v-for="item in allSeasons"
+              v-for="item in seasons"
               :key="item.value"
               :name="item.value"
               :label="item.name"
@@ -429,7 +429,7 @@
             class="flex-1 mt-4 bg-transparent"
           >
             <q-tab-panel
-              v-for="{ value } in allSeasons"
+              v-for="{ value } in seasons"
               :key="value"
               :name="value"
               class="h-full py-0 !px-0 flex justify-around place-items-center place-content-start relative overflow-y-auto pb-3"
@@ -669,7 +669,7 @@ const props = defineProps<{
   }
   name: string
   poster?: string
-  allSeasons?: {
+  seasons?: {
     value: string
     path: string
     name: string
