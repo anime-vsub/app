@@ -31,7 +31,7 @@
           Trang chủ
         </q-route-tab>
         <q-route-tab
-          exact-active-class="tab-active"
+          active-class="tab-active"
           class="pt-1"
           to="/tim-kiem"
         >

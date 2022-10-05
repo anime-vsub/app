@@ -8,26 +8,26 @@ export async function TypeNormalValue(
   value: string | string[],
   page = 1,
   onlyItems: boolean,
-  options: {
+  options?: {
     genres: string[]
     seaser: string | null
     sorter: string | null
     typer: string | null
     year: string | null
   },
-  defaultsOptions: {
+  defaultsOptions?: {
     genres?: string
     seaser?: string
     typer?: string
     year?: string
   }
 ) {
-  const isCustom =
+  const isCustom = options && (
     options.genres.length > 0 ||
     options.seaser ||
     options.typer ||
     options.year ||
-    /* exclude */ type === "danh-sach"
+    /* exclude */ type === "danh-sach")
 
   const { data: html } = isCustom
     ? await get(

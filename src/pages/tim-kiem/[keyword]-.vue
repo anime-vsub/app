@@ -6,8 +6,8 @@
         dense
         round
         class="mr-2"
-        v-show="searching"
-        @click="searching = false"
+        v-show="route.params.keyword || searching"
+        @click="onBack"
       >
         <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
       </q-btn>
@@ -22,7 +22,7 @@
         />
         <button
           class="text-[#aaa] absolute right-6 top-0 h-full flex items-center"
-          v-show="searching && query"
+          v-show="query"
           @click="query = ''"
         >
           <Icon icon="ep:close-bold" />
@@ -37,7 +37,7 @@
       <q-list dense>
         <q-item
           v-for="item in data"
-          :key="typeof item === 'object' ? item.name : item"
+          :key="typeof item === 'object' ? 'B'+item.name : item"
           clickable
           v-ripple
           @click="onClickItemPreLoad(item)"
@@ -70,7 +70,7 @@
     </div>
 
     <q-toolbar>
-      <div v-if="!searching" class="flex items-center mx-3">
+      <div v-if="!route.params.keyword && !searching" class="flex items-center mx-3">
         <div>
           <div class="title">Thịnh hành</div>
           <span
@@ -94,7 +94,7 @@
     </q-toolbar>
   </q-header>
 
-  <div class="absolute top-0 h-[100%] w-full">
+  <div v-if="!route.params.keyword" class="absolute top-0 h-[100%] w-full">
     <!-- swiper -->
 
     <swiper
@@ -174,6 +174,7 @@ import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import { debounce } from "quasar"
 
 dayjs.extend(relativeTime)
 
@@ -188,19 +189,26 @@ const route = useRoute()
 const router = useRouter()
 
 const searching = ref(false)
-const query = ref("")
+const query = ref((route.params.keyword ?? "") + "")
 
 const historySearch = useLocalStorage<string[]>("history_search", [])
 
+const debounceRun = debounce(() => run(), 100)
+
 const { data, error, run } = useRequest(
   async () => [
-    ...historySearch.value.filter((item) => item.includes(query.value)),
+    ...[...new Set([
+        ...historySearch.value,
+        query.value
+      ])]
+    .filter((item) => item.includes(query.value)),
     ...(await PreSearch(query.value)),
   ],
   {
     refreshDeps: [query],
+    manual: !!route.params.keyword,
     refreshDepsAction() {
-      run()
+      debounceRun()
     },
   }
 )
@@ -222,7 +230,23 @@ watchEffect(() => {
 
 function onEnter() {
   // save to history search
-  historySearch.value.push(query.value)
+  historySearch.value = [
+    ...new Set([
+      ...historySearch.value,
+      query.value
+    ])
+  ]
+  if(route.params.keyword)
+  router.replace(`/tim-kiem/${encodeURIComponent(query.value)}`)
+else   router.push(`/tim-kiem/${encodeURIComponent(query.value)}`)
+
+  searching.value = false
+}
+function onBack() {
+  searching.value = false
+
+  if(route.params.keyword)
+    router.back()
 }
 
 async function onClickItemPreLoad(
@@ -246,6 +270,11 @@ async function onClickItemPreLoad(
 
   searching.value = false
 }
+
+import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
+watch(() => route.params.keyword, async keyword => {
+  console.log(await TypeNormalValue("tim-kiem", keyword, 1, true))
+}, { immediate: true })
 
 // =========== load top anime ============
 

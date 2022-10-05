@@ -16,5 +16,5 @@ export function parseTime(seconds: number): string {
   const hours = ~~(minutes / 60)
   minutes -= hours * 60
 
-  return `${toFixed(hours)}:${toFixed(minutes)}:${toFixed(~~seconds)}}`
+  return `${toFixed(hours)}:${toFixed(minutes)}:${toFixed(~~seconds)}`
 }
