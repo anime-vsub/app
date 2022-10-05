@@ -32,6 +32,13 @@ export async function get(url: string | HttpOptions) {
           },
         }
   )
+  .then(response => {
+    if (response.status === 403 || response.status === 520) {
+console.log("response fail")
+    }
+
+    return response
+  })
 
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
