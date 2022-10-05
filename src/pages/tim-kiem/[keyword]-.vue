@@ -257,11 +257,9 @@ const debounceRun = debounce(() => run(), 100)
 
 const { data, error, run } = useRequest(
   async () => [
-    ...[...new Set([
-        ...historySearch.value,
-        query.value
-      ])]
-    .filter((item) => item.includes(query.value)),
+    ...[...new Set([...historySearch.value, query.value])].filter((item) =>
+      item.includes(query.value)
+    ),
     ...(await PreSearch(query.value)),
   ],
   {
@@ -290,23 +288,17 @@ watchEffect(() => {
 
 function onEnter() {
   // save to history search
-  historySearch.value = [
-    ...new Set([
-      ...historySearch.value,
-      query.value
-    ])
-  ]
-  if(route.params.keyword)
-  router.replace(`/tim-kiem/${encodeURIComponent(query.value)}`)
-else   router.push(`/tim-kiem/${encodeURIComponent(query.value)}`)
+  historySearch.value = [...new Set([...historySearch.value, query.value])]
+  if (route.params.keyword)
+    router.replace(`/tim-kiem/${encodeURIComponent(query.value)}`)
+  else router.push(`/tim-kiem/${encodeURIComponent(query.value)}`)
 
   searching.value = false
 }
 function onBack() {
   searching.value = false
 
-  if(route.params.keyword)
-    router.back()
+  if (route.params.keyword) router.back()
 }
 
 async function onClickItemPreLoad(
@@ -331,30 +323,38 @@ async function onClickItemPreLoad(
   searching.value = false
 }
 
-
 // ================= unknown ===============
-
 
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 
-
-import { useRequest } from "vue-request"
-
-
-const { loading : loadingSearch, runSearch, data: resultSearch } = useRequest(() => TypeNormalValue("tim-kiem", route.params.keyword, 1, true), {, {
-  cacheKey: () => `tim-kiem/${route.params.keyword}`,
-  cacheTime: 5 * 60 * 1000, // 5 minutes
-  refreshDeps: [() => route.params.keyword],    manual: !route.params.keyword,
-  refreshDepsAction() {
-    run()
+const {
+  loading: loadingSearch,
+  data: resultSearch,
+  run: runSearch,
+} = useRequest(
+  () => TypeNormalValue("tim-kiem", route.params.keyword, 1, true),
+  {
+    cacheKey: () => `tim-kiem/${route.params.keyword}`,
+    cacheTime: 5 * 60 * 1000, // 5 minutes
   }
-})
-
+)
+watch(() => route.params.keyword, runSearch, { immediate: true })
 
 async function moreSearch(page: number, done: (noMore: boolean) => void) {
-  if (runSearch.value.curPage === runSearch.value.maxPage) done(true)
+  if (
+    resultSearch.value &&
+    resultSearch.value.curPage === resultSearch.value.maxPage
+  )
+    return done(true)
 
-resultSearch.value = await TypeNormalValue("tim-kiem", route.params.keyword, page + 1, true)
+  resultSearch.value = await TypeNormalValue(
+    "tim-kiem",
+    route.params.keyword,
+    page + 1,
+    true
+  )
+
+  done()
 }
 
 // =========== load top anime ============
