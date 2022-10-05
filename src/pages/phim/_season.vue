@@ -19,7 +19,7 @@
       :name="data.name"
       :name-current-chap="currentMetaChap?.name"
       :poster="data.poster"
-      :all-seasons="allSeasons"
+      :seasons="seasons"
       :_cache-data-seasons="_cacheDataSeasons"
       :fetch-season="fetchSeason"
     />
@@ -200,7 +200,7 @@
       class="h-full bg-transparent overflow-y-visible whitespace-nowrap mb-3"
     >
       <q-tab-panel
-        v-for="{ value } in allSeasons"
+        v-for="{ value } in seasons"
         :key="value"
         :name="value"
         class="!h-[47px] overflow-y-visible py-0 !px-0"
@@ -242,18 +242,18 @@
       active-class="c--main"
       indicator-color="transparent"
       v-if="
-        allSeasons.length > 1 ||
-        (allSeasons.length === 0 && allSeasons[0].name !== '#default')
+       seasons && ( seasons.length > 1 ||
+        (seasons.length === 0 && seasons[0].name !== '#default') )
       "
     >
       <q-tab
-        v-for="item in allSeasons"
+        v-for="item in seasons"
         :key="item.value"
         :name="item.value"
         :label="item.name"
         class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[6px]"
         content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-        :ref="(el) => item.value === currentSeason && (tabsRef = el as QTab)"
+        :ref="(el) => item.value === seasonActive && (tabsRef = el as QTab)"
       />
     </q-tabs>
 
@@ -285,22 +285,23 @@
           inline-label
           active-class="c--main"
           v-if="
-            allSeasons.length > 1 ||
-            (allSeasons.length === 0 && allSeasons[0].name !== '#default')
+          seasons && (
+            seasons.length > 1 ||
+            (seasons.length === 0 && seasons[0].name !== '#default'))
           "
         >
           <q-tab
-            v-for="item in allSeasons"
+            v-for="item in seasons"
             :key="item.value"
             :name="item.value"
             :label="item.name"
-            :ref="(el) => item.value === currentSeason && (tabsDialogRef = el as QTab)"
+            :ref="(el) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
           />
         </q-tabs>
 
         <q-tab-panels v-model="seasonActive" animated keep-alive class="h-full">
           <q-tab-panel
-            v-for="({ value }, index) in allSeasons"
+            v-for="({ value }, index) in seasons"
             :key="index"
             :name="value"
             class="flex justify-around place-items-center place-content-start"
@@ -457,34 +458,29 @@ const route = useRoute()
 const router = useRouter()
 
 const currentSeason = computed(() => route.params.season as string)
-const allSeasons = computed(() => {
-  const season = data.value?.season ?? []
-
-  if (season.length > 0) {
-    return season.map((item) => {
-      return {
-        ...item,
-        value: router.resolve(item.path).params.season as string,
-      }
-    })
-  }
-
-  return [
-    {
-      path: `/phim/${currentSeason.value}/`,
-      name: "#default",
-      value: currentSeason.value,
-    },
-  ]
-})
 const currentMetaSeason = computed(() => {
-  return allSeasons.value?.find((item) => item.value === currentSeason.value)
+  return seasons.value?.find((item) => item.value === currentSeason.value)
+})
+const realIdCurrentSeason = computed(() => {
+  if (!currentSeason.value) return 
+
+  const lastIndexDolar =currentSeason.value.lastIndexOf("$")
+
+console.log( currentSeason.value.slice(0, lastIndexDolar) )
+
+if (lastIndexDolar === -1) return currentSeason.value
+
+  return currentSeason.value.slice(0, lastIndexDolar)
 })
 
 const { data, run, error, loading } = useRequest(
-  () => (currentSeason.value ? PhimId(currentSeason.value) : Promise.reject()),
+  () => {
+
+    // const { }
+  return  (realIdCurrentSeason.value ? PhimId(realIdCurrentSeason.value) : Promise.reject())
+  },
   {
-    refreshDeps: [currentSeason],
+    refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
       run()
     },
@@ -501,6 +497,35 @@ watch(error, (error) => {
       },
     })
 })
+
+const seasons = ref()
+watch(data, () => {
+  if (!data.value) {
+    seasons.value = undefined
+
+    return
+  }
+
+  console.log("data refreshed")
+
+  const season = data.value.season ?? []
+
+  if (season.length > 0) {
+    seasons.value = season.map((item) => {
+      return {
+        name: item.name,
+        value: router.resolve(item.path).params.season as string,
+      }
+    })
+  }
+
+  seasons.value = [
+    {
+      name: "#default",
+      value: currentSeason.value,
+    },
+  ]
+}, { immediate: true })
 
 interface ResponseDataSeasonPending {
   status: "pending"
@@ -524,6 +549,8 @@ const _cacheDataSeasons = reactive<
   >
 >(new Map())
 // =======================================================
+import { unflat } from "src/logic/unflat"
+
 async function fetchSeason(season: string) {
   if (_cacheDataSeasons.get(season)?.status === "success") {
     console.info("use data from cache not fetch")
@@ -536,7 +563,10 @@ async function fetchSeason(season: string) {
   try {
     console.log("fetch chaps on season")
 
-    const response = await PhimIdChap(season)
+const lastIndexDolar = season.lastIndexOf("$")
+const realIdSeason = lastIndexDolar === -1 ? season : season.slice(0, lastIndexDolar)
+
+    const response = await PhimIdChap(realIdSeason)
 
     if (response.chaps.length === 0) {
       console.warn("chaps not found")
@@ -552,9 +582,40 @@ async function fetchSeason(season: string) {
       ]
     } else if (response.chaps.length > 50) {
       console.log("large chap. spliting...")
-      const { chaps } = response.chaps
-      response.chaps = chaps.slice(0, 50)
-      console.log("other: ", chaps.slice(50).length)
+      const { chaps } = response
+
+const indexMetaSeason = (seasons.value.findIndex(item => item.value === season) >>> 0)
+const nameSeason  = seasons.value [ indexMetaSeason ].name;
+
+      seasons.value.splice(
+        indexMetaSeason,
+        1,
+        ...unflat(chaps, 50)
+        .map((chaps, index) => {
+          const value = index === 0 ?realIdSeason : `${realIdSeason}$${index}`
+const name = `${nameSeason} (${chaps[0].name} - ${chaps[chaps.length - 1].name})`
+
+console.log("set %s by %s", value, chaps[0].id)
+
+
+          _cacheDataSeasons.set(value, {
+            status: "success",
+            response: {
+              ...response,
+              chaps,
+            }
+          })
+
+          return {
+            name,
+            value
+          }
+        })
+      )
+
+
+      console.log(seasons.value )
+return 
     }
 
     _cacheDataSeasons.set(season, {
@@ -562,6 +623,7 @@ async function fetchSeason(season: string) {
       response,
     })
   } catch (err) {
+    console.warn(err)
     _cacheDataSeasons.set(season, {
       status: "error",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -621,22 +683,22 @@ const nextChap = computed<{ season: string; chap?: string } | undefined>(() => {
     }
   }
 
-  if (!allSeasons.value) return
+  if (!seasons.value) return
   // if current last chap of season
   // check season of last
   const indexSeason = !currentMetaSeason.value
     ? -1
-    : allSeasons.value.indexOf(currentMetaSeason.value)
+    : seasons.value.indexOf(currentMetaSeason.value)
   if (indexSeason === -1) {
     console.warn("current index not found %i", indexSeason)
     return
   }
 
-  const isLastSeason = indexSeason === allSeasons.value.length - 1
+  const isLastSeason = indexSeason === seasons.value.length - 1
   if (!isLastSeason) {
     // first chap of next season
     return {
-      season: allSeasons.value[indexSeason + 1].value,
+      season: seasons.value[indexSeason + 1].value,
     }
   }
 
