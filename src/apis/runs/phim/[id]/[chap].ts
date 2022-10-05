@@ -5,7 +5,7 @@ import { get } from "src/logic/http"
 import { useCache } from "src/apis/useCache"
 
 export async function PhimIdChap(season: string) {
-  return await useCache(`/phim/${season}`, async () => {
+  return await useCache(`/phim/${season}/xem-phim`, async () => {
     const { data: html } = await get(`/phim/${season}/xem-phim.html`)
 
     return PostWorker<typeof PhimIdChapParser>(Worker, html)
