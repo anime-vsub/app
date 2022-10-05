@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full overflow-hidden fixed top-0 left-0 z-200"
+    class="w-full overflow-hidden fixed top-0 left-0 z-200 bg-[#000]"
     ref="playerWrapRef"
   >
     <q-responsive :ratio="16 / 9" class="player__wrap">
