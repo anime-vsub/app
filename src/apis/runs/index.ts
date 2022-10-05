@@ -3,9 +3,12 @@ import { get } from "src/logic/http"
 
 import type IndexParser from "../parser"
 import { PostWorker } from "../wrap-worker"
+import { useCache } from "src/apis/useCache"
 
 export async function Index() {
-  const { data: html } = await get("/")
+  return await useCache("/", async () => {
+    const { data: html } = await get("/")
 
-  return PostWorker<typeof IndexParser>(Worker, html)
+    return PostWorker<typeof IndexParser>(Worker, html)
+  })
 }

@@ -1,9 +1,23 @@
 import type { HttpOptions, HttpResponse } from "@capacitor-community/http"
 import { Http } from "@capacitor-community/http"
 
+const cacheStore = new Map<
+  string,
+  {
+    data: unknown
+    time: number
+  }
+>()
+setInterval(() => {
+  cacheStore.forEach(({ time }, key) => {
+    if (performance.now() - time > 60_000) cacheStore.delete(key)
+  })
+}, 60_000)
+
 export async function get(url: string | HttpOptions) {
-  if (import.meta.env.TEST)
-    return { data: import.meta.env.DATA } as HttpResponse
+  const inStore = cacheStore.get(typeof url === "string" ? url : url.url)
+
+  if (inStore) return inStore.data
 
   const response = await Http.get(
     typeof url === "object"
@@ -31,13 +45,16 @@ export async function get(url: string | HttpOptions) {
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
           },
         }
-  )
-  .then(response => {
+  ).then((response) => {
     if (response.status === 403 || response.status === 520) {
-console.log("response fail")
+      console.log("response fail")
     }
 
     return response
+  })
+  cacheStore.set(typeof url === "string" ? url : url.url, {
+    data: response,
+    time: performance.now(),
   })
 
   // eslint-disable-next-line functional/no-throw-statement
@@ -50,9 +67,6 @@ export async function post(
   url: string,
   data: Record<string, number | string | boolean>
 ) {
-  if (import.meta.env.TEST)
-    return { data: import.meta.env.DATA } as HttpResponse
-
   const response = await Http.post({
     url: "https://animevietsub.cc" + url,
     headers: {

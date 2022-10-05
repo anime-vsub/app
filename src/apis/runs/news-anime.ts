@@ -4,6 +4,7 @@ import Worker from "src/apis/workers/Mgn?worker"
 import { get } from "src/logic/http"
 
 import { PostWorker } from "../wrap-worker"
+import { useCache } from "src/apis/useCache"
 
 async function fetchFromMgn(page: number): Promise<string> {
   const { data: html } = await get(`https://mgn.vn/anime/p${page}`)
