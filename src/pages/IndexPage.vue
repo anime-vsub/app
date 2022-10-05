@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-transparent">
+  <q-header v-if="false" class="bg-transparent">
     <q-toolbar>
       <svg
         width="60px"
@@ -43,7 +43,7 @@
 
   <div
     v-if="loading || !data"
-    class="mt-[-50px] absolute w-full h-[calc(100%+50px)] overflow-hidden loader"
+    class="absolute w-full h-[calc(100%+50px)] overflow-hidden loader"
   >
     <div class="swiper-hot">
       <q-responsive :ratio="aspectRatio" class="poster">
@@ -134,7 +134,7 @@
       <SkeletonGridCard :count="6" />
     </div>
   </div>
-  <div v-else class="mt-[-50px]">
+  <div v-else>
     <swiper
       :slides-per-view="1"
       :space-between="0"
