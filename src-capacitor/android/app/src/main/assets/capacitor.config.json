@@ -3,7 +3,5 @@
 	"appName": "Quasar App",
 	"bundledWebRuntime": false,
 	"webDir": "www",
-	"server": {
-		"url": "http://192.168.0.117:9500"
-	}
+	"server": {}
 }
