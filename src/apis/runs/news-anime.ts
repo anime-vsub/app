@@ -4,7 +4,6 @@ import Worker from "src/apis/workers/Mgn?worker"
 import { get } from "src/logic/http"
 
 import { PostWorker } from "../wrap-worker"
-import { useCache } from "src/apis/useCache"
 
 async function fetchFromMgn(page: number): Promise<string> {
   const { data: html } = await get(`https://mgn.vn/anime/p${page}`)
@@ -20,7 +19,7 @@ async function fetchFromTinAnime(page: number) {
     icon: "https://tinanime.com/logos/114x114.png",
     name: "TinAnime",
   }
-  return data.map((item) => {
+  return data.map((item: any) => {
     return {
       image: item.thumbnail,
       href: `https://tinanime.com/${item.slug}`,

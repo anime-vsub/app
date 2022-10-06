@@ -636,10 +636,11 @@ import { playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import Hls from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
-import { computed, ref, shallowReactive, watch, watchEffect } from "vue"
+import { computed, onBeforeUnmount, ref, shallowReactive, watch , watchEffect } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
 import type { Source } from "./sources"
+
 
 interface ResponseDataSeasonPending {
   status: "pending"
@@ -916,8 +917,6 @@ function runRemount() {
     persistent: false,
   }).onOk(remount)
 }
-
-import { onBeforeUnmount } from "vue"
 
 let currentHls: Hls
 onBeforeUnmount(() => currentHls?.destroy())
