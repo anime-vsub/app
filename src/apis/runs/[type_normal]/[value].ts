@@ -1,8 +1,8 @@
 import type TypeNormalValueParser from "src/apis/parser/[type_normal]/[value]"
+import { useCache } from "src/apis/useCache"
 import Worker from "src/apis/workers/[type_normal]/[value]?worker"
 import { PostWorker } from "src/apis/wrap-worker"
 import { get } from "src/logic/http"
-import { useCache } from "src/apis/useCache"
 
 export async function TypeNormalValue(
   type: string,
@@ -16,12 +16,12 @@ export async function TypeNormalValue(
     typer: string | null
     year: string | null
   },
-  defaultsOptions?: {
+  defaultsOptions: {
     genres?: string
     seaser?: string
     typer?: string
     year?: string
-  }
+  } = {}
 ) {
   const isCustom =
     options &&
