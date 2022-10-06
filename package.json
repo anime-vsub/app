@@ -2,7 +2,7 @@
   "name": "git.shin.animevsub",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "productName": "AnimeVsub",
   "author": "Tachibana Shin <45375496+tachibana-shin@users.noreply.github.com>",
   "private": true,
   "scripts": {
@@ -14,7 +14,7 @@
     "dev:android": "pnpm dev -m capacitor -T android",
     "build:android": "pnpm build -m capacitor -T android",
     "quasar": "quasar",
-    "icongenie": "icongenie"
+    "icongenie": "icongenie generate -m capacitor -i meta/app_icon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim"
   },
   "dependencies": {
     "@iconify/vue": "^4.0.0",

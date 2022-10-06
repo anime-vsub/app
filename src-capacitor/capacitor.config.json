@@ -1,6 +1,6 @@
 {
   "appId": "git.shin.animevsub",
-  "appName": "Quasar App",
+  "appName": "AnimeVsub",
   "bundledWebRuntime": false,
   "webDir": "www",
   "server": {
