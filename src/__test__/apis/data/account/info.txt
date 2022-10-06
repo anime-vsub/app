@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<!--[if IE 9]><html class="no-js ie9"><![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thông tin しん</title>
+<meta property="og:url" content="http://animevietsub.cc/account/login" />
+<meta property="og:title" content="Thông tin しん" />
+<meta property="og:description" content="Thông tin member trên phimtop10.com" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<base href="http://animevietsub.cc" />
+<meta name="robots" content="noindex,nofollow" />
+<meta name="language" content="Vietnamese, English" />
+<meta property="og:site_name" content="AnimeVietSub.cc" />
+<meta property="fb:app_id" content="1214104412028762" />
+<meta property="fb:pages" content="114595880190017" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+
+
+<link rel="stylesheet" type="text/css" href="http://animevietsub.cc/statics/default/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="http://animevietsub.cc/statics/default/css/fonts.css?v=1.1" />
+<link rel="stylesheet" type="text/css" href="http://animevietsub.cc/statics/default/css/style.css?v=1.6.2" />
+<script type="text/javascript">
+		var	MAIN_URL	=	'http://animevietsub.cc';
+		var	AjaxURL	=	'http://animevietsub.cc/ajax/all';
+	</script>
+<script type="text/javascript">
+        function w3tc_load_js(u) {
+            var d = document,
+                p = d.getElementsByTagName('HEAD')[0],
+                c = d.createElement('script');
+            c.type = 'text/javascript';
+            c.src = u;
+            p.appendChild(c);
+        }
+    </script>
+<script type="text/javascript">
+        w3tc_load_js('http://animevietsub.cc/statics/default/js/04538.default.include-footer.2dcd18.js?v=1.0.102022');
+    </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/bootstrap.min.js?v=1.0"></script>
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/jquery.raty.js?v=1.0"></script>
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/jquery.md5.js"></script>
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/fx/util.js?_1.2"></script>
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/home-v1.js?v=1.5.1"></script>
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/jquery.cookie.js?v=1.1"></script>
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/schedule.js"></script>
+<script type="text/javascript"> $(document).ready(function(){ !function () { /*referans:box*/ navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) || (devtoolsDetector.addListener(function (t, e) { t && (document.location.href = "http://animevietsub.tv") }), devtoolsDetector.lanuch()) }(); }); </script>
+<script src="http://animevietsub.cc/statics/default/js/detect.dev.js?v=1.0" type="text/javascript"></script>
+<script async src"https: static.amcdn.vn tka cdn.js" type"text javascript"></script>
+<script>
+  var arfAsync = arfAsync || [];
+</script>
+<script id="arf-core-js" onerror="window.arferrorload=true;" src="//media1.admicro.vn/cms/Arf.min.js" async></script> <link rel="stylesheet" href="http://animevietsub.cc/statics/default/css/login.css" type="text/css" />
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/register.js"></script>
+</head>
+<body class="page-template page-template-pages NoBrdRa">
+<div class="Tp-Wp" id="Tp-Wp">
+<script data-cfasync="false" type="text/javascript" src="//i8xkjci7nd.com/aas/r45d/vki/1923111/9d801fab.js"></script><header class="Header MnBrCn BgA">
+<div class="MnBr EcBgA">
+<div class="Container">
+<figure class="Logo">
+<a href="/" title="Xem anime Vietsub" rel="home"><img src="http://cdn.animevietsub.cc/data/logo/logoz.png" alt="Logo"></a>
+</figure>
+<span class="Button MenuBtn AAShwHdd-lnk CXHd" data-shwhdd="Tp-Wp"><i></i><i></i><i></i></span>
+<span class="MenuBtnClose AAShwHdd-lnk CXHd" data-shwhdd="Tp-Wp"></span>
+<div class="Search" id="SearchMobile" style="display:none">
+<form method="post" id="form-search1" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchMobile')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>
+<div class="search-suggest" style="display: none;">
+<ul style="margin-bottom: 0;" id="search-suggest-list"></ul>
+</div>
+</div>
+<div class="Rght BgA">
+<div class="Search" id="SearchDesktop">
+<form method="post" id="form-search" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchDesktop')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>
+<div class="search-suggest" style="display: none;">
+<ul style="margin-bottom: 0;" id="search-suggest-list"></ul>
+</div>
+</div>
+<div class="Login">
+<input type="checkbox" hidden="hidden" id="LnkUser">
+<label for="LnkUser" class="LnkUser fa-chevron-down"><img src="http://cdn.animevietsub.cc/data/avatar/user-35738.jpg" alt=""></label>
+<div class="user-name-text" style="display:none;">tachib.shin</div>
+<ul>
+<li><a href="/account/info/" class="fa-user">Thông tin tài khoản</a></li>
+<li><a href="/tu-phim" class="fa-film">Hộp phim</a></li>
+<li><a href="/thoat?_fxRef=http://animevietsub.cc/account/info/" class="fa-power-off">Thoát</a></li>
+</ul>
+</div><div class="Notice navbar-notice">
+<a href="javascript:void(0);" class="navbar-notice-toggle"></a>
+<div class="manage-notifi"></div>
+</div>
+<nav class="Menu">
+<ul>
+<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home menu-item-490"><a href="/">Trang chủ</a></li>
+<li id="menu-item-495" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-495"><a href="#">Dạng Anime</a>
+<ul class="sub-menu">
+<li><a href="/anime-bo/">TV/Series</a></li>
+<li><a href="/anime-le/">Movie/OVA</a></li>
+<li><a href="/hoat-hinh-trung-quoc/">HH Trung Quốc</a></li>
+<li><a href="/anime-sap-chieu/">Anime Sắp Chiếu</a></li>
+<li><a href="/danh-sach/list-dang-chieu/">Anime Đang Chiếu</a></li>
+<li><a href="/danh-sach/list-tron-bo/">Anime Trọn Bộ</a></li>
+</ul>
+</li>
+ <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-493"><a href="/bang-xep-hang.html">Top Anime</a>
+<ul class="sub-menu">
+<li><a href="/bang-xep-hang/day.html">Theo Ngày</a></li>
+<li><a href="/bang-xep-hang/voted.html">Yêu Thích</a></li>
+<li><a href="/bang-xep-hang/month.html">Theo Tháng</a></li>
+<li><a href="/bang-xep-hang/season.html">Theo Mùa</a></li>
+<li><a href="/bang-xep-hang/year.html">Theo Năm</a></li>
+</ul>
+</li>
+<li id="menu-item-494" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-494"><a href="#">THỂ LOẠI</a>
+<ul class="sub-menu"><li><a href="http://animevietsub.cc/the-loai/hanh-dong/">Action</a></li><li><a href="http://animevietsub.cc/the-loai/phieu-luu/">Adventure</a></li><li><a href="http://animevietsub.cc/the-loai/cartoon/">Cartoon</a></li><li><a href="http://animevietsub.cc/the-loai/hai-huoc/">Comedy</a></li><li><a href="http://animevietsub.cc/the-loai/dien-loan/">Dementia</a></li><li><a href="http://animevietsub.cc/the-loai/demons/">Demons</a></li><li><a href="http://animevietsub.cc/the-loai/drama/">Drama</a></li><li><a href="http://animevietsub.cc/the-loai/ecchi/">Ecchi</a></li><li><a href="http://animevietsub.cc/the-loai/phep-thuat/">Fantasy</a></li><li><a href="http://animevietsub.cc/the-loai/tro-choi/">Game</a></li><li><a href="http://animevietsub.cc/the-loai/harem/">Harem</a></li><li><a href="http://animevietsub.cc/the-loai/lich-su/">Historical</a></li><li><a href="http://animevietsub.cc/the-loai/kinh-di/">Horror</a></li><li><a href="http://animevietsub.cc/the-loai/josei/">Josei</a></li><li><a href="http://animevietsub.cc/the-loai/tre-em/">Kids</a></li><li><a href="http://animevietsub.cc/the-loai/live-action/">Live Action</a></li><li><a href="http://animevietsub.cc/the-loai/ma-thuat/">Magic</a></li><li><a href="http://animevietsub.cc/the-loai/martial-arts/">Martial Arts</a></li><li><a href="http://animevietsub.cc/the-loai/mecha/">Mecha</a></li><li><a href="http://animevietsub.cc/the-loai/quan-doi/">Military</a></li><li><a href="http://animevietsub.cc/the-loai/am-nhac/">Music</a></li><li><a href="http://animevietsub.cc/the-loai/mystery/">Mystery</a></li><li><a href="http://animevietsub.cc/the-loai/parody/">Parody</a></li><li><a href="http://animevietsub.cc/the-loai/police/">Police</a></li><li><a href="http://animevietsub.cc/the-loai/psychological/">Psychological</a></li><li><a href="http://animevietsub.cc/the-loai/tinh-cam/">Romance</a></li><li><a href="http://animevietsub.cc/the-loai/samurai/">Samurai</a></li><li><a href="http://animevietsub.cc/the-loai/truong-hoc/">School</a></li><li><a href="http://animevietsub.cc/the-loai/sci-fi/">Sci-Fi</a></li><li><a href="http://animevietsub.cc/the-loai/seinen/">Seinen</a></li><li><a href="http://animevietsub.cc/the-loai/shoujo/">Shoujo</a></li><li><a href="http://animevietsub.cc/the-loai/shoujo-ai/">Shoujo Ai</a></li><li><a href="http://animevietsub.cc/the-loai/shounen/">Shounen</a></li><li><a href="http://animevietsub.cc/the-loai/shounen-ai/">Shounen Ai</a></li><li><a href="http://animevietsub.cc/the-loai/doi-thuong/">Slice of Life</a></li><li><a href="http://animevietsub.cc/the-loai/space/">Space</a></li><li><a href="http://animevietsub.cc/the-loai/the-thao/">Sports</a></li><li><a href="http://animevietsub.cc/the-loai/super-power/">Super Power</a></li><li><a href="http://animevietsub.cc/the-loai/sieu-nhien/">Supernatural</a></li><li><a href="http://animevietsub.cc/the-loai/thriller/">Thriller</a></li><li><a href="http://animevietsub.cc/the-loai/tokusatsu/">Tokusatsu</a></li><li><a href="http://animevietsub.cc/the-loai/vampire/">Vampire</a></li><li><a href="http://animevietsub.cc/the-loai/yaoi/">Yaoi</a></li><li><a href="http://animevietsub.cc/the-loai/yuri/">Yuri</a></li></ul>
+</li>
+ <li id="menu-item-497" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-497"><a href="#">Season</a>
+<ul class="sub-menu">
+<li><a href="/season/winter/2022/">Mùa Đông 2022</a></li>
+<li><a href="/season/spring/2022/">Mùa Xuân 2022</a></li>
+<li><a href="/season/summer/2022/">Mùa Hạ 2022</a></li>
+<li><a href="/season/autumn/2022/">Mùa Thu 2022</a></li>
+<li><a href="/season/winter/2021/">Mùa Đông 2021</a></li>
+<li><a href="/season/spring/2021/">Mùa Xuân 2021</a></li>
+<li><a href="/season/summer/2021/">Mùa Hạ 2021</a></li>
+<li><a href="/season/autumn/2021/">Mùa Thu 2021</a></li>
+<li><a href="/season/winter/2020/">Mùa Đông 2020</a></li>
+<li><a href="/season/spring/2020/">Mùa Xuân 2020</a></li>
+<li><a href="/season/summer/2020/">Mùa Hạ 2020</a></li>
+<li><a href="/season/autumn/2020/">Mùa Thu 2020</a></li>
+<li><a href="/season/winter/2019/">Mùa Đông 2019</a></li>
+<li><a href="/season/spring/2019/">Mùa Xuân 2019</a></li>
+<li><a href="/season/summer/2019/">Mùa Hạ 2019</a></li>
+<li><a href="/season/autumn/2019/">Mùa Thu 2019</a></li>
+<li><a href="/season/winter/2018/">Mùa Đông 2018</a></li>
+<li><a href="/season/spring/2018/">Mùa Xuân 2018</a></li>
+<li><a href="/season/summer/2018/">Mùa Hạ 2018</a></li>
+<li><a href="/season/autumn/2018/">Mùa Thu 2018</a></li>
+<li><a href="/season/winter/2017/">Mùa Đông 2017</a></li>
+<li><a href="/season/spring/2017/">Mùa Xuân 2017</a></li>
+<li><a href="/season/summer/2017/">Mùa Hạ 2017</a></li>
+<li><a href="/season/autumn/2017/">Mùa Thu 2017</a></li>
+<li><a href="/season/winter/2016/">Mùa Đông 2016</a></li>
+<li><a href="/season/spring/2016/">Mùa Xuân 2016</a></li>
+<li><a href="/season/summer/2016/">Mùa Hạ 2016</a></li>
+<li><a href="/season/autumn/2016/">Mùa Thu 2016</a></li>
+<li><a href="/season/winter/2015/">Mùa Đông 2015</a></li>
+<li><a href="/season/spring/2015/">Mùa Xuân 2015</a></li>
+<li><a href="/season/summer/2015/">Mùa Hạ 2015</a></li>
+<li><a href="/season/autumn/2015/">Mùa Thu 2015</a></li>
+<li><a href="/season/winter/2014/">Mùa Đông 2014</a></li>
+<li><a href="/season/spring/2014/">Mùa Xuân 2014</a></li>
+<li><a href="/season/summer/2014/">Mùa Hạ 2014</a></li>
+<li><a href="/season/autumn/2014/">Mùa Thu 2014</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/anime/library/0-9/">Thư viện</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/lich-chieu-phim.html">Lịch chiếu</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</header> <div class="Body Container">
+<div class="Content">
+<div class="announcement"><span class="ann_title"><i class="fa-bullhorn"></i></span><span class="ann_text"><ul>
+<li>
+<p><span style="color:#f3dd3d"><span style="font-size:22px">Mời bạn tham gia group của AnimeVietsub </span></span><span style="font-size:22px"><a href="https://www.facebook.com/groups/fananimevietsub"><span style="color:#e62117">tại đ&acirc;y!</span></a></span></p>
+</li>
+<li>
+<p><span style="color:#f3dd3d"><span style="font-size:22px">Do thiếu h&uacute;t kinh ph&iacute; n&ecirc;n quảng c&aacute;o c&oacute; thể g&acirc;y kh&oacute; chịu, rất mong c&aacute;c bạn th&ocirc;ng cảm!</span></span></p>
+</li>
+</ul></span></div> <div class="Ads ad-center-1110"><div><center>
+<zone id="kwvia9z0"></zone>
+<script>
+arfAsync.push("kwvia9z0");
+</script>
+</center></div></div>
+<div class="TpRwCont">
+<main>
+<section id="log-reg">
+<div class="row">
+<div class="col-md-3" style="margin-bottom:20px;">
+<div class="profile-sidebar">
+<div class="profile-userpic">
+<img src="http://cdn.animevietsub.cc/data/avatar/user-35738.jpg" class="img-responsive" alt="">
+</div>
+<div class="profile-usertitle">
+<div class="profile-usertitle-name">しん </div>
+<div class="profile-usertitle-vip">
+<p>Tham gia: 19/06/2021</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-9" style="margin-bottom:20px;">
+<div class="col-xs-12 col-md-12 pdr0">
+<div class="tab-login update-info" id="tab-login">
+<div class="title"> THÔNG TIN TÀI KHOẢN</div>
+<div class="bor-form">
+<form name="SignInForm" id="SignInForm" method="post" class="form-login form-horizontal" enctype="multipart/form-data" action="/account/info/">
+<div class="form-group">
+<label class="control-label col-sm-3" for="email">Email</label>
+<div class="col-sm-9">
+<input name="User[email]" type="email" id="email" value="oppoepgergh@gmail.com" class="form-control lg-email" placeholder="Email đăng nhập" disabled>
+</div>
+</div>
+<div class="form-group">
+<label class="control-label col-sm-3" for="username">Tài khoản</label>
+<div class="col-sm-9">
+<input name="User[username]" type="text" id="username" value="しん" class="form-control lg-name" placeholder="Tài khoản / Username" disabled>
+</div>
+</div>
+<div class="form-group">
+<label class="control-label col-sm-3" for="hoten">Họ tên</label>
+<div class="col-sm-9">
+<input name="User[hoten]" type="text" id="hoten" value="tachib.shin" class="form-control lg-name" placeholder="Họ và tên">
+</div>
+</div>
+<div class="form-group">
+<label class="control-label col-sm-3" for="gender">Giới tính</label>
+<div class="col-sm-9 gender">
+<input id="male" name="User[gender]" type="radio" value="1" checked="checked">
+<label for="male" class="label-radio">Nam</label>
+<input id="female" name="User[gender]" type="radio" value="0">
+<label for="female" class="label-radio">Nữ</label>
+<input id="pede" name="User[gender]" type="radio" value="2">
+<label for="pede" class="label-radio">Không xác định</label>
+</div>
+</div>
+<div class="form-group">
+<label class="control-label col-sm-3" for="email">Mật khẩu</label>
+<div class="col-sm-9">
+<input name="User[password]" type="password" id="password" value="" class="form-control lg-pass" placeholder="Để trống nếu không muốn đổi">
+</div>
+</div>
+<div class="form-group">
+<label class="control-label col-sm-3" for="email">Avatar</label>
+<div class="col-sm-9">
+<input type="file" name="fileToUpload" id="fileToUpload">
+</div>
+</div>
+<div class="form-group" style="padding-top: 6px;">
+<label class="control-label col-sm-3"></label>
+<div class="col-sm-9">
+<input type="submit" name="submit" class="btn btn-main" value="Cập nhật">
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<aside class="widget-area" role="complementary">
+<section class="Wdgt">
+<div class="Title">Hôm nay xem gì?</div><p>Nếu bạn buồn phiền không biết xem gì hôm nay. Hãy để chúng tôi chọn cho bạn</p><a href="http://animevietsub.cc/phim/canaan-i3-a569/" class="Button TPlay AAIco-play_arrow">Xem Anime <strong>Ngẫu Nhiên</strong></a></section>
+<div class="Dvr-300"><div><center>
+<a href="https://fb.com/233536333844133" target="_blank"><img src="https://ci3.googleusercontent.com/mZI_lfpGW9NbuQ4qnbnfClQu3lVKccG067BGTYb6YVzaddILwDKSZ4Y_NIHXlkusgYOOI7ZicXMxk_XnnJEIxp3ovzOULO4RRywdmUNq7TPXkyB0-ZNY7xOHmjohwg=s0" alt="group" width="300px" height="250px"></a>
+<zone id="kwvigxyu"></zone>
+<script>
+arfAsync.push("kwvigxyu");
+</script>
+</center></div></div>
+
+<section class="Wdgt" id="showChonLoc">
+<div class="Title">ANIME MỚI CẬP NHẬT</div>
+<ul class="MovieList Newepisode">
+<li><a href="http://animevietsub.cc/phim/shan-hai-juelun-a4715/" title="Xem Anime Sơn Hải Tuyệt Luân"><span>Sơn Hải Tuyệt Luân</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/than-mo-a4653/" title="Xem Anime Thần Mộ"><span>Thần Mộ</span><span>Tập 13</span></a></li><li><a href="http://animevietsub.cc/phim/ta-da-choc-tuc-ca-dam-tu-luyen-gia-a4249/" title="Xem Anime Ta Đã Chọc Tức Cả Đám Tu Luyện Giả"><span>Ta Đã Chọc Tức Cả Đám Tu Luyện Giả</span><span>Tập 122</span></a></li><li><a href="http://animevietsub.cc/phim/van-co-than-thoai-a4691/" title="Xem Anime Vạn Cổ Thần Thoại"><span>Vạn Cổ Thần Thoại</span><span>Tập 19</span></a></li><li><a href="http://animevietsub.cc/phim/van-gioi-tien-tung-a3852/" title="Xem Anime Vạn Giới Tiên Tung"><span>Vạn Giới Tiên Tung</span><span>Tập 312</span></a></li><li><a href="http://animevietsub.cc/phim/qi-jie-diyi-xian-that-gioi-de-nhat-tien-a4492/" title="Xem Anime Thất Giới Đệ Nhất Tiên"><span>Thất Giới Đệ Nhất Tiên</span><span>Tập 68</span></a></li><li><a href="http://animevietsub.cc/phim/tien-vo-de-ton-a4488/" title="Xem Anime Tiên Võ Đế Tôn"><span>Tiên Võ Đế Tôn</span><span>Tập 157</span></a></li><li><a href="http://animevietsub.cc/phim/luc-bat-son-ha-he-tu-duong-a4711/" title="Xem Anime Lực Bạt Sơn Hà Hề Tử Đường"><span>Lực Bạt Sơn Hà Hề Tử Đường</span><span>Tập 14</span></a></li><li><a href="http://animevietsub.cc/phim/tien-vo-thuong-khung-a4634/" title="Xem Anime Tiên Võ Thương Khung"><span>Tiên Võ Thương Khung</span><span>Tập 35</span></a></li><li><a href="http://animevietsub.cc/phim/muv-luv-alternative-2nd-season-a4730/" title="Xem Anime Muv-Luv Alternative 2nd Season"><span>Muv-Luv Alternative 2nd Season</span><span>Tập 01</span></a></li>
+<li><a href="/anime-moi/">Xem thêm..</a></li>
+</ul>
+</section>
+ <section class="Wdgt">
+<div class="Title">Hỏi/đáp anime</div>
+<div class="fbcmt" id="comments">
+<div class="fbcmt title">Đừng quên để like page của AnimeVsub <div class="fb-like" data-href="https://www.facebook.com/animevsub/" data-layout="button_count" data-action="like" data-size="large" data-lazy="true" data-show-faces="true"></div> để cập nhật anime mỗi ngày</div>
+<span style="color:#000000">Nếu bạn không truy cập được animevietsub.tv mời truy cập <a href="http://animevietsub.cc" target="_blank"><span style="color:#ff5722"><strong>animevietsub.cc</strong></span></a></span>
+<div class="Comment Wrt" id="respond">
+<div class="fb-comments fb_iframe_widget" data-href="http://animevietsub.tv" data-numposts="3" data-width="100%" data-colorscheme="light" data-order-by="reverse_time"></div>
+</div>
+</div> </section>
+
+<section class="Wdgt" id="showTopPhim">
+<div class="Title">HOT TUẦN<div class="Top">
+<a href="/anime-bo/" class="STPb Current" title="Anime TV/Series xem nhiều nhất tuần" data-tag="top-bo-week">TV/Series</a>
+<a href="/anime-le/" class="STPb" title="Movie/OVA xem nhiều nhất tuần" data-tag="top-le-week">Movie/OVA</a>
+</div></div>
+<ul class="MovieList">
+<li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/one-piece-dao-hai-tac-a1/"> <span class="Top">#1<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2019/09/27/animevsub-sQCBqYz9ve.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="One Piece - Đảo Hải Tặc - Vua Hải Tặc"></figure></div><div class="Title">One Piece - Đảo Hải Tặc</div> </a><p class="Info"> <span class="Vote AAIco-star">9.1</span><span class="Time AAIco-access_time">1035/???</span> <span class="Date AAIco-date_range">1999</span> <span class="Qlty">FHD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/the-gioi-phep-thuat-a474/"> <span class="Top">#2<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2020/10/17/animevsub-IoEzyCjdCJ.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Black Clover (TV) - Black Clover (2017), Black Clover, Thế Giới Phép Thuật, Cỏ Ba Lá Đen"></figure></div><div class="Title">Black Clover (TV)</div> </a><p class="Info"> <span class="Vote AAIco-star">9.5</span><span class="Time AAIco-access_time">170/170</span> <span class="Date AAIco-date_range">2017</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-r3-a3/"> <span class="Top">#3<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2019/08/26/animevsub-bGw5lnUHTC.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Thám Tử Lừng Danh Conan - Detective Conan, Case Closed, Meitantei Conan"></figure></div><div class="Title">Thám Tử Lừng Danh Conan</div> </a><p class="Info"> <span class="Vote AAIco-star">9.4</span><span class="Time AAIco-access_time">1057/????</span> <span class="Date AAIco-date_range">1996</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/overlord-iv-a4263/"> <span class="Top">#4<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2022/06/16/animevsub-N3lu0GaZTE.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Overlord IV - Overlord 4, Overlord SS4"></figure></div><div class="Title">Overlord IV</div> </a><p class="Info"> <span class="Vote AAIco-star">9.6</span><span class="Time AAIco-access_time">13/13</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/jujutsu-kaisen-chu-thuat-hoi-chien-r3-a3841/"> <span class="Top">#5<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2020/09/21/animevsub-XI9GXfbHY4.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Jujutsu Kaisen - Chú Thuật Hồi Chiến - Chú Thuật Hồi Chiến, Sorcery Fight, Jujutsu Kaisen (TV)"></figure></div><div class="Title">Jujutsu Kaisen - Chú Thuật Hồi Chiến</div> </a><p class="Info"> <span class="Vote AAIco-star">9.5</span><span class="Time AAIco-access_time">24/24</span> <span class="Date AAIco-date_range">2020</span> <span class="Qlty">BD</span></p></div></li>
+</ul>
+</section>
+ <div class="Dvr-300"> </div>
+<div class="tag-list-main"><ul><li class="tag-item"><a class="tag-link" title="List anime thể loại Action - Comedy" href="http://animevietsub.cc/danh-sach/all/1-3/all/all/">List anime thể loại Action - Comedy</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title="List anime thể loại Action  -Romance" href="http://animevietsub.cc/danh-sach/all/1-24/all/all/">List anime thể loại Action -Romance</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title=" List anime thể loại Harem - Comedy" href="http://animevietsub.cc/danh-sach/all/3-10/all/all/"> List anime thể loại Harem - Comedy</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title=" List Phim Hoạt Hình Trung Quốc" href="http://animevietsub.cc/hoat-hinh-trung-quoc/"> List Phim Hoạt Hình Trung Quốc</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title="List anime Ghibli " href="http://animevietsub.cc/tag/ghibli/">List anime Ghibli </a><span class="tag-end">&nbsp;</span></li>
+</ul></div> </aside> </div>
+</div>
+</div>
+<footer class="Footer">
+<div class="Container">
+<div class="MnBrCn BgA">
+<div class="MnBr EcBgA">
+<div class="Container">
+<figure class="Logo">
+<a href="http://animevietsub.cc" title="Xem anime online" rel="home"><img src="http://cdn.animevietsub.cc/data/logo/logoz.png" alt="logo"></a>
+</figure>
+<div class="Rght">
+<nav class="Menu">
+<ul>
+<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home menu-item-490"><a href="<?=$web_link;?>">XEM PHIM</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/yeu-cau-phim.html">YÊU CẦU ANIME</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/pages/discord.html">Chat Anime/Discord</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/pages/thuat-ngu.html">THUẬT NGỮ</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="https://fb.com/233536333844133">GROUP THẢO LUẬN</a></li>
+</ul>
+</nav>
+<ul class="ListSocial">
+<li>
+<a target="_blank" href="https://www.facebook.com/animevsub/" class="fa fa-facebook"></a>
+</li>
+<li>
+<a target="_blank" href="https://www.instagram.com/animevsub/" class="fa fa-instagram"></a>
+</li>
+<li>
+<a target="_blank" href="https://twitter.com/AnimeVsub" class="fa-twitter"></a>
+</li>
+<li>
+<a target="_blank" href="https://www.youtube.com/channel/UCtpcar8l0Tv51xlpwwGVpvA" class="fa-youtube-play"></a>
+</li>
+<li>
+<a href="#Tp-Wp" class="Up AAIco-arrow_upward"></a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="WebDescription">
+<p><a href="http://www.kanefusafs.net/" rel="dofollow" target="_blank" title="Kanefusa Fansub">Kanefusa Fansub </a>&nbsp;<a href="http://animevietsub.cc/phim/dao-hai-tac-a1/" target="_blank" title="One Piece - Đảo Hải Tặc">One Piece, Vua Hải Tặc&nbsp;Đảo Hải Tặc</a>&nbsp;<a href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-a3/" target="_blank" title="Thám Tử Lừng Danh Conan">Th&aacute;m Tử Lừng Danh Conan</a>&nbsp;<a href="http://animevietsub.cc/hoat-hinh-trung-quoc/" target="_blank" title="Hoạt Hình Trung Quốc">Hoạt H&igrave;nh Trung Quốc</a></p>
+</div>
+<div class="WebDescription">
+Liên Hệ Quảng Cáo: <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b0d1d4c3f0d1ded9ddd5c6d9d5c4c3c5d29ec4c6">[email&#160;protected]</a></b>
+</div>
+<p class="Copy"><a target="_blank" href="<?=$web_link;?>">© Copyright 2022 AnimeVietSub.TV. All rights reserved.</a></p>
+</div></footer>
+<div id="loading">
+<div id="loading-center">
+<div id="loading-center-absolute">
+<div class="object" id="object_one"></div>
+<div class="object" id="object_two"></div>
+<div class="object" id="object_three"></div>
+<div class="object" id="object_four"></div>
+</div>
+</div>
+</div>
+<div class="top-message"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-68882454-10"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-68882454-10');
+</script>
+<div style="position: fixed; top: 60px; right: 40px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: -700px; margin-right: 0px; visibility: visible;"><zone id="kwybox12"></zone>
+<script>
+arfAsync.push("kwybox12");
+</script></div></div>
+<div style="position: fixed; top: 60px; left: 70px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: 500px; margin-right: 0px; visibility: visible;"><zone id="kwybpkrw"></zone>
+<script>
+arfAsync.push("kwybpkrw");
+</script></div></div> <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0&appId=1214104412028762&autoLogAppEvents=1" nonce="zNEV1awW"></script>
+<script type="text/javascript" src="http://animevietsub.cc/statics/default/js/film.notiny.js?v=1.0"></script>
+<!--[if lt IE 9]><script type="text/javascript" src="http://animevietsub.cc/statics/default/js/ie/css3mq.js"></script><![endif]-->
+<!--[if lte IE 9]><script type="text/javascript" src="http://animevietsub.cc/statics/default/js/ie/ie.js"></script><![endif]-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6186261113573228" crossorigin="anonymous"></script> </div>
+</body>
+</html>

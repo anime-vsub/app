@@ -4,7 +4,7 @@ import { Http } from "@capacitor-community/http"
 const cacheStore = new Map<
   string,
   {
-    data: unknown
+    data: HttpResponse
     time: number
   }
 >()
