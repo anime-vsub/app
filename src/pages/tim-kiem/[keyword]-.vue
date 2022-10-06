@@ -225,6 +225,8 @@ import CardVertical from "components/CardVertical.vue"
 import LaodingAnim from "components/LaodingAnim.vue"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import { debounce } from "quasar"
+import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { AjaxItem } from "src/apis/runs/ajax/item"
 import { PreSearch } from "src/apis/runs/pre-search"
 import { useLocalStorage } from "src/composibles/useLocalStorage"
@@ -234,7 +236,9 @@ import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import { debounce } from "quasar"
+
+// ================= unknown ===============
+
 
 dayjs.extend(relativeTime)
 
@@ -322,10 +326,6 @@ async function onClickItemPreLoad(
 
   searching.value = false
 }
-
-// ================= unknown ===============
-
-import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 
 const {
   loading: loadingSearch,

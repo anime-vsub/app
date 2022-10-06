@@ -1,9 +1,9 @@
+import { useCache } from "src/apis/useCache"
 import Worker from "src/apis/workers/pre-search?worker"
 import { get, post } from "src/logic/http"
 
 import type PreSearchParser from "../parser/pre-search"
 import { PostWorker } from "../wrap-worker"
-import { useCache } from "src/apis/useCache"
 
 export async function PreSearch(query: string) {
   return await useCache("/", async () => {

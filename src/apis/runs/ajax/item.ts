@@ -15,10 +15,10 @@
         type: top-bo-week | top-le-week
  */
 import type AjaxItemParser from "src/apis/parser/ajax/item"
+import { useCache } from "src/apis/useCache"
 import Worker from "src/apis/workers/ajax/item?worker"
 import { PostWorker } from "src/apis/wrap-worker"
 import { post } from "src/logic/http"
-import { useCache } from "src/apis/useCache"
 
 export async function AjaxItem(type: "top-bo-week" | "top-le-week") {
   return await useCache(`/ajax/item/${type}`, async () => {

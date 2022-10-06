@@ -1,7 +1,9 @@
 <template>
   <router-view />
 
-  <q-btn v-if="isDev" class="fixed right-0 bottom-0 z-9999" @click="reload">reload</q-btn>
+  <q-btn v-if="isDev" class="fixed right-0 bottom-0 z-9999" @click="reload"
+    >reload</q-btn
+  >
 </template>
 
 <script setup lang="ts">
@@ -10,14 +12,13 @@ import { Http } from "@capacitor-community/http"
 // @ts-expect-error
 import eruda from "eruda2"
 
-const isDev = import.meta.NODE_ENV === "development"
+const isDev = import.meta.env.NODE_ENV !== "production"
 if (isDev) {
-    eruda.init()
+  eruda.init()
 
-    Object.assign(window, { Http })
-
-    function reload() {
-      location.reload()
-    }
+  Object.assign(window, { Http })
+}
+function reload() {
+  location.reload()
 }
 </script>

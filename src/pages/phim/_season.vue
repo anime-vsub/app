@@ -448,9 +448,11 @@ import { labelToQuality } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
+import { unflat } from "src/logic/unflat"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+// =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
 
 // ============================================
@@ -556,8 +558,6 @@ const _cacheDataSeasons = reactive<
     | ResponseDataSeasonError
   >
 >(new Map())
-// =======================================================
-import { unflat } from "src/logic/unflat"
 
 async function fetchSeason(season: string) {
   if (_cacheDataSeasons.get(season)?.status === "success") {
