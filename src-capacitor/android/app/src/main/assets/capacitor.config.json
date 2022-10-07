@@ -1,6 +1,11 @@
 {
 	"appId": "git.shin.animevsub",
 	"appName": "AnimeVsub",
+	"plugins": {
+		"CapacitorCookies": {
+			"enabled": true
+		}
+	},
 	"bundledWebRuntime": false,
 	"webDir": "www",
 	"server": {
