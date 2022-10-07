@@ -9,7 +9,9 @@ specifiers:
   '@hugotomazi/capacitor-navigation-bar': ^2.0.0
   '@iconify/vue': ^4.0.0
   '@intlify/vite-plugin-vue-i18n': ^6.0.3
-  '@ionic/vue': ^6.2.9
+  '@ionic/core': ^6.3.0
+  '@ionic/vue': ^6.3.0
+  '@ionic/vue-router': ^6.3.0
   '@quasar/app-vite': ^1.1.2
   '@quasar/cli': ^1.3.2
   '@quasar/extras': ^1.15.4
@@ -17,7 +19,9 @@ specifiers:
   '@tachibana-shin/artplayer': 4.5.7
   '@tachibana-shin/eslint-config': ^1.0.7
   '@types/group-array': ^1.0.1
+  '@types/js-cookie': ^3.0.2
   '@types/node': ^18.8.1
+  '@types/set-cookie-parser': ^2.4.2
   '@types/sort-array': ^4.1.0
   '@types/uuid': ^8.3.4
   '@typescript-eslint/eslint-plugin': ^5.39.0
@@ -36,14 +40,17 @@ specifiers:
   hls.js: 1.2.4
   htmlparser2: ^8.0.1
   js-base64: ^3.7.2
+  js-cookie: ^3.0.1
   jsdom: ^20.0.1
   jwplayer8: 0.0.1-b1
   message-port-api: ^0.0.5
   pinia: ^2.0.22
+  pinia-plugin-persistedstate-2: ^2.0.1
   prettier: ^2.7.1
   quasar: ^2.9.1
   rss-parser: ^3.12.0
   sass: 1.32.13
+  set-cookie-parser: ^2.5.1
   sort-array: ^4.1.5
   swiper: ^8.4.2
   ts-md5: ^1.3.1
@@ -59,6 +66,9 @@ specifiers:
 
 dependencies:
   '@iconify/vue': 4.0.0_vue@3.2.40
+  '@ionic/core': 6.3.0
+  '@ionic/vue': 6.3.0
+  '@ionic/vue-router': 6.3.0
   '@quasar/extras': 1.15.4
   '@tachibana-shin/artplayer': 4.5.7
   '@vue/devtools': 6.4.3
@@ -71,11 +81,14 @@ dependencies:
   hls.js: 1.2.4
   htmlparser2: 8.0.1
   js-base64: 3.7.2
+  js-cookie: 3.0.1
   jwplayer8: 0.0.1-b1
   message-port-api: 0.0.5
   pinia: 2.0.22_bfjwoga25wxjazzogo7o372nwq
+  pinia-plugin-persistedstate-2: 2.0.1_pinia@2.0.22
   quasar: 2.9.1
   rss-parser: 3.12.0
+  set-cookie-parser: 2.5.1
   sort-array: 4.1.5
   swiper: 8.4.2
   ts-md5: 1.3.1
@@ -93,13 +106,14 @@ devDependencies:
   '@capacitor/status-bar': 4.0.1
   '@hugotomazi/capacitor-navigation-bar': 2.0.0
   '@intlify/vite-plugin-vue-i18n': 6.0.3_vue-i18n@9.2.2
-  '@ionic/vue': 6.2.9
   '@quasar/app-vite': 1.1.2_iyiwmlwfziexvdywv2pszlfadi
   '@quasar/cli': 1.3.2
   '@quasar/icongenie': 2.5.3
   '@tachibana-shin/eslint-config': 1.0.7_ypn2ylkkyfa5i233caldtndbqa
   '@types/group-array': 1.0.1
+  '@types/js-cookie': 3.0.2
   '@types/node': 18.8.1
+  '@types/set-cookie-parser': 2.4.2
   '@types/sort-array': 4.1.0
   '@types/uuid': 8.3.4
   '@typescript-eslint/eslint-plugin': 5.39.0_xyciw6oqjoiiono4dhv3uhn5my
@@ -441,20 +455,26 @@ packages:
       '@intlify/core-base': 9.2.2
       '@intlify/shared': 9.2.2
 
-  /@ionic/core/6.2.9:
-    resolution: {integrity: sha512-d2KBXYUKBND2AD8aMgash3O/t04IDc/DHHMshcOydfNJ5qqAxwJYzZR7hs96UknCcIlhHk1pb5C29epkv7gOcQ==}
+  /@ionic/core/6.3.0:
+    resolution: {integrity: sha512-6MR0hOdIM6sQyZyXez3/jWAnHScrZKaQxzGT2XiXXIpBrKztNdeAhqDLXoxbDU1PLyDnXXPWBzT6xZ698gG67g==}
     dependencies:
       '@stencil/core': 2.18.1
       ionicons: 6.0.3
       tslib: 2.4.0
-    dev: true
+    dev: false
 
-  /@ionic/vue/6.2.9:
-    resolution: {integrity: sha512-B0/T5MvVVQU+j+N4AoY/TLpOgPH9Fx/lWLK+BnOpkWHawmTNrw//iWgl1ypg7gOeRHAQIbKgmcyDpPhY7neo/w==}
+  /@ionic/vue-router/6.3.0:
+    resolution: {integrity: sha512-GEozV84HQNKShyyovLdgrnTP7vLaWcVm8DeYpbzAZOZ9kVY/a18B6WPI1WMk8vrg/rkYTOGP0iKweURTi5+w/Q==}
     dependencies:
-      '@ionic/core': 6.2.9
+      '@ionic/vue': 6.3.0
+    dev: false
+
+  /@ionic/vue/6.3.0:
+    resolution: {integrity: sha512-9D7bK8xZ/qa6gWShgvBRCFSmwkZBN7RkJF1ItmNQXl1msszRjqi7W/++AsTjjGmqpWbupNkwwxZWP7IzN7vcjA==}
+    dependencies:
+      '@ionic/core': 6.3.0
       ionicons: 6.0.3
-    dev: true
+    dev: false
 
   /@jimp/bmp/0.14.0_@jimp+custom@0.14.0:
     resolution: {integrity: sha512-5RkX6tSS7K3K3xNEb2ygPuvyL9whjanhoaB/WmmXlJS6ub4DjTqrapu8j4qnIWmO4YYtFeTbDTXV6v9P1yMA5A==}
@@ -1092,13 +1112,13 @@ packages:
     resolution: {integrity: sha512-s/UJp9qxExL3DyQPT70kiuWeb3AdjbUZM+5lEIXn30I2DLcLYPOPXfsoWJODieQywq+3vPiLZeIdkoqjf6jcSw==}
     engines: {node: '>=12.10.0', npm: '>=6.0.0'}
     hasBin: true
-    dev: true
+    dev: false
 
   /@stencil/core/2.18.1:
     resolution: {integrity: sha512-/fXkh1lwZ+X9JQCw50mPjhBogzEHOBvVC5pLoDLZqodVYK0DGWILM2YLV4dcIUBNEK8/HMDpO/Rq81/rS3mNOw==}
     engines: {node: '>=12.10.0', npm: '>=6.0.0'}
     hasBin: true
-    dev: true
+    dev: false
 
   /@szmarczak/http-timer/1.1.2:
     resolution: {integrity: sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==}
@@ -1242,6 +1262,10 @@ packages:
       '@types/node': 18.8.1
     dev: true
 
+  /@types/js-cookie/3.0.2:
+    resolution: {integrity: sha512-6+0ekgfusHftJNYpihfkMu8BWdeHs9EOJuGcSofErjstGPfPGEu9yTu4t460lTzzAMl2cM5zngQJqPMHbbnvYA==}
+    dev: true
+
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
@@ -1291,6 +1315,12 @@ packages:
     resolution: {integrity: sha512-z5xyF6uh8CbjAu9760KDKsH2FcDxZ2tFCsA4HIMWE6IkiYMXfVoa+4f9KX+FN0ZLsaMw1WNG2ETLA6N+/YA+cg==}
     dependencies:
       '@types/mime': 3.0.1
+      '@types/node': 18.8.1
+    dev: true
+
+  /@types/set-cookie-parser/2.4.2:
+    resolution: {integrity: sha512-fBZgytwhYAUkj/jC/FAV4RQ5EerRup1YQsXQCh8rZfiHkc4UahC192oH0smGwsXol3cL3A5oETuAHeQHmhXM4w==}
+    dependencies:
       '@types/node': 18.8.1
     dev: true
 
@@ -4917,7 +4947,7 @@ packages:
     resolution: {integrity: sha512-kVOWER991EMqLiVShrCSWKMHkgHZP7XfVdyN6YPMuoO33W7pc5CPNVNfR8OMe/I8rYEbaunyBs6dXNYpR6gGZw==}
     dependencies:
       '@stencil/core': 2.16.1
-    dev: true
+    dev: false
 
   /ip/1.1.8:
     resolution: {integrity: sha512-PuExPYUiu6qMBQb4l06ecm6T6ujzhmh+MeJcW9wa89PoAz5pvd4zPgN5WJV104mb6S2T1AwNIAaB70JNrLQWhg==}
@@ -5216,6 +5246,11 @@ packages:
 
   /js-base64/3.7.2:
     resolution: {integrity: sha512-NnRs6dsyqUXejqk/yv2aiXlAvOs56sLkX6nUdeaNezI5LFFLlsZjOThmwnrcwh5ZZRwZlCMnVAY3CvhIhoVEKQ==}
+    dev: false
+
+  /js-cookie/3.0.1:
+    resolution: {integrity: sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==}
+    engines: {node: '>=12'}
     dev: false
 
   /js-sdsl/4.1.5:
@@ -6151,6 +6186,16 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /pinia-plugin-persistedstate-2/2.0.1_pinia@2.0.22:
+    resolution: {integrity: sha512-xtX2YOahow7MLrKSKuLQKE3VNJ8JQkfRgTCJ+T9rggiRDDhBQMg1usZ+LP3km9iOnJsR8JofA60g6cL63gsg5A==}
+    engines: {node: ^14 || ^16 || >=18}
+    peerDependencies:
+      pinia: ^2
+    dependencies:
+      pinia: 2.0.22_bfjwoga25wxjazzogo7o372nwq
+      shvl: 3.0.0
+    dev: false
+
   /pinia/2.0.22_bfjwoga25wxjazzogo7o372nwq:
     resolution: {integrity: sha512-u+b8/BC+tmvo3ACbYO2w5NfxHWFOjvvw9DQnyT0dW8aUMCPRQT5QnfZ5R5W2MzZBMTeZRMQI7V/QFbafmM9QHw==}
     peerDependencies:
@@ -6768,6 +6813,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
+  /set-cookie-parser/2.5.1:
+    resolution: {integrity: sha512-1jeBGaKNGdEq4FgIrORu/N570dwoPYio8lSoYLWmX7sQ//0JY08Xh9o5pBcgmHQ/MbsYp/aZnOe1s1lIsbLprQ==}
+    dev: false
+
   /set-value/3.0.3:
     resolution: {integrity: sha512-Xsn/XSatoVOGBbp5hs3UylFDs5Bi9i+ArpVJKdHPniZHoEgRniXTqHWrWrGQ0PbEClVT6WtfnBwR8CAHC9sveg==}
     engines: {node: '>=6.0'}
@@ -6821,6 +6870,10 @@ packages:
   /shebang-regex/3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
+
+  /shvl/3.0.0:
+    resolution: {integrity: sha512-5IomAM3ykE/g9K9L6lhODc+TpCuN03rrhlboegeKyyfh66DDdpRD5JN37DYhNHH+RaYjiIDx64K/Ms/xQYOR5w==}
+    dev: false
 
   /side-channel/1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -7303,7 +7356,6 @@ packages:
 
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
-    dev: true
 
   /tsutils/3.21.0_typescript@4.8.4:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}

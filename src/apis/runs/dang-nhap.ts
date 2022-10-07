@@ -10,7 +10,7 @@ export async function DangNhap(email: string, password: string) {
   const password_md5 = Md5.hashAsciiStr(password)
 
   const { data: html, headers } = await post(
-    "http://animevietsub.cc/account/login/?_fxRef=https://animevietsub.cc/account/info",
+    "/account/login/?_fxRef=https://animevietsub.cc/account/info",
     {
       email,
       password: "",
@@ -26,7 +26,7 @@ export async function DangNhap(email: string, password: string) {
     // parse
 
     return {
-      ...PostWorker<typeof AccountInfoParser>(Worker, html),
+      ...await PostWorker<typeof AccountInfoParser>(Worker, html),
       cookie: new Headers(headers).get("set-cookie"),
     }
   } else {

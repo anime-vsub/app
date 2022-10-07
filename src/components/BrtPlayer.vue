@@ -871,7 +871,7 @@ function onVideoError(event: Event) {
 
   $q.notify({
     message: "Đã gặp sự cố khi phát lại",
-    position: "bottom-left",
+    position: "bottom-right",
     timeout: 0,
     actions: [
       {
@@ -925,7 +925,7 @@ function remount() {
 
   if (!currentStream.value) {
     $q.notify({
-      position: "bottom-left",
+      position: "bottom-right",
       message: "Video tạm thời không khả dụng",
     })
 
