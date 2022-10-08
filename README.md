@@ -8,10 +8,13 @@
 
 ### To be on
 
-- [ ] API system
-- [ ] UI
-- [ ] Tabs option type in Index.vue
+- [x] API system
+- [x] UI
+- [x] Tabs option type in Index.vue
 - [x] router: bang-xep-hang
 - [x] router: search
 - [x] router: lich-chieu-phim
 - [ ] button follow anime
+- [ ] scan QR code to login
+- [ ] restore progress watch anime
+- [ ] history and follows
