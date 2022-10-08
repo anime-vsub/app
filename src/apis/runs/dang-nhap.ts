@@ -27,7 +27,7 @@ export async function DangNhap(email: string, password: string) {
 
     return {
       ...await PostWorker<typeof AccountInfoParser>(Worker, html),
-      cookie: new Headers(headers).get("set-cookie"),
+      cookie: new Headers(headers).get("set-cookie")!,
     }
   } else {
     // eslint-disable-next-line functional/no-throw-statement

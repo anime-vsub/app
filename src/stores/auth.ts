@@ -1,46 +1,41 @@
-import { defineStore } from 'pinia';
-  import { DangNhap } from "src/apis/runs/dang-nhap"
-import { parse } from "set-cookie-parser"
 import cookie from "js-cookie"
+import { defineStore } from "pinia"
+import { parse } from "set-cookie-parser"
+import { DangNhap } from "src/apis/runs/dang-nhap"
 import { post } from "src/logic/http"
 
 interface User {
-          avatar: string
-          email:string
-          name:string
-          sex: string
-          username: string
-        }
+  avatar?: string
+  email: string
+  name: string
+  sex: string
+  username: string
+}
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user_data: parseJSON(cookie.get("user_data")) as (null | {
-      value: User
-      expires: number
-    }),
-    token_name: (cookie.get("token_name")??null) as null | string,
-    token_value: (cookie.get("token_value")??null) as null | string
+    user_data: parseJSON(cookie.get("user_data")) as null | User,
+    token_name: (cookie.get("token_name") ?? null) as null | string,
+    token_value: (cookie.get("token_value") ?? null) as null | string,
   }),
   getters: {
     user(state) {
-      if (!state.user_data || state.user_data.expires < Date.now()) return null
-
-      return state.user_data.value
+      return state.user_data
     },
     isLogged(state) {
       return !!state.token_name && !!state.token_value && !!state.user_data
-    }
+    },
   },
   actions: {
-    setUser(value: User, expires: number) {
-      this.user_data = { value, expires }
-      cookie.set("user_data", JSON.stringify({value, expires}), { expires })
+    setUser(value: User, expires: Date) {
+      this.user_data = value
+      cookie.set("user_data", JSON.stringify({ value }), { expires })
     },
-    setToken(name: string, value: string, expires: number) {
+    setToken(name: string, value: string, expires: Date) {
       this.token_name = name
       this.token_value = value
-      cookie.set("token_name", (name), { expires })
-      cookie.set("token_value", (value), { expires })
+      cookie.set("token_name", name, { expires })
+      cookie.set("token_value", value, { expires })
     },
     deleteUser() {
       this.user_data = null
@@ -48,14 +43,16 @@ export const useAuthStore = defineStore('auth', {
     },
     deleteToken() {
       this.token_name = null
-      this.token_value = null;
+      this.token_value = null
       cookie.set("token_name", "", { expires: -1 })
       cookie.set("token_value", "", { expires: -1 })
     },
     setTokenByCookie(cookie: string) {
-      const token = parse(cookie).find(item => item.name.startsWith("token"))!
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const token = parse(cookie).find((item) => item.name.startsWith("token"))!
       // set token
-      this.setToken(token.name, token.value, token.expires)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.setToken(token.name, token.value, token.expires!)
       return token
     },
     // ** actions **
@@ -63,41 +60,53 @@ export const useAuthStore = defineStore('auth', {
       const data = await DangNhap(email, password)
 
       const { expires } = this.setTokenByCookie(data.cookie)
-      this.setUser({
+      this.setUser(
+        {
           avatar: data.avatar,
           email: data.email,
           name: data.name,
           sex: data.sex,
-          username: data.username
+          username: data.username,
         },
-        expires
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expires!
       )
 
-      return data;
+      return data
     },
     async logout() {
       this.deleteToken()
       this.deleteUser()
     },
     async changePassword(newPassword: string) {
-      const { headers } = await post("/account/info/", {
-        'User[hoten]': this.user.username,
-        'User[gender]': this.user.sex,
-        "User[password]": newPassword,
-        submit: "Cập nhật"
-      }, {
-cookie:`${this.token_name}=${this.token_value}`
-      }).catch(res => {
-      if (res.status === 302 && res.data) return Promise.resolve(res)
+      // eslint-disable-next-line functional/no-throw-statement
+      if (!this.user_data) throw new Error("YOU_CAN_LOGIN")
 
-      return Promise.reject(res)
+      const { headers } = await post(
+        "/account/info/",
+        {
+          "User[hoten]": this.user_data.username,
+          "User[gender]": this.user_data.sex,
+          "User[password]": newPassword,
+          submit: "Cập nhật",
+        },
+        {
+          cookie: `${this.token_name}=${this.token_value}`,
+        }
+      ).catch((res) => {
+        // eslint-disable-next-line promise/no-return-wrap
+        if (res.status === 302 && res.data) return Promise.resolve(res)
+
+        // eslint-disable-next-line promise/no-return-wrap
+        return Promise.reject(res)
       })
 
-      const cookie = new Headers(headers).get("set-cookie")
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const cookie = new Headers(headers).get("set-cookie")!
       this.setTokenByCookie(cookie)
-    }
-  }
-});
+    },
+  },
+})
 
 function parseJSON(value?: string) {
   if (!value) return null

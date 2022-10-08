@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import type PhimIdParser from "src/apis/parser/phim/[id]"
 import { useCache } from "src/apis/useCache"
 import Worker from "src/apis/workers/phim/[id]?worker"

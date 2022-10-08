@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@capacitor-community/http': ^1.4.1
   '@capacitor/browser': ^4.0.1
+  '@capacitor/core': ^4.3.0
   '@capacitor/haptics': ^4.0.1
   '@capacitor/preferences': ^4.0.1
   '@capacitor/status-bar': ^4.0.1
@@ -94,11 +95,12 @@ dependencies:
 
 devDependencies:
   '@capacitor-community/http': 1.4.1
-  '@capacitor/browser': 4.0.1
-  '@capacitor/haptics': 4.0.1
-  '@capacitor/preferences': 4.0.1
-  '@capacitor/status-bar': 4.0.1
-  '@hugotomazi/capacitor-navigation-bar': 2.0.0
+  '@capacitor/browser': 4.0.1_@capacitor+core@4.3.0
+  '@capacitor/core': 4.3.0
+  '@capacitor/haptics': 4.0.1_@capacitor+core@4.3.0
+  '@capacitor/preferences': 4.0.1_@capacitor+core@4.3.0
+  '@capacitor/status-bar': 4.0.1_@capacitor+core@4.3.0
+  '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.3.0
   '@intlify/vite-plugin-vue-i18n': 6.0.3_vue-i18n@9.2.2
   '@quasar/app-vite': 1.1.2_iyiwmlwfziexvdywv2pszlfadi
   '@quasar/cli': 1.3.2
@@ -177,14 +179,22 @@ packages:
       '@capacitor/core': 3.8.0
     dev: true
 
-  /@capacitor/browser/4.0.1:
+  /@capacitor/browser/4.0.1_@capacitor+core@4.3.0:
     resolution: {integrity: sha512-tPOA/eYDJdDeMFd+A3I8teuGfPP0GEqhWtMzH8z5r2tW40iJ/mL8qH5NgVLMZ3uvs7gN2LfQTCMNJvl0F/WdBw==}
     peerDependencies:
       '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: true
 
   /@capacitor/core/3.8.0:
     resolution: {integrity: sha512-Z7iHM+1CBbuIK+74bS4ZjpPUOdcKb7Gf7j8xK9WegcrUeHZQl4O6hAAn6nT60kDoeAyutsr3PP25542Ur0wLBg==}
+    dependencies:
+      tslib: 2.4.0
+    dev: true
+
+  /@capacitor/core/4.3.0:
+    resolution: {integrity: sha512-zb225feaiHYcttHqw7SnKVj9gjOh3yoM2ol0Efky4kd80qZvqPHt7nRI1XZmGUKid5j3AVggULd5rRke5OEOXQ==}
     dependencies:
       tslib: 2.4.0
     dev: true
@@ -197,10 +207,12 @@ packages:
       '@capacitor/core': 3.8.0
     dev: true
 
-  /@capacitor/haptics/4.0.1:
+  /@capacitor/haptics/4.0.1_@capacitor+core@4.3.0:
     resolution: {integrity: sha512-ZLVoLdK1Md/xIRRrDOnrLCKGRg8UENY1ShpKcysPN1z1MgcpvB/9Nbqczm3RH24zyo3MP/7homkqMzUGxPBlwQ==}
     peerDependencies:
       '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: true
 
   /@capacitor/ios/3.8.0_@capacitor+core@3.8.0:
@@ -211,16 +223,20 @@ packages:
       '@capacitor/core': 3.8.0
     dev: true
 
-  /@capacitor/preferences/4.0.1:
+  /@capacitor/preferences/4.0.1_@capacitor+core@4.3.0:
     resolution: {integrity: sha512-FffJjKS4XcodUj/rtFtWizQ9q/oYDSn5opZ+JYwj/EkjiMWMhY/Pk9lN3vwQfp+VJrTt3hjr+bwKXjhTbYBqKw==}
     peerDependencies:
       '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: true
 
-  /@capacitor/status-bar/4.0.1:
+  /@capacitor/status-bar/4.0.1_@capacitor+core@4.3.0:
     resolution: {integrity: sha512-BmEyOf3m/hAf8bO4hCX0m5gpQPSgd05mGYl+9E841WUZeJjcYlmiG/EBshAUb2uGCVtyNaG36yPXB0r0Ypg+rw==}
     peerDependencies:
       '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: true
 
   /@electron/get/1.14.1:
@@ -314,10 +330,12 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: true
 
-  /@hugotomazi/capacitor-navigation-bar/2.0.0:
+  /@hugotomazi/capacitor-navigation-bar/2.0.0_@capacitor+core@4.3.0:
     resolution: {integrity: sha512-hebf0ixGPugiZfH6g7HS/hrDzkKmNdJV/pV2jUz5lfoZXFMjE+7aeAr1AqwW6EGNej65WcEP8VUL5YUc3wSCjw==}
     peerDependencies:
       '@capacitor/core': ^4.0.1
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: true
 
   /@humanwhocodes/config-array/0.10.7:

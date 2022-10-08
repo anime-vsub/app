@@ -94,44 +94,34 @@
     Icon
   } from "@iconify/vue"
   import {
+    useQuasar
+  } from "quasar"
+  import {
+    useAuthStore
+  } from "stores/auth"
+  import {
     ref
   } from "vue"
   import {
-    DangNhap
-  } from "src/apis/runs/dang-nhap"
+    useRouter
+  } from "vue-router"
 
-
-  const data = {
-    avatar: "http://cdn.animevietsub.cc/data/avatar/user-35738.jpg",
-    name: "しん",
-    email: "oppoepgergh@gmail.com",
-    username: "tachib.shin",
-    sex: "male"
-  }
 
   const showDialogLogin = ref(false)
 
   const showPassword = ref(false)
 
   const email = ref("")
-  const password = ref('')
-
-  import {
-    useQuasar
-  } from "quasar"
-  import {
-    useAuthStore
-  } from "stores/auth"
+  const password = ref("")
 
   const $q = useQuasar()
   const authStore = useAuthStore()
 
   async function login() {
     const loader = $q.loading.show({
-      message: 'Đang xác thực. Vui lòng đợi...',
-      boxClass: 'bg-dark text-light-9',
-      spinnerColor: 'main',
-      thickness: 2,
+      message: "Đang xác thực. Vui lòng đợi...",
+      boxClass: "bg-dark text-light-9",
+      spinnerColor: "main",
       delay: Infinity,
 
     })
@@ -141,13 +131,13 @@
 
       showDialogLogin.value = false
       $q.notify({
-        position: 'bottom-right',
+        position: "bottom-right",
         message: `Đã đăng nhập với tư cách ${data.name}`
       })
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
       $q.notify({
-        position: 'bottom-right',
+        position: "bottom-right",
         message: "Đăng nhập thất bại",
         caption: err.message,
       })
@@ -155,11 +145,6 @@
       loader()
     }
   }
-
-
-  import {
-    useRouter
-  } from "vue-router"
 
   const router = useRouter()
 
