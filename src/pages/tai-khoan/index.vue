@@ -67,21 +67,23 @@
       </q-card-section>
 
       <q-card-section>
-        <div>
-          <input v-model="email" type="email" name="email" class="input" placeholder="E-mail" />
-        </div>
-        <div class="mt-4 relative flex items-center flex-nowrap input-wrap">
-          <input v-model="password" required :type="showPassword ? 'text' : 'password'" name="password"
-            class="input" placeholder="Mật khẩu mới" />
-          <q-btn dense round class="mr-1" @click="showPassword = !showPassword">
-            <Icon v-if="showPassword" icon="fluent:eye-24-regular" width="22" height="22" />
-            <Icon v-else icon="fluent:eye-off-24-regular" />
-          </q-btn>
-        </div>
+        <form @submit.prevent="login">
+          <div>
+            <input v-model="email" required type="email" name="email" class="input" placeholder="E-mail" />
+          </div>
+          <div class="mt-4 relative flex items-center flex-nowrap input-wrap">
+            <input v-model="password" required :type="showPassword ? 'text' : 'password'" name="password" class="input"
+              placeholder="Mật khẩu mới" />
+            <q-btn dense round class="mr-1" @click="showPassword = !showPassword">
+              <Icon v-if="showPassword" icon="fluent:eye-24-regular" width="22" height="22" />
+              <Icon v-else icon="fluent:eye-off-24-regular" />
+            </q-btn>
+          </div>
 
-        <div class="text-grey text-center mt-5 mb-4">Tìm lại mật khẩu</div>
+          <div class="text-grey text-center mt-5 mb-4">Tìm lại mật khẩu</div>
 
-        <q-btn no-caps class="bg-main w-full" :disable="!email || !password" @click="login">Đăng nhập</q-btn>
+          <q-btn type="submit" no-caps class="bg-main w-full" :disable="!email || !password">Đăng nhập</q-btn>
+        </form>
       </q-card-section>
     </q-card>
   </q-dialog>
