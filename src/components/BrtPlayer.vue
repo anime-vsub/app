@@ -193,6 +193,7 @@
                   no-caps
                   class="mr-6 text-weight-normal art-btn"
                   :disable="!nextChap"
+                  replace
                   :to="{
                     name: 'phim_[season]_[chap]',
                     params: nextChap,
