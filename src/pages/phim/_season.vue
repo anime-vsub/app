@@ -199,7 +199,7 @@
           follows ? formatView(follows) : "Theo dõi"
         }}</span>
       </q-btn>
-      <q-btn stack no-caps class="mr-4 text-weight-normal">
+      <q-btn stack no-caps class="mr-4 text-weight-normal" @click="share">
         <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
         <span class="text-[12px] mt-1">Chia sẻ</span>
       </q-btn>
@@ -529,7 +529,10 @@ watch(error, (error) => {
     })
 })
 
-const seasons = ref()
+const seasons = ref<{
+  name: string
+  value: string
+}[]>()
 watch(
   data,
   () => {
@@ -853,6 +856,7 @@ watchEffect(() => {
 import { checkIsLile , AjaxLike } from "src/apis/runs/ajax/like"
 const followed = ref(false)
 import { useQuasar } from "quasar"
+import { Share } from "@capacitor/share"
 
 const $q = useQuasar()
 
@@ -879,6 +883,15 @@ async function toggleFollow() {
   $q.notify({
     position: "bottom-right",
     message: followed.value ? "Đã thêm vào danh sách theo dõi" : "Đã xóa khỏi danh sách theo dõi"
+  })
+}
+
+function share() {
+  Share.share({
+    title: `Xem ${data.value.name} series ${currentMetaSeason.value.name}`,
+    text: `Xem ${data.value.name} tập ${currentMetaChap.value.name}`,
+    url: `https://animevietsub.cc${route.path}`,
+    dialogTitle: `Chia sẻ ${data.value.name}`
   })
 }
 // ================ status ================
