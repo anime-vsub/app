@@ -660,6 +660,7 @@ const currentDataSeason = computed(() => {
   return undefined
 })
 const currentChap = computed(() => {
+  console.log(route.params)
   if (route.params.chap) return route.params.chap as string
 
   // get first chap in season
