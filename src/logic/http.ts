@@ -1,23 +1,9 @@
 import type { HttpOptions, HttpResponse } from "@capacitor-community/http"
-import { Http } from "@capacitor-community/http"
+import { CapacitorHttp as Http } from '@capacitor/core';
 
-const cacheStore = new Map<
-  string,
-  {
-    data: HttpResponse
-    time: number
-  }
->()
-setInterval(() => {
-  cacheStore.forEach(({ time }, key) => {
-    if (performance.now() - time > 60_000) cacheStore.delete(key)
-  })
-}, 60_000)
 
-export async function get(url: string | HttpOptions) {
-  const inStore = cacheStore.get(typeof url === "string" ? url : url.url)
-
-  if (inStore) return inStore.data
+export async function get(url: string | HttpOptions,
+  headers?: Record<string, string>) {
 
   const response = await Http.get(
     typeof url === "object"
@@ -43,6 +29,7 @@ export async function get(url: string | HttpOptions) {
             "upgrade-insecure-requests": "1",
             "user-agent":
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+              ...headers
           },
         }
   ).then((response) => {
@@ -52,11 +39,7 @@ export async function get(url: string | HttpOptions) {
 
     return response
   })
-  cacheStore.set(typeof url === "string" ? url : url.url, {
-    data: response,
-    time: performance.now(),
-  })
-
+ 
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
@@ -65,7 +48,8 @@ export async function get(url: string | HttpOptions) {
 
 export async function post(
   url: string,
-  data: Record<string, number | string | boolean>
+  data: Record<string, number | string | boolean>,
+  headers?: Record<string, string>
 ) {
   const response = await Http.post({
     url: "https://animevietsub.cc" + url,
@@ -73,6 +57,7 @@ export async function post(
       "user-agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
       "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+      ...headers
     },
     data,
   })
