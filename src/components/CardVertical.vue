@@ -32,7 +32,8 @@
         color="primary"
         no-caps
         class="px-2 mt-1"
-        @click.stop.prevent
+        @click.stop.prevent="addToFavorite"
+        v-if="false"
       >
         <Icon icon="bi:bookmark-plus" />
         <!-- <Icon icon="bi:bookmark-check" /> -->
@@ -56,4 +57,10 @@ defineProps<{
     description?: string
   }
 }>()
+
+
+
+function addToFavorite() {
+  
+}
 </script>
