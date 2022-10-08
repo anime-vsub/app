@@ -37,7 +37,7 @@
       </q-list>
 
 
-      <div v-if="notificationStore.items.length < notificationStore.max" class="text-grey text-center">Do API server
+      <div v-if="notificationStore.items.length < notificationStore.max" class="text-grey text-center mt-3 mx-2 mb-3">Do API server
         không đầy đủ bạn phải xóa những thông báo mới để xem những thông báo cũ</div>
     </template>
 
