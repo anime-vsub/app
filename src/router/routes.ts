@@ -70,17 +70,16 @@ const routes: RouteRecordRaw[] = [
           },
           {
             path: "edit-profile",
-            component: () => import("pages/tai-khoan/edit-profile.vue")
+            component: () => import("pages/tai-khoan/edit-profile.vue"),
           },
           {
             path: "setting",
-            component: () => import("pages/tai-khoan/setting.vue")
-          }
-        ]
+            component: () => import("pages/tai-khoan/setting.vue"),
+          },
+        ],
       },
     ],
   },
-
 
   {
     name: "phim_[season]_[chap]",

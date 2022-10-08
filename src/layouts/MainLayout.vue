@@ -78,7 +78,9 @@
             class="mb-1 filled"
           />
           Thông báo
-            <q-badge v-if="notificationStore.max" color="red" floating>{{notificationStore.max }}</q-badge>
+          <q-badge v-if="notificationStore.max" color="red" floating>{{
+            notificationStore.max
+          }}</q-badge>
         </q-route-tab>
         <q-route-tab
           exact-active-class="tab-active"

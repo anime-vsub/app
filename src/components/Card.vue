@@ -18,9 +18,7 @@
           <template v-if="data.process[0] === data.process[1]">
             {{ data.process[0] }} tập
           </template>
-          <template v-else>
-            Tập {{ data.process }}
-          </template>
+          <template v-else> Tập {{ data.process }} </template>
         </span>
         <span v-else>Tập {{ data.chap }}</span>
       </BottomBlur>

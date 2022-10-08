@@ -58,9 +58,5 @@ defineProps<{
   }
 }>()
 
-
-
-function addToFavorite() {
-  
-}
+function addToFavorite() {}
 </script>

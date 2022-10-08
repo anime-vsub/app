@@ -26,7 +26,7 @@ export async function DangNhap(email: string, password: string) {
     // parse
 
     return {
-      ...await PostWorker<typeof AccountInfoParser>(Worker, html),
+      ...(await PostWorker<typeof AccountInfoParser>(Worker, html)),
       cookie: new Headers(headers).get("set-cookie")!,
     }
   } else {
