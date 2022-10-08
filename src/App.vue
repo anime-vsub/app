@@ -12,7 +12,7 @@ import { Http } from "@capacitor-community/http"
 // @ts-expect-error
 import eruda from "eruda2"
 
-const isDev = import.meta.env.NODE_ENV !== "production"
+const isDev = import.meta.env.DEV
 if (isDev) {
   eruda.init()
 
