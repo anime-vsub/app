@@ -19,6 +19,7 @@ async function fetchFromTinAnime(page: number) {
     icon: "https://tinanime.com/logos/114x114.png",
     name: "TinAnime",
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return data.map((item: any) => {
     return {
       image: item.thumbnail,

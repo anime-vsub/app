@@ -1,10 +1,10 @@
-import type { HttpOptions, HttpResponse } from "@capacitor-community/http"
-import { CapacitorHttp as Http } from '@capacitor/core';
+import type { HttpOptions } from "@capacitor-community/http"
+import { CapacitorHttp as Http } from "@capacitor/core"
 
-
-export async function get(url: string | HttpOptions,
-  headers?: Record<string, string>) {
-
+export async function get(
+  url: string | HttpOptions,
+  headers?: Record<string, string>
+) {
   const response = await Http.get(
     typeof url === "object"
       ? url
@@ -29,7 +29,7 @@ export async function get(url: string | HttpOptions,
             "upgrade-insecure-requests": "1",
             "user-agent":
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-              ...headers
+            ...headers,
           },
         }
   ).then((response) => {
@@ -39,7 +39,7 @@ export async function get(url: string | HttpOptions,
 
     return response
   })
- 
+
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
@@ -57,7 +57,7 @@ export async function post(
       "user-agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
       "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-      ...headers
+      ...headers,
     },
     data,
   })

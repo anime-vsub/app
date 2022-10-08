@@ -1,9 +1,11 @@
-import { describe ,  test, expect } from "vitest"
+import { describe, expect, test } from "vitest"
+
 import AjaxNotification from "./notification"
 
 describe("notification", () => {
   test("normal", () => {
-    expect(AjaxNotification(`<div class="notifi-item" id="notifi-item-5606932">
+    expect(
+      AjaxNotification(`<div class="notifi-item" id="notifi-item-5606932">
 			<a href="/phim/kakkou-no-iinazuke-a4260/tap-24end-86965.html" class="not-read">
 				<div class="notifi-item-thumbnail"><img src="http://cdn.animevietsub.cc/data/banner/2021/08/31/animevsub-4WKr3mgTnu.jpg"></div>
 				<div class="notifi-item-info">
@@ -69,49 +71,62 @@ describe("notification", () => {
 
 			<i class="fa fa-times notification-delete" id="notification-delete" data-id="5559895"></i>
 
-		</div>`)).toEqual([
-  {
-    "image": "http://cdn.animevietsub.cc/data/banner/2021/08/31/animevsub-4WKr3mgTnu.jpg",
-    "name": "Hôn Thê Cúc Cu",
-    "chap": "Tập 24_END",
-    "time": " 5 ngày trước",
-    "path": "/phim/kakkou-no-iinazuke-a4260/tap-24end-86965.html"
-  },
-  {
-    "image": "http://cdn.animevietsub.cc/data/banner/2022/04/15/animevsub-wo4DTBXCyd.png",
-    "name": "Summertime Render",
-    "chap": "Tập 25_END",
-    "time": " 6 ngày trước",
-    "path": "/phim/summertime-render-a4504/tap-25end-86906.html"
-  },
-  {
-    "image": "http://cdn.animevietsub.cc/data/banner/2022/07/08/animevsub-gvZ0OWMdaI.jpg",
-    "name": "Yofukashi no Uta",
-    "chap": "Tập 13_END",
-    "time": " 1 tuần trước",
-    "path": "/phim/call-of-the-night-a4536/tap-13end-86895.html"
-  },
-  {
-    "image": "http://cdn.animevietsub.cc/data/banner/2022/09/08/animevsub-MThn4jJ9eT.jpg",
-    "name": "DanMachi IV",
-    "chap": "Tập 11_END",
-    "time": " 1 tuần trước",
-    "path": "/phim/danmachi-iv-a4289/tap-11end-86893.html"
-  },
-  {
-    "image": "http://cdn.animevietsub.cc/data/banner/2022/06/03/animevsub-ixE7rWSfjK.jpg",
-    "name": "Ma Vương Đi Làm Mùa 2",
-    "chap": "Tập 12_END",
-    "time": " 1 tuần trước",
-    "path": "/phim/hataraku-maou-sama-2nd-season-a4257/tap-12end-86892.html"
-  },
-  {
-    "image": "http://cdn.animevietsub.cc/data/banner/2022/06/16/animevsub-WTbLjxxodb.jpg",
-    "name": "Overlord IV",
-    "chap": "Tập 13_END",
-    "time": " 1 tuần trước",
-    "path": "/phim/overlord-iv-a4263/tap-13end-86859.html"
-  }
-])
+		</div>`)
+    ).toEqual([
+      {
+        image:
+          "http://cdn.animevietsub.cc/data/banner/2021/08/31/animevsub-4WKr3mgTnu.jpg",
+        name: "Hôn Thê Cúc Cu",
+        chap: "Tập 24_END",
+        time: " 5 ngày trước",
+        path: "/phim/kakkou-no-iinazuke-a4260/tap-24end-86965.html",
+        id: "5606932",
+      },
+      {
+        image:
+          "http://cdn.animevietsub.cc/data/banner/2022/04/15/animevsub-wo4DTBXCyd.png",
+        name: "Summertime Render",
+        chap: "Tập 25_END",
+        time: " 6 ngày trước",
+        path: "/phim/summertime-render-a4504/tap-25end-86906.html",
+        id: "5589667",
+      },
+      {
+        image:
+          "http://cdn.animevietsub.cc/data/banner/2022/07/08/animevsub-gvZ0OWMdaI.jpg",
+        name: "Yofukashi no Uta",
+        chap: "Tập 13_END",
+        time: " 1 tuần trước",
+        path: "/phim/call-of-the-night-a4536/tap-13end-86895.html",
+        id: "5581144",
+      },
+      {
+        image:
+          "http://cdn.animevietsub.cc/data/banner/2022/09/08/animevsub-MThn4jJ9eT.jpg",
+        name: "DanMachi IV",
+        chap: "Tập 11_END",
+        time: " 1 tuần trước",
+        path: "/phim/danmachi-iv-a4289/tap-11end-86893.html",
+        id: "5577127",
+      },
+      {
+        image:
+          "http://cdn.animevietsub.cc/data/banner/2022/06/03/animevsub-ixE7rWSfjK.jpg",
+        name: "Ma Vương Đi Làm Mùa 2",
+        chap: "Tập 12_END",
+        time: " 1 tuần trước",
+        path: "/phim/hataraku-maou-sama-2nd-season-a4257/tap-12end-86892.html",
+        id: "5573509",
+      },
+      {
+        image:
+          "http://cdn.animevietsub.cc/data/banner/2022/06/16/animevsub-WTbLjxxodb.jpg",
+        name: "Overlord IV",
+        chap: "Tập 13_END",
+        time: " 1 tuần trước",
+        path: "/phim/overlord-iv-a4263/tap-13end-86859.html",
+        id: "5559895",
+      },
+    ])
   })
 })

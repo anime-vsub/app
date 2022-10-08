@@ -100,15 +100,14 @@
     Icon
   } from "@iconify/vue"
   import {
+    useQuasar
+  } from "quasar"
+  import {
     useAuthStore
   } from "stores/auth"
   import {
     ref
   } from "vue"
-
-  import {
-    useQuasar
-  } from "quasar"
   import {
     useRouter
   } from "vue-router"
@@ -122,32 +121,35 @@
 
   const showPassword = ref(false)
 
+  // eslint-disable-next-line camelcase
   const new_password = ref("")
 
   async function changePassword() {
 
     const loader = $q.loading.show({
-      message: 'Đang xác thực. Vui lòng đợi...',
-      boxClass: 'bg-dark text-light-9',
-      spinnerColor: 'main',
-      thickness: 2,
+      message: "Đang xác thực. Vui lòng đợi...",
+      boxClass: "bg-dark text-light-9",
+      spinnerColor: "main",
       delay: Infinity,
 
     })
 
     try {
-      const data = await authStore.changePassword(new_password.value)
+      // eslint-disable-next-line camelcase
+      await authStore.changePassword(new_password.value)
 
       showDialogChangePassword.value = false
       $q.notify({
-        position: 'bottom-right',
-        message: `Đã đổi mật khẩu`
+        position: "bottom-right",
+        message: "Đã đổi mật khẩu"
       })
+      // eslint-disable-next-line camelcase
       new_password.value = ""
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       console.error(err)
       $q.notify({
-        position: 'bottotm-right',
+        position: "bottom-right",
         message: "Đổi mật khẩu thất bại",
         caption: err.message,
       })
@@ -161,7 +163,7 @@
     router.back()
 
     $q.notify({
-      position: 'bottom-right',
+      position: "bottom-right",
       message: "Đã đăng xuất"
     })
   }

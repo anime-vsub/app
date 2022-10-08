@@ -106,8 +106,8 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
-import { useRoute } from "vue-router"
 import { useNotificationStore } from "stores/notification"
+import { useRoute } from "vue-router"
 
 const route = useRoute()
 const notificationStore = useNotificationStore()

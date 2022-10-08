@@ -5,8 +5,10 @@ export default function AccountInfo(html: string) {
 
   const avatar = $(".profile-userpic img").attr("src")
   const name = $(".profile-usertitle-name").text().trim()
-  const email = $("#email").attr("value")
-  const username = $("#hoten").attr("value")
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const email = $("#email").attr("value")!
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const username = $("#hoten").attr("value")!
   const sex = $("#male").attr("checked")
     ? "male"
     : $("#female").attr("checked")

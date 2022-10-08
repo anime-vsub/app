@@ -175,7 +175,7 @@
 
       <q-infinite-scroll v-else @load="moreSearch" :offset="250">
         <CardVertical
-          v-for="(item, index) in resultSearch.items"
+          v-for="item in resultSearch.items"
           :key="item.name"
           :data="{
             ...item,
@@ -238,7 +238,6 @@ import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 // ================= unknown ===============
-
 
 dayjs.extend(relativeTime)
 
@@ -340,7 +339,7 @@ const {
 )
 watch(() => route.params.keyword, runSearch, { immediate: true })
 
-async function moreSearch(page: number, done: (noMore: boolean) => void) {
+async function moreSearch(page: number, done: (noMore?: boolean) => void) {
   if (
     resultSearch.value &&
     resultSearch.value.curPage === resultSearch.value.maxPage

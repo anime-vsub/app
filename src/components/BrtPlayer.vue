@@ -637,11 +637,17 @@ import { playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import Hls from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
-import { computed, onBeforeUnmount, ref, shallowReactive, watch , watchEffect } from "vue"
+import {
+  computed,
+  onBeforeUnmount,
+  ref,
+  shallowReactive,
+  watch,
+  watchEffect,
+} from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
 import type { Source } from "./sources"
-
 
 interface ResponseDataSeasonPending {
   status: "pending"
@@ -919,7 +925,8 @@ function runRemount() {
   }).onOk(remount)
 }
 
-let currentHls: Hls
+// eslint-disable-next-line functional/no-let
+let currentHls: typeof Hls
 onBeforeUnmount(() => currentHls?.destroy())
 function remount() {
   currentHls?.destroy()
@@ -942,14 +949,17 @@ function remount() {
   switch (type) {
     case "hls":
     case "m3u":
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       // eslint-disable-next-line no-case-declarations
-      const hls = new Hls()
+      const hls = new Hls() as typeof Hls
       currentHls = hls
       // customLoader(hls.config)
       hls.loadSource(url)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       hls.attachMedia(video.value!)
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      hls.on((Hls as unknown as any).Events.MANIFEST_PARSED, () => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (playing) video.value!.play()
       })
@@ -977,7 +987,8 @@ const watcherVideoTagReady = watch(video, (video) => {
 
       console.log("set url art %s", url)
 
-      if (Hls.isSupported()) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((Hls as unknown as any).isSupported()) {
         remount()
       } else {
         const canPlay = video.canPlayType("application/vnd.apple.mpegurl")
