@@ -63,7 +63,7 @@
         <q-route-tab
           exact-active-class="tab-active"
           class="pt-1"
-          to="/thong-bao"
+          to="/notification"
         >
           <Icon
             icon="carbon:notification"
@@ -78,6 +78,7 @@
             class="mb-1 filled"
           />
           Thông báo
+            <q-badge v-if="notificationStore.max" color="red" floating>{{notificationStore.max }}</q-badge>
         </q-route-tab>
         <q-route-tab
           exact-active-class="tab-active"
@@ -106,8 +107,10 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useRoute } from "vue-router"
+import { useNotificationStore } from "stores/notification"
 
 const route = useRoute()
+const notificationStore = useNotificationStore()
 </script>
 
 <style lang="scss">
