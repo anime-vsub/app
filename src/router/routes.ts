@@ -13,11 +13,6 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        name: "phim_[season]_[chap]",
-        path: "phim/:season/:chap?",
-        component: () => import("pages/phim/_season.vue"),
-      },
-      {
         path: ":type_normal(anime-bo|anime-le|hoat-hinh-trung-quoc|anime-sap-chieu)",
         redirect(to) {
           return `/danh-sach/${to.params.type_normal}`
@@ -56,20 +51,41 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: "thong-bao",
-        component: () => null,
+        path: "notification",
+        component: () => import("pages/notification.vue"),
         meta: {
           footer: true,
         },
       },
       {
         path: "tai-khoan",
-        component: () => null,
-        meta: {
-          footer: true,
-        },
+        component: () => import("pages/tai-khoan/index_outlet.vue"),
+        children: [
+          {
+            path: "",
+            component: () => import("pages/tai-khoan/index.vue"),
+            meta: {
+              footer: true,
+            },
+          },
+          {
+            path: "edit-profile",
+            component: () => import("pages/tai-khoan/edit-profile.vue")
+          },
+          {
+            path: "setting",
+            component: () => import("pages/tai-khoan/setting.vue")
+          }
+        ]
       },
     ],
+  },
+  
+  
+  {
+    name: "phim_[season]_[chap]",
+    path: "/phim/:season/:chap?",
+    component: () => import("pages/phim/_season.vue"),
   },
 
   // Always leave this as last one,
