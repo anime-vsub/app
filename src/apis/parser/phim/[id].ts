@@ -81,8 +81,6 @@ export default function PhimId(html: string, now: number) {
   const seasonOf = getInfoAnchor(findInfo($, infoListRight, "season").find("a"))
   const trailer = $("#Opt1 iframe").attr("src")
 
-  const followed = $(".added").length > 0
-
   const toPut = $(".MovieListRelated .TPostMv")
     .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
@@ -111,7 +109,6 @@ export default function PhimId(html: string, now: number) {
     studio,
     seasonOf,
     trailer,
-    followed,
     toPut,
   }
 }

@@ -74,19 +74,34 @@
     <q-responsive :ratio="16 / 9" />
 
     <div v-ripple @click="showDialogInforma = true" class="relative">
-      <div class="relative flex items-end justify-between mx-[10px]">
+      <div class="relative flex items-center justify-between mx-[10px]">
         <div class="flex-1 mt-4 mb-2">
           <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
             {{ data.name }}
           </h1>
           <h5 class="text-gray-400 text-weight-normal">
             {{ formatView(data.views) }} lượt xem &bull;
-            <router-link
-              v-if="data.seasonOf"
-              class="c--main"
-              :to="data.seasonOf.path"
-              >{{ data.seasonOf.name }}</router-link
-            >
+
+            <span v-if="currentDataSeason?.update">
+              Tập mới chiếu vào
+              {{
+                dayjs(
+                  new Date(
+                    `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
+                  )
+                ).format("HH:MM")
+              }}
+              {{
+                currentDataSeason.update[0] === 7
+                  ? "Chủ nhật"
+                  : `thứ ${currentDataSeason.update[0]}`
+              }}
+              {{
+                currentDataSeason.update[0] > new Date().getDay()
+                  ? "tuần sau"
+                  : ""
+              }}
+            </span>
           </h5>
         </div>
 
@@ -124,7 +139,8 @@
           :key="item.name"
           :to="item.path"
           class="text-[rgb(28,199,73)]"
-          >{{ item.name }}</router-link
+        >
+          {{ item.name }}</router-link
         >
         <div class="divider"></div>
 
@@ -141,9 +157,16 @@
           {{ formatView(data.count_rate) }} người đánh giá
         </span>
         <div class="divider"></div>
-        <span class="text-gray-400">
+        <!-- <span class="text-gray-400">
           {{ formatView(data.follows) }} người theo dõi
-        </span>
+        </span> -->
+
+        <router-link
+          v-if="data.seasonOf"
+          class="c--main"
+          :to="data.seasonOf.path"
+          >{{ data.seasonOf.name }}
+        </router-link>
       </div>
 
       <div class="tags mt-1">
@@ -158,32 +181,31 @@
       </div>
     </div>
 
-    <div
-      v-if="currentDataSeason?.update"
-      class="text-gray-300 px-2 text-center pt-1 text-weight-medium text-[14px]"
-    >
-      Tập mới cập nhật lúc
-      {{
-        dayjs(
-          new Date(
-            `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
-          )
-        ).format("HH:MM")
-      }}
-      {{
-        currentDataSeason.update[0] === 7
-          ? "Chủ nhật"
-          : `Thứ ${currentDataSeason.update[0]}`
-      }}
-      {{ currentDataSeason.update[0] > new Date().getDay() ? "tuần sau" : "" }}
+    <div class="my-2 mx-2">
+      <q-btn stack no-caps class="mr-4 text-weight-normal" @click="toggleFollow">
+        <Icon
+          v-if="followed"
+          icon="material-symbols:bookmark-added-outline-rounded"
+          width="28"
+          height="28"
+        />
+        <Icon
+          v-else
+          icon="material-symbols:bookmark-add-outline-rounded"
+          width="28"
+          height="28"
+        />
+        <span class="text-[12px] mt-1">{{
+          follows ? formatView(follows) : "Theo dõi"
+        }}</span>
+      </q-btn>
+      <q-btn stack no-caps class="mr-4 text-weight-normal">
+        <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
+        <span class="text-[12px] mt-1">Chia sẻ</span>
+      </q-btn>
     </div>
 
-    <q-btn
-      flat
-      no-caps
-      class="w-full !px-2 mt-4"
-      @click="showDialogChapter = true"
-    >
+    <q-btn flat no-caps class="w-full !px-2" @click="showDialogChapter = true">
       <div class="flex items-center justify-between text-subtitle2 w-full">
         Tập
 
@@ -405,7 +427,8 @@
                   :key="item.name"
                   class="py-[5px] !min-h-0 px-2 rounded-sm bg-gray-700 mx-1 my-1 inline-block relative"
                   :to="item.path"
-                  >{{ item.name }}</q-btn
+                >
+                  {{ item.name }}</q-btn
                 >
               </span>
             </li>
@@ -496,14 +519,15 @@ watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      params: { pathMatch: route.path },
+      params: {
+        pathMatch: route.path,
+      },
       query: {
         message: error.message,
         cause: error.cause + "",
       },
     })
 })
-watch(data, data => console.log(data), { immediate: true })
 
 const seasons = ref()
 watch(
@@ -535,7 +559,9 @@ watch(
       },
     ]
   },
-  { immediate: true }
+  {
+    immediate: true,
+  }
 )
 
 interface ResponseDataSeasonPending {
@@ -644,7 +670,9 @@ async function fetchSeason(season: string) {
 
 const seasonActive = ref<string>()
 // sync data by active route
-watch(currentSeason, (val) => (seasonActive.value = val), { immediate: true })
+watch(currentSeason, (val) => (seasonActive.value = val), {
+  immediate: true,
+})
 
 watch(seasonActive, (seasonActive) => {
   if (!seasonActive) return
@@ -673,7 +701,13 @@ const currentMetaChap = computed(() => {
   )
 })
 // eslint-disable-next-line vue/return-in-computed-property
-const nextChap = computed<{ season: string; chap?: string } | undefined>(() => {
+const nextChap = computed<
+  | {
+      season: string
+      chap?: string
+    }
+  | undefined
+>(() => {
   if (!currentDataSeason.value) return
   // get index currentChap
   const indexCurrentChap = !currentMetaChap.value
@@ -759,10 +793,14 @@ watch(
         ).data
       )
     } catch (err) {
-      console.log({ err })
+      console.log({
+        err,
+      })
     }
   },
-  { immediate: true }
+  {
+    immediate: true,
+  }
 )
 const sources = computed<Source[] | undefined>(() =>
   configPlayer.value?.link.map((item): Source => {
@@ -811,6 +849,38 @@ watchEffect(() => {
   }, 70)
 })
 
+// ================ follow ================
+import { checkIsLile , AjaxLike } from "src/apis/runs/ajax/like"
+const followed = ref(false)
+import { useQuasar } from "quasar"
+
+const $q = useQuasar()
+
+const seasonId = computed(() => route.params.season?.match(/\d+$/)?.[0])
+watch(seasonId, async seasonId => {
+  if (seasonId) {
+    followed.value = await checkIsLile(seasonId)
+    console.log(followed.value)
+  } else {
+    followed.value = 0
+  }
+}, { immediate: true })
+
+const follows = ref(0)
+watch(data, (data) => {
+  follows.value = data?.follows ?? 0
+}, { immediate: true })
+
+async function toggleFollow() {
+  followed.value = !followed.value
+  await AjaxLike(seasonId.value,   followed.value )
+  if (followed.value) follows.value ++
+  else follows.value --
+  $q.notify({
+    position: "bottom-right",
+    message: followed.value ? "Đã thêm vào danh sách theo dõi" : "Đã xóa khỏi danh sách theo dõi"
+  })
+}
 // ================ status ================
 const showDialogChapter = ref(false)
 const showDialogInforma = ref(false)
@@ -835,13 +905,16 @@ const showDialogInforma = ref(false)
   > * {
     @apply mr-3;
   }
+
   @media (max-width: 767px) {
     font-size: 13px;
+
     > * {
       @apply mr-1 mt-1;
     }
   }
 }
+
 .chap-name {
   // height: 20px;
   text-align: center;
@@ -850,8 +923,10 @@ const showDialogInforma = ref(false)
   // transition: all 1s ease;
   font-weight: 500;
   @apply mx-2 py-1;
+
   &.active {
     color: rgb(0, 190, 6);
+
     &:after {
       width: 80%;
     }

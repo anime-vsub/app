@@ -10,8 +10,7 @@ describe("info", () => {
       name: "しん",
       email: "oppoepgergh@gmail.com",
       username: "tachib.shin",
-      sex: "male"
-    }
-    )
+      sex: "male",
+    })
   })
 })
