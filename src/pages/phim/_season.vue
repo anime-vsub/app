@@ -363,7 +363,7 @@
         class="relative flex-1 min-h-0 px-2 overflow-y-scroll text-[14px] text-[#9a9a9a] text-weight-normal"
       >
         <div>
-          <div class="flex">
+          <div class="flex flex-nowrap">
             <q-img
               :src="data.image"
               :ratio="280 / 400"
