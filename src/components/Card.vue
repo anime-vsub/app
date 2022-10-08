@@ -19,7 +19,7 @@
             {{ data.process[0] }} tập
           </template>
           <template v-else>
-            Tập {{ data.process[0] }} / {{ data.process[1] ?? "??" }}
+            Tập {{ data.process }}
           </template>
         </span>
         <span v-else>Tập {{ data.chap }}</span>
