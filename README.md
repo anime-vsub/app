@@ -12,5 +12,6 @@
 - [ ] UI
 - [ ] Tabs option type in Index.vue
 - [x] router: bang-xep-hang
-- [ ] router: search
+- [x] router: search
 - [x] router: lich-chieu-phim
+- [ ] button follow anime
