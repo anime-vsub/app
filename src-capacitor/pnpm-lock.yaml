@@ -9,6 +9,7 @@ specifiers:
   '@capacitor/core': ^4.3.0
   '@capacitor/haptics': ^4.0.1
   '@capacitor/preferences': ^4.0.1
+  '@capacitor/share': ^4.0.1
   '@capacitor/status-bar': ^4.0.1
   '@hugotomazi/capacitor-navigation-bar': ^2.0.0
   '@ionic/vue': ^6.3.0
@@ -23,6 +24,7 @@ dependencies:
   '@capacitor/core': 4.3.0
   '@capacitor/haptics': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/preferences': 4.0.1_@capacitor+core@4.3.0
+  '@capacitor/share': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/status-bar': 4.0.1_@capacitor+core@4.3.0
   '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.3.0
   '@ionic/vue': 6.3.0
@@ -135,6 +137,14 @@ packages:
 
   /@capacitor/preferences/4.0.1_@capacitor+core@4.3.0:
     resolution: {integrity: sha512-FffJjKS4XcodUj/rtFtWizQ9q/oYDSn5opZ+JYwj/EkjiMWMhY/Pk9lN3vwQfp+VJrTt3hjr+bwKXjhTbYBqKw==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
+    dev: false
+
+  /@capacitor/share/4.0.1_@capacitor+core@4.3.0:
+    resolution: {integrity: sha512-czqYavgW+rMrlcgZkLHJ4Xwr+7E/T2YxxZ5tVtdqxANlKCw/qUL2tpNx3wphiC8lWj9wLUWFjgrBBDeZSlPYdQ==}
     peerDependencies:
       '@capacitor/core': ^4.0.0
     dependencies:
