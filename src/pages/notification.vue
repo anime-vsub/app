@@ -12,7 +12,7 @@
       <q-list class="bg-transparent">
         <transition-group name="notify">
           <q-slide-item v-for="(item) in notificationStore.items" :key="item.id" @left="onDelete($event, item)"
-            @right="onDelete($event, item)" left-color="red" right-color="red" clickable v-ripple :to="item.path">
+            @right="onDelete($event, item)" left-color="red" right-color="red" clickable v-ripple @click="router.push(item.path)" class="bg-transparent">
             <template v-slot:left>
               <Icon icon="fluent:delete-24-regular" width="25" height="25" />
             </template>
