@@ -503,6 +503,7 @@ watch(error, (error) => {
       },
     })
 })
+watch(data, data => console.log(data), { immediate: true })
 
 const seasons = ref()
 watch(
@@ -660,7 +661,6 @@ const currentDataSeason = computed(() => {
   return undefined
 })
 const currentChap = computed(() => {
-  console.log(route.params)
   if (route.params.chap) return route.params.chap as string
 
   // get first chap in season
