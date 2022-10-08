@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
   import { DangNhap } from "src/apis/runs/dang-nhap"
 import { parse } from "set-cookie-parser"
 import cookie from "js-cookie"
+import { post } from "src/logic/http"
 
 interface User {
           avatar: string
@@ -17,14 +18,17 @@ export const useAuthStore = defineStore('auth', {
       value: User
       expires: number
     }),
-    token_name: parseJSON(cookie.get("token_name")) as null | string,
-    token_value: parseJSON(cookie.get("token_value")) as null | string
+    token_name: (cookie.get("token_name")??null) as null | string,
+    token_value: (cookie.get("token_value")??null) as null | string
   }),
   getters: {
     user(state) {
-      if (!state.user_data && state.user_data.expires < Date.now()) return null
+      if (!state.user_data || state.user_data.expires < Date.now()) return null
 
       return state.user_data.value
+    },
+    isLogged(state) {
+      return !!state.token_name && !!state.token_value && !!state.user_data
     }
   },
   actions: {
@@ -35,26 +39,30 @@ export const useAuthStore = defineStore('auth', {
     setToken(name: string, value: string, expires: number) {
       this.token_name = name
       this.token_value = value
-      cookie.set("token_name", JSON.stringify(name), { expires })
-      cookie.set("token_value", JSON.stringify(value), { expires })
+      cookie.set("token_name", (name), { expires })
+      cookie.set("token_value", (value), { expires })
     },
     deleteUser() {
       this.user_data = null
-      cookie.delete("user_data")
+      cookie.set("user_data", "", { expires: -1 })
     },
     deleteToken() {
       this.token_name = null
       this.token_value = null;
-      cookie.delete("token_name")
-      cookie.delete("token_value")
+      cookie.set("token_name", "", { expires: -1 })
+      cookie.set("token_value", "", { expires: -1 })
+    },
+    setTokenByCookie(cookie: string) {
+      const token = parse(cookie).find(item => item.name.startsWith("token"))!
+      // set token
+      this.setToken(token.name, token.value, token.expires)
+      return token
     },
     // ** actions **
     async login(email: string, password: string) {
       const data = await DangNhap(email, password)
-      
-      const token = parse(data.cookie).find(item => item.name.startsWith("token"))!
-      // set token
-      this.setToken(token.name, token.value, token.expires)
+
+      const { expires } = this.setTokenByCookie(data.cookie)
       this.setUser({
           avatar: data.avatar,
           email: data.email,
@@ -62,13 +70,31 @@ export const useAuthStore = defineStore('auth', {
           sex: data.sex,
           username: data.username
         },
-        token.expires
+        expires
       )
 
       return data;
     },
     async logout() {
       this.deleteToken()
+      this.deleteUser()
+    },
+    async changePassword(newPassword: string) {
+      const { headers } = await post("/account/info/", {
+        'User[hoten]': this.user.username,
+        'User[gender]': this.user.sex,
+        "User[password]": newPassword,
+        submit: "Cập nhật"
+      }, {
+cookie:`${this.token_name}=${this.token_value}`
+      }).catch(res => {
+      if (res.status === 302 && res.data) return Promise.resolve(res)
+
+      return Promise.reject(res)
+      })
+
+      const cookie = new Headers(headers).get("set-cookie")
+      this.setTokenByCookie(cookie)
     }
   }
 });
