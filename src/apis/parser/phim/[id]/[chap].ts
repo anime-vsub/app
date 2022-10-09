@@ -26,9 +26,13 @@ export default function PhimIdChap(html: string) {
       .text()
       .match(/(Thứ [^\s]+) vào lúc (\d+) giờ (\d+) phút/i)
       ?.slice(1) ?? []
+  const image = $(".Image img").attr("src")!
+  const poster = $(".TPostBg img").attr("src")!
 
   return {
     chaps,
     update: !day ? null : [dayTextToNum(day.toLowerCase()), +hour, +minus],
+    image,
+    poster,
   }
 }

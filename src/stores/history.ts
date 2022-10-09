@@ -7,6 +7,7 @@ export const useHistoryStore = defineStore("history", {
         string,
         {
           first: string
+          poster: string
           chaps: Record<string, { cur: number; dur: number }>
         }
       >
@@ -16,6 +17,7 @@ export const useHistoryStore = defineStore("history", {
   actions: {
     saveViewingProgress(options: {
       first: string
+      poster: string
       season: string
       chap: string
       progress: { cur: number; dur: number }
@@ -30,16 +32,14 @@ export const useHistoryStore = defineStore("history", {
 
       this.items[options.season] = {
         first: options.first,
+        poster: options.poster,
         chaps: {
           [options.chap]: options.progress,
         },
       }
     },
-    getProgressChap(options: {
-      season: string;
-      chap: string 
-    }) {
-      return this.items[ options.season ]?.chaps[options.chap] ?? null
-    }
+    getProgressChap(options: { season: string; chap: string }) {
+      return this.items[options.season]?.chaps[options.chap] ?? null
+    },
   },
 })

@@ -877,6 +877,7 @@ const historyStore = useHistoryStore()
 const saveCurTimeToPer = debounce(async () => {
   historyStore.saveViewingProgress({
     first: props.seasons![0].value,
+    poster: props.poster!,
     season: props.currentSeason!,
     chap: props.currentChap!,
     progress: { cur: artCurrentTime.value, dur: artDuration.value },
