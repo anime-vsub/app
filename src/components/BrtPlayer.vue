@@ -53,14 +53,14 @@
             height="24"
             class="mr-1"
           />
-          -10
+          -{{ countSkip * 10 }}
         </div>
 
         <div
           v-else
           class="flex items-center bg-[rgba(0,0,0,.5)] py-1 px-2 rounded-md"
         >
-          +10
+          +{{ countSkip * 10 }}
           <Icon
             icon="fluent:fast-forward-24-regular"
             width="24"
@@ -646,6 +646,7 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
+import { useHistoryStore } from "stores/history"
 
 import type { Source } from "./sources"
 
@@ -763,7 +764,24 @@ const setArtCurrentTime = (currentTime: number) => {
 }
 watch(
   () => props.currentChap,
-  () => setArtCurrentTime(0)
+  (currentChap) => {
+    if (currentChap) {
+      const progressInHistory = historyStore.getProgressChap({
+        season: props.currentSeason!,
+        chap: props.currentChap!,
+      })
+
+      if (progressInHistory) {
+        setArtCurrentTime(progressInHistory.cur)
+        addNotice(
+          `Đã khôi phục phiên xem trước ${parseTime(progressInHistory.cur)}`
+        )
+      } else {
+        setArtCurrentTime(0)
+      }
+    }
+  },
+  { immediate: true }
 )
 const artPercentageResourceLoaded = ref<number>(0)
 const artPlaybackRate = ref(1)
@@ -854,12 +872,16 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
+
+const historyStore = useHistoryStore()
 const saveCurTimeToPer = debounce(async () => {
-  localStorage.setItem(
-    `cur_time:${props.currentChap}`,
-    JSON.stringify(artCurrentTime.value)
-  )
-  console.log("saaved to per")
+  historyStore.saveViewingProgress({
+    first: props.seasons![0].value,
+    season: props.currentSeason!,
+    chap: props.currentChap!,
+    progress: { cur: artCurrentTime.value, dur: artDuration.value },
+  })
+  console.log("save viewing progress")
 }, 900)
 function onVideoTimeUpdate() {
   if (
@@ -1172,6 +1194,7 @@ let lastTimeClick: number
 let lastPositionClickIsLeft: boolean | null = null
 // eslint-disable-next-line functional/no-let, no-undef
 let timeoutDbClick: number | NodeJS.Timeout | null = null
+const countSkip = ref(0)
 function onClickSkip(event: MouseEvent, orFalse: boolean) {
   // click
   const now = Date.now()
@@ -1194,14 +1217,17 @@ function onClickSkip(event: MouseEvent, orFalse: boolean) {
     timeoutResetDoubleClicking && clearTimeout(timeoutResetDoubleClicking)
     timeoutResetDoubleClicking = setTimeout(() => {
       doubleClicking.value = false
+      countSkip.value = 0
     }, 700)
 
     if (isLeft) {
       // previous 10s
       skipBack()
+      countSkip.value++
     } else {
       // next 10s
       skipForward()
+      countSkip.value++
     }
     // soku
   } else {
