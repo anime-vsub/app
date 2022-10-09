@@ -17,6 +17,8 @@
     "icongenie": "icongenie generate -m capacitor -i meta/app_icon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim"
   },
   "dependencies": {
+    "@firebase/app": "^0.8.0",
+    "@firebase/firestore": "^3.6.0",
     "@iconify/vue": "^4.0.0",
     "@quasar/extras": "^1.15.4",
     "@tachibana-shin/artplayer": "4.5.7",
@@ -34,6 +36,7 @@
     "jwplayer8": "0.0.1-b1",
     "message-port-api": "^0.0.5",
     "pinia": "^2.0.22",
+    "pinia-plugin-persistedstate": "^2.2.0",
     "pinia-plugin-persistedstate-2": "^2.0.1",
     "quasar": "^2.9.1",
     "rss-parser": "^3.12.0",

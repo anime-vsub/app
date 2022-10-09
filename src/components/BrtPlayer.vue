@@ -631,7 +631,7 @@ import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { debounce, QTab, useQuasar } from "quasar"
+import { throttle, QTab, useQuasar } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
@@ -646,7 +646,6 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
-import { useHistoryStore } from "stores/history"
 
 import type { Source } from "./sources"
 
@@ -761,23 +760,27 @@ const setArtCurrentTime = (currentTime: number) => {
     return
   }
   video.value.currentTime = currentTime
+  artCurrentTime.value = currentTime
 }
 watch(
   () => props.currentChap,
-  (currentChap) => {
+  async (currentChap) => {
     if (currentChap) {
-      const progressInHistory = historyStore.getProgressChap({
-        season: props.currentSeason!,
-        chap: props.currentChap!,
-      })
+      setArtCurrentTime(0)
 
-      if (progressInHistory) {
-        setArtCurrentTime(progressInHistory.cur)
-        addNotice(
-          `Đã khôi phục phiên xem trước ${parseTime(progressInHistory.cur)}`
-        )
-      } else {
-        setArtCurrentTime(0)
+      if (!authStore.user_data) return
+
+      const userRef = doc(db, "users", authStore.user_data.email)
+      const seasonRef = doc(userRef, "history", props.currentSeason)
+      const chapRef = doc(seasonRef, "chaps", currentChap)
+
+      const progressInCloud = await getDoc(chapRef)
+
+      const cur = progressInCloud.data()?.cur
+
+      if (cur) {
+        setArtCurrentTime(cur)
+        addNotice(`Đã khôi phục phiên xem trước ${parseTime(cur)}`)
       }
     }
   },
@@ -872,18 +875,67 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
+import { useAuthStore } from "stores/auth"
 
-const historyStore = useHistoryStore()
-const saveCurTimeToPer = debounce(async () => {
-  historyStore.saveViewingProgress({
-    first: props.seasons![0].value,
-    poster: props.poster!,
-    season: props.currentSeason!,
-    chap: props.currentChap!,
-    progress: { cur: artCurrentTime.value, dur: artDuration.value },
-  })
+const authStore = useAuthStore()
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+} from "@firebase/firestore"
+import { app } from "boot/firebase"
+
+const db = getFirestore(app)
+let seasonRefCache
+watch(
+  [() => authStore.user_data, () => props.currentSeason],
+  async ([user_data, currentSeason]) => {
+    seasonRefCache = null
+
+    if (!user_data || !currentSeason) return
+
+    const userRef = doc(db, "users", user_data.email)
+
+    if (!(await getDoc(userRef)).exists()) {
+      console.log("create new user")
+      await setDoc(userRef, {
+        email: user_data.email,
+        name: user_data.name,
+      })
+    }
+
+    const seasonRef = doc(userRef, "history", currentSeason)
+
+    if (!(await getDoc(seasonRef)).exists()) {
+      //
+      console.log("create new record")
+      await setDoc(seasonRef, {
+        first: props.seasons![0].value,
+        poster: props.poster!,
+      })
+    }
+
+    seasonRefCache = seasonRef
+  },
+  { immediate: true }
+)
+
+const saveCurTimeToPer = throttle(async () => {
+  if (!seasonRefCache) return
+
+  const chapRef = doc(seasonRefCache, "chaps", props.currentChap)
+
+  await setDoc(
+    chapRef,
+    { cur: artCurrentTime.value, dur: artDuration.value },
+    { merge: true }
+  )
+
   console.log("save viewing progress")
-}, 900)
+}, 3_000)
 function onVideoTimeUpdate() {
   if (
     artPlaying.value &&
