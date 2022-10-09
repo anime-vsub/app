@@ -182,7 +182,12 @@
     </div>
 
     <div class="my-2 mx-2">
-      <q-btn stack no-caps class="mr-4 text-weight-normal" @click="toggleFollow">
+      <q-btn
+        stack
+        no-caps
+        class="mr-4 text-weight-normal"
+        @click="toggleFollow"
+      >
         <Icon
           v-if="followed"
           icon="material-symbols:bookmark-added-outline-rounded"
@@ -463,8 +468,8 @@ import Quality from "components/Quality.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
 import dayjs from "dayjs"
-import { QTab , useQuasar } from "quasar"
-import { AjaxLike , checkIsLile } from "src/apis/runs/ajax/like"
+import { QTab, useQuasar } from "quasar"
+import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
@@ -533,10 +538,12 @@ watch(error, (error) => {
     })
 })
 
-const seasons = ref<{
-  name: string
-  value: string
-}[]>()
+const seasons = ref<
+  {
+    name: string
+    value: string
+  }[]
+>()
 watch(
   data,
   () => {
@@ -594,9 +601,9 @@ const _cacheDataSeasons = reactive<
 >(new Map())
 
 async function fetchSeason(season: string) {
-  if ( !seasons.value ) {
+  if (!seasons.value) {
     console.warn("seasons not ready")
-    return;
+    return
   }
   if (_cacheDataSeasons.get(season)?.status === "success") {
     console.info("use data from cache not fetch")
@@ -718,7 +725,7 @@ const nextChap = computed<
       chap?: string
     }
   | undefined
-// eslint-disable-next-line vue/return-in-computed-property
+  // eslint-disable-next-line vue/return-in-computed-property
 >(() => {
   if (!currentDataSeason.value) return
   // get index currentChap
@@ -865,42 +872,54 @@ const follows = ref(0)
 
 const $q = useQuasar()
 
-const seasonId = computed(() => (route.params.season as string | undefined)?.match(/\d+$/)?.[0])
-watch(seasonId, async seasonId => {
-  if (seasonId) {
-    followed.value = await checkIsLile(seasonId)
-  } else {
-    followed.value = false
-    follows.value = 0
-  }
-}, { immediate: true })
+const seasonId = computed(
+  () => (route.params.season as string | undefined)?.match(/\d+$/)?.[0]
+)
+watch(
+  seasonId,
+  async (seasonId) => {
+    if (seasonId) {
+      followed.value = await checkIsLile(seasonId)
+    } else {
+      followed.value = false
+      follows.value = 0
+    }
+  },
+  { immediate: true }
+)
 
-watch(data, (data) => {
-  follows.value = data?.follows ?? 0
-}, { immediate: true })
+watch(
+  data,
+  (data) => {
+    follows.value = data?.follows ?? 0
+  },
+  { immediate: true }
+)
 
 async function toggleFollow() {
   followed.value = !followed.value
-  await AjaxLike(seasonId.value!,   followed.value )
-  if (followed.value) follows.value ++
-  else follows.value --
+  await AjaxLike(seasonId.value!, followed.value)
+  if (followed.value) follows.value++
+  else follows.value--
   $q.notify({
     position: "bottom-right",
-    message: followed.value ? "Đã thêm vào danh sách theo dõi" : "Đã xóa khỏi danh sách theo dõi"
+    message: followed.value
+      ? "Đã thêm vào danh sách theo dõi"
+      : "Đã xóa khỏi danh sách theo dõi",
   })
 }
 
 function share() {
   if (!data.value || !currentMetaSeason.value || !currentMetaChap.value) {
-console.warn("data not ready")
+    console.warn("data not ready")
 
-    return;
+    return
   }
   Share.share({
     title: `Xem ${data.value.name} series ${currentMetaSeason.value.name}`,
     text: `Xem ${data.value.name} tập ${currentMetaChap.value.name}`,
     url: `https://animevietsub.cc${route.path}`,
-    dialogTitle: `Chia sẻ ${data.value.name}`
+    dialogTitle: `Chia sẻ ${data.value.name}`,
   })
 }
 // ================ status ================
