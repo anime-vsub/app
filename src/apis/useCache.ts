@@ -15,10 +15,10 @@ setInterval(() => {
 export async function useCache<Fn extends (...args: any) => any>(
   key: string,
   fn: Fn
-) {
+): Promise<Awaited<ReturnType<Fn>>> {
   const inCache = cacheStore.get(key)
 
-  if (inCache) return inCache
+  if (inCache) return inCache.result as Awaited<ReturnType<Fn>>
 
   const result = await fn()
 

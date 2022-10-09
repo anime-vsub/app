@@ -276,7 +276,7 @@
         :label="item.name"
         class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[6px]"
         content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-        :ref="(el) => item.value === seasonActive && (tabsRef = el as QTab)"
+        :ref="(el: QTab) => item.value === seasonActive && (tabsRef = el as QTab)"
       />
     </q-tabs>
 
@@ -318,7 +318,7 @@
             :key="item.value"
             :name="item.value"
             :label="item.name"
-            :ref="(el) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
+            :ref="(el: QTab) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
           />
         </q-tabs>
 
@@ -454,6 +454,7 @@
 </template>
 
 <script lang="ts" setup>
+import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
@@ -462,7 +463,8 @@ import Quality from "components/Quality.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
 import dayjs from "dayjs"
-import { QTab } from "quasar"
+import { QTab , useQuasar } from "quasar"
+import { AjaxLike , checkIsLile } from "src/apis/runs/ajax/like"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
@@ -475,6 +477,8 @@ import { unflat } from "src/logic/unflat"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+
+// ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
 
@@ -590,6 +594,10 @@ const _cacheDataSeasons = reactive<
 >(new Map())
 
 async function fetchSeason(season: string) {
+  if ( !seasons.value ) {
+    console.warn("seasons not ready")
+    return;
+  }
   if (_cacheDataSeasons.get(season)?.status === "success") {
     console.info("use data from cache not fetch")
     return
@@ -703,13 +711,14 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
-// eslint-disable-next-line vue/return-in-computed-property
+
 const nextChap = computed<
   | {
       season: string
       chap?: string
     }
   | undefined
+// eslint-disable-next-line vue/return-in-computed-property
 >(() => {
   if (!currentDataSeason.value) return
   // get index currentChap
@@ -851,33 +860,28 @@ watchEffect(() => {
     if (tabsDialogRef.value?.$el) scrollXIntoView(tabsDialogRef.value.$el)
   }, 70)
 })
-
-// ================ follow ================
-import { checkIsLile , AjaxLike } from "src/apis/runs/ajax/like"
 const followed = ref(false)
-import { useQuasar } from "quasar"
-import { Share } from "@capacitor/share"
+const follows = ref(0)
 
 const $q = useQuasar()
 
-const seasonId = computed(() => route.params.season?.match(/\d+$/)?.[0])
+const seasonId = computed(() => (route.params.season as string | undefined)?.match(/\d+$/)?.[0])
 watch(seasonId, async seasonId => {
   if (seasonId) {
     followed.value = await checkIsLile(seasonId)
-    console.log(followed.value)
   } else {
-    followed.value = 0
+    followed.value = false
+    follows.value = 0
   }
 }, { immediate: true })
 
-const follows = ref(0)
 watch(data, (data) => {
   follows.value = data?.follows ?? 0
 }, { immediate: true })
 
 async function toggleFollow() {
   followed.value = !followed.value
-  await AjaxLike(seasonId.value,   followed.value )
+  await AjaxLike(seasonId.value!,   followed.value )
   if (followed.value) follows.value ++
   else follows.value --
   $q.notify({
