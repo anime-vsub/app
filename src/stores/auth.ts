@@ -6,8 +6,8 @@ import { post } from "src/logic/http"
 
 interface User {
   avatar?: string
-  email: string
-  name: string
+  email: string // const
+  name: string // const
   sex: string
   username: string
 }
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     setUser(value: User, expires: Date) {
       this.user_data = value
-      cookie.set("user_data", JSON.stringify({ value }), { expires })
+      cookie.set("user_data", JSON.stringify(value), { expires })
     },
     setToken(name: string, value: string, expires: Date) {
       this.token_name = name
