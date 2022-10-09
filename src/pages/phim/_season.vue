@@ -18,7 +18,7 @@
       :next-chap="nextChap"
       :name="data.name"
       :name-current-chap="currentMetaChap?.name"
-      :poster="data.poster"
+      :poster="currentDataSeason?.poster ?? data.poster"
       :seasons="seasons"
       :_cache-data-seasons="_cacheDataSeasons"
       :fetch-season="fetchSeason"
@@ -387,7 +387,7 @@
         <div>
           <div class="flex flex-nowrap">
             <q-img
-              :src="data.image"
+              :src="currentDataSeason?.image ?? data.image"
               :ratio="280 / 400"
               width="110px"
               class="rounded-lg"
