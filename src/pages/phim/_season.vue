@@ -891,6 +891,11 @@ async function toggleFollow() {
 }
 
 function share() {
+  if (!data.value || !currentMetaSeason.value || !currentMetaChap.value) {
+console.warn("data not ready")
+
+    return;
+  }
   Share.share({
     title: `Xem ${data.value.name} series ${currentMetaSeason.value.name}`,
     text: `Xem ${data.value.name} tập ${currentMetaChap.value.name}`,
