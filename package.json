@@ -14,7 +14,8 @@
     "dev:android": "pnpm dev -m capacitor -T android",
     "build:android": "pnpm build -m capacitor -T android",
     "quasar": "quasar",
-    "icongenie": "icongenie generate -m capacitor -i meta/app_icon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim"
+    "icongenie": "icongenie generate -m capacitor -i meta/app_icon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim",
+    "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts"
   },
   "dependencies": {
     "@firebase/app": "^0.8.0",
@@ -79,6 +80,7 @@
     "jsdom": "^20.0.1",
     "prettier": "^2.7.1",
     "sass": "1.32.13",
+    "tsx": "^3.10.1",
     "typescript": "^4.8.4",
     "vite-plugin-windicss": "^1.8.8",
     "vitest": "^0.23.4",
