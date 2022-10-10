@@ -9,4 +9,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends BridgeActivity {
   // no code
+  @Override
+  public void onStart() {
+    super.onStart();
+    bridge.getWebView().setVerticalScrollBarEnabled(false);
+  }
 }
