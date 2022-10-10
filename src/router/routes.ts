@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: ":type_normal(anime-bo|anime-le|hoat-hinh-trung-quoc|anime-sap-chieu)",
+        path: ":type_normal(anime-bo|anime-le|hoat-hinh-trung-quoc|anime-sap-chieu|anime-moi)",
         redirect(to) {
           return `/danh-sach/${to.params.type_normal}`
         },
@@ -73,9 +73,32 @@ const routes: RouteRecordRaw[] = [
             component: () => import("pages/tai-khoan/edit-profile.vue"),
           },
           {
-            path: "setting",
-            component: () => import("pages/tai-khoan/setting.vue"),
+            path: "history",
+            component: () => import("pages/tai-khoan/history.vue")
           },
+          {
+            path: "follow",
+            component: () => import("pages/tai-khoan/follow.vue")
+          },
+          {
+            path: "settings",
+            component: () => import("pages/tai-khoan/settings/index_outlet.vue"),
+            children: [
+              {
+                path: "",
+                component: () => import("pages/tai-khoan/settings/index.vue")
+              },
+              {
+                path: "player",
+                component: () => import("pages/tai-khoan/settings/player.vue")
+              }
+            ]
+          },
+          {
+            path: "about",
+            alias: ["/tai-khoan/settings/about"],
+            component: () => import("pages/tai-khoan/about.vue")
+          }
         ],
       },
     ],
