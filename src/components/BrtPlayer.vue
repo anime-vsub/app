@@ -627,16 +627,26 @@
 <script lang="ts" setup>
 import { Haptics } from "@capacitor/haptics"
 import { StatusBar } from "@capacitor/status-bar"
+import type { DocumentData, DocumentReference } from "@firebase/firestore"
+import {
+  doc,
+  getDoc,
+  getFirestore,
+  serverTimestamp,
+  setDoc,
+} from "@firebase/firestore"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
+import { app } from "boot/firebase"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { throttle, QTab, useQuasar } from "quasar"
+import { QTab, throttle, useQuasar } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import Hls from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
+import { useAuthStore } from "stores/auth"
 import {
   computed,
   onBeforeUnmount,
@@ -647,21 +657,9 @@ import {
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
-import { useAuthStore } from "stores/auth"
+import type { Source } from "./sources"
 
 const authStore = useAuthStore()
-
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  collection,
-  updateDoc,
-} from "@firebase/firestore"
-import { app } from "boot/firebase"
-
-import type { Source } from "./sources"
 
 interface ResponseDataSeasonPending {
   status: "pending"
@@ -787,7 +785,8 @@ watch(
       if (!authStore.user_data) return
 
       const userRef = doc(db, "users", authStore.user_data.email)
-      const seasonRef = doc(userRef, "history", props.currentSeason)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const seasonRef = doc(userRef, "history", props.currentSeason!)
       const chapRef = doc(seasonRef, "chaps", currentChap)
 
       const progressInCloud = await getDoc(chapRef)
@@ -892,20 +891,26 @@ function onVideoCanPlay() {
   activeTime = Date.now()
 }
 
-let seasonRefCache
+// eslint-disable-next-line functional/no-let
+let seasonRefCache: null | DocumentReference<DocumentData>
 watch(
   [() => authStore.user_data, () => props.currentSeason],
+  // eslint-disable-next-line camelcase
   async ([user_data, currentSeason]) => {
     seasonRefCache = null
 
+    // eslint-disable-next-line camelcase
     if (!user_data || !currentSeason) return
 
+    // eslint-disable-next-line camelcase
     const userRef = doc(db, "users", user_data.email)
 
     if (!(await getDoc(userRef)).exists()) {
       console.log("create new user")
       await setDoc(userRef, {
+        // eslint-disable-next-line camelcase
         email: user_data.email,
+        // eslint-disable-next-line camelcase
         name: user_data.name,
       })
     }
@@ -916,9 +921,13 @@ watch(
       //
       console.log("create new record")
       await setDoc(seasonRef, {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         first: props.seasons![0].value,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         poster: props.poster!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         seasonName: props.nameCurrentSeason!,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         name: props.name!,
       })
     }
@@ -927,12 +936,12 @@ watch(
   },
   { immediate: true }
 )
-import { serverTimestamp } from "@firebase/firestore"
 
 const saveCurTimeToPer = throttle(async () => {
   if (!seasonRefCache) return
 
-  const chapRef = doc(seasonRefCache, "chaps", props.currentChap)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const chapRef = doc(seasonRefCache, "chaps", props.currentChap!)
 
   await Promise.all([
     setDoc(
@@ -953,6 +962,7 @@ const saveCurTimeToPer = throttle(async () => {
       {
         cur: artCurrentTime.value,
         dur: artDuration.value,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         name: props.nameCurrentChap!,
       },
       { merge: true }

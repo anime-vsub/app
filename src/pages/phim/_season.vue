@@ -898,6 +898,7 @@ watch(
 
 async function toggleFollow() {
   followed.value = !followed.value
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   await AjaxLike(seasonId.value!, followed.value)
   if (followed.value) follows.value++
   else follows.value--

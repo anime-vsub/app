@@ -1,5 +1,5 @@
+/* eslint-disable camelcase */
 import type TypeNormalValueParser from "src/apis/parser/[type_normal]/[value]"
-import { useCache } from "src/apis/useCache"
 import Worker from "src/apis/workers/[type_normal]/[value]?worker"
 import { PostWorker } from "src/apis/wrap-worker"
 import { get } from "src/logic/http"

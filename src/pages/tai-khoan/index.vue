@@ -74,7 +74,7 @@
     </div>
   </div>
 
-  <div class="mx-4 mt-4" v-if="favorites?.items.length > 0">
+  <div class="mx-4 mt-4" v-if="favorites && favorites?.items.length > 0">
     <div class="text-subtitle1 text-weight-normal py-1">Theo dõi</div>
     <div class="overflow-x-auto whitespace-nowrap">
       <Card
@@ -186,23 +186,26 @@
 </template>
 
 <script lang="ts" setup>
-import { Icon } from "@iconify/vue"
-import { useQuasar } from "quasar"
-import { useAuthStore } from "stores/auth"
-import { ref, watch, shallowReactive } from "vue"
-import { useRouter } from "vue-router"
-import { app } from "boot/firebase"
+import type { Timestamp } from "@firebase/firestore"
 import {
-  getFirestore,
-  doc,
   collection,
-  limit,
-  query,
-  orderBy,
   getDocs,
+  getFirestore,
+  limit,
+  orderBy,
+  query,
   where,
 } from "@firebase/firestore"
+import { Icon } from "@iconify/vue"
+import { app } from "boot/firebase"
 import Card from "components/Card.vue"
+import { useQuasar } from "quasar"
+import { TuPhim } from "src/apis/runs/tu-phim"
+import { useAuthStore } from "stores/auth"
+import { ref, shallowReactive, watch } from "vue"
+import { useRequest } from "vue-request"
+import { useRouter } from "vue-router"
+// ========== favorite =========
 
 const db = getFirestore(app)
 
@@ -232,6 +235,7 @@ async function login() {
       position: "bottom-right",
       message: `Đã đăng nhập với tư cách ${data.name}`,
     })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error(err)
     $q.notify({
@@ -269,15 +273,18 @@ const histories = shallowReactive<
 >([])
 watch(
   () => authStore.user_data,
+  // eslint-disable-next-line camelcase
   async (user_data) => {
     histories.splice(0)
 
+    // eslint-disable-next-line camelcase
     if (!user_data) return
 
+    // eslint-disable-next-line camelcase
     const historyRef = collection(db, "users", user_data.email, "history")
     const q = query(
       historyRef,
-      where("timestamp", "!=", null, "&&", "last", "!=", null),
+      where("timestamp", "!=", null),
       orderBy("timestamp", "desc"),
       limit(30)
     )
@@ -289,15 +296,12 @@ watch(
         return {
           id: item.id,
           ...item.data(),
-        }
+        } as typeof histories[0]
       })
     )
   },
   { immediate: true }
 )
-// ========== favorite =========
-import { useRequest } from "vue-request"
-import { TuPhim } from "src/apis/runs/tu-phim"
 
 const { data: favorites } = useRequest(() => TuPhim(1))
 </script>
