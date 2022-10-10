@@ -213,14 +213,24 @@
       </div>
     </div>
 
-    <div class="px-4 mt-4">
-      <h2 class="text-h6">Đề xuất</h2>
+    <div class="block px-4 mt-4">
+      <router-link to="/bang-xep-hang/day" class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between">
+        Đề xuất
+
+        <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
+      </router-link>
 
       <GridCard :items="data.nominate" />
     </div>
 
     <div class="px-4 mt-4">
-      <h2 class="text-h6">Top</h2>
+
+        <router-link to="/bang-xep-hang/day" class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between">
+          Top
+
+          <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
+
+      </router-link>
 
       <div class="wpa-grid">
         <div class="ctnr">
@@ -236,7 +246,12 @@
     </div>
 
     <div class="px-4 mt-4">
-      <h2 class="text-h6">Sắp chiếu</h2>
+      <router-link to="/anime-sap-chieu" class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between">
+        Sắp chiếu
+
+        <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
+      </router-link>
+
 
       <div class="wpa-grid">
         <div class="ctnr">
@@ -294,7 +309,13 @@
     </div>
 
     <div class="px-4 mt-4">
-      <h2 class="text-h6">Mới cập nhật</h2>
+
+            <router-link to="/anime-moi" class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between">
+             Mới cập nhật
+
+              <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
+
+          </router-link>
 
       <GridCard :items="data.lastUpdate" />
     </div>
@@ -318,6 +339,7 @@ import SearchBtn from "components/SearchBtn.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import dayjs from "dayjs"
+import { Icon } from "@iconify/vue"
 // eslint-disable-next-line import/order
 import isToday from "dayjs/plugin/isToday"
 
