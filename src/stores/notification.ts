@@ -16,12 +16,15 @@ export const useNotificationStore = defineStore("notification", () => {
 
   const $q = useQuasar()
 
+  const loading = ref(false)
+
   // eslint-disable-next-line functional/no-let
   let timeout: NodeJS.Timeout | number
   async function updateNotification() {
     if (timeout) clearTimeout(timeout)
 
     try {
+      loading.value = true
       const result = await AjaxNotification()
 
       items.value = result.items
@@ -37,6 +40,8 @@ export const useNotificationStore = defineStore("notification", () => {
       })
 
       timeout = setTimeout(updateNotification, 10 * 60_000)
+    } finally {
+      loading.value = false
     }
   }
 
@@ -64,5 +69,5 @@ export const useNotificationStore = defineStore("notification", () => {
     updateNotification()
   }
 
-  return { items, max, remove }
+  return { items, max, remove, loading }
 })
