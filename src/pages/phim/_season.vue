@@ -14,10 +14,11 @@
       v-if="configPlayer?.playTech !== 'trailer'"
       :sources="sources"
       :current-season="currentSeason"
+      :name-current-season="currentMetaSeason?.name"
       :current-chap="currentChap"
+      :name-current-chap="currentMetaChap?.name"
       :next-chap="nextChap"
       :name="data.name"
-      :name-current-chap="currentMetaChap?.name"
       :poster="currentDataSeason?.poster ?? data.poster"
       :seasons="seasons"
       :_cache-data-seasons="_cacheDataSeasons"
@@ -181,7 +182,7 @@
       </div>
     </div>
 
-    <div class="my-2 mx-2">
+    <div class="my-2 mx-4">
       <q-btn
         stack
         no-caps
@@ -270,8 +271,7 @@
       indicator-color="transparent"
       v-if="
         seasons &&
-        (seasons.length > 1 ||
-          (seasons.length === 0 && seasons[0].name !== '#default'))
+        (seasons.length > 1 || (seasons.length === 0 && seasons[0].name !== ''))
       "
     >
       <q-tab
@@ -315,7 +315,7 @@
           v-if="
             seasons &&
             (seasons.length > 1 ||
-              (seasons.length === 0 && seasons[0].name !== '#default'))
+              (seasons.length === 0 && seasons[0].name !== ''))
           "
         >
           <q-tab
@@ -568,7 +568,7 @@ watch(
 
     seasons.value = [
       {
-        name: "#default",
+        name: "",
         value: currentSeason.value,
       },
     ]

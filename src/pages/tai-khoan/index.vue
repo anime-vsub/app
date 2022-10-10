@@ -1,49 +1,93 @@
 <template>
-  <q-item
-    clickable
-    @click="authStore.user ? gotoEditProfile() : (showDialogLogin = true)"
-  >
-    <q-item-section avatar>
-      <q-avatar size="55px">
-        <img v-if="authStore.user?.avatar" :src="authStore.user.avatar" />
-        <Icon
-          v-else
-          icon="fluent:person-circle-20-filled"
-          width="55"
-          height="55"
-        />
-      </q-avatar>
-    </q-item-section>
-    <q-item-section>
-      <template v-if="authStore.user">
-        <q-item-label class="text-subtitle1 text-weight-normal">{{
-          authStore.user.name
-        }}</q-item-label>
-        <q-item-label caption class="text-grey">{{
-          authStore.user.username
-        }}</q-item-label>
-      </template>
-      <q-item-label v-else class="text-subtitle1 text-weight-normal"
-        >Đăng nhập/Đăng ký</q-item-label
+  <q-header class="bg-dark-page">
+    <q-item
+      clickable
+      @click="authStore.user ? gotoEditProfile() : (showDialogLogin = true)"
+    >
+      <q-item-section avatar>
+        <q-avatar size="55px">
+          <img v-if="authStore.user?.avatar" :src="authStore.user.avatar" />
+          <Icon
+            v-else
+            icon="fluent:person-circle-20-filled"
+            width="55"
+            height="55"
+          />
+        </q-avatar>
+      </q-item-section>
+      <q-item-section>
+        <template v-if="authStore.user">
+          <q-item-label class="text-subtitle1 text-weight-normal">{{
+            authStore.user.name
+          }}</q-item-label>
+          <q-item-label caption class="text-grey">{{
+            authStore.user.username
+          }}</q-item-label>
+        </template>
+        <q-item-label v-else class="text-subtitle1 text-weight-normal"
+          >Đăng nhập/Đăng ký</q-item-label
+        >
+      </q-item-section>
+      <q-item-section side>
+        <div class="flex items-center flex-nowrap">
+          <q-btn dense round class="mr-1">
+            <Icon icon="fluent:scan-dash-24-regular" width="25" height="25" />
+          </q-btn>
+
+          <Icon
+            v-if="authStore.user"
+            icon="fluent:chevron-right-24-regular"
+            width="25"
+            height="25"
+          />
+        </div>
+      </q-item-section>
+    </q-item>
+  </q-header>
+
+  <div class="mx-4 mt-4" v-if="histories.length > 0">
+    <div class="text-subtitle1 text-weight-normal py-1">Lịch sử</div>
+    <div class="overflow-x-auto whitespace-nowrap">
+      <q-card
+        v-for="item in histories"
+        :key="item.id"
+        class="bg-transparent inline-block w-[140px] mr-2"
+        style="white-space: initial"
+        @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
       >
-    </q-item-section>
-    <q-item-section side>
-      <div class="flex items-center flex-nowrap">
-        <q-btn dense round class="mr-1">
-          <Icon icon="fluent:scan-dash-24-regular" width="25" height="25" />
-        </q-btn>
+        <q-img :src="item.poster" :ratio="1920 / 1080" class="!rounded-[4px]">
+          <div class="absolute bottom-0 w-full min-h-0 !py-0 !px-0">
+            <q-linear-progress
+              :value="item.last.cur / item.last.dur"
+              rounded
+              color="main"
+              class="!h-[4px]"
+            />
+          </div>
+        </q-img>
 
-        <Icon
-          v-if="authStore.user"
-          icon="fluent:chevron-right-24-regular"
-          width="25"
-          height="25"
-        />
-      </div>
-    </q-item-section>
-  </q-item>
+        <span class="line-clamp-2 min-h-10 mt-1">{{ item.name }}</span>
+        <div class="text-grey">
+          {{ item.seasonName }} tập {{ item.last.name }}
+        </div>
+      </q-card>
+    </div>
+  </div>
 
-  <q-list>
+  <div class="mx-4 mt-4" v-if="favorites?.items.length > 0">
+    <div class="text-subtitle1 text-weight-normal py-1">Theo dõi</div>
+    <div class="overflow-x-auto whitespace-nowrap">
+      <Card
+        v-for="item in favorites?.items"
+        :key="item.name"
+        :data="item"
+        class="inline-block card-wrap"
+      />
+      <!-- {{ favorites.items }} -->
+    </div>
+  </div>
+
+  <q-list class="mt-4">
     <q-item clickable v-ripple to="/tai-khoan/setting">
       <q-item-section avatar>
         <Icon icon="fluent:settings-24-regular" width="25" height="25" />
@@ -74,7 +118,7 @@
     </q-item>
   </q-list>
 
-  <!-- dialogs -->
+  <!-- dialogs login -->
   <q-dialog v-model="showDialogLogin" position="bottom" full-width>
     <q-card class="h-[60vh] bg-dark-500">
       <q-card-section>
@@ -145,8 +189,22 @@
 import { Icon } from "@iconify/vue"
 import { useQuasar } from "quasar"
 import { useAuthStore } from "stores/auth"
-import { ref } from "vue"
+import { ref, watch, shallowReactive } from "vue"
 import { useRouter } from "vue-router"
+import { app } from "boot/firebase"
+import {
+  getFirestore,
+  doc,
+  collection,
+  limit,
+  query,
+  orderBy,
+  getDocs,
+  where,
+} from "@firebase/firestore"
+import Card from "components/Card.vue"
+
+const db = getFirestore(app)
 
 const showDialogLogin = ref(false)
 
@@ -191,6 +249,57 @@ const router = useRouter()
 function gotoEditProfile() {
   router.push("/tai-khoan/edit-profile")
 }
+
+// ============ fetch history =============
+const histories = shallowReactive<
+  {
+    id: string
+    first: string
+    name: string
+    poster: string
+    seasonName: string
+    update: Timestamp
+    last: {
+      chap: string
+      name: string
+      cur: number
+      dur: number
+    }
+  }[]
+>([])
+watch(
+  () => authStore.user_data,
+  async (user_data) => {
+    histories.splice(0)
+
+    if (!user_data) return
+
+    const historyRef = collection(db, "users", user_data.email, "history")
+    const q = query(
+      historyRef,
+      where("timestamp", "!=", null, "&&", "last", "!=", null),
+      orderBy("timestamp", "desc"),
+      limit(30)
+    )
+
+    const { docs } = await getDocs(q)
+
+    histories.push(
+      ...docs.map((item) => {
+        return {
+          id: item.id,
+          ...item.data(),
+        }
+      })
+    )
+  },
+  { immediate: true }
+)
+// ========== favorite =========
+import { useRequest } from "vue-request"
+import { TuPhim } from "src/apis/runs/tu-phim"
+
+const { data: favorites } = useRequest(() => TuPhim(1))
 </script>
 
 <style lang="scss" scoped>
@@ -213,6 +322,26 @@ function gotoEditProfile() {
 
   .input {
     border: none;
+  }
+}
+
+.card-wrap {
+  $offset: 0.1;
+  display: inline-block;
+  white-space: initial;
+
+  width: 280px;
+  // class="col-4 col-lg-3 col-xl-2 px-[5px] py-2"
+  max-width: calc((100% - 16px) / #{3 + $offset});
+  margin-right: 8px;
+
+  @media (min-width: $breakpoint-lg-min) {
+    max-width: calc((100% - 48px) / #{4 + $offset});
+    margin-right: 24px;
+  }
+  @media (min-width: $breakpoint-xl-min) {
+    max-width: calc((100% - 80px) / #{6 + $offset});
+    margin-right: 40px;
   }
 }
 </style>

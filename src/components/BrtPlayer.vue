@@ -647,6 +647,20 @@ import {
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
+import { useAuthStore } from "stores/auth"
+
+const authStore = useAuthStore()
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  updateDoc,
+} from "@firebase/firestore"
+import { app } from "boot/firebase"
+
 import type { Source } from "./sources"
 
 interface ResponseDataSeasonPending {
@@ -665,10 +679,12 @@ interface ResponseDataSeasonError {
 
 const router = useRouter()
 const $q = useQuasar()
+const db = getFirestore(app)
 
 const props = defineProps<{
   sources?: Source[]
   currentSeason?: string
+  nameCurrentSeason?: string
   currentChap?: string
   nameCurrentChap?: string
   nextChap?: {
@@ -875,20 +891,7 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
-import { useAuthStore } from "stores/auth"
 
-const authStore = useAuthStore()
-
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  collection,
-} from "@firebase/firestore"
-import { app } from "boot/firebase"
-
-const db = getFirestore(app)
 let seasonRefCache
 watch(
   [() => authStore.user_data, () => props.currentSeason],
@@ -915,6 +918,8 @@ watch(
       await setDoc(seasonRef, {
         first: props.seasons![0].value,
         poster: props.poster!,
+        seasonName: props.nameCurrentSeason!,
+        name: props.name!,
       })
     }
 
@@ -922,17 +927,37 @@ watch(
   },
   { immediate: true }
 )
+import { serverTimestamp } from "@firebase/firestore"
 
 const saveCurTimeToPer = throttle(async () => {
   if (!seasonRefCache) return
 
   const chapRef = doc(seasonRefCache, "chaps", props.currentChap)
 
-  await setDoc(
-    chapRef,
-    { cur: artCurrentTime.value, dur: artDuration.value },
-    { merge: true }
-  )
+  await Promise.all([
+    setDoc(
+      seasonRefCache,
+      {
+        timestamp: serverTimestamp(),
+        last: {
+          chap: props.currentChap,
+          name: props.nameCurrentChap,
+          cur: artCurrentTime.value,
+          dur: artDuration.value,
+        },
+      },
+      { merge: true }
+    ).catch((err) => console.error("update time error", err)),
+    setDoc(
+      chapRef,
+      {
+        cur: artCurrentTime.value,
+        dur: artDuration.value,
+        name: props.nameCurrentChap!,
+      },
+      { merge: true }
+    ).catch((err) => console.error("update progress error", err)),
+  ])
 
   console.log("save viewing progress")
 }, 3_000)
