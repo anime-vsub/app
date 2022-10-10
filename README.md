@@ -16,5 +16,5 @@
 - [x] router: lich-chieu-phim
 - [ ] button follow anime
 - [ ] scan QR code to login
-- [ ] restore progress watch anime
-- [ ] history and follows
+- [x] restore progress watch anime
+- [x] history and follows
