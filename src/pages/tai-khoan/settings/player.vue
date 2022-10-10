@@ -12,9 +12,6 @@
     </q-toolbar>
   </q-header>
 
-
-
-
   <q-list class="mt-4">
     <q-item clickable v-ripple>
       <q-item-section>
@@ -33,7 +30,6 @@
       </q-item-section>
     </q-item>
   </q-list>
-
 </template>
 
 <script lang="ts" setup>

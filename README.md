@@ -1,4 +1,5 @@
 # Informal AnimeVsub Application!
+
 <div style="text-align: center;">
    <img src="./meta/app_icon.svg" width="120px">
    <h1 style="font-size: 16px">AnimeVsub</h1>
@@ -9,6 +10,7 @@
 > And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `downloading...`, enjoy the best quality Anime episodes and no `downloading...`
 
 ## Screenshot
+
 <!--screenshot-->
 <div style="overflow-x: scroll; white-space: nowrap">
    <a href="./meta/screenshoots/Screenshot_2022-10-05-22-28-37-000_git.shin.animevsub.jpg"><img src="./meta/screenshoots/Screenshot_2022-10-05-22-28-37-000_git.shin.animevsub.jpg" width="120px"></a>

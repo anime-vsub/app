@@ -46,11 +46,19 @@
   </q-header>
 
   <div class="mt-4" v-if="histories.length > 0">
-    <router-link class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between" to="/tai-khoan/history">
+    <router-link
+      class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
+      to="/tai-khoan/history"
+    >
       Lịch sử
 
-        <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
-      </router-link>
+      <Icon
+        icon="fluent:chevron-right-24-regular"
+        class="text-grey"
+        width="18"
+        height="18"
+      />
+    </router-link>
     <div class="mx-4 overflow-x-auto whitespace-nowrap">
       <q-card
         v-for="item in histories"
@@ -79,11 +87,19 @@
   </div>
 
   <div class="mt-4" v-if="favorites && favorites?.items.length > 0">
-    <router-link class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between" to="/tai-khoan/follow">
+    <router-link
+      class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
+      to="/tai-khoan/follow"
+    >
       Theo dõi
 
-      <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
-      </router-link>
+      <Icon
+        icon="fluent:chevron-right-24-regular"
+        class="text-grey"
+        width="18"
+        height="18"
+      />
+    </router-link>
     <div class="mx-4 overflow-x-auto whitespace-nowrap">
       <Card
         v-for="item in favorites?.items"
@@ -285,7 +301,7 @@ watch(
     // eslint-disable-next-line camelcase
     if (!user_data) return
 
-const db = getFirestore(app)
+    const db = getFirestore(app)
 
     // eslint-disable-next-line camelcase
     const historyRef = collection(db, "users", user_data.email, "history")
@@ -313,9 +329,9 @@ const db = getFirestore(app)
 // ========== favorite =========
 const { data: favorites, run } = useRequest(() => TuPhim(1), {
   refreshDeps: [() => authStore.user_data],
-    refreshDepsAction() {
-      run()
-    },
+  refreshDepsAction() {
+    run()
+  },
 })
 </script>
 

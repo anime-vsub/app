@@ -12,8 +12,6 @@
     </q-toolbar>
   </q-header>
 
-
-
   <q-list>
     <q-item clickable v-ripple to="/tai-khoan/settings/player">
       <q-item-section>
@@ -34,34 +32,44 @@
         <q-item-label>Về AnimeVsub</q-item-label>
       </q-item-section>
     </q-item>
-    <q-item clickable v-ripple @click="open('https://animevsub.github.io/tems-of-use')">
+    <q-item
+      clickable
+      v-ripple
+      @click="open('https://animevsub.github.io/tems-of-use')"
+    >
       <q-item-section>
         <q-item-label>Điều khoản sử dụng</q-item-label>
       </q-item-section>
     </q-item>
-    <q-item clickable v-ripple @click="open('https://animevsub.github.io/privacy-police')">
+    <q-item
+      clickable
+      v-ripple
+      @click="open('https://animevsub.github.io/privacy-police')"
+    >
       <q-item-section>
         <q-item-label>Chính sách riêng tư</q-item-label>
       </q-item-section>
     </q-item>
-    <q-item clickable v-ripple @click="open('https://animevsub.github.io/disclaimer')">
+    <q-item
+      clickable
+      v-ripple
+      @click="open('https://animevsub.github.io/disclaimer')"
+    >
       <q-item-section>
         <q-item-label>Tuyên bố từ chối trách nhiệm</q-item-label>
       </q-item-section>
     </q-item>
   </q-list>
-
 </template>
 
 <script lang="ts" setup>
+import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
 
-import { Browser } from "@capacitor/browser"
-
-function open(url : string) {
+function open(url: string) {
   Browser.open({ url })
 }
 </script>
