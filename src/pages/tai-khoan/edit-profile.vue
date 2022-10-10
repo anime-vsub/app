@@ -77,6 +77,7 @@
       >
     </div>
 
+    <!-- dialog change password -->
     <q-dialog v-model="showDialogChangePassword" position="bottom" full-width>
       <q-card class="h-[60vh] bg-dark-500">
         <q-card-section>
@@ -117,6 +118,8 @@
                 <Icon v-else icon="fluent:eye-off-24-regular" />
               </q-btn>
             </div>
+            
+            <div class="text-grey py-1">Quan trọng! Hãy nhớ mật khẩu bạn thay đổi vì nó khó có thể khôi phục lại được nếu bị mất.</div>
 
             <q-btn
               type="submit"

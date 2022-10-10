@@ -45,9 +45,13 @@
     </q-item>
   </q-header>
 
-  <div class="mx-4 mt-4" v-if="histories.length > 0">
-    <div class="text-subtitle1 text-weight-normal py-1">Lịch sử</div>
-    <div class="overflow-x-auto whitespace-nowrap">
+  <div class="mt-4" v-if="histories.length > 0">
+    <router-link class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between" to="/tai-khoan/history">
+      Lịch sử
+
+        <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
+      </router-link>
+    <div class="mx-4 overflow-x-auto whitespace-nowrap">
       <q-card
         v-for="item in histories"
         :key="item.id"
@@ -74,9 +78,13 @@
     </div>
   </div>
 
-  <div class="mx-4 mt-4" v-if="favorites && favorites?.items.length > 0">
-    <div class="text-subtitle1 text-weight-normal py-1">Theo dõi</div>
-    <div class="overflow-x-auto whitespace-nowrap">
+  <div class="mt-4" v-if="favorites && favorites?.items.length > 0">
+    <router-link class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between" to="/tai-khoan/follow">
+      Theo dõi
+
+      <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
+      </router-link>
+    <div class="mx-4 overflow-x-auto whitespace-nowrap">
       <Card
         v-for="item in favorites?.items"
         :key="item.name"
@@ -88,7 +96,7 @@
   </div>
 
   <q-list class="mt-4">
-    <q-item clickable v-ripple to="/tai-khoan/setting">
+    <q-item clickable v-ripple to="/tai-khoan/settings">
       <q-item-section avatar>
         <Icon icon="fluent:settings-24-regular" width="25" height="25" />
       </q-item-section>
@@ -108,7 +116,7 @@
         <q-item-label>Phản hồi</q-item-label>
       </q-item-section>
     </q-item>
-    <q-item clickable v-ripple href="https://shin.is-a.dev">
+    <q-item clickable v-ripple to="/tai-khoan/about">
       <q-item-section avatar>
         <Icon icon="fluent:info-24-regular" width="25" height="25" />
       </q-item-section>
@@ -205,9 +213,6 @@ import { useAuthStore } from "stores/auth"
 import { ref, shallowReactive, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
-// ========== favorite =========
-
-const db = getFirestore(app)
 
 const showDialogLogin = ref(false)
 
@@ -280,6 +285,8 @@ watch(
     // eslint-disable-next-line camelcase
     if (!user_data) return
 
+const db = getFirestore(app)
+
     // eslint-disable-next-line camelcase
     const historyRef = collection(db, "users", user_data.email, "history")
     const q = query(
@@ -303,7 +310,13 @@ watch(
   { immediate: true }
 )
 
-const { data: favorites } = useRequest(() => TuPhim(1))
+// ========== favorite =========
+const { data: favorites, run } = useRequest(() => TuPhim(1), {
+  refreshDeps: [() => authStore.user_data],
+    refreshDepsAction() {
+      run()
+    },
+})
 </script>
 
 <style lang="scss" scoped>

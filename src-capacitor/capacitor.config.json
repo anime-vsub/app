@@ -9,6 +9,6 @@
   "bundledWebRuntime": false,
   "webDir": "www",
   "server": {
-    "url": "http://192.168.0.117:9500"
+    "url": "http://192.168.0.101:9500"
   }
 }
