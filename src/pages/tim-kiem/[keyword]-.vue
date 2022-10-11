@@ -118,7 +118,8 @@
           v-if="
             !(_dataInStoreTmp = dataStore.get(type)) ||
             _dataInStoreTmp.status === 'pending'
-          " />
+          "
+        />
         <CardVertical
           v-else-if="_dataInStoreTmp.status === 'success'"
           v-for="(item, index) in _dataInStoreTmp.response"

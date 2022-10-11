@@ -1,17 +1,17 @@
 <template>
+  <div>
   <q-btn
     dense
     no-caps
-    v-bind="attrs"
     :ripple="false"
     v-for="item in chaps"
     :key="item.id"
     outline
-    class="px-4 py-[10px] mx-2 rounded-md before:text-[#3a3a3a]"
-    :class="{
-      [`c--main before:text-[rgb(0,194,52)] ${classActive ?? ''}`]: find(item),
+    class="px-4 py-[10px] mx-2 rounded-md before:text-[#3a3a3a] overflow-hidden item"
+    :class="[classItem, {
+      [`c--main before:text-[rgb(0,194,52)] active ${classActive ?? ''}`]: find(item),
       'mb-3': grid,
-    }"
+    }]"
     replace
     :to="{
       name: 'phim_[season]_[chap]',
@@ -23,7 +23,15 @@
     :ref="(el) => find(item) && (activeRef = el as QBtn)"
   >
     {{ item.name }}
+      <q-linear-progress
+        v-if="tmp = progressChaps.get(item.id)"
+        :value="tmp.cur / tmp.dur"
+        rounded
+        color="main"
+        class="absolute bottom-[1px] left-0 !h-[3px] w-full progress"
+      />
   </q-btn>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -36,21 +44,31 @@ defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
   chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"]
   season: string
+  classItem?: string
   classActive?: string
   grid?: boolean
+  progressChaps: Map<string, {
+    cur: number
+    dur: number
+  }>
 }>()
-
-const attrs = useAttrs()
 
 const activeRef = ref<QBtn>()
 
 watchEffect(() => {
   if (activeRef.value?.$el) scrollXIntoView(activeRef.value.$el)
 })
+
+let tmp : typeof ReturnType<typeof props.progressChaps.get>
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
+<style lang="scss" scoped>
+  .item {
+    &.active {
+      .progress {
+        bottom: 1px;
+        color: $blue;
+      }
+    }
+  }
+  </style>
