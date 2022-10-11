@@ -48,10 +48,7 @@
     </q-toolbar>
   </q-header>
 
-  <ScreenLoading
-    v-if="loading"
-    class="absolute"
-  />
+  <ScreenLoading v-if="loading" class="absolute" />
 
   <div v-else class="absolute top-0 h-[100%] w-full">
     <swiper
