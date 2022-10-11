@@ -461,7 +461,7 @@
               </div>
               <ChapsGridQBtn
                 v-else
-                class="!px-3 !py-2 !mx-1"
+                class-item="!px-3 !py-2 !mx-1"
                 class-active="!bg-[rgba(0,194,52,.15)]"
                 grid
                 :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
@@ -469,6 +469,7 @@
                 :find="
                   (item) => value === currentSeason && item.id === currentChap
                 "
+                :progress-chaps="progressChaps"
               />
             </q-tab-panel>
           </q-tab-panels>
@@ -704,6 +705,10 @@ const props = defineProps<{
     | ResponseDataSeasonError
   >
   fetchSeason: (season: string) => Promise<void>
+  progressChaps: Map<string, {
+    cur: number
+    dur: number
+  }>
 }>()
 
 // ===== setup effect =====
@@ -939,6 +944,13 @@ watch(
   { immediate: true }
 )
 
+const emit = defineEmits<{
+  (name: "cur-update", val: {
+    cur: number
+    dur: number
+    id: string
+  }): void
+}>()
 const saveCurTimeToPer = throttle(async () => {
   if (!seasonRefCache) return
 
@@ -971,6 +983,11 @@ const saveCurTimeToPer = throttle(async () => {
     ).catch((err) => console.error("update progress error", err)),
   ])
 
+  emit("cur-update", {
+    cur: artCurrentTime.value,
+    dur: artDuration.value,
+    id: props.currentChap!
+  })
   console.log("save viewing progress")
 }, 3_000)
 function onVideoTimeUpdate() {
