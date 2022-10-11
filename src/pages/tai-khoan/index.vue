@@ -46,12 +46,24 @@
   </q-header>
 
   <div class="mt-4">
-    <router-link class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between" to="/tai-khoan/history">
+    <router-link
+      class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
+      to="/tai-khoan/history"
+    >
       Lịch sử
 
-        <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
-      </router-link>
-    <div v-if="histories.length > 0" class="mx-4 overflow-x-auto whitespace-nowrap">
+      <Icon
+        icon="fluent:chevron-right-24-regular"
+        class="text-grey"
+        width="18"
+        height="18"
+      />
+    </router-link>
+    <!-- <div v-if="loadingHistories" -->
+    <div
+      v-if="histories.length > 0"
+      class="mx-4 overflow-x-auto whitespace-nowrap"
+    >
       <q-card
         v-for="item in histories"
         :key="item.id"
@@ -79,12 +91,23 @@
   </div>
 
   <div class="mt-4">
-    <router-link class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between" to="/tai-khoan/follow">
+    <router-link
+      class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
+      to="/tai-khoan/follow"
+    >
       Theo dõi
 
-      <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
-      </router-link>
-    <div  v-if="favorites && favorites?.items.length > 0" class="mx-4 overflow-x-auto whitespace-nowrap">
+      <Icon
+        icon="fluent:chevron-right-24-regular"
+        class="text-grey"
+        width="18"
+        height="18"
+      />
+    </router-link>
+    <div
+      v-if="favorites && favorites?.items.length > 0"
+      class="mx-4 overflow-x-auto whitespace-nowrap"
+    >
       <Card
         v-for="item in favorites?.items"
         :key="item.name"
@@ -213,6 +236,7 @@ import { useAuthStore } from "stores/auth"
 import { ref, shallowReactive, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
+import { History } from "src/apis/runs/history"
 
 const showDialogLogin = ref(false)
 
@@ -260,61 +284,26 @@ function gotoEditProfile() {
 }
 
 // ============ fetch history =============
-const histories = shallowReactive<
-  {
-    id: string
-    first: string
-    name: string
-    poster: string
-    seasonName: string
-    update: Timestamp
-    last: {
-      chap: string
-      name: string
-      cur: number
-      dur: number
-    }
-  }[]
->([])
-watch(
-  () => authStore.user_data,
-  // eslint-disable-next-line camelcase
-  async (user_data) => {
-    histories.splice(0)
-
-    // eslint-disable-next-line camelcase
-    if (!user_data) return
-
-    const db = getFirestore(app)
-
-    // eslint-disable-next-line camelcase
-    const historyRef = collection(db, "users", user_data.email, "history")
-    const q = query(
-      historyRef,
-      where("timestamp", "!=", null),
-      orderBy("timestamp", "desc"),
-      limit(30)
-    )
-
-    const { docs } = await getDocs(q)
-
-    histories.push(
-      ...docs.map((item) => {
-        return {
-          id: item.id,
-          ...item.data(),
-        } as typeof histories[0]
-      })
-    )
-  },
-  { immediate: true }
-)
-
-// ========== favorite =========
-const { data: favorites, run } = useRequest(() => TuPhim(1), {
+const {
+  data: histories,
+  loading: loadingHistories,
+  run: runHistories,
+} = useRequest(() => History(), {
   refreshDeps: [() => authStore.user_data],
   refreshDepsAction() {
-    run()
+    runHistories()
+  },
+})
+
+// ========== favorite =========
+const {
+  data: favorites,
+  loading: loadingFavorites,
+  run: runFavorites,
+} = useRequest(() => TuPhim(1), {
+  refreshDeps: [() => authStore.user_data],
+  refreshDepsAction() {
+    runFavorites()
   },
 })
 </script>
@@ -356,6 +345,7 @@ const { data: favorites, run } = useRequest(() => TuPhim(1), {
     max-width: calc((100% - 48px) / #{4 + $offset});
     margin-right: 24px;
   }
+
   @media (min-width: $breakpoint-xl-min) {
     max-width: calc((100% - 80px) / #{6 + $offset});
     margin-right: 40px;

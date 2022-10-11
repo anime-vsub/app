@@ -150,28 +150,17 @@
               class="px-2"
               @click="fetchRankType(type)"
               style="color: #00be06"
-              >Thử lại</q-btn
-            >
+              >Thử lại
+            </q-btn>
           </div>
         </div>
       </swiper-slide>
     </swiper>
   </div>
   <template v-else>
-    <div v-if="loadingSearch" class="absolute h-full w-full flex items-center">
-      <LaodingAnim />
-    </div>
+    <ScreenLoading v-if="loadingSearch" class="absolute" />
     <template v-else-if="resultSearch">
-      <div v-if="resultSearch.items.length === 0" class="text-center py-20">
-        <img
-          src="~assets/img_tips_error_not_foud.png"
-          width="186"
-          height="174"
-          class="mx-auto"
-        />
-
-        <div class="text-subtitle1 mt-1">Không tìm thấy gì cả.</div>
-      </div>
+      <ScreenNotFound v-if="resultSearch.items.length === 0" />
 
       <q-infinite-scroll v-else @load="moreSearch" :offset="250">
         <CardVertical
@@ -191,26 +180,12 @@
 
         <template v-slot:loading>
           <div class="row justify-center q-my-md">
-            <q-spinner-dots color="primary" size="40px" />
+            <q-spinner class="c--main" size="40px" />
           </div>
         </template>
       </q-infinite-scroll>
     </template>
-    <div v-else class="absolute h-full w-full flex items-center">
-      <div class="text-center w-full">
-        <img src="~assets/ic_22_cry.png" width="240" class="mx-auto" />
-        <br />
-        <q-btn
-          dense
-          no-caps
-          outline
-          class="px-2"
-          @click="runSearch"
-          style="color: #00be06"
-          >Thử lại</q-btn
-        >
-      </div>
-    </div>
+    <ScreenError v-else @click:retry="run" />
   </template>
 </template>
 
@@ -236,6 +211,9 @@ import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+
+import ScreenLoading from "components/ScreenLoading.vue"
+import ScreenError from "components/ScreenError.vue"
 
 // ================= unknown ===============
 
@@ -277,7 +255,9 @@ watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      params: { pathMatch: route.path },
+      params: {
+        pathMatch: route.path,
+      },
       query: {
         message: error.message,
         cause: error.cause + "",
@@ -298,6 +278,7 @@ function onEnter() {
 
   searching.value = false
 }
+
 function onBack() {
   searching.value = false
 
@@ -337,7 +318,9 @@ const {
     cacheTime: 5 * 60 * 1000, // 5 minutes
   }
 )
-watch(() => route.params.keyword, runSearch, { immediate: true })
+watch(() => route.params.keyword, runSearch, {
+  immediate: true,
+})
 
 async function moreSearch(page: number, done: (noMore?: boolean) => void) {
   if (
@@ -401,13 +384,16 @@ watch(
   (activeIndex) => {
     fetchRankType(types[activeIndex][1])
   },
-  { immediate: !route.params.keyword }
+  {
+    immediate: !route.params.keyword,
+  }
 )
 
 function onSwiper(swiper: TSwiper) {
   swiperRef.value = swiper
   activeIndex.value = swiper.activeIndex
 }
+
 function onSlideChange(swiper: TSwiper) {
   activeIndex.value = swiper.activeIndex
 }
