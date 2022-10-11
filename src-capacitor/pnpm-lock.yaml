@@ -7,6 +7,7 @@ specifiers:
   '@capacitor/browser': ^4.0.1
   '@capacitor/cli': ^4.3.0
   '@capacitor/core': ^4.3.0
+  '@capacitor/device': ^4.0.1
   '@capacitor/haptics': ^4.0.1
   '@capacitor/preferences': ^4.0.1
   '@capacitor/share': ^4.0.1
@@ -22,6 +23,7 @@ dependencies:
   '@capacitor/browser': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/cli': 4.3.0
   '@capacitor/core': 4.3.0
+  '@capacitor/device': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/haptics': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/preferences': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/share': 4.0.1_@capacitor+core@4.3.0
@@ -109,6 +111,14 @@ packages:
     resolution: {integrity: sha512-zb225feaiHYcttHqw7SnKVj9gjOh3yoM2ol0Efky4kd80qZvqPHt7nRI1XZmGUKid5j3AVggULd5rRke5OEOXQ==}
     dependencies:
       tslib: 2.4.0
+    dev: false
+
+  /@capacitor/device/4.0.1_@capacitor+core@4.3.0:
+    resolution: {integrity: sha512-D0jJFQYifmsgcz4X9MEEKH5E36ARK2CJcUCXJbcuFTChHSxK+ly7Kd6PZC73Y5GkEZIjpebWAWo5F3w9S4hsYQ==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: false
 
   /@capacitor/filesystem/1.1.0_@capacitor+core@3.8.0:
