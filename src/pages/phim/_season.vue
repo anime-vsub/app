@@ -30,7 +30,7 @@
       })"
     />
     <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
-      <q-img
+      <q-img no-spinner
         v-if="sources?.[0]?.url"
         :ratio="16 / 9"
         src="~assets/ic_question_result_error.png"
@@ -400,7 +400,7 @@
       >
         <div>
           <div class="flex flex-nowrap">
-            <q-img
+            <q-img no-spinner
               :src="currentDataSeason?.image ?? data.image"
               :ratio="280 / 400"
               width="110px"
@@ -465,6 +465,8 @@
   <!--
       followed
     -->
+
+    <div ref="testRef" id="playerId" />
 </template>
 
 <script lang="ts" setup>
@@ -488,10 +490,9 @@ import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
-import { computed, reactive, ref, shallowRef, watch, watchEffect, shallowReactive } from "vue"
+import { computed, reactive, ref, shallowRef, watch, watchEffect, shallowReactive , onMounted } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"

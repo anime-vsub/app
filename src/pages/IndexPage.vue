@@ -151,7 +151,7 @@
         v-ripple
         @click="router.push(item.path)"
       >
-        <q-img :ratio="aspectRatio" :src="item.image!" class="poster" />
+        <q-img no-spinner  :ratio="aspectRatio" :src="item.image!" class="poster" />
         <div class="drop-left"></div>
         <div class="drop-center"></div>
         <div class="drop-right"></div>

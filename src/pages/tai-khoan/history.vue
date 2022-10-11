@@ -40,7 +40,7 @@
           style="white-space: initial"
           @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
         >
-          <q-img
+          <q-img no-spinner 
             :src="item.poster"
             :ratio="1920 / 1080"
             class="!rounded-[4px] w-[min(210px,40%)]"
