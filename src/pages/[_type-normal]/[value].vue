@@ -23,13 +23,14 @@
 
         <q-toolbar-title
           class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
-          >{{
+        >
+          {{
             route.params.type_normal === "danh-sach" &&
             route.params.value === "all"
               ? "Mục lục"
               : title
-          }}</q-toolbar-title
-        >
+          }}
+        </q-toolbar-title>
 
         <q-btn flat dense round @click="showDialogSorter = true">
           <Icon icon="fluent:filter-24-regular" width="24" height="24" />
