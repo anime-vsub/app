@@ -8,7 +8,7 @@
   </q-header>
 
   <div v-if="authStore.isLogged">
-    <LaodingAnim v-if="notificationStore.loading" />
+    <ScreenLoading v-if="notificationStore.loading" class="absolute" />
 
     <template v-else-if="notificationStore.max > 0">
       <q-list class="bg-transparent">
@@ -93,7 +93,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
-import LaodingAnim from "src/components/LaodingAnim.vue"
+import ScreenLoading from "src/components/ScreenLoading.vue"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
 import { useRouter } from "vue-router"

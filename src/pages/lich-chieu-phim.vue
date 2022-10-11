@@ -48,9 +48,9 @@
     </q-toolbar>
   </q-header>
 
-  <LaodingAnim
+  <ScreenLoading
     v-if="loading"
-    class="absolute top-[50%] transform translate-y-[-50%]"
+    class="absolute"
   />
 
   <div v-else class="absolute top-0 h-[100%] w-full">
@@ -154,7 +154,7 @@
 import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
-import LaodingAnim from "components/LaodingAnim.vue"
+import ScreenLoading from "components/ScreenLoading.vue"
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
 import groupArray from "group-array"
