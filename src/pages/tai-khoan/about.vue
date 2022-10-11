@@ -12,24 +12,29 @@
     </q-toolbar>
   </q-header>
 
-
   <q-list v-if="infoApp && infoDev">
     <q-item>
       <q-item-section>
         <q-item-label>Phiên bản ứng dụng</q-item-label>
-        <q-item-label caption>{{ infoApp.name }} {{ infoApp.version }} build {{ infoApp.build }}</q-item-label>
+        <q-item-label caption
+          >{{ infoApp.name }} {{ infoApp.version }} build
+          {{ infoApp.build }}</q-item-label
+        >
       </q-item-section>
     </q-item>
     <q-item>
       <q-item-section>
         <q-item-label>Hệ điều hành</q-item-label>
-        <q-item-label caption>{{infoDev.operatingSystem}} {{ infoDev.osVersion }}; {{infoDev.name}}</q-item-label>
+        <q-item-label caption
+          >{{ infoDev.operatingSystem }} {{ infoDev.osVersion }};
+          {{ infoDev.name }}</q-item-label
+        >
       </q-item-section>
     </q-item>
     <q-item>
       <q-item-section>
         <q-item-label>WebView</q-item-label>
-        <q-item-label caption>{{infoDev.webViewVersion}}</q-item-label>
+        <q-item-label caption>{{ infoDev.webViewVersion }}</q-item-label>
       </q-item-section>
     </q-item>
   </q-list>
@@ -38,15 +43,15 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useRouter } from "vue-router"
-import { App } from '@capacitor/app'
-import { Device } from '@capacitor/device'
-import {shallowRef} from "vue"
+import { App } from "@capacitor/app"
+import { Device } from "@capacitor/device"
+import { shallowRef } from "vue"
 
 const router = useRouter()
 
 const infoApp = shallowRef()
 const infoDev = shallowRef()
 
-App.getInfo().then(data => infoApp.value= data)
-Device.getInfo().then(data => infoDev.value = data)
+App.getInfo().then((data) => (infoApp.value = data))
+Device.getInfo().then((data) => (infoDev.value = data))
 </script>
