@@ -12,10 +12,7 @@
     </q-toolbar>
   </q-header>
 
-
-
-
-  <q-list >
+  <q-list>
     <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Tự động phát</q-item-label>
@@ -38,7 +35,7 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useRouter } from "vue-router"
-import { useSettingsStore}  from "stores/settings"
+import { useSettingsStore } from "stores/settings"
 
 const router = useRouter()
 const settingsStore = useSettingsStore()
