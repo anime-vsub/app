@@ -548,7 +548,9 @@ watch(
       },
     })
   },
-  { deep: true }
+  {
+    deep: true,
+  }
 )
 
 const textFilter = computed(() => {
@@ -586,17 +588,26 @@ const defaultsOptions = computed<{
   // eslint-disable-next-line camelcase
   switch (type_normal) {
     case "danh-sach":
-      return { typer: value }
+      return {
+        typer: value,
+      }
     case "the-loai":
-      return { gener: value }
+      return {
+        gener: value,
+      }
     case "season": {
       const [season, year] = value
 
       if (year) {
-        return { seaser: season, year }
+        return {
+          seaser: season,
+          year,
+        }
       }
 
-      return { seaser: season }
+      return {
+        seaser: season,
+      }
     }
     default:
       return {}
@@ -617,6 +628,7 @@ function resetFilter() {
 function indexInGenres(item: string) {
   return genres.indexOf(item)
 }
+
 function toggleGenres(item: string) {
   const index = indexInGenres(item)
   if (index > -1) {
@@ -655,7 +667,9 @@ watch(error, (error) => {
   if (error)
     router.push({
       name: "not_found",
-      params: { pathMatch: route.path },
+      params: {
+        pathMatch: route.path,
+      },
       query: {
         message: error.message,
         cause: error.cause + "",
@@ -677,7 +691,9 @@ watch(
     console.log("try refresh")
     run()
   },
-  { deep: true }
+  {
+    deep: true,
+  }
 )
 
 // eslint-disable-next-line functional/no-let
