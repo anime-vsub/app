@@ -39,7 +39,7 @@
 - [ ] scan QR code to login
 - [x] restore progress watch anime
 - [x] history and follows
-- [ ] tai-khoan/settings/player
+- [x] tai-khoan/settings/player
 - [x] tai-khoan/about
 - [x] tai-khoan/history
 - [x] tai-khoan/follow

@@ -46,6 +46,8 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
 
   // eslint-disable-next-line camelcase, functional/no-throw-statement
   if (!user_data) throw new Error("LOGIN_REQUIRED")
+  
+  const db = getFirestore(app)
 
   // eslint-disable-next-line camelcase
   const historyRef = collection(db, "users", user_data.email, "history")

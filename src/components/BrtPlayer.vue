@@ -656,10 +656,12 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
+import { useSettingsStore } from "stores/settings"
 
 import type { Source } from "./sources"
 
 const authStore = useAuthStore()
+const settingsStore = useSettingsStore()
 
 interface ResponseDataSeasonPending {
   status: "pending"
@@ -1011,7 +1013,7 @@ function onVideoError(event: Event) {
 }
 function onVideoEnded() {
   artEnded = true
-  if (props.nextChap) {
+  if (props.nextChap && settingsStore.player.autoNext) {
     addNotice(
       props.currentSeason !== props.nextChap.season
         ? `Đang phát ${props.nextChap.season}`
