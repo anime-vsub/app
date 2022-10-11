@@ -59,9 +59,23 @@
         height="18"
       />
     </router-link>
-    <!-- <div v-if="loadingHistories" -->
+    <div v-if="loadingHistories" class="h-[146px] mx-4 overflow-x-hidden whitespace-nowrap">
+      <q-card
+        v-for="item in 12"
+        :key="item"
+        class="bg-transparent inline-block w-[140px] mr-2"
+        style="white-space: initial"
+      >
+        <q-responsive :ratio="1920 / 1080" class="!rounded-[4px]">
+          <q-skeleton type="rect" class="absolute w-full h-full" />
+        </q-responsive>
+
+        <q-skeleton type="text" width="100%" class="line-clamp-2 mt-1" />
+        <q-skeleton type="text" width="40%" />
+      </q-card>
+    </div>
     <div
-      v-if="histories.length > 0"
+      v-else-if="histories"
       class="mx-4 overflow-x-auto whitespace-nowrap"
     >
       <q-card
@@ -88,6 +102,8 @@
         </div>
       </q-card>
     </div>
+     <ScreenError v-else no-image class="h-[146px] px-4" @click:retry="runHistories" />
+
   </div>
 
   <div class="mt-4">
@@ -104,18 +120,22 @@
         height="18"
       />
     </router-link>
+    <div v-if="loadingFavorites" class="h-[203px] mx-4 overflow-x-hidden whitespace-nowrap">
+     <SkeletonCard v-for="item in 20" :key="item" class="inline-block card-wrap" />
+    </div>
     <div
-      v-if="favorites && favorites?.items.length > 0"
+      v-else-if="favorites"
       class="mx-4 overflow-x-auto whitespace-nowrap"
     >
       <Card
-        v-for="item in favorites?.items"
+        v-for="item in favorites.items"
         :key="item.name"
         :data="item"
         class="inline-block card-wrap"
       />
       <!-- {{ favorites.items }} -->
     </div>
+     <ScreenError v-else no-image class="h-[203px] px-4" @click:retry="runFavorites" />
   </div>
 
   <q-list class="mt-4">
@@ -237,6 +257,8 @@ import { ref, shallowReactive, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 import { History } from "src/apis/runs/history"
+import SkeletonCard from "components/SkeletonCard.vue"
+import ScreenError from "components/ScreenError.vue"
 
 const showDialogLogin = ref(false)
 
