@@ -2,8 +2,10 @@ lockfileVersion: 5.4
 
 specifiers:
   '@capacitor-community/http': ^1.4.1
+  '@capacitor/app': ^4.0.1
   '@capacitor/browser': ^4.0.1
   '@capacitor/core': ^4.3.0
+  '@capacitor/device': ^4.0.1
   '@capacitor/haptics': ^4.0.1
   '@capacitor/preferences': ^4.0.1
   '@capacitor/share': ^4.0.1
@@ -101,8 +103,10 @@ dependencies:
 
 devDependencies:
   '@capacitor-community/http': 1.4.1
+  '@capacitor/app': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/browser': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/core': 4.3.0
+  '@capacitor/device': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/haptics': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/preferences': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/share': 4.0.1_@capacitor+core@4.3.0
@@ -187,6 +191,14 @@ packages:
       '@capacitor/core': 3.8.0
     dev: true
 
+  /@capacitor/app/4.0.1_@capacitor+core@4.3.0:
+    resolution: {integrity: sha512-frPft9TMJL70jWq5jmxwGSBddZVvsWxX5Agj2i19WJerk37aTgljB05HRr/YLg6mF1G/NIXmmFJZDY8MEgirDg==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
+    dev: true
+
   /@capacitor/browser/4.0.1_@capacitor+core@4.3.0:
     resolution: {integrity: sha512-tPOA/eYDJdDeMFd+A3I8teuGfPP0GEqhWtMzH8z5r2tW40iJ/mL8qH5NgVLMZ3uvs7gN2LfQTCMNJvl0F/WdBw==}
     peerDependencies:
@@ -205,6 +217,14 @@ packages:
     resolution: {integrity: sha512-zb225feaiHYcttHqw7SnKVj9gjOh3yoM2ol0Efky4kd80qZvqPHt7nRI1XZmGUKid5j3AVggULd5rRke5OEOXQ==}
     dependencies:
       tslib: 2.4.0
+    dev: true
+
+  /@capacitor/device/4.0.1_@capacitor+core@4.3.0:
+    resolution: {integrity: sha512-D0jJFQYifmsgcz4X9MEEKH5E36ARK2CJcUCXJbcuFTChHSxK+ly7Kd6PZC73Y5GkEZIjpebWAWo5F3w9S4hsYQ==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: true
 
   /@capacitor/filesystem/1.1.0_@capacitor+core@3.8.0:

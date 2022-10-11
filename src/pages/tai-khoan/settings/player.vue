@@ -15,21 +15,21 @@
 
 
 
-  <q-list class="mt-4">
+  <q-list >
     <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Tự động phát</q-item-label>
       </q-item-section>
-      <q-item-section inset>
-        <q-switch size="sm" />
+      <q-item-section side>
+        <q-toggle v-model="settingsStore.player.autoNext" size="sm" />
       </q-item-section>
     </q-item>
     <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Nhắc tôi tạm dừng xem</q-item-label>
       </q-item-section>
-      <q-item-section inset>
-        <q-switch size="sm" />
+      <q-item-section side>
+        <q-toggle v-model="settingsStore.player.enableRemindStop" size="sm" />
       </q-item-section>
     </q-item>
   </q-list>
@@ -39,6 +39,8 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useRouter } from "vue-router"
+import { useSettingsStore}  from "stores/settings"
 
 const router = useRouter()
+const settingsStore = useSettingsStore()
 </script>

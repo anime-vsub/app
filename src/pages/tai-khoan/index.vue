@@ -45,13 +45,13 @@
     </q-item>
   </q-header>
 
-  <div class="mt-4" v-if="histories.length > 0">
+  <div class="mt-4">
     <router-link class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between" to="/tai-khoan/history">
       Lịch sử
 
         <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
       </router-link>
-    <div class="mx-4 overflow-x-auto whitespace-nowrap">
+    <div v-if="histories.length > 0" class="mx-4 overflow-x-auto whitespace-nowrap">
       <q-card
         v-for="item in histories"
         :key="item.id"
@@ -78,13 +78,13 @@
     </div>
   </div>
 
-  <div class="mt-4" v-if="favorites && favorites?.items.length > 0">
+  <div class="mt-4">
     <router-link class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between" to="/tai-khoan/follow">
       Theo dõi
 
       <Icon icon="fluent:chevron-right-24-regular" class="text-grey" width="18" height="18" />
       </router-link>
-    <div class="mx-4 overflow-x-auto whitespace-nowrap">
+    <div  v-if="favorites && favorites?.items.length > 0" class="mx-4 overflow-x-auto whitespace-nowrap">
       <Card
         v-for="item in favorites?.items"
         :key="item.name"
