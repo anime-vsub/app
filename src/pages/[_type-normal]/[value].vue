@@ -107,6 +107,7 @@
       v-model="showDialogGener"
       position="bottom"
       no-route-dismiss
+    class="children:!px-0"
       full-width
     >
       <q-card flat class="w-full pt-3 !max-h-[60vh]">
@@ -156,6 +157,7 @@
       v-model="showDialogSeaser"
       position="bottom"
       no-route-dismiss
+    class="children:!px-0"
       full-width
     >
       <q-card flat class="w-full pt-3">
@@ -205,6 +207,7 @@
       v-model="showDialogTyper"
       position="bottom"
       no-route-dismiss
+    class="children:!px-0"
       full-width
     >
       <q-card flat class="w-full pt-3">
@@ -253,6 +256,7 @@
       v-model="showDialogSorter"
       position="bottom"
       no-route-dismiss
+    class="children:!px-0"
       full-width
     >
       <q-card flat class="w-full pt-3">

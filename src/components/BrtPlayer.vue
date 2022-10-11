@@ -522,6 +522,7 @@
     :model-value="!artFullscreen && showDialogSetting"
     @update:model-value="showDialogSetting = $event"
     position="bottom"
+    class="children:!px-0"
     full-width
   >
     <q-card flat class="w-full pt-3">
@@ -582,6 +583,7 @@
     :model-value="!artFullscreen && showDialogQuality"
     @update:model-value="showDialogQuality = $event"
     position="bottom"
+    class="children:!px-0"
     full-width
   >
     <q-card flat class="w-full text-[16px]">
@@ -602,6 +604,7 @@
     :model-value="!artFullscreen && showDialogPlayback"
     @update:model-value="showDialogPlayback = $event"
     position="bottom"
+    class="children:!px-0"
     full-width
   >
     <q-card flat class="w-full text-[16px]">

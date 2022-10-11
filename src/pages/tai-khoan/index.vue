@@ -199,7 +199,8 @@
   </q-list>
 
   <!-- dialogs login -->
-  <q-dialog v-model="showDialogLogin" position="bottom" full-width>
+  <q-dialog v-model="showDialogLogin" position="bottom" 
+    class="children:!px-0" full-width>
     <q-card class="h-[60vh] bg-dark-500">
       <q-card-section>
         <div class="flex justify-between">
@@ -265,7 +266,8 @@
   </q-dialog>
 
   <!-- dialogs my QR -->
-  <q-dialog v-model="showDialogQR" position="bottom" full-width>
+  <q-dialog v-model="showDialogQR" position="bottom" 
+    class="children:!px-0" full-width>
     <q-card class="bg-dark-500 h-min-[500px] px-4 pb-2 pt-4">
       <div class="text-subtitle1 text-weight-normal">QR của bạn</div>
       <div class="text-grey">

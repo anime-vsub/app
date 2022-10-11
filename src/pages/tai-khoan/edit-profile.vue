@@ -78,7 +78,8 @@
     </div>
 
     <!-- dialog change password -->
-    <q-dialog v-model="showDialogChangePassword" position="bottom" full-width>
+    <q-dialog v-model="showDialogChangePassword" position="bottom" 
+    class="children:!px-0" full-width>
       <q-card class="h-[60vh] bg-dark-500">
         <q-card-section>
           <div class="flex justify-between">
