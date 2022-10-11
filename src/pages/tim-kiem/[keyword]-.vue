@@ -92,7 +92,7 @@
         </div>
       </div>
     </q-toolbar>
-    <q-toolbar v-else>
+    <q-toolbar v-else-if="!searching && query">
       <div class="text-subtitle2 text-weight-regular mx-2">
         <span class="text-grey">Kết quả tìm kiếm cho: </span>{{ query }}
       </div>
@@ -195,6 +195,7 @@ import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 import ScreenLoading from "components/ScreenLoading.vue"
+import ScreenNotFound from "components/ScreenNotFound.vue"
 import ScreenError from "components/ScreenError.vue"
 
 // ================= unknown ===============
