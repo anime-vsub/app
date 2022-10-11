@@ -8,7 +8,9 @@
   </q-header>
 
   <div v-if="authStore.isLogged">
-    <template v-if="notificationStore.max > 0">
+    <LaodingAnim v-if="notificationStore.loading" />
+
+    <template v-else-if="notificationStore.max > 0">
       <q-list class="bg-transparent">
         <transition-group name="notify">
           <q-slide-item
@@ -91,6 +93,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import LaodingAnim from "src/components/LaodingAnim.vue"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
 import { useRouter } from "vue-router"

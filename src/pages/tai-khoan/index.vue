@@ -285,7 +285,7 @@ watch(
     // eslint-disable-next-line camelcase
     if (!user_data) return
 
-const db = getFirestore(app)
+    const db = getFirestore(app)
 
     // eslint-disable-next-line camelcase
     const historyRef = collection(db, "users", user_data.email, "history")
@@ -313,9 +313,9 @@ const db = getFirestore(app)
 // ========== favorite =========
 const { data: favorites, run } = useRequest(() => TuPhim(1), {
   refreshDeps: [() => authStore.user_data],
-    refreshDepsAction() {
-      run()
-    },
+  refreshDepsAction() {
+    run()
+  },
 })
 </script>
 

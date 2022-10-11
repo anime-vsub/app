@@ -33,7 +33,6 @@
       </q-item-section>
     </q-item>
   </q-list>
-
 </template>
 
 <script lang="ts" setup>
