@@ -43,7 +43,7 @@
 
   <div
     v-if="loading || !data"
-    class="absolute w-full h-full overflow-hidden px-2 pt-4 text-[28px]"
+    class="absolute w-full h-full overflow-hidden mx-4 pt-6 text-[28px]"
   >
     <q-responsive :ratio="16 / 9" />
 
@@ -300,6 +300,7 @@
   <q-dialog
     v-if="data"
     position="bottom"
+    class="children:!px-0"
     full-width
     v-model="showDialogChapter"
   >
@@ -383,6 +384,7 @@
     v-if="data"
     position="bottom"
     full-width
+    class="children:!px-0"
     v-model="showDialogInforma"
   >
     <q-card
@@ -394,7 +396,7 @@
         <q-btn dense flat round icon="close" v-close-popup />
       </div>
       <q-card-section
-        class="relative flex-1 min-h-0 px-2 overflow-y-scroll text-[14px] text-[#9a9a9a] text-weight-normal"
+        class="relative flex-1 min-h-0 px-4 overflow-y-scroll text-[14px] text-[#9a9a9a] text-weight-normal"
       >
         <div>
           <div class="flex flex-nowrap">
@@ -425,7 +427,7 @@
             <li>
               <span>Tên khác: </span>
 
-              <span class="text-[#eee]">{{ data.othername }}</span>
+              <span class="text-[#eee] leading-relaxed">{{ data.othername }}</span>
             </li>
             <li class="mt-3">
               <span>Loại: </span>
