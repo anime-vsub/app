@@ -23,6 +23,11 @@
       :seasons="seasons"
       :_cache-data-seasons="_cacheDataSeasons"
       :fetch-season="fetchSeason"
+      :progress-chaps="progressChaps"
+      @cur-update="progressChaps.set($event.id, {
+        cur: $event.cur,
+        dur: $event.dur
+      })"
     />
     <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
       <q-img
@@ -71,11 +76,11 @@
     <SkeletonGridCard class="mt-3" :count="12" />
   </div>
 
-  <template v-else>
+  <div v-else class="mx-4">
     <q-responsive :ratio="16 / 9" />
 
-    <div v-ripple @click="showDialogInforma = true" class="relative">
-      <div class="relative flex items-center justify-between mx-[10px]">
+    <div v-ripple @click="showDialogInforma = true" class="relative mt-6">
+      <div class="relative flex items-center justify-between">
         <div class="flex-1 mt-4 mb-2">
           <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
             {{ data.name }}
@@ -115,7 +120,6 @@
       </div>
     </div>
 
-    <div class="px-[10px]">
       <div class="text-gray-400">
         Tác giả
         <template v-for="(item, index) in data.authors" :key="item.name">
@@ -141,8 +145,8 @@
           :to="item.path"
           class="text-[rgb(28,199,73)]"
         >
-          {{ item.name }}</router-link
-        >
+          {{ item.name }}
+        </router-link>
         <div class="divider"></div>
 
         <br />
@@ -180,9 +184,9 @@
           #{{ item.name.replace(/ /, "_") }}
         </router-link>
       </div>
-    </div>
 
-    <div class="my-2 mx-4">
+
+    <div class="my-2">
       <q-btn
         stack
         no-caps
@@ -211,7 +215,7 @@
       </q-btn>
     </div>
 
-    <q-btn flat no-caps class="w-full !px-2" @click="showDialogChapter = true">
+    <div class="w-full py-2 relative" v-ripple @click="showDialogChapter = true">
       <div class="flex items-center justify-between text-subtitle2 w-full">
         Tập
 
@@ -219,13 +223,13 @@
           Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
         </span>
       </div>
-    </q-btn>
+    </div>
 
     <q-tab-panels
       v-model="seasonActive"
       animated
       keep-alive
-      class="h-full bg-transparent overflow-y-visible whitespace-nowrap mb-3"
+      class="h-full bg-transparent overflow-y-visible whitespace-nowrap mb-3 mx-[-8px]"
     >
       <q-tab-panel
         v-for="{ value } in seasons"
@@ -258,6 +262,7 @@
           :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
           :season="value"
           :find="(item) => value === currentSeason && item.id === currentChap"
+              :progress-chaps="progressChaps"
         />
       </q-tab-panel>
     </q-tab-panels>
@@ -273,6 +278,7 @@
         seasons &&
         (seasons.length > 1 || (seasons.length === 0 && seasons[0].name !== ''))
       "
+      class=" mx-[-8px]"
     >
       <q-tab
         v-for="item in seasons"
@@ -285,10 +291,10 @@
       />
     </q-tabs>
 
-    <div class="px-1">
+    <div class="px-1  mx-[-8px]">
       <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
     </div>
-  </template>
+  </div>
 
   <!-- bottom sheet -->
   <q-dialog
@@ -363,7 +369,8 @@
               :find="
                 (item) => value === currentSeason && item.id === currentChap
               "
-              class="px-4 py-[10px] mx-2 mb-3"
+              :progress-chaps="progressChaps"
+              class-item="px-4 py-[10px] mx-2 mb-3"
             />
           </q-tab-panel>
         </q-tab-panels>
@@ -433,8 +440,8 @@
                   class="py-[5px] !min-h-0 px-2 rounded-sm bg-gray-700 mx-1 my-1 inline-block relative"
                   :to="item.path"
                 >
-                  {{ item.name }}</q-btn
-                >
+                  {{ item.name }}
+                </q-btn>
               </span>
             </li>
           </ul>
@@ -479,7 +486,7 @@ import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
-import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
+import { computed, reactive, ref, shallowRef, watch, watchEffect, shallowReactive } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
@@ -846,6 +853,52 @@ const sources = computed<Source[] | undefined>(() =>
     }
   })
 )
+import { useAuthStore } from "stores/auth"
+import {
+  doc,
+  getDocs,
+  getFirestore,
+  serverTimestamp,
+  setDoc,
+  collection,
+} from "@firebase/firestore"
+import { app } from "boot/firebase"
+
+const authStore = useAuthStore()
+const progressChaps = shallowReactive<Map<string, {
+  cur: number
+  dur: number
+}>>(new Map())
+
+watch(
+  [currentSeason, () => authStore.user_data],
+  async ([currentSeason, user_data]) => {
+    if (!user_data || !currentSeason) {
+      return
+    }
+
+    const db = getFirestore(app)
+
+    const userRef = doc(db, "users", user_data.email)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const seasonRef = doc(userRef, "history", currentSeason!)
+    const chapRef = collection(seasonRef, "chaps")
+
+    progressChaps.clear()
+    const { docs } = await getDocs(chapRef)
+
+    docs.forEach((item) => {
+      const { cur , dur } = item.data()
+      progressChaps.set(item.id, {
+        cur, dur
+      })
+    })
+  },
+  {
+    immediate: true,
+  }
+)
+
 // @scrollIntoView
 const tabsRef = ref<QTab>()
 watchEffect(() => {
@@ -885,7 +938,9 @@ watch(
       follows.value = 0
     }
   },
-  { immediate: true }
+  {
+    immediate: true,
+  }
 )
 
 watch(
@@ -893,7 +948,9 @@ watch(
   (data) => {
     follows.value = data?.follows ?? 0
   },
-  { immediate: true }
+  {
+    immediate: true,
+  }
 )
 
 async function toggleFollow() {
