@@ -50,15 +50,12 @@
         class="h-full overflow-y-auto scroll-smooth"
         style="white-space: pre-wrap"
       >
-        <div
+        <ScreenLoading
           v-if="
             !(_dataInStoreTmp = dataStore.get(type)) ||
             _dataInStoreTmp.status === 'pending'
           "
-          class="h-full flex items-center"
-        >
-          <LaodingAnim />
-        </div>
+        />
         <CardVertical
           v-else-if="_dataInStoreTmp.status === 'success'"
           v-for="(item, index) in _dataInStoreTmp.response"
@@ -75,21 +72,7 @@
             <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
           </template>
         </CardVertical>
-        <div v-else class="h-full flex items-center">
-          <div class="text-center w-full">
-            <img src="~assets/ic_22_cry.png" width="240" class="mx-auto" />
-            <br />
-            <q-btn
-              dense
-              no-caps
-              outline
-              class="px-2"
-              @click="fetchRankType(type)"
-              style="color: #00be06"
-              >Thử lại</q-btn
-            >
-          </div>
-        </div>
+        <ScreenError v-else @click:retry="fetchRankType(type)" />
       </swiper-slide>
     </swiper>
   </div>
@@ -107,6 +90,8 @@ import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRouter } from "vue-router"
+import ScreenLoading from "components/ScreenLoading.vue"
+import ScreenError from "components/ScreenError.vue"
 
 import "swiper/css"
 
