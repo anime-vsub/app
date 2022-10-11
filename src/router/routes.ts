@@ -74,31 +74,32 @@ const routes: RouteRecordRaw[] = [
           },
           {
             path: "history",
-            component: () => import("pages/tai-khoan/history.vue")
+            component: () => import("pages/tai-khoan/history.vue"),
           },
           {
             path: "follow",
-            component: () => import("pages/tai-khoan/follow.vue")
+            component: () => import("pages/tai-khoan/follow.vue"),
           },
           {
             path: "settings",
-            component: () => import("pages/tai-khoan/settings/index_outlet.vue"),
+            component: () =>
+              import("pages/tai-khoan/settings/index_outlet.vue"),
             children: [
               {
                 path: "",
-                component: () => import("pages/tai-khoan/settings/index.vue")
+                component: () => import("pages/tai-khoan/settings/index.vue"),
               },
               {
                 path: "player",
-                component: () => import("pages/tai-khoan/settings/player.vue")
-              }
-            ]
+                component: () => import("pages/tai-khoan/settings/player.vue"),
+              },
+            ],
           },
           {
             path: "about",
             alias: ["/tai-khoan/settings/about"],
-            component: () => import("pages/tai-khoan/about.vue")
-          }
+            component: () => import("pages/tai-khoan/about.vue"),
+          },
         ],
       },
     ],

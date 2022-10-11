@@ -118,8 +118,11 @@
                 <Icon v-else icon="fluent:eye-off-24-regular" />
               </q-btn>
             </div>
-            
-            <div class="text-grey py-1">Quan trọng! Hãy nhớ mật khẩu bạn thay đổi vì nó khó có thể khôi phục lại được nếu bị mất.</div>
+
+            <div class="text-grey py-1">
+              Quan trọng! Hãy nhớ mật khẩu bạn thay đổi vì nó khó có thể khôi
+              phục lại được nếu bị mất.
+            </div>
 
             <q-btn
               type="submit"
