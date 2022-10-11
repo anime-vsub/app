@@ -82,7 +82,6 @@
 import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
-import LaodingAnim from "components/LaodingAnim.vue"
 import { BangXepHangType } from "src/apis/runs/bang-xep-hang/[type]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import ranks from "src/logic/ranks"

@@ -179,7 +179,6 @@ import BottomBlur from "components/BottomBlur.vue"
 import "dayjs/locale/vi"
 
 import CardVertical from "components/CardVertical.vue"
-import LaodingAnim from "components/LaodingAnim.vue"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { debounce } from "quasar"

@@ -13,7 +13,6 @@ import {
 import { Icon } from "@iconify/vue"
 import { app } from "boot/firebase"
 import BottomBlur from "components/BottomBlur.vue"
-import LaodingAnim from "components/LaodingAnim.vue"
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
 import isYesterday from "dayjs/plugin/isYesterday"

@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@capacitor-community/barcode-scanner': ^3.0.0
   '@capacitor-community/http': 1.4.1
   '@capacitor/android': ^4.3.0
   '@capacitor/app': ^4.0.1
@@ -17,6 +18,7 @@ specifiers:
   cordova-plugin-screen-orientation: ^3.0.2
 
 dependencies:
+  '@capacitor-community/barcode-scanner': 3.0.0_@capacitor+core@4.3.0
   '@capacitor-community/http': 1.4.1
   '@capacitor/android': 4.3.0_@capacitor+core@4.3.0
   '@capacitor/app': 4.0.1_@capacitor+core@4.3.0
@@ -33,6 +35,14 @@ dependencies:
   cordova-plugin-screen-orientation: 3.0.2
 
 packages:
+
+  /@capacitor-community/barcode-scanner/3.0.0_@capacitor+core@4.3.0:
+    resolution: {integrity: sha512-Jzr4phHyDS+C2ZE+eoVsuq15oFvFLVtAJmmegIjwVBcb3CxgRdkt/kdVurXgVKMQ6mJ6StYI7hALeMu2vkyC6A==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
+    dev: false
 
   /@capacitor-community/http/1.4.1:
     resolution: {integrity: sha512-+pCkBXrwfm97UfjOgjV950H/qZ8SE36Mrcb46BlL1ps3VIsGuIO+AulL8GqTC6LewheRVtGJpRspNtneXQotNA==}
