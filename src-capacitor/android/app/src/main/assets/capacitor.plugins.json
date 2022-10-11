@@ -1,38 +1,38 @@
 [
-	{
-		"pkg": "@capacitor-community/http",
-		"classpath": "com.getcapacitor.plugin.http.Http"
-	},
-	{
-		"pkg": "@capacitor/app",
-		"classpath": "com.capacitorjs.plugins.app.AppPlugin"
-	},
-	{
-		"pkg": "@capacitor/browser",
-		"classpath": "com.capacitorjs.plugins.browser.BrowserPlugin"
-	},
-	{
-		"pkg": "@capacitor/device",
-		"classpath": "com.capacitorjs.plugins.device.DevicePlugin"
-	},
-	{
-		"pkg": "@capacitor/haptics",
-		"classpath": "com.capacitorjs.plugins.haptics.HapticsPlugin"
-	},
-	{
-		"pkg": "@capacitor/preferences",
-		"classpath": "com.capacitorjs.plugins.preferences.PreferencesPlugin"
-	},
-	{
-		"pkg": "@capacitor/share",
-		"classpath": "com.capacitorjs.plugins.share.SharePlugin"
-	},
-	{
-		"pkg": "@capacitor/status-bar",
-		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
-	},
-	{
-		"pkg": "@hugotomazi/capacitor-navigation-bar",
-		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
-	}
+  {
+    "pkg": "@capacitor-community/http",
+    "classpath": "com.getcapacitor.plugin.http.Http"
+  },
+  {
+    "pkg": "@capacitor/app",
+    "classpath": "com.capacitorjs.plugins.app.AppPlugin"
+  },
+  {
+    "pkg": "@capacitor/browser",
+    "classpath": "com.capacitorjs.plugins.browser.BrowserPlugin"
+  },
+  {
+    "pkg": "@capacitor/device",
+    "classpath": "com.capacitorjs.plugins.device.DevicePlugin"
+  },
+  {
+    "pkg": "@capacitor/haptics",
+    "classpath": "com.capacitorjs.plugins.haptics.HapticsPlugin"
+  },
+  {
+    "pkg": "@capacitor/preferences",
+    "classpath": "com.capacitorjs.plugins.preferences.PreferencesPlugin"
+  },
+  {
+    "pkg": "@capacitor/share",
+    "classpath": "com.capacitorjs.plugins.share.SharePlugin"
+  },
+  {
+    "pkg": "@capacitor/status-bar",
+    "classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
+  },
+  {
+    "pkg": "@hugotomazi/capacitor-navigation-bar",
+    "classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
+  }
 ]
