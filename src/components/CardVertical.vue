@@ -1,7 +1,7 @@
 <template>
   <router-link :to="data.path" v-ripple class="relative flex flex-nowrap">
     <div>
-      <q-img
+      <q-img no-spinner 
         :src="data.image"
         :ratio="280 / 400"
         width="110px"

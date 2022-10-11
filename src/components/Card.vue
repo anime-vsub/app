@@ -1,6 +1,6 @@
 <template>
   <q-card flat dense class="bg-transparent" @click="router.push(data.path)">
-    <q-img
+    <q-img no-spinner 
       :src="data.image"
       :ratio="280 / 400"
       :initial-ratio="744 / 530"

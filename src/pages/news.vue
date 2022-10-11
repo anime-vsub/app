@@ -103,7 +103,7 @@
       @click="open(item.href, item.title)"
     >
       <div>
-        <q-img :src="item.image" class="image" />
+        <q-img no-spinner  :src="item.image" class="image" />
       </div>
 
       <div class="content">

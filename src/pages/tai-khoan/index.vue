@@ -91,7 +91,7 @@
         style="white-space: initial"
         @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
       >
-        <q-img :src="item.poster" :ratio="1920 / 1080" class="!rounded-[4px]">
+        <q-img no-spinner  :src="item.poster" :ratio="1920 / 1080" class="!rounded-[4px]">
           <BottomBlur class="px-0 h-[40%]">
             <div
               class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
