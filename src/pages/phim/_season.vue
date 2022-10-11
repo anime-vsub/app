@@ -306,13 +306,13 @@
   >
     <q-card
       style="height: calc(100vh - 100vw * 9 / 16)"
-      class="!overflow-visible flex column flex-nowrap py-0"
+      class="!overflow-visible flex column flex-nowrap py-0 px-4"
     >
-      <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
+      <div class="flex items-center justify-between text-subtitle1 py-2">
         Season
         <q-btn dense flat round icon="close" v-close-popup />
       </div>
-      <div class="relative flex-1 min-h-0">
+      <div class="relative flex-1 min-h-0 mx-[-24px]">
         <q-tabs
           v-model="seasonActive"
           no-caps
