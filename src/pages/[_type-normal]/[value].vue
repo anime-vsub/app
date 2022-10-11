@@ -85,19 +85,9 @@
 
   <!-- main -->
 
-  <div v-if="data?.items.length === 0" class="text-center py-20">
-    <img
-      src="~assets/img_tips_error_not_foud.png"
-      width="186"
-      height="174"
-      class="mx-auto"
-    />
-
-    <div class="text-subtitle1 mt-1">Không tìm thấy gì cả.</div>
-  </div>
-
-  <template v-else>
-    <SkeletonGridCard v-if="loading || !data" :count="12" />
+  <SkeletonGridCard v-if="loading" :count="12" />
+  <template v-else-if="data">
+    <ScreenNotFound v-if="data.items.length === 0" />
 
     <q-infinite-scroll v-else @load="onLoad" :offset="250">
       <GridCard :items="data.items" />
@@ -109,6 +99,7 @@
       </template>
     </q-infinite-scroll>
   </template>
+  <ScreenError v-else @click:retry="run" />
 
   <template v-if="data?.filter">
     <!-- gener -->
@@ -490,6 +481,8 @@ import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, reactive, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import ScreenError from "components/ScreenError.vue"
+import ScreenNotFound from "components/ScreenNotFound.vue"
 
 const route = useRoute()
 const router = useRouter()
