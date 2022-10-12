@@ -18,7 +18,7 @@
         <q-item-label>Tự động phát</q-item-label>
       </q-item-section>
       <q-item-section side>
-        <q-toggle v-model="settingsStore.player.autoNext" size="sm" />
+        <q-toggle v-model="settingsStore.player.autoNext" size="sm" color="green" />
       </q-item-section>
     </q-item>
     <q-item clickable v-ripple>
@@ -26,7 +26,7 @@
         <q-item-label>Nhắc tôi tạm dừng xem</q-item-label>
       </q-item-section>
       <q-item-section side>
-        <q-toggle v-model="settingsStore.player.enableRemindStop" size="sm" />
+        <q-toggle v-model="settingsStore.player.enableRemindStop" size="sm" color="green" />
       </q-item-section>
     </q-item>
   </q-list>

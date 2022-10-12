@@ -396,6 +396,12 @@
             >{{ name }}</q-btn
           >
         </div>
+
+
+        <div class="flex items-center justify-between mt-4 mb-2">
+          Tự động phát
+          <q-toggle v-model="settingsStore.player.autoNext" size="sm"  color="green" />
+        </div>
       </ArtDialog>
       <ArtDialog
         :model-value="artFullscreen && showDialogChapter"
