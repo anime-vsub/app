@@ -1,5 +1,6 @@
 import type AccountInfoParser from "src/apis/parser/account/info"
 import Worker from "src/apis/workers/account/info?worker"
+import { C_URL } from "src/constants"
 import { post } from "src/logic/http"
 import { Md5 } from "ts-md5"
 
@@ -10,7 +11,7 @@ export async function DangNhap(email: string, password: string) {
   const password_md5 = Md5.hashAsciiStr(password)
 
   const { data: html, headers } = await post(
-    "/account/login/?_fxRef=https://animevietsub.cc/account/info",
+    `/account/login/?_fxRef=${C_URL}/account/info`,
     {
       email,
       password: "",

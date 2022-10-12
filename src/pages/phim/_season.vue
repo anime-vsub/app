@@ -491,7 +491,7 @@ import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
-import { labelToQuality } from "src/constants"
+import { C_URL, labelToQuality } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
@@ -993,7 +993,7 @@ function share() {
   Share.share({
     title: `Xem ${data.value.name} series ${currentMetaSeason.value.name}`,
     text: `Xem ${data.value.name} tập ${currentMetaChap.value.name}`,
-    url: `https://animevietsub.cc${route.path}`,
+    url: C_URL + route.path,
     dialogTitle: `Chia sẻ ${data.value.name}`,
   })
 }
