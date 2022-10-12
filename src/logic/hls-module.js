@@ -1,4 +1,5 @@
 import { XMLHttpRequestJava } from "./XMLHttpRequestJava"
+import { fetchJava } from "./fetchJava"
 
 export default (function() {
 return /******/ (function(modules) { // webpackBootstrap
@@ -14507,65 +14508,35 @@ var xhr_loader_XhrLoader = /*#__PURE__*/function () {
   };
 
   _proto.loadInternal = function loadInternal() {
-    var xhr,
-        context = this.context;
-    xhr = this.loader = context.url.endsWith(".m3u8")
-                ? new XMLHttpRequestJava()
-                : new window.XMLHttpRequest()
-    var stats = this.stats;
+    const { context , config, stats } = this;
+
     stats.tfirst = 0;
     stats.loaded = 0;
-    var xhrSetup = this.xhrSetup;
 
-    try {
-      if (xhrSetup) {
-        try {
-          xhrSetup(xhr, context.url);
-        } catch (e) {
-          // fix xhrSetup: (xhr, url) => {xhr.setRequestHeader("Content-Language", "test");}
-          // not working, as xhr.setRequestHeader expects xhr.readyState === OPEN
-          xhr.open('GET', context.url, true);
-          xhrSetup(xhr, context.url);
-        }
-      }
+    const controller = new AbortController()
 
-      if (!xhr.readyState) {
-        xhr.open('GET', context.url, true);
+    const loader = this.loader = {
+      abort() {
+        controller.abort()
       }
-    } catch (e) {
-      // IE11 throws an exception on xhr.open if attempting to access an HTTP resource over HTTPS
-      this.callbacks.onError({
-        code: xhr.status,
-        text: e.message
-      }, context, xhr);
-      return;
     }
 
+    const headers = new Headers()
     if (context.rangeEnd) {
-      xhr.setRequestHeader('Range', 'bytes=' + context.rangeStart + '-' + (context.rangeEnd - 1));
+      headers.set('Range', 'bytes=' + context.rangeStart + '-' + (context.rangeEnd - 1));
     }
 
-    xhr.onreadystatechange = this.readystatechange.bind(this);
-    xhr.onprogress = this.loadprogress.bind(this);
-    xhr.responseType = context.responseType; // setup timeout before we perform request
 
-    this.requestTimeout = window.setTimeout(this.loadtimeout.bind(this), this.config.timeout);
-    xhr.send();
-  };
+    ;(context.url.endsWith(".m3u8") ? fetchJava : fetch)(context.url, {
+      headers,
+      signal: controller.signal
+    })
+    .then(async response => {
 
-  _proto.readystatechange = function readystatechange(event) {
-    var xhr = event.currentTarget,
-        readyState = xhr.readyState,
-        stats = this.stats,
-        context = this.context,
-        config = this.config; // don't proceed if xhr has been aborted
+      if (stats.aborted) {
+        return;
+      } // >= HEADERS_RECEIVED
 
-    if (stats.aborted) {
-      return;
-    } // >= HEADERS_RECEIVED
-
-
-    if (readyState >= 2) {
       // clear xhr timeout and rearm it if readyState less than 4
       window.clearTimeout(this.requestTimeout);
 
@@ -14573,52 +14544,65 @@ var xhr_loader_XhrLoader = /*#__PURE__*/function () {
         stats.tfirst = Math.max(window.performance.now(), stats.trequest);
       }
 
-      if (readyState === 4) {
-        var status = xhr.status; // http status between 200 to 299 are all successful
+      
+            stats.tload = Math.max(stats.tfirst, window.performance.now());
+            var data, len;
 
-        if (status >= 200 && status < 300) {
-          stats.tload = Math.max(stats.tfirst, window.performance.now());
-          var data, len;
+            if (context.responseType === 'arraybuffer') {
+              data = await response.arrayBuffer()
+              len = data.byteLength;
+            } else {
+              data = await response.text()
+              len = data.length;
+            }
 
-          if (context.responseType === 'arraybuffer') {
-            data = xhr.response;
-            len = data.byteLength;
-          } else {
-            data = xhr.responseText;
-            len = data.length;
-          }
+            stats.loaded = stats.total = len;
+            var response = {
+              url: response.url,
+              data: data
+            };
+            this.callbacks.onSuccess(response, stats, context);
 
-          stats.loaded = stats.total = len;
-          var response = {
-            url: xhr.responseURL,
-            data: data
-          };
-          this.callbacks.onSuccess(response, stats, context, xhr);
-        } else {
-          // if max nb of retries reached or if http status between 400 and 499 (such error cannot be recovered, retrying is useless), return error
-          if (stats.retry >= config.maxRetry || status >= 400 && status < 499) {
-            logger["logger"].error(status + " while loading " + context.url);
-            this.callbacks.onError({
-              code: status,
-              text: xhr.statusText
-            }, context, xhr);
-          } else {
-            // retry
-            logger["logger"].warn(status + " while loading " + context.url + ", retrying in " + this.retryDelay + "..."); // aborts and resets internal state
 
-            this.destroy(); // schedule retry
-
-            this.retryTimeout = window.setTimeout(this.loadInternal.bind(this), this.retryDelay); // set exponential backoff
-
-            this.retryDelay = Math.min(2 * this.retryDelay, config.maxRetryDelay);
-            stats.retry++;
-          }
-        }
-      } else {
-        // readyState >= 2 AND readyState !==4 (readyState = HEADERS_RECEIVED || LOADING) rearm timeout as xhr not finished yet
-        this.requestTimeout = window.setTimeout(this.loadtimeout.bind(this), config.timeout);
+    })
+    .catch(err => {
+      
+      if (stats.aborted) {
+        return;
+      } // >= HEADERS_RECEIVED
+      
+      // clear xhr timeout and rearm it if readyState less than 4
+      window.clearTimeout(this.requestTimeout);
+      
+      if (stats.tfirst === 0) {
+        stats.tfirst = Math.max(window.performance.now(), stats.trequest);
       }
-    }
+      
+      // if max nb of retries reached or if http status between 400 and 499 (such error cannot be recovered, retrying is useless), return error
+      if (stats.retry >= config.maxRetry || status >= 400 && status < 499) {
+        logger["logger"].error(status + " while loading " + context.url);
+        this.callbacks.onError({
+          code: status,
+          text: err?.statusText ?? "unknown"
+        }, context);
+      } else {
+        // retry
+        logger["logger"].warn(status + " while loading " + context.url + ", retrying in " + this.retryDelay + "..."); // aborts and resets internal state
+
+        this.destroy(); // schedule retry
+
+        this.retryTimeout = window.setTimeout(this.loadInternal.bind(this), this.retryDelay); // set exponential backoff
+
+        this.retryDelay = Math.min(2 * this.retryDelay, config.maxRetryDelay);
+        stats.retry++;
+      }
+    })
+
+    // xhr = this.loader = context.url.endsWith(".m3u8")
+                // ? new XMLHttpRequestJava()
+                // : new window.XMLHttpRequest()
+
+    this.requestTimeout = window.setTimeout(() => loader.abort(), this.config.timeout);
   };
 
   _proto.loadtimeout = function loadtimeout() {
