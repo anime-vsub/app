@@ -411,6 +411,10 @@
             inline-label
             active-class="c--main"
             indicator-color="transparent"
+            v-if="
+        seasons &&
+        (seasons.length > 1 || (seasons.length === 0 && seasons[0].name !== ''))
+      "
           >
             <q-tab
               v-for="item in seasons"
