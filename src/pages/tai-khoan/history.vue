@@ -14,7 +14,7 @@
 
   <ScreenLoading v-if="loading" class="absolute" />
   <template v-else-if="histories">
-    <ScreenNotFound v-if="data.items.length === 0" />
+    <ScreenNotFound v-if="histories.length === 0" />
 
     <q-infinite-scroll v-else @load="onLoad" :offset="250">
       <template v-for="(item, index) in histories" :key="item.id">
@@ -40,7 +40,8 @@
           style="white-space: initial"
           @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
         >
-          <q-img no-spinner 
+          <q-img
+            no-spinner
             :src="item.poster"
             :ratio="1920 / 1080"
             class="!rounded-[4px] w-[min(210px,40%)]"
@@ -91,31 +92,18 @@
 </template>
 
 <script lang="ts" setup>
-import type { Timestamp } from "@firebase/firestore"
-import {
-  collection,
-  getDocs,
-  getFirestore,
-  limit,
-  orderBy,
-  query,
-  where,
-} from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
-import { app } from "boot/firebase"
 import BottomBlur from "components/BottomBlur.vue"
+import ScreenError from "components/ScreenError.vue"
+import ScreenLoading from "components/ScreenLoading.vue"
+import ScreenNotFound from "components/ScreenNotFound.vue"
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
 import isYesterday from "dayjs/plugin/isYesterday"
+import { History } from "src/apis/runs/history"
 import { parseTime } from "src/logic/parseTime"
-import { useAuthStore } from "stores/auth"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
-import { History } from "src/apis/runs/history"
-
-import ScreenLoading from "components/ScreenLoading.vue"
-import ScreenError from "components/ScreenError.vue"
-import ScreenNotFound from "components/ScreenNotFound.vue"
 
 dayjs.extend(isToday)
 dayjs.extend(isYesterday)

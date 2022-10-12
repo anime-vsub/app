@@ -34,13 +34,12 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import GridCard from "components/GridCard.vue"
+import ScreenError from "components/ScreenError.vue"
+import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
-
-import ScreenError from "components/ScreenError.vue"
-import ScreenNotFound from "components/ScreenNotFound.vue"
 
 const router = useRouter()
 

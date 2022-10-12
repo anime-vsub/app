@@ -41,17 +41,26 @@
 </template>
 
 <script lang="ts" setup>
-import { Icon } from "@iconify/vue"
-import { useRouter } from "vue-router"
 import { App } from "@capacitor/app"
 import { Device } from "@capacitor/device"
+import { Icon } from "@iconify/vue"
+import { useQuasar } from "quasar"
 import { shallowRef } from "vue"
+import { useRouter } from "vue-router"
 
 const router = useRouter()
+const $q = useQuasar()
 
 const infoApp = shallowRef()
 const infoDev = shallowRef()
 
-App.getInfo().then((data) => (infoApp.value = data))
-Device.getInfo().then((data) => (infoDev.value = data))
+Promise.all([
+  App.getInfo().then((data) => (infoApp.value = data)),
+  Device.getInfo().then((data) => (infoDev.value = data)),
+]).catch(() => {
+  $q.notify({
+    position: "bottom-right",
+    message: "Không thể lấy dữ liệu",
+  })
+})
 </script>

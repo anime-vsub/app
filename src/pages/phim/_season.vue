@@ -24,13 +24,16 @@
       :_cache-data-seasons="_cacheDataSeasons"
       :fetch-season="fetchSeason"
       :progress-chaps="progressChaps"
-      @cur-update="progressChaps.set($event.id, {
-        cur: $event.cur,
-        dur: $event.dur
-      })"
+      @cur-update="
+        progressChaps.set($event.id, {
+          cur: $event.cur,
+          dur: $event.dur,
+        })
+      "
     />
     <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
-      <q-img no-spinner
+      <q-img
+        no-spinner
         v-if="sources?.[0]?.url"
         :ratio="16 / 9"
         src="~assets/ic_question_result_error.png"
@@ -120,71 +123,67 @@
       </div>
     </div>
 
-      <div class="text-gray-400">
-        Tác giả
-        <template v-for="(item, index) in data.authors" :key="item.name">
-          <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
-            item.name
-          }}</router-link
-          ><template v-if="index < data.authors.length - 1">, </template>
-        </template>
-        <div class="divider"></div>
-        sản xuất bởi {{ data.studio }}
-      </div>
+    <div class="text-gray-400">
+      Tác giả
+      <template v-for="(item, index) in data.authors" :key="item.name">
+        <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
+          item.name
+        }}</router-link
+        ><template v-if="index < data.authors.length - 1">, </template>
+      </template>
+      <div class="divider"></div>
+      sản xuất bởi {{ data.studio }}
+    </div>
 
-      <div class="text-[rgb(230,230,230)] mt-3">
-        <Quality>{{ data.quality }}</Quality>
-        <div class="divider"></div>
-        {{ data.yearOf }}
-        <div class="divider"></div>
-        Cập nhật tới tập {{ data.duration }}
-        <div class="divider"></div>
-        <router-link
-          v-for="item in data.contries"
-          :key="item.name"
-          :to="item.path"
-          class="text-[rgb(28,199,73)]"
-        >
-          {{ item.name }}
-        </router-link>
-        <div class="divider"></div>
+    <div class="text-[rgb(230,230,230)] mt-3">
+      <Quality>{{ data.quality }}</Quality>
+      <div class="divider"></div>
+      {{ data.yearOf }}
+      <div class="divider"></div>
+      Cập nhật tới tập {{ data.duration }}
+      <div class="divider"></div>
+      <router-link
+        v-for="item in data.contries"
+        :key="item.name"
+        :to="item.path"
+        class="text-[rgb(28,199,73)]"
+      >
+        {{ item.name }}
+      </router-link>
+      <div class="divider"></div>
 
-        <br />
+      <br />
 
-        <div class="inline-flex items-center">
-          <div class="text-[16px] text-weight-medium mr-1">
-            {{ data.rate }}
-          </div>
-          <Star />
+      <div class="inline-flex items-center">
+        <div class="text-[16px] text-weight-medium mr-1">
+          {{ data.rate }}
         </div>
-        <div class="divider"></div>
-        <span class="text-gray-400">
-          {{ formatView(data.count_rate) }} người đánh giá
-        </span>
-        <div class="divider"></div>
-        <!-- <span class="text-gray-400">
+        <Star />
+      </div>
+      <div class="divider"></div>
+      <span class="text-gray-400">
+        {{ formatView(data.count_rate) }} người đánh giá
+      </span>
+      <div class="divider"></div>
+      <!-- <span class="text-gray-400">
           {{ formatView(data.follows) }} người theo dõi
         </span> -->
 
-        <router-link
-          v-if="data.seasonOf"
-          class="c--main"
-          :to="data.seasonOf.path"
-          >{{ data.seasonOf.name }}
-        </router-link>
-      </div>
+      <router-link v-if="data.seasonOf" class="c--main" :to="data.seasonOf.path"
+        >{{ data.seasonOf.name }}
+      </router-link>
+    </div>
 
-      <div class="tags mt-1">
-        <router-link
-          v-for="item in data.genre"
-          :key="item.name"
-          :to="item.path"
-          class="text-[rgb(28,199,73)]"
-        >
-          #{{ item.name.replace(/ /, "_") }}
-        </router-link>
-      </div>
-
+    <div class="tags mt-1">
+      <router-link
+        v-for="item in data.genre"
+        :key="item.name"
+        :to="item.path"
+        class="text-[rgb(28,199,73)]"
+      >
+        #{{ item.name.replace(/ /, "_") }}
+      </router-link>
+    </div>
 
     <div class="my-2">
       <q-btn
@@ -215,7 +214,11 @@
       </q-btn>
     </div>
 
-    <div class="w-full py-2 relative" v-ripple @click="showDialogChapter = true">
+    <div
+      class="w-full py-2 relative"
+      v-ripple
+      @click="showDialogChapter = true"
+    >
       <div class="flex items-center justify-between text-subtitle2 w-full">
         Tập
 
@@ -262,7 +265,7 @@
           :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
           :season="value"
           :find="(item) => value === currentSeason && item.id === currentChap"
-              :progress-chaps="progressChaps"
+          :progress-chaps="progressChaps"
         />
       </q-tab-panel>
     </q-tab-panels>
@@ -278,7 +281,7 @@
         seasons &&
         (seasons.length > 1 || (seasons.length === 0 && seasons[0].name !== ''))
       "
-      class=" mx-[-8px]"
+      class="mx-[-8px]"
     >
       <q-tab
         v-for="item in seasons"
@@ -291,7 +294,7 @@
       />
     </q-tabs>
 
-    <div class="px-1  mx-[-8px]">
+    <div class="px-1 mx-[-8px]">
       <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
     </div>
   </div>
@@ -400,7 +403,8 @@
       >
         <div>
           <div class="flex flex-nowrap">
-            <q-img no-spinner
+            <q-img
+              no-spinner
               :src="currentDataSeason?.image ?? data.image"
               :ratio="280 / 400"
               width="110px"
@@ -427,7 +431,9 @@
             <li>
               <span>Tên khác: </span>
 
-              <span class="text-[#eee] leading-relaxed">{{ data.othername }}</span>
+              <span class="text-[#eee] leading-relaxed">{{
+                data.othername
+              }}</span>
             </li>
             <li class="mt-3">
               <span>Loại: </span>
@@ -465,12 +471,13 @@
   <!--
       followed
     -->
-
 </template>
 
 <script lang="ts" setup>
 import { Share } from "@capacitor/share"
+import { collection, doc, getDocs, getFirestore } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
+import { app } from "boot/firebase"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import GridCard from "components/GridCard.vue"
@@ -489,7 +496,16 @@ import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
-import { computed, reactive, ref, shallowRef, watch, watchEffect, shallowReactive , onMounted } from "vue"
+import { useAuthStore } from "stores/auth"
+import {
+  computed,
+  reactive,
+  ref,
+  shallowReactive,
+  shallowRef,
+  watch,
+  watchEffect,
+} from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 // ================ follow ================
@@ -855,32 +871,30 @@ const sources = computed<Source[] | undefined>(() =>
     }
   })
 )
-import { useAuthStore } from "stores/auth"
-import {
-  doc,
-  getDocs,
-  getFirestore,
-  serverTimestamp,
-  setDoc,
-  collection,
-} from "@firebase/firestore"
-import { app } from "boot/firebase"
 
 const authStore = useAuthStore()
-const progressChaps = shallowReactive<Map<string, {
-  cur: number
-  dur: number
-}>>(new Map())
+const progressChaps = shallowReactive<
+  Map<
+    string,
+    {
+      cur: number
+      dur: number
+    }
+  >
+>(new Map())
 
 watch(
   [currentSeason, () => authStore.user_data],
+  // eslint-disable-next-line camelcase
   async ([currentSeason, user_data]) => {
+    // eslint-disable-next-line camelcase
     if (!user_data || !currentSeason) {
       return
     }
 
     const db = getFirestore(app)
 
+    // eslint-disable-next-line camelcase
     const userRef = doc(db, "users", user_data.email)
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const seasonRef = doc(userRef, "history", currentSeason!)
@@ -890,9 +904,10 @@ watch(
     const { docs } = await getDocs(chapRef)
 
     docs.forEach((item) => {
-      const { cur , dur } = item.data()
+      const { cur, dur } = item.data()
       progressChaps.set(item.id, {
-        cur, dur
+        cur,
+        dur,
       })
     })
   },

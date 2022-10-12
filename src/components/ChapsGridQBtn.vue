@@ -1,36 +1,40 @@
 <template>
   <div>
-  <q-btn
-    dense
-    no-caps
-    :ripple="false"
-    v-for="item in chaps"
-    :key="item.id"
-    outline
-    class="px-4 py-[10px] mx-2 rounded-md before:text-[#3a3a3a] overflow-hidden item"
-    :class="[classItem, {
-      [`c--main before:text-[rgb(0,194,52)] active ${classActive ?? ''}`]: find(item),
-      'mb-3': grid,
-    }]"
-    replace
-    :to="{
-      name: 'phim_[season]_[chap]',
-      params: {
-        season,
-        chap: item.id,
-      },
-    }"
-    :ref="(el) => find(item) && (activeRef = el as QBtn)"
-  >
-    {{ item.name }}
+    <q-btn
+      dense
+      no-caps
+      :ripple="false"
+      v-for="item in chaps"
+      :key="item.id"
+      outline
+      class="px-4 py-[10px] mx-2 rounded-md before:text-[#3a3a3a] overflow-hidden item"
+      :class="[
+        classItem,
+        {
+          [`c--main before:text-[rgb(0,194,52)] active ${classActive ?? ''}`]:
+            find(item),
+          'mb-3': grid,
+        },
+      ]"
+      replace
+      :to="{
+        name: 'phim_[season]_[chap]',
+        params: {
+          season,
+          chap: item.id,
+        },
+      }"
+      :ref="(el: QBtn) => find(item) && (activeRef = el as QBtn)"
+    >
+      {{ item.name }}
       <q-linear-progress
-        v-if="tmp = progressChaps.get(item.id)"
+        v-if="(tmp = progressChaps.get(item.id))"
         :value="tmp.cur / tmp.dur"
         rounded
         color="main"
         class="absolute bottom-[1px] left-0 !h-[3px] w-full progress"
       />
-  </q-btn>
+    </q-btn>
   </div>
 </template>
 
@@ -38,19 +42,22 @@
 import { QBtn } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
-import { ref, useAttrs, watchEffect } from "vue"
+import { ref, watchEffect } from "vue"
 
-defineProps<{
+const props = defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
   chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"]
   season: string
   classItem?: string
   classActive?: string
   grid?: boolean
-  progressChaps: Map<string, {
-    cur: number
-    dur: number
-  }>
+  progressChaps: Map<
+    string,
+    {
+      cur: number
+      dur: number
+    }
+  >
 }>()
 
 const activeRef = ref<QBtn>()
@@ -59,16 +66,17 @@ watchEffect(() => {
   if (activeRef.value?.$el) scrollXIntoView(activeRef.value.$el)
 })
 
-let tmp : typeof ReturnType<typeof props.progressChaps.get>
+// eslint-disable-next-line functional/no-let
+let tmp: ReturnType<typeof props.progressChaps.get>
 </script>
 
 <style lang="scss" scoped>
-  .item {
-    &.active {
-      .progress {
-        bottom: 1px;
-        color: $blue;
-      }
+.item {
+  &.active {
+    .progress {
+      bottom: 1px;
+      color: $blue;
     }
   }
-  </style>
+}
+</style>

@@ -1,5 +1,3 @@
-import { useAuthStore } from "stores/auth"
-
 import type { Timestamp } from "@firebase/firestore"
 import {
   collection,
@@ -10,16 +8,9 @@ import {
   query,
   where,
 } from "@firebase/firestore"
-import { Icon } from "@iconify/vue"
 import { app } from "boot/firebase"
-import BottomBlur from "components/BottomBlur.vue"
 import dayjs from "dayjs"
-import isToday from "dayjs/plugin/isToday"
-import isYesterday from "dayjs/plugin/isYesterday"
-import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
-import { useRequest } from "vue-request"
-import { useRouter } from "vue-router"
 
 interface ItemData {
   id: string

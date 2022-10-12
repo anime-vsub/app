@@ -397,10 +397,13 @@
           >
         </div>
 
-
         <div class="flex items-center justify-between mt-4 mb-2">
           Tự động phát
-          <q-toggle v-model="settingsStore.player.autoNext" size="sm"  color="green" />
+          <q-toggle
+            v-model="settingsStore.player.autoNext"
+            size="sm"
+            color="green"
+          />
         </div>
       </ArtDialog>
       <ArtDialog
@@ -418,9 +421,10 @@
             active-class="c--main"
             indicator-color="transparent"
             v-if="
-        seasons &&
-        (seasons.length > 1 || (seasons.length === 0 && seasons[0].name !== ''))
-      "
+              seasons &&
+              (seasons.length > 1 ||
+                (seasons.length === 0 && seasons[0].name !== ''))
+            "
           >
             <q-tab
               v-for="item in seasons"
@@ -661,6 +665,7 @@ import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import Hls from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
+import { useSettingsStore } from "stores/settings"
 import {
   computed,
   onBeforeUnmount,
@@ -670,7 +675,6 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
-import { useSettingsStore } from "stores/settings"
 
 import type { Source } from "./sources"
 
@@ -718,10 +722,13 @@ const props = defineProps<{
     | ResponseDataSeasonError
   >
   fetchSeason: (season: string) => Promise<void>
-  progressChaps: Map<string, {
-    cur: number
-    dur: number
-  }>
+  progressChaps: Map<
+    string,
+    {
+      cur: number
+      dur: number
+    }
+  >
 }>()
 
 // ===== setup effect =====
@@ -958,11 +965,14 @@ watch(
 )
 
 const emit = defineEmits<{
-  (name: "cur-update", val: {
-    cur: number
-    dur: number
-    id: string
-  }): void
+  (
+    name: "cur-update",
+    val: {
+      cur: number
+      dur: number
+      id: string
+    }
+  ): void
 }>()
 const saveCurTimeToPer = throttle(async () => {
   if (!seasonRefCache) return
@@ -999,7 +1009,8 @@ const saveCurTimeToPer = throttle(async () => {
   emit("cur-update", {
     cur: artCurrentTime.value,
     dur: artDuration.value,
-    id: props.currentChap!
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    id: props.currentChap!,
   })
   console.log("save viewing progress")
 }, 3_000)
