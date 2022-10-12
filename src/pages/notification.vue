@@ -41,7 +41,8 @@
                 <q-item-label class="text-grey">{{ item.time }}</q-item-label>
               </q-item-section>
               <q-item-section side>
-                <q-img no-spinner 
+                <q-img
+                  no-spinner
                   :src="item.image"
                   width="120px"
                   :ratio="120 / 81"

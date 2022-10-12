@@ -91,7 +91,12 @@
         style="white-space: initial"
         @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
       >
-        <q-img no-spinner  :src="item.poster" :ratio="1920 / 1080" class="!rounded-[4px]">
+        <q-img
+          no-spinner
+          :src="item.poster"
+          :ratio="1920 / 1080"
+          class="!rounded-[4px]"
+        >
           <BottomBlur class="px-0 h-[40%]">
             <div
               class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
@@ -199,8 +204,12 @@
   </q-list>
 
   <!-- dialogs login -->
-  <q-dialog v-model="showDialogLogin" position="bottom" 
-    class="children:!px-0" full-width>
+  <q-dialog
+    v-model="showDialogLogin"
+    position="bottom"
+    class="children:!px-0"
+    full-width
+  >
     <q-card class="h-[60vh] bg-dark-500">
       <q-card-section>
         <div class="flex justify-between">
@@ -266,8 +275,12 @@
   </q-dialog>
 
   <!-- dialogs my QR -->
-  <q-dialog v-model="showDialogQR" position="bottom" 
-    class="children:!px-0" full-width>
+  <q-dialog
+    v-model="showDialogQR"
+    position="bottom"
+    class="children:!px-0"
+    full-width
+  >
     <q-card class="bg-dark-500 h-min-[500px] px-4 pb-2 pt-4">
       <div class="text-subtitle1 text-weight-normal">QR của bạn</div>
       <div class="text-grey">
@@ -282,33 +295,21 @@
 </template>
 
 <script lang="ts" setup>
-import type { Timestamp } from "@firebase/firestore"
-import {
-  collection,
-  getDocs,
-  getFirestore,
-  limit,
-  orderBy,
-  query,
-  where,
-} from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
-import { app } from "boot/firebase"
+import BottomBlur from "components/BottomBlur.vue"
 import Card from "components/Card.vue"
+import ScreenError from "components/ScreenError.vue"
+import SkeletonCard from "components/SkeletonCard.vue"
+import { compressToBase64 } from "lz-string"
+import QRCode from "qrcode"
 import { useQuasar } from "quasar"
+import { History } from "src/apis/runs/history"
 import { TuPhim } from "src/apis/runs/tu-phim"
+import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
-import { ref, shallowReactive, watch, watchEffect } from "vue"
+import { ref, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
-import { History } from "src/apis/runs/history"
-import SkeletonCard from "components/SkeletonCard.vue"
-import ScreenError from "components/ScreenError.vue"
-import QRCode from "qrcode"
-import QrScanner from "qr-scanner"
-import { onMounted } from "vue"
-import { parseTime } from "src/logic/parseTime"
-import BottomBlur from "components/BottomBlur.vue"
 // import QrScanner from "qr-scanner"
 
 const showDialogLogin = ref(false)
@@ -365,7 +366,15 @@ watchEffect(() => {
       token_value: authStore.token_value,
       user_data: authStore.user_data,
     })
-  ).then((url) => (qrcodeUrl.value = url))
+  )
+    .then((url) => (qrcodeUrl.value = url))
+    .catch((err) => {
+      $q.notify({
+        position: "bottom-right",
+        message: "Lỗi khi tạo QR Code",
+        caption: err + "",
+      })
+    })
 })
 
 // ============ fetch history =============
@@ -398,7 +407,6 @@ const {
 
 // ========== gen qr code =========
 const qrRef = ref<HTMLCanvasElement>()
-import { compressToBase64 } from "lz-string"
 watch(qrRef, (qrRef) => {
   if (qrRef) {
     if (!authStore.isLogged) {

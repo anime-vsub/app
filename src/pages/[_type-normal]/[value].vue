@@ -107,7 +107,7 @@
       v-model="showDialogGener"
       position="bottom"
       no-route-dismiss
-    class="children:!px-0"
+      class="children:!px-0"
       full-width
     >
       <q-card flat class="w-full pt-3 !max-h-[60vh]">
@@ -157,7 +157,7 @@
       v-model="showDialogSeaser"
       position="bottom"
       no-route-dismiss
-    class="children:!px-0"
+      class="children:!px-0"
       full-width
     >
       <q-card flat class="w-full pt-3">
@@ -207,7 +207,7 @@
       v-model="showDialogTyper"
       position="bottom"
       no-route-dismiss
-    class="children:!px-0"
+      class="children:!px-0"
       full-width
     >
       <q-card flat class="w-full pt-3">
@@ -256,7 +256,7 @@
       v-model="showDialogSorter"
       position="bottom"
       no-route-dismiss
-    class="children:!px-0"
+      class="children:!px-0"
       full-width
     >
       <q-card flat class="w-full pt-3">
@@ -480,13 +480,13 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import GridCard from "components/GridCard.vue"
+import ScreenError from "components/ScreenError.vue"
+import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, reactive, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import ScreenError from "components/ScreenError.vue"
-import ScreenNotFound from "components/ScreenNotFound.vue"
 
 const route = useRoute()
 const router = useRouter()

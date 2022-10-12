@@ -82,6 +82,8 @@
 import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
+import ScreenError from "components/ScreenError.vue"
+import ScreenLoading from "components/ScreenLoading.vue"
 import { BangXepHangType } from "src/apis/runs/bang-xep-hang/[type]"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import ranks from "src/logic/ranks"
@@ -89,8 +91,6 @@ import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRouter } from "vue-router"
-import ScreenLoading from "components/ScreenLoading.vue"
-import ScreenError from "components/ScreenError.vue"
 
 import "swiper/css"
 

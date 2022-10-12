@@ -180,6 +180,9 @@ import BottomBlur from "components/BottomBlur.vue"
 import "dayjs/locale/vi"
 
 import CardVertical from "components/CardVertical.vue"
+import ScreenError from "components/ScreenError.vue"
+import ScreenLoading from "components/ScreenLoading.vue"
+import ScreenNotFound from "components/ScreenNotFound.vue"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { debounce } from "quasar"
@@ -193,10 +196,6 @@ import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-
-import ScreenLoading from "components/ScreenLoading.vue"
-import ScreenNotFound from "components/ScreenNotFound.vue"
-import ScreenError from "components/ScreenError.vue"
 
 // ================= unknown ===============
 
