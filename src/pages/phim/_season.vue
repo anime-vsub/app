@@ -466,7 +466,6 @@
       followed
     -->
 
-    <div ref="testRef" id="playerId" />
 </template>
 
 <script lang="ts" setup>
