@@ -35,7 +35,7 @@ export default function TypeNormalValue(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const value = new URL(
           $(anchor).attr("href") ?? "",
-          "https://animevietsub.cc"
+          "https://example.com"
         ).searchParams.get("sort")!
         return { text, value }
       })

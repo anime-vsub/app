@@ -37,7 +37,7 @@ export default function Index(html: string) {
 
 /**
  * Get update:
- * POST: https://animevietsub.cc/ajax/item
+ * POST: /ajax/item
       @Mới_cập_nhật
       params:
         widget: list-film

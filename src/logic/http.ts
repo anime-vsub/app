@@ -1,5 +1,6 @@
 import type { HttpOptions } from "@capacitor-community/http"
 import { CapacitorHttp as Http } from "@capacitor/core"
+import { C_URL } from "src/constants"
 
 export async function get(
   url: string | HttpOptions,
@@ -9,7 +10,7 @@ export async function get(
     typeof url === "object"
       ? url
       : {
-          url: url.includes("://") ? url : "https://animevietsub.cc" + url,
+          url: url.includes("://") ? url : C_URL + url,
           headers: {
             accept:
               "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -52,7 +53,7 @@ export async function post(
   headers?: Record<string, string>
 ) {
   const response = await Http.post({
-    url: "https://animevietsub.cc" + url,
+    url: C_URL + url,
     headers: {
       "user-agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
