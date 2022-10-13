@@ -22,6 +22,8 @@
 <a href="./meta/screenshoots/Screenshot_2022-10-05-22-33-12-869_git.shin.animevsub.jpg"><img src="./meta/screenshoots/Screenshot_2022-10-05-22-33-12-869_git.shin.animevsub.jpg" width="120px"></a>
 <a href="./meta/screenshoots/Screenshot_2022-10-06-07-26-11-027_git.shin.animevsub.jpg"><img src="./meta/screenshoots/Screenshot_2022-10-06-07-26-11-027_git.shin.animevsub.jpg" width="120px"></a>
 <a href="./meta/screenshoots/Screenshot_2022-10-06-07-26-15-284_git.shin.animevsub.jpg"><img src="./meta/screenshoots/Screenshot_2022-10-06-07-26-15-284_git.shin.animevsub.jpg" width="120px"></a>
+<a href="./meta/screenshoots/Screenshot_2022-10-13-17-09-06-063_git.shin.animevsub.jpg"><img src="./meta/screenshoots/Screenshot_2022-10-13-17-09-06-063_git.shin.animevsub.jpg" width="120px"></a>
+<a href="./meta/screenshoots/Screenshot_2022-10-13-17-09-13-504_git.shin.animevsub.jpg"><img src="./meta/screenshoots/Screenshot_2022-10-13-17-09-13-504_git.shin.animevsub.jpg" width="120px"></a>
 </div>
 <!--/screenshot-->
 
