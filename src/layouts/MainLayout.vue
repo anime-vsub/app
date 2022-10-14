@@ -3,7 +3,9 @@
     <q-page-container>
       <q-page>
         <router-view v-slot="{ Component }">
-          <component :is="Component" />
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
         </router-view>
       </q-page>
     </q-page-container>
@@ -15,7 +17,12 @@
         class="bg-transparent text-grey-5 shadow-2 text-[12px]"
         no-caps
       >
-        <q-route-tab replace exact-active-class="tab-active" class="pt-1" to="/">
+        <q-route-tab
+          replace
+          exact-active-class="tab-active"
+          class="pt-1"
+          to="/"
+        >
           <Icon
             icon="fluent:home-24-regular"
             width="24"
@@ -30,7 +37,12 @@
           />
           Trang chủ
         </q-route-tab>
-        <q-route-tab replace active-class="tab-active" class="pt-1" to="/tim-kiem">
+        <q-route-tab
+          replace
+          active-class="tab-active"
+          class="pt-1"
+          to="/tim-kiem"
+        >
           <Icon
             icon="fluent:search-24-regular"
             width="24"
@@ -45,7 +57,12 @@
           />
           Tìm kiếm
         </q-route-tab>
-        <q-route-tab replace exact-active-class="tab-active" class="pt-1" to="/news">
+        <q-route-tab
+          replace
+          exact-active-class="tab-active"
+          class="pt-1"
+          to="/news"
+        >
           <Icon
             icon="fluent:news-24-regular"
             width="24"
@@ -60,7 +77,8 @@
           />
           Tin tức
         </q-route-tab>
-        <q-route-tab replace
+        <q-route-tab
+          replace
           exact-active-class="tab-active"
           class="pt-1"
           to="/notification"
@@ -82,7 +100,8 @@
             notificationStore.max
           }}</q-badge>
         </q-route-tab>
-        <q-route-tab replace
+        <q-route-tab
+          replace
           exact-active-class="tab-active"
           class="pt-1"
           to="/tai-khoan"
@@ -109,9 +128,10 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useNotificationStore } from "stores/notification"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 
 const route = useRoute()
+const router = useRouter()
 const notificationStore = useNotificationStore()
 </script>
 
