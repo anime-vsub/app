@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed top-0 bg-dark-page bg-dark-page z-1000 w-full">
     <q-item
       clickable
       @click="authStore.user ? gotoEditProfile() : (showDialogLogin = true)"
@@ -46,9 +46,9 @@
         </div>
       </q-item-section>
     </q-item>
-  </q-header>
+  </header>
 
-  <div class="mt-4">
+  <div class="mt-4 mt-[72px]">
     <router-link
       class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
       to="/tai-khoan/history"
