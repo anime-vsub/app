@@ -1,4 +1,5 @@
 <template>
+  <div>
   <q-header v-if="false" class="bg-transparent">
     <q-toolbar>
       <svg
@@ -352,6 +353,7 @@
       <GridCard :items="data.lastUpdate" />
     </div>
   </div>
+</div>
 </template>
 
 <script setup lang="ts">
