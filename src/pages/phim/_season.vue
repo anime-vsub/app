@@ -541,8 +541,6 @@ const { data, run, error, loading } = useRequest(
       : Promise.reject()
   },
   {
-    cacheKey: () => `/phim/${realIdCurrentSeason.value}`,
-    cacheTime: 5 * 60 * 1000, // 5 minutes
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
       run()

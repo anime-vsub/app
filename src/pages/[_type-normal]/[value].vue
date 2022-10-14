@@ -654,11 +654,7 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
 }
 
 const { data, error, run, loading } = useRequest(
-  () => fetchTypeNormalValue(1, false),
-  {
-    cacheKey: () => route.path,
-    cacheTime: 5 * 60 * 1000, // 5 minutes
-  }
+  () => fetchTypeNormalValue(1, false)
 )
 watch(error, (error) => {
   if (error)
