@@ -307,11 +307,7 @@ const {
   data: resultSearch,
   run: runSearch,
 } = useRequest(
-  () => TypeNormalValue("tim-kiem", route.params.keyword, 1, true),
-  {
-    cacheKey: () => `tim-kiem/${route.params.keyword}`,
-    cacheTime: 5 * 60 * 1000, // 5 minutes
-  }
+  () => TypeNormalValue("tim-kiem", route.params.keyword, 1, true)
 )
 watch(() => route.params.keyword, runSearch, {
   immediate: true,
