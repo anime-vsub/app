@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed z-1000 bg-dark-page w-full">
     <q-toolbar>
       <q-toolbar-title class="text-center absolute w-full"
         >Tin tức</q-toolbar-title
@@ -48,9 +48,9 @@
         </div>
       </div>
     </q-toolbar>
-  </q-header>
+  </header>
 
-  <div class="absolute fit overflow-hidden" v-if="data.length === 0">
+  <div class="absolute fit overflow-hidden pt-[50px]" v-if="data.length === 0">
     <q-card
       v-for="item in 12"
       :key="item"
@@ -91,7 +91,7 @@
     </q-card>
   </div>
 
-  <q-infinite-scroll v-else @load="onLoad" :offset="250">
+  <q-infinite-scroll v-else @load="onLoad" :offset="250" class="pt-[50px]">
     <q-card
       v-for="item in data"
       :key="item.title"

@@ -9,6 +9,7 @@ export function useAliveScrollBehavior() {
       setTimeout(() => window.scrollTo(saved))
     // called on initial mount
     // and every time it is re-inserted from the cache
+    // fix header size not update
   })
 
   onBeforeRouteLeave(() => {

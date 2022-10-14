@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed z-1000 bg-dark-page top-0 w-full left-0">
     <q-toolbar class="relative">
       <q-btn
         flat
@@ -97,9 +97,9 @@
         <span class="text-grey">Kết quả tìm kiếm cho: </span>{{ query }}
       </div>
     </q-toolbar>
-  </q-header>
+  </header>
 
-  <div v-if="!route.params.keyword" class="absolute top-0 h-[100%] w-full">
+  <div v-if="!route.params.keyword" class="absolute top-0 h-[100%] w-full pt-[100px]">
     <!-- swiper -->
 
     <swiper
@@ -141,11 +141,11 @@
     </swiper>
   </div>
   <template v-else>
-    <ScreenLoading v-if="loadingSearch" class="absolute" />
+    <ScreenLoading v-if="loadingSearch" class="absolute pt-[100px]" />
     <template v-else-if="resultSearch">
-      <ScreenNotFound v-if="resultSearch.items.length === 0" />
+      <ScreenNotFound v-if="resultSearch.items.length === 0" class="absolute pt-[100px]" />
 
-      <q-infinite-scroll v-else @load="moreSearch" :offset="250">
+      <q-infinite-scroll v-else @load="moreSearch" :offset="250" class="pt-[100px]">
         <CardVertical
           v-for="item in resultSearch.items"
           :key="item.name"
@@ -168,7 +168,7 @@
         </template>
       </q-infinite-scroll>
     </template>
-    <ScreenError v-else @click:retry="run" />
+    <ScreenError v-else @click:retry="run" class="absolute pt-[100px]" />
   </template>
 </template>
 
@@ -219,8 +219,6 @@ const query = ref((route.params.keyword ?? "") + "")
 
 const historySearch = useLocalStorage<string[]>("history_search", [])
 
-const debounceRun = debounce(() => run(), 100)
-
 const { data, error, run } = useRequest(
   async () => [
     ...[...new Set([...historySearch.value, query.value])].filter((item) =>
@@ -229,13 +227,10 @@ const { data, error, run } = useRequest(
     ...(await PreSearch(query.value)),
   ],
   {
-    refreshDeps: [query],
     manual: true,
-    refreshDepsAction() {
-      debounceRun()
-    },
   }
 )
+watch(query, debounce(() => run(), 100))
 watch(error, (error) => {
   if (error)
     router.push({

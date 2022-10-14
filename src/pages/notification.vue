@@ -1,17 +1,17 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed top-0 z-1000 w-full bg-dark-page">
     <q-toolbar class="relative">
       <q-toolbar-title class="text-center text-[16px] w-full line-clamp-1">
         Thông báo
       </q-toolbar-title>
     </q-toolbar>
-  </q-header>
+  </header>
 
   <div v-if="authStore.isLogged">
-    <ScreenLoading v-if="notificationStore.loading" class="absolute" />
+    <ScreenLoading v-if="notificationStore.loading" class="absolute top-0 h-full w-full pt-[50px]" />
 
     <template v-else-if="notificationStore.max > 0">
-      <q-list class="bg-transparent">
+      <q-list class="bg-transparent mt-[50px]">
         <transition-group name="notify">
           <q-slide-item
             v-for="item in notificationStore.items"
@@ -65,7 +65,7 @@
 
     <div
       v-else
-      class="absolute fit text-subtitle1 flex items-center justify-center"
+      class="absolute top-0 h-full w-full pt-[50px] text-subtitle1 flex items-center justify-center"
     >
       <div class="text-center">
         <img
@@ -79,7 +79,7 @@
   </div>
   <div
     v-else
-    class="absolute fit text-subtitle1 flex items-center justify-center"
+    class="absolute top-0 h-full w-full pt-[50px] text-subtitle1 flex items-center justify-center"
   >
     <div class="text-center">
       <img
