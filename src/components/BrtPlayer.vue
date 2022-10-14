@@ -195,7 +195,7 @@
                   :disable="!nextChap"
                   replace
                   :to="{
-                    name: 'phim_[season]_[chap]',
+                    name: 'watch-anime',
                     params: nextChap,
                   }"
                 >
@@ -1062,7 +1062,7 @@ function onVideoEnded() {
     )
 
     router.push({
-      name: "phim_[season]_[chap]",
+      name: "watch-anime",
       params: props.nextChap,
     })
   }
