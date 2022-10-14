@@ -6,68 +6,74 @@ import { ref, shallowRef, watch } from "vue"
 
 import { useAuthStore } from "./auth"
 
-export const useNotificationStore = defineStore("notification", () => {
-  const authStore = useAuthStore()
+export const useNotificationStore = defineStore(
+  "notification",
+  () => {
+    const authStore = useAuthStore()
 
-  const items = shallowRef<
-    Awaited<ReturnType<typeof AjaxNotification>>["items"]
-  >([])
-  const max = ref(0)
+    const items = shallowRef<
+      Awaited<ReturnType<typeof AjaxNotification>>["items"]
+    >([])
+    const max = ref(0)
 
-  const $q = useQuasar()
+    const $q = useQuasar()
 
-  const loading = ref(false)
+    const loading = ref(false)
 
-  // eslint-disable-next-line functional/no-let
-  let timeout: NodeJS.Timeout | number
-  async function updateNotification() {
-    if (timeout) clearTimeout(timeout)
+    // eslint-disable-next-line functional/no-let
+    let timeout: NodeJS.Timeout | number
+    async function updateNotification() {
+      if (timeout) clearTimeout(timeout)
 
-    try {
-      loading.value = true
-      const result = await AjaxNotification()
+      try {
+        loading.value = true
+        const result = await AjaxNotification()
 
-      items.value = result.items
-      max.value = result.max
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      console.error(err)
+        items.value = result.items
+        max.value = result.max
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        console.error(err)
 
-      $q.notify({
-        position: "bottom-right",
-        message: "Nhận thông báo thất bại",
-        caption: err.message,
+        $q.notify({
+          position: "bottom-right",
+          message: "Nhận thông báo thất bại",
+          caption: err.message,
+        })
+
+        timeout = setTimeout(updateNotification, 10 * 60_000)
+      } finally {
+        loading.value = false
+      }
+    }
+
+    watch(
+      () => authStore.isLogged,
+      (isLogged) => {
+        if (isLogged) updateNotification()
+        else {
+          clearTimeout(timeout)
+          items.value = []
+          max.value = 0
+        }
+      },
+      { immediate: true }
+    )
+
+    async function remove(id: string) {
+      const { data } = await post("/ajax/notification", {
+        Delete: "true",
+        id,
       })
 
-      timeout = setTimeout(updateNotification, 10 * 60_000)
-    } finally {
-      loading.value = false
+      // eslint-disable-next-line functional/no-throw-statement
+      if (JSON.parse(data).status !== 1) throw new Error("DELETE_FAILED")
+      updateNotification()
     }
+
+    return { items, max, remove, loading }
+  },
+  {
+    persist: true,
   }
-
-  watch(
-    () => authStore.isLogged,
-    (isLogged) => {
-      if (isLogged) updateNotification()
-      else {
-        clearTimeout(timeout)
-        items.value = []
-        max.value = 0
-      }
-    },
-    { immediate: true }
-  )
-
-  async function remove(id: string) {
-    const { data } = await post("/ajax/notification", {
-      Delete: "true",
-      id,
-    })
-
-    // eslint-disable-next-line functional/no-throw-statement
-    if (JSON.parse(data).status !== 1) throw new Error("DELETE_FAILED")
-    updateNotification()
-  }
-
-  return { items, max, remove, loading }
-})
+)

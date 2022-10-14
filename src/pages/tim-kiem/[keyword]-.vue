@@ -99,7 +99,10 @@
     </q-toolbar>
   </header>
 
-  <div v-if="!route.params.keyword" class="absolute top-0 h-[100%] w-full pt-[100px]">
+  <div
+    v-if="!route.params.keyword"
+    class="absolute top-0 h-[100%] w-full pt-[100px]"
+  >
     <!-- swiper -->
 
     <swiper
@@ -143,9 +146,17 @@
   <template v-else>
     <ScreenLoading v-if="loadingSearch" class="absolute pt-[100px]" />
     <template v-else-if="resultSearch">
-      <ScreenNotFound v-if="resultSearch.items.length === 0" class="absolute pt-[100px]" />
+      <ScreenNotFound
+        v-if="resultSearch.items.length === 0"
+        class="absolute pt-[100px]"
+      />
 
-      <q-infinite-scroll v-else @load="moreSearch" :offset="250" class="pt-[100px]">
+      <q-infinite-scroll
+        v-else
+        @load="moreSearch"
+        :offset="250"
+        class="pt-[100px]"
+      >
         <CardVertical
           v-for="item in resultSearch.items"
           :key="item.name"
@@ -189,15 +200,14 @@ import { debounce } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { AjaxItem } from "src/apis/runs/ajax/item"
 import { PreSearch } from "src/apis/runs/pre-search"
-import { useLocalStorage } from "src/composibles/useLocalStorage"
+import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import ranks from "src/logic/ranks"
+import { useHistorySearchStore } from "stores/history-search"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-
-import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
 // ================= unknown ===============
@@ -217,11 +227,11 @@ const router = useRouter()
 const searching = ref(false)
 const query = ref((route.params.keyword ?? "") + "")
 
-const historySearch = useLocalStorage<string[]>("history_search", [])
+const historySearchStore = useHistorySearchStore()
 
 const { data, error, run } = useRequest(
   async () => [
-    ...[...new Set([...historySearch.value, query.value])].filter((item) =>
+    ...[...new Set([...historySearchStore.items, query.value])].filter((item) =>
       item.includes(query.value)
     ),
     ...(await PreSearch(query.value)),
@@ -230,7 +240,10 @@ const { data, error, run } = useRequest(
     manual: true,
   }
 )
-watch(query, debounce(() => run(), 100))
+watch(
+  query,
+  debounce(() => run(), 100)
+)
 watch(error, (error) => {
   if (error)
     router.push({
@@ -251,7 +264,9 @@ watchEffect(() => {
 
 function onEnter() {
   // save to history search
-  historySearch.value = [...new Set([...historySearch.value, query.value])]
+  historySearchStore.items = [
+    ...new Set([...historySearchStore.items, query.value]),
+  ]
   if (route.params.keyword)
     router.replace(`/tim-kiem/${encodeURIComponent(query.value)}`)
   else router.push(`/tim-kiem/${encodeURIComponent(query.value)}`)
