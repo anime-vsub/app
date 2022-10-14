@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-  import MainLayout from "layouts/MainLayout.vue"
-  
+import MainLayout from "layouts/MainLayout.vue"
+
 import { Http } from "@capacitor-community/http"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
