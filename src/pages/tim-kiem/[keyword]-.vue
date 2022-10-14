@@ -197,6 +197,9 @@ import { ref, shallowReactive, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
+import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+// Import Swiper Vue.js components
+useAliveScrollBehavior()
 // ================= unknown ===============
 
 dayjs.extend(relativeTime)

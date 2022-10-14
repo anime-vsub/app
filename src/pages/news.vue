@@ -144,6 +144,9 @@ import relativeTime from "dayjs/plugin/relativeTime"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import { ref, shallowReactive } from "vue"
 
+import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+// Import Swiper Vue.js components
+useAliveScrollBehavior()
 // https://tinanime.com/api/news/?p=3
 
 dayjs.extend(relativeTime)

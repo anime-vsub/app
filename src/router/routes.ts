@@ -2,6 +2,7 @@ import type { RouteRecordRaw } from "vue-router"
 
 const routes: RouteRecordRaw[] = [
   {
+    name: "index",
     path: "/",
     component: () => import("pages/index_outlet.vue"),
     meta: {
@@ -49,6 +50,7 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    name: "search",
     path: "/tim-kiem/:keyword?",
     component: () => import("pages/tim-kiem/[keyword]-.vue"),
     meta: {
@@ -57,6 +59,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    name: "news",
     path: "/news",
     component: () => import("pages/news.vue"),
     meta: {
@@ -65,6 +68,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    name: "notification",
     path: "/notification",
     component: () => import("pages/notification.vue"),
     meta: {
@@ -73,6 +77,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    name: "account",
     path: "/tai-khoan",
     component: () => import("pages/tai-khoan/index_outlet.vue"),
     meta: {
@@ -123,6 +128,7 @@ const routes: RouteRecordRaw[] = [
   // helpers
 
   {
+    name: "watch-anime",
     name: "phim_[season]_[chap]",
     path: "/phim/:season/:chap?",
     alias: ["/phim/:season/:prefix(.+)-:chap(\\d+).html"],
@@ -132,6 +138,7 @@ const routes: RouteRecordRaw[] = [
   // Always leave this as last one,
   // but you can also remove it
   {
+    name: "not_found",
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),
   },

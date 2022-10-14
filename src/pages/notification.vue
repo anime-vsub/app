@@ -99,6 +99,10 @@ import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
 import { useRouter } from "vue-router"
 
+import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+// Import Swiper Vue.js components
+useAliveScrollBehavior()
+
 const router = useRouter()
 const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
