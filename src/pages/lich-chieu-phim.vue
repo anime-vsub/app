@@ -50,7 +50,7 @@
 
   <ScreenLoading v-if="loading" class="absolute" />
 
-  <div v-else class="absolute top-0 h-[100%] w-full">
+  <div v-else-if="data" class="absolute top-0 h-[100%] w-full">
     <swiper
       class="relative h-full w-full"
       :slides-per-view="1"
