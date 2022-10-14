@@ -388,12 +388,8 @@ import SearchBtn from "components/SearchBtn.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import dayjs from "dayjs"
-// eslint-disable-next-line import/order
 import isToday from "dayjs/plugin/isToday"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
-// Import Swiper Vue.js components
-useAliveScrollBehavior()
-
 import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { watch } from "vue"
@@ -404,6 +400,8 @@ import "swiper/css"
 import "swiper/css/pagination"
 import "swiper/css/autoplay"
 import "swiper/css/grid"
+// Import Swiper Vue.js components
+useAliveScrollBehavior()
 
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)

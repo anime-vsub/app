@@ -8,7 +8,10 @@
   </header>
 
   <div v-if="authStore.isLogged">
-    <ScreenLoading v-if="notificationStore.loading" class="absolute top-0 h-full w-full pt-[50px]" />
+    <ScreenLoading
+      v-if="notificationStore.loading && notificationStore.items.length > 0"
+      class="absolute top-0 h-full w-full pt-[50px]"
+    />
 
     <template v-else-if="notificationStore.max > 0">
       <q-list class="bg-transparent mt-[50px]">
@@ -95,11 +98,11 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import ScreenLoading from "src/components/ScreenLoading.vue"
+import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
 import { useRouter } from "vue-router"
 
-import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
 

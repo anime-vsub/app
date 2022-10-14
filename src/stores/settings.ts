@@ -7,4 +7,5 @@ export const useSettingsStore = defineStore("settings", {
       enableRemindStop: false,
     },
   }),
+  persist: true,
 })

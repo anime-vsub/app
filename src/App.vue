@@ -7,12 +7,12 @@
 </template>
 
 <script setup lang="ts">
-import MainLayout from "layouts/MainLayout.vue"
 
 import { Http } from "@capacitor-community/http"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import eruda from "eruda2"
+import MainLayout from "layouts/MainLayout.vue"
 
 const isDev = import.meta.env.DEV
 if (isDev) {
