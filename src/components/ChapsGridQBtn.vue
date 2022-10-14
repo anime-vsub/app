@@ -18,7 +18,7 @@
       ]"
       replace
       :to="{
-        name: 'phim_[season]_[chap]',
+        name: 'watch-anime',
         params: {
           season,
           chap: item.id,
