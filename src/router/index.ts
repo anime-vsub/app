@@ -34,22 +34,5 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   })
 
-
-  // ============= custom scroll behavior by forceScrollBehavior ===========
-  const store = new Map<string, { top: number; left: number }>()
-  Router.beforeEach((to, from) => {
-    if (from.meta?.forceScrollBehavior) {
-      // save if forceScrollBehavior enable
-      store.set(from.fullPath, { top: pageYOffset, left: pageXOffset })
-    }
-
-    if (to.meta?.forceScrollBehavior) {
-      // restore scroll ofset if forceScrollBehavior enable
-      const saved = store.get(to.fullPath)
-      if (saved)
-      setTimeout(() => scrollTo(saved))
-      }
-      })
-
   return Router
 })

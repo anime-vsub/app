@@ -3,7 +3,7 @@
     <q-page-container>
       <q-page>
         <router-view v-slot="{ Component }">
-          <keep-alive>
+          <keep-alive exclude="watch-anime">
             <component :is="Component" />
           </keep-alive>
         </router-view>

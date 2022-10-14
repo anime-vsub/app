@@ -390,8 +390,9 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import dayjs from "dayjs"
 // eslint-disable-next-line import/order
 import isToday from "dayjs/plugin/isToday"
-
+import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 // Import Swiper Vue.js components
+useAliveScrollBehavior()
 
 import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
