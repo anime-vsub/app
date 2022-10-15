@@ -385,7 +385,7 @@ const {
   loading: loadingHistories,
   run: runHistories,
   error: errorHistories,
-  reload: reloadHistories
+  refresh: reloadHistories
 } = useRequest(() => History(), { manual: true })
 
 // ========== favorite =========
@@ -394,8 +394,7 @@ const {
   loading: loadingFavorites,
   run: runFavorites,
   error: errorFavorites,
-  reset: resetFavorites,
-  reload: reloadFavorites
+  refresh: reloadFavorites
 } = useRequest(() => TuPhim(1), { manual: true, })
 
 watch(() => authStore.isLogged, (isLogged) => {
