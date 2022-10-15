@@ -1,4 +1,4 @@
-import { spawn } from "child_process"
+import { spawnSync } from "child_process"
 import { readFileSync, writeFileSync } from "fs"
 import { resolve } from "path"
 import { exit } from "process"
@@ -139,10 +139,10 @@ async function bumppAndroid() {
     )
 
   writeFileSync(resolve(androidDir, "app/build.gradle"), newBuildGradle)
-await spawn("git", ["add", `${resolve(androidDir, "app/build.gradle")}`], {
+  spawnSync("git", ["add", `${resolve(androidDir, "app/build.gradle")}`], {
     stdio: "inherit",
   })
-  await spawn(
+  spawnSync(
     "git",
     [
       "commit",
@@ -151,8 +151,8 @@ await spawn("git", ["add", `${resolve(androidDir, "app/build.gradle")}`], {
     ],
     { stdio: "inherit" }
   )
-  await spawn("git", ["tag", `v${currentVersionName}`])
-  await spawn("git", ["push"], { stdio: "inherit" })
-  await spawn("git", ["push", "--tags"])
+  spawnSync("git", ["tag", `v${currentVersionName}`])
+  spawnSync("git", ["push"], { stdio: "inherit" })
+  spawnSync("git", ["push", "--tags"])
 }
 bumppAndroid()
