@@ -9,6 +9,8 @@
 >
 > And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `downloading...`, enjoy the best quality Anime episodes and no `downloading...`
 
+[![Build APK](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml) [![Test](https://github.com/anime-vsub/app/actions/workflows/test.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/test.yml)
+
 ## Screenshot
 
 <!--screenshot-->
