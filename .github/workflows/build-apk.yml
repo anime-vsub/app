@@ -29,8 +29,8 @@ jobs:
             project-path: src-capacitor/android
             output-path: apk-release.apk
             gradle-task: assembleRelease
-            build-type: bundle
-            package-name: git.shin.animevsub
+            # build-type: bundle
+            # package-name: git.shin.animevsub
             # keystore-content:  ${{ secrets.KEYSTORE_CONTENT }}
             # keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
             # keystore-alias:  ${{ secrets.KEYSTORE_ALIAS }}
