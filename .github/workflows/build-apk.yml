@@ -1,5 +1,9 @@
 name: Build APK
-on: [push]
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -54,5 +58,16 @@ jobs:
       # Example use of `signedReleaseFile` output -- not needed
       - uses: actions/upload-artifact@v2
         with:
-          name: Signed app bundle
+          name: apk-release.apk
           path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+      - name: Generate changelog
+        id: changelog
+        uses: metcalfc/changelog-generator@c3f61b2a3db543ceee83c759ac8e48419a1a2211
+        with:
+          myToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          files: ${{steps.sign_app.outputs.signedReleaseFile}}
