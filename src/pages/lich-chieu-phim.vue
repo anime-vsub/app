@@ -145,12 +145,15 @@
       </swiper-slide>
     </swiper>
   </div>
+
+  <ScreenError v-else class="absolute" />
 </template>
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
+import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import dayjs from "dayjs"
 import isToday from "dayjs/plugin/isToday"
@@ -162,27 +165,15 @@ import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import { dayTextToNum } from "src/logic/dayTextToNum"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
-import { ref, watch, watchEffect } from "vue"
+import { ref, watchEffect } from "vue"
 import { useRequest } from "vue-request"
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 
 dayjs.extend(isToday)
 
-const route = useRoute()
 const router = useRouter()
 
-const { data, loading, error } = useRequest(() => LichChieuPhim())
-watch(error, (error) => {
-  if (error)
-    router.push({
-      name: "not_found",
-      params: { pathMatch: route.path },
-      query: {
-        message: error.message,
-        cause: error.cause + "",
-      },
-    })
-})
+const { loading, data } = useRequest(() => LichChieuPhim())
 
 // eslint-disable-next-line functional/no-let
 let _tmp: ReturnType<typeof splitOverTime>

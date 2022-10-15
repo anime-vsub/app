@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-pull-to-refresh @refresh="refresh">
     <q-header v-if="false" class="bg-transparent">
       <q-toolbar>
         <svg
@@ -43,7 +43,7 @@
     </q-header>
 
     <div
-      v-if="loading || !data"
+      v-if="loading"
       class="absolute w-full h-[calc(100%+50px)] overflow-hidden loader"
     >
       <div class="swiper-hot">
@@ -135,7 +135,7 @@
         <SkeletonGridCard :count="6" />
       </div>
     </div>
-    <div v-else>
+    <div v-else-if="data">
       <swiper
         :slides-per-view="1"
         :space-between="0"
@@ -367,7 +367,8 @@
         <GridCard :items="data.lastUpdate" />
       </div>
     </div>
-  </div>
+    <ScreenError v-else class="absolute" />
+  </q-pull-to-refresh>
 </template>
 
 <script setup lang="ts">
@@ -384,6 +385,7 @@ import { Icon } from "@iconify/vue"
 import Card from "components/Card.vue"
 import GridCard from "components/GridCard.vue"
 import Quality from "components/Quality.vue"
+import ScreenError from "components/ScreenError.vue"
 import SearchBtn from "components/SearchBtn.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
@@ -392,8 +394,7 @@ import isToday from "dayjs/plugin/isToday"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
-import { watch } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 
 // Import Swiper styles
 import "swiper/css"
@@ -406,23 +407,15 @@ useAliveScrollBehavior()
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
 
-const route = useRoute()
 const router = useRouter()
 
 const aspectRatio = 622 / 350
 
-const { data, loading, error } = useRequest(() => Index())
-watch(error, (error) => {
-  if (error)
-    router.push({
-      name: "not_found",
-      params: { pathMatch: route.path },
-      query: {
-        message: error.message,
-        cause: error.cause + "",
-      },
-    })
-})
+const { data, loading, refreshAsync } = useRequest(() => Index())
+async function refresh(done: () => void) {
+  await refreshAsync()
+  done()
+}
 
 // eslint-disable-next-line functional/no-let, @typescript-eslint/no-explicit-any
 let tmp: any

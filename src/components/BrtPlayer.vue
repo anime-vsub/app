@@ -803,6 +803,7 @@ const setArtCurrentTime = (currentTime: number) => {
   video.value.currentTime = currentTime
   artCurrentTime.value = currentTime
 }
+// eslint-disable-next-line functional/no-let
 let disableBackupProgressViewing = false
 watch(
   () => props.currentChap,
@@ -979,7 +980,7 @@ const emit = defineEmits<{
 }>()
 const saveCurTimeToPer = throttle(async () => {
   if (!seasonRefCache) return
-  
+
   if (disableBackupProgressViewing) return
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

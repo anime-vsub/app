@@ -653,22 +653,9 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   )
 }
 
-const { data, error, run, loading } = useRequest(
+const { data, run, loading } = useRequest(
   () => fetchTypeNormalValue(1, false)
 )
-watch(error, (error) => {
-  if (error)
-    router.push({
-      name: "not_found",
-      params: {
-        pathMatch: route.path,
-      },
-      query: {
-        message: error.message,
-        cause: error.cause + "",
-      },
-    })
-})
 
 const title = ref("")
 const watcherData = watch(data, (data) => {
