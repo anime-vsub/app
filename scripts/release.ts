@@ -5,10 +5,7 @@ import { exit } from "process"
 
 import { bold, green, red } from "kleur"
 import prompts from "prompts"
-import semver, {
-  valid as isValidVersion,
-  SemVer,
-} from "semver"
+import semver, { valid as isValidVersion, SemVer } from "semver"
 
 async function bumppAndroid() {
   const androidDir = resolve(__dirname, "../src-capacitor/android")
@@ -97,10 +94,10 @@ async function bumppAndroid() {
           const value =
             name === "next"
               ? semver.parse(currentVersionName)?.prerelease?.length
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                ? semver.inc(currentVersionName, "prerelease")!
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                : semver.inc(currentVersionName, "patch")!
+                ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  semver.inc(currentVersionName, "prerelease")!
+                : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  semver.inc(currentVersionName, "patch")!
               : new SemVer(currentVersionName).inc(name)
 
           return { title: `${name.padStart(PADDING, " ")} ${value}`, value }
@@ -142,12 +139,20 @@ async function bumppAndroid() {
     )
 
   writeFileSync(resolve(androidDir, "app/build.gradle"), newBuildGradle)
-
-  spawn("git", ["add", `${resolve(androidDir, "app/build.gradle")}`])
-  spawn("git", [
-    "commit",
-    `chore: release ${newVersionName} build ${newVersionCode}`,
-  ])
-  // spawn("git", ["push"])
+await spawn("git", ["add", `${resolve(androidDir, "app/build.gradle")}`], {
+    stdio: "inherit",
+  })
+  await spawn(
+    "git",
+    [
+      "commit",
+      "-m",
+      `chore: release ${newVersionName} build ${newVersionCode}`,
+    ],
+    { stdio: "inherit" }
+  )
+  await spawn("git", ["tag", `v${currentVersionName}`])
+  await spawn("git", ["push"], { stdio: "inherit" })
+  await spawn("git", ["push", "--tags"])
 }
 bumppAndroid()
