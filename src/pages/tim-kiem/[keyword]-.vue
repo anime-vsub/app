@@ -6,7 +6,7 @@
         dense
         round
         class="mr-2"
-        v-show="route.params.keyword || searching"
+        v-show="keyword || searching"
         @click="onBack"
       >
         <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
@@ -69,7 +69,7 @@
       </q-list>
     </div>
 
-    <q-toolbar v-if="!route.params.keyword && !searching">
+    <q-toolbar v-if="!keyword && !searching">
       <div class="flex items-center mx-3">
         <div>
           <div class="title">Thịnh hành</div>
@@ -100,7 +100,7 @@
   </header>
 
   <div
-    v-if="!route.params.keyword"
+    v-if="!keyword"
     class="absolute top-0 h-[100%] w-full pt-[100px]"
   >
     <!-- swiper -->
@@ -225,13 +225,14 @@ const route = useRoute()
 const router = useRouter()
 
 const searching = ref(false)
-const query = ref((route.params.keyword ?? "") + "")
+const keyword = ref("")
+const query = ref("")
 
 const historySearchStore = useHistorySearchStore()
 
 const { data, error, run } = useRequest(
   async () => [
-    ...[...new Set([...historySearchStore.items, query.value])].filter((item) =>
+    ...[...new Set(historySearchStore.items)].filter((item) =>
       item.includes(query.value)
     ),
     ...(await PreSearch(query.value)),
@@ -267,9 +268,8 @@ function onEnter() {
   historySearchStore.items = [
     ...new Set([...historySearchStore.items, query.value]),
   ]
-  if (route.params.keyword)
-    router.replace(`/tim-kiem/${encodeURIComponent(query.value)}`)
-  else router.push(`/tim-kiem/${encodeURIComponent(query.value)}`)
+
+  keyword.value=query.value
 
   searching.value = false
 }
@@ -277,7 +277,7 @@ function onEnter() {
 function onBack() {
   searching.value = false
 
-  if (route.params.keyword) router.back()
+  if (keyword.value) keyword.value=""
 }
 
 async function onClickItemPreLoad(
@@ -307,9 +307,9 @@ const {
   data: resultSearch,
   run: runSearch,
 } = useRequest(
-  () => TypeNormalValue("tim-kiem", route.params.keyword, 1, true)
+  () => TypeNormalValue("tim-kiem", keyword.value, 1, true)
 )
-watch(() => route.params.keyword, runSearch, {
+watch(keyword, runSearch, {
   immediate: true,
 })
 
@@ -322,7 +322,7 @@ async function moreSearch(page: number, done: (noMore?: boolean) => void) {
 
   resultSearch.value = await TypeNormalValue(
     "tim-kiem",
-    route.params.keyword,
+    keyword.value,
     page + 1,
     true
   )
@@ -375,9 +375,7 @@ watch(
   (activeIndex) => {
     fetchRankType(types[activeIndex][1])
   },
-  {
-    immediate: !route.params.keyword,
-  }
+  {immediate:true}
 )
 
 function onSwiper(swiper: TSwiper) {
