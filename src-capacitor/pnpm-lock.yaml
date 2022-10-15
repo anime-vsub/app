@@ -14,7 +14,6 @@ specifiers:
   '@capacitor/share': ^4.0.1
   '@capacitor/status-bar': ^4.0.1
   '@hugotomazi/capacitor-navigation-bar': ^2.0.0
-  '@ionic/vue': ^6.3.0
   cordova-plugin-screen-orientation: ^3.0.2
 
 dependencies:
@@ -31,7 +30,6 @@ dependencies:
   '@capacitor/share': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/status-bar': 4.0.1_@capacitor+core@4.3.0
   '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.3.0
-  '@ionic/vue': 6.3.0
   cordova-plugin-screen-orientation: 3.0.2
 
 packages:
@@ -198,14 +196,6 @@ packages:
       - supports-color
     dev: false
 
-  /@ionic/core/6.3.0:
-    resolution: {integrity: sha512-6MR0hOdIM6sQyZyXez3/jWAnHScrZKaQxzGT2XiXXIpBrKztNdeAhqDLXoxbDU1PLyDnXXPWBzT6xZ698gG67g==}
-    dependencies:
-      '@stencil/core': 2.18.1
-      ionicons: 6.0.3
-      tslib: 2.4.0
-    dev: false
-
   /@ionic/utils-array/2.1.5:
     resolution: {integrity: sha512-HD72a71IQVBmQckDwmA8RxNVMTbxnaLbgFOl+dO5tbvW9CkkSFCv41h6fUuNsSEVgngfkn0i98HDuZC8mk+lTA==}
     engines: {node: '>=10.3.0'}
@@ -295,33 +285,14 @@ packages:
       - supports-color
     dev: false
 
-  /@ionic/vue/6.3.0:
-    resolution: {integrity: sha512-9D7bK8xZ/qa6gWShgvBRCFSmwkZBN7RkJF1ItmNQXl1msszRjqi7W/++AsTjjGmqpWbupNkwwxZWP7IzN7vcjA==}
-    dependencies:
-      '@ionic/core': 6.3.0
-      ionicons: 6.0.3
-    dev: false
-
-  /@stencil/core/2.16.1:
-    resolution: {integrity: sha512-s/UJp9qxExL3DyQPT70kiuWeb3AdjbUZM+5lEIXn30I2DLcLYPOPXfsoWJODieQywq+3vPiLZeIdkoqjf6jcSw==}
-    engines: {node: '>=12.10.0', npm: '>=6.0.0'}
-    hasBin: true
-    dev: false
-
-  /@stencil/core/2.18.1:
-    resolution: {integrity: sha512-/fXkh1lwZ+X9JQCw50mPjhBogzEHOBvVC5pLoDLZqodVYK0DGWILM2YLV4dcIUBNEK8/HMDpO/Rq81/rS3mNOw==}
-    engines: {node: '>=12.10.0', npm: '>=6.0.0'}
-    hasBin: true
-    dev: false
-
   /@types/fs-extra/8.1.2:
     resolution: {integrity: sha512-SvSrYXfWSc7R4eqnOzbQF4TZmfpNSM9FrSWLU3EUnWBuyZqNBOrv1B1JA3byUDPUl9z4Ab3jeZG2eDdySlgNMg==}
     dependencies:
-      '@types/node': 18.8.3
+      '@types/node': 18.11.0
     dev: false
 
-  /@types/node/18.8.3:
-    resolution: {integrity: sha512-0os9vz6BpGwxGe9LOhgP/ncvYN5Tx1fNcd2TM3rD/aCGBkysb+ZWpXEocG24h6ZzOi13+VB8HndAQFezsSOw1w==}
+  /@types/node/18.11.0:
+    resolution: {integrity: sha512-IOXCvVRToe7e0ny7HpT/X9Rb2RYtElG1a+VshjwT00HxrM2dWBApHQoqsI6WiY7Q03vdf2bCrIGzVrkF/5t10w==}
     dev: false
 
   /@types/slice-ansi/4.0.0:
@@ -509,12 +480,6 @@ packages:
   /ini/3.0.1:
     resolution: {integrity: sha512-it4HyVAUTKBc6m8e1iXWvXSTdndF7HbdN713+kvLrymxTaU4AUBWrJ4vEooP+V7fexnVD3LKcBshjGGPefSMUQ==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
-    dev: false
-
-  /ionicons/6.0.3:
-    resolution: {integrity: sha512-kVOWER991EMqLiVShrCSWKMHkgHZP7XfVdyN6YPMuoO33W7pc5CPNVNfR8OMe/I8rYEbaunyBs6dXNYpR6gGZw==}
-    dependencies:
-      '@stencil/core': 2.16.1
     dev: false
 
   /is-docker/2.2.1:
