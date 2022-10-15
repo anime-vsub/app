@@ -128,6 +128,15 @@ async function bumppAndroid() {
       ? options.customVersionName
       : options.versionName
 
+  if (!newVersionCode) {
+    console.error("new versionCode is not defined")
+    exit(1)
+  }
+  if (!newVersionName) {
+    console.error("new versionName is not defined")
+    exit(1)
+  }
+
   const newBuildGradle = buildGradle
     .replace(
       `versionCode ${currentVersionCode}`,
