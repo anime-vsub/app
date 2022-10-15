@@ -335,6 +335,8 @@ async function login() {
     const data = await authStore.login(email.value, password.value)
 
     showDialogLogin.value = false
+    email.value = ""
+    password.value = ""
     $q.notify({
       position: "bottom-right",
       message: `Đã đăng nhập với tư cách ${data.name}`,
