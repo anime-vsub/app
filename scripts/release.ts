@@ -153,6 +153,6 @@ async function bumppAndroid() {
   )
   spawnSync("git", ["tag", `v${currentVersionName}`])
   spawnSync("git", ["push"], { stdio: "inherit" })
-  spawnSync("git", ["push", "--tags"])
+  spawnSync("git", ["push", "--tags"], { stdio: "inherit" })
 }
 bumppAndroid()
