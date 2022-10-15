@@ -803,10 +803,12 @@ const setArtCurrentTime = (currentTime: number) => {
   video.value.currentTime = currentTime
   artCurrentTime.value = currentTime
 }
+let disableBackupProgressViewing = false
 watch(
   () => props.currentChap,
   async (currentChap) => {
     if (currentChap) {
+      disableBackupProgressViewing = true
       setArtCurrentTime(0)
 
       if (!authStore.user_data) return
@@ -824,6 +826,7 @@ watch(
         setArtCurrentTime(cur)
         addNotice(`Đã khôi phục phiên xem trước ${parseTime(cur)}`)
       }
+      disableBackupProgressViewing = false
     }
   },
   { immediate: true }
@@ -976,6 +979,8 @@ const emit = defineEmits<{
 }>()
 const saveCurTimeToPer = throttle(async () => {
   if (!seasonRefCache) return
+  
+  if (disableBackupProgressViewing) return
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const chapRef = doc(seasonRefCache, "chaps", props.currentChap!)
