@@ -198,6 +198,10 @@ module.exports = configure(function (/* ctx */) {
       hideSplashscreen: true,
     },
 
+    bin: {
+      linuxAndroidStudio: "./noop.sh"
+    },
+
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
     electron: {
       // extendElectronMainConf (esbuildConf)
