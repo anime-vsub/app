@@ -383,13 +383,8 @@ const {
   loading: loadingHistories,
   run: runHistories,
   error: errorHistories,
-} = useRequest(() => History(), {
-  refreshDeps: [() => authStore.user_data],
-  manual: !authStore.isLogged,
-  refreshDepsAction() {
-    runHistories()
-  },
-})
+  reload: reloadHistories
+} = useRequest(() => History(), { manual: true })
 
 // ========== favorite =========
 const {
@@ -397,13 +392,19 @@ const {
   loading: loadingFavorites,
   run: runFavorites,
   error: errorFavorites,
-} = useRequest(() => TuPhim(1), {
-  refreshDeps: [() => authStore.user_data],
-  manual: !authStore.isLogged,
-  refreshDepsAction() {
+  reset: resetFavorites,
+  reload: reloadFavorites
+} = useRequest(() => TuPhim(1), { manual: true, })
+
+watch(() => authStore.isLogged, (isLogged) => {
+  if (isLogged) {
+    runHistories()
     runFavorites()
-  },
-})
+  } else {
+    reloadHistories()
+    reloadFavorites()
+  }
+}, { immediate: true })
 
 // ========== gen qr code =========
 const qrRef = ref<HTMLCanvasElement>()
