@@ -89,7 +89,8 @@
   <template v-else-if="data">
     <ScreenNotFound v-if="data.items.length === 0" />
 
-    <q-infinite-scroll v-else @load="onLoad" :offset="250">
+ <q-pull-to-refresh v-else  @refresh="refresh">
+    <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250">
       <GridCard :items="data.items" />
 
       <template v-slot:loading>
@@ -98,7 +99,8 @@
         </div>
       </template>
     </q-infinite-scroll>
-  </template>
+    </q-pull-to-refresh>
+    </template>
   <ScreenError v-else @click:retry="run" />
 
   <template v-if="data?.filter">
@@ -487,9 +489,11 @@ import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, reactive, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import { QInfiniteScroll } from "quasar"
 
 const route = useRoute()
 const router = useRouter()
+const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const showDialogGener = ref(false)
 const showDialogSeaser = ref(false)
@@ -502,53 +506,6 @@ const seaser = ref<string | null>(null)
 const sorter = ref<string | null>(null)
 const typer = ref<string | null>(null)
 const year = ref<string | null>(null)
-
-setup() // call if free memory
-function setup() {
-  const {
-    genres: qGenres,
-    seaser: qSeaser,
-    sorter: qSorter,
-    typer: qTyper,
-    year: qYear,
-  } = route.query
-
-  if (qGenres) {
-    const _qgen = (Array.isArray(qGenres) ? qGenres : [qGenres]).filter(
-      Boolean
-    ) as string[]
-
-    if (
-      genres.length !== _qgen.length ||
-      genres.some((item) => !_qgen.includes(item))
-    ) {
-      genres.splice(0)
-      genres.push(..._qgen)
-    }
-  }
-  if (qSeaser) seaser.value = qSeaser as string
-  if (qSorter) sorter.value = qSorter as string
-  if (qTyper) typer.value = qTyper as string
-  if (qYear) year.value = qYear as string
-}
-watch(
-  [genres, seaser, sorter, typer, year],
-  ([genres, seaser, sorter, typer, year]) => {
-    router.replace({
-      ...route,
-      query: {
-        genres,
-        seaser,
-        sorter,
-        typer,
-        year,
-      },
-    })
-  },
-  {
-    deep: true,
-  }
-)
 
 const textFilter = computed(() => {
   return (
@@ -653,9 +610,10 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   )
 }
 
-const { data, run, loading } = useRequest(
+const { data, run, loading, refreshAsync } = useRequest(
   () => fetchTypeNormalValue(1, false)
 )
+const refresh = (done: () => void) => refreshAsync().then(() => infiniteScrollRef.value?.reset()).then(done)
 
 const title = ref("")
 const watcherData = watch(data, (data) => {
@@ -668,8 +626,8 @@ const watcherData = watch(data, (data) => {
 watch(
   [genres, seaser, sorter, typer, year, defaultsOptions],
   () => {
-    console.log("try refresh")
     run()
+  infiniteScrollRef.value?.reset()
   },
   {
     deep: true,

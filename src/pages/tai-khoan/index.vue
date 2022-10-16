@@ -30,7 +30,7 @@
       </q-item-section>
       <q-item-section side>
         <div class="flex items-center flex-nowrap">
-          <q-btn dense round class="mr-1" @click.stop="showDialogQR = true">
+          <q-btn v-if="authStore.isLogged" dense round class="mr-1" @click.stop="showDialogQR = true">
             <Icon icon="fluent:qr-code-24-regular" width="25" height="25" />
           </q-btn>
           <q-btn dense round class="mr-1" @click.stop="startScanQR">
@@ -48,6 +48,8 @@
     </q-item>
   </header>
 
+
+    <q-pull-to-refresh @refresh="refresh">
   <div class="mt-4 mt-[72px]">
     <router-link
       class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
@@ -202,7 +204,7 @@
       </q-item-section>
     </q-item>
   </q-list>
-
+</q-pull-to-refresh>
   <!-- dialogs login -->
   <q-dialog
     v-model="showDialogLogin"
@@ -385,7 +387,8 @@ const {
   loading: loadingHistories,
   run: runHistories,
   error: errorHistories,
-  refresh: reloadHistories
+  refresh: reloadHistories,
+  refreshAsync: refreshHistories
 } = useRequest(() => History(), { manual: true })
 
 // ========== favorite =========
@@ -394,7 +397,8 @@ const {
   loading: loadingFavorites,
   run: runFavorites,
   error: errorFavorites,
-  refresh: reloadFavorites
+  refresh: reloadFavorites,
+  refreshAsync: refreshFavorites
 } = useRequest(() => TuPhim(1), { manual: true, })
 
 watch(() => authStore.isLogged, (isLogged) => {
@@ -405,7 +409,16 @@ watch(() => authStore.isLogged, (isLogged) => {
     reloadHistories()
     reloadFavorites()
   }
-}, { immediate: true })
+})
+if (authStore.isLogged) {
+    runHistories()
+    runFavorites()
+}
+
+async function refresh(done: () => void) {
+  await Promise.all([refreshHistories(), refreshFavorites()])
+  done()
+}
 
 // ========== gen qr code =========
 const qrRef = ref<HTMLCanvasElement>()

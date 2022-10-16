@@ -16,7 +16,8 @@
   <template v-else-if="histories">
     <ScreenNotFound v-if="histories.length === 0" />
 
-    <q-infinite-scroll v-else @load="onLoad" :offset="250">
+    <q-pull-to-refresh v-else @refresh="refresh">
+    <q-infinite-scroll @load="onLoad" :offset="250">
       <template v-for="(item, index) in histories" :key="item.id">
         <div
           v-if="
@@ -87,6 +88,7 @@
         </div>
       </template>
     </q-infinite-scroll>
+    </q-pull-to-refresh>
   </template>
   <ScreenError v-else @click:retry="run" class="absolute" />
 </template>
@@ -109,8 +111,10 @@ dayjs.extend(isToday)
 dayjs.extend(isYesterday)
 
 const router = useRouter()
+const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const { loading, data: histories, run } = useRequest(() => History())
+const refresh = (done: () => void) => refreshAsync().then(() => infiniteScrollRef.value?.reset()).then(done)
 
 async function onLoad(page: number, done: (end: boolean) => void) {
   const items = await History(histories.value)
