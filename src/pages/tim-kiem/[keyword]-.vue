@@ -59,11 +59,12 @@
               </div>
             </q-item-label>
           </q-item-section>
-          <q-item-section avatar class="min-w-0"   @click.stop.prevent="onClickItemPreLoad(item, true)">
-            <Icon
-              icon="fluent:arrow-up-left-24-regular"
-
-            />
+          <q-item-section
+            avatar
+            class="min-w-0"
+            @click.stop.prevent="onClickItemPreLoad(item, true)"
+          >
+            <Icon icon="fluent:arrow-up-left-24-regular" />
           </q-item-section>
         </q-item>
       </q-list>
@@ -99,10 +100,7 @@
     </q-toolbar>
   </header>
 
-  <div
-    v-if="!keyword"
-    class="absolute top-0 h-[100%] w-full pt-[100px]"
-  >
+  <div v-if="!keyword" class="absolute top-0 h-[100%] w-full pt-[100px]">
     <!-- swiper -->
 
     <swiper
@@ -123,24 +121,25 @@
             _dataInStoreTmp.status === 'pending'
           "
         />
-        <q-pull-to-refresh    v-else-if="_dataInStoreTmp.status === 'success'" @refresh="refreshRank($event, type)">
-          
-        <CardVertical
-       
-          v-for="(item, index) in _dataInStoreTmp.response"
-          :key="item.name"
-          :data="{
-            ...item,
-            description: '',
-            process: item.process.replace('Tập ', ''),
-          }"
-          class="mt-4 mx-3"
+        <q-pull-to-refresh
+          v-else-if="_dataInStoreTmp.status === 'success'"
+          @refresh="refreshRank($event, type)"
         >
-          <template v-slot:img-content>
-            <BottomBlur />
-            <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
-          </template>
-        </CardVertical>
+          <CardVertical
+            v-for="(item, index) in _dataInStoreTmp.response"
+            :key="item.name"
+            :data="{
+              ...item,
+              description: '',
+              process: item.process.replace('Tập ', ''),
+            }"
+            class="mt-4 mx-3"
+          >
+            <template v-slot:img-content>
+              <BottomBlur />
+              <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
+            </template>
+          </CardVertical>
         </q-pull-to-refresh>
         <ScreenError v-else @click:retry="runSearch" />
       </swiper-slide>
@@ -154,34 +153,29 @@
         class="absolute pt-[100px]"
       />
 
+      <q-pull-to-refresh v-else @refresh="refresh">
+        <q-infinite-scroll @load="moreSearch" :offset="250" class="pt-[100px]">
+          <CardVertical
+            v-for="item in resultSearch.items"
+            :key="item.name"
+            :data="{
+              ...item,
+              description: '',
+              process: item.process.replace('Tập ', ''),
+            }"
+            class="mt-4 mx-3"
+          >
+            <template v-slot:img-content>
+              <BottomBlur />
+            </template>
+          </CardVertical>
 
-    <q-pull-to-refresh v-else @refresh="refresh">
-      <q-infinite-scroll
-        @load="moreSearch"
-        :offset="250"
-        class="pt-[100px]"
-      >
-        <CardVertical
-          v-for="item in resultSearch.items"
-          :key="item.name"
-          :data="{
-            ...item,
-            description: '',
-            process: item.process.replace('Tập ', ''),
-          }"
-          class="mt-4 mx-3"
-        >
-          <template v-slot:img-content>
-            <BottomBlur />
+          <template v-slot:loading>
+            <div class="row justify-center q-my-md">
+              <q-spinner class="c--main" size="40px" />
+            </div>
           </template>
-        </CardVertical>
-
-        <template v-slot:loading>
-          <div class="row justify-center q-my-md">
-            <q-spinner class="c--main" size="40px" />
-          </div>
-        </template>
-      </q-infinite-scroll>
+        </q-infinite-scroll>
       </q-pull-to-refresh>
     </template>
     <ScreenError v-else @click:retry="run" class="absolute pt-[100px]" />
@@ -260,7 +254,7 @@ function onEnter(event: Event) {
     ...new Set([...historySearchStore.items, query.value]),
   ]
 
-  keyword.value=query.value
+  keyword.value = query.value
 
   searching.value = false
   event.target?.blur()
@@ -269,7 +263,7 @@ function onEnter(event: Event) {
 function onBack() {
   searching.value = false
 
-  if (keyword.value) keyword.value=""
+  if (keyword.value) keyword.value = ""
 }
 
 async function onClickItemPreLoad(
@@ -298,10 +292,9 @@ const {
   loading: loadingSearch,
   data: resultSearch,
   run: runSearch,
-  refreshAsync: refreshAsyncSearch
-} = useRequest(
-  () => TypeNormalValue("tim-kiem", keyword.value, 1, true)
-)
+  refreshAsync: refreshAsyncSearch,
+} = useRequest(() => TypeNormalValue("tim-kiem", keyword.value, 1, true))
+// eslint-disable-next-line promise/no-callback-in-promise
 const refresh = (done: () => void) => refreshAsyncSearch().then(done)
 watch(keyword, runSearch, {
   immediate: true,
@@ -314,7 +307,7 @@ async function moreSearch(page: number, done: (noMore?: boolean) => void) {
   )
     return done(true)
 
-  const newData  = await TypeNormalValue(
+  const newData = await TypeNormalValue(
     "tim-kiem",
     keyword.value,
     page + 1,
@@ -323,7 +316,7 @@ async function moreSearch(page: number, done: (noMore?: boolean) => void) {
 
   resultSearch.value = {
     ...newData,
-    items: [...resultSearch.value.items, ...newData.items]
+    items: [...resultSearch.value.items, ...newData.items],
   }
 
   done()
@@ -366,13 +359,12 @@ async function fetchRankType(type: string) {
   }
 }
 async function refreshRank(done: () => void, type: string) {
-    dataStore.set(type, {
-      status: "success",
-      response: await AjaxItem(type as "top-bo-week" | "top-le-week"),
-    })
-    
-    done()
-  
+  dataStore.set(type, {
+    status: "success",
+    response: await AjaxItem(type as "top-bo-week" | "top-le-week"),
+  })
+
+  done()
 }
 
 const swiperRef = ref()
@@ -383,7 +375,7 @@ watch(
   (activeIndex) => {
     fetchRankType(types[activeIndex][1])
   },
-  {immediate:true}
+  { immediate: true }
 )
 
 function onSwiper(swiper: TSwiper) {

@@ -89,18 +89,18 @@
   <template v-else-if="data">
     <ScreenNotFound v-if="data.items.length === 0" />
 
- <q-pull-to-refresh v-else  @refresh="refresh">
-    <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250">
-      <GridCard :items="data.items" />
+    <q-pull-to-refresh v-else @refresh="refresh">
+      <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250">
+        <GridCard :items="data.items" />
 
-      <template v-slot:loading>
-        <div class="row justify-center q-my-md">
-          <q-spinner class="c--main" size="40px" />
-        </div>
-      </template>
-    </q-infinite-scroll>
+        <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner class="c--main" size="40px" />
+          </div>
+        </template>
+      </q-infinite-scroll>
     </q-pull-to-refresh>
-    </template>
+  </template>
   <ScreenError v-else @click:retry="run" />
 
   <template v-if="data?.filter">
@@ -485,11 +485,11 @@ import GridCard from "components/GridCard.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
+import { QInfiniteScroll } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, reactive, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import { QInfiniteScroll } from "quasar"
 
 const route = useRoute()
 const router = useRouter()
@@ -610,10 +610,14 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   )
 }
 
-const { data, run, loading, refreshAsync } = useRequest(
-  () => fetchTypeNormalValue(1, false)
+const { data, run, loading, refreshAsync } = useRequest(() =>
+  fetchTypeNormalValue(1, false)
 )
-const refresh = (done: () => void) => refreshAsync().then(() => infiniteScrollRef.value?.reset()).then(done)
+const refresh = (done: () => void) =>
+  refreshAsync()
+    .then(() => infiniteScrollRef.value?.reset())
+    // eslint-disable-next-line promise/no-callback-in-promise
+    .then(done)
 
 const title = ref("")
 const watcherData = watch(data, (data) => {
@@ -627,7 +631,7 @@ watch(
   [genres, seaser, sorter, typer, year, defaultsOptions],
   () => {
     run()
-  infiniteScrollRef.value?.reset()
+    infiniteScrollRef.value?.reset()
   },
   {
     deep: true,

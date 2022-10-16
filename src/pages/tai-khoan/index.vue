@@ -30,7 +30,13 @@
       </q-item-section>
       <q-item-section side>
         <div class="flex items-center flex-nowrap">
-          <q-btn v-if="authStore.isLogged" dense round class="mr-1" @click.stop="showDialogQR = true">
+          <q-btn
+            v-if="authStore.isLogged"
+            dense
+            round
+            class="mr-1"
+            @click.stop="showDialogQR = true"
+          >
             <Icon icon="fluent:qr-code-24-regular" width="25" height="25" />
           </q-btn>
           <q-btn dense round class="mr-1" @click.stop="startScanQR">
@@ -48,163 +54,167 @@
     </q-item>
   </header>
 
-
-    <q-pull-to-refresh @refresh="refresh">
-  <div class="mt-4 mt-[72px]">
-    <router-link
-      class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
-      to="/tai-khoan/history"
-    >
-      Lịch sử
-
-      <Icon
-        icon="fluent:chevron-right-24-regular"
-        class="text-grey"
-        width="18"
-        height="18"
-      />
-    </router-link>
-    <div
-      v-if="loadingHistories"
-      class="h-[146px] mx-4 overflow-x-hidden whitespace-nowrap"
-    >
-      <q-card
-        v-for="item in 12"
-        :key="item"
-        class="bg-transparent inline-block history-item mr-2"
-        style="white-space: initial"
+  <q-pull-to-refresh @refresh="refresh">
+    <div class="mt-4 mt-[72px]">
+      <router-link
+        class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
+        to="/tai-khoan/history"
       >
-        <q-responsive :ratio="1920 / 1080" class="!rounded-[4px]">
-          <q-skeleton type="rect" class="absolute w-full h-full" />
-        </q-responsive>
+        Lịch sử
 
-        <q-skeleton type="text" width="100%" class="line-clamp-2 mt-1" />
-        <q-skeleton type="text" width="40%" />
-      </q-card>
-    </div>
-    <div
-      v-else-if="!errorHistories"
-      class="mx-4 overflow-x-auto whitespace-nowrap"
-    >
-      <q-card
-        v-for="item in histories"
-        :key="item.id"
-        class="bg-transparent inline-block history-item mr-2"
-        style="white-space: initial"
-        @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
+        <Icon
+          icon="fluent:chevron-right-24-regular"
+          class="text-grey"
+          width="18"
+          height="18"
+        />
+      </router-link>
+      <div
+        v-if="loadingHistories"
+        class="h-[146px] mx-4 overflow-x-hidden whitespace-nowrap"
       >
-        <q-img
-          no-spinner
-          :src="item.poster"
-          :ratio="1920 / 1080"
-          class="!rounded-[4px]"
+        <q-card
+          v-for="item in 12"
+          :key="item"
+          class="bg-transparent inline-block history-item mr-2"
+          style="white-space: initial"
         >
-          <BottomBlur class="px-0 h-[40%]">
-            <div
-              class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
+          <q-responsive :ratio="1920 / 1080" class="!rounded-[4px]">
+            <q-skeleton type="rect" class="absolute w-full h-full" />
+          </q-responsive>
+
+          <q-skeleton type="text" width="100%" class="line-clamp-2 mt-1" />
+          <q-skeleton type="text" width="40%" />
+        </q-card>
+      </div>
+      <div
+        v-else-if="!errorHistories"
+        class="mx-4 overflow-x-auto whitespace-nowrap"
+      >
+        <q-card
+          v-for="item in histories"
+          :key="item.id"
+          class="bg-transparent inline-block history-item mr-2"
+          style="white-space: initial"
+          @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
+        >
+          <q-img
+            no-spinner
+            :src="item.poster"
+            :ratio="1920 / 1080"
+            class="!rounded-[4px]"
+          >
+            <BottomBlur class="px-0 h-[40%]">
+              <div
+                class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
+              >
+                <q-linear-progress
+                  :value="item.last.cur / item.last.dur"
+                  rounded
+                  color="main"
+                  class="!h-[3px]"
+                />
+              </div>
+            </BottomBlur>
+            <span
+              class="absolute text-white z-10 text-[12px] bottom-2 right-2"
+              >{{ parseTime(item.last.cur) }}</span
             >
-              <q-linear-progress
-                :value="item.last.cur / item.last.dur"
-                rounded
-                color="main"
-                class="!h-[3px]"
-              />
-            </div>
-          </BottomBlur>
-          <span class="absolute text-white z-10 text-[12px] bottom-2 right-2">{{
-            parseTime(item.last.cur)
-          }}</span>
-        </q-img>
+          </q-img>
 
-        <span class="line-clamp-2 min-h-10 mt-1">{{ item.name }}</span>
-        <div class="text-grey">
-          {{ item.seasonName }} tập {{ item.last.name }}
-        </div>
-      </q-card>
-    </div>
-    <ScreenError
-      v-else
-      no-image
-      class="h-[146px] px-4"
-      @click:retry="runHistories"
-    />
-  </div>
-
-  <div class="mt-4">
-    <router-link
-      class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
-      to="/tai-khoan/follow"
-    >
-      Theo dõi
-
-      <Icon
-        icon="fluent:chevron-right-24-regular"
-        class="text-grey"
-        width="18"
-        height="18"
-      />
-    </router-link>
-    <div
-      v-if="loadingFavorites"
-      class="mx-4 overflow-x-hidden whitespace-nowrap"
-    >
-      <SkeletonCard
-        v-for="item in 20"
-        :key="item"
-        class="inline-block card-wrap"
+          <span class="line-clamp-2 min-h-10 mt-1">{{ item.name }}</span>
+          <div class="text-grey">
+            {{ item.seasonName }} tập {{ item.last.name }}
+          </div>
+        </q-card>
+      </div>
+      <ScreenError
+        v-else
+        no-image
+        class="h-[146px] px-4"
+        @click:retry="runHistories"
       />
     </div>
-    <div
-      v-else-if="!errorFavorites"
-      class="mx-4 overflow-x-auto whitespace-nowrap"
-    >
-      <Card
-        v-for="item in favorites?.items"
-        :key="item.name"
-        :data="item"
-        class="inline-block card-wrap"
-      />
-      <!-- {{ favorites.items }} -->
-    </div>
-    <ScreenError
-      v-else
-      no-image
-      class="h-[203px] px-4"
-      @click:retry="runFavorites"
-    />
-  </div>
 
-  <q-list class="mt-4">
-    <q-item clickable v-ripple to="/tai-khoan/settings">
-      <q-item-section avatar>
-        <Icon icon="fluent:settings-24-regular" width="25" height="25" />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>Cài đặt</q-item-label>
-      </q-item-section>
-    </q-item>
-    <q-item
-      clickable
-      v-ripple
-      href="mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub"
-    >
-      <q-item-section avatar>
-        <Icon icon="fluent:person-feedback-24-regular" width="22" height="22" />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>Phản hồi</q-item-label>
-      </q-item-section>
-    </q-item>
-    <q-item clickable v-ripple to="/tai-khoan/about">
-      <q-item-section avatar>
-        <Icon icon="fluent:info-24-regular" width="25" height="25" />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>Giới thiệu</q-item-label>
-      </q-item-section>
-    </q-item>
-  </q-list>
-</q-pull-to-refresh>
+    <div class="mt-4">
+      <router-link
+        class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
+        to="/tai-khoan/follow"
+      >
+        Theo dõi
+
+        <Icon
+          icon="fluent:chevron-right-24-regular"
+          class="text-grey"
+          width="18"
+          height="18"
+        />
+      </router-link>
+      <div
+        v-if="loadingFavorites"
+        class="mx-4 overflow-x-hidden whitespace-nowrap"
+      >
+        <SkeletonCard
+          v-for="item in 20"
+          :key="item"
+          class="inline-block card-wrap"
+        />
+      </div>
+      <div
+        v-else-if="!errorFavorites"
+        class="mx-4 overflow-x-auto whitespace-nowrap"
+      >
+        <Card
+          v-for="item in favorites?.items"
+          :key="item.name"
+          :data="item"
+          class="inline-block card-wrap"
+        />
+        <!-- {{ favorites.items }} -->
+      </div>
+      <ScreenError
+        v-else
+        no-image
+        class="h-[203px] px-4"
+        @click:retry="runFavorites"
+      />
+    </div>
+
+    <q-list class="mt-4">
+      <q-item clickable v-ripple to="/tai-khoan/settings">
+        <q-item-section avatar>
+          <Icon icon="fluent:settings-24-regular" width="25" height="25" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>Cài đặt</q-item-label>
+        </q-item-section>
+      </q-item>
+      <q-item
+        clickable
+        v-ripple
+        href="mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub"
+      >
+        <q-item-section avatar>
+          <Icon
+            icon="fluent:person-feedback-24-regular"
+            width="22"
+            height="22"
+          />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>Phản hồi</q-item-label>
+        </q-item-section>
+      </q-item>
+      <q-item clickable v-ripple to="/tai-khoan/about">
+        <q-item-section avatar>
+          <Icon icon="fluent:info-24-regular" width="25" height="25" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>Giới thiệu</q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </q-pull-to-refresh>
   <!-- dialogs login -->
   <q-dialog
     v-model="showDialogLogin"
@@ -388,7 +398,7 @@ const {
   run: runHistories,
   error: errorHistories,
   refresh: reloadHistories,
-  refreshAsync: refreshHistories
+  refreshAsync: refreshHistories,
 } = useRequest(() => History(), { manual: true })
 
 // ========== favorite =========
@@ -398,21 +408,24 @@ const {
   run: runFavorites,
   error: errorFavorites,
   refresh: reloadFavorites,
-  refreshAsync: refreshFavorites
-} = useRequest(() => TuPhim(1), { manual: true, })
+  refreshAsync: refreshFavorites,
+} = useRequest(() => TuPhim(1), { manual: true })
 
-watch(() => authStore.isLogged, (isLogged) => {
-  if (isLogged) {
-    runHistories()
-    runFavorites()
-  } else {
-    reloadHistories()
-    reloadFavorites()
+watch(
+  () => authStore.isLogged,
+  (isLogged) => {
+    if (isLogged) {
+      runHistories()
+      runFavorites()
+    } else {
+      reloadHistories()
+      reloadFavorites()
+    }
   }
-})
+)
 if (authStore.isLogged) {
-    runHistories()
-    runFavorites()
+  runHistories()
+  runFavorites()
 }
 
 async function refresh(done: () => void) {
