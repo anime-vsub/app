@@ -50,7 +50,7 @@
     </q-toolbar>
   </header>
 
-  <div class="absolute fit overflow-hidden pt-[50px]" v-if="data.length === 0">
+  <div  v-if="data.length === 0" class="absolute fit overflow-hidden pt-[50px]">
     <q-card
       v-for="item in 12"
       :key="item"
@@ -83,7 +83,7 @@
               height="20px"
               class="inline-block mr-[5px]"
             />
-            <q-skeleton type="text" width="4em" /> &bull;
+            <q-skeleton type="text" width="4em" /> 
             <q-skeleton type="text" width="6em" />
           </span>
         </q-card-section>
@@ -91,7 +91,9 @@
     </q-card>
   </div>
 
-  <q-infinite-scroll v-else @load="onLoad" :offset="250" class="pt-[50px]">
+
+    <q-pull-to-refresh v-else @refresh="refresh">
+  <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250" class="pt-[50px]">
     <q-card
       v-for="item in data"
       :key="item.title"
@@ -133,6 +135,7 @@
       </div>
     </template>
   </q-infinite-scroll>
+</q-pull-to-refresh>
 </template>
 
 <script lang="ts" setup>
@@ -144,6 +147,7 @@ import relativeTime from "dayjs/plugin/relativeTime"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import { ref, shallowReactive } from "vue"
+import { QInfiniteScroll} from "quasar"
 
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
@@ -151,12 +155,20 @@ useAliveScrollBehavior()
 
 dayjs.extend(relativeTime)
 
+const infiniteScrollRef = ref<QInfiniteScroll>()
+
 const viewMode = ref<1 | 2>(1)
 
 const data = shallowReactive<Awaited<ReturnType<typeof NewsAnime>>>([])
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-onLoad(1, () => {})
+async function refresh(done: () => void) {
+  const news = await NewsAnime(1)
+  data.splice(0)
+  data.push(...news)
+  done()
+  infiniteScrollRef.value?.reset()
+}
+refresh(() => {})
 
 async function onLoad(page: number, done: (noMore: boolean) => void) {
   console.log(page)

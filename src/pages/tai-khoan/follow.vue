@@ -18,7 +18,8 @@
   <template v-else-if="data">
     <ScreenNotFound v-if="data.items.length === 0" />
 
-    <q-infinite-scroll v-else @load="onLoad" :offset="250">
+    <q-pull-to-refresh v-else @refresh="refresh">
+    <q-infinite-scroll @load="onLoad" :offset="250" ref="infiniteScrollRef">
       <GridCard :items="data.items" />
 
       <template v-slot:loading>
@@ -27,6 +28,7 @@
         </div>
       </template>
     </q-infinite-scroll>
+    </q-pull-to-refresh>
   </template>
   <ScreenError v-else @click:retry="run" />
 </template>
@@ -40,10 +42,13 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
+import { QInfiniteScroll } from "quasar"
 
 const router = useRouter()
+const infiniteScrollRef = ref<QInfiniteScroll>()
 
-const { data, loading, run } = useRequest(() => TuPhim(1))
+const { data, loading, run, refreshAsync } = useRequest(() => TuPhim(1))
+const refresh = (done: () => void) => refreshAsync().then(() => infiniteScrollRef.value?.reset()).then(done)
 
 // eslint-disable-next-line functional/no-let
 let nextPage = 2

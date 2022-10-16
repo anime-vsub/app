@@ -59,10 +59,10 @@
               </div>
             </q-item-label>
           </q-item-section>
-          <q-item-section avatar class="min-w-0">
+          <q-item-section avatar class="min-w-0"   @click.stop.prevent="onClickItemPreLoad(item, true)">
             <Icon
               icon="fluent:arrow-up-left-24-regular"
-              @click.stop="onClickItemPreLoad(item, true)"
+
             />
           </q-item-section>
         </q-item>
@@ -123,8 +123,10 @@
             _dataInStoreTmp.status === 'pending'
           "
         />
+        <q-pull-to-refresh    v-else-if="_dataInStoreTmp.status === 'success'" @refresh="refreshRank($event, type)">
+          
         <CardVertical
-          v-else-if="_dataInStoreTmp.status === 'success'"
+       
           v-for="(item, index) in _dataInStoreTmp.response"
           :key="item.name"
           :data="{
@@ -139,6 +141,7 @@
             <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
           </template>
         </CardVertical>
+        </q-pull-to-refresh>
         <ScreenError v-else @click:retry="runSearch" />
       </swiper-slide>
     </swiper>
@@ -151,8 +154,9 @@
         class="absolute pt-[100px]"
       />
 
+
+    <q-pull-to-refresh v-else @refresh="refresh">
       <q-infinite-scroll
-        v-else
         @load="moreSearch"
         :offset="250"
         class="pt-[100px]"
@@ -178,6 +182,7 @@
           </div>
         </template>
       </q-infinite-scroll>
+      </q-pull-to-refresh>
     </template>
     <ScreenError v-else @click:retry="run" class="absolute pt-[100px]" />
   </template>
@@ -249,7 +254,7 @@ watchEffect(() => {
   document.body.style.overflow = searching.value ? "hidden" : ""
 })
 
-function onEnter() {
+function onEnter(event: Event) {
   // save to history search
   historySearchStore.items = [
     ...new Set([...historySearchStore.items, query.value]),
@@ -258,6 +263,7 @@ function onEnter() {
   keyword.value=query.value
 
   searching.value = false
+  event.target?.blur()
 }
 
 function onBack() {
@@ -292,9 +298,11 @@ const {
   loading: loadingSearch,
   data: resultSearch,
   run: runSearch,
+  refreshAsync: refreshAsyncSearch
 } = useRequest(
   () => TypeNormalValue("tim-kiem", keyword.value, 1, true)
 )
+const refresh = (done: () => void) => refreshAsyncSearch().then(done)
 watch(keyword, runSearch, {
   immediate: true,
 })
@@ -306,12 +314,17 @@ async function moreSearch(page: number, done: (noMore?: boolean) => void) {
   )
     return done(true)
 
-  resultSearch.value = await TypeNormalValue(
+  const newData  = await TypeNormalValue(
     "tim-kiem",
     keyword.value,
     page + 1,
     true
   )
+
+  resultSearch.value = {
+    ...newData,
+    items: [...resultSearch.value.items, ...newData.items]
+  }
 
   done()
 }
@@ -351,6 +364,15 @@ async function fetchRankType(type: string) {
       response: err,
     })
   }
+}
+async function refreshRank(done: () => void, type: string) {
+    dataStore.set(type, {
+      status: "success",
+      response: await AjaxItem(type as "top-bo-week" | "top-le-week"),
+    })
+    
+    done()
+  
 }
 
 const swiperRef = ref()

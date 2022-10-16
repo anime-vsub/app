@@ -63,6 +63,7 @@
         class="h-full overflow-y-auto scroll-smooth"
         style="white-space: pre-wrap"
       >
+      <q-pull-to-refresh @refresh="refresh">
         <template
           v-if="
             dayjs(
@@ -142,6 +143,7 @@
             </template>
           </CardVertical>
         </template>
+      </q-pull-to-refresh>
       </swiper-slide>
     </swiper>
   </div>
@@ -173,7 +175,8 @@ dayjs.extend(isToday)
 
 const router = useRouter()
 
-const { loading, data } = useRequest(() => LichChieuPhim())
+const { loading, data, refreshAsync } = useRequest(() => LichChieuPhim())
+const refresh = (done: () => void) => refreshAsync().then(done)
 
 // eslint-disable-next-line functional/no-let
 let _tmp: ReturnType<typeof splitOverTime>

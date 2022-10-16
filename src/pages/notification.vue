@@ -13,7 +13,7 @@
       class="absolute top-0 h-full w-full pt-[50px]"
     />
 
-    <template v-else-if="notificationStore.max > 0">
+    <q-pull-to-refresh v-else-if="notificationStore.max > 0" @refresh="notificationStore.refresh" >
       <q-list class="bg-transparent mt-[50px]">
         <transition-group name="notify">
           <q-slide-item
@@ -64,7 +64,7 @@
         Do API server không đầy đủ bạn phải xóa những thông báo mới để xem những
         thông báo cũ
       </div>
-    </template>
+    </q-pull-to-refresh>
 
     <div
       v-else

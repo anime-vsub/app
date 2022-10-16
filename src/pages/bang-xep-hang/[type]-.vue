@@ -56,8 +56,9 @@
             _dataInStoreTmp.status === 'pending'
           "
         />
+         <q-pull-to-refresh 
+          v-else-if="_dataInStoreTmp.status === 'success'"  @refresh="refresh($event, type)">
         <CardVertical
-          v-else-if="_dataInStoreTmp.status === 'success'"
           v-for="(item, index) in _dataInStoreTmp.response"
           :key="item.name"
           :data="{
@@ -72,6 +73,7 @@
             <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
           </template>
         </CardVertical>
+        </q-pull-to-refresh>
         <ScreenError v-else @click:retry="fetchRankType(type)" />
       </swiper-slide>
     </swiper>
@@ -150,6 +152,13 @@ async function fetchRankType(type: string) {
       response: err,
     })
   }
+}
+async function refresh(done: () => void, type: string) {
+  dataStore.set(type, {
+    status: "success",
+    response: await BangXepHangType(type ? `${type}.html` : ""),
+  })
+  done()
 }
 
 const swiperRef = ref()

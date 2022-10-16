@@ -1,5 +1,4 @@
 <template>
-  <q-pull-to-refresh @refresh="refresh">
     <q-header v-if="false" class="bg-transparent">
       <q-toolbar>
         <svg
@@ -135,7 +134,7 @@
         <SkeletonGridCard :count="6" />
       </div>
     </div>
-    <div v-else-if="data">
+    <q-pull-to-refresh v-else-if="data"  @refresh="refresh">
       <swiper
         :slides-per-view="1"
         :space-between="0"
@@ -366,9 +365,8 @@
 
         <GridCard :items="data.lastUpdate" />
       </div>
-    </div>
-    <ScreenError v-else class="absolute" />
   </q-pull-to-refresh>
+    <ScreenError v-else class="absolute" />
 </template>
 
 <script setup lang="ts">
