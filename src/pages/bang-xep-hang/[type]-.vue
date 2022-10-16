@@ -56,23 +56,25 @@
             _dataInStoreTmp.status === 'pending'
           "
         />
-         <q-pull-to-refresh 
-          v-else-if="_dataInStoreTmp.status === 'success'"  @refresh="refresh($event, type)">
-        <CardVertical
-          v-for="(item, index) in _dataInStoreTmp.response"
-          :key="item.name"
-          :data="{
-            ...item,
-            description: item.othername,
-            process: item.process.replace('Tập ', ''),
-          }"
-          class="mt-4 mx-3"
+        <q-pull-to-refresh
+          v-else-if="_dataInStoreTmp.status === 'success'"
+          @refresh="refresh($event, type)"
         >
-          <template v-slot:img-content>
-            <BottomBlur />
-            <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
-          </template>
-        </CardVertical>
+          <CardVertical
+            v-for="(item, index) in _dataInStoreTmp.response"
+            :key="item.name"
+            :data="{
+              ...item,
+              description: item.othername,
+              process: item.process.replace('Tập ', ''),
+            }"
+            class="mt-4 mx-3"
+          >
+            <template v-slot:img-content>
+              <BottomBlur />
+              <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
+            </template>
+          </CardVertical>
         </q-pull-to-refresh>
         <ScreenError v-else @click:retry="fetchRankType(type)" />
       </swiper-slide>

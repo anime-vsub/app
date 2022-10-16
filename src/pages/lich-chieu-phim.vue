@@ -63,48 +63,70 @@
         class="h-full overflow-y-auto scroll-smooth"
         style="white-space: pre-wrap"
       >
-      <q-pull-to-refresh @refresh="refresh">
-        <template
-          v-if="
-            dayjs(
-              `${item.month}/${item.date}/${new Date().getFullYear()}`
-            ).isToday()
-          "
-        >
-          <!-- overtime -->
+        <q-pull-to-refresh @refresh="refresh">
           <template
-            v-for="[time, items] in (_tmp = splitOverTime(
+            v-if="
+              dayjs(
+                `${item.month}/${item.date}/${new Date().getFullYear()}`
+              ).isToday()
+            "
+          >
+            <!-- overtime -->
+            <template
+              v-for="[time, items] in (_tmp = splitOverTime(
               groupArray(item.items, 'time_release') as unknown as  Record<string, Awaited<ReturnType<typeof LichChieuPhim>>[0]['items']>
             ))[0]"
-            :key="time"
-          >
-            <div class="text-grey text-[12px] mt-7 mb-2 flex items-center">
-              <span class="h-[1px] w-[12px] bg-grey inline-block" />
-              {{ dayjs(+time).format("HH:mm") }}
+              :key="time"
+            >
+              <div class="text-grey text-[12px] mt-7 mb-2 flex items-center">
+                <span class="h-[1px] w-[12px] bg-grey inline-block" />
+                {{ dayjs(+time).format("HH:mm") }}
+              </div>
+
+              <CardVertical
+                v-for="anime in items"
+                :key="anime.name"
+                :data="anime"
+                class="mx-3"
+              >
+                <template v-slot:img-content>
+                  <BottomBlur />
+                </template>
+              </CardVertical>
+            </template>
+
+            <div
+              class="w-full my-7 flex relative items-center justify-center before:content-DEFAULT before:absolute before:w-full before:h-[1px] before:bg-[rgba(200,200,200,0.5)] text-[14px]"
+            >
+              <span class="px-2 bg-dark-page z-2 text-grey"
+                >Bây giờ:{{ dayjs().format("HH:mm") }}</span
+              >
             </div>
 
-            <CardVertical
-              v-for="anime in items"
-              :key="anime.name"
-              :data="anime"
-              class="mx-3"
-            >
-              <template v-slot:img-content>
-                <BottomBlur />
-              </template>
-            </CardVertical>
+            <!-- next on today -->
+            <template v-for="[time, items] in _tmp[1]" :key="time">
+              <div class="text-[12px] mt-7 mb-2 flex items-center">
+                <span class="h-[1px] w-[12px] bg-[currentColor] inline-block" />
+                {{ dayjs(+time).format("HH:mm") }}
+              </div>
+
+              <CardVertical
+                v-for="anime in items"
+                :key="anime.name"
+                :data="anime"
+                class="mx-3"
+              >
+                <template v-slot:img-content>
+                  <BottomBlur />
+                </template>
+              </CardVertical>
+            </template>
           </template>
-
-          <div
-            class="w-full my-7 flex relative items-center justify-center before:content-DEFAULT before:absolute before:w-full before:h-[1px] before:bg-[rgba(200,200,200,0.5)] text-[14px]"
+          <template
+            v-else
+            v-for="(items, time) in (groupArray(item.items, 'time_release') as Record<string, typeof item.items>)"
+            :key="time"
           >
-            <span class="px-2 bg-dark-page z-2 text-grey"
-              >Bây giờ:{{ dayjs().format("HH:mm") }}</span
-            >
-          </div>
-
-          <!-- next on today -->
-          <template v-for="[time, items] in _tmp[1]" :key="time">
             <div class="text-[12px] mt-7 mb-2 flex items-center">
               <span class="h-[1px] w-[12px] bg-[currentColor] inline-block" />
               {{ dayjs(+time).format("HH:mm") }}
@@ -121,29 +143,7 @@
               </template>
             </CardVertical>
           </template>
-        </template>
-        <template
-          v-else
-          v-for="(items, time) in (groupArray(item.items, 'time_release') as Record<string, typeof item.items>)"
-          :key="time"
-        >
-          <div class="text-[12px] mt-7 mb-2 flex items-center">
-            <span class="h-[1px] w-[12px] bg-[currentColor] inline-block" />
-            {{ dayjs(+time).format("HH:mm") }}
-          </div>
-
-          <CardVertical
-            v-for="anime in items"
-            :key="anime.name"
-            :data="anime"
-            class="mx-3"
-          >
-            <template v-slot:img-content>
-              <BottomBlur />
-            </template>
-          </CardVertical>
-        </template>
-      </q-pull-to-refresh>
+        </q-pull-to-refresh>
       </swiper-slide>
     </swiper>
   </div>
@@ -176,6 +176,7 @@ dayjs.extend(isToday)
 const router = useRouter()
 
 const { loading, data, refreshAsync } = useRequest(() => LichChieuPhim())
+// eslint-disable-next-line promise/no-callback-in-promise
 const refresh = (done: () => void) => refreshAsync().then(done)
 
 // eslint-disable-next-line functional/no-let
