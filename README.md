@@ -47,3 +47,4 @@
 - [x] tai-khoan/about
 - [x] tai-khoan/history
 - [x] tai-khoan/follow
+- [ ] pull to refresh
