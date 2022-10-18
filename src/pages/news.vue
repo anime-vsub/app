@@ -50,7 +50,7 @@
     </q-toolbar>
   </header>
 
-  <div  v-if="data.length === 0" class="absolute fit overflow-hidden pt-[50px]">
+  <div v-if="data.length === 0" class="absolute fit overflow-hidden pt-[50px]">
     <q-card
       v-for="item in 12"
       :key="item"
@@ -83,7 +83,7 @@
               height="20px"
               class="inline-block mr-[5px]"
             />
-            <q-skeleton type="text" width="4em" /> 
+            <q-skeleton type="text" width="4em" />
             <q-skeleton type="text" width="6em" />
           </span>
         </q-card-section>
@@ -91,51 +91,55 @@
     </q-card>
   </div>
 
-
-    <q-pull-to-refresh v-else @refresh="refresh">
-  <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250" class="pt-[50px]">
-    <q-card
-      v-for="item in data"
-      :key="item.title"
-      class="relative mx-3 mt-5 rounded-xl overflow-hidden"
-      :class="{
-        'news-item': viewMode === 2,
-      }"
-      v-ripple
-      @click="open(item.href, item.title)"
+  <q-pull-to-refresh v-else @refresh="refresh">
+    <q-infinite-scroll
+      ref="infiniteScrollRef"
+      @load="onLoad"
+      :offset="250"
+      class="pt-[50px]"
     >
-      <div>
-        <q-img no-spinner :src="item.image" class="image" />
-      </div>
+      <q-card
+        v-for="item in data"
+        :key="item.title"
+        class="relative mx-3 mt-5 rounded-xl overflow-hidden"
+        :class="{
+          'news-item': viewMode === 2,
+        }"
+        v-ripple
+        @click="open(item.href, item.title)"
+      >
+        <div>
+          <q-img no-spinner :src="item.image" class="image" />
+        </div>
 
-      <div class="content">
-        <q-card-section>
-          <div class="text-h6 leading-snug !font-normal">
-            {{ item.title }}
-          </div>
-          <div class="text-grey mt-1 line-clamp-3 des">{{ item.intro }}</div>
-        </q-card-section>
-        <q-card-section class="pt-0">
-          <span class="text-caption text-grey">
-            <img
-              :src="item.by.icon"
-              width="18"
-              height="18"
-              class="inline-block mr-[5px]"
-            />{{ item.by.name }} &bull;
-            {{ dayjs(item.time).locale("vi").fromNow() }}
-          </span>
-        </q-card-section>
-      </div>
-    </q-card>
+        <div class="content">
+          <q-card-section>
+            <div class="text-h6 leading-snug !font-normal">
+              {{ item.title }}
+            </div>
+            <div class="text-grey mt-1 line-clamp-3 des">{{ item.intro }}</div>
+          </q-card-section>
+          <q-card-section class="pt-0">
+            <span class="text-caption text-grey">
+              <img
+                :src="item.by.icon"
+                width="18"
+                height="18"
+                class="inline-block mr-[5px]"
+              />{{ item.by.name }} &bull;
+              {{ dayjs(item.time).locale("vi").fromNow() }}
+            </span>
+          </q-card-section>
+        </div>
+      </q-card>
 
-    <template v-slot:loading>
-      <div class="row justify-center q-my-md">
-        <q-spinner-dots color="primary" size="40px" />
-      </div>
-    </template>
-  </q-infinite-scroll>
-</q-pull-to-refresh>
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px" />
+        </div>
+      </template>
+    </q-infinite-scroll>
+  </q-pull-to-refresh>
 </template>
 
 <script lang="ts" setup>
@@ -144,10 +148,10 @@ import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import { ref, shallowReactive } from "vue"
-import { QInfiniteScroll} from "quasar"
 
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
@@ -168,6 +172,7 @@ async function refresh(done: () => void) {
   done()
   infiniteScrollRef.value?.reset()
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 refresh(() => {})
 
 async function onLoad(page: number, done: (noMore: boolean) => void) {

@@ -19,15 +19,15 @@
     <ScreenNotFound v-if="data.items.length === 0" />
 
     <q-pull-to-refresh v-else @refresh="refresh">
-    <q-infinite-scroll @load="onLoad" :offset="250" ref="infiniteScrollRef">
-      <GridCard :items="data.items" />
+      <q-infinite-scroll @load="onLoad" :offset="250" ref="infiniteScrollRef">
+        <GridCard :items="data.items" />
 
-      <template v-slot:loading>
-        <div class="row justify-center q-my-md">
-          <q-spinner class="c--main" size="40px" />
-        </div>
-      </template>
-    </q-infinite-scroll>
+        <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner class="c--main" size="40px" />
+          </div>
+        </template>
+      </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
   <ScreenError v-else @click:retry="run" />
@@ -39,16 +39,21 @@ import GridCard from "components/GridCard.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
+import { QInfiniteScroll } from "quasar"
 import { TuPhim } from "src/apis/runs/tu-phim"
+import { ref } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
-import { QInfiniteScroll } from "quasar"
 
 const router = useRouter()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const { data, loading, run, refreshAsync } = useRequest(() => TuPhim(1))
-const refresh = (done: () => void) => refreshAsync().then(() => infiniteScrollRef.value?.reset()).then(done)
+const refresh = (done: () => void) =>
+  refreshAsync()
+    .then(() => infiniteScrollRef.value?.reset())
+    // eslint-disable-next-line promise/no-callback-in-promise
+    .then(done)
 
 // eslint-disable-next-line functional/no-let
 let nextPage = 2

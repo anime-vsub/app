@@ -72,11 +72,11 @@ export const useNotificationStore = defineStore(
     }
 
     async function refresh(done: () => void) {
-        const result = await AjaxNotification()
+      const result = await AjaxNotification()
 
-        items.value = result.items
-        max.value = result.max
-        
+      items.value = result.items
+      max.value = result.max
+
       done()
     }
 

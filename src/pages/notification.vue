@@ -13,7 +13,10 @@
       class="absolute top-0 h-full w-full pt-[50px]"
     />
 
-    <q-pull-to-refresh v-else-if="notificationStore.max > 0" @refresh="notificationStore.refresh" >
+    <q-pull-to-refresh
+      v-else-if="notificationStore.max > 0"
+      @refresh="notificationStore.refresh"
+    >
       <q-list class="bg-transparent mt-[50px]">
         <transition-group name="notify">
           <q-slide-item
