@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-
 import { Http } from "@capacitor-community/http"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
