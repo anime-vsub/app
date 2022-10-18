@@ -2,7 +2,6 @@ import type { RouteRecordRaw } from "vue-router"
 
 const routes: RouteRecordRaw[] = [
   {
-    name: "index",
     path: "/",
     component: () => import("pages/index_outlet.vue"),
     meta: {
@@ -11,6 +10,7 @@ const routes: RouteRecordRaw[] = [
     },
     children: [
       {
+        name: "index",
         path: "",
         component: () => import("pages/index.vue"),
       },
@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: ":type_normal(danh-sach|the-loai|quoc-gia|tag)/:value",
-        alias: [":type_normal(season)/:value+"],
+        alias: [":type_normal(season)/:value(.+/.+)"],
         component: () => import("pages/[_type-normal]/[value].vue"),
         meta: {
           footer: false,
@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "bang-xep-hang/:type(day|voted|month|season|year)?",
-        alias: ["bang-xep-hang/:type(day|voted|month|season|year).html"],
+        alias: ["bang-xep-hang/:type(day|voted|month|season|year)?.html"],
         component: () => import("pages/bang-xep-hang/[type]-.vue"),
         meta: {
           footer: false,
@@ -77,7 +77,6 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    name: "account",
     path: "/tai-khoan",
     component: () => import("pages/tai-khoan/index_outlet.vue"),
     meta: {
@@ -85,6 +84,7 @@ const routes: RouteRecordRaw[] = [
     },
     children: [
       {
+    name: "account",
         path: "",
         component: () => import("pages/tai-khoan/index.vue"),
         meta: {
@@ -129,8 +129,8 @@ const routes: RouteRecordRaw[] = [
 
   {
     name: "watch-anime",
-    path: "/phim/:season/:chap?",
-    alias: ["/phim/:season/:prefix(.+)-:chap(\\d+).html"],
+    path: "/phim/:season/:prefix(\\w+)?:chap?",
+    alias: ["/phim/:season/:prefix(.+)?-:chap(\\d+)?.html"],
     component: () => import("pages/phim/_season.vue"),
   },
 
