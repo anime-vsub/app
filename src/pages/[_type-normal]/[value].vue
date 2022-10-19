@@ -87,9 +87,9 @@
 
   <SkeletonGridCard v-if="loading" :count="12" class="pt-[125px]" />
   <template v-else-if="data">
-    <ScreenNotFound v-if="data.items.length === 0"  class="pt-[125px]" />
+    <ScreenNotFound v-if="data.items.length === 0" class="pt-[125px]" />
 
-    <q-pull-to-refresh v-else @refresh="refresh"  class="mt-[125px]">
+    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[125px]">
       <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250">
         <GridCard :items="data.items" />
 
@@ -101,7 +101,7 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run"  class="pt-[125px]" />
+  <ScreenError v-else @click:retry="run" class="pt-[125px]" />
 
   <template v-if="data?.filter">
     <!-- gener -->
