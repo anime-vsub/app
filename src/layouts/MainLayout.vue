@@ -14,7 +14,7 @@
       <q-tabs
         indicator-color="transparent"
         exact-active-color="white"
-        class="bg-transparent text-grey-5 shadow-2 text-[12px]"
+        class="bg-transparent text-grey-5 shadow-2 text-[12px] children:transition-color children:duration-200 children:ease-in-out"
         no-caps
       >
         <q-route-tab
@@ -39,7 +39,7 @@
         </q-route-tab>
         <q-route-tab
           replace
-          active-class="tab-active"
+          exact-active-class="tab-active"
           class="pt-1"
           to="/tim-kiem"
         >
