@@ -946,6 +946,11 @@ const seasonId = computed(
 watch(
   seasonId,
   async (seasonId) => {
+    if (!authStore.isLogged) {
+      console.warn("can't get is like because not login")
+      return
+    }
+
     if (seasonId) {
       followed.value = await checkIsLile(seasonId)
     } else {
@@ -969,6 +974,14 @@ watch(
 )
 
 async function toggleFollow() {
+  if (!authStore.isLogged) {
+    $q.notify({
+      position: "bottom-right",
+      message: "Hãy đăng nhập trước để theo dõi",
+    })
+    return
+  }
+
   followed.value = !followed.value
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   await AjaxLike(seasonId.value!, followed.value)
