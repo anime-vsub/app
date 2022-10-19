@@ -13,7 +13,7 @@
   </header>
 
   <q-list v-if="infoApp && infoDev" class="mt-[47px]">
-    <q-item>
+    <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Phiên bản ứng dụng</q-item-label>
         <q-item-label caption
@@ -22,7 +22,7 @@
         >
       </q-item-section>
     </q-item>
-    <q-item>
+    <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Hệ điều hành</q-item-label>
         <q-item-label caption
@@ -31,7 +31,7 @@
         >
       </q-item-section>
     </q-item>
-    <q-item>
+    <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>WebView</q-item-label>
         <q-item-label caption>{{ infoDev.webViewVersion }}</q-item-label>
