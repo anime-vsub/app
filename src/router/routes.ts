@@ -84,7 +84,7 @@ const routes: RouteRecordRaw[] = [
     },
     children: [
       {
-    name: "account",
+        name: "account",
         path: "",
         component: () => import("pages/tai-khoan/index.vue"),
         meta: {
