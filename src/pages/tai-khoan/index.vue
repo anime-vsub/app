@@ -54,8 +54,8 @@
     </q-item>
   </header>
 
-  <q-pull-to-refresh @refresh="refresh">
-    <div class="mt-4 mt-[72px]">
+  <q-pull-to-refresh @refresh="refresh" class="pt-[72px]">
+    <div class="mt-4">
       <router-link
         class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
         to="/tai-khoan/history"
