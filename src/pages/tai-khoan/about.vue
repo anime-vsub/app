@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
     <q-toolbar class="relative">
       <q-btn flat dense round class="mr-2" @click.stop="router.back()">
         <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
@@ -10,9 +10,9 @@
         Giới thiệu về AnimeVsub
       </q-toolbar-title>
     </q-toolbar>
-  </q-header>
+  </header>
 
-  <q-list v-if="infoApp && infoDev">
+  <q-list v-if="infoApp && infoDev" class="mt-[47px]">
     <q-item>
       <q-item-section>
         <q-item-label>Phiên bản ứng dụng</q-item-label>
