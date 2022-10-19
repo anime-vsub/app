@@ -46,7 +46,7 @@
 
   <div
     v-if="loading || !data"
-    class="absolute w-full h-full overflow-hidden mx-4 pt-6 text-[28px]"
+    class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px]"
   >
     <q-responsive :ratio="16 / 9" />
 
