@@ -12,7 +12,7 @@
     </q-toolbar>
   </header>
 
-  <q-list class="mt-[47px]">
+  <q-list class="pt-[47px]">
     <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Tự động phát</q-item-label>

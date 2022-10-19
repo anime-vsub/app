@@ -13,7 +13,7 @@
   </header>
 
   <template v-if="authStore.isLogged">
-    <div class="py-15 text-center mt-[47px]">
+    <div class="py-15 text-center pt-[47px]">
       <q-avatar size="80px">
         <img v-if="authStore.user?.avatar" :src="authStore.user.avatar" />
         <Icon

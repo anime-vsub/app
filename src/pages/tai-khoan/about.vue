@@ -12,7 +12,7 @@
     </q-toolbar>
   </header>
 
-  <q-list v-if="infoApp && infoDev" class="mt-[47px]">
+  <q-list v-if="infoApp && infoDev" class="pt-[47px]">
     <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Phiên bản ứng dụng</q-item-label>

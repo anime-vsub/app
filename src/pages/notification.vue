@@ -17,7 +17,7 @@
       v-else-if="notificationStore.max > 0"
       @refresh="notificationStore.refresh"
     >
-      <q-list class="bg-transparent mt-[50px]">
+      <q-list class="bg-transparent pt-[50px]">
         <transition-group name="notify">
           <q-slide-item
             v-for="item in notificationStore.items"

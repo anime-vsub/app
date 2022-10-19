@@ -12,11 +12,11 @@
     </q-toolbar>
   </header>
 
-  <ScreenLoading v-if="loading" class="absolute pt-[47px]"/>
+  <ScreenLoading v-if="loading" class="absolute pt-[47px]" />
   <template v-else-if="histories">
     <ScreenNotFound v-if="histories.length === 0" class="pt-[47px]" />
 
-    <q-pull-to-refresh v-else @refresh="refresh" class="mt-[47px]">
+    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[47px]">
       <q-infinite-scroll @load="onLoad" :offset="250">
         <template v-for="(item, index) in histories" :key="item.id">
           <div
@@ -115,7 +115,12 @@ dayjs.extend(isYesterday)
 const router = useRouter()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
-const { loading, data: histories, run, refreshAsync } = useRequest(() => History())
+const {
+  loading,
+  data: histories,
+  run,
+  refreshAsync,
+} = useRequest(() => History())
 const refresh = (done: () => void) =>
   refreshAsync()
     .then(() => infiniteScrollRef.value?.reset())
