@@ -129,7 +129,7 @@ const routes: RouteRecordRaw[] = [
 
   {
     name: "watch-anime",
-    path: "/phim/:season/:prefix(\\w+)?:chap?",
+    path: "/phim/:season/:prefix(\\D+)?:chap(\\d+)?",
     alias: ["/phim/:season/:prefix(.+)?-:chap(\\d+)?.html"],
     component: () => import("pages/phim/_season.vue"),
   },

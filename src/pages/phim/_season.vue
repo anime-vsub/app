@@ -89,10 +89,10 @@
             {{ data.name }}
           </h1>
           <h5 class="text-gray-400 text-weight-normal">
-            {{ formatView(data.views) }} lượt xem &bull;
+            {{ formatView(data.views) }} lượt xem
 
             <span v-if="currentDataSeason?.update">
-              Tập mới chiếu vào
+               &bull; Tập mới chiếu vào
               {{
                 dayjs(
                   new Date(
