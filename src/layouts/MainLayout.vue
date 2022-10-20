@@ -229,6 +229,7 @@ function ignoreUpdateVersion(version: string) {
 }
 
 .tabs-main .q-tab__content {
-  min-width: 0 !important;
+  max-width: 0 !important;
+  width: (100% / 5) !important;
 }
 </style>
