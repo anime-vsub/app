@@ -11,6 +11,7 @@ import {
 import { app } from "boot/firebase"
 import dayjs from "dayjs"
 import { useAuthStore } from "stores/auth"
+import sha256 from "sha256"
 
 interface ItemData {
   id: string
@@ -40,7 +41,7 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
   const db = getFirestore(app)
 
   // eslint-disable-next-line camelcase
-  const historyRef = collection(db, "users", user_data.email, "history")
+  const historyRef = collection(db, "users", sha256(user_data.email + user_data.name), "history")
   const q = query(
     historyRef,
     where("timestamp", "!=", null),

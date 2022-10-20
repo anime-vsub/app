@@ -508,6 +508,7 @@ import {
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import sha256 from "sha256"
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -893,7 +894,7 @@ watch(
     const db = getFirestore(app)
 
     // eslint-disable-next-line camelcase
-    const userRef = doc(db, "users", user_data.email)
+    const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const seasonRef = doc(userRef, "history", currentSeason!)
     const chapRef = collection(seasonRef, "chaps")
