@@ -816,7 +816,7 @@ watch(
 
       const userRef = doc(db, "users", authStore.user_data.email)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const seasonRef = doc(userRef, "history", props.currentSeason!)
+      const seasonRef = doc(userRef, "history", props.currentSeason!.slice(0, props.currentSeason.lastIndexOf("$") >>> 0))
       const chapRef = doc(seasonRef, "chaps", currentChap)
 
       const progressInCloud = await getDoc(chapRef)
@@ -946,7 +946,7 @@ watch(
       })
     }
 
-    const seasonRef = doc(userRef, "history", currentSeason)
+    const seasonRef = doc(userRef, "history", currentSeason.slice(0, currentSeason.lastIndexOf("$") >>> 0))
 
     if (!(await getDoc(seasonRef)).exists()) {
       //
