@@ -335,14 +335,14 @@ import { collection, doc, getDocs, getFirestore } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
 import { app } from "boot/firebase"
 import BrtPlayer from "components/BrtPlayer.vue"
-import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import GridCard from "components/GridCard.vue"
 import CardVertical from "components/CardVertical.vue"
+import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import Quality from "components/Quality.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
 import dayjs from "dayjs"
 import { QTab, useQuasar } from "quasar"
+import sha256 from "sha256"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
@@ -365,7 +365,6 @@ import {
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import sha256 from "sha256"
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -867,8 +866,6 @@ function share() {
   })
 }
 // ================ status ================
-const showDialogChapter = ref(false)
-const showDialogInforma = ref(false)
 
 const gridModeTabsSeasons = ref(false)
 </script>

@@ -1,79 +1,66 @@
 <template>
-<q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
-<div class="w-full">
-  <div class="flex mx-2">
-    <q-avatar size="60px">
-      <img src="~/assets/trending_avatar.png">
-    </q-avatar>
-    <div class="flex items-center">
-      <div class="text-subtitle1 text-weight-medium text-[20px] ml-3">Thịnh hành</div>
-    </div>
-  </div>
-    <div
-      class="text-[#9a9a9a] mt-3 mb-2 text-[16px]"
-    >
-      <router-link
-        v-for="([name, value], index) in types"
-        :key="value"
-        class="relative inline-block px-4 py-1"
-        v-ripple
-        active-class="c--main text-weight-medium children:before:block"
-        :to="`/bang-xep-hang/${value}`"
-      >
-        <span
-          class="relative inline-block before:content-DEFAULT before:hidden before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-[-4px] pb-[2px] before:rounded "
-          >{{ name }}</span
+  <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
+    <div class="w-full">
+      <div class="flex mx-2">
+        <q-avatar size="60px">
+          <img src="~/assets/trending_avatar.png" />
+        </q-avatar>
+        <div class="flex items-center">
+          <div class="text-subtitle1 text-weight-medium text-[20px] ml-3">
+            Thịnh hành
+          </div>
+        </div>
+      </div>
+      <div class="text-[#9a9a9a] mt-3 mb-2 text-[16px]">
+        <router-link
+          v-for="[name, value] in types"
+          :key="value"
+          class="relative inline-block px-4 py-1"
+          v-ripple
+          active-class="c--main text-weight-medium children:before:block"
+          :to="`/bang-xep-hang/${value}`"
         >
-      </router-link>
-    </div>
-
-</div>
-</q-page-sticky>
-
-
-<div class="pt-[100px]">
-
-
-        <ScreenLoading
-          v-if="loading
-          "
-          class="absolute"
-        />
-          <CardVertical
-          v-else-if="data"
-            v-for="(item, index) in data"
-            :key="item.name"
-            :data="{
-              ...item,
-              description: item.othername,
-              process: item.process.replace('Tập ', ''),
-            }"
-            class="mt-4 mx-3"
+          <span
+            class="relative inline-block before:content-DEFAULT before:hidden before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-[-4px] pb-[2px] before:rounded"
+            >{{ name }}</span
           >
-            <template v-slot:img-content>
-              <BottomBlur />
-              <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
-            </template>
-          </CardVertical>
-        <ScreenError v-else @click:retry="run" 
-          class="absolute"/>
-</div>
+        </router-link>
+      </div>
+    </div>
+  </q-page-sticky>
+
+  <div class="pt-[100px]">
+    <ScreenLoading v-if="loading" class="absolute" />
+    <CardVertical
+      v-else-if="data"
+      v-for="(item, index) in data"
+      :key="item.name"
+      :data="{
+        ...item,
+        description: item.othername,
+        process: item.process.replace('Tập ', ''),
+      }"
+      class="mt-4 mx-3"
+    >
+      <template v-slot:img-content>
+        <BottomBlur />
+        <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
+      </template>
+    </CardVertical>
+    <ScreenError v-else @click:retry="run" class="absolute" />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import { BangXepHangType } from "src/apis/runs/bang-xep-hang/[type]"
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
 import ranks from "src/logic/ranks"
-import { ref, shallowReactive, watch, watchEffect } from "vue"
-import { useRouter, useRoute } from "vue-router"
 import { useRequest } from "vue-request"
+import { useRoute } from "vue-router"
 
-const router = useRouter()
 const route = useRoute()
 
 const types = [
@@ -85,12 +72,13 @@ const types = [
   ["Mùa", "season"],
 ]
 
-
-
-const { data, loading, run } = useRequest(() => BangXepHangType(route.params.type), {
-  refreshDeps: [() => route.params.type],
-  refreshAction() {
-    run()
+const { data, loading, run } = useRequest(
+  () => BangXepHangType(route.params.type as string),
+  {
+    refreshDeps: [() => route.params.type],
+    refreshDepsAction() {
+      run()
+    },
   }
-})
+)
 </script>

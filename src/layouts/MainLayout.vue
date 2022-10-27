@@ -1,15 +1,25 @@
 <template>
   <q-layout view="hHh Lpr lFf">
-    <q-header class="bg-dark-page py-1 px-2" :class="{
-      transparent: route.meta?.transparentHeader
-    }">
+    <q-header
+      class="bg-dark-page py-1 px-2"
+      :class="{
+        transparent: route.meta?.transparentHeader,
+      }"
+    >
       <q-toolbar>
-        <q-btn dense flat round icon="menu" class="mr-5" @click="showDrawer = !showDrawer" />
+        <q-btn
+          dense
+          flat
+          round
+          icon="menu"
+          class="mr-5"
+          @click="showDrawer = !showDrawer"
+        />
 
-<router-link to="/" class="flex items-end">
-        <img src="~assets/app_icon.svg" width="35" height="35" />
-        <span style="font-family: Caveat;" class="text-[25px]">nimeVsub</span>
-</router-link>
+        <router-link to="/" class="flex items-end">
+          <img src="~assets/app_icon.svg" width="35" height="35" />
+          <span style="font-family: Caveat" class="text-[25px]">nimeVsub</span>
+        </router-link>
 
         <q-space />
 
@@ -24,7 +34,7 @@
             placeholder="Tìm kiếm"
             @focus="focusing = true"
             @blur="focusing = false"
-            @keypress.enter="router.push(`/tim-kiem/${(query)}`)"
+            @keypress.enter="router.push(`/tim-kiem/${query}`)"
           />
 
           <transition name="q-transition--fade">
@@ -60,7 +70,7 @@
 
         <q-btn v-if="authStore.isLogged" flat round>
           <q-avatar size="35px">
-            <img :src="authStore.user_data.avatar" />
+            <img :src="authStore.user_data!.avatar" />
           </q-avatar>
         </q-btn>
         <q-btn
@@ -83,42 +93,70 @@
     </q-header>
 
     <q-drawer
-    v-model="showDrawer"
+      v-model="showDrawer"
       :width="250"
       :breakpoint="500"
       overlay
       behavior="mobile"
       class="bg-dark-page"
     >
-    <q-toolbar
-    >
-        <q-btn dense flat round icon="menu" class="mr-5" @click="showDrawer = !showDrawer" />
+      <q-toolbar>
+        <q-btn
+          dense
+          flat
+          round
+          icon="menu"
+          class="mr-5"
+          @click="showDrawer = !showDrawer"
+        />
 
-<router-link to="/" class="flex items-end">
-        <img src="~assets/app_icon.svg" width="35" height="35" />
-        <span style="font-family: Caveat;" class="text-[25px]">nimeVsub</span>
-</router-link>
-</q-toolbar>
+        <router-link to="/" class="flex items-end">
+          <img src="~assets/app_icon.svg" width="35" height="35" />
+          <span style="font-family: Caveat" class="text-[25px]">nimeVsub</span>
+        </router-link>
+      </q-toolbar>
 
       <q-list>
-        <template  v-for="{ icon, active, name, path, divider } in drawers" :key="name">
-          <q-separator v-if="divider" class="bg-[rgba(255,255,255,0.1)] my-6 mr-2" />
-        <q-item v-else clickable v-ripple class="min-h-0 px-4 my-2" :to="path" active-class="" exact-active-class="bg-[rgba(255,255,255,0.1)] text-main">
-
-          <q-item-section avatar class="pr-0 min-w-0 mr-5">
-            <Icon v-if="router.resolve(path).fullPath !== route.fullPath" :icon="icon" width="23" height="23" />
-            <Icon v-else :icon="active" width="23" height="23" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-[16px]">{{ name }}</q-item-label>
-          </q-item-section>
-        </q-item>
+        <template
+          v-for="{ icon, active, name, path, divider } in drawers"
+          :key="name"
+        >
+          <q-separator
+            v-if="divider"
+            class="bg-[rgba(255,255,255,0.1)] my-6 mr-2"
+          />
+          <q-item
+            v-else
+            clickable
+            v-ripple
+            class="min-h-0 px-4 my-2"
+            :to="path"
+            active-class=""
+            exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
+          >
+            <q-item-section avatar class="pr-0 min-w-0 mr-5">
+              <Icon
+                v-if="router.resolve(path!).fullPath !== route.fullPath"
+                :icon="icon"
+                width="23"
+                height="23"
+              />
+              <Icon v-else :icon="active" width="23" height="23" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-[16px]">{{ name }}</q-item-label>
+            </q-item-section>
+          </q-item>
         </template>
       </q-list>
 
       <div class="absolute bottom-0 left-0 w-full text-gray-500">
-        <a v-for="item in drawersBottom" :key="item.name" class="py-2 px-4 block"
-        >{{ item.name }}</a>
+        <a
+          v-for="item in drawersBottom"
+          :key="item.name"
+          class="py-2 px-4 block"
+          >{{ item.name }}</a
+        >
       </div>
     </q-drawer>
 
@@ -200,122 +238,106 @@
 </template>
 
 <script lang="ts" setup>
+// eslint-disable-next-line import/order
 import { Icon } from "@iconify/vue"
-import { useNotificationStore } from "stores/notification"
-import { useAuthStore } from "stores/auth"
-import { useRoute , useRouter } from "vue-router"
-import { shallowRef } from "vue"
-import semverGt from "semver/functions/gt"
-import semverEq from "semver/functions/eq"
-import { debounce } from "quasar"
-import { ref, watch } from "vue"
-import { PreSearch } from "src/apis/runs/pre-search"
-import { useRequest } from "vue-request"
 
 import "@fontsource/caveat"
 
+// =========== suth
+
+import { debounce, useQuasar } from "quasar"
+import { PreSearch } from "src/apis/runs/pre-search"
+import { useAuthStore } from "stores/auth"
+import { ref, watch } from "vue"
+import { useRequest } from "vue-request"
+import { useRoute, useRouter } from "vue-router"
+
 const drawers = [
   {
-    icon : "fluent:home-24-regular",
+    icon: "fluent:home-24-regular",
     active: "fluent:home-24-filled",
     name: "Trang chủ",
-    path: '/'
+    path: "/",
   },
   {
     icon: "ant-design:fire-outlined",
     active: "ant-design:fire-filled",
     name: "Thịnh hành",
-    path: '/bang-xep-hang'
+    path: "/bang-xep-hang",
   },
   {
     icon: "ic:outline-filter-alt",
     active: "ic:round-filter-alt",
     name: "Mục lục",
-    path: '/danh-sach/all'
+    path: "/danh-sach/all",
   },
   {
     icon: "fluent:calendar-clock-24-regular",
     active: "fluent:calendar-clock-24-filled",
     name: "Lịch chiếu",
-    path: '/lich-chieu-phim'
+    path: "/lich-chieu-phim",
   },
 
-
-  { divider : true },
+  { divider: true },
 
   {
     icon: "material-symbols:favorite-outline-rounded",
     active: "material-symbols:favorite-rounded",
     name: "Theo dõi",
-    path: "/tai-khoan/follow"
+    path: "/tai-khoan/follow",
   },
   {
     icon: "fluent:history-24-regular",
     active: "fluent:history-24-filled",
     name: "Lịch sử",
-    path: "/tai-khoan/history"
-  }
+    path: "/tai-khoan/history",
+  },
 ]
-const drawersBottom = [{
-  name: "Về chúng tôi",
-  },{
+const drawersBottom = [
+  {
+    name: "Về chúng tôi",
+  },
+  {
     name: "Liên hệ chúng tôi",
-    },{
-      name: "Tải ứng dụng",
-      }, {
-        name: "Điều khoản sử dụng",
-        }, {
-          name: "Chính sách riêng tư",
-          }, {
-            name: "Khiếu nại vi phạm",
-            }
+  },
+  {
+    name: "Tải ứng dụng",
+  },
+  {
+    name: "Điều khoản sử dụng",
+  },
+  {
+    name: "Chính sách riêng tư",
+  },
+  {
+    name: "Khiếu nại vi phạm",
+  },
 ]
 
 const route = useRoute()
 const router = useRouter()
-const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
 
 const query = ref("")
-const {
-  data: searchResult,
-  loading: loadingResult,
-  run,
-} = useRequest(() => PreSearch(query.value), {
+const { data: searchResult, run } = useRequest(() => PreSearch(query.value), {
   manual: true,
 })
 watch(query, debounce(run, 300))
 
 const focusing = ref(false)
 
+const showDrawer = ref(false)
 
-const showDrawer  =ref(false)
-
-watch(() => route.meta?.hideDrawer === true, hideDrawer => {
-  if (hideDrawer) showDrawer.value = false
-}, { immediate: true })
-
-// =========== suth
-
-import { Icon } from "@iconify/vue"
-import BottomBlur from "components/BottomBlur.vue"
-import Card from "components/Card.vue"
-import ScreenError from "components/ScreenError.vue"
-import SkeletonCard from "components/SkeletonCard.vue"
-import { compressToBase64 } from "lz-string"
-import QRCode from "qrcode"
-import { useQuasar } from "quasar"
-import { History } from "src/apis/runs/history"
-import { TuPhim } from "src/apis/runs/tu-phim"
-import { parseTime } from "src/logic/parseTime"
-import { useAuthStore } from "stores/auth"
-import { ref, watch, watchEffect } from "vue"
-import { useRequest } from "vue-request"
-import { useRouter } from "vue-router"
+watch(
+  () => route.meta?.hideDrawer === true,
+  (hideDrawer) => {
+    if (hideDrawer) showDrawer.value = false
+  },
+  { immediate: true }
+)
 // import QrScanner from "qr-scanner"
 
 const showDialogLogin = ref(false)
-const showDialogQR = ref(false)
 
 const showPassword = ref(false)
 
@@ -399,7 +421,6 @@ async function login() {
     width: (100% / 5);
   }
 }
-
 
 .only-router-active {
   display: none;
