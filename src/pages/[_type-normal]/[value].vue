@@ -1,96 +1,107 @@
 <template>
-  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
-    <q-toolbar v-if="!data" class="relative">
-      <q-skeleton type="QBtn" flat dense round />
+  <div v-if="data?.filter" class="px-6">
+    <div>
+      <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
+        >Thể loại:
+      </span>
+      <q-btn
+        v-for="item in data.filter.gener"
+        :key="item.text"
+        dense
+        no-caps
+        class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
+        :class="{
+          'text-main font-weight-medium': genres.includes(item.value)
+        }"
+        @click="genres.includes(item.value) ? genres.splice(genres.indexOf(item.value) >>> 0) : genres.push(item.value)"
+        outline
+        flat
+        :label="item.text"/>
+    </div>
 
-      <q-space />
-      <q-skeleton
-        type="text"
-        class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px]"
-        width="120px"
-      />
+    <div>
+      <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
+        >Sắp xếp:
+      </span>
+      <q-btn
+        v-for="item in data.filter.sorter"
+        :key="item.value"
+        dense
+        no-caps
+        class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
+        :class="{
+          'text-main font-weight-medium': sorter === item.value
+        }"
+        @click="sorter = item.value"
+        outline
+        flat
+        :label="item.text"/>
+    </div>
 
-      <q-skeleton type="QBtn" flat dense round />
-    </q-toolbar>
+    <div>
+      <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
+        >Loại:
+      </span>
+      <q-btn
+        v-for="item in data.filter.typer"
+        :key="item.value"
+        dense
+        no-caps
+        class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
+        :class="{
+          'text-main font-weight-medium': typer === item.value
+        }"
+        @click="typer = item.value"
+        outline
+        flat
+        :label="item.text"/>
+    </div>
 
-    <template v-else>
-      <q-toolbar class="relative">
-        <q-btn flat dense round class="mr-2" @click.stop="router.back()">
-          <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
-        </q-btn>
+    <div>
+      <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
+        >Mùa:
+      </span>
+      <q-btn
+        v-for="item in data.filter.seaser"
+        :key="item.value"
+        dense
+        no-caps
+        class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
+        :class="{
+          'text-main font-weight-medium': seaser === item.value
+        }"
+        @click="seaser = item.value"
+        outline
+        flat
+        :label="item.text"/>
+    </div>
 
-        <q-space />
+    <div>
+      <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
+        >Năm:
+      </span>
+      <q-btn
+        v-for="item in data.filter.year"
+        :key="item.value"
+        dense
+        no-caps
+        class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
+        :class="{
+          'text-main font-weight-medium': year === item.value
+        }"
+        @click="year = item.value"
+        outline
+flat
+        :label="item.text"/>
+    </div>
+  </div>
 
-        <q-toolbar-title
-          class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
-        >
-          {{
-            route.params.type_normal === "danh-sach" &&
-            route.params.value === "all"
-              ? "Mục lục"
-              : title
-          }}
-        </q-toolbar-title>
-
-        <q-btn flat dense round @click="showDialogSorter = true">
-          <Icon icon="fluent:filter-24-regular" width="24" height="24" />
-        </q-btn>
-      </q-toolbar>
-
-      <div class="row text-subtitle1 text-[16px] py-4">
-        <div class="col-4 px-1">
-          <div
-            class="bg-dark-700 px-4 text-zinc-400 py-1 h-[45px] flex items-center justify-between"
-            @click="showDialogGener = true"
-          >
-            Thể loại
-            <Icon icon="fluent:chevron-down-24-regular" />
-          </div>
-        </div>
-        <div v-if="defaultsOptions.typer" class="col-4 px-1">
-          <div
-            class="bg-dark-700 px-4 text-zinc-400 py-1 h-[45px] flex items-center justify-between"
-            @click="showDialogSeaser = true"
-          >
-            Mùa
-            <Icon icon="fluent:chevron-down-24-regular" />
-          </div>
-        </div>
-        <div v-else class="col-4 px-1">
-          <div
-            class="bg-dark-700 px-4 text-zinc-400 py-1 h-[45px] flex items-center justify-between"
-            @click="showDialogTyper = true"
-          >
-            Loại
-            <Icon icon="fluent:chevron-down-24-regular" />
-          </div>
-        </div>
-        <div class="col-4 px-1">
-          <div
-            class="bg-dark-700 px-4 text-zinc-400 py-1 h-[45px] flex items-center justify-between"
-            @click="showDialogSorter = true"
-          >
-            Sắp xếp
-            <Icon icon="fluent:chevron-down-24-regular" />
-          </div>
-        </div>
-      </div>
-
-      <div v-if="textFilter" class="text-center text-gray-500 mb-1">
-        Đã chọn:
-        {{ textFilter }}
-      </div>
-    </template>
-  </header>
-
-  <!-- main -->
-
-  <SkeletonGridCard v-if="loading" :count="12" class="pt-[125px]" />
+  <SkeletonGridCard v-if="loading" :count="12" />
   <template v-else-if="data">
-    <ScreenNotFound v-if="data.items.length === 0" class="pt-[125px]" />
+    <ScreenNotFound v-if="data.items.length === 0" />
 
-    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[125px]">
-      <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250">
+    <q-pull-to-refresh v-else @refresh="refresh">
+      <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250" class="px-4">
         <GridCard :items="data.items" />
 
         <template v-slot:loading>
@@ -101,382 +112,7 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run" class="pt-[125px]" />
-
-  <template v-if="data?.filter">
-    <!-- gener -->
-    <q-dialog
-      v-model="showDialogGener"
-      position="bottom"
-      no-route-dismiss
-      class="children:!px-0"
-      full-width
-    >
-      <q-card flat class="w-full pt-3 !max-h-[60vh]">
-        <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Loại</div>
-
-          <q-btn
-            dense
-            flat
-            no-caps
-            class="text-weight-normal"
-            @click="genres.splice(0)"
-            >Đặt lại</q-btn
-          >
-        </q-card-section>
-
-        <q-card-section class="row">
-          <div
-            v-for="item in data?.filter.gener"
-            :key="item.value"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
-            <q-btn
-              dense
-              no-caps
-              flat
-              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-              :disable="defaultsOptions.gener === item.value"
-              @click="toggleGenres(item.value)"
-              :class="{
-                'bg-main':
-                  defaultsOptions.gener === item.value ||
-                  indexInGenres(item.value) > -1,
-              }"
-              >{{ item.text }}</q-btn
-            >
-          </div>
-          <!-- -->
-        </q-card-section>
-
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-      </q-card>
-    </q-dialog>
-
-    <!-- seaser -->
-    <q-dialog
-      v-model="showDialogSeaser"
-      position="bottom"
-      no-route-dismiss
-      class="children:!px-0"
-      full-width
-    >
-      <q-card flat class="w-full pt-3">
-        <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Mùa</div>
-
-          <q-btn
-            dense
-            flat
-            no-caps
-            class="text-weight-normal"
-            @click="seaser = null"
-            >Đặt lại</q-btn
-          >
-        </q-card-section>
-
-        <q-card-section class="row">
-          <div
-            v-for="item in data?.filter.seaser"
-            :key="item.value"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
-            <q-btn
-              dense
-              no-caps
-              flat
-              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-              :disable="!!defaultsOptions.seaser"
-              @click="seaser = item.value"
-              :class="{
-                'bg-main':
-                  defaultsOptions.seaser === item.value ||
-                  seaser === item.value,
-              }"
-              >{{ item.text }}</q-btn
-            >
-          </div>
-          <!-- -->
-        </q-card-section>
-
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-      </q-card>
-    </q-dialog>
-
-    <!-- typer -->
-    <q-dialog
-      v-model="showDialogTyper"
-      position="bottom"
-      no-route-dismiss
-      class="children:!px-0"
-      full-width
-    >
-      <q-card flat class="w-full pt-3">
-        <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Loại</div>
-
-          <q-btn
-            dense
-            flat
-            no-caps
-            class="text-weight-normal"
-            @click="typer = null"
-            >Đặt lại</q-btn
-          >
-        </q-card-section>
-
-        <q-card-section class="row">
-          <div
-            v-for="item in data?.filter.typer"
-            :key="item.value"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
-            <q-btn
-              dense
-              no-caps
-              flat
-              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-              :disable="!!defaultsOptions.typer"
-              @click="typer = item.value"
-              :class="{
-                'bg-main':
-                  defaultsOptions.typer === item.value || typer === item.value,
-              }"
-              >{{ item.text }}</q-btn
-            >
-          </div>
-          <!-- -->
-        </q-card-section>
-
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-      </q-card>
-    </q-dialog>
-
-    <!-- sorter -->
-    <q-dialog
-      v-model="showDialogSorter"
-      position="bottom"
-      no-route-dismiss
-      class="children:!px-0"
-      full-width
-    >
-      <q-card flat class="w-full pt-3">
-        <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Sắp xếp</div>
-
-          <q-btn
-            dense
-            flat
-            no-caps
-            class="text-weight-normal"
-            @click="sorter = null"
-            >Đặt lại</q-btn
-          >
-        </q-card-section>
-
-        <q-card-section class="row">
-          <div
-            v-for="item in data?.filter.sorter"
-            :key="item.value"
-            class="col-4 col-sm-3 col-md-4 px-1 py-1"
-          >
-            <q-btn
-              dense
-              no-caps
-              flat
-              class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-              @click="sorter = item.value"
-              :class="{
-                'bg-main': sorter === item.value,
-              }"
-              >{{ item.text }}</q-btn
-            >
-          </div>
-          <!-- -->
-        </q-card-section>
-
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-      </q-card>
-    </q-dialog>
-
-    <!-- filter -->
-    <q-dialog
-      v-model="showDialogFilter"
-      position="bottom"
-      no-route-dismiss
-      full-width
-    >
-      <q-card flat class="w-full pt-3 !max-h-[60vh]">
-        <div class="relative">
-          <!-- sorter -->
-          <q-card-section class="py-0 flex items-center justify-between">
-            <div class="text-subtitle1 mx-1">Sắp xếp theo</div>
-
-            <q-btn
-              dense
-              flat
-              no-caps
-              class="text-weight-normal"
-              @click="resetFilter"
-              >Đặt lại</q-btn
-            >
-          </q-card-section>
-
-          <q-card-section class="row">
-            <div
-              v-for="item in data?.filter.sorter"
-              :key="item.value"
-              class="col-4 col-sm-3 col-md-4 px-1 py-1"
-            >
-              <q-btn
-                dense
-                no-caps
-                flat
-                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-                @click="sorter = item.value"
-                :class="{
-                  'bg-main': sorter === item.value,
-                }"
-                >{{ item.text }}</q-btn
-              >
-            </div>
-            <!-- -->
-          </q-card-section>
-
-          <!-- gener -->
-          <q-card-section class="py-0">
-            <div class="text-subtitle1 mx-1">Thể loại</div>
-          </q-card-section>
-
-          <q-card-section class="row">
-            <div
-              v-for="item in showFullGener
-                ? data?.filter.gener
-                : data?.filter.gener.slice(0, 11)"
-              :key="item.value"
-              class="col-4 col-sm-3 col-md-4 px-1 py-1"
-            >
-              <q-btn
-                dense
-                no-caps
-                flat
-                class="py-2 bg-[#292929] text-weight-normal w-full min-h-10 ease-bg"
-                :disable="defaultsOptions.gener === item.value"
-                @click="toggleGenres(item.value)"
-                :class="{
-                  'bg-main':
-                    defaultsOptions.gener === item.value ||
-                    indexInGenres(item.value) > -1,
-                }"
-                >{{ item.text }}</q-btn
-              >
-            </div>
-
-            <div
-              v-if="!showFullGener"
-              @click="showFullGener = true"
-              class="col-4 col-sm-3 col-md-4 px-1 py-1"
-            >
-              <q-btn
-                dense
-                no-caps
-                flat
-                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg min-h-10"
-              >
-                <Icon icon="fluent:chevron-down-24-regular" />
-              </q-btn>
-            </div>
-          </q-card-section>
-
-          <!-- typer -->
-          <q-card-section class="py-0">
-            <div class="text-subtitle1 mx-1">Loại</div>
-          </q-card-section>
-
-          <q-card-section class="row">
-            <div
-              v-for="item in data?.filter.typer"
-              :key="item.value"
-              class="col-4 col-sm-3 col-md-4 px-1 py-1"
-            >
-              <q-btn
-                dense
-                no-caps
-                flat
-                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-                :disable="!!defaultsOptions.typer"
-                @click="typer = item.value"
-                :class="{
-                  'bg-main':
-                    defaultsOptions.typer === item.value ||
-                    typer === item.value,
-                }"
-                >{{ item.text }}</q-btn
-              >
-            </div>
-          </q-card-section>
-
-          <!-- seaser -->
-          <q-card-section class="py-0">
-            <div class="text-subtitle1 mx-1">Mùa</div>
-          </q-card-section>
-
-          <q-card-section class="row">
-            <div
-              v-for="item in data?.filter.seaser"
-              :key="item.value"
-              class="col-4 col-sm-3 col-md-4 px-1 py-1"
-            >
-              <q-btn
-                dense
-                no-caps
-                flat
-                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-                :disable="!!defaultsOptions.seaser"
-                @click="seaser = item.value"
-                :class="{
-                  'bg-main':
-                    defaultsOptions.seaser === item.value ||
-                    seaser === item.value,
-                }"
-                >{{ item.text }}</q-btn
-              >
-            </div>
-          </q-card-section>
-
-          <!-- year -->
-          <q-card-section class="py-0">
-            <div class="text-subtitle1 mx-1">Năm</div>
-          </q-card-section>
-
-          <q-card-section class="row">
-            <div
-              v-for="item in data?.filter.year"
-              :key="item.value"
-              class="col-4 col-sm-3 col-md-4 px-1 py-1"
-            >
-              <q-btn
-                dense
-                no-caps
-                flat
-                class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-                :disable="!!defaultsOptions.year"
-                @click="year = item.value"
-                :class="{
-                  'bg-main':
-                    defaultsOptions.year === item.value || year === item.value,
-                }"
-                >{{ item.text }}</q-btn
-              >
-            </div>
-          </q-card-section>
-        </div>
-
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
-      </q-card>
-    </q-dialog>
-  </template>
+  <ScreenError v-else @click:retry="run" />
 </template>
 
 <script lang="ts" setup>
@@ -494,12 +130,6 @@ import { useRoute, useRouter } from "vue-router"
 const route = useRoute()
 const router = useRouter()
 const infiniteScrollRef = ref<QInfiniteScroll>()
-
-const showDialogGener = ref(false)
-const showDialogSeaser = ref(false)
-const showDialogTyper = ref(false)
-const showDialogSorter = ref(false)
-const showDialogFilter = ref(false)
 
 const genres = reactive<string[]>([])
 const seaser = ref<string | null>(null)

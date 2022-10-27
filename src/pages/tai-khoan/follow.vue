@@ -1,24 +1,19 @@
 <template>
-  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
-    <q-toolbar class="relative">
-      <q-btn flat dense round class="mr-2" @click.stop="router.back()">
-        <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
-      </q-btn>
-      <q-toolbar-title
-        class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
-      >
-        Anime đã theo dõi</q-toolbar-title
-      >
-    </q-toolbar>
-  </header>
+  <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
+    <div class="text-[16px] py-2 px-4">
+   Anime đã theo dõi
+    </div>
+  </q-page-sticky>
 
   <!-- main -->
 
-  <SkeletonGridCard v-if="loading" :count="12" class="pt-[47px]" />
-  <template v-else-if="data">
-    <ScreenNotFound v-if="data.items.length === 0" class="pt-[47px]" />
+<div class="pt-[32px]">
 
-    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[47px]">
+  <SkeletonGridCard v-if="loading" :count="12"  />
+  <template v-else-if="data">
+    <ScreenNotFound v-if="data.items.length === 0"  />
+
+    <q-pull-to-refresh v-else @refresh="refresh">
       <q-infinite-scroll @load="onLoad" :offset="250" ref="infiniteScrollRef">
         <GridCard :items="data.items" />
 
@@ -30,7 +25,8 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run" class="pt-[47px]" />
+  <ScreenError v-else @click:retry="run" />
+</div>
 </template>
 
 <script lang="ts" setup>

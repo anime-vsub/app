@@ -1,9 +1,12 @@
 <template>
-  <div
-    class="w-full overflow-hidden fixed top-0 left-0 z-200 bg-[#000]"
-    ref="playerWrapRef"
-  >
-    <q-responsive :ratio="16 / 9" class="player__wrap">
+  <div class="w-full overflow-hidden bg-[#000]" ref="playerWrapRef">
+    <q-responsive
+      :ratio="841 / 483"
+      class="player__wrap max-h-[calc(100vh-169px)]"
+      :class="{
+        fullscreen: artFullscreen,
+      }"
+    >
       <video
         ref="video"
         :poster="poster"
@@ -21,6 +24,7 @@
         @ratechange="
           artPlaybackRate = ($event.target as HTMLVideoElement).playbackRate
         "
+        @volumechange="artVolume = $event.target.volume"
         @canplay=";(artLoading = false), onVideoCanPlay()"
         @canplaythrough="artLoading = false"
         @waiting="artLoading = true"
@@ -29,46 +33,14 @@
       />
 
       <div
-        class="absolute top-0 left-0 w-full h-full"
+        class="absolute top-0 left-0 w-full h-full cursor-none"
         @touchstart="onBDTouchStart"
         @touchmove="onBDTouchMove"
         @touchend="onBDTouchEnd"
         @click="onClickSkip($event, true)"
+        @mousemove="setArtControlShow(true)"
         v-show="holdedBD || !artControlShow"
       />
-
-      <!-- backdrop show skip icon -->
-      <div
-        v-if="doubleClicking"
-        class="absolute top-0 left-0 w-full h-full pointer-events-none flex items-center justify-center text-[16px]"
-      >
-        <div
-          v-if="doubleClicking === 'left'"
-          class="flex items-center bg-[rgba(0,0,0,.5)] py-1 px-2 rounded-md"
-        >
-          <Icon
-            icon="fluent:fast-forward-24-regular"
-            :rotate="2"
-            width="24"
-            height="24"
-            class="mr-1"
-          />
-          -{{ countSkip * 10 }}
-        </div>
-
-        <div
-          v-else
-          class="flex items-center bg-[rgba(0,0,0,.5)] py-1 px-2 rounded-md"
-        >
-          +{{ countSkip * 10 }}
-          <Icon
-            icon="fluent:fast-forward-24-regular"
-            width="24"
-            height="24"
-            class="ml-1"
-          />
-        </div>
-      </div>
 
       <transition name="fade__ease-in-out">
         <div
@@ -80,23 +52,18 @@
           @touchmove="onBDTouchMove"
           @touchend="onBDTouchEnd"
           @click="onClickSkip($event, false)"
+          @mousemove="setArtControlShow(true)"
           v-show="holdedBD || artControlShow"
         >
           <div class="toolbar-top">
             <div class="flex items-start w-max-[70%] flex-nowrap">
-              <q-btn flat dense round class="mr-2" @click.stop="router.back()">
-                <Icon
-                  icon="fluent:chevron-left-24-regular"
-                  width="25"
-                  height="25"
-                />
-              </q-btn>
-
               <div class="">
-                <div class="line-clamp-1 text-[18px] text-weight-medium">
+                <div
+                  class="line-clamp-1 art-title text-[18px] text-weight-medium"
+                >
                   {{ name }}
                 </div>
-                <div v-if="nameCurrentChap" class="text-gray-300">
+                <div v-if="nameCurrentChap" class="art-subtitle text-gray-300">
                   Tập
                   {{ nameCurrentChap }}
                 </div>
@@ -113,13 +80,6 @@
               >
                 <Icon
                   icon="fluent:flash-flow-24-regular"
-                  width="25"
-                  height="25"
-                />
-              </q-btn>
-              <q-btn dense flat round @click="showDialogSetting = true">
-                <Icon
-                  icon="fluent:settings-24-regular"
                   width="25"
                   height="25"
                 />
@@ -184,7 +144,7 @@
             </q-btn>
           </div>
 
-          <div class="toolbar-bottom">
+          <div class="toolbar-bottom" @click.stop>
             <div class="art-more-controls flex items-center justify-between">
               <div class="flex items-center">
                 <q-btn
@@ -208,12 +168,58 @@
                   Tiếp
                 </q-btn>
 
+                <div
+                  class="flex items-center mr-6 text-weight-normal art-btn art-volume"
+                  :class="{ active: artVolumeHoving }"
+                  @mouseover="artVolumeHoving = true"
+                  @mouseout="artVolumeHoving = false"
+                >
+                  <Icon
+                    :icon="
+                      [
+                        'fluent:speaker-off-24-regular',
+                        'fluent:speaker-1-24-regular',
+                        'fluent:speaker-2-24-regular',
+                      ][artVolume === 0 ? 0 : artVolume < 0.5 ? 1 : 2]
+                    "
+                    class="mr-2 art-icon"
+                    width="18"
+                    height="18"
+                  />
+
+                  <div
+                    class="overflow-hidden py-1 w-0 transition-width duration-300 ease-in-out slider"
+                    @mouseout.stop
+                  >
+                    <q-slider
+                      :model-value="artVolume"
+                      @update:model-value="setArtVolume($event)"
+                      :min="0"
+                      :max="1"
+                      :step="0.01"
+                      dense
+                      color="white"
+                      track-size="3px"
+                      thumb-size="17px"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  class="art-control art-control-time art-control-onlyText hide-fscrn"
+                  data-index="30"
+                  style="cursor: auto"
+                >
+                  {{ parseTime(artCurrentTime) }} /
+                  {{ parseTime(artDuration) }}
+                </div>
+
                 <q-btn
                   dense
                   flat
                   no-caps
                   @click="showDialogChapter = true"
-                  class="text-weight-normal art-btn"
+                  class="text-weight-normal art-btn only-fscrn"
                 >
                   <Icon
                     icon="fluent:list-24-regular"
@@ -231,7 +237,6 @@
                   flat
                   no-caps
                   class="mr-6 text-weight-normal art-btn"
-                  @click="showDialogQuality = true"
                 >
                   <Icon
                     icon="bi:badge-hd"
@@ -240,13 +245,56 @@
                     height="18"
                   />
                   {{ artQuality }}
+
+                  <q-menu
+                    v-model="showMenuQuality"
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[0, 20]"
+                    class="min-w-[200px]"
+                  >
+                    <div
+                      class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                    >
+                      Chất lượng
+
+                      <q-btn
+                        dense
+                        flat
+                        round
+                        icon="close"
+                        class="text-zinc-500"
+                        v-close-popup
+                      />
+                    </div>
+                    <div
+                      class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
+                    >
+                      <ul>
+                        <li
+                          v-for="({ html }, index) in sources"
+                          :key="html"
+                          class="py-2 text-center px-15"
+                          :class="{
+                            'c--main':
+                              html === artQuality ||
+                              (!artQuality && index === 0),
+                          }"
+                          @click="setArtQuality(html)"
+                        >
+                          {{ html }}
+                        </li>
+                      </ul>
+
+                      <div class="bottom-drop" />
+                    </div>
+                  </q-menu>
                 </q-btn>
                 <q-btn
                   dense
                   flat
                   no-caps
-                  @click="showDialogPlayback = true"
-                  class="text-weight-normal art-btn"
+                  class="mr-6 ttext-weight-normal art-btn"
                 >
                   <Icon
                     icon="fluent:top-speed-24-regular"
@@ -255,15 +303,83 @@
                     height="18"
                   />
                   {{ artPlaybackRate }}x
+
+                  <q-menu
+                    v-model="showMenuPlaybackRate"
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[0, 20]"
+                    class="min-w-[200px]"
+                  >
+                    <div
+                      class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                    >
+                      Tốc độ
+
+                      <q-btn
+                        dense
+                        flat
+                        round
+                        icon="close"
+                        class="text-zinc-500"
+                        v-close-popup
+                      />
+                    </div>
+                    <div
+                      class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
+                    >
+                      <ul>
+                        <li
+                          v-for="{ name, value } in [
+                            ...playbackRates,
+                          ].reverse()"
+                          :key="value"
+                          class="py-2 text-center px-12"
+                          :class="{
+                            'c--main': value === artPlaybackRate,
+                          }"
+                          @click="setArtPlaybackRate(value)"
+                        >
+                          {{ name }}
+                        </li>
+                      </ul>
+
+                      <div class="bottom-drop" />
+                    </div>
+                  </q-menu>
+                </q-btn>
+                <q-btn
+                  dense
+                  flat
+                  no-caps
+                  class="text-weight-normal art-btn"
+                  @click="setArtFullscreen(!artFullscreen)"
+                >
+                  <Icon
+                    v-if="!artFullscreen"
+                    icon="fluent:full-screen-maximize-24-regular"
+                    class="art-icon"
+                    width="24"
+                    height="24"
+                  />
+                  <Icon
+                    v-else
+                    icon="fluent:full-screen-minimize-24-regular"
+                    class="art-icon"
+                    width="24"
+                    height="24"
+                  />
                 </q-btn>
               </div>
             </div>
 
             <div
               class="art-control-progress"
-              @touchstart.stop="onIndicatorMove"
-              @touchmove.stop="onIndicatorMove"
-              @touchend.stop="onIndicatorEnd"
+              @mousedown.stop="onIndicatorMove"
+              @mousemove.stop="onIndicatorMove"
+              @mouseup.stop="onIndicatorEnd"
+              @mouseover="artControlProgressHoving = true"
+              @mouseout="artControlProgressHoving = false"
             >
               <div class="art-control-progress-inner" ref="progressInnerRef">
                 <div
@@ -272,6 +388,11 @@
                     width: `${artPercentageResourceLoaded * 100}%`,
                   }"
                 />
+                <div v-if="artControlProgressHoving && !currentingTime" class="art-progress-hoved"
+                :data-title="parseTime(artCurrentTimeHoving)"
+                :style="{
+                  width: `${artCurrentTimeHoving/artDuration * 100}%`
+                }" />
                 <div
                   class="art-progress-played"
                   :style="{
@@ -280,10 +401,10 @@
                 >
                   <div
                     class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
-                    :data-title="parseTime(artCurrentTime)"
-                    @touchstart.stop="currentingTime = true"
-                    @touchmove.stop="onIndicatorMove"
-                    @touchend.stop="onIndicatorEnd"
+                    :data-title="parseTime(artCurrentTimeHoving)"
+                    @mousedown.stop="currentingTime = true"
+                    @mousemove.stop="onIndicatorMove"
+                    @mouseup.stop="onIndicatorEnd"
                   >
                     <img width="16" heigth="16" src="~assets/indicator.svg" />
                   </div>
@@ -291,7 +412,7 @@
               </div>
             </div>
 
-            <div class="art-controls">
+            <div class="art-controls only-fscrn">
               <div class="art-controls-left">
                 <div
                   class="art-control art-control-time art-control-onlyText"
@@ -300,33 +421,6 @@
                 >
                   {{ parseTime(artCurrentTime) }} /
                   {{ parseTime(artDuration) }}
-                </div>
-              </div>
-              <div class="art-controls-center"></div>
-              <div class="art-controls-right">
-                <div
-                  class="art-control art-control-fullscreen hint--rounded hint--top"
-                  data-index="70"
-                  aria-label="Fullscreen"
-                  @click="setArtFullscreen(!artFullscreen)"
-                >
-                  <i
-                    v-if="!artFullscreen"
-                    class="art-icon art-icon-fullscreenOn"
-                  >
-                    <Icon
-                      icon="fluent:full-screen-maximize-24-regular"
-                      width="22"
-                      height="22"
-                    />
-                  </i>
-                  <i v-else class="art-icon art-icon-fullscreenOff">
-                    <Icon
-                      icon="fluent:full-screen-minimize-24-regular"
-                      width="22"
-                      height="22"
-                    />
-                  </i>
                 </div>
               </div>
             </div>
@@ -489,157 +583,9 @@
           </q-tab-panels>
         </div>
       </ArtDialog>
-      <ArtDialog
-        :model-value="artFullscreen && showDialogPlayback"
-        @update:model-value="showDialogPlayback = $event"
-        title="Tốc độ"
-      >
-        <ul>
-          <li
-            v-for="{ name, value } in [...playbackRates].reverse()"
-            :key="value"
-            class="py-2 text-center px-12"
-            :class="{
-              'c--main': value === artPlaybackRate,
-            }"
-            @click="setArtPlaybackRate(value)"
-          >
-            {{ name }}
-          </li>
-        </ul>
-      </ArtDialog>
-      <ArtDialog
-        :model-value="artFullscreen && showDialogQuality"
-        @update:model-value="showDialogQuality = $event"
-        title="Chất lượng"
-      >
-        <ul>
-          <li
-            v-for="({ html }, index) in sources"
-            :key="html"
-            class="py-2 text-center px-15"
-            :class="{
-              'c--main': html === artQuality || (!artQuality && index === 0),
-            }"
-            @click="setArtQuality(html)"
-          >
-            {{ html }}
-          </li>
-        </ul>
-      </ArtDialog>
       <!-- /dialogs -->
     </q-responsive>
   </div>
-
-  <!-- teleporting -->
-  <q-dialog
-    :model-value="!artFullscreen && showDialogSetting"
-    @update:model-value="showDialogSetting = $event"
-    position="bottom"
-    class="children:!px-0"
-    full-width
-  >
-    <q-card flat class="w-full pt-3">
-      <q-list>
-        <q-item clickable v-ripple>
-          <q-item-section avatar>
-            <Icon
-              icon="fluent:text-bullet-list-square-warning-24-regular"
-              width="22"
-              height="22"
-            />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label> Báo lỗi </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item clickable v-ripple>
-          <q-item-section avatar>
-            <Icon
-              icon="fluent:person-feedback-24-regular"
-              width="22"
-              height="22"
-            />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label> Phản hồi </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item clickable v-ripple @click="showDialogQuality = true">
-          <q-item-section avatar>
-            <Icon icon="bi:badge-hd" width="22" height="22" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label> Chất lượng </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item clickable v-ripple @click="showDialogPlayback = true">
-          <q-item-section avatar>
-            <Icon icon="fluent:top-speed-24-regular" width="22" height="22" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label> Tốc độ </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-btn flat no-caps class="w-full py-2 mt-2" v-close-popup>Hủy</q-btn>
-      </q-list>
-    </q-card>
-  </q-dialog>
-  <!-- quality -->
-  <q-dialog
-    :model-value="!artFullscreen && showDialogQuality"
-    @update:model-value="showDialogQuality = $event"
-    position="bottom"
-    class="children:!px-0"
-    full-width
-  >
-    <q-card flat class="w-full text-[16px]">
-      <q-list>
-        <q-item v-for="item in sources" :key="item.html" clickable v-ripple>
-          <q-item-section avatar>
-            <q-icon v-if="artQuality === item.html" name="check" />
-          </q-item-section>
-          <q-item-section>
-            {{ item.html }}
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-card>
-  </q-dialog>
-  <!-- playback -->
-  <q-dialog
-    :model-value="!artFullscreen && showDialogPlayback"
-    @update:model-value="showDialogPlayback = $event"
-    position="bottom"
-    class="children:!px-0"
-    full-width
-  >
-    <q-card flat class="w-full text-[16px]">
-      <q-list>
-        <q-item
-          v-for="{ name, value } in playbackRates"
-          :key="value"
-          clickable
-          v-ripple
-          @click="setArtPlaybackRate(value)"
-        >
-          <q-item-section avatar>
-            <q-icon v-if="artPlaybackRate === value" name="check" />
-          </q-item-section>
-          <q-item-section>
-            {{ name }}
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-card>
-  </q-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -815,9 +761,20 @@ watch(
 
       if (!authStore.user_data) return
 
-      const userRef = doc(db, "users", sha256(authStore.user_data.email + authStore.user_data.name))
+      const userRef = doc(
+        db,
+        "users",
+        sha256(authStore.user_data.email + authStore.user_data.name)
+      )
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const seasonRef = doc(userRef, "history", props.currentSeason!.slice(0, props.currentSeason.lastIndexOf("$") >>> 0))
+      const seasonRef = doc(
+        userRef,
+        "history",
+        props.currentSeason!.slice(
+          0,
+          props.currentSeason.lastIndexOf("$") >>> 0
+        )
+      )
       const chapRef = doc(seasonRef, "chaps", currentChap)
 
       const progressInCloud = await getDoc(chapRef)
@@ -842,6 +799,10 @@ const setArtPlaybackRate = (value: number) => {
   }
   video.value.playbackRate = value
   addNotice(`${value}x`)
+}
+const artVolume = ref(1)
+const setArtVolume = (value: number) => {
+  video.value.volume = value
 }
 
 // value control other
@@ -869,7 +830,7 @@ const setArtFullscreen = async (fullscreen: boolean) => {
       overlay: true,
     })
   } else {
-    await document.exitFullscreen()
+    await document.exitFullscreen().catch(() => {})
     screen.orientation.unlock()
     StatusBar.show()
     NavigationBar.show()
@@ -880,6 +841,13 @@ const setArtFullscreen = async (fullscreen: boolean) => {
 
   artFullscreen.value = document.fullscreenElement !== null
 }
+function onFullscreenchange() {
+  setArtFullscreen(document.fullscreenElement !== null)
+}
+document.addEventListener("fullscreenchange", onFullscreenchange)
+onBeforeUnmount(() =>
+  document.removeEventListener("fullscreenchange", onFullscreenchange)
+)
 
 onBeforeRouteLeave(() => {
   if (artFullscreen.value) {
@@ -947,7 +915,11 @@ watch(
       })
     }
 
-    const seasonRef = doc(userRef, "history", currentSeason.slice(0, currentSeason.lastIndexOf("$") >>> 0))
+    const seasonRef = doc(
+      userRef,
+      "history",
+      currentSeason.slice(0, currentSeason.lastIndexOf("$") >>> 0)
+    )
 
     if (!(await getDoc(seasonRef)).exists()) {
       //
@@ -1026,6 +998,10 @@ function onVideoTimeUpdate() {
     artPlaying.value &&
     !currentingTime.value &&
     artControlShow.value &&
+    !showMenuQuality.value &&
+    !showMenuPlaybackRate.value &&
+    !artVolumeHoving.value &&
+    !artControlProgressHoving.value &&
     Date.now() - activeTime >= 3e3
   ) {
     artControlShow.value = false
@@ -1033,7 +1009,9 @@ function onVideoTimeUpdate() {
   saveCurTimeToPer()
 }
 function onVideoError(event: Event) {
-  console.log("video error ", event)
+  if (!event.target.error) return
+
+  console.log("video error ", event.target.error)
 
   $q.notify({
     message: "Đã gặp sự cố khi phát lại",
@@ -1188,6 +1166,10 @@ function onIndicatorMove(
   offsetX: number,
   curTimeStart: number
 ): void
+
+const artCurrentTimeHoving = ref(0)
+const artControlProgressHoving = ref(false)
+
 // eslint-disable-next-line no-redeclare
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
@@ -1196,12 +1178,8 @@ function onIndicatorMove(
   offsetX?: number,
   curTimeStart?: number
 ) {
-  currentingTime.value = true
-
   const maxX = innerEl.offsetWidth
   const { left } = innerEl.getBoundingClientRect()
-
-  console.log(offsetX)
 
   if (offsetX) {
     const clientX =
@@ -1214,7 +1192,7 @@ function onIndicatorMove(
       left
 
     // patch x exists -> enable mode add
-    artCurrentTime.value = Math.max(
+    artCurrentTimeHoving.value = Math.max(
       0,
       Math.min(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -1237,15 +1215,21 @@ function onIndicatorMove(
     )
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    artCurrentTime.value = (video.value!.duration * clientX) / maxX
+    artCurrentTimeHoving.value = (video.value!.duration * clientX) / maxX
   }
+
+  if (event.type === "mousemove" && event.buttons !== 1)
+    return;
+
+artCurrentTime.value = artCurrentTimeHoving.value
+  currentingTime.value = true
 
   activeTime = Date.now()
 }
 function onIndicatorEnd() {
   currentingTime.value = false
 
-  setArtCurrentTime(artCurrentTime.value)
+  setArtCurrentTime(artCurrentTimeHoving.value)
   activeTime = Date.now()
 }
 
@@ -1371,7 +1355,8 @@ function onClickSkip(event: MouseEvent, orFalse: boolean) {
   } else {
     timeoutDbClick && clearTimeout(timeoutDbClick)
     timeoutDbClick = setTimeout(() => {
-      setArtControlShow(orFalse)
+      // setArtControlShow(orFalse)
+      setArtPlaying(!artPlaying.value)
       lastTimeClick = 0
       lastPositionClickIsLeft = null
     }, 300)
@@ -1397,6 +1382,8 @@ function addNotice(text: string) {
   }, 5000)
 }
 
+const artVolumeHoving = ref(false)
+
 const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)
 const showDialogPlayback = ref(false)
@@ -1404,6 +1391,33 @@ const showDialogQuality = ref(false)
 
 watch(showDialogChapter, (status) => {
   if (!status) seasonActive.value = props.currentSeason
+})
+
+const showMenuQuality = ref(false)
+const showMenuPlaybackRate = ref(false)
+
+// keyboard binding
+function onKeypress(event: KeyboardEvent) {
+  switch (event.code) {
+    case "Space":
+      setArtPlaying(!artPlaying.value)
+      break
+    case "KeyF":
+      setArtFullscreen(!artFullscreen.value)
+      break
+    case "ArrowLeft":
+      skipBack()
+      break
+    case "ArrowRight":
+      skipForward()
+      break
+  }
+}
+window.addEventListener("keypress", onKeypress)
+window.addEventListener("keydown", onKeypress)
+onBeforeUnmount(() => {
+  window.removeEventListener("keypress", onKeypress)
+  window.removeEventListener("keydown", onKeypress)
 })
 </script>
 
@@ -1425,16 +1439,6 @@ watch(showDialogChapter, (status) => {
     cursor: pointer;
   }
 
-  .toolbar-top,
-  .toolbar-bottom {
-    @media (orientation: landscape) {
-      padding: {
-        left: 44px !important;
-        right: 44px !important;
-      }
-    }
-  }
-
   .toolbar-top {
     position: absolute;
     top: 0;
@@ -1442,9 +1446,6 @@ watch(showDialogChapter, (status) => {
     width: 100%;
     z-index: 2;
     padding: 8px 16px;
-    @media (orientation: landscape) {
-      padding-top: 32px !important;
-    }
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1453,6 +1454,7 @@ watch(showDialogChapter, (status) => {
     transition: all 0.2s ease-in-out;
   }
   &.currenting-time {
+    @media (hover: none) {
     .toolbar-top,
     .art-controls {
       opacity: 0 !important;
@@ -1467,6 +1469,7 @@ watch(showDialogChapter, (status) => {
     .art-control-progress-inner {
       height: 3px !important;
     }
+    }
   }
   .toolbar-bottom {
     padding: 50px 7px 0;
@@ -1477,9 +1480,6 @@ watch(showDialogChapter, (status) => {
     }
     display: flex;
     flex-direction: column-reverse;
-    @media (orientation: landscape) {
-      padding-bottom: 32px !important;
-    }
     @apply h-min-[100px] z-60;
     background: {
       image: linear-gradient(to top, #000, #0006, #0000);
@@ -1496,9 +1496,6 @@ watch(showDialogChapter, (status) => {
 
     .art-more-controls {
       display: none;
-      @media (orientation: landscape) {
-        display: flex;
-      }
       margin-top: 16px;
     }
 
@@ -1511,18 +1508,31 @@ watch(showDialogChapter, (status) => {
       cursor: pointer;
       z-index: 30;
 
+img {
+  transition: transform 0.22s ease-in-out;
+}
+.art-control-progress-inner {
+  transition: height 0.22s ease-in-out;
+}
+
+      &:hover {
+        img {
+          transform : scale(1.35)
+        }
+        .art-control-progress-inner {
+          height: 5px;
+        }
+      }
+
       .art-control-progress-inner {
         display: flex;
         align-items: center;
         position: relative;
-        height: 2px;
-        @media (orientation: landscape) {
-          height: 4px;
-        }
+        height: 3px;
         width: 100%;
         background: rgba(255, 255, 255, 0.2);
 
-        .art-progress-loaded {
+        .art-progress-loaded, .art-progress-hoved {
           position: absolute;
           z-index: 10;
           left: 0;
@@ -1533,6 +1543,16 @@ watch(showDialogChapter, (status) => {
           width: 0;
           background: rgba(255, 255, 255, 0.4);
           pointer-events: none;
+        }
+
+        .art-progress-hoved {
+          background: rgba($color: #fff, $alpha: 0.5);
+          &:after {
+            content: attr(data-title);
+            @apply absolute right-0 bottom-[100%] transform translate-x--1/2 translate-y-[-16px];
+            background: rgba(0, 0, 0, 0.7);
+            @apply py-2 px-3 font-weight-medium rounded-lg;
+          }
         }
 
         .art-progress-played {
@@ -1659,6 +1679,11 @@ watch(showDialogChapter, (status) => {
         text-align: center;
         cursor: pointer;
         white-space: nowrap;
+
+        @media (min-width: $breakpoint-sm-min) {
+          font-size: 14px;
+        }
+
         .art-icon {
           display: flex;
           align-items: center;
@@ -1693,18 +1718,131 @@ watch(showDialogChapter, (status) => {
     .prev,
     .next {
       display: none;
-      @media (orientation: landscape) {
-        display: inline-block;
+    }
+  }
+
+  .art-volume.active {
+    .slider {
+      @apply px-[20px] mx-[-20px];
+      width: (60px + 40px);
+    }
+  }
+}
+
+.only-fscrn {
+  display: none !important;
+}
+
+.player__wrap.fullscreen {
+  .only-fscrn {
+    display: block !important;
+  }
+  .hide-fscrn {
+    display: none;
+  }
+
+  width: 100vw !important;
+  height: 100vh !important;
+
+  max-height: 100vh !important;
+  .toolbar-top,
+  .toolbar-bottom {
+    padding: {
+      left: 58px !important;
+      right: 58px !important;
+    }
+  }
+
+  .toolbar-top {
+    padding-top: 50px !important;
+  }
+  .toolbar-bottom {
+    padding-bottom: 50px !important;
+
+    .art-more-controls {
+      display: flex;
+    }
+
+    .art-control-progress {
+      .art-control-progress-inner {
+        // height: 4px;
+      }
+    }
+  }
+
+  .art-controls-main {
+    .prev,
+    .next {
+      display: inline-block;
+    }
+  }
+
+  .art-btn .art-icon {
+    @media (min-width: $breakpoint-sm-min) {
+      height: 30px;
+      width: 30px;
+    }
+  }
+
+  .art-title {
+    font-size: 25px;
+  }
+  .art-subtitle {
+    font-size: 20px;
+  }
+}
+
+.player__wrap {
+  .toolbar-top,
+  .toolbar-bottom {
+    padding: {
+      left: 44px !important;
+      right: 44px !important;
+    }
+  }
+
+  .toolbar-top {
+    padding-top: 32px !important;
+  }
+  .toolbar-bottom {
+    padding-bottom: 32px !important;
+
+    .art-more-controls {
+      display: flex;
+    }
+
+    .art-control-progress {
+      .art-control-progress-inner {
+        // height: 4px;
+      }
+    }
+  }
+
+  .art-controls-main {
+    .prev,
+    .next {
+      display: inline-block;
+    }
+  }
+
+  .art-btn {
+    font-size: 12px;
+    @media (min-width: 718px) {
+      font-size: 14px;
+    }
+    .art-icon {
+      @media (min-width: 718px) {
+        width: 20px;
+        height: 20px;
+      }
+      @media (min-width: $breakpoint-sm-min) {
+        height: 25px;
+        width: 25px;
       }
     }
   }
 }
-.player__wrap {
-  @media (orientation: landscape) {
-    width: 100vw !important;
-    height: 100vh !important;
-  }
-}
+
 .notices {
   &-move,
   &-enter-active,
@@ -1718,18 +1856,6 @@ watch(showDialogChapter, (status) => {
   }
   &-active {
     position: absolute;
-  }
-}
-.art-btn {
-  font-size: 12px;
-  @media (min-width: 718px) {
-    font-size: 14px;
-  }
-  .art-icon {
-    @media (min-width: 718px) {
-      width: 20px;
-      height: 20px;
-    }
   }
 }
 </style>

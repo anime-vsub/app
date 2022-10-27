@@ -3,6 +3,10 @@
   user-select: none;
 }
 
+body {
+  --q-dark-page: rgb(17, 19, 25);
+}
+
 .c--main,
 .text-main {
   color: rgb(0, 194, 52);
@@ -14,4 +18,9 @@
 
 .bg-main {
   background-color: rgb(0, 194, 52) !important;
+}
+
+
+.children\:before\:block>*:before {
+  display: block !important;
 }

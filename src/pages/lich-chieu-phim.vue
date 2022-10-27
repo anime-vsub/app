@@ -1,80 +1,68 @@
 <template>
-  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
-    <q-toolbar class="relative">
-      <q-btn flat dense round class="mr-2" @click.stop="router.back()">
-        <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
-      </q-btn>
-      <q-toolbar-title
-        class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
-        >Lịch chiếu</q-toolbar-title
-      >
-    </q-toolbar>
 
-    <q-toolbar>
+<q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
+<div class="w-full">
+  <div class="flex mx-2">
+    <q-avatar size="60px">
+      <img src="~/assets/trending_avatar.png">
+    </q-avatar>
+    <div class="flex items-center">
+      <div class="text-subtitle1 text-weight-medium text-[20px] ml-3">Lịch chiếu</div>
+    </div>
+  </div>
+    <div
+      class="text-[#9a9a9a] mt-3 mb-2 text-[16px]"
+    >
       <div
-        class="overflow-x-scroll whitespace-nowrap text-[#9a9a9a] text-center mb-2"
+        v-for="(item, index) in data"
+        :key="index"
+        class="relative inline-block px-4 py-1"
+        v-ripple
+
+        :class="{
+          'c--main text-weight-medium children:before:block':
+            activeIndex === index ||
+            dayjs(
+              `${item.month}/${item.date}/${new Date().getFullYear()}`
+            ).isToday(),
+        }"
+@click="activeIndex = index"
+
       >
-        <div
-          v-for="(item, index) in data"
-          :ref="(el) => activeIndex === index && (pagItemActiveRef = el as HTMLDivElement)"
-          :key="index"
-          class="relative inline-block px-4"
-          v-ripple
-          :class="{
-            'c--main text-weight-medium':
-              activeIndex === index ||
-              dayjs(
-                `${item.month}/${item.date}/${new Date().getFullYear()}`
-              ).isToday(),
-          }"
-          @click="swiperRef?.slideTo(index)"
+        T{{ dayTextToNum(item.day) }}
+        <br />
+        <span
+         class="relative inline-block before:content-DEFAULT before:hidden before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-[-4px] pb-[2px] before:rounded "
+
         >
-          T{{ dayTextToNum(item.day) }}
-          <br />
-          <span
-            :class="
-              activeIndex === index
-                ? 'relative inline-block before:content-DEFAULT before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-0 pb-[2px] before:rounded'
-                : undefined
-            "
+          {{ item.date
+          }}<template v-if="item.month !== data?.[index - 1]?.month"
+            >/{{ item.month }}</template
           >
-            {{ item.date
-            }}<template v-if="item.month !== data?.[index - 1]?.month"
-              >/{{ item.month }}</template
-            >
-          </span>
-        </div>
+        </span>
       </div>
-    </q-toolbar>
-  </header>
+    </div>
+
+</div>
+</q-page-sticky>
+
+
+<div class="mt-[123px]">
 
   <ScreenLoading v-if="loading" class="absolute pt-[47px]" />
 
-  <div v-else-if="data" class="absolute top-0 h-[100%] w-full pt-[47px]">
-    <swiper
-      class="relative h-full w-full"
-      :slides-per-view="1"
-      @swiper="onSwiper"
-      @slideChange="onSlideChange"
-    >
-      <swiper-slide
-        v-for="(item, index) in data"
-        :key="index"
-        class="h-full overflow-y-auto scroll-smooth"
-        style="white-space: pre-wrap"
-      >
-        <q-pull-to-refresh @refresh="refresh">
+  <div v-else-if="data">
           <template
             v-if="
               dayjs(
-                `${item.month}/${item.date}/${new Date().getFullYear()}`
+                `${data[activeIndex].month}/${data[activeIndex].date}/${new Date().getFullYear()}`
               ).isToday()
             "
           >
             <!-- overtime -->
             <template
               v-for="[time, items] in (_tmp = splitOverTime(
-              groupArray(item.items, 'time_release') as unknown as  Record<string, Awaited<ReturnType<typeof LichChieuPhim>>[0]['items']>
+              groupArray(data[activeIndex].items, 'time_release') as unknown as  Record<string, Awaited<ReturnType<typeof LichChieuPhim>>[0]['items']>
             ))[0]"
               :key="time"
             >
@@ -124,7 +112,7 @@
           </template>
           <template
             v-else
-            v-for="(items, time) in (groupArray(item.items, 'time_release') as Record<string, typeof item.items>)"
+            v-for="(items, time) in (groupArray(data[activeIndex].items, 'time_release') as Record<string, typeof item.items>)"
             :key="time"
           >
             <div class="text-[12px] mt-7 mb-2 flex items-center">
@@ -143,12 +131,11 @@
               </template>
             </CardVertical>
           </template>
-        </q-pull-to-refresh>
-      </swiper-slide>
-    </swiper>
+
   </div>
 
   <ScreenError v-else class="absolute mt-[47px]" />
+</div>
 </template>
 
 <script lang="ts" setup>
@@ -199,22 +186,5 @@ function splitOverTime(
   ]
 }
 
-const swiperRef = ref()
 const activeIndex = ref(0)
-const pagItemActiveRef = ref<HTMLDivElement>()
-
-watchEffect(() => {
-  if (pagItemActiveRef.value) {
-    console.log("scroll into view x")
-    scrollXIntoView(pagItemActiveRef.value)
-  }
-})
-
-function onSwiper(swiper: TSwiper) {
-  swiperRef.value = swiper
-  activeIndex.value = swiper.activeIndex
-}
-function onSlideChange(swiper: TSwiper) {
-  activeIndex.value = swiper.activeIndex
-}
 </script>
