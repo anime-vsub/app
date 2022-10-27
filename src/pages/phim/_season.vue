@@ -177,7 +177,7 @@
   <div v-else class="mx-4 row">
     <div class="col-9">
       <div class="flex-1 mt-4 mb-2">
-        <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px]">
+        <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px] leading-normal">
           {{ data.name }}
         </h1>
       </div>

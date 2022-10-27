@@ -101,7 +101,7 @@
         delay: 5000,
         disableOnInteraction: false,
       }"
-      class="swiper-hot mt-[-50px]"
+      class="swiper-hot mt-[-60px]"
     >
       <swiper-slide
         v-for="(item, index) in data.carousel"

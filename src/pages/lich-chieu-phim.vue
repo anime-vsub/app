@@ -41,8 +41,8 @@
     </div>
   </q-page-sticky>
 
-  <div class="mt-[123px]">
-    <ScreenLoading v-if="loading" class="absolute pt-[47px]" />
+  <div class="pt-[123px]">
+    <ScreenLoading v-if="loading"/>
 
     <div v-else-if="data">
       <template
@@ -128,7 +128,7 @@
       </template>
     </div>
 
-    <ScreenError v-else class="absolute mt-[47px]" />
+    <ScreenError v-else />
   </div>
 </template>
 

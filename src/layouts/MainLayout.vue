@@ -3,7 +3,7 @@
     <q-header
       class="bg-dark-page py-1 px-2"
       :class="{
-        transparent: route.meta?.transparentHeader,
+        '!bg-transparent': route.meta?.transparentHeader,
       }"
     >
       <q-toolbar>
@@ -21,25 +21,32 @@
           <span style="font-family: Caveat" class="text-[25px]">nimeVsub</span>
         </router-link>
 
-        <q-space />
+<q-space />
 
-        <div class="relative">
+        <div class="relative min-w-[164px] w-full max-w-[598px]">
           <q-input
             v-model="query"
             dense
-            square
-            filled
-            class="font-weight-normal input-search bg-[rgba(255,255,255,0)] text-[rgba(255,255,255,0.6)] w-[340px]"
+            rounded
+            outlined
+            class="font-weight-normal input-search bg-[rgba(255,255,255,0)] w-full"
             input-style="background-color: transparent"
             placeholder="Tìm kiếm"
             @focus="focusing = true"
             @blur="focusing = false"
             @keypress.enter="router.push(`/tim-kiem/${query}`)"
-          />
+          >
+            <template v-slot:append>
+              <q-separator vertical inset class="bg-[rgba(153,153,153,0.3)]" />
+              <button type="submit" class="flex items-center" @click.stop.prevent="router.push(`/tim-kiem/${query}`)" @mousedown.stop.prevent>
+              <q-icon name="search" class="pl-6 pr-4 cursor-pointer" />
+              </button>
+            </template>
+          </q-input>
 
           <transition name="q-transition--fade">
             <ul
-              class="absolute w-full bg-dark-page left-0 max-h-[80vh] overflow-y-auto border border-[rgba(255,255,255,0.1)] pb-4"
+              class="absolute w-full bg-dark-page left-0 max-h-[80vh] overflow-y-auto pb-4 top-[calc(100%+8px)] shadow-8"
               v-show="focusing"
             >
               <li
@@ -49,7 +56,10 @@
                 v-ripple
               >
                 <router-link :to="item.path" class="flex flex-nowrap mt-5 mx-4">
-                  <img :src="item.image" width="90" />
+                  <div>
+
+                  <q-img :ratio="267/400" :src="item.image" width="90px" class="rounded"/>
+                  </div>
 
                   <div class="ml-2">
                     <div class="text-subtitle1 text-weight-medium">
@@ -62,6 +72,8 @@
             </ul>
           </transition>
         </div>
+
+        <q-space />
 
         <q-btn flat stack no-caps class="font-weight-normal">
           <Icon icon="fluent:history-24-regular" width="20" height="20" />
@@ -93,14 +105,16 @@
     </q-header>
 
     <q-drawer
-      v-model="showDrawer"
+      :model-value="hideDrawer ? showDrawer : true"
+      @update:model-value="hideDrawer ? (showDrawer = $event) : undefined"
+      :mini="hideDrawer ? false : !showDrawer"
       :width="250"
       :breakpoint="500"
-      overlay
-      behavior="mobile"
+      :overlay="hideDrawer"
+      :behavior="hideDrawer ? 'mobile' : undefined"
       class="bg-dark-page"
     >
-      <q-toolbar>
+      <q-toolbar v-if="hideDrawer">
         <q-btn
           dense
           flat
@@ -134,7 +148,7 @@
             active-class=""
             exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
           >
-            <q-item-section avatar class="pr-0 min-w-0 mr-5">
+            <q-item-section avatar class="pr-0 min-w-0 ">
               <Icon
                 v-if="router.resolve(path!).fullPath !== route.fullPath"
                 :icon="icon"
@@ -143,14 +157,14 @@
               />
               <Icon v-else :icon="active" width="23" height="23" />
             </q-item-section>
-            <q-item-section>
+            <q-item-section class="ml-5">
               <q-item-label class="text-[16px]">{{ name }}</q-item-label>
             </q-item-section>
           </q-item>
         </template>
       </q-list>
 
-      <div class="absolute bottom-0 left-0 w-full text-gray-500">
+      <div v-if="hideDrawer ? true : showDrawer" class="absolute bottom-0 left-0 w-full text-gray-500">
         <a
           v-for="item in drawersBottom"
           :key="item.name"
@@ -248,7 +262,7 @@ import "@fontsource/caveat"
 import { debounce, useQuasar } from "quasar"
 import { PreSearch } from "src/apis/runs/pre-search"
 import { useAuthStore } from "stores/auth"
-import { ref, watch } from "vue"
+import { ref, watch, computed } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
@@ -328,10 +342,12 @@ const focusing = ref(false)
 
 const showDrawer = ref(false)
 
+const hideDrawer = computed(() =>  route.meta?.hideDrawer === true)
 watch(
-  () => route.meta?.hideDrawer === true,
+  hideDrawer,
   (hideDrawer) => {
     if (hideDrawer) showDrawer.value = false
+    else showDrawer.value  = true ;
   },
   { immediate: true }
 )
@@ -381,7 +397,7 @@ async function login() {
 <style lang="scss">
 .input-search {
   .q-field__control {
-    height: 36px !important;
+    height: 40px !important;
     input,
     input:focus {
       border: none;
@@ -392,7 +408,13 @@ async function login() {
 
   .q-field__control:after,
   .q-field__control:before {
-    display: none !important;
+    // display: none !important;
+  }
+  .q-field__control:before {
+    border-color: rgba(153,153,153,0.3) !important;
+  }
+  .q-field__control:after {
+    border-width:1px !important;
   }
 }
 
