@@ -52,9 +52,22 @@
           <transition name="q-transition--fade">
             <ul
               class="absolute w-full bg-dark-page left-0 max-h-[80vh] overflow-y-auto scrollbar-custom pb-4 top-[calc(100%+8px)] shadow-8"
-              v-show="focusing && searchResult?.length > 0"
+              v-show="focusing"
+              @mousedown.stop.prevent
+              @click.stop.prevent
             >
-              <li
+            <li v-if="searchLoading" v-for="i in 12" :key="i" class="flex mt-5 mx-4">
+              <q-responsive
+                      :ratio="267 / 400" class="w-[90px] rounded">
+                      <q-skeleton type="rect" class="absolute w-full h-full" />
+                      </q-responsive>
+
+                      <div class="ml-2 flex-1">
+                        <q-skeleton type="text" width="60%" />
+                        <q-skeleton type="text" width="100px" height="15px" />
+                      </div>
+            </li>
+              <li v-else-if="searchResult?.length"
                 v-for="item in searchResult"
                 :key="item.path"
                 class="relative"
@@ -78,41 +91,118 @@
                   </div>
                 </router-link>
               </li>
+              <li v-else class="px-4 py-5">
+                Không tìm thấy
+              </li>
             </ul>
           </transition>
         </div>
 
         <q-space />
 
-        <q-btn round class="mr-2">
+        <q-btn v-if="authStore.isLogged" round class="mr-2">
           <Icon
             :icon="
               showMenuFollow
-                ? 'material-symbols:favorite-rounded'
-                : 'material-symbols:favorite-outline-rounded'
+                ? 'majesticons:bookmark-plus'
+                : 'majesticons:bookmark-plus-line'
             "
             width="24"
             height="24"
           />
 
+          <q-menu
+            v-model="showMenuFollow"
+            class="flex flex-nowrap column bg-dark-page"
+          >
+            <q-card
+              class="transparent shadow-none w-[415px] scrollbar-custom overflow-y-auto"
+            >
+              <q-card-section>
+                <SkeletonCardVertical
+                  v-if="loadingFavorites"
+                  v-for="i in 12"
+                  :key="i"
+                  class="mb-4"
+                />
+                <CardVertical
+                  v-else
+                  v-for="item in favorites?.items"
+                  :key="item.path"
+                  :data="item"
+                  class="mb-4"
+                />
+              </q-card-section>
+            </q-card>
 
-            <q-menu v-model="showMenuFollow" class="scrollbar-custom">
-              <q-card class="bg-dark-page max-w-[435px]">
-                <q-card-section>
-                  <CardVertical v-for="item in favorites?.items" :key="item.path" :data="item" class="mb-4"/>
-                </q-card-section>
-              </q-card>
-            </q-menu>
-
+            <router-link to="/tai-khoan/follow" class="block py-2 text-center"
+              >Xem tất cả</router-link
+            >
+          </q-menu>
         </q-btn>
 
-        <q-btn round class="mr-2">
-          <Icon icon="fluent:clock-24-regular" width="24" height="24" />
+        <q-btn v-if="authStore.isLogged" round class="mr-2">
+          <Icon
+            :icon="
+              showMenuHistory
+                ? 'fluent:clock-24-filled'
+                : 'fluent:clock-24-regular'
+            "
+            width="24"
+            height="24"
+          />
 
-          <q-menu v-model="showMenuHistory" class="scrollbar-custom">
-            <q-card class="bg-dark-page max-w-[480px]">
+          <q-menu
+            v-model="showMenuHistory"
+            class="flex flex-nowrap column bg-dark-page"
+          >
+            <q-card
+              class="transparent shadow-none w-[415px] scrollbar-custom overflow-y-auto"
+            >
               <q-card-section>
-                <template v-for="(item, index) in histories" :key="item.id">
+                <div
+                  v-if="loadingHistories"
+                  v-for="i in 12"
+                  :key="i"
+                  class="flex mt-1 mb-4 flex-nowrap"
+                >
+                  <q-responsive :ratio="1920 / 1080" class="w-[149px]">
+                    <q-skeleton class="!rounded-[4px] absolute w-full h-full" />
+                  </q-responsive>
+
+                  <div class="pl-2 flex-1">
+                    <q-skeleton type="text" class="mt-1" width="60%" />
+                    <q-skeleton
+                      type="text"
+                      class="mt-1"
+                      width="40px"
+                      height="15px"
+                    />
+
+                    <div class="text-grey mt-1">
+                      <q-skeleton
+                        type="text"
+                        class="mt-1"
+                        width="60px"
+                        height="15px"
+                      />
+                    </div>
+                    <div class="text-grey mt-2">
+                      <q-skeleton
+                        type="text"
+                        class="mt-1"
+                        width="120px"
+                        height="15px"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <template
+                  v-else
+                  v-for="(item, index) in histories"
+                  :key="item.id"
+                >
                   <div
                     v-if="
                       !histories[index - 1] ||
