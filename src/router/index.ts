@@ -5,7 +5,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from "vue-router"
-import { LoadingBar } from 'quasar'
+import { LoadingBar } from "quasar"
 
 import routes from "./routes"
 

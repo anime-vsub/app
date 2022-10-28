@@ -42,7 +42,7 @@
   </q-page-sticky>
 
   <div class="pt-[123px]">
-    <ScreenLoading v-if="loading"/>
+    <ScreenLoading v-if="loading" />
 
     <div v-else-if="data">
       <template

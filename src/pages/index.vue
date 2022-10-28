@@ -1,45 +1,15 @@
 <template>
   <div
     v-if="loading"
-    class="absolute w-full h-[calc(100%+50px)] overflow-hidden loader"
+    class="absolute w-full h-[calc(100%+60px)] mt-[-60px] overflow-hidden loader"
   >
-    <div class="swiper-hot">
+    <div class="swiper-hot mt-[-60px]">
       <q-responsive :ratio="aspectRatio" class="poster">
         <q-skeleton type="rect" width="100%" height="100%" />
       </q-responsive>
     </div>
 
-    <div class="row text-grey text-[14px] mx-4 text-center mb-4">
-      <div class="col-4 relative py-2">
-        <q-skeleton type="circle" size="40px" class="mx-auto mb-2" />
-        <q-skeleton
-          type="text"
-          width="3.5rem"
-          height="1rem"
-          class="mt-2 mx-auto"
-        />
-      </div>
-      <div class="col-4 relative py-2">
-        <q-skeleton type="circle" size="40px" class="mx-auto mb-2" />
-        <q-skeleton
-          type="text"
-          width="3.5rem"
-          height="1rem"
-          class="mt-2 mx-auto"
-        />
-      </div>
-      <div class="col-4 relative py-2">
-        <q-skeleton type="circle" size="40px" class="mx-auto mb-2" />
-        <q-skeleton
-          type="text"
-          width="3.5rem"
-          height="1rem"
-          class="mt-2 mx-auto"
-        />
-      </div>
-    </div>
-
-    <div class="px-4 mt-4">
+    <div class="px-4 md:px-13 relative">
       <div class="wpa-grid">
         <div class="ctnr">
           <SkeletonCard
@@ -51,13 +21,13 @@
       </div>
     </div>
 
-    <div class="px-4 mt-4">
+    <div class="px-4 md:px-13 relative">
       <q-skeleton type="text" width="7rem" class="text-h6" />
 
       <SkeletonGridCard :count="6" />
     </div>
 
-    <div class="px-4 mt-4">
+    <div class="px-4 md:px-13 relative">
       <q-skeleton type="text" width="7rem" class="text-h6" />
 
       <div class="wpa-grid">
@@ -71,7 +41,7 @@
       </div>
     </div>
 
-    <div class="px-4 mt-4">
+    <div class="px-4 md:px-13 relative">
       <q-skeleton type="text" width="7rem" class="text-h6" />
 
       <div class="wpa-grid">
@@ -86,7 +56,7 @@
       </div>
     </div>
 
-    <div class="px-4 mt-4">
+    <div class="px-4 md:px-13 relative">
       <q-skeleton type="text" width="7rem" class="text-h6" />
 
       <SkeletonGridCard :count="6" />

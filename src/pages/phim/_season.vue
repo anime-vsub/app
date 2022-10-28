@@ -1,145 +1,141 @@
 <template>
   <!-- skeleton first load -->
-  <template v-if="!data">
-    <div class="w-full overflow-hidden fixed top-0 left-0 z-200">
-      <div
-        class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
+  <div class="row mx-4">
+    <div class="col-9">
+      <q-responsive
+        v-if="!data"
+        :ratio="841 / 483"
+        class="max-h-[calc(100vh-169px)]"
       >
-        <q-spinner size="60px" :thickness="3" />
-      </div>
-    </div>
-  </template>
-  <template v-else>
-    <div class="row mx-4">
-      <div class="col-9">
-        <BrtPlayer
-          v-if="configPlayer?.playTech !== 'trailer'"
-          :sources="sources"
-          :current-season="currentSeason"
-          :name-current-season="currentMetaSeason?.name"
-          :current-chap="currentChap"
-          :name-current-chap="currentMetaChap?.name"
-          :next-chap="nextChap"
-          :name="data.name"
-          :poster="currentDataSeason?.poster ?? data.poster"
-          :seasons="seasons"
-          :_cache-data-seasons="_cacheDataSeasons"
-          :fetch-season="fetchSeason"
-          :progress-chaps="progressChaps"
-          @cur-update="
-            progressChaps.set($event.id, {
-              cur: $event.cur,
-              dur: $event.dur,
-            })
-          "
+        <div class="flex items-center justify-center absolute w-full h-full">
+          <q-spinner color="main" size="45px" />
+        </div>
+      </q-responsive>
+      <BrtPlayer
+        v-else-if="configPlayer?.playTech !== 'trailer'"
+        :sources="sources"
+        :current-season="currentSeason"
+        :name-current-season="currentMetaSeason?.name"
+        :current-chap="currentChap"
+        :name-current-chap="currentMetaChap?.name"
+        :next-chap="nextChap"
+        :name="data.name"
+        :poster="currentDataSeason?.poster ?? data.poster"
+        :seasons="seasons"
+        :_cache-data-seasons="_cacheDataSeasons"
+        :fetch-season="fetchSeason"
+        :progress-chaps="progressChaps"
+        @cur-update="
+          progressChaps.set($event.id, {
+            cur: $event.cur,
+            dur: $event.dur,
+          })
+        "
+      />
+      <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
+        <q-img
+          no-spinner
+          v-if="sources?.[0]?.url"
+          :ratio="841 / 483"
+          class="max-h-[calc(100vh-169px)] max-w-[100px]"
+          src="~assets/ic_question_result_error.png"
+          width="100"
         />
-        <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
-          <q-img
-            no-spinner
-            v-if="sources?.[0]?.url"
-            :ratio="841 / 483"
-            class="max-h-[calc(100vh-169px)] max-w-[100px]"
-            src="~assets/ic_question_result_error.png"
-            width="100"
-          />
-          <q-video
-            v-else
-            :ratio="841 / 483"
-            class="max-h-[calc(100vh-169px)]"
-            :src="sources![0]!.url"
-          />
-        </div>
-      </div>
-      <div class="col-3 relative">
-        <div class="absolute w-full h-full flex column">
-          <div
-            class="py-1 px-4 text-subtitle1 flex items-center justify-between"
-          >
-            Chọn tập
-
-            <q-btn
-              dense
-              round
-              @click="gridModeTabsSeasons = !gridModeTabsSeasons"
-            >
-              <Icon icon="fluent:apps-list-24-regular" width="20" height="20" />
-            </q-btn>
-          </div>
-
-          <q-tabs
-            v-model="seasonActive"
-            class="min-w-0 w-full tabs-seasons relative"
-            :class="{
-              'grid-mode': gridModeTabsSeasons,
-            }"
-            no-caps
-            dense
-            inline-label
-            active-class="c--main"
-            v-if="
-              seasons &&
-              (seasons.length > 1 ||
-                (seasons.length === 0 && seasons[0].name !== ''))
-            "
-          >
-            <q-tab
-              v-for="item in seasons"
-              :key="item.value"
-              :name="item.value"
-              :label="item.name"
-              :ref="(el: QTab) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
-            />
-          </q-tabs>
-
-          <q-tab-panels
-            v-model="seasonActive"
-            animated
-            keep-alive
-            class="flex-1 w-full bg-transparent"
-          >
-            <q-tab-panel
-              v-for="({ value }, index) in seasons"
-              :key="index"
-              :name="value"
-            >
-              <div
-                v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
-                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
-              >
-                <q-spinner style="color: #00be06" size="3em" :thickness="3" />
-              </div>
-              <div
-                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-              >
-                Lỗi khi lấy dữ liệu
-                <br />
-                <q-btn
-                  dense
-                  no-caps
-                  style="color: #00be06"
-                  @click="fetchSeason(value)"
-                  >Thử lại</q-btn
-                >
-              </div>
-
-              <ChapsGridQBtn
-                v-else
-                grid
-                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-                :season="value"
-                :find="
-                  (item) => value === currentSeason && item.id === currentChap
-                "
-                :progress-chaps="progressChaps"
-                class-item="px-3 py-[6px] mx-[-8px] mb-3"
-              />
-            </q-tab-panel>
-          </q-tab-panels>
-        </div>
+        <q-video
+          v-else
+          :ratio="841 / 483"
+          class="max-h-[calc(100vh-169px)]"
+          :src="sources![0]!.url"
+        />
       </div>
     </div>
-  </template>
+    <div class="col-3 relative">
+      <div class="absolute w-full h-full flex column">
+        <div class="py-1 px-4 text-subtitle1 flex items-center justify-between">
+          Chọn tập
+
+          <q-btn
+            dense
+            round
+            @click="gridModeTabsSeasons = !gridModeTabsSeasons"
+          >
+            <Icon icon="fluent:apps-list-24-regular" width="20" height="20" />
+          </q-btn>
+        </div>
+
+        <q-tabs
+          v-model="seasonActive"
+          class="min-w-0 w-full tabs-seasons relative"
+          :class="{
+            'grid-mode': gridModeTabsSeasons,
+          }"
+          no-caps
+          dense
+          inline-label
+          active-class="c--main"
+          v-if="
+            seasons &&
+            (seasons.length > 1 ||
+              (seasons.length === 0 && seasons[0].name !== ''))
+          "
+        >
+          <q-tab
+            v-for="item in seasons"
+            :key="item.value"
+            :name="item.value"
+            :label="item.name"
+            :ref="(el: QTab) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
+          />
+        </q-tabs>
+
+        <q-tab-panels
+          v-model="seasonActive"
+          animated
+          keep-alive
+          class="flex-1 w-full bg-transparent"
+        >
+          <q-tab-panel
+            v-for="({ value }, index) in seasons"
+            :key="index"
+            :name="value"
+          >
+            <div
+              v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
+              class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+            >
+              <q-spinner style="color: #00be06" size="3em" :thickness="3" />
+            </div>
+            <div
+              v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+              class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
+            >
+              Lỗi khi lấy dữ liệu
+              <br />
+              <q-btn
+                dense
+                no-caps
+                style="color: #00be06"
+                @click="fetchSeason(value)"
+                >Thử lại</q-btn
+              >
+            </div>
+
+            <ChapsGridQBtn
+              v-else
+              grid
+              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+              :season="value"
+              :find="
+                (item) => value === currentSeason && item.id === currentChap
+              "
+              :progress-chaps="progressChaps"
+              class-item="px-3 py-[6px] mx-[-8px] mb-3"
+            />
+          </q-tab-panel>
+        </q-tab-panels>
+      </div>
+    </div>
+  </div>
 
   <div
     v-if="loading || !data"
@@ -177,7 +173,9 @@
   <div v-else class="mx-4 row">
     <div class="col-9">
       <div class="flex-1 mt-4 mb-2">
-        <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px] leading-normal">
+        <h1
+          class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px] leading-normal"
+        >
           {{ data.name }}
         </h1>
       </div>
@@ -939,27 +937,6 @@ const gridModeTabsSeasons = ref(false)
 
 <style lang="scss">
 .q-panel {
-  &::-webkit-scrollbar {
-    width: 12px;
-    background-color: transparent;
-    height: 12px;
-  }
-
-  &::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #323232;
-    transition: background 0.2s ease-in-out;
-    border: 3px solid transparent;
-    background-clip: content-box;
-    background-color: #e5e7eb;
-    border-radius: 9999px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  @apply scrollbar-custom;
 }
 </style>
