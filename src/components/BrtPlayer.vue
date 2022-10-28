@@ -93,7 +93,7 @@
               </q-btn>
 
               <div class="">
-                <div class="line-clamp-1 text-[18px] text-weight-medium">
+                <div class="line-clamp-1 text-[18px] text-weight-medium leading-normal">
                   {{ name }}
                 </div>
                 <div v-if="nameCurrentChap" class="text-gray-300">
