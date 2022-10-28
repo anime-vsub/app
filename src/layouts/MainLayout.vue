@@ -223,37 +223,36 @@
                           (item.timestamp.get("month") + 1)
                     }}
                   </div>
-                  <div
+                  <router-link
                     class="bg-transparent flex mt-1 mb-4 flex-nowrap"
                     style="white-space: initial"
-                    @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
+                    :to="`/phim/${item.id}/${item.last.chap}`"
                   >
-                  <div class=" w-[149px]">
-
-                    <q-img
-                      no-spinner
-                      :src="item.poster"
-                      :ratio="1920 / 1080"
-                      class="!rounded-[4px]"
-                    >
-                      <BottomBlur class="px-0 h-[40%]">
-                        <div
-                          class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
-                        >
-                          <q-linear-progress
-                            :value="item.last.cur / item.last.dur"
-                            rounded
-                            color="main"
-                            class="!h-[3px]"
-                          />
-                        </div>
-                      </BottomBlur>
-                      <span
-                        class="absolute text-white z-10 text-[12px] bottom-2 right-2"
-                        >{{ parseTime(item.last.cur) }}</span
+                    <div class="w-[149px]">
+                      <q-img
+                        no-spinner
+                        :src="item.poster"
+                        :ratio="1920 / 1080"
+                        class="!rounded-[4px]"
                       >
-                    </q-img>
-                  </div>
+                        <BottomBlur class="px-0 h-[40%]">
+                          <div
+                            class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
+                          >
+                            <q-linear-progress
+                              :value="item.last.cur / item.last.dur"
+                              rounded
+                              color="main"
+                              class="!h-[3px]"
+                            />
+                          </div>
+                        </BottomBlur>
+                        <span
+                          class="absolute text-white z-10 text-[12px] bottom-2 right-2"
+                          >{{ parseTime(item.last.cur) }}</span
+                        >
+                      </q-img>
+                    </div>
 
                     <div class="pl-2 flex-1">
                       <span class="line-clamp-3 mt-1">{{ item.name }}</span>
@@ -269,14 +268,18 @@
                         }}
                       </div>
                     </div>
-                  </div>
+                  </router-link>
                 </template>
               </q-card-section>
             </q-card>
+
+            <router-link to="/tai-khoan/history" class="block py-2 text-center"
+              >Xem tất cả</router-link
+            >
           </q-menu>
         </q-btn>
 
-        <q-btn round class="mr-2">
+        <q-btn v-if="authStore.isLogged" round class="mr-2">
           <Icon
             :icon="
               showMenuNotify
@@ -290,7 +293,32 @@
           <q-menu v-model="showMenuNotify" class="scrollbar-custom">
             <q-card class="bg-dark-page max-w-[435px]">
               <q-card-section>
-                <q-list class="bg-transparent">
+                <q-list v-if="notificationStore.loading" class="bg-transparent">
+                  <q-item v-for="item in 12" :key="item">
+                    <q-item-section>
+                      <q-item-label class="text-subtitle1 text-weight-normal">
+                        <q-skeleton type="text" width="40%" />
+                        <q-skeleton type="text" width="60%" />
+                      </q-item-label>
+                      <q-item-label>
+                        <q-skeleton type="text" width="100" height="15px" />
+                      </q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-responsive
+                        :ratio="120 / 81"
+                        class="w-[120px] rounded-sm"
+                      >
+                        <q-skeleton
+                          type="rect"
+                          class="absolute w-full h-full"
+                        />
+                      </q-responsive>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+
+                <q-list v-else class="bg-transparent">
                   <transition-group name="notify">
                     <q-item
                       v-for="item in notificationStore.items"
@@ -333,8 +361,84 @@
 
         <q-btn v-if="authStore.isLogged" flat round>
           <q-avatar size="35px">
-            <img :src="authStore.user_data!.avatar" />
+            <img v-if="authStore.user_data?.avatar" :src="authStore.user_data.avatar" />
+            <Icon v-else icon="fluent:person-circle-24-filled" width="30" height=30 />
           </q-avatar>
+
+          <q-menu v-model="showMenuAccount" class="bg-dark-page">
+            <q-card  class="transparent w-[280px] px-2 pb-3">
+                <q-list v-if="tabMenuAccountActive==='normal'">
+                <q-item>
+                  <q-item-section avatar>
+                    <q-avatar size="45px">
+
+            <img v-if="authStore.user_data?.avatar" :src="authStore.user_data.avatar" />
+            <Icon v-else icon="fluent:person-circle-24-filled" width="45" height=45 />
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="font-weight-medium text-subtitle1">{{ authStore.user_data.name }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-separator class="bg-[rgba(255,255,255,0.1)]"/>
+
+                <q-item clickable v-ripple to="/tai-khoan/edit-profile" active-class="">
+                  <q-item-section avatar class="min-w-0">
+<Icon icon="fluent:info-24-regular" width="20" height="20" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Trung tâm cá nhân</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item clickable v-ripple @click="tabMenuAccountActive = 'locale'">
+                  <q-item-section avatar class="min-w-0">
+                    <Icon icon="carbon:translate" width="20" height="20" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Ngôn ngữ</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <Icon icon="fluent:chevron-right-24-regular" />
+                  </q-item-section>
+                </q-item>
+
+                <q-item clickable v-ripple @click="logout">
+                  <q-item-section avatar class="min-w-0">
+                <Icon icon="fa:sign-out" width="20" height="20" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Thoát</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+
+                </q-list>
+
+
+
+              <q-list v-if="tabMenuAccountActive==='locale'">
+                <q-item clickable v-ripple @click="tabMenuAccountActive= 'normal'">
+                  <q-item-section avatar class="min-w-0">
+<Icon icon="fluent:ios-arrow-ltr-24-regular"  width="20" height="20"/>
+                  </q-item-section>
+                  <q-item-section>
+Chọn ngôn ngữ của bạn
+                  </q-item-section>
+                </q-item>
+
+                <q-separator class="bg-[rgba(255,255,255,0.1)]"/>
+
+                <q-item v-for="i in 3" :key="i" clickable v-ripple>
+                  <q-item-section avatar class="min-w-0">
+                    <Icon icon="fluent:checkmark-24-regular" width="20" height="20" />
+                  </q-item-section>
+                  <q-item-section>Tiếng Việt</q-item-section>
+                </q-item>
+              </q-list>
+            </q-card>
+          </q-menu>
         </q-btn>
         <q-btn
           v-else
@@ -524,6 +628,7 @@ import { parseTime } from "src/logic/parseTime"
 import { useNotificationStore } from "stores/notification"
 import Card from "components/Card.vue"
 import CardVertical from "components/CardVertical.vue"
+import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 
 const drawers = [
   {
@@ -593,7 +698,7 @@ const authStore = useAuthStore()
 const notificationStore = useNotificationStore()
 
 const query = ref("")
-const { data: searchResult, run } = useRequest(() => PreSearch(query.value), {
+const { data: searchResult, loading:searchLoading, run } = useRequest(() => PreSearch(query.value), {
   manual: true,
 })
 watch(query, debounce(run, 300))
@@ -652,11 +757,19 @@ async function login() {
     loader()
   }
 }
+async function logout() {
+  authStore.logout()
+  $q.notify({
+    position: "bottom-right",
+    message: "Đã đăng xuất"
+  })
+}
 
 // ============= states ===============
-const showMenuHistory = ref(true)
+const showMenuHistory = ref(false)
 const showMenuFollow = ref(false)
 const showMenuNotify = ref(false)
+const showMenuAccount = ref(false)
 
 import { History } from "src/apis/runs/history"
 import { TuPhim } from "src/apis/runs/tu-phim"
@@ -667,7 +780,18 @@ const {
   run: runHistories,
   error: errorHistories,
   refreshAsync: refreshHistories,
-} = useRequest(() => History())
+} = useRequest(() => History(), {
+  manual: true,
+  cacheKey: "histories",
+  cacheTime: 60 * 60 * 1000,
+})
+watch(
+  showMenuHistory,
+  (state) => {
+    if (state) refreshHistories()
+  },
+  { immediate: true }
+)
 // follow
 const {
   data: favorites,
@@ -675,7 +799,25 @@ const {
   run: runFavorites,
   error: errorFavorites,
   refreshAsync: refreshFavorites,
-} = useRequest(() => TuPhim(1))
+} = useRequest(() => TuPhim(1), {
+  manual: true,
+  cacheKey: "favorites",
+  staleTime: 60 * 60 * 1000,
+})
+watch(
+  showMenuFollow,
+  (state) => {
+    if (state) refreshFavorites()
+  },
+  { immediate: true }
+)
+
+// account
+// showMenuAccount
+const tabMenuAccountActive = ref<"normal" | "locale">("normal")
+watch(showMenuAccount, (val) => {
+  if (val)tabMenuAccountActive.value = "normal"
+  })
 </script>
 
 <style lang="scss">
