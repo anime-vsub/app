@@ -68,6 +68,7 @@ export const useNotificationStore = defineStore(
 
       // eslint-disable-next-line functional/no-throw-statement
       if (JSON.parse(data).status !== 1) throw new Error("DELETE_FAILED")
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       refresh(() => {})
     }
 

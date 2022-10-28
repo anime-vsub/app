@@ -608,6 +608,7 @@ import { app } from "boot/firebase"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import { QTab, throttle, useQuasar } from "quasar"
+import sha256 from "sha256"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollXIntoView"
@@ -624,7 +625,6 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
-import sha256 from "sha256"
 
 import type { Source } from "./sources"
 
