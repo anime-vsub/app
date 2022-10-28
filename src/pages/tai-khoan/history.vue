@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
     <q-toolbar class="relative">
       <q-btn flat dense round class="mr-2" @click.stop="router.back()">
         <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
@@ -10,13 +10,13 @@
         Anime đã xem</q-toolbar-title
       >
     </q-toolbar>
-  </q-header>
+  </header>
 
-  <ScreenLoading v-if="loading" class="absolute" />
+  <ScreenLoading v-if="loading" class="absolute pt-[47px]" />
   <template v-else-if="histories">
-    <ScreenNotFound v-if="histories.length === 0" />
+    <ScreenNotFound v-if="histories.length === 0" class="pt-[47px]" />
 
-    <q-pull-to-refresh v-else @refresh="refresh">
+    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[47px]">
       <q-infinite-scroll @load="onLoad" :offset="250">
         <template v-for="(item, index) in histories" :key="item.id">
           <div
@@ -90,7 +90,7 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run" class="absolute" />
+  <ScreenError v-else @click:retry="run" class="absolute mt-[47px]" />
 </template>
 
 <script lang="ts" setup>
@@ -115,7 +115,12 @@ dayjs.extend(isYesterday)
 const router = useRouter()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
-const { loading, data: histories, run, refreshAsync } = useRequest(() => History())
+const {
+  loading,
+  data: histories,
+  run,
+  refreshAsync,
+} = useRequest(() => History())
 const refresh = (done: () => void) =>
   refreshAsync()
     .then(() => infiniteScrollRef.value?.reset())

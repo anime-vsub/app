@@ -46,7 +46,7 @@
 
   <div
     v-if="loading || !data"
-    class="absolute w-full h-full overflow-hidden mx-4 pt-6 text-[28px]"
+    class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px]"
   >
     <q-responsive :ratio="16 / 9" />
 
@@ -89,10 +89,10 @@
             {{ data.name }}
           </h1>
           <h5 class="text-gray-400 text-weight-normal">
-            {{ formatView(data.views) }} lượt xem &bull;
+            {{ formatView(data.views) }} lượt xem
 
             <span v-if="currentDataSeason?.update">
-              Tập mới chiếu vào
+               &bull; Tập mới chiếu vào
               {{
                 dayjs(
                   new Date(
@@ -508,6 +508,7 @@ import {
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import sha256 from "sha256"
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -893,7 +894,7 @@ watch(
     const db = getFirestore(app)
 
     // eslint-disable-next-line camelcase
-    const userRef = doc(db, "users", user_data.email)
+    const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const seasonRef = doc(userRef, "history", currentSeason!)
     const chapRef = collection(seasonRef, "chaps")
@@ -946,6 +947,11 @@ const seasonId = computed(
 watch(
   seasonId,
   async (seasonId) => {
+    if (!authStore.isLogged) {
+      console.warn("can't get is like because not login")
+      return
+    }
+
     if (seasonId) {
       followed.value = await checkIsLile(seasonId)
     } else {
@@ -969,6 +975,14 @@ watch(
 )
 
 async function toggleFollow() {
+  if (!authStore.isLogged) {
+    $q.notify({
+      position: "bottom-right",
+      message: "Hãy đăng nhập trước để theo dõi",
+    })
+    return
+  }
+
   followed.value = !followed.value
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   await AjaxLike(seasonId.value!, followed.value)

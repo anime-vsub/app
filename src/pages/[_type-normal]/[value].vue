@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
     <q-toolbar v-if="!data" class="relative">
       <q-skeleton type="QBtn" flat dense round />
 
@@ -81,15 +81,15 @@
         {{ textFilter }}
       </div>
     </template>
-  </q-header>
+  </header>
 
   <!-- main -->
 
-  <SkeletonGridCard v-if="loading" :count="12" />
+  <SkeletonGridCard v-if="loading" :count="12" class="pt-[125px]" />
   <template v-else-if="data">
-    <ScreenNotFound v-if="data.items.length === 0" />
+    <ScreenNotFound v-if="data.items.length === 0" class="pt-[125px]" />
 
-    <q-pull-to-refresh v-else @refresh="refresh">
+    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[125px]">
       <q-infinite-scroll ref="infiniteScrollRef" @load="onLoad" :offset="250">
         <GridCard :items="data.items" />
 
@@ -101,7 +101,7 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run" />
+  <ScreenError v-else @click:retry="run" class="pt-[125px]" />
 
   <template v-if="data?.filter">
     <!-- gener -->

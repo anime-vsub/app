@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
     <q-toolbar class="relative">
       <q-btn flat dense round class="mr-2" @click.stop="router.back()">
         <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
@@ -10,10 +10,10 @@
         Giới thiệu về AnimeVsub
       </q-toolbar-title>
     </q-toolbar>
-  </q-header>
+  </header>
 
-  <q-list v-if="infoApp && infoDev">
-    <q-item>
+  <q-list v-if="infoApp && infoDev" class="pt-[47px]">
+    <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Phiên bản ứng dụng</q-item-label>
         <q-item-label caption
@@ -22,7 +22,7 @@
         >
       </q-item-section>
     </q-item>
-    <q-item>
+    <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>Hệ điều hành</q-item-label>
         <q-item-label caption
@@ -31,7 +31,7 @@
         >
       </q-item-section>
     </q-item>
-    <q-item>
+    <q-item clickable v-ripple>
       <q-item-section>
         <q-item-label>WebView</q-item-label>
         <q-item-label caption>{{ infoDev.webViewVersion }}</q-item-label>

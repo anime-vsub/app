@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
     <q-toolbar class="relative">
       <q-btn flat dense round class="mr-2" @click.stop="router.back()">
         <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
@@ -46,11 +46,11 @@
         </div>
       </div>
     </q-toolbar>
-  </q-header>
+  </header>
 
-  <ScreenLoading v-if="loading" class="absolute" />
+  <ScreenLoading v-if="loading" class="absolute pt-[47px]" />
 
-  <div v-else-if="data" class="absolute top-0 h-[100%] w-full">
+  <div v-else-if="data" class="absolute top-0 h-[100%] w-full pt-[47px]">
     <swiper
       class="relative h-full w-full"
       :slides-per-view="1"
@@ -148,7 +148,7 @@
     </swiper>
   </div>
 
-  <ScreenError v-else class="absolute" />
+  <ScreenError v-else class="absolute mt-[47px]" />
 </template>
 
 <script lang="ts" setup>

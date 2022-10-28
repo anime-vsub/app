@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
     <q-toolbar class="relative">
       <q-btn flat dense round class="mr-2" @click.stop="router.back()">
         <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
@@ -10,9 +10,9 @@
         Cài đặt chung
       </q-toolbar-title>
     </q-toolbar>
-  </q-header>
+  </header>
 
-  <q-list>
+  <q-list class="pt-[47px]">
     <q-item clickable v-ripple to="/tai-khoan/settings/player">
       <q-item-section>
         <q-item-label>Cài đặt phát</q-item-label>
@@ -21,7 +21,7 @@
     <q-item
       clickable
       v-ripple
-      href="mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub"
+      href="mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.anime-vsub"
     >
       <q-item-section>
         <q-item-label>Phản hồi</q-item-label>
@@ -35,7 +35,7 @@
     <q-item
       clickable
       v-ripple
-      @click="open('https://animevsub.github.io/tems-of-use')"
+      @click="open('https://anime-vsub.github.io/tems-of-use')"
     >
       <q-item-section>
         <q-item-label>Điều khoản sử dụng</q-item-label>
@@ -44,7 +44,7 @@
     <q-item
       clickable
       v-ripple
-      @click="open('https://animevsub.github.io/privacy-police')"
+      @click="open('https://anime-vsub.github.io/privacy-police')"
     >
       <q-item-section>
         <q-item-label>Chính sách riêng tư</q-item-label>
@@ -53,7 +53,7 @@
     <q-item
       clickable
       v-ripple
-      @click="open('https://animevsub.github.io/disclaimer')"
+      @click="open('https://anime-vsub.github.io/disclaimer')"
     >
       <q-item-section>
         <q-item-label>Tuyên bố từ chối trách nhiệm</q-item-label>
