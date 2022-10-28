@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { Http } from "@capacitor-community/http"
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import eruda from "eruda2"
@@ -17,7 +16,7 @@ const isDev = import.meta.env.DEV
 if (isDev) {
   eruda.init()
 
-  Object.assign(window, { Http })
+  Object.assign(window)
 }
 function reload() {
   location.reload()

@@ -49,7 +49,11 @@ export const useAuthStore = defineStore("auth", {
     },
     setTokenByCookie(cookie: string) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const token = parse(cookie).find((item) => item.name.startsWith("token"))!
+      const token = cookie
+        .split(",")
+        .map((item) => parse(cookie))
+        .flat(1)
+        .find((item) => item.name.startsWith("token"))!
       // set token
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.setToken(token.name, token.value, token.expires!)

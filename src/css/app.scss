@@ -1,6 +1,7 @@
 // app global css in SCSS form
-* {
-  user-select: none;
+
+body {
+  --q-dark-page: rgb(17, 19, 25);
 }
 
 .c--main,
@@ -14,4 +15,33 @@
 
 .bg-main {
   background-color: rgb(0, 194, 52) !important;
+}
+
+.children\:before\:block > *:before {
+  display: block !important;
+}
+
+.scrollbar-custom {
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: transparent;
+    height: 12px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #323232;
+    transition: background 0.2s ease-in-out;
+    border: 3px solid transparent;
+    background-clip: content-box;
+    // background-color: #e5e7eb;
+    border-radius: 9999px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }

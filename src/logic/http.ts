@@ -1,11 +1,11 @@
 import type { HttpOptions } from "@capacitor-community/http"
-import { CapacitorHttp as Http } from "@capacitor/core"
 import { C_URL } from "src/constants"
 
 export async function get(
   url: string | HttpOptions,
   headers?: Record<string, string>
 ) {
+  console.log("get: ", url)
   const response = await Http.get(
     typeof url === "object"
       ? url
@@ -41,6 +41,7 @@ export async function get(
     return response
   })
 
+  console.log("get-result: ", response)
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
@@ -52,17 +53,29 @@ export async function post(
   data: Record<string, number | string | boolean>,
   headers?: Record<string, string>
 ) {
+  console.log("post: ", {
+    url: C_URL + url,
+    data,
+    headers: {
+      "user-agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+      // "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+      ...headers,
+    },
+  })
+
   const response = await Http.post({
     url: C_URL + url,
     headers: {
       "user-agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-      "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+      // "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
       ...headers,
     },
     data,
   })
 
+  console.log("post-result: ", response)
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
