@@ -145,7 +145,6 @@ import { dayTextToNum } from "src/logic/dayTextToNum"
 import { ref } from "vue"
 import { useRequest } from "vue-request"
 
-
 const { loading, data } = useRequest(() => LichChieuPhim())
 
 // eslint-disable-next-line functional/no-let
