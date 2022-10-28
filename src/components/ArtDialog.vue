@@ -1,7 +1,7 @@
 <template>
   <transition name="art-dialog">
     <div
-      class="fixed top-0 left-0 w-full h-full z-100"
+      class="fixed top-0 left-0 w-full h-full z-400"
       v-if="modelValue"
       @click="emit('update:model-value', false)"
     >
