@@ -316,7 +316,7 @@ async function moreSearch(page: number, done: (noMore?: boolean) => void) {
 
   resultSearch.value = {
     ...newData,
-    items: [...resultSearch.value.items, ...newData.items],
+    items: [...resultSearch.value?.items ?? [], ...newData.items],
   }
 
   done()

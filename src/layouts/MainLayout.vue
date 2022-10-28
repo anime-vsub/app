@@ -165,13 +165,13 @@
 </template>
 
 <script lang="ts" setup>
-import { Icon } from "@iconify/vue"
-import { useNotificationStore } from "stores/notification"
-import { useRoute } from "vue-router"
-import { shallowRef } from "vue"
 import { App } from "@capacitor/app"
-import semverGt from "semver/functions/gt"
+import { Icon } from "@iconify/vue"
 import semverEq from "semver/functions/eq"
+import semverGt from "semver/functions/gt"
+import { useNotificationStore } from "stores/notification"
+import { shallowRef } from "vue"
+import { useRoute } from "vue-router"
 
 const route = useRoute()
 const notificationStore = useNotificationStore()
@@ -195,10 +195,8 @@ Promise.all([
       }
     }
 
-    if (!semverGt(results[0][0].tag_name, results[1].version)) {
-      return
-    }
-
+    // eslint-disable-next-line promise/always-return
+    if (!semverGt(results[0][0].tag_name, results[1].version)) return
     ;[newVersion.value, appInfos.value] = [results[0][0], results[1]]
   })
   .catch((err) => {
