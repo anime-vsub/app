@@ -345,6 +345,7 @@ import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+import dayjs from "src/logic/dayjs"
 import { Autoplay, Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { useRouter } from "vue-router"
@@ -362,11 +363,7 @@ const router = useRouter()
 
 const aspectRatio = 622 / 350
 
-const { data, loading, refreshAsync } = useRequest(() => Index())
-async function refresh(done: () => void) {
-  await refreshAsync()
-  done()
-}
+const { data, loading } = useRequest(() => Index())
 
 // eslint-disable-next-line functional/no-let, @typescript-eslint/no-explicit-any
 let tmp: any

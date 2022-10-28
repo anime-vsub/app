@@ -1,3 +1,4 @@
+import { LoadingBar } from "quasar"
 import { route } from "quasar/wrappers"
 import {
   createMemoryHistory,
@@ -5,7 +6,6 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from "vue-router"
-import { LoadingBar } from "quasar"
 
 import routes from "./routes"
 

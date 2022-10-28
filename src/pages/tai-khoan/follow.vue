@@ -38,7 +38,6 @@ import { QInfiniteScroll } from "quasar"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { ref } from "vue"
 import { useRequest } from "vue-request"
-import { useRouter } from "vue-router"
 
 const infiniteScrollRef = ref<QInfiniteScroll>()
 

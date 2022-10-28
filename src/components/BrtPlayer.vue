@@ -769,13 +769,14 @@ watch(
         "users",
         sha256(authStore.user_data.email + authStore.user_data.name)
       )
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const seasonRef = doc(
         userRef,
         "history",
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         props.currentSeason!.slice(
           0,
-          props.currentSeason.lastIndexOf("$") >>> 0
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          props.currentSeason!.lastIndexOf("$") >>> 0
         )
       )
       const chapRef = doc(seasonRef, "chaps", currentChap)
@@ -805,7 +806,8 @@ const setArtPlaybackRate = (value: number) => {
 }
 const artVolume = ref(1)
 const setArtVolume = (value: number) => {
-  video.value.volume = value
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  video.value!.volume = value
 }
 
 // value control other
@@ -833,6 +835,7 @@ const setArtFullscreen = async (fullscreen: boolean) => {
       overlay: true,
     })
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     await document.exitFullscreen().catch(() => {})
     screen.orientation.unlock()
     StatusBar.show()
@@ -1012,9 +1015,9 @@ function onVideoTimeUpdate() {
   saveCurTimeToPer()
 }
 function onVideoError(event: Event) {
-  if (!event.target.error) return
+  if (!(event.target as HTMLVideoElement).error) return
 
-  console.log("video error ", event.target.error)
+  console.log("video error ", (event.target as HTMLVideoElement).error)
 
   $q.notify({
     message: "Đã gặp sự cố khi phát lại",
@@ -1158,6 +1161,10 @@ const playerWrapRef = ref<HTMLDivElement>()
 
 const currentingTime = ref(false)
 const progressInnerRef = ref<HTMLDivElement>()
+
+const artCurrentTimeHoving = ref(0)
+const artControlProgressHoving = ref(false)
+
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl?: HTMLDivElement
@@ -1169,9 +1176,6 @@ function onIndicatorMove(
   offsetX: number,
   curTimeStart: number
 ): void
-
-const artCurrentTimeHoving = ref(0)
-const artControlProgressHoving = ref(false)
 
 // eslint-disable-next-line no-redeclare
 function onIndicatorMove(
@@ -1221,7 +1225,7 @@ function onIndicatorMove(
     artCurrentTimeHoving.value = (video.value!.duration * clientX) / maxX
   }
 
-  if (event.type === "mousemove" && event.buttons !== 1) return
+  if (event.type === "mousemove" && (event as MouseEvent).buttons !== 1) return
 
   artCurrentTime.value = artCurrentTimeHoving.value
   currentingTime.value = true
@@ -1319,7 +1323,7 @@ let lastPositionClickIsLeft: boolean | null = null
 // eslint-disable-next-line functional/no-let, no-undef
 let timeoutDbClick: number | NodeJS.Timeout | null = null
 const countSkip = ref(0)
-function onClickSkip(event: MouseEvent, orFalse: boolean) {
+function onClickSkip(event: MouseEvent) {
   // click
   const now = Date.now()
 
@@ -1388,8 +1392,6 @@ const artVolumeHoving = ref(false)
 
 const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)
-const showDialogPlayback = ref(false)
-const showDialogQuality = ref(false)
 
 watch(showDialogChapter, (status) => {
   if (!status) seasonActive.value = props.currentSeason

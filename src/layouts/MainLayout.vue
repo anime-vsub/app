@@ -56,18 +56,23 @@
               @mousedown.stop.prevent
               @click.stop.prevent
             >
-            <li v-if="searchLoading" v-for="i in 12" :key="i" class="flex mt-5 mx-4">
-              <q-responsive
-                      :ratio="267 / 400" class="w-[90px] rounded">
-                      <q-skeleton type="rect" class="absolute w-full h-full" />
-                      </q-responsive>
+              <li
+                v-if="searchLoading"
+                v-for="i in 12"
+                :key="i"
+                class="flex mt-5 mx-4"
+              >
+                <q-responsive :ratio="267 / 400" class="w-[90px] rounded">
+                  <q-skeleton type="rect" class="absolute w-full h-full" />
+                </q-responsive>
 
-                      <div class="ml-2 flex-1">
-                        <q-skeleton type="text" width="60%" />
-                        <q-skeleton type="text" width="100px" height="15px" />
-                      </div>
-            </li>
-              <li v-else-if="searchResult?.length"
+                <div class="ml-2 flex-1">
+                  <q-skeleton type="text" width="60%" />
+                  <q-skeleton type="text" width="100px" height="15px" />
+                </div>
+              </li>
+              <li
+                v-else-if="searchResult?.length"
                 v-for="item in searchResult"
                 :key="item.path"
                 class="relative"
@@ -91,9 +96,7 @@
                   </div>
                 </router-link>
               </li>
-              <li v-else class="px-4 py-5">
-                Không tìm thấy
-              </li>
+              <li v-else class="px-4 py-5">Không tìm thấy</li>
             </ul>
           </transition>
         </div>
@@ -205,8 +208,8 @@
                 >
                   <div
                     v-if="
-                      !histories[index - 1] ||
-                      !histories[index - 1].timestamp.isSame(
+                      !histories![index - 1] ||
+                      !histories![index - 1].timestamp.isSame(
                         item.timestamp,
                         'day'
                       )
@@ -361,38 +364,68 @@
 
         <q-btn v-if="authStore.isLogged" flat round>
           <q-avatar size="35px">
-            <img v-if="authStore.user_data?.avatar" :src="authStore.user_data.avatar" />
-            <Icon v-else icon="fluent:person-circle-24-filled" width="30" height=30 />
+            <img
+              v-if="authStore.user_data?.avatar"
+              :src="authStore.user_data.avatar"
+            />
+            <Icon
+              v-else
+              icon="fluent:person-circle-24-filled"
+              width="30"
+              height="30"
+            />
           </q-avatar>
 
           <q-menu v-model="showMenuAccount" class="bg-dark-page">
-            <q-card  class="transparent w-[280px] px-2 pb-3">
-                <q-list v-if="tabMenuAccountActive==='normal'">
+            <q-card class="transparent w-[280px] px-2 pb-3">
+              <q-list v-if="tabMenuAccountActive === 'normal'">
                 <q-item>
                   <q-item-section avatar>
                     <q-avatar size="45px">
-
-            <img v-if="authStore.user_data?.avatar" :src="authStore.user_data.avatar" />
-            <Icon v-else icon="fluent:person-circle-24-filled" width="45" height=45 />
+                      <img
+                        v-if="authStore.user_data?.avatar"
+                        :src="authStore.user_data.avatar"
+                      />
+                      <Icon
+                        v-else
+                        icon="fluent:person-circle-24-filled"
+                        width="45"
+                        height="45"
+                      />
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label class="font-weight-medium text-subtitle1">{{ authStore.user_data.name }}</q-item-label>
+                    <q-item-label class="font-weight-medium text-subtitle1">{{
+                      authStore.user_data!.name
+                    }}</q-item-label>
                   </q-item-section>
                 </q-item>
 
-                <q-separator class="bg-[rgba(255,255,255,0.1)]"/>
+                <q-separator class="bg-[rgba(255,255,255,0.1)]" />
 
-                <q-item clickable v-ripple to="/tai-khoan/edit-profile" active-class="">
+                <q-item
+                  clickable
+                  v-ripple
+                  to="/tai-khoan/edit-profile"
+                  active-class=""
+                >
                   <q-item-section avatar class="min-w-0">
-<Icon icon="fluent:info-24-regular" width="20" height="20" />
+                    <Icon
+                      icon="fluent:info-24-regular"
+                      width="20"
+                      height="20"
+                    />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>Trung tâm cá nhân</q-item-label>
                   </q-item-section>
                 </q-item>
 
-                <q-item clickable v-ripple @click="tabMenuAccountActive = 'locale'">
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="tabMenuAccountActive = 'locale'"
+                >
                   <q-item-section avatar class="min-w-0">
                     <Icon icon="carbon:translate" width="20" height="20" />
                   </q-item-section>
@@ -406,33 +439,39 @@
 
                 <q-item clickable v-ripple @click="logout">
                   <q-item-section avatar class="min-w-0">
-                <Icon icon="fa:sign-out" width="20" height="20" />
+                    <Icon icon="fa:sign-out" width="20" height="20" />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>Thoát</q-item-label>
                   </q-item-section>
                 </q-item>
+              </q-list>
 
-
-                </q-list>
-
-
-
-              <q-list v-if="tabMenuAccountActive==='locale'">
-                <q-item clickable v-ripple @click="tabMenuAccountActive= 'normal'">
+              <q-list v-if="tabMenuAccountActive === 'locale'">
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="tabMenuAccountActive = 'normal'"
+                >
                   <q-item-section avatar class="min-w-0">
-<Icon icon="fluent:ios-arrow-ltr-24-regular"  width="20" height="20"/>
+                    <Icon
+                      icon="fluent:ios-arrow-ltr-24-regular"
+                      width="20"
+                      height="20"
+                    />
                   </q-item-section>
-                  <q-item-section>
-Chọn ngôn ngữ của bạn
-                  </q-item-section>
+                  <q-item-section> Chọn ngôn ngữ của bạn </q-item-section>
                 </q-item>
 
-                <q-separator class="bg-[rgba(255,255,255,0.1)]"/>
+                <q-separator class="bg-[rgba(255,255,255,0.1)]" />
 
                 <q-item v-for="i in 3" :key="i" clickable v-ripple>
                   <q-item-section avatar class="min-w-0">
-                    <Icon icon="fluent:checkmark-24-regular" width="20" height="20" />
+                    <Icon
+                      icon="fluent:checkmark-24-regular"
+                      width="20"
+                      height="20"
+                    />
                   </q-item-section>
                   <q-item-section>Tiếng Việt</q-item-section>
                 </q-item>
@@ -617,18 +656,19 @@ import "@fontsource/caveat"
 
 // =========== suth
 
-import { debounce, useQuasar } from "quasar"
-import { PreSearch } from "src/apis/runs/pre-search"
-import { useAuthStore } from "stores/auth"
-import { ref, watch, computed } from "vue"
-import { useRequest } from "vue-request"
-import { useRoute, useRouter } from "vue-router"
 import BottomBlur from "components/BottomBlur.vue"
-import { parseTime } from "src/logic/parseTime"
-import { useNotificationStore } from "stores/notification"
-import Card from "components/Card.vue"
 import CardVertical from "components/CardVertical.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
+import { debounce, useQuasar } from "quasar"
+import { History } from "src/apis/runs/history"
+import { PreSearch } from "src/apis/runs/pre-search"
+import { TuPhim } from "src/apis/runs/tu-phim"
+import { parseTime } from "src/logic/parseTime"
+import { useAuthStore } from "stores/auth"
+import { useNotificationStore } from "stores/notification"
+import { computed, ref, watch } from "vue"
+import { useRequest } from "vue-request"
+import { useRoute, useRouter } from "vue-router"
 
 const drawers = [
   {
@@ -698,7 +738,11 @@ const authStore = useAuthStore()
 const notificationStore = useNotificationStore()
 
 const query = ref("")
-const { data: searchResult, loading:searchLoading, run } = useRequest(() => PreSearch(query.value), {
+const {
+  data: searchResult,
+  loading: searchLoading,
+  run,
+} = useRequest(() => PreSearch(query.value), {
   manual: true,
 })
 watch(query, debounce(run, 300))
@@ -761,7 +805,7 @@ async function logout() {
   authStore.logout()
   $q.notify({
     position: "bottom-right",
-    message: "Đã đăng xuất"
+    message: "Đã đăng xuất",
   })
 }
 
@@ -770,15 +814,10 @@ const showMenuHistory = ref(false)
 const showMenuFollow = ref(false)
 const showMenuNotify = ref(false)
 const showMenuAccount = ref(false)
-
-import { History } from "src/apis/runs/history"
-import { TuPhim } from "src/apis/runs/tu-phim"
 // history
 const {
   data: histories,
   loading: loadingHistories,
-  run: runHistories,
-  error: errorHistories,
   refreshAsync: refreshHistories,
 } = useRequest(() => History(), {
   manual: true,
@@ -796,8 +835,6 @@ watch(
 const {
   data: favorites,
   loading: loadingFavorites,
-  run: runFavorites,
-  error: errorFavorites,
   refreshAsync: refreshFavorites,
 } = useRequest(() => TuPhim(1), {
   manual: true,
@@ -816,8 +853,8 @@ watch(
 // showMenuAccount
 const tabMenuAccountActive = ref<"normal" | "locale">("normal")
 watch(showMenuAccount, (val) => {
-  if (val)tabMenuAccountActive.value = "normal"
-  })
+  if (val) tabMenuAccountActive.value = "normal"
+})
 </script>
 
 <style lang="scss">
@@ -832,10 +869,6 @@ watch(showMenuAccount, (val) => {
     }
   }
 
-  .q-field__control:after,
-  .q-field__control:before {
-    // display: none !important;
-  }
   .q-field__control:before {
     border-color: rgba(153, 153, 153, 0.3) !important;
   }

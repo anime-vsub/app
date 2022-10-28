@@ -40,10 +40,10 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
 
   const db = getFirestore(app)
 
-  // eslint-disable-next-line camelcase
   const historyRef = collection(
     db,
     "users",
+    // eslint-disable-next-line camelcase
     sha256(user_data.email + user_data.name),
     "history"
   )
@@ -63,6 +63,7 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
     .map((item) => {
       const data = item.data()
 
+      // eslint-disable-next-line array-callback-return
       if (!data.timestamp) return
 
       return {

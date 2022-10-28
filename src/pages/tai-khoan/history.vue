@@ -85,7 +85,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
@@ -93,24 +92,16 @@ import ScreenNotFound from "components/ScreenNotFound.vue"
 import { QInfiniteScroll } from "quasar"
 import { History } from "src/apis/runs/history"
 import { parseTime } from "src/logic/parseTime"
-import { ref } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
-const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const {
   loading,
   data: histories,
   run,
-  refreshAsync,
 } = useRequest(() => History())
-const refresh = (done: () => void) =>
-  refreshAsync()
-    .then(() => infiniteScrollRef.value?.reset())
-    // eslint-disable-next-line promise/no-callback-in-promise
-    .then(done)
 
 async function onLoad(page: number, done: (end: boolean) => void) {
   const items = await History(histories.value)
