@@ -421,8 +421,8 @@ watch(
       errorHistories.value = undefined
 
       favorites.value = undefined
-      loadingFavorites.value = false;
-      errorFavorites.value = undefined;
+      loadingFavorites.value = false
+      errorFavorites.value = undefined
     }
   }
 )
@@ -433,7 +433,7 @@ if (authStore.isLogged) {
 
 async function refresh(done: () => void) {
   if (authStore.isLogged)
-  await Promise.all([refreshHistories(), refreshFavorites()])
+    await Promise.all([refreshHistories(), refreshFavorites()])
   done()
 }
 

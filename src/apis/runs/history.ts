@@ -41,7 +41,12 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
   const db = getFirestore(app)
 
   // eslint-disable-next-line camelcase
-  const historyRef = collection(db, "users", sha256(user_data.email + user_data.name), "history")
+  const historyRef = collection(
+    db,
+    "users",
+    sha256(user_data.email + user_data.name),
+    "history"
+  )
   const q = query(
     historyRef,
     where("timestamp", "!=", null),
@@ -54,13 +59,18 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
 
   const { docs } = await getDocs(q)
 
-  return docs.map((item) => {
-    const data = item.data()
-    return {
-      id: item.id,
-      ...data,
-      timestamp: dayjs(data.timestamp.toDate()),
-      rawTimestamp: data.timestamp,
-    }
-  }) as ItemData[]
+  return docs
+    .map((item) => {
+      const data = item.data()
+
+      if (!data.timestamp) return
+
+      return {
+        id: item.id,
+        ...data,
+        timestamp: dayjs(data.timestamp.toDate()),
+        rawTimestamp: data.timestamp,
+      }
+    })
+    .filter(Boolean) as ItemData[]
 }

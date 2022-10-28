@@ -13,6 +13,10 @@ const routes: RouteRecordRaw[] = [
         name: "index",
         path: "",
         component: () => import("pages/index.vue"),
+        meta: {
+          hideDrawer: true,
+          transparentHeader: true,
+        },
       },
       {
         path: ":type_normal(anime-bo|anime-le|hoat-hinh-trung-quoc|anime-sap-chieu|anime-moi)",
@@ -132,6 +136,9 @@ const routes: RouteRecordRaw[] = [
     path: "/phim/:season/:prefix(\\D+)?:chap(\\d+)?",
     alias: ["/phim/:season/:prefix(.+)?-:chap(\\d+)?.html"],
     component: () => import("pages/phim/_season.vue"),
+    meta: {
+      hideDrawer: true,
+    },
   },
 
   // Always leave this as last one,
