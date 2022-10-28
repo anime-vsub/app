@@ -1,5 +1,5 @@
 <template>
-  <q-header class="bg-dark-page">
+  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
     <q-toolbar class="relative">
       <q-btn flat dense round class="mr-2" @click.stop="router.back()">
         <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
@@ -10,15 +10,15 @@
         Anime đã theo dõi</q-toolbar-title
       >
     </q-toolbar>
-  </q-header>
+  </header>
 
   <!-- main -->
 
-  <SkeletonGridCard v-if="loading" :count="12" />
+  <SkeletonGridCard v-if="loading" :count="12" class="pt-[47px]" />
   <template v-else-if="data">
-    <ScreenNotFound v-if="data.items.length === 0" />
+    <ScreenNotFound v-if="data.items.length === 0" class="pt-[47px]" />
 
-    <q-pull-to-refresh v-else @refresh="refresh">
+    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[47px]">
       <q-infinite-scroll @load="onLoad" :offset="250" ref="infiniteScrollRef">
         <GridCard :items="data.items" />
 
@@ -30,7 +30,7 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run" />
+  <ScreenError v-else @click:retry="run" class="pt-[47px]" />
 </template>
 
 <script lang="ts" setup>

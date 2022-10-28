@@ -68,14 +68,16 @@ export const useNotificationStore = defineStore(
 
       // eslint-disable-next-line functional/no-throw-statement
       if (JSON.parse(data).status !== 1) throw new Error("DELETE_FAILED")
-      updateNotification()
+      refresh(() => {})
     }
 
     async function refresh(done: () => void) {
+      try {
       const result = await AjaxNotification()
 
       items.value = result.items
       max.value = result.max
+}catch{}
 
       done()
     }

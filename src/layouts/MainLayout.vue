@@ -14,7 +14,7 @@
       <q-tabs
         indicator-color="transparent"
         exact-active-color="white"
-        class="bg-transparent text-grey-5 shadow-2 text-[12px]"
+        class="bg-transparent text-grey-5 shadow-2 text-[12px] tabs-main"
         no-caps
       >
         <q-route-tab
@@ -39,7 +39,7 @@
         </q-route-tab>
         <q-route-tab
           replace
-          active-class="tab-active"
+          exact-active-class="tab-active"
           class="pt-1"
           to="/tim-kiem"
         >
@@ -123,28 +123,118 @@
       </q-tabs>
     </q-footer>
   </q-layout>
+
+  <!-- dialog notify update app -->
+  <q-dialog
+    :model-value="newVersion"
+    @update:model-value="newVersion = undefined"
+    full-width
+  >
+    <q-card class="">
+      <q-card-section>
+        <div class="text-subtitle1 text-weight-medium">Có bản cập nhật mới</div>
+
+        <div class="text-grey">
+          {{ newVersion.tag_name }} (current: {{ appInfos.version }})
+        </div>
+
+        <div class="overflow-y-auto">
+          <p class="whitespace-pre-wrap">{{ newVersion.body }}</p>
+        </div>
+      </q-card-section>
+
+      <q-card-actions class="justify-end">
+        <q-btn
+          flat
+          no-caps
+          color="grey"
+          label="Bỏ qua"
+          @click="ignoreUpdateVersion(newVersion.tag_name)"
+        />
+        <q-btn
+          flat
+          no-caps
+          color="main"
+          label="Cập nhật"
+          target="_blank"
+          href="https://anime-vsub.github.io/changelog"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useNotificationStore } from "stores/notification"
 import { useRoute } from "vue-router"
+import { shallowRef } from "vue"
+import { App } from "@capacitor/app"
+import semverGt from "semver/functions/gt"
+import semverEq from "semver/functions/eq"
 
 const route = useRoute()
 const notificationStore = useNotificationStore()
+
+const newVersion = shallowRef()
+const appInfos = shallowRef()
+
+Promise.all([
+  fetch("https://api.github.com/repos/anime-vsub/app/releases").then((res) =>
+    res.json()
+  ),
+
+  App.getInfo(),
+])
+  .then((results) => {
+    const ignoreUpdateVersion = localStorage.getItem("ignore-update-version")
+
+    if (ignoreUpdateVersion) {
+      if (semverEq(ignoreUpdateVersion, results[0][0].tag_name)) {
+        return
+      }
+    }
+
+    if (!semverGt(results[0][0].tag_name, results[1].version)) {
+      return
+    }
+
+    ;[newVersion.value, appInfos.value] = [results[0][0], results[1]]
+  })
+  .catch((err) => {
+    console.error(err)
+  })
+
+function ignoreUpdateVersion(version: string) {
+  localStorage.setItem("ignore-update-version", version)
+  newVersion.value = undefined
+}
 </script>
 
 <style lang="scss">
 .filled {
   display: none;
 }
+
 .tab-active {
   color: #fff;
+
   .regular {
     display: none;
   }
+
   .filled {
     display: inline-block;
+  }
+}
+
+.tabs-main .q-tab__content {
+  min-width: 0 !important;
+}
+.tabs-main .q-tabs__content {
+  width: 100% !important;
+  > .q-tab {
+    width: (100% / 5);
   }
 }
 </style>

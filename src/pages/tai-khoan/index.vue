@@ -54,8 +54,8 @@
     </q-item>
   </header>
 
-  <q-pull-to-refresh @refresh="refresh">
-    <div class="mt-4 mt-[72px]">
+  <q-pull-to-refresh @refresh="refresh" class="pt-[72px]">
+    <div class="mt-4">
       <router-link
         class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
         to="/tai-khoan/history"
@@ -397,7 +397,6 @@ const {
   loading: loadingHistories,
   run: runHistories,
   error: errorHistories,
-  refresh: reloadHistories,
   refreshAsync: refreshHistories,
 } = useRequest(() => History(), { manual: true })
 
@@ -407,7 +406,6 @@ const {
   loading: loadingFavorites,
   run: runFavorites,
   error: errorFavorites,
-  refresh: reloadFavorites,
   refreshAsync: refreshFavorites,
 } = useRequest(() => TuPhim(1), { manual: true })
 
@@ -418,8 +416,13 @@ watch(
       runHistories()
       runFavorites()
     } else {
-      reloadHistories()
-      reloadFavorites()
+      histories.value = undefined
+      loadingHistories.value = false
+      errorHistories.value = undefined
+
+      favorites.value = undefined
+      loadingFavorites.value = false;
+      errorFavorites.value = undefined;
     }
   }
 )
@@ -429,6 +432,7 @@ if (authStore.isLogged) {
 }
 
 async function refresh(done: () => void) {
+  if (authStore.isLogged)
   await Promise.all([refreshHistories(), refreshFavorites()])
   done()
 }

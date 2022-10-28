@@ -1,16 +1,20 @@
 export function scrollXIntoView(el: HTMLDivElement) {
+
   // let parent = el.parentNode.parentNode
 
-  parentScroll(el, el.parentNode as HTMLDivElement)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  parentScroll(el, el.parentNode!.parentNode as HTMLDivElement)
-}
+let i =0;
+let parent = el;
+while ((parent = parent.parentNode) && i++ < 3) {
+  const oldLeft = el.offsetLeft;
 
-function parentScroll(el: HTMLElement, parent: HTMLElement) {
   const left = el.offsetLeft - (parent.offsetWidth - el.offsetWidth) / 2
 
   parent.scrollTo({
     left,
     behavior: "smooth",
   })
+
+  if (oldLeft !== el.offsetLeft) break
+
+}
 }
