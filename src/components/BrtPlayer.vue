@@ -59,7 +59,7 @@
             <div class="flex items-start w-max-[70%] flex-nowrap">
               <div class="">
                 <div
-                  class="line-clamp-1 art-title text-[18px] text-weight-medium"
+                  class="line-clamp-1 art-title text-[18px] text-weight-medium leading-normal"
                 >
                   {{ name }}
                 </div>
