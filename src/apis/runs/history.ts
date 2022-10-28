@@ -9,14 +9,9 @@ import {
   where,
 } from "@firebase/firestore"
 import { app } from "boot/firebase"
-import dayjs from "dayjs"
 import sha256 from "sha256"
-
-import isToday from "dayjs/plugin/isToday"
-import isYesterday from "dayjs/plugin/isYesterday"
-
-dayjs.extend(isToday)
-dayjs.extend(isYesterday)
+import dayjs from "src/logic/dayjs"
+import { useAuthStore } from "stores/auth"
 
 interface ItemData {
   id: string

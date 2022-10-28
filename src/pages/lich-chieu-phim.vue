@@ -137,8 +137,6 @@ import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
-import dayjs from "dayjs"
-import isToday from "dayjs/plugin/isToday"
 import groupArray from "group-array"
 import { LichChieuPhim } from "src/apis/runs/lich-chieu-phim"
 // Import Swiper styles
@@ -147,7 +145,6 @@ import { dayTextToNum } from "src/logic/dayTextToNum"
 import { ref } from "vue"
 import { useRequest } from "vue-request"
 
-dayjs.extend(isToday)
 
 const { loading, data } = useRequest(() => LichChieuPhim())
 
