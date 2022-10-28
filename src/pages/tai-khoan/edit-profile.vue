@@ -1,18 +1,11 @@
 <template>
-  <header class="fixed w-full top-0 left-0 z-200 bg-dark-page">
-    <q-toolbar class="relative">
-      <q-btn flat dense round class="mr-2" @click.stop="router.back()">
-        <Icon icon="fluent:chevron-left-24-regular" width="25" height="25" />
-      </q-btn>
-      <q-toolbar-title
-        class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
-      >
-        Tài khoản
-      </q-toolbar-title>
-    </q-toolbar>
-  </header>
+  <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
+    <div class="text-[16px] py-2 px-4">
+      Tài khoản
+    </div>
+  </q-page-sticky>
 
-  <template v-if="authStore.isLogged">
+  <div v-if="authStore.isLogged" class="pt-[32px]">
     <div class="py-15 text-center pt-[47px]">
       <q-avatar size="80px">
         <img v-if="authStore.user?.avatar" :src="authStore.user.avatar" />
@@ -80,9 +73,6 @@
     <!-- dialog change password -->
     <q-dialog
       v-model="showDialogChangePassword"
-      position="bottom"
-      class="children:!px-0"
-      full-width
     >
       <q-card class="h-[60vh] bg-dark-500">
         <q-card-section>
@@ -141,7 +131,7 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-  </template>
+  </div>
 </template>
 
 <script lang="ts" setup>
