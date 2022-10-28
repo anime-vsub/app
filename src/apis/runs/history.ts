@@ -12,6 +12,11 @@ import { app } from "boot/firebase"
 import dayjs from "dayjs"
 import { useAuthStore } from "stores/auth"
 import sha256 from "sha256"
+import isToday from "dayjs/plugin/isToday"
+import isYesterday from "dayjs/plugin/isYesterday"
+
+dayjs.extend(isToday)
+dayjs.extend(isYesterday)
 
 interface ItemData {
   id: string
@@ -59,13 +64,18 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
 
   const { docs } = await getDocs(q)
 
-  return docs.map((item) => {
-    const data = item.data()
-    return {
-      id: item.id,
-      ...data,
-      timestamp: dayjs(data.timestamp.toDate()),
-      rawTimestamp: data.timestamp,
-    }
-  }) as ItemData[]
+  return docs
+    .map((item) => {
+      const data = item.data()
+
+      if (!data.timestamp) return
+
+      return {
+        id: item.id,
+        ...data,
+        timestamp: dayjs(data.timestamp.toDate()),
+        rawTimestamp: data.timestamp,
+      }
+    })
+    .filter(Boolean) as ItemData[]
 }

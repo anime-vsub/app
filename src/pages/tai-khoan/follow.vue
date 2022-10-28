@@ -10,15 +10,20 @@
     <template v-else-if="data">
       <ScreenNotFound v-if="data.items.length === 0" />
 
-        <q-infinite-scroll v-else @load="onLoad" :offset="250" ref="infiniteScrollRef">
-          <GridCard :items="data.items" />
+      <q-infinite-scroll
+        v-else
+        @load="onLoad"
+        :offset="250"
+        ref="infiniteScrollRef"
+      >
+        <GridCard :items="data.items" />
 
-          <template v-slot:loading>
-            <div class="row justify-center q-my-md">
-              <q-spinner class="c--main" size="40px" />
-            </div>
-          </template>
-        </q-infinite-scroll>
+        <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner class="c--main" size="40px" />
+          </div>
+        </template>
+      </q-infinite-scroll>
     </template>
     <ScreenError v-else @click:retry="run" />
   </div>

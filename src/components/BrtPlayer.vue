@@ -388,11 +388,14 @@
                     width: `${artPercentageResourceLoaded * 100}%`,
                   }"
                 />
-                <div v-if="artControlProgressHoving && !currentingTime" class="art-progress-hoved"
-                :data-title="parseTime(artCurrentTimeHoving)"
-                :style="{
-                  width: `${artCurrentTimeHoving/artDuration * 100}%`
-                }" />
+                <div
+                  v-if="artControlProgressHoving && !currentingTime"
+                  class="art-progress-hoved"
+                  :data-title="parseTime(artCurrentTimeHoving)"
+                  :style="{
+                    width: `${(artCurrentTimeHoving / artDuration) * 100}%`,
+                  }"
+                />
                 <div
                   class="art-progress-played"
                   :style="{
@@ -719,7 +722,7 @@ const currentStream = computed(() => {
 
 const video = ref<HTMLVideoElement>()
 // value control get play
-const artPlaying = ref(true)
+const artPlaying = ref(false)
 const setArtPlaying = (playing: boolean) => {
   if (!video.value) {
     console.log("video element not ready")
@@ -1218,10 +1221,9 @@ function onIndicatorMove(
     artCurrentTimeHoving.value = (video.value!.duration * clientX) / maxX
   }
 
-  if (event.type === "mousemove" && event.buttons !== 1)
-    return;
+  if (event.type === "mousemove" && event.buttons !== 1) return
 
-artCurrentTime.value = artCurrentTimeHoving.value
+  artCurrentTime.value = artCurrentTimeHoving.value
   currentingTime.value = true
 
   activeTime = Date.now()
@@ -1455,20 +1457,20 @@ onBeforeUnmount(() => {
   }
   &.currenting-time {
     @media (hover: none) {
-    .toolbar-top,
-    .art-controls {
-      opacity: 0 !important;
-      visibility: hidden !important;
-    }
-    .art-progress-indicator {
-      &:after {
-        display: block !important;
+      .toolbar-top,
+      .art-controls {
+        opacity: 0 !important;
+        visibility: hidden !important;
       }
-      transform: scale(1.2) !important;
-    }
-    .art-control-progress-inner {
-      height: 3px !important;
-    }
+      .art-progress-indicator {
+        &:after {
+          display: block !important;
+        }
+        transform: scale(1.2) !important;
+      }
+      .art-control-progress-inner {
+        height: 3px !important;
+      }
     }
   }
   .toolbar-bottom {
@@ -1508,16 +1510,16 @@ onBeforeUnmount(() => {
       cursor: pointer;
       z-index: 30;
 
-img {
-  transition: transform 0.22s ease-in-out;
-}
-.art-control-progress-inner {
-  transition: height 0.22s ease-in-out;
-}
+      img {
+        transition: transform 0.22s ease-in-out;
+      }
+      .art-control-progress-inner {
+        transition: height 0.22s ease-in-out;
+      }
 
       &:hover {
         img {
-          transform : scale(1.35)
+          transform: scale(1.35);
         }
         .art-control-progress-inner {
           height: 5px;
@@ -1532,7 +1534,8 @@ img {
         width: 100%;
         background: rgba(255, 255, 255, 0.2);
 
-        .art-progress-loaded, .art-progress-hoved {
+        .art-progress-loaded,
+        .art-progress-hoved {
           position: absolute;
           z-index: 10;
           left: 0;
