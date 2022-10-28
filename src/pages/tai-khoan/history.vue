@@ -99,18 +99,13 @@ import BottomBlur from "components/BottomBlur.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
-import dayjs from "dayjs"
-import isToday from "dayjs/plugin/isToday"
-import isYesterday from "dayjs/plugin/isYesterday"
 import { QInfiniteScroll } from "quasar"
 import { History } from "src/apis/runs/history"
+import dayjs from "src/logic/dayjs"
 import { parseTime } from "src/logic/parseTime"
 import { ref } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
-
-dayjs.extend(isToday)
-dayjs.extend(isYesterday)
 
 const router = useRouter()
 const infiniteScrollRef = ref<QInfiniteScroll>()

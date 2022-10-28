@@ -187,14 +187,11 @@ import "swiper/css"
 import { Icon } from "@iconify/vue"
 // eslint-disable-next-line import/order
 import BottomBlur from "components/BottomBlur.vue"
-import "dayjs/locale/vi"
 
 import CardVertical from "components/CardVertical.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
 import { debounce } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { AjaxItem } from "src/apis/runs/ajax/item"
@@ -210,8 +207,6 @@ import { useRouter } from "vue-router"
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
 // ================= unknown ===============
-
-dayjs.extend(relativeTime)
 
 const types = [
   ["Tuần", "top-bo-week"],
