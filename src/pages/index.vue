@@ -320,8 +320,6 @@ import { Index } from "src/apis/runs/index"
 import { useRequest } from "vue-request"
 // eslint-disable-next-line import/order
 import Star from "components/Star.vue"
-// eslint-disable-next-line import/order
-import isTomorrow from "dayjs/plugin/isTomorrow"
 import "dayjs/locale/vi"
 import { Icon } from "@iconify/vue"
 import Card from "components/Card.vue"
@@ -330,9 +328,8 @@ import Quality from "components/Quality.vue"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
-import dayjs from "dayjs"
-import isToday from "dayjs/plugin/isToday"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+import dayjs from "src/logic/dayjs"
 import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { useRouter } from "vue-router"
@@ -344,9 +341,6 @@ import "swiper/css/autoplay"
 import "swiper/css/grid"
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
-
-dayjs.extend(isToday)
-dayjs.extend(isTomorrow)
 
 const router = useRouter()
 
