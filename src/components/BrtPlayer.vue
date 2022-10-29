@@ -2,7 +2,13 @@
   <div class="w-full overflow-hidden bg-[#000] focus-visible:outline-none" ref="playerWrapRef"
         tabindex="0"
         autofocus
-        @keydown="onKeypress">
+          
+        @keydown="event => {
+        if (event.code === 'Space') {
+          
+          event.preventDefault()
+        }
+        }">
     <q-responsive
       :ratio="841 / 483"
       class="player__wrap max-h-[calc(100vh-169px)]"
@@ -1390,7 +1396,6 @@ const showMenuPlaybackRate = ref(false)
 function onKeypress(event: KeyboardEvent) {
   switch (event.code) {
     case "Space":
-    event.preventDefault()
       setArtPlaying(!artPlaying.value)
       break
     case "KeyF":
@@ -1404,6 +1409,8 @@ function onKeypress(event: KeyboardEvent) {
       break
   }
 }
+window.addEventListener("keydown", onKeypress)
+onBeforeUnmount(() => window.removeEventListener("keydown", onKeypress))
 </script>
 
 <style lang="scss" scoped>

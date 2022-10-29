@@ -35,6 +35,7 @@
             @focus="focusing = true"
             @blur="focusing = false"
             @keypress.enter="router.push(`/tim-kiem/${query}`)"
+            @keydown.stop.prevent
           >
             <template v-slot:append>
               <q-separator vertical inset class="bg-[rgba(153,153,153,0.3)]" />
@@ -606,6 +607,7 @@
               name="email"
               class="input w-full"
               placeholder="E-mail"
+            @keydown.stop
             />
           </div>
           <div class="mt-4 relative flex items-center flex-nowrap input-wrap">
@@ -616,6 +618,7 @@
               name="password"
               class="input w-full"
               placeholder="Mật khẩu mới"
+            @keydown.stop
             />
             <q-btn
               dense
