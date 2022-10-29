@@ -597,7 +597,6 @@
 
 <script lang="ts" setup>
 import { Haptics } from "@capacitor/haptics"
-import { StatusBar } from "@capacitor/status-bar"
 import type { DocumentData, DocumentReference } from "@firebase/firestore"
 import {
   doc,
@@ -606,7 +605,6 @@ import {
   serverTimestamp,
   setDoc,
 } from "@firebase/firestore"
-import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
 import { app } from "boot/firebase"
 import ArtDialog from "components/ArtDialog.vue"
@@ -822,31 +820,15 @@ const setArtControlShow = (show: boolean) => {
   artControlShow.value = show
   if (show) activeTime = Date.now()
 }
-watch(
-  artControlShow,
-  (artControlShow) => artControlShow && artFullscreen.value && StatusBar.hide()
-)
 const artFullscreen = ref(false)
 const setArtFullscreen = async (fullscreen: boolean) => {
   console.log("set art fullscreen ", fullscreen)
   if (fullscreen) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await playerWrapRef.value!.requestFullscreen()
-    screen.orientation.lock("landscape")
-    StatusBar.hide()
-    NavigationBar.hide()
-    StatusBar.setOverlaysWebView({
-      overlay: true,
-    })
   } else {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     await document.exitFullscreen().catch(() => {})
-    screen.orientation.unlock()
-    StatusBar.show()
-    NavigationBar.show()
-    StatusBar.setOverlaysWebView({
-      overlay: false,
-    })
   }
 
   artFullscreen.value = document.fullscreenElement !== null
