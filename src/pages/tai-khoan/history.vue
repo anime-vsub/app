@@ -95,6 +95,28 @@ import { parseTime } from "src/logic/parseTime"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
+import {computed}from"vue"
+import { useHead } from "@vueuse/head"
+useHead(computed(() => {
+const title = "Lịch sử xem Anime"
+const description = title
+
+  return {
+    title : title,
+    description,
+    meta: [
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url" }
+    ],
+    link: [
+      {
+        rel: "canonical",
+      }
+    ]
+  }
+}))
+
 const router = useRouter()
 
 const {

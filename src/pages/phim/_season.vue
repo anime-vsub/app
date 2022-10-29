@@ -597,6 +597,34 @@ const currentMetaChap = computed(() => {
   )
 })
 
+
+import { useHead } from "@vueuse/head"
+useHead(computed(() => {
+
+  if (!data.value || !currentMetaChap.value) return {}
+
+
+const title = `Tập ${currentMetaChap.value.name} ${data.value.name} (${data.value.othername})`
+const description = data.value.description
+
+  return {
+    title,
+    description,
+    meta: [
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:image", content: data.value.poster },
+      { property: "og:url", content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}` }
+    ],
+    link: [
+      {
+        rel: "canonical",
+        href:  `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`
+      }
+    ]
+  }
+}))
+
 const nextChap = computed<
   | {
       season: string

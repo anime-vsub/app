@@ -39,6 +39,27 @@ import { TuPhim } from "src/apis/runs/tu-phim"
 import { ref } from "vue"
 import { useRequest } from "vue-request"
 
+import {computed}from"vue"
+import { useHead } from "@vueuse/head"
+useHead(computed(() => {
+const title = "Anime đang theo dõi"
+const description = title
+
+  return {
+    title : title,
+    description,
+    meta: [
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url" }
+    ],
+    link: [
+      {
+        rel: "canonical",
+      }
+    ]
+  }
+}))
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const { data, loading, run } = useRequest(() => TuPhim(1))

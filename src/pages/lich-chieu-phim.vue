@@ -145,6 +145,38 @@ import { dayTextToNum } from "src/logic/dayTextToNum"
 import { ref } from "vue"
 import { useRequest } from "vue-request"
 
+import {computed}from"vue"
+import dayjs from "src/logic/dayjs"
+
+import { useHead } from "@vueuse/head"
+useHead(computed(() => {
+const title = `Lịch chiếu`
+
+
+
+
+
+
+
+const description = title
+
+  return {
+    title : title,
+    description,
+    meta: [
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url" }
+    ],
+    link: [
+      {
+        rel: "canonical",
+      }
+    ]
+  }
+}))
+
+
 const { loading, data } = useRequest(() => LichChieuPhim())
 
 // eslint-disable-next-line functional/no-let
