@@ -9,6 +9,10 @@ body {
   color: rgb(0, 194, 52);
 }
 
+.\!text-main {
+  color: rgb(0, 194, 52) !important;
+}
+
 .bg-dark-page {
   background-color: var(--q-dark-page, #121212) !important;
 }
