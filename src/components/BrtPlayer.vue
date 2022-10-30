@@ -192,6 +192,8 @@ break
                   :class="{ active: !artVolumeOutside }"
                   ref="wrapVolumeRef"
                 >
+                <q-btn round dense @click="toggleMuted">
+
                   <Icon
                     :icon="
                       [
@@ -204,6 +206,7 @@ break
                     width="18"
                     height="18"
                   />
+                  </q-btn>
 
                   <div
                     class="overflow-hidden py-1 w-0 transition-width duration-300 ease-in-out slider"
@@ -829,6 +832,17 @@ const artVolume = ref(1)
 const setArtVolume = (value: number) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   video.value!.volume = value
+}
+let lastVolumeBeforeMute: number;
+const toggleMuted = () => {
+  if (artVolume.value === 0) {
+    setArtVolume(lastVolumeBeforeMute ?? 0.05)
+  } else {
+    lastVolumeBeforeMute = artVolume.value
+    setArtVolume(0)
+  }
+  
+addNotice(`Âm lượng ${Math.round(artVolume.value * 100)}%`)
 }
 
 // value control other
@@ -1465,6 +1479,9 @@ function onKeypress(event: KeyboardEvent) {
       skipForward()
       break
       // case ArrowUp , ArrowDown bind to el scope
+      case "KeyM":
+      toggleMuted()
+      break
   }
 }
 window.addEventListener("keydown", onKeypress)
