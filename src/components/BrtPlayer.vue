@@ -4,10 +4,19 @@
         autofocus
 
         @keydown="event => {
-        if (event.code === 'Space') {
+          switch (event.code) {
 
-          event.preventDefault()
-        }
+      case 'ArrowUp':
+            event.preventDefault()
+setArtVolume(Math.min(1, artVolume + 0.05))
+addNotice(`Âm lượng ${Math.round(artVolume * 100)}%`)
+break
+case 'ArrowDown':
+            event.preventDefault()
+setArtVolume(Math.max(0, artVolume - 0.05))
+addNotice(`Âm lượng ${Math.round(artVolume * 100)}%`)
+break
+          }
         }">
     <q-responsive
       :ratio="841 / 483"
@@ -205,7 +214,7 @@
                       @update:model-value="setArtVolume($event)"
                       :min="0"
                       :max="1"
-                      :step="0.01"
+                      :step="0.05"
                       dense
                       color="white"
                       track-size="3px"
@@ -1433,8 +1442,10 @@ const showMenuPlaybackRate = ref(false)
 
 // keyboard binding
 function onKeypress(event: KeyboardEvent) {
+
   switch (event.code) {
     case "Space":
+  if ( event.target?.nodeName !== "TEXTAREA" && event.target?.nodeName !== "INPUT" ) event.preventDefault()
       setArtPlaying(!artPlaying.value)
       break
     case "KeyF":
@@ -1446,6 +1457,7 @@ function onKeypress(event: KeyboardEvent) {
     case "ArrowRight":
       skipForward()
       break
+      // case ArrowUp , ArrowDown bind to el scope
   }
 }
 window.addEventListener("keydown", onKeypress)
