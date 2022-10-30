@@ -100,7 +100,7 @@
             :name="value"
           >
             <div
-              v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
+              v-if="!_cacheDataSeasons.get(value) || _cacheDataSeasons.get(value)?.status === 'pending'"
               class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
             >
               <q-spinner style="color: #00be06" size="3em" :thickness="3" />
@@ -139,8 +139,9 @@
 
   <div
     v-if="loading || !data"
-    class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px]"
+    class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px] row"
   >
+  <div class="col-9">
     <q-skeleton type="text" class="text-[35px]" width="80%" />
     <q-skeleton type="text" width="100px" class="mt-[-10px]" />
 
@@ -166,8 +167,21 @@
     <div class="mt-3">
       <q-skeleton type="rect" width="100%" height="48px" />
     </div>
+</div>
+<div class="col-3">
 
-    <SkeletonGridCard class="mt-3" :count="12" />
+  <div class="col-3">
+    <div class="text-h6 mt-3 text-subtitle1">
+      <q-skeleton type="text" width="60%" />
+    </div>
+
+    <SkeletonCardVertical
+      v-for="item in 12"
+      :key="item"
+      class="mt-3"
+    />
+  </div>
+</div>
   </div>
 
   <div v-else class="mx-4 row">
@@ -363,6 +377,7 @@ import {
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
