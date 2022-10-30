@@ -2,10 +2,10 @@
   <div class="w-full overflow-hidden bg-[#000] focus-visible:outline-none" ref="playerWrapRef"
         tabindex="0"
         autofocus
-          
+
         @keydown="event => {
         if (event.code === 'Space') {
-          
+
           event.preventDefault()
         }
         }">
@@ -18,7 +18,7 @@
     >
       <video
         ref="video"
-        autoplay
+        :autoplay="documentVisibility === 'visible'"
         :poster="poster"
         @play="artPlaying = true"
         @pause="artPlaying = false"
@@ -180,9 +180,8 @@
 
                 <div
                   class="flex items-center mr-6 text-weight-normal art-btn art-volume"
-                  :class="{ active: artVolumeHoving }"
-                  @mouseover="artVolumeHoving = true"
-                  @mouseout="artVolumeHoving = false"
+                  :class="{ active: !artVolumeOutside }"
+                  ref="wrapVolumeRef"
                 >
                   <Icon
                     :icon="
@@ -998,7 +997,7 @@ function onVideoTimeUpdate() {
     artControlShow.value &&
     !showMenuQuality.value &&
     !showMenuPlaybackRate.value &&
-    !artVolumeHoving.value &&
+    artVolumeOutside.value &&
     !artControlProgressHoving.value &&
     Date.now() - activeTime >= 3e3
   ) {
@@ -1050,7 +1049,40 @@ function onVideoEnded() {
     })
   }
 }
+import { useIntervalFn } from "@vueuse/core"
+import { useDocumentVisibility } from '@vueuse/core'
 
+const documentVisibility = useDocumentVisibility()
+watch(documentVisibility, visibility => {
+  if (visibility === "visible") {
+    if (!artPlaying.value)
+    setArtPlaying(true)
+  }
+})
+
+if (settingsStore.enableRemindStop) {
+  useIntervalFn(() => {
+    if (!artPlaying.value) return;
+
+    setArtPlaying(false)
+
+    $q.dialog({
+      title: "Xác nhận",
+      message: "Bạn vẫn đang xem chứ?",
+      cancel: true,
+      persistent: false,
+    })
+    .onOk(() => {
+      setArtPlaying(true)
+    })
+    .onDismiss(() => {
+      setArtPlaying(true)
+    })
+    .onCancel(() => {
+      console.warn("cancel continue play")
+    })
+  }, 1 /* hours */ * 3600_000)
+}
 function runRemount() {
   $q.dialog({
     title: "Relay change",
@@ -1380,7 +1412,9 @@ function addNotice(text: string) {
   }, 5000)
 }
 
-const artVolumeHoving = ref(false)
+const wrapVolumeRef = ref<HTMLDivElement>()
+import { useMouseInElement  } from "@vueuse/core"
+const {isOutside: artVolumeOutside } = useMouseInElement(wrapVolumeRef)
 
 const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)

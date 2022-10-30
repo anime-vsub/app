@@ -38,6 +38,7 @@ specifiers:
   '@types/uuid': ^8.3.4
   '@typescript-eslint/eslint-plugin': ^5.40.0
   '@typescript-eslint/parser': ^5.40.0
+  '@vueuse/core': ^9.4.0
   '@vueuse/head': ^0.9.8
   artplayer: ^4.5.8
   autoprefixer: ^10.4.12
@@ -95,6 +96,7 @@ dependencies:
   '@ionic/vue-router': 6.3.1
   '@quasar/extras': 1.15.5
   '@tachibana-shin/artplayer': 4.5.7
+  '@vueuse/core': 9.4.0_vue@3.2.41
   '@vueuse/head': 0.9.8_vue@3.2.41
   artplayer: 4.5.8
   axios: 1.1.2
@@ -1580,6 +1582,10 @@ packages:
     resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
     dev: true
 
+  /@types/web-bluetooth/0.0.16:
+    resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
+    dev: false
+
   /@typescript-eslint/eslint-plugin/5.40.0_25sstg4uu2sk4pm7xcyzuov7xq:
     resolution: {integrity: sha512-FIBZgS3DVJgqPwJzvZTuH4HNsZhHMa9SjxTKAZTlMsPw/UzpEjcf9f4dfgDJEHjK+HboUJo123Eshl6niwEm/Q==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -1794,6 +1800,18 @@ packages:
   /@vue/shared/3.2.41:
     resolution: {integrity: sha512-W9mfWLHmJhkfAmV+7gDjcHeAWALQtgGT3JErxULl0oz6R6+3ug91I7IErs93eCFhPCZPHBs4QJS7YWEV7A3sxw==}
 
+  /@vueuse/core/9.4.0_vue@3.2.41:
+    resolution: {integrity: sha512-JzgenGj1ZF2BHOen5rsFiAyyI9sXAv7aKhNLlm9b7SwYQeKTcxTWdhudonURCSP3Egl9NQaRBzes2lv/1JUt/Q==}
+    dependencies:
+      '@types/web-bluetooth': 0.0.16
+      '@vueuse/metadata': 9.4.0
+      '@vueuse/shared': 9.4.0_vue@3.2.41
+      vue-demi: 0.13.11_vue@3.2.41
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
   /@vueuse/head/0.9.8_vue@3.2.41:
     resolution: {integrity: sha512-zt8+JksoVFKxRvmABlaUHA62w+8nOcD8cJnaJ0+SHcr6xaIP3GXgh7/n2TzUoWw4l3d9UxRNs+tapgHdsQ7RbA==}
     peerDependencies:
@@ -1805,6 +1823,10 @@ packages:
       vue: 3.2.41
     transitivePeerDependencies:
       - '@vue/composition-api'
+    dev: false
+
+  /@vueuse/metadata/9.4.0:
+    resolution: {integrity: sha512-7GKMdGAsJyQJl35MYOz/RDpP0FxuiZBRDSN79QIPbdqYx4Sd0sVTnIC68KJ6Oln0t0SouvSUMvRHuno216Ud2Q==}
     dev: false
 
   /@vueuse/shared/9.4.0_vue@3.2.41:
