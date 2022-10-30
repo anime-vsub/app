@@ -126,7 +126,7 @@
 
   <!-- dialog notify update app -->
   <q-dialog
-    :model-value="newVersion"
+    :model-value="!!newVersion"
     @update:model-value="newVersion = undefined"
     full-width
   >
@@ -196,7 +196,7 @@ Promise.all([
     }
 
     // eslint-disable-next-line promise/always-return
-    if (!semverGt(results[0][0].tag_name, results[1].version)) return
+    if (!semverGt(results[0][0].tag_name.slice(1), results[1].version)) return
     ;[newVersion.value, appInfos.value] = [results[0][0], results[1]]
   })
   .catch((err) => {
