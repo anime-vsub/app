@@ -279,11 +279,13 @@
                     <div
                       class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
                     >
-                      <ul>
+                    <BottomBlurRelative>
+
+                      <ul class="mx-[-16px]">
                         <li
                           v-for="({ html }, index) in sources"
                           :key="html"
-                          class="py-2 text-center px-15"
+                          class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
                           :class="{
                             'c--main':
                               html === artQuality ||
@@ -295,7 +297,7 @@
                         </li>
                       </ul>
 
-                      <div class="bottom-drop" />
+                    </BottomBlurRelative>
                     </div>
                   </q-menu>
                 </q-btn>
@@ -337,13 +339,15 @@
                     <div
                       class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
                     >
-                      <ul>
+                    <BottomBlurRelative>
+
+                      <ul class="mx-[-16px]">
                         <li
                           v-for="{ name, value } in [
                             ...playbackRates,
                           ].reverse()"
                           :key="value"
-                          class="py-2 text-center px-12"
+                          class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
                           :class="{
                             'c--main': value === artPlaybackRate,
                           }"
@@ -353,7 +357,7 @@
                         </li>
                       </ul>
 
-                      <div class="bottom-drop" />
+                    </BottomBlurRelative>
                     </div>
                   </q-menu>
                 </q-btn>
@@ -632,6 +636,7 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
+import BottomBlurRelative from "components/BottomBlurRelative.vue"
 
 import type { Source } from "./sources"
 

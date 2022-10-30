@@ -35,9 +35,11 @@
             class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 pt-4 relative"
             :class="fit ? 'flex-1' : 'h-full'"
           >
+          <BottomBlurRelative>
             <slot />
+            
+          </BottomBlurRelative>
 
-            <div class="bottom-drop" />
           </div>
         </div>
       </div>
@@ -45,6 +47,8 @@
 </template>
 
 <script lang="ts" setup>
+  import BottomBlurRelative from "components/BottomBlurRelative.vue"
+  
 defineProps<{
   modelValue: boolean
   title: string
@@ -55,26 +59,3 @@ const emit = defineEmits<{
   (name: "update:model-value", v: false): void
 }>()
 </script>
-
-<style lang="scss">
-.art-dialog {
-  &-enter-active,
-  &-leave-active {
-    transition: transform 0.44s ease-in-out, opacity 0.44s ease-in-out;
-  }
-  &-enter-from,
-  &-leave-to {
-    transform: translateX(50vw);
-    opacity: 0;
-  }
-}
-
-.bottom-drop {
-  background-image: linear-gradient(
-    rgba(17, 19, 25, 0) 0%,
-    rgb(17, 19, 25) 100%
-  );
-  // background: red;
-  @apply absolute w-full h-[20px] bottom-0 left-0;
-}
-</style>
