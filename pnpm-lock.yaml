@@ -79,6 +79,7 @@ specifiers:
   tsx: ^3.10.1
   typescript: ^4.8.4
   uuid: ^9.0.0
+  vite-plugin-rewrite-all: ^1.0.0
   vite-plugin-windicss: ^1.8.8
   vitest: ^0.24.3
   vue: ^3.2.41
@@ -172,6 +173,7 @@ devDependencies:
   semver: 7.3.8
   tsx: 3.10.1
   typescript: 4.8.4
+  vite-plugin-rewrite-all: 1.0.0
   vite-plugin-windicss: 1.8.8
   vitest: 0.24.3_jsdom@20.0.1+sass@1.32.11
   windicss: 3.5.6
@@ -7971,6 +7973,15 @@ packages:
   /vary/1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+    dev: true
+
+  /vite-plugin-rewrite-all/1.0.0:
+    resolution: {integrity: sha512-XScNU1F73ImgsNQUuDTBd09r8nSz8Umr5PVhfmGJ8FTrFvfcci+P1pD7lT5BIdua75ZoNZGfHgdNYwnZB4cszQ==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      vite: ^2.0.0 || ^3.0.0
+    dependencies:
+      connect-history-api-fallback: 1.6.0
     dev: true
 
   /vite-plugin-windicss/1.8.8:

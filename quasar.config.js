@@ -109,6 +109,7 @@ module.exports = configure(function (/* ctx */) {
             include: path.resolve(__dirname, "./src/i18n/**"),
           },
         ],
+        ["vite-plugin-rewrite-all"]
       ],
     },
 
@@ -124,7 +125,7 @@ module.exports = configure(function (/* ctx */) {
         dark: true,
         loadingBar: {
           color: "main"
-        }        
+        }
       },
 
       // iconSet: 'material-icons', // Quasar icon set
