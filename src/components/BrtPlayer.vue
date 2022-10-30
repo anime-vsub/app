@@ -27,7 +27,7 @@ break
     >
       <video
         ref="video"
-        :autoplay="documentVisibility === 'visible'"
+        :autoplay="documentVisibility !== 'hidden'"
         :poster="poster"
         @play="artPlaying = true"
         @pause="artPlaying = false"
@@ -841,7 +841,7 @@ const toggleMuted = () => {
     lastVolumeBeforeMute = artVolume.value
     setArtVolume(0)
   }
-  
+
 addNotice(`Âm lượng ${Math.round(artVolume.value * 100)}%`)
 }
 
@@ -1084,12 +1084,12 @@ const documentVisibility = useDocumentVisibility()
 let artPlayingOfBeforeDocumentHide: boolean;
 watch(documentVisibility, visibility => {
   if (visibility === "visible") {
-    if (!artPlaying.value && artPlayingOfBeforeDocumentHide)
+    if (!artPlaying.value && (artPlayingOfBeforeDocumentHide ?? true))
     setArtPlaying(true)
   } else {
     artPlayingOfBeforeDocumentHide = artPlaying.value
   }
-}, { immediate: true })
+})
 
 if (settingsStore.enableRemindStop) {
   useIntervalFn(() => {
