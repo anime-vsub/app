@@ -132,18 +132,21 @@ break
               v-show="!holdedBD"
             >
               <template v-if="!artLoading">
+                <transition name="q-transition--scale">
+
                 <Icon
-                  v-show="!artPlaying"
+                  v-if="!artPlaying"
                   icon="fluent:play-circle-20-regular"
                   width="60"
                   height="60"
                 />
                 <Icon
-                  v-show="artPlaying"
+                v-else
                   icon="fluent:pause-circle-20-regular"
                   width="60"
                   height="60"
                 />
+                </transition>
               </template>
             </q-btn>
 
