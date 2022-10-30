@@ -12,7 +12,7 @@
 import eruda from "eruda2"
 import MainLayout from "layouts/MainLayout.vue"
 
-const isDev = import.meta.env.DEV
+const isDev = import.meta.env.DEV && process.env.MODE !== "spa"
 if (isDev) {
   eruda.init()
 
