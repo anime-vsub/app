@@ -129,7 +129,7 @@
                 (item) => value === currentSeason && item.id === currentChap
               "
               :progress-chaps="progressChaps"
-              class-item="px-3 py-[6px] mx-[-8px] mb-3"
+              class-item="px-3 py-[6px] mb-3"
             />
           </q-tab-panel>
         </q-tab-panels>
