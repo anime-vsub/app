@@ -294,6 +294,8 @@
             height="24"
           />
 
+          <q-badge floating rounded  transparent class="top-0" :label="notificationStore.max " />
+
           <q-menu v-model="showMenuNotify" class="scrollbar-custom">
             <q-card class="bg-dark-page max-w-[435px]">
               <q-card-section>
@@ -339,13 +341,20 @@
                         }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
+                        <div class="flex flex-nowrap">
+
                         <q-img
                           no-spinner
                           :src="item.image"
-                          width="120px"
+                          width="128px"
                           :ratio="120 / 81"
                           class="rounded-sm"
                         />
+                        <div class="mr-[-32px]">
+
+                        <q-btn round dense icon="close" @click="notificationStore.remove(item.id)"/>
+                        </div>
+                        </div>
                       </q-item-section>
                     </q-item>
                   </transition-group>
@@ -916,5 +925,26 @@ watch(showMenuAccount, (val) => {
 
 .only-router-active {
   display: none;
+}
+</style>
+
+
+<style lang="scss" scoped>
+.notify {
+  &-move,
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.22s ease;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  &-leave-active {
+    position: absolute;
+  }
 }
 </style>
