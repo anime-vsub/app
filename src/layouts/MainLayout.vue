@@ -567,6 +567,8 @@
           v-for="item in drawersBottom"
           :key="item.name"
           class="py-2 px-4 block"
+          :href="item.href"
+          target="_blank"
           >{{ item.name }}</a
         >
       </div>
@@ -717,21 +719,27 @@ const drawers = [
 const drawersBottom = [
   {
     name: "Về chúng tôi",
+    href: "https://anime-vsub.github.io/about"
   },
   {
     name: "Liên hệ chúng tôi",
+    href:"mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub"
   },
   {
     name: "Tải ứng dụng",
+    href:"https://anime-vsub.github.io"
   },
   {
     name: "Điều khoản sử dụng",
+    href:'https://anime-vsub.github.io/tems-of-use'
   },
   {
     name: "Chính sách riêng tư",
+    href: 'https://anime-vsub.github.io/privacy-police'
   },
   {
     name: "Khiếu nại vi phạm",
+    href: 'https://anime-vsub.github.io/disclaimer'
   },
 ]
 
