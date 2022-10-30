@@ -823,7 +823,7 @@ const setArtPlaybackRate = (value: number) => {
     return
   }
   video.value.playbackRate = value
-  addNotice(`${value}x`)
+  addNotice(`Tốc độ phát ${value}x`)
 }
 const artVolume = ref(1)
 const setArtVolume = (value: number) => {
@@ -1067,12 +1067,15 @@ import { useIntervalFn } from "@vueuse/core"
 import { useDocumentVisibility } from '@vueuse/core'
 
 const documentVisibility = useDocumentVisibility()
+let artPlayingOfBeforeDocumentHide: boolean;
 watch(documentVisibility, visibility => {
   if (visibility === "visible") {
-    if (!artPlaying.value)
+    if (!artPlaying.value && artPlayingOfBeforeDocumentHide)
     setArtPlaying(true)
+  } else {
+    artPlayingOfBeforeDocumentHide = artPlaying.value
   }
-})
+}, { immediate: true })
 
 if (settingsStore.enableRemindStop) {
   useIntervalFn(() => {
