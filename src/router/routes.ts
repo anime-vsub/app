@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
   {
     name: "watch-anime",
     path: "/phim/:season/:prefix(\\D+)?:chap(\\d+)?",
-    alias: ["/phim/:season/:prefix(.+)?-:chap(\\d+)?.html"],
+    alias: ["/phim/:season/:prefix(.+)?-:chap(\\d+)?:isHtml(.html)?"],
     component: () => import("pages/phim/_season.vue"),
     meta: {
       hideDrawer: true,
