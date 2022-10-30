@@ -1420,7 +1420,11 @@ const notices = shallowReactive<
 let id = 1
 function addNotice(text: string) {
   const uuid = id++
+
   notices.push({ id: uuid, text })
+  if (notices.length > 3)
+  notices.splice(0, notices.length - 3)
+
   setTimeout(() => {
     notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1)
   }, 5000)
