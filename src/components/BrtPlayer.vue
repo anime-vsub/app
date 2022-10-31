@@ -6,16 +6,16 @@
         @keydown="event => {
           switch (event.code) {
 
-      case 'ArrowUp':
+
+              case 'ArrowUp':
             event.preventDefault()
-setArtVolume(Math.min(1, artVolume + 0.05))
-addNotice(`Âm lượng ${Math.round(artVolume * 100)}%`)
-break
-case 'ArrowDown':
+              if (!artFullscreen) upVolume()
+        break
+        case 'ArrowDown':
             event.preventDefault()
-setArtVolume(Math.max(0, artVolume - 0.05))
-addNotice(`Âm lượng ${Math.round(artVolume * 100)}%`)
-break
+       if (!artFullscreen) downVolume()
+        break
+
           }
         }">
     <q-responsive
@@ -1512,6 +1512,25 @@ watch(showDialogChapter, (status) => {
 const showMenuQuality = ref(false)
 const showMenuPlaybackRate = ref(false)
 
+
+
+
+function upVolume() {
+
+        if (artVolume.value < 1) {
+          const newVal = Math.min(1, artVolume.value + 0.05)
+  setArtVolume(newVal)
+  addNotice(`Âm lượng ${Math.round(newVal * 100)}%`)
+  }
+}
+function downVolume() {
+  if (artVolume.value > 0) {
+    const newVal = Math.max(0, artVolume.value - 0.05)
+  setArtVolume(newVal)
+  addNotice(`Âm lượng ${Math.round(newVal * 100)}%`)
+  }
+}
+
 // keyboard binding
 import { useEventListener } from "@vueuse/core"
 useEventListener(window, "keydown", (event: KeyboardEvent) => {
@@ -1535,7 +1554,15 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       case "ArrowRight":
         skipForward()
         break
-        // case ArrowUp , ArrowDown bind to el scope
+
+
+              case 'ArrowUp':
+              if (artFullscreen.value) upVolume()
+        break
+        case 'ArrowDown':
+       if (artFullscreen.value) downVolume()
+        break
+
         case "KeyM":
         toggleMuted()
         break
