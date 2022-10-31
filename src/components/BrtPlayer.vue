@@ -1504,30 +1504,34 @@ const showMenuQuality = ref(false)
 const showMenuPlaybackRate = ref(false)
 
 // keyboard binding
-function onKeypress(event: KeyboardEvent) {
+import { useEventListener } from "@vueuse/core"
+useEventListener(window, "keydown", (event: KeyboardEvent) => {
 
-  switch (event.code) {
-    case "Space":
-  if ( event.target?.nodeName !== "TEXTAREA" && event.target?.nodeName !== "INPUT" ) event.preventDefault()
-      setArtPlaying(!artPlaying.value)
-      break
-    case "KeyF":
-      setArtFullscreen(!artFullscreen.value)
-      break
-    case "ArrowLeft":
-      skipBack()
-      break
-    case "ArrowRight":
-      skipForward()
-      break
-      // case ArrowUp , ArrowDown bind to el scope
-      case "KeyM":
-      toggleMuted()
-      break
-  }
-}
-window.addEventListener("keydown", onKeypress)
-onBeforeUnmount(() => window.removeEventListener("keydown", onKeypress))
+
+    switch (event.code) {
+      case "Space": {
+    if ( event.target?.nodeName !== "TEXTAREA" && event.target?.nodeName !== "INPUT" ) event.preventDefault()
+    const playing = artPlaying.value
+        setArtPlaying(!playing)
+        if (playing) setArtControlShow(true)
+        // setArtControlShow(playing)
+        break
+        }
+      case "KeyF":
+        toggleArtFullscreen()
+        break
+      case "ArrowLeft":
+        skipBack()
+        break
+      case "ArrowRight":
+        skipForward()
+        break
+        // case ArrowUp , ArrowDown bind to el scope
+        case "KeyM":
+        toggleMuted()
+        break
+    }
+})
 </script>
 
 <style lang="scss" scoped>
