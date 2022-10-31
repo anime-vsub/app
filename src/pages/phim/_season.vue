@@ -642,8 +642,8 @@ const description = data.value.description
 
 const nextChap = computed<
   | {
-      season: string
-      chap?: string
+      season: typeof seasons.value[0]
+      chap?: typeof currentDataSeason.value.chaps[0]
     }
   | undefined
   // eslint-disable-next-line vue/return-in-computed-property
@@ -662,8 +662,8 @@ const nextChap = computed<
     indexCurrentChap === currentDataSeason.value.chaps.length - 1
   if (!isLastChapOfSeason) {
     return {
-      season: currentSeason.value,
-      chap: currentDataSeason.value.chaps[indexCurrentChap + 1].id,
+      season: currentMetaSeason.value,
+      chap: currentDataSeason.value.chaps[indexCurrentChap + 1]
     }
   }
 
@@ -682,7 +682,7 @@ const nextChap = computed<
   if (!isLastSeason) {
     // first chap of next season
     return {
-      season: seasons.value[indexSeason + 1].value,
+      season: seasons.value[indexSeason + 1]
     }
   }
 

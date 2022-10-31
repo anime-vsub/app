@@ -173,12 +173,16 @@ break
                   dense
                   flat
                   no-caps
+                  rounded
                   class="mr-6 text-weight-normal art-btn"
                   :disable="!nextChap"
                   replace
-                  :to="{
+                  :to="nextChap && {
                     name: 'watch-anime',
-                    params: nextChap,
+                    params: {
+                      season: nextChap.season.value,
+                      chap: nextChap.chap?.id
+                    },
                   }"
                 >
                   <Icon
@@ -683,8 +687,14 @@ const props = defineProps<{
   currentChap?: string
   nameCurrentChap?: string
   nextChap?: {
-    season: string
-    chap?: string
+    season: {
+      name: string
+      value: string
+    }
+    chap?: {
+      name: string
+      id: string
+    }
   }
   name: string
   poster?: string
