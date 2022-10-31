@@ -332,6 +332,8 @@
         :key="item.name"
         :data="item"
         class="mt-3"
+        three-line
+        show-star
       />
     </div>
   </div>

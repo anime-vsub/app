@@ -13,11 +13,14 @@
     </div>
 
     <div class="flex-1 h-full overflow-hidden pl-3 py-[3px] text-[#9a9a9a]">
-      <div class="text-[16px] line-clamp-2 text-[#eee] leading-snug">
+      <div class="text-[16px] text-[#eee] leading-snug" :class="{
+        'line-clamp-3': threeLine,
+        'line-clamp-2': !threeLine
+      }">
         {{ data.name }}
       </div>
 
-      <div class="mt-2">
+      <div v-if="data.process" class="mt-2">
         <template v-if="data.year"
           >{{ data.year }} <span class="mx-1">|</span> </template
         >Tập
@@ -27,6 +30,11 @@
       <p v-if="data.description" class="text-grey mt-2 line-clamp-2">
         {{ data.description }}
       </p>
+
+<div v-if="showStar" class="flex items-center text-white font-weight-medium mt-2">
+  <span class="font-weight-normal text-gray-400">Đánh giá: </span>
+  <Star class="mr-1 ml-1" /> {{ data.rate }}
+</div>
 
       <q-btn
         dense
@@ -47,6 +55,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import Star from "./Star.vue"
 
 defineProps<{
   data: {
@@ -56,7 +65,9 @@ defineProps<{
     year?: string | number
     process: string
     description?: string
-  }
+  },
+  threeLine?: boolean
+  showStar?: boolean
 }>()
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
