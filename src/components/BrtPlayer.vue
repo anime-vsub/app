@@ -719,13 +719,7 @@ const router = useRouter()
 const $q = useQuasar()
 const db = getFirestore(app)
 
-const props = defineProps<{
-  sources?: Source[]
-  currentSeason?: string
-  nameCurrentSeason?: string
-  currentChap?: string
-  nameCurrentChap?: string
-  nextChap?: {
+interface SiblingChap  {
     season: {
       name: string
       value: string
@@ -735,6 +729,15 @@ const props = defineProps<{
       id: string
     }
   }
+
+const props = defineProps<{
+  sources?: Source[]
+  currentSeason?: string
+  nameCurrentSeason?: string
+  currentChap?: string
+  nameCurrentChap?: string
+  nextChap?:SiblingChap
+  // prevChap?: SiblingChap
   name: string
   poster?: string
   seasons?: {
