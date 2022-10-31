@@ -1993,3 +1993,9 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
   }
 }
 </style>
+
+<style lang="scss" scoped>
+.art-layer-controller :deep(.q-btn .q-focus-helper) {
+  display: none;
+}
+</style>
