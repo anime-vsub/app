@@ -46,6 +46,7 @@
         @volumechange="artVolume = $event.target.volume"
         @canplay=";(artLoading = false), onVideoCanPlay()"
         @canplaythrough="artLoading = false"
+        @suspend="artLoading = false"
         @waiting="artLoading = true"
         @error="onVideoError"
         @ended="onVideoEnded"
