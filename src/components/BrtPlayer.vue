@@ -1126,7 +1126,7 @@ watch(documentVisibility, visibility => {
 })
 
 if (settingsStore.enableRemindStop) {
-  useIntervalFn(() => {
+  const { resume } = useIntervalFn(() => {
     if (!artPlaying.value) return;
 
     setArtPlaying(false)
@@ -1147,6 +1147,16 @@ if (settingsStore.enableRemindStop) {
       console.warn("cancel continue play")
     })
   }, 1 /* hours */ * 3600_000)
+
+  const resumeDelay = debounce(resume, 1_000);
+  ["mousedown", "mouseup", "mousemove",
+    "keydown",
+    "touchstart", "touchmove", "touchend",
+    "scroll"]
+    .forEach(name => {
+      useEventListener(window, name, resumeDelay)
+    })
+    watch(documentVisibility, resumeDelay);
 }
 function runRemount() {
   $q.dialog({
