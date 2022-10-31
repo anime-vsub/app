@@ -192,6 +192,11 @@ break
                     height="18"
                   />
                   Tiếp
+
+
+                  <q-tooltip v-if="nextChap" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                   {{ currentSeason !== nextChap.season.value ? `Tiếp theo: ${nextChap.season.name}` : `Tiếp theo: Tập ${nextChap.chap.name}` }}
+                  </q-tooltip>
                 </q-btn>
 
                 <div
@@ -199,7 +204,7 @@ break
                   :class="{ active: !artVolumeOutside }"
                   ref="wrapVolumeRef"
                 >
-                <q-btn round dense @click="toggleMuted">
+                <q-btn round flat dense @click="toggleMuted">
 
                   <Icon
                     :icon="
@@ -213,6 +218,11 @@ break
                     width="18"
                     height="18"
                   />
+
+
+                  <q-tooltip anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                   {{ artVolume === 0 ? "Bật tiếng (m)" : "Tắt tiếng (m)" }}
+                  </q-tooltip>
                   </q-btn>
 
                   <div
@@ -256,6 +266,11 @@ break
                     height="18"
                   />
                   EP {{ nameCurrentChap }}
+
+
+                  <q-tooltip anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                   Danh sách tập
+                  </q-tooltip>
                 </q-btn>
               </div>
 
@@ -264,6 +279,7 @@ break
                   dense
                   flat
                   no-caps
+                  rounded
                   class="mr-6 text-weight-normal art-btn"
                 >
                   <Icon
@@ -319,11 +335,17 @@ break
                     </BottomBlurRelative>
                     </div>
                   </q-menu>
+
+
+                  <q-tooltip anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                   Chất lượng
+                  </q-tooltip>
                 </q-btn>
                 <q-btn
                   dense
                   flat
                   no-caps
+                  rounded
                   class="mr-6 ttext-weight-normal art-btn"
                 >
                   <Icon
@@ -379,13 +401,19 @@ break
                     </BottomBlurRelative>
                     </div>
                   </q-menu>
+
+
+                  <q-tooltip anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                    Tốc độ phát
+                  </q-tooltip>
                 </q-btn>
                 <q-btn
                   dense
                   flat
+                  round
                   no-caps
                   class="text-weight-normal art-btn"
-                  @click="setArtFullscreen(!artFullscreen)"
+                  @click="toggleArtFullscreen"
                 >
                   <Icon
                     v-if="!artFullscreen"
@@ -401,6 +429,10 @@ break
                     width="24"
                     height="24"
                   />
+
+                  <q-tooltip ref="toolipFullscreenRef" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                    {{ artFullscreen ?  "Thoát khỏi chế độ toàn màn hình (f)" : "Toàn màn hình (f)" }}
+                  </q-tooltip>
                 </q-btn>
               </div>
             </div>
@@ -718,6 +750,8 @@ const props = defineProps<{
   >
 }>()
 
+const playerWrapRef = ref<HTMLDivElement>()
+
 // ===== setup effect =====
 
 const seasonActive = ref<string>()
@@ -866,30 +900,16 @@ const setArtControlShow = (show: boolean) => {
   artControlShow.value = show
   if (show) activeTime = Date.now()
 }
-const artFullscreen = ref(false)
-const setArtFullscreen = async (fullscreen: boolean) => {
-  console.log("set art fullscreen ", fullscreen)
-  if (fullscreen) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await playerWrapRef.value!.requestFullscreen()
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    await document.exitFullscreen().catch(() => {})
-  }
-
-  artFullscreen.value = document.fullscreenElement !== null
-}
-function onFullscreenchange() {
-  setArtFullscreen(document.fullscreenElement !== null)
-}
-document.addEventListener("fullscreenchange", onFullscreenchange)
-onBeforeUnmount(() =>
-  document.removeEventListener("fullscreenchange", onFullscreenchange)
-)
-
+import { useFullscreen  } from "@vueuse/core"
+const {isFullscreen: artFullscreen, toggle: toggleArtFullscreen, exit: exitArtFullscreen } = useFullscreen(playerWrapRef)
+// fix toolip fullscreen not hide if change fullscreen
+import {QTooltip} from"quasar"
+const toolipFullscreenRef = ref<QTooltip>()
+watch(artFullscreen, () => toolipFullscreenRef.value.hide())
+// fix done
 onBeforeRouteLeave(() => {
   if (artFullscreen.value) {
-    setArtFullscreen(false)
+    exitArtFullscreen()
 
     return false
   }
@@ -1224,8 +1244,6 @@ watch(
   },
   { immediate: true }
 )
-
-const playerWrapRef = ref<HTMLDivElement>()
 
 const currentingTime = ref(false)
 const progressInnerRef = ref<HTMLDivElement>()
