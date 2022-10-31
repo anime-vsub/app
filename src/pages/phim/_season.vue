@@ -141,7 +141,7 @@
     v-if="loading || !data"
     class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px] row"
   >
-  <div class="col-9">
+  <div class="col-9 pr-4">
     <q-skeleton type="text" class="text-[35px]" width="80%" />
     <q-skeleton type="text" width="100px" class="mt-[-10px]" />
 
@@ -185,7 +185,7 @@
   </div>
 
   <div v-else class="mx-4 row">
-    <div class="col-9">
+    <div class="col-9 pr-4">
       <div class="flex-1 mt-4 mb-2">
         <h1
           class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px] leading-normal"
