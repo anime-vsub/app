@@ -140,12 +140,16 @@
                   class="mb-4"
                 />
                 <CardVertical
-                  v-else
+                  v-else-if="favorites"
                   v-for="item in favorites?.items"
                   :key="item.path"
                   :data="item"
                   class="mb-4"
                 />
+                <div v-else class="text-center">
+                  <div class="text-subtitle1 font-weight-medium">Lỗi không xác định</div>
+                  <q-btn outline color="main" @click="refreshFavorites">Thử lại</q-btn>
+                  </div>
               </q-card-section>
             </q-card>
 
@@ -213,7 +217,7 @@
                 </div>
 
                 <template
-                  v-else
+                  v-else-if="histories"
                   v-for="(item, index) in histories"
                   :key="item.id"
                 >
@@ -284,6 +288,12 @@
                     </div>
                   </router-link>
                 </template>
+              
+              
+              <div v-else class="text-center">
+                <div class="text-subtitle1 font-weight-medium">Lỗi không xác định</div>
+                <q-btn outline color="main" @click="refreshHistories">Thử lại</q-btn>
+                </div>
               </q-card-section>
             </q-card>
 
