@@ -256,6 +256,7 @@ break
                   dense
                   flat
                   no-caps
+                  rounded
                   @click="showDialogChapter = true"
                   class="text-weight-normal art-btn only-fscrn"
                 >
@@ -1100,7 +1101,7 @@ function onVideoEnded() {
   if (props.nextChap && settingsStore.player.autoNext) {
     addNotice(
       props.currentSeason !== props.nextChap.season
-        ? `Đang phát ${props.nextChap.season}`
+        ? `Đang phát season ${props.nextChap.season.name}`
         : "Đang phát tập tiếp theo"
     )
 
