@@ -102,6 +102,12 @@ break
                   width="25"
                   height="25"
                 />
+
+
+
+                <q-tooltip anchor="bottom middle" self="top middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                Đổi relay
+                </q-tooltip>
               </q-btn>
             </div>
           </div>
@@ -269,7 +275,7 @@ break
                   EP {{ nameCurrentChap }}
 
 
-                  <q-tooltip anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                  <q-tooltip v-if="!showDialogChapter" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
                    Danh sách tập
                   </q-tooltip>
                 </q-btn>
@@ -338,7 +344,7 @@ break
                   </q-menu>
 
 
-                  <q-tooltip anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                  <q-tooltip v-if="!showMenuQuality" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
                    Chất lượng
                   </q-tooltip>
                 </q-btn>
@@ -404,7 +410,7 @@ break
                   </q-menu>
 
 
-                  <q-tooltip anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                  <q-tooltip v-if="!showMenuPlaybackRate" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
                     Tốc độ phát
                   </q-tooltip>
                 </q-btn>
