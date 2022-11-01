@@ -157,7 +157,7 @@
                   <div class="text-subtitle1 font-weight-medium">
                     Lỗi không xác định
                   </div>
-                  <q-btn outline color="main" @click="refreshFavorites"
+                  <q-btn outline rounded color="main" @click="refreshFavorites"
                     >Thử lại</q-btn
                   >
                 </div>
@@ -304,7 +304,7 @@
                   <div class="text-subtitle1 font-weight-medium">
                     Lỗi không xác định
                   </div>
-                  <q-btn outline color="main" @click="refreshHistories"
+                  <q-btn outline rounded color="main" @click="refreshHistories"
                     >Thử lại</q-btn
                   >
                 </div>
@@ -522,16 +522,16 @@
 
               <q-list v-if="tabMenuAccountActive === 'locale'">
                 <q-item
-                  clickable
-                  v-ripple
-                  @click="tabMenuAccountActive = 'normal'"
                 >
                   <q-item-section avatar class="min-w-0">
+                    <q-btn round dense
+                  @click="tabMenuAccountActive = 'normal'">
                     <Icon
                       icon="fluent:ios-arrow-ltr-24-regular"
                       width="20"
                       height="20"
                     />
+                  </q-btn>
                   </q-item-section>
                   <q-item-section> Chọn ngôn ngữ của bạn </q-item-section>
                 </q-item>
@@ -552,18 +552,18 @@
 
               <q-list v-if="tabMenuAccountActive === 'setting'">
                 <q-item
-                  clickable
-                  v-ripple
-                  @click="tabMenuAccountActive = 'normal'"
                 >
                   <q-item-section avatar class="min-w-0">
+                    <q-btn round dense
+                  @click="tabMenuAccountActive = 'normal'">
                     <Icon
                       icon="fluent:ios-arrow-ltr-24-regular"
                       width="20"
                       height="20"
                     />
+                  </q-btn>
                   </q-item-section>
-                  <q-item-section> Quay lại </q-item-section>
+                  <q-item-section> Chọn ngôn ngữ của bạn </q-item-section>
                 </q-item>
 
                 <q-item clickable v-ripple>
@@ -599,6 +599,7 @@
           flat
           stack
           no-caps
+          rounded
           class="font-weight-normal"
           @click="showDialogLogin = true"
         >
@@ -609,6 +610,7 @@
         <q-btn
           flat
           no-caps
+          rounded
           class="font-weight-normal"
           href="https://anime-vsub.github.io"
           target="_blank"
@@ -645,7 +647,7 @@
         </router-link>
       </q-toolbar>
 
-      <q-list>
+      <q-list class="mx-2">
         <template
           v-for="{ icon, active, name, path, divider } in drawers"
           :key="name"
@@ -658,7 +660,7 @@
             v-else
             clickable
             v-ripple
-            class="min-h-0 px-4 my-2"
+            class="min-h-0 my-2  rounded-xl"
             :to="path"
             active-class=""
             exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
@@ -707,7 +709,7 @@
     <q-card class="h-[60vh] bg-dark-500">
       <q-card-section>
         <div class="flex justify-between">
-          <q-btn dense round />
+          <q-btn dense round flat />
 
           <div class="flex-1 text-center text-subtitle1">
             Đăng nhập để đồng bộ dữ liệu
@@ -761,6 +763,7 @@
           <q-btn
             type="submit"
             no-caps
+            rounded
             class="bg-main w-full"
             :disable="!email || !password"
             >Đăng nhập</q-btn

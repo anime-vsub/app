@@ -122,6 +122,7 @@
                 <q-btn
                   dense
                   no-caps
+                  rounded
                   style="color: #00be06"
                   @click="fetchSeason(value)"
                   >Thử lại</q-btn
@@ -239,7 +240,7 @@
         </div>
 
         <div class="my-2">
-          <q-btn no-caps class="mr-4 text-weight-normal" @click="toggleFollow">
+          <q-btn no-caps rounded unelevated class="bg-[rgba(113,113,113,0.3)] mr-4 text-weight-normal" @click="toggleFollow">
             <Icon
               v-if="followed"
               icon="material-symbols:bookmark-added-outline-rounded"
@@ -256,7 +257,7 @@
               follows ? formatView(follows) : "Theo dõi"
             }}</span>
           </q-btn>
-          <q-btn no-caps class="mr-4 text-weight-normal" @click="share">
+          <q-btn no-caps rounded unelevated class="bg-[rgba(113,113,113,0.3)] mr-4 text-weight-normal" @click="share">
             <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
             <span class="text-[12px] mt-1">Chia sẻ</span>
           </q-btn>

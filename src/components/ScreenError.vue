@@ -12,6 +12,7 @@
         dense
         no-caps
         outline
+        rounded
         class="px-2"
         @click="emit('click:retry')"
         style="color: #00be06"
