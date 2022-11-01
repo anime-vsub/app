@@ -13,10 +13,13 @@
     </div>
 
     <div class="flex-1 h-full overflow-hidden pl-3 py-[3px] text-[#9a9a9a]">
-      <div class="text-[16px] text-[#eee] leading-snug" :class="{
-        'line-clamp-3': threeLine,
-        'line-clamp-2': !threeLine
-      }">
+      <div
+        class="text-[16px] text-[#eee] leading-snug"
+        :class="{
+          'line-clamp-3': threeLine,
+          'line-clamp-2': !threeLine,
+        }"
+      >
         {{ data.name }}
       </div>
 
@@ -31,10 +34,13 @@
         {{ data.description }}
       </p>
 
-<div v-if="showStar" class="flex items-center text-white font-weight-medium mt-2">
-  <span class="font-weight-normal text-gray-400">Đánh giá: </span>
-  <Star class="mr-1 ml-1" /> {{ data.rate }}
-</div>
+      <div
+        v-if="showStar"
+        class="flex items-center text-white font-weight-medium mt-2"
+      >
+        <span class="font-weight-normal text-gray-400">Đánh giá: </span>
+        <Star class="mr-1 ml-1" /> {{ data.rate }}
+      </div>
 
       <q-btn
         dense
@@ -55,6 +61,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+
 import Star from "./Star.vue"
 
 defineProps<{
@@ -65,7 +72,7 @@ defineProps<{
     year?: string | number
     process: string
     description?: string
-  },
+  }
   threeLine?: boolean
   showStar?: boolean
 }>()

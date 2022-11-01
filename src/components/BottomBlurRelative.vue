@@ -4,7 +4,6 @@
 </template>
 
 <style lang="scss" scoped>
-
 .bottom-drop {
   background-image: linear-gradient(
     rgba(17, 19, 25, 0) 0%,

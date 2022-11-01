@@ -85,6 +85,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useHead } from "@vueuse/head"
 import BottomBlur from "components/BottomBlur.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
@@ -92,38 +93,35 @@ import ScreenNotFound from "components/ScreenNotFound.vue"
 import { QInfiniteScroll } from "quasar"
 import { History } from "src/apis/runs/history"
 import { parseTime } from "src/logic/parseTime"
+import { computed } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
-import {computed}from"vue"
-import { useHead } from "@vueuse/head"
-useHead(computed(() => {
-const title = "Lịch sử xem Anime"
-const description = title
+useHead(
+  computed(() => {
+    const title = "Lịch sử xem Anime"
+    const description = title
 
-  return {
-    title : title,
-    description,
-    meta: [
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:url" }
-    ],
-    link: [
-      {
-        rel: "canonical",
-      }
-    ]
-  }
-}))
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url" },
+      ],
+      link: [
+        {
+          rel: "canonical",
+        },
+      ],
+    }
+  })
+)
 
 const router = useRouter()
 
-const {
-  loading,
-  data: histories,
-  run,
-} = useRequest(() => History())
+const { loading, data: histories, run } = useRequest(() => History())
 
 async function onLoad(page: number, done: (end: boolean) => void) {
   const items = await History(histories.value)

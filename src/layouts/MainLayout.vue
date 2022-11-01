@@ -23,7 +23,10 @@
 
         <q-space />
 
-        <form @submit.prevent="router.push(`/tim-kiem/${query}`)" class="relative min-w-[164px] w-full max-w-[598px]">
+        <form
+          @submit.prevent="router.push(`/tim-kiem/${query}`)"
+          class="relative min-w-[164px] w-full max-w-[598px]"
+        >
           <q-input
             v-model="query"
             dense
@@ -56,9 +59,11 @@
               @mousedown.stop.prevent
               @click.stop.prevent
             >
-              <li v-if="query" class="px-4 mt-1 py-[0.5rem] flex items-center w-full justify-between">
-                <div >
-
+              <li
+                v-if="query"
+                class="px-4 mt-1 py-[0.5rem] flex items-center w-full justify-between"
+              >
+                <div>
                   <span class="text-gray-400 mr-1">Tìm kiếm: </span>
                   <span class="font-bold truncate">{{ query }}</span>
                 </div>
@@ -66,8 +71,9 @@
                 <button class="key-enter" type="submit">
                   <span>Enter</span>
                 </button>
-                </li>
+              </li>
               <li
+              
                 v-if="searchLoading"
                 v-for="i in 12"
                 :key="i"
@@ -107,7 +113,9 @@
                   </div>
                 </router-link>
               </li>
-              <li v-else class="px-4 py-5 text-center text-gray-400 w-full">{{ query ? "Không tìm thấy" : "Nhập để tìm kiếm"}}</li>
+              <li v-else class="px-4 py-5 text-center text-gray-400 w-full">
+                {{ query ? "Không tìm thấy" : "Nhập để tìm kiếm" }}
+              </li>
             </ul>
           </transition>
         </form>
@@ -147,9 +155,13 @@
                   class="mb-4"
                 />
                 <div v-else class="text-center">
-                  <div class="text-subtitle1 font-weight-medium">Lỗi không xác định</div>
-                  <q-btn outline color="main" @click="refreshFavorites">Thử lại</q-btn>
+                  <div class="text-subtitle1 font-weight-medium">
+                    Lỗi không xác định
                   </div>
+                  <q-btn outline color="main" @click="refreshFavorites"
+                    >Thử lại</q-btn
+                  >
+                </div>
               </q-card-section>
             </q-card>
 
@@ -288,11 +300,14 @@
                     </div>
                   </router-link>
                 </template>
-              
-              
-              <div v-else class="text-center">
-                <div class="text-subtitle1 font-weight-medium">Lỗi không xác định</div>
-                <q-btn outline color="main" @click="refreshHistories">Thử lại</q-btn>
+
+                <div v-else class="text-center">
+                  <div class="text-subtitle1 font-weight-medium">
+                    Lỗi không xác định
+                  </div>
+                  <q-btn outline color="main" @click="refreshHistories"
+                    >Thử lại</q-btn
+                  >
                 </div>
               </q-card-section>
             </q-card>
@@ -314,7 +329,13 @@
             height="24"
           />
 
-          <q-badge floating rounded  transparent class="top-0" :label="notificationStore.max " />
+          <q-badge
+            floating
+            rounded
+            transparent
+            class="top-0"
+            :label="notificationStore.max"
+          />
 
           <q-menu v-model="showMenuNotify" class="scrollbar-custom">
             <q-card class="bg-dark-page max-w-[435px]">
@@ -362,18 +383,21 @@
                       </q-item-section>
                       <q-item-section side>
                         <div class="flex flex-nowrap">
-
-                        <q-img
-                          no-spinner
-                          :src="item.image"
-                          width="128px"
-                          :ratio="120 / 81"
-                          class="rounded-sm"
-                        />
-                        <div class="mr-[-32px]">
-
-                        <q-btn round dense icon="close" @click="notificationStore.remove(item.id)"/>
-                        </div>
+                          <q-img
+                            no-spinner
+                            :src="item.image"
+                            width="128px"
+                            :ratio="120 / 81"
+                            class="rounded-sm"
+                          />
+                          <div class="mr-[-32px]">
+                            <q-btn
+                              round
+                              dense
+                              icon="close"
+                              @click="notificationStore.remove(item.id)"
+                            />
+                          </div>
                         </div>
                       </q-item-section>
                     </q-item>
@@ -521,7 +545,13 @@
           Đăng nhập
         </q-btn>
 
-        <q-btn flat no-caps class="font-weight-normal" href="https://anime-vsub.github.io" target="_blank">
+        <q-btn
+          flat
+          no-caps
+          class="font-weight-normal"
+          href="https://anime-vsub.github.io"
+          target="_blank"
+        >
           <Icon icon="fluent:phone-24-regular" width="20" height="20" />
           App
         </q-btn>
@@ -638,7 +668,7 @@
               name="email"
               class="input w-full"
               placeholder="E-mail"
-            @keydown.stop
+              @keydown.stop
             />
           </div>
           <div class="mt-4 relative flex items-center flex-nowrap input-wrap">
@@ -649,7 +679,7 @@
               name="password"
               class="input w-full"
               placeholder="Mật khẩu mới"
-            @keydown.stop
+              @keydown.stop
             />
             <q-btn
               dense
@@ -748,27 +778,27 @@ const drawers = [
 const drawersBottom = [
   {
     name: "Về chúng tôi",
-    href: "https://anime-vsub.github.io/about"
+    href: "https://anime-vsub.github.io/about",
   },
   {
     name: "Liên hệ chúng tôi",
-    href:"mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub"
+    href: "mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub",
   },
   {
     name: "Tải ứng dụng",
-    href:"https://anime-vsub.github.io"
+    href: "https://anime-vsub.github.io",
   },
   {
     name: "Điều khoản sử dụng",
-    href:'https://anime-vsub.github.io/tems-of-use'
+    href: "https://anime-vsub.github.io/tems-of-use",
   },
   {
     name: "Chính sách riêng tư",
-    href: 'https://anime-vsub.github.io/privacy-police'
+    href: "https://anime-vsub.github.io/privacy-police",
   },
   {
     name: "Khiếu nại vi phạm",
-    href: 'https://anime-vsub.github.io/disclaimer'
+    href: "https://anime-vsub.github.io/disclaimer",
   },
 ]
 
@@ -948,7 +978,6 @@ watch(showMenuAccount, (val) => {
 }
 </style>
 
-
 <style lang="scss" scoped>
 .notify {
   &-move,
@@ -970,31 +999,30 @@ watch(showMenuAccount, (val) => {
 </style>
 
 <style lang="scss" scoped>
- .key-enter {
-   color: #f6f6f7;
-     forced-color-adjust: none;
-     height: 23px;
-     width: auto;
-     overflow: hidden;
-     font-size: 12px;
-     line-height: 1;
-     text-transform: uppercase;
+.key-enter {
+  color: #f6f6f7;
+  forced-color-adjust: none;
+  height: 23px;
+  width: auto;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-transform: uppercase;
 
-     &:hover {
-       @apply pt-1;
-     }
+  &:hover {
+    @apply pt-1;
+  }
 
-     span {
-       background-color: #727d74;
-         box-shadow: inset 0 -4px #202225;
-         border: 1px solid hsl(220deg,7.7%,22.9%);
-         padding: 3px 6px 4px;
-         border-radius: 4px;
-         min-width: 14px;
-         min-height: 14px;
-         height: 23px;
-         color: #b9bbbe;
-     }
- }
-
-  </style>
+  span {
+    background-color: #727d74;
+    box-shadow: inset 0 -4px #202225;
+    border: 1px solid hsl(220deg, 7.7%, 22.9%);
+    padding: 3px 6px 4px;
+    border-radius: 4px;
+    min-width: 14px;
+    min-height: 14px;
+    height: 23px;
+    color: #b9bbbe;
+  }
+}
+</style>

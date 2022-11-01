@@ -89,6 +89,7 @@ module.exports = {
     "functional/immutable-data": "off",
     "vue/multi-word-component-names": "off",
     "eslint-comments/no-unlimited-disable": "off",
-    "eslint-disable-next-line vue/no-use-v-if-with-v-for": "off"
+    "vue/no-use-v-if-with-v-for": "off",
+
   },
 }

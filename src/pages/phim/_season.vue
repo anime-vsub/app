@@ -100,7 +100,10 @@
             :name="value"
           >
             <div
-              v-if="!_cacheDataSeasons.get(value) || _cacheDataSeasons.get(value)?.status === 'pending'"
+              v-if="
+                !_cacheDataSeasons.get(value) ||
+                _cacheDataSeasons.get(value)?.status === 'pending'
+              "
               class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
             >
               <q-spinner style="color: #00be06" size="3em" :thickness="3" />
@@ -141,47 +144,42 @@
     v-if="loading || !data"
     class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px] row"
   >
-  <div class="col-9 pr-4">
-    <q-skeleton type="text" class="text-[35px]" width="80%" />
-    <q-skeleton type="text" width="100px" class="mt-[-10px]" />
+    <div class="col-9 pr-4">
+      <q-skeleton type="text" class="text-[35px]" width="80%" />
+      <q-skeleton type="text" width="100px" class="mt-[-10px]" />
 
-    <div class="flex flex-nowrap">
-      <q-skeleton type="text" width="100px" class="mr-2" />
-      <q-skeleton type="text" width="140px" class="mr-1" />
+      <div class="flex flex-nowrap">
+        <q-skeleton type="text" width="100px" class="mr-2" />
+        <q-skeleton type="text" width="140px" class="mr-1" />
+      </div>
+
+      <div class="flex mt-1 flex-nowrap mt-[-10px]">
+        <q-skeleton type="text" width="38px" class="mr-2" />
+        <q-skeleton type="text" width="38px" class="mr-2" />
+        <q-skeleton type="text" width="70px" class="mr-2" />
+        <q-skeleton type="text" width="40px" />
+      </div>
+
+      <div class="flex flex-nowrap mt-[-10px]">
+        <q-skeleton type="text" width="3em" class="mr-2" />
+        <q-skeleton type="text" width="4em" class="mr-2" />
+        <q-skeleton type="text" width="5em" class="mr-2" />
+        <q-skeleton type="text" width="5em" />
+      </div>
+
+      <div class="mt-3">
+        <q-skeleton type="rect" width="100%" height="48px" />
+      </div>
     </div>
+    <div class="col-3">
+      <div class="col-3">
+        <div class="text-h6 mt-3 text-subtitle1">
+          <q-skeleton type="text" width="60%" />
+        </div>
 
-    <div class="flex mt-1 flex-nowrap mt-[-10px]">
-      <q-skeleton type="text" width="38px" class="mr-2" />
-      <q-skeleton type="text" width="38px" class="mr-2" />
-      <q-skeleton type="text" width="70px" class="mr-2" />
-      <q-skeleton type="text" width="40px" />
+        <SkeletonCardVertical v-for="item in 12" :key="item" class="mt-3" />
+      </div>
     </div>
-
-    <div class="flex flex-nowrap mt-[-10px]">
-      <q-skeleton type="text" width="3em" class="mr-2" />
-      <q-skeleton type="text" width="4em" class="mr-2" />
-      <q-skeleton type="text" width="5em" class="mr-2" />
-      <q-skeleton type="text" width="5em" />
-    </div>
-
-    <div class="mt-3">
-      <q-skeleton type="rect" width="100%" height="48px" />
-    </div>
-</div>
-<div class="col-3">
-
-  <div class="col-3">
-    <div class="text-h6 mt-3 text-subtitle1">
-      <q-skeleton type="text" width="60%" />
-    </div>
-
-    <SkeletonCardVertical
-      v-for="item in 12"
-      :key="item"
-      class="mt-3"
-    />
-  </div>
-</div>
   </div>
 
   <div v-else class="mx-4 row">
@@ -347,12 +345,13 @@
 import { Share } from "@capacitor/share"
 import { collection, doc, getDocs, getFirestore } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import { app } from "boot/firebase"
 import BrtPlayer from "components/BrtPlayer.vue"
 import CardVertical from "components/CardVertical.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import Quality from "components/Quality.vue"
-import SkeletonGridCard from "components/SkeletonGridCard.vue"
+import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
 import { QTab, useQuasar } from "quasar"
 import sha256 from "sha256"
@@ -379,7 +378,7 @@ import {
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
+
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -613,39 +612,39 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
+useHead(
+  computed(() => {
+    if (!data.value || !currentMetaChap.value) return {}
 
+    const title = `Tập ${currentMetaChap.value.name} ${data.value.name} (${data.value.othername})`
+    const description = data.value.description
 
-import { useHead } from "@vueuse/head"
-useHead(computed(() => {
-
-  if (!data.value || !currentMetaChap.value) return {}
-
-
-const title = `Tập ${currentMetaChap.value.name} ${data.value.name} (${data.value.othername})`
-const description = data.value.description
-
-  return {
-    title,
-    description,
-    meta: [
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:image", content: data.value.poster },
-      { property: "og:url", content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}` }
-    ],
-    link: [
-      {
-        rel: "canonical",
-        href:  `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`
-      }
-    ]
-  }
-}))
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:image", content: data.value.poster },
+        {
+          property: "og:url",
+          content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
+        },
+      ],
+      link: [
+        {
+          rel: "canonical",
+          href: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
+        },
+      ],
+    }
+  })
+)
 
 const nextChap = computed<
   | {
-      season: typeof seasons.value[0]
-      chap?: typeof currentDataSeason.value.chaps[0]
+      season: Exclude<typeof seasons.value, undefined>[0]
+      chap?: Exclude<typeof currentDataSeason.value, undefined>["chaps"][0]
     }
   | undefined
   // eslint-disable-next-line vue/return-in-computed-property
@@ -665,7 +664,7 @@ const nextChap = computed<
   if (!isLastChapOfSeason) {
     return {
       season: currentMetaSeason.value,
-      chap: currentDataSeason.value.chaps[indexCurrentChap + 1]
+      chap: currentDataSeason.value.chaps[indexCurrentChap + 1],
     }
   }
 
@@ -684,7 +683,7 @@ const nextChap = computed<
   if (!isLastSeason) {
     // first chap of next season
     return {
-      season: seasons.value[indexSeason + 1]
+      season: seasons.value[indexSeason + 1],
     }
   }
 

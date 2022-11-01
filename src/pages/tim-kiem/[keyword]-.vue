@@ -32,42 +32,41 @@
 </template>
 
 <script lang="ts" setup>
+import { useHead } from "@vueuse/head"
 import GridCard from "components/GridCard.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
-import { ref } from "vue"
+import { computed , ref } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
 
-import {computed}from"vue"
+
 const route = useRoute()
 const infiniteScrollRef = ref()
+useHead(
+  computed(() => {
+    const title = `Tìm kiếm: ${route.params.keyword}`
+    const description = title
 
-
-import { useHead } from "@vueuse/head"
-useHead(computed(() => {
-const title = `Tìm kiếm: ${route.params.keyword}`
-const description = title
-
-  return {
-    title : title,
-    description,
-    meta: [
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:url" }
-    ],
-    link: [
-      {
-        rel: "canonical",
-      }
-    ]
-  }
-}))
-
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url" },
+      ],
+      link: [
+        {
+          rel: "canonical",
+        },
+      ],
+    }
+  })
+)
 
 const { data, loading, run } = useRequest(
   () => TypeNormalValue("tim-kiem", route.params.keyword, 1, true),

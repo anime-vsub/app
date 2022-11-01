@@ -1,8 +1,6 @@
 <template>
   <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
-    <div class="text-[16px] py-2 px-4">
-      Tài khoản
-    </div>
+    <div class="text-[16px] py-2 px-4">Tài khoản</div>
   </q-page-sticky>
 
   <div v-if="authStore.isLogged" class="pt-[32px]">
@@ -71,9 +69,7 @@
     </div>
 
     <!-- dialog change password -->
-    <q-dialog
-      v-model="showDialogChangePassword"
-    >
+    <q-dialog v-model="showDialogChangePassword">
       <q-card class="h-[60vh] bg-dark-500">
         <q-card-section>
           <div class="flex justify-between">
@@ -136,33 +132,33 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import { useQuasar } from "quasar"
 import { useAuthStore } from "stores/auth"
-import { ref } from "vue"
+import { computed , ref } from "vue"
 import { useRouter } from "vue-router"
 
-import {computed}from"vue"
-import { useHead } from "@vueuse/head"
-useHead(computed(() => {
-const title = "Thông tin tài khoản"
-const description = title
+useHead(
+  computed(() => {
+    const title = "Thông tin tài khoản"
+    const description = title
 
-  return {
-    title : title,
-    description,
-    meta: [
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:url" }
-    ],
-    link: [
-      {
-        rel: "canonical",
-      }
-    ]
-  }
-}))
-
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url" },
+      ],
+      link: [
+        {
+          rel: "canonical",
+        },
+      ],
+    }
+  })
+)
 
 const $q = useQuasar()
 const router = useRouter()

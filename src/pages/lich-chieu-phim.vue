@@ -107,7 +107,7 @@
       </template>
       <template
         v-else
-        v-for="(items, time) in (groupArray(data[activeIndex].items, 'time_release') as Record<string, typeof item.items>)"
+        v-for="(items, time) in (groupArray(data[activeIndex].items, 'time_release') as Record<string, typeof data[0]['items']>)"
         :key="time"
       >
         <div class="text-[12px] mt-7 mb-2 flex items-center">
@@ -142,40 +142,34 @@ import { LichChieuPhim } from "src/apis/runs/lich-chieu-phim"
 // Import Swiper styles
 import "swiper/css"
 import { dayTextToNum } from "src/logic/dayTextToNum"
-import { ref } from "vue"
-import { useRequest } from "vue-request"
-
-import {computed}from"vue"
 import dayjs from "src/logic/dayjs"
-
+import { computed , ref } from "vue"
+import { useRequest } from "vue-request"
+// eslint-disable-next-line import/order
 import { useHead } from "@vueuse/head"
-useHead(computed(() => {
-const title = `Lịch chiếu`
 
+useHead(
+  computed(() => {
+    const title = "Lịch chiếu"
 
+    const description = title
 
-
-
-
-
-const description = title
-
-  return {
-    title : title,
-    description,
-    meta: [
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:url" }
-    ],
-    link: [
-      {
-        rel: "canonical",
-      }
-    ]
-  }
-}))
-
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url" },
+      ],
+      link: [
+        {
+          rel: "canonical",
+        },
+      ],
+    }
+  })
+)
 
 const { loading, data } = useRequest(() => LichChieuPhim())
 

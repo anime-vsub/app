@@ -1,23 +1,24 @@
 <template>
-  <div class="w-full overflow-hidden bg-[#000] focus-visible:outline-none select-none" ref="playerWrapRef"
-        tabindex="0"
-        autofocus
-
-        @keydown="event => {
-          switch (event.code) {
-
-
-              case 'ArrowUp':
+  <div
+    class="w-full overflow-hidden bg-[#000] focus-visible:outline-none select-none"
+    ref="playerWrapRef"
+    tabindex="0"
+    autofocus
+    @keydown="
+      (event) => {
+        switch (event.code) {
+          case 'ArrowUp':
             event.preventDefault()
-              if (!artFullscreen) upVolume()
-        break
-        case 'ArrowDown':
+            if (!artFullscreen) upVolume()
+            break
+          case 'ArrowDown':
             event.preventDefault()
-       if (!artFullscreen) downVolume()
-        break
-
-          }
-        }">
+            if (!artFullscreen) downVolume()
+            break
+        }
+      }
+    "
+  >
     <q-responsive
       :ratio="841 / 483"
       class="player__wrap max-h-[calc(100vh-169px)]"
@@ -104,10 +105,14 @@
                   height="25"
                 />
 
-
-
-                <q-tooltip anchor="bottom middle" self="top middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
-                Đổi relay
+                <q-tooltip
+                  anchor="bottom middle"
+                  self="top middle"
+                  class="bg-dark text-[14px] text-weight-medium"
+                  transition-show="jump-up"
+                  transition-hide="jump-down"
+                >
+                  Đổi relay
                 </q-tooltip>
               </q-btn>
             </div>
@@ -140,19 +145,18 @@
             >
               <template v-if="!artLoading">
                 <transition name="q-transition--scale">
-
-                <Icon
-                  v-if="!artPlaying"
-                  icon="fluent:play-circle-20-regular"
-                  width="60"
-                  height="60"
-                />
-                <Icon
-                v-else
-                  icon="fluent:pause-circle-20-regular"
-                  width="60"
-                  height="60"
-                />
+                  <Icon
+                    v-if="!artPlaying"
+                    icon="fluent:play-circle-20-regular"
+                    width="60"
+                    height="60"
+                  />
+                  <Icon
+                    v-else
+                    icon="fluent:pause-circle-20-regular"
+                    width="60"
+                    height="60"
+                  />
                 </transition>
               </template>
             </q-btn>
@@ -184,13 +188,15 @@
                   class="mr-6 text-weight-normal art-btn"
                   :disable="!nextChap"
                   replace
-                  :to="nextChap && {
-                    name: 'watch-anime',
-                    params: {
-                      season: nextChap.season.value,
-                      chap: nextChap.chap?.id
-                    },
-                  }"
+                  :to="
+                    nextChap && {
+                      name: 'watch-anime',
+                      params: {
+                        season: nextChap.season.value,
+                        chap: nextChap.chap?.id,
+                      },
+                    }
+                  "
                 >
                   <Icon
                     icon="fluent:next-24-regular"
@@ -200,9 +206,19 @@
                   />
                   Tiếp
 
-
-                  <q-tooltip v-if="nextChap" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
-                   {{ currentSeason !== nextChap.season.value ? `Tiếp theo: ${nextChap.season.name}` : `Tiếp theo: Tập ${nextChap.chap.name}` }}
+                  <q-tooltip
+                    v-if="nextChap"
+                    anchor="top middle"
+                    self="bottom middle"
+                    class="bg-dark text-[14px] text-weight-medium"
+                    transition-show="jump-up"
+                    transition-hide="jump-down"
+                  >
+                    {{
+                      currentSeason !== nextChap.season.value
+                        ? `Tiếp theo: ${nextChap.season.name}`
+                        : `Tiếp theo: Tập ${nextChap.chap.name}`
+                    }}
                   </q-tooltip>
                 </q-btn>
 
@@ -211,25 +227,29 @@
                   :class="{ active: !artVolumeOutside }"
                   ref="wrapVolumeRef"
                 >
-                <q-btn round flat dense @click="toggleMuted">
+                  <q-btn round flat dense @click="toggleMuted">
+                    <Icon
+                      :icon="
+                        [
+                          'fluent:speaker-off-24-regular',
+                          'fluent:speaker-1-24-regular',
+                          'fluent:speaker-2-24-regular',
+                        ][artVolume === 0 ? 0 : artVolume < 0.5 ? 1 : 2]
+                      "
+                      class="mr-2 art-icon"
+                      width="18"
+                      height="18"
+                    />
 
-                  <Icon
-                    :icon="
-                      [
-                        'fluent:speaker-off-24-regular',
-                        'fluent:speaker-1-24-regular',
-                        'fluent:speaker-2-24-regular',
-                      ][artVolume === 0 ? 0 : artVolume < 0.5 ? 1 : 2]
-                    "
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
-                  />
-
-
-                  <q-tooltip anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
-                   {{ artVolume === 0 ? "Bật tiếng (m)" : "Tắt tiếng (m)" }}
-                  </q-tooltip>
+                    <q-tooltip
+                      anchor="top middle"
+                      self="bottom middle"
+                      class="bg-dark text-[14px] text-weight-medium"
+                      transition-show="jump-up"
+                      transition-hide="jump-down"
+                    >
+                      {{ artVolume === 0 ? "Bật tiếng (m)" : "Tắt tiếng (m)" }}
+                    </q-tooltip>
                   </q-btn>
 
                   <div
@@ -275,9 +295,15 @@
                   />
                   EP {{ nameCurrentChap }}
 
-
-                  <q-tooltip v-if="!showDialogChapter" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
-                   Danh sách tập
+                  <q-tooltip
+                    v-if="!showDialogChapter"
+                    anchor="top middle"
+                    self="bottom middle"
+                    class="bg-dark text-[14px] text-weight-medium"
+                    transition-show="jump-up"
+                    transition-hide="jump-down"
+                  >
+                    Danh sách tập
                   </q-tooltip>
                 </q-btn>
               </div>
@@ -322,31 +348,35 @@
                     <div
                       class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
                     >
-                    <BottomBlurRelative>
-
-                      <ul class="mx-[-16px]">
-                        <li
-                          v-for="({ html }, index) in sources"
-                          :key="html"
-                          class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
-                          :class="{
-                            'c--main':
-                              html === artQuality ||
-                              (!artQuality && index === 0),
-                          }"
-                          @click="setArtQuality(html)"
-                        >
-                          {{ html }}
-                        </li>
-                      </ul>
-
-                    </BottomBlurRelative>
+                      <BottomBlurRelative>
+                        <ul class="mx-[-16px]">
+                          <li
+                            v-for="({ html }, index) in sources"
+                            :key="html"
+                            class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
+                            :class="{
+                              'c--main':
+                                html === artQuality ||
+                                (!artQuality && index === 0),
+                            }"
+                            @click="setArtQuality(html)"
+                          >
+                            {{ html }}
+                          </li>
+                        </ul>
+                      </BottomBlurRelative>
                     </div>
                   </q-menu>
 
-
-                  <q-tooltip v-if="!showMenuQuality" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
-                   Chất lượng
+                  <q-tooltip
+                    v-if="!showMenuQuality"
+                    anchor="top middle"
+                    self="bottom middle"
+                    class="bg-dark text-[14px] text-weight-medium"
+                    transition-show="jump-up"
+                    transition-hide="jump-down"
+                  >
+                    Chất lượng
                   </q-tooltip>
                 </q-btn>
                 <q-btn
@@ -388,30 +418,34 @@
                     <div
                       class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
                     >
-                    <BottomBlurRelative>
-
-                      <ul class="mx-[-16px]">
-                        <li
-                          v-for="{ name, value } in [
-                            ...playbackRates,
-                          ].reverse()"
-                          :key="value"
-                          class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
-                          :class="{
-                            'c--main': value === artPlaybackRate,
-                          }"
-                          @click="setArtPlaybackRate(value)"
-                        >
-                          {{ name }}
-                        </li>
-                      </ul>
-
-                    </BottomBlurRelative>
+                      <BottomBlurRelative>
+                        <ul class="mx-[-16px]">
+                          <li
+                            v-for="{ name, value } in [
+                              ...playbackRates,
+                            ].reverse()"
+                            :key="value"
+                            class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
+                            :class="{
+                              'c--main': value === artPlaybackRate,
+                            }"
+                            @click="setArtPlaybackRate(value)"
+                          >
+                            {{ name }}
+                          </li>
+                        </ul>
+                      </BottomBlurRelative>
                     </div>
                   </q-menu>
 
-
-                  <q-tooltip v-if="!showMenuPlaybackRate" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
+                  <q-tooltip
+                    v-if="!showMenuPlaybackRate"
+                    anchor="top middle"
+                    self="bottom middle"
+                    class="bg-dark text-[14px] text-weight-medium"
+                    transition-show="jump-up"
+                    transition-hide="jump-down"
+                  >
                     Tốc độ phát
                   </q-tooltip>
                 </q-btn>
@@ -438,8 +472,19 @@
                     height="24"
                   />
 
-                  <q-tooltip ref="toolipFullscreenRef" anchor="top middle" self="bottom middle" class="bg-dark text-[14px] text-weight-medium" transition-show="jump-up" transition-hide="jump-down">
-                    {{ artFullscreen ?  "Thoát khỏi chế độ toàn màn hình (f)" : "Toàn màn hình (f)" }}
+                  <q-tooltip
+                    ref="tooltipFullscreenRef"
+                    anchor="top middle"
+                    self="bottom middle"
+                    class="bg-dark text-[14px] text-weight-medium"
+                    transition-show="jump-up"
+                    transition-hide="jump-down"
+                  >
+                    {{
+                      artFullscreen
+                        ? "Thoát khỏi chế độ toàn màn hình (f)"
+                        : "Toàn màn hình (f)"
+                    }}
                   </q-tooltip>
                 </q-btn>
               </div>
@@ -672,10 +717,12 @@ import {
   setDoc,
 } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
+import { useDocumentVisibility , useEventListener , useFullscreen , useIntervalFn , useMouseInElement } from "@vueuse/core"
 import { app } from "boot/firebase"
 import ArtDialog from "components/ArtDialog.vue"
+import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { QTab, throttle, useQuasar } from "quasar"
+import { debounce, QTab, QTooltip, throttle , useQuasar } from "quasar"
 import sha256 from "sha256"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
@@ -693,9 +740,12 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
-import BottomBlurRelative from "components/BottomBlurRelative.vue"
 
 import type { Source } from "./sources"
+
+// fix toolip fullscreen not hide if change fullscreen
+
+// keyboard binding
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
@@ -718,16 +768,16 @@ const router = useRouter()
 const $q = useQuasar()
 const db = getFirestore(app)
 
-interface SiblingChap  {
-    season: {
-      name: string
-      value: string
-    }
-    chap?: {
-      name: string
-      id: string
-    }
+interface SiblingChap {
+  season: {
+    name: string
+    value: string
   }
+  chap?: {
+    name: string
+    id: string
+  }
+}
 
 const props = defineProps<{
   sources?: Source[]
@@ -735,7 +785,7 @@ const props = defineProps<{
   nameCurrentSeason?: string
   currentChap?: string
   nameCurrentChap?: string
-  nextChap?:SiblingChap
+  nextChap?: SiblingChap
   // prevChap?: SiblingChap
   name: string
   poster?: string
@@ -889,7 +939,8 @@ const setArtVolume = (value: number) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   video.value!.volume = value
 }
-let lastVolumeBeforeMute: number;
+// eslint-disable-next-line functional/no-let
+let lastVolumeBeforeMute: number
 const toggleMuted = () => {
   if (artVolume.value === 0) {
     setArtVolume(lastVolumeBeforeMute ?? 0.05)
@@ -898,7 +949,7 @@ const toggleMuted = () => {
     setArtVolume(0)
   }
 
-addNotice(`Âm lượng ${Math.round(artVolume.value * 100)}%`)
+  addNotice(`Âm lượng ${Math.round(artVolume.value * 100)}%`)
 }
 
 // value control other
@@ -909,12 +960,13 @@ const setArtControlShow = (show: boolean) => {
   artControlShow.value = show
   if (show) activeTime = Date.now()
 }
-import { useFullscreen  } from "@vueuse/core"
-const {isFullscreen: artFullscreen, toggle: toggleArtFullscreen, exit: exitArtFullscreen } = useFullscreen(playerWrapRef)
-// fix toolip fullscreen not hide if change fullscreen
-import {QTooltip} from"quasar"
-const toolipFullscreenRef = ref<QTooltip>()
-watch(artFullscreen, () => toolipFullscreenRef.value.hide())
+const {
+  isFullscreen: artFullscreen,
+  toggle: toggleArtFullscreen,
+  exit: exitArtFullscreen,
+} = useFullscreen(playerWrapRef)
+const tooltipFullscreenRef = ref<QTooltip>()
+watch(artFullscreen, () => tooltipFullscreenRef.value?.hide())
 // fix done
 onBeforeRouteLeave(() => {
   if (artFullscreen.value) {
@@ -1108,34 +1160,36 @@ function onVideoEnded() {
   artEnded = true
   if (props.nextChap && settingsStore.player.autoNext) {
     addNotice(
-      props.currentSeason !== props.nextChap.season
+      props.currentSeason !== props.nextChap.season.value
         ? `Đang phát season ${props.nextChap.season.name}`
         : "Đang phát tập tiếp theo"
     )
 
     router.push({
       name: "watch-anime",
-      params: props.nextChap,
+      params: {
+        season: props.nextChap.season.value,
+        chap: props.nextChap.chap?.id
+      }
     })
   }
 }
-import { useIntervalFn } from "@vueuse/core"
-import { useDocumentVisibility } from '@vueuse/core'
 
 const documentVisibility = useDocumentVisibility()
-let artPlayingOfBeforeDocumentHide: boolean;
-watch(documentVisibility, visibility => {
+// eslint-disable-next-line functional/no-let
+let artPlayingOfBeforeDocumentHide: boolean
+watch(documentVisibility, (visibility) => {
   if (visibility === "visible") {
     if (!artPlaying.value && (artPlayingOfBeforeDocumentHide ?? true))
-    setArtPlaying(true)
+      setArtPlaying(true)
   } else {
     artPlayingOfBeforeDocumentHide = artPlaying.value
   }
 })
 
-if (settingsStore.enableRemindStop) {
+if (settingsStore.player.enableRemindStop) {
   const { resume } = useIntervalFn(() => {
-    if (!artPlaying.value) return;
+    if (!artPlaying.value) return
 
     setArtPlaying(false)
 
@@ -1145,26 +1199,31 @@ if (settingsStore.enableRemindStop) {
       cancel: true,
       persistent: false,
     })
-    .onOk(() => {
-      setArtPlaying(true)
-    })
-    .onDismiss(() => {
-      setArtPlaying(true)
-    })
-    .onCancel(() => {
-      console.warn("cancel continue play")
-    })
+      .onOk(() => {
+        setArtPlaying(true)
+      })
+      .onDismiss(() => {
+        setArtPlaying(true)
+      })
+      .onCancel(() => {
+        console.warn("cancel continue play")
+      })
   }, 1 /* hours */ * 3600_000)
 
-  const resumeDelay = debounce(resume, 1_000);
-  ["mousedown", "mouseup", "mousemove",
+  const resumeDelay = debounce(resume, 1_000)
+  ;[
+    "mousedown",
+    "mouseup",
+    "mousemove",
     "keydown",
-    "touchstart", "touchmove", "touchend",
-    "scroll"]
-    .forEach(name => {
-      useEventListener(window, name, resumeDelay)
-    })
-    watch(documentVisibility, resumeDelay);
+    "touchstart",
+    "touchmove",
+    "touchend",
+    "scroll",
+  ].forEach((name) => {
+    useEventListener(window, name, resumeDelay)
+  })
+  watch(documentVisibility, resumeDelay)
 }
 function runRemount() {
   $q.dialog({
@@ -1270,6 +1329,9 @@ const progressInnerRef = ref<HTMLDivElement>()
 const artCurrentTimeHoving = ref(0)
 const artControlProgressHoving = ref(false)
 
+// eslint-disable-next-line functional/no-let
+let bindedMouseUp = false
+
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl?: HTMLDivElement
@@ -1282,7 +1344,6 @@ function onIndicatorMove(
   curTimeStart: number
 ): void
 
-let bindedMouseUp = false
 // eslint-disable-next-line no-redeclare
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
@@ -1351,8 +1412,8 @@ function onIndicatorEnd() {
 useEventListener(window, "mouseup", () => {
   if (currentingTime.value) {
     currentingTime.value = false
-  // setArtCurrentTime(artCurrentTimeHoving.value)
-  activeTime = Date.now()
+    // setArtCurrentTime(artCurrentTimeHoving.value)
+    activeTime = Date.now()
   }
 })
 
@@ -1501,8 +1562,7 @@ function addNotice(text: string) {
   const uuid = id++
 
   notices.push({ id: uuid, text })
-  if (notices.length > 3)
-  notices.splice(0, notices.length - 3)
+  if (notices.length > 3) notices.splice(0, notices.length - 3)
 
   setTimeout(() => {
     notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1)
@@ -1510,8 +1570,7 @@ function addNotice(text: string) {
 }
 
 const wrapVolumeRef = ref<HTMLDivElement>()
-import { useMouseInElement  } from "@vueuse/core"
-const {isOutside: artVolumeOutside } = useMouseInElement(wrapVolumeRef)
+const { isOutside: artVolumeOutside } = useMouseInElement(wrapVolumeRef)
 
 const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)
@@ -1523,61 +1582,55 @@ watch(showDialogChapter, (status) => {
 const showMenuQuality = ref(false)
 const showMenuPlaybackRate = ref(false)
 
-
-
-
 function upVolume() {
-
-        if (artVolume.value < 1) {
-          const newVal = Math.min(1, artVolume.value + 0.05)
-  setArtVolume(newVal)
-  addNotice(`Âm lượng ${Math.round(newVal * 100)}%`)
+  if (artVolume.value < 1) {
+    const newVal = Math.min(1, artVolume.value + 0.05)
+    setArtVolume(newVal)
+    addNotice(`Âm lượng ${Math.round(newVal * 100)}%`)
   }
 }
 function downVolume() {
   if (artVolume.value > 0) {
     const newVal = Math.max(0, artVolume.value - 0.05)
-  setArtVolume(newVal)
-  addNotice(`Âm lượng ${Math.round(newVal * 100)}%`)
+    setArtVolume(newVal)
+    addNotice(`Âm lượng ${Math.round(newVal * 100)}%`)
   }
 }
-
-// keyboard binding
-import { useEventListener } from "@vueuse/core"
 useEventListener(window, "keydown", (event: KeyboardEvent) => {
-
-
-    switch (event.code) {
-      case "Space": {
-    if ( event.target?.nodeName !== "TEXTAREA" && event.target?.nodeName !== "INPUT" ) event.preventDefault()
-    const playing = artPlaying.value
-        setArtPlaying(!playing)
-        if (playing) setArtControlShow(true)
-        // setArtControlShow(playing)
-        break
-        }
-      case "KeyF":
-        toggleArtFullscreen()
-        break
-      case "ArrowLeft":
-        skipBack()
-        break
-      case "ArrowRight":
-        skipForward()
-        break
-
-
-              case 'ArrowUp':
-              if (artFullscreen.value) upVolume()
-        break
-        case 'ArrowDown':
-       if (artFullscreen.value) downVolume()
-        break
-
-        case "KeyM":
-        toggleMuted()
-        break
+  switch (event.code) {
+    case "Space": {
+      if (
+        (event.target as HTMLElement | undefined)?.nodeName !== "TEXTAREA" &&
+        (event.target as HTMLElement | undefined)?.nodeName !== "INPUT"
+      )
+        event.preventDefault()
+      const playing = artPlaying.value
+      setArtPlaying(!playing)
+      if (playing) setArtControlShow(true)
+      // setArtControlShow(playing)
+      break
     }
+    case "KeyF":
+      toggleArtFullscreen()
+      break
+    case "ArrowLeft":
+      skipBack()
+      break
+    case "ArrowRight":
+      skipForward()
+      break
+
+    case "ArrowUp":
+      if (artFullscreen.value) upVolume()
+      break
+    case "ArrowDown":
+      if (artFullscreen.value) downVolume()
+      break
+
+    case "KeyM":
+      toggleMuted()
+      break
+  }
 })
 </script>
 

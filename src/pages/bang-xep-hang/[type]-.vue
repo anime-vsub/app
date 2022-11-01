@@ -52,15 +52,17 @@
 </template>
 
 <script lang="ts" setup>
+import { useHead } from "@vueuse/head"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import { BangXepHangType } from "src/apis/runs/bang-xep-hang/[type]"
 import ranks from "src/logic/ranks"
+import { computed } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
-import {computed}from"vue"
+
 const route = useRoute()
 
 const types = [
@@ -71,30 +73,34 @@ const types = [
   ["Đánh giá", "voted"],
   ["Mùa", "season"],
 ]
+useHead(
+  computed(() => {
+    const title = `Bảng xếp hạng Anime theo ${
+      (types.find((item) => item[1] === route.params.type) ?? types[0])[0]
+    }`
 
+    const description = title
 
-import { useHead } from "@vueuse/head"
-useHead(computed(() => {
-const title = `Bảng xếp hạng Anime theo ${(types.find(item => item[1] === route.params.type)??types[0])[0]}`
-
-const description = title
-
-  return {
-    title : title,
-    description,
-    meta: [
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:url", content: process.env.APP_URL + `bang-xep-hang/${route.params.type}` }
-    ],
-    link: [
-      {
-        rel: "canonical",
-        href:  process.env.APP_URL + `bang-xep-hang/${route.params.type}`
-      }
-    ]
-  }
-}))
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        {
+          property: "og:url",
+          content: process.env.APP_URL + `bang-xep-hang/${route.params.type}`,
+        },
+      ],
+      link: [
+        {
+          rel: "canonical",
+          href: process.env.APP_URL + `bang-xep-hang/${route.params.type}`,
+        },
+      ],
+    }
+  })
+)
 
 const { data, loading, run } = useRequest(
   () => BangXepHangType(route.params.type as string),
