@@ -63,13 +63,12 @@
 </template>
 
 <script lang="ts" setup>
-import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
 
 function open(url: string) {
-  Browser.open({ url })
+  window.open(url)
 }
 </script>

@@ -144,7 +144,6 @@
 
 <script lang="ts" setup>
 import "dayjs/locale/vi"
-import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
 import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
@@ -177,7 +176,7 @@ async function onLoad(page: number, done: (noMore: boolean) => void) {
   done(news.length === 0)
 }
 function open(url: string, title: string) {
-  Browser.open({ url, windowName: title })
+  window.open(url, { windowName: title })
 }
 </script>
 

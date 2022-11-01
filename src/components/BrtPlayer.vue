@@ -706,7 +706,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Haptics } from "@capacitor/haptics"
 import type { DocumentData, DocumentReference } from "@firebase/firestore"
 import {
   doc,
@@ -1457,7 +1456,7 @@ function onBDTouchStart(event: TouchEvent) {
     curTimeStart = artCurrentTime.value
     // vibrate
     console.log("hold")
-    Haptics.vibrate({ duration: 90 })
+    navigator.vibrate?.(90)
   }, 400)
 }
 function onBDTouchMove(event: TouchEvent) {

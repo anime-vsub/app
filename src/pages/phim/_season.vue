@@ -348,7 +348,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Share } from "@capacitor/share"
 import { collection, doc, getDocs, getFirestore } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
@@ -954,11 +953,10 @@ function share() {
 
     return
   }
-  Share.share({
+  navigator.share?.({
     title: `Xem ${data.value.name} series ${currentMetaSeason.value.name}`,
     text: `Xem ${data.value.name} tập ${currentMetaChap.value.name}`,
     url: C_URL + route.path,
-    dialogTitle: `Chia sẻ ${data.value.name}`,
   })
 }
 // ================ status ================

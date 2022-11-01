@@ -121,11 +121,6 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
-      {
-        path: "about",
-        alias: ["/tai-khoan/settings/about"],
-        component: () => import("pages/tai-khoan/about.vue"),
-      },
     ],
   },
 
