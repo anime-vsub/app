@@ -344,7 +344,6 @@ import Quality from "components/Quality.vue"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
-import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import dayjs from "src/logic/dayjs"
 import { Autoplay, Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
@@ -357,7 +356,6 @@ import "swiper/css/navigation"
 import "swiper/css/autoplay"
 import "swiper/css/grid"
 // Import Swiper Vue.js components
-useAliveScrollBehavior()
 
 const router = useRouter()
 

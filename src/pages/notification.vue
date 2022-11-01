@@ -101,13 +101,9 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import ScreenLoading from "src/components/ScreenLoading.vue"
-import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
 import { useRouter } from "vue-router"
-
-// Import Swiper Vue.js components
-useAliveScrollBehavior()
 
 const router = useRouter()
 const notificationStore = useNotificationStore()

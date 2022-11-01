@@ -148,12 +148,9 @@ import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
 import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
-import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import dayjs from "src/logic/dayjs"
 import { ref, shallowReactive } from "vue"
 
-// Import Swiper Vue.js components
-useAliveScrollBehavior()
 // https://tinanime.com/api/news/?p=3
 
 const infiniteScrollRef = ref<QInfiniteScroll>()
