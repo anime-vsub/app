@@ -859,7 +859,7 @@ const video = ref<HTMLVideoElement>()
 watch(
   video,
   (video) => {
-    if (video && documentVisibility.value !== "hidden")
+    if (video && documentVisibility.value === "visible")
       try {
         video.play()
       } catch {}
@@ -882,8 +882,9 @@ const setArtPlaying = (playing: boolean) => {
 }
 watch(
   () => props.currentChap,
-  () => setArtPlaying(true),
-  { immediate: true }
+  (newVal, oldVal) => {
+    if (newVal && oldVal) setArtPlaying(true)
+    }
 )
 // eslint-disable-next-line functional/no-let
 let artEnded = false
@@ -1267,7 +1268,7 @@ function remount() {
   const { url, type } = currentStream.value
 
   const currentTime = artCurrentTime.value
-  const playing = !video.value?.paused || artPlaying.value || artEnded
+  const playing = artPlaying.value || artEnded
   artEnded = false
 
   switch (type) {
