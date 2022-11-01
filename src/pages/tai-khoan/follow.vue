@@ -37,7 +37,7 @@ import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TuPhim } from "src/apis/runs/tu-phim"
-import { computed , ref } from "vue"
+import { computed, ref } from "vue"
 import { useRequest } from "vue-request"
 
 useHead(

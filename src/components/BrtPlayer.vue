@@ -716,12 +716,18 @@ import {
   setDoc,
 } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
-import { useDocumentVisibility , useEventListener , useFullscreen , useIntervalFn , useMouseInElement } from "@vueuse/core"
+import {
+  useDocumentVisibility,
+  useEventListener,
+  useFullscreen,
+  useIntervalFn,
+  useMouseInElement,
+} from "@vueuse/core"
 import { app } from "boot/firebase"
 import ArtDialog from "components/ArtDialog.vue"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { debounce, QTab, QTooltip, throttle , useQuasar } from "quasar"
+import { debounce, QTab, QTooltip, throttle, useQuasar } from "quasar"
 import sha256 from "sha256"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
@@ -851,9 +857,16 @@ const currentStream = computed(() => {
 })
 
 const video = ref<HTMLVideoElement>()
-watch(video, video => {
-  if (video && documentVisibility.value !== 'hidden') try {  video.play() } catch {}
-}, { immediate: true })
+watch(
+  video,
+  (video) => {
+    if (video && documentVisibility.value !== "hidden")
+      try {
+        video.play()
+      } catch {}
+  },
+  { immediate: true }
+)
 // value control get play
 const artPlaying = ref(false)
 const setArtPlaying = (playing: boolean) => {
@@ -1172,8 +1185,8 @@ function onVideoEnded() {
       name: "watch-anime",
       params: {
         season: props.nextChap.season.value,
-        chap: props.nextChap.chap?.id
-      }
+        chap: props.nextChap.chap?.id,
+      },
     })
   }
 }
@@ -1181,7 +1194,7 @@ function onVideoEnded() {
 // eslint-disable-next-line functional/no-let
 let artPlayingOfBeforeDocumentHide: boolean
 watch(documentVisibility, (visibility) => {
-  console.log('document %s', visibility)
+  console.log("document %s", visibility)
   if (visibility === "visible") {
     if (!artPlaying.value && (artPlayingOfBeforeDocumentHide ?? true))
       setArtPlaying(true)

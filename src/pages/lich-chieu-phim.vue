@@ -143,7 +143,7 @@ import { LichChieuPhim } from "src/apis/runs/lich-chieu-phim"
 import "swiper/css"
 import { dayTextToNum } from "src/logic/dayTextToNum"
 import dayjs from "src/logic/dayjs"
-import { computed , ref } from "vue"
+import { computed, ref } from "vue"
 import { useRequest } from "vue-request"
 // eslint-disable-next-line import/order
 import { useHead } from "@vueuse/head"

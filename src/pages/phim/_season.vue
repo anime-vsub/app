@@ -63,86 +63,85 @@
           </q-btn>
         </div>
 
-<div v-if="loading" class="flex-1 flex items-center justify-center">
-      <q-spinner color="main" size="3em" :thickness="3" />
-</div>
+        <div v-if="loading" class="flex-1 flex items-center justify-center">
+          <q-spinner color="main" size="3em" :thickness="3" />
+        </div>
 
-<template v-else>
-
-        <q-tabs
-          v-model="seasonActive"
-          class="min-w-0 w-full tabs-seasons relative"
-          :class="{
-            'grid-mode': gridModeTabsSeasons,
-          }"
-          no-caps
-          dense
-          inline-label
-          active-class="c--main"
-          v-if="
-            seasons &&
-            (seasons.length > 1 ||
-              (seasons.length === 0 && seasons[0].name !== ''))
-          "
-        >
-          <q-tab
-            v-for="item in seasons"
-            :key="item.value"
-            :name="item.value"
-            :label="item.name"
-            :ref="(el: QTab) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
-          />
-        </q-tabs>
-
-        <q-tab-panels
-          v-model="seasonActive"
-          animated
-          keep-alive
-          class="flex-1 w-full bg-transparent"
-        >
-          <q-tab-panel
-            v-for="({ value }, index) in seasons"
-            :key="index"
-            :name="value"
+        <template v-else>
+          <q-tabs
+            v-model="seasonActive"
+            class="min-w-0 w-full tabs-seasons relative"
+            :class="{
+              'grid-mode': gridModeTabsSeasons,
+            }"
+            no-caps
+            dense
+            inline-label
+            active-class="c--main"
+            v-if="
+              seasons &&
+              (seasons.length > 1 ||
+                (seasons.length === 0 && seasons[0].name !== ''))
+            "
           >
-            <div
-              v-if="
-                !_cacheDataSeasons.get(value) ||
-                _cacheDataSeasons.get(value)?.status === 'pending'
-              "
-              class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
-            >
-              <q-spinner style="color: #00be06" size="3em" :thickness="3" />
-            </div>
-            <div
-              v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-              class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-            >
-              Lỗi khi lấy dữ liệu
-              <br />
-              <q-btn
-                dense
-                no-caps
-                style="color: #00be06"
-                @click="fetchSeason(value)"
-                >Thử lại</q-btn
-              >
-            </div>
-
-            <ChapsGridQBtn
-              v-else
-              grid
-              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-              :season="value"
-              :find="
-                (item) => value === currentSeason && item.id === currentChap
-              "
-              :progress-chaps="progressChaps"
-              class-item="px-3 py-[6px] mb-3"
+            <q-tab
+              v-for="item in seasons"
+              :key="item.value"
+              :name="item.value"
+              :label="item.name"
+              :ref="(el: QTab) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
             />
-          </q-tab-panel>
-        </q-tab-panels>
-      </template>
+          </q-tabs>
+
+          <q-tab-panels
+            v-model="seasonActive"
+            animated
+            keep-alive
+            class="flex-1 w-full bg-transparent"
+          >
+            <q-tab-panel
+              v-for="({ value }, index) in seasons"
+              :key="index"
+              :name="value"
+            >
+              <div
+                v-if="
+                  !_cacheDataSeasons.get(value) ||
+                  _cacheDataSeasons.get(value)?.status === 'pending'
+                "
+                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+              >
+                <q-spinner style="color: #00be06" size="3em" :thickness="3" />
+              </div>
+              <div
+                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
+              >
+                Lỗi khi lấy dữ liệu
+                <br />
+                <q-btn
+                  dense
+                  no-caps
+                  style="color: #00be06"
+                  @click="fetchSeason(value)"
+                  >Thử lại</q-btn
+                >
+              </div>
+
+              <ChapsGridQBtn
+                v-else
+                grid
+                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                :season="value"
+                :find="
+                  (item) => value === currentSeason && item.id === currentChap
+                "
+                :progress-chaps="progressChaps"
+                class-item="px-3 py-[6px] mb-3"
+              />
+            </q-tab-panel>
+          </q-tab-panels>
+        </template>
       </div>
     </div>
   </div>

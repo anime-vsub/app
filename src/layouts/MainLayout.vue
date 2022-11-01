@@ -496,7 +496,11 @@
                   @click="tabMenuAccountActive = 'setting'"
                 >
                   <q-item-section avatar class="min-w-0">
-                    <Icon icon="fluent:settings-24-regular" width="20" height="20" />
+                    <Icon
+                      icon="fluent:settings-24-regular"
+                      width="20"
+                      height="20"
+                    />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>Cài đặt</q-item-label>
@@ -696,8 +700,7 @@
     <q-page-container>
       <q-page>
         <router-view v-slot="{ Component }">
-            <component :is="Component" />
-    
+          <component :is="Component" />
         </router-view>
       </q-page>
     </q-page-container>

@@ -154,7 +154,6 @@ import { computed, reactive, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
 
-
 const route = useRoute()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
@@ -227,12 +226,11 @@ const title = ref("")
 const watcherData = watch(data, (data) => {
   if (!data) return
 
-
   title.value =
     route.params.type_normal === "danh-sach" && route.params.value === "all"
       ? "Mục lục"
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      : data.title!
+      : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        data.title!
   watcherData()
 })
 useHead(

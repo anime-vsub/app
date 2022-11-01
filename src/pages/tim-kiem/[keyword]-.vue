@@ -39,10 +39,9 @@ import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
-import { computed , ref } from "vue"
+import { computed, ref } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
-
 
 const route = useRoute()
 const infiniteScrollRef = ref()

@@ -135,7 +135,7 @@ import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
 import { useQuasar } from "quasar"
 import { useAuthStore } from "stores/auth"
-import { computed , ref } from "vue"
+import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 
 useHead(
