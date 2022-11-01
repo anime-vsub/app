@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full overflow-hidden bg-[#000] focus-visible:outline-none" ref="playerWrapRef"
+  <div class="w-full overflow-hidden bg-[#000] focus-visible:outline-none select-none" ref="playerWrapRef"
         tabindex="0"
         autofocus
 
@@ -449,7 +449,6 @@
               class="art-control-progress"
               @mousedown.stop="onIndicatorMove"
               @mousemove.stop="onIndicatorMove"
-              @mouseup.stop="onIndicatorEnd"
               @mouseover="artControlProgressHoving = true"
               @mouseout="artControlProgressHoving = false"
             >
@@ -479,7 +478,6 @@
                     :data-title="parseTime(artCurrentTimeHoving)"
                     @mousedown.stop="currentingTime = true"
                     @mousemove.stop="onIndicatorMove"
-                    @mouseup.stop="onIndicatorEnd"
                   >
                     <img width="16" heigth="16" src="~assets/indicator.svg" />
                   </div>
@@ -1284,6 +1282,7 @@ function onIndicatorMove(
   curTimeStart: number
 ): void
 
+let bindedMouseUp = false
 // eslint-disable-next-line no-redeclare
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
@@ -1292,6 +1291,10 @@ function onIndicatorMove(
   offsetX?: number,
   curTimeStart?: number
 ) {
+  if (event.type.startsWith("mouse") && !bindedMouseUp) {
+    bindedMouseUp = true
+  }
+
   const maxX = innerEl.offsetWidth
   const { left } = innerEl.getBoundingClientRect()
 
@@ -1334,7 +1337,7 @@ function onIndicatorMove(
 
   if (event.type === "mousemove" && (event as MouseEvent).buttons !== 1) return
 
-  artCurrentTime.value = artCurrentTimeHoving.value
+  setArtCurrentTime(artCurrentTimeHoving.value)
   currentingTime.value = true
 
   activeTime = Date.now()
@@ -1345,6 +1348,13 @@ function onIndicatorEnd() {
   setArtCurrentTime(artCurrentTimeHoving.value)
   activeTime = Date.now()
 }
+useEventListener(window, "mouseup", () => {
+  if (currentingTime.value) {
+    currentingTime.value = false
+  // setArtCurrentTime(artCurrentTimeHoving.value)
+  activeTime = Date.now()
+  }
+})
 
 // ==== addons swipe backdrop ====
 // eslint-disable-next-line functional/no-let, no-undef
