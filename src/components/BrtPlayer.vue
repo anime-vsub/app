@@ -28,7 +28,6 @@
     >
       <video
         ref="video"
-        :autoplay="documentVisibility !== 'hidden'"
         :poster="poster"
         @play="artPlaying = true"
         @pause="artPlaying = false"
@@ -810,6 +809,7 @@ const props = defineProps<{
 }>()
 
 const playerWrapRef = ref<HTMLDivElement>()
+const documentVisibility = useDocumentVisibility()
 
 // ===== setup effect =====
 
@@ -851,6 +851,9 @@ const currentStream = computed(() => {
 })
 
 const video = ref<HTMLVideoElement>()
+watch(video, video => {
+  if (video && documentVisibility.value !== 'hidden') try {  video.play() } catch {}
+}, { immediate: true })
 // value control get play
 const artPlaying = ref(false)
 const setArtPlaying = (playing: boolean) => {
@@ -1175,10 +1178,10 @@ function onVideoEnded() {
   }
 }
 
-const documentVisibility = useDocumentVisibility()
 // eslint-disable-next-line functional/no-let
 let artPlayingOfBeforeDocumentHide: boolean
 watch(documentVisibility, (visibility) => {
+  console.log('document %s', visibility)
   if (visibility === "visible") {
     if (!artPlaying.value && (artPlayingOfBeforeDocumentHide ?? true))
       setArtPlaying(true)
