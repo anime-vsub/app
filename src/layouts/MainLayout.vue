@@ -73,7 +73,6 @@
                 </button>
               </li>
               <li
-              
                 v-if="searchLoading"
                 v-for="i in 12"
                 :key="i"
@@ -491,6 +490,22 @@
                   </q-item-section>
                 </q-item>
 
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="tabMenuAccountActive = 'setting'"
+                >
+                  <q-item-section avatar class="min-w-0">
+                    <Icon icon="fluent:settings-24-regular" width="20" height="20" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Cài đặt</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <Icon icon="fluent:chevron-right-24-regular" />
+                  </q-item-section>
+                </q-item>
+
                 <q-item clickable v-ripple @click="logout">
                   <q-item-section avatar class="min-w-0">
                     <Icon icon="fa:sign-out" width="20" height="20" />
@@ -528,6 +543,51 @@
                     />
                   </q-item-section>
                   <q-item-section>Tiếng Việt</q-item-section>
+                </q-item>
+              </q-list>
+
+              <q-list
+                v-if="tabMenuAccountActive === 'setting'"
+                class="pt-[47px]"
+              >
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="tabMenuAccountActive = 'normal'"
+                >
+                  <q-item-section avatar class="min-w-0">
+                    <Icon
+                      icon="fluent:ios-arrow-ltr-24-regular"
+                      width="20"
+                      height="20"
+                    />
+                  </q-item-section>
+                  <q-item-section> Quay lại </q-item-section>
+                </q-item>
+
+                <q-item clickable v-ripple>
+                  <q-item-section>
+                    <q-item-label>Tự động phát</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-toggle
+                      v-model="settingsStore.player.autoNext"
+                      size="sm"
+                      color="green"
+                    />
+                  </q-item-section>
+                </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section>
+                    <q-item-label>Nhắc tôi tạm dừng xem</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-toggle
+                      v-model="settingsStore.player.enableRemindStop"
+                      size="sm"
+                      color="green"
+                    />
+                  </q-item-section>
                 </q-item>
               </q-list>
             </q-card>
@@ -730,6 +790,7 @@ import { TuPhim } from "src/apis/runs/tu-phim"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
+import { useSettingsStore } from "stores/settings"
 import { computed, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
@@ -806,6 +867,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const notificationStore = useNotificationStore()
+const settingsStore = useSettingsStore()
 
 const query = ref("")
 const {
@@ -921,7 +983,7 @@ watch(
 
 // account
 // showMenuAccount
-const tabMenuAccountActive = ref<"normal" | "locale">("normal")
+const tabMenuAccountActive = ref<"normal" | "locale" | "setting">("normal")
 watch(showMenuAccount, (val) => {
   if (val) tabMenuAccountActive.value = "normal"
 })
