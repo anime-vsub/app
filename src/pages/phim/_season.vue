@@ -63,6 +63,12 @@
           </q-btn>
         </div>
 
+<div v-if="loading" class="flex-1 flex items-center justify-center">
+      <q-spinner color="main" size="3em" :thickness="3" />
+</div>
+
+<template v-else>
+
         <q-tabs
           v-model="seasonActive"
           class="min-w-0 w-full tabs-seasons relative"
@@ -136,6 +142,7 @@
             />
           </q-tab-panel>
         </q-tab-panels>
+      </template>
       </div>
     </div>
   </div>
