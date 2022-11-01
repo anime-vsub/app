@@ -550,10 +550,7 @@
                 </q-item>
               </q-list>
 
-              <q-list
-                v-if="tabMenuAccountActive === 'setting'"
-                class="pt-[47px]"
-              >
+              <q-list v-if="tabMenuAccountActive === 'setting'">
                 <q-item
                   clickable
                   v-ripple
