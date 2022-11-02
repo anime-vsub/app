@@ -694,9 +694,10 @@
 
     <q-page-container>
       <q-page>
-        <router-view v-slot="{ Component }">
+        <router-view v-if="extensionHelperInstalled" v-slot="{ Component }">
           <component :is="Component" />
         </router-view>
+        <NotExistsExtension v-else />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -793,6 +794,9 @@ import { computed, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
+import NotExistsExtension from "./NotExistsExtension.vue"
+import { useIntervalFn } from "@vueuse/core"
+
 const drawers = [
   {
     icon: "fluent:home-24-regular",
@@ -866,6 +870,15 @@ const router = useRouter()
 const authStore = useAuthStore()
 const notificationStore = useNotificationStore()
 const settingsStore = useSettingsStore()
+
+const extensionHelperInstalled = ref(typeof window.Http !== "undefined")
+if (!extensionHelperInstalled) {
+  const { stop: stopInterval } = useIntervalFn(() => {
+    extensionHelperInstalled.value = typeof window.Http !== "undefined"
+    if (extensionHelperInstalled.value)
+    stopInterval()
+  }, 1e3)
+  }
 
 const query = ref("")
 const {
