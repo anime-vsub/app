@@ -331,23 +331,26 @@
 </template>
 
 <script setup lang="ts">
-// eslint-disable-next-line import/order
-import { Index } from "src/apis/runs/index"
+import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
+import Card from "components/Card.vue"
 // eslint-disable-next-line import/order
 import { useRequest } from "vue-request"
 // eslint-disable-next-line import/order
 import Star from "components/Star.vue"
-import { Icon } from "@iconify/vue"
-import Card from "components/Card.vue"
 import GridCard from "components/GridCard.vue"
 import Quality from "components/Quality.vue"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
+import { Index } from "src/apis/runs/index"
 import dayjs from "src/logic/dayjs"
 import { Autoplay, Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
+import { computed } from "vue"
 import { useRouter } from "vue-router"
+
+import appIcon from "~assets/app_icon.svg"
 
 // Import Swiper styles
 import "swiper/css"
@@ -356,6 +359,35 @@ import "swiper/css/navigation"
 import "swiper/css/autoplay"
 import "swiper/css/grid"
 // Import Swiper Vue.js components
+
+useHead(
+  computed(() => {
+    const title = "AnimeVsub"
+
+    const description =
+      "Xem anime vietsub online xem trên điện thoại di động và máy tính nhanh nhất"
+
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:image", content:process.env.APP_URL + appIcon },
+        {
+          property: "og:url",
+          content: process.env.APP_URL,
+        },
+      ],
+      link: [
+        {
+          rel: "canonical",
+          href: process.env.APP_URL,
+        },
+      ],
+    }
+  })
+)
 
 const router = useRouter()
 
