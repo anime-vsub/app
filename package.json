@@ -12,10 +12,7 @@
     "build": "quasar build",
     "test:watch": "vitest",
     "test": "vitest run",
-    "dev:android": "pnpm dev -m capacitor -T android",
-    "build:android": "pnpm build -m capacitor -T android",
     "quasar": "quasar",
-    "icongenie": "icongenie generate -m capacitor -i meta/app_icon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim",
     "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts",
     "release": "bumpp package.json --commit --push --tag"
   },
