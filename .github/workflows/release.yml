@@ -13,4 +13,4 @@ jobs:
       - name: Release
         run: |
           git branch release -f
-          git push origin release
+          git push origin release -f
