@@ -217,7 +217,7 @@
                       currentSeason !== nextChap.season.value
                         ? `Tiếp theo: ${nextChap.season.name}`
                         : `Tiếp theo: Tập ${nextChap.chap.name}`
-                    }}
+                    }} (Shift + N)
                   </q-tooltip>
                 </q-btn>
 
@@ -1645,6 +1645,17 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
 
     case "KeyM":
       toggleMuted()
+      break
+      case "KeyN":
+      if (event.shiftKey && props.nextChap)
+      router.push({
+                      name: 'watch-anime',
+                      params: {
+                        season: props.nextChap.season.value,
+                        chap: props.nextChap.chap?.id,
+                      },
+                    })
+
       break
   }
 })
