@@ -5,10 +5,10 @@
 
 ## Screenshot
 
-<!--screenshot--><a href="./meta/screenshoots/2022-11-02 105058.jpeg"><img src="./meta/screenshoots/2022-11-02 105058.jpeg" ></a>
-<a href="./meta/screenshoots/2022-11-02 150257.jpeg"><img src="./meta/screenshoots/2022-11-02 150257.jpeg" ></a>
-<a href="./meta/screenshoots/2022-11-02 150331.jpeg"><img src="./meta/screenshoots/2022-11-02 150331.jpeg" ></a>
-<a href="./meta/screenshoots/2022-11-02 150406.jpeg"><img src="./meta/screenshoots/2022-11-02 150406.jpeg" ></a>
-<a href="./meta/screenshoots/2022-11-02 150545.jpeg"><img src="./meta/screenshoots/2022-11-02 150545.jpeg" ></a>
-<a href="./meta/screenshoots/2022-11-02 150627.jpeg"><img src="./meta/screenshoots/2022-11-02 150627.jpeg" ></a>
+<!--screenshot--><a href="./meta/screenshoots/2022-11-02 105058.jpeg"><img src="./meta/screenshoots/2022-11-02 105058.jpeg" style="margin-top: 8px"></a>
+<a href="./meta/screenshoots/2022-11-02 150257.jpeg"><img src="./meta/screenshoots/2022-11-02 150257.jpeg" style="margin-top: 8px"></a>
+<a href="./meta/screenshoots/2022-11-02 150331.jpeg"><img src="./meta/screenshoots/2022-11-02 150331.jpeg" style="margin-top: 8px"></a>
+<a href="./meta/screenshoots/2022-11-02 150406.jpeg"><img src="./meta/screenshoots/2022-11-02 150406.jpeg" style="margin-top: 8px"></a>
+<a href="./meta/screenshoots/2022-11-02 150545.jpeg"><img src="./meta/screenshoots/2022-11-02 150545.jpeg" style="margin-top: 8px"></a>
+<a href="./meta/screenshoots/2022-11-02 150627.jpeg"><img src="./meta/screenshoots/2022-11-02 150627.jpeg" style="margin-top: 8px"></a>
 <!--/screenshot-->

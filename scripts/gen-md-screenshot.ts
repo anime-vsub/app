@@ -9,7 +9,7 @@ const screenshots = fs
   .map((name) => `./meta/screenshoots/${name}`)
 
 const md = screenshots.map((src) => {
-  return `<a href="${src}"><img src="${src}" ></a>`
+  return `<a href="${src}"><img src="${src}" style="margin-top: 8px"></a>`
 })
 
 const readme = fs.readFileSync(pathToReadme, "utf8")
