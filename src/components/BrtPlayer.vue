@@ -217,7 +217,8 @@
                       currentSeason !== nextChap.season.value
                         ? `Tiếp theo: ${nextChap.season.name}`
                         : `Tiếp theo: Tập ${nextChap.chap.name}`
-                    }} (Shift + N)
+                    }}
+                    (Shift + N)
                   </q-tooltip>
                 </q-btn>
 
@@ -884,7 +885,7 @@ watch(
   () => props.currentChap,
   (newVal, oldVal) => {
     if (newVal && oldVal) setArtPlaying(true)
-    }
+  }
 )
 // eslint-disable-next-line functional/no-let
 let artEnded = false
@@ -931,7 +932,10 @@ watch(
 
       const cur = progressInCloud.data()?.cur
 
-      if (cur && !artControlProgressHoving.value /* disable if user hoving to progress bar */) {
+      if (
+        cur &&
+        !artControlProgressHoving.value /* disable if user hoving to progress bar */
+      ) {
         setArtCurrentTime(cur)
         addNotice(`Đã khôi phục phiên xem trước ${parseTime(cur)}`)
       }
@@ -952,7 +956,9 @@ const setArtPlaybackRate = (value: number) => {
 }
 const artVolume = computed<number>({
   get: () => settingsStore.player.volume,
-  set: (val) => settingsStore.player.volume = val
+  set: (val) => {
+    settingsStore.player.volume = val
+  },
 })
 const setArtVolume = (value: number) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -1649,15 +1655,15 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
     case "KeyM":
       toggleMuted()
       break
-      case "KeyN":
+    case "KeyN":
       if (event.shiftKey && props.nextChap)
-      router.push({
-                      name: 'watch-anime',
-                      params: {
-                        season: props.nextChap.season.value,
-                        chap: props.nextChap.chap?.id,
-                      },
-                    })
+        router.push({
+          name: "watch-anime",
+          params: {
+            season: props.nextChap.season.value,
+            chap: props.nextChap.chap?.id,
+          },
+        })
 
       break
   }

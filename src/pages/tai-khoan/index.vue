@@ -397,7 +397,7 @@ const {
   loading: loadingHistories,
   run: runHistories,
   error: errorHistories,
-  refreshAsync: refreshHistories,
+  // refreshAsync: refreshHistories,
 } = useRequest(() => History(), { manual: true })
 
 // ========== favorite =========
@@ -406,7 +406,7 @@ const {
   loading: loadingFavorites,
   run: runFavorites,
   error: errorFavorites,
-  refreshAsync: refreshFavorites,
+  // refreshAsync: refreshFavorites,
 } = useRequest(() => TuPhim(1), { manual: true })
 
 watch(
@@ -431,11 +431,11 @@ if (authStore.isLogged) {
   runFavorites()
 }
 
-async function refresh(done: () => void) {
-  if (authStore.isLogged)
-    await Promise.all([refreshHistories(), refreshFavorites()])
-  done()
-}
+// async function refresh(done: () => void) {
+//   if (authStore.isLogged)
+//     await Promise.all([refreshHistories(), refreshFavorites()])
+//   done()
+// }
 
 // ========== gen qr code =========
 const qrRef = ref<HTMLCanvasElement>()

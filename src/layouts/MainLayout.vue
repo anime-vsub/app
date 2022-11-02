@@ -521,17 +521,15 @@
               </q-list>
 
               <q-list v-if="tabMenuAccountActive === 'locale'">
-                <q-item
-                >
+                <q-item>
                   <q-item-section avatar class="min-w-0">
-                    <q-btn round dense
-                  @click="tabMenuAccountActive = 'normal'">
-                    <Icon
-                      icon="fluent:ios-arrow-ltr-24-regular"
-                      width="20"
-                      height="20"
-                    />
-                  </q-btn>
+                    <q-btn round dense @click="tabMenuAccountActive = 'normal'">
+                      <Icon
+                        icon="fluent:ios-arrow-ltr-24-regular"
+                        width="20"
+                        height="20"
+                      />
+                    </q-btn>
                   </q-item-section>
                   <q-item-section> Chọn ngôn ngữ của bạn </q-item-section>
                 </q-item>
@@ -551,17 +549,15 @@
               </q-list>
 
               <q-list v-if="tabMenuAccountActive === 'setting'">
-                <q-item
-                >
+                <q-item>
                   <q-item-section avatar class="min-w-0">
-                    <q-btn round dense
-                  @click="tabMenuAccountActive = 'normal'">
-                    <Icon
-                      icon="fluent:ios-arrow-ltr-24-regular"
-                      width="20"
-                      height="20"
-                    />
-                  </q-btn>
+                    <q-btn round dense @click="tabMenuAccountActive = 'normal'">
+                      <Icon
+                        icon="fluent:ios-arrow-ltr-24-regular"
+                        width="20"
+                        height="20"
+                      />
+                    </q-btn>
                   </q-item-section>
                   <q-item-section> Chọn ngôn ngữ của bạn </q-item-section>
                 </q-item>
@@ -660,7 +656,7 @@
             v-else
             clickable
             v-ripple
-            class="min-h-0 my-2  rounded-xl"
+            class="min-h-0 my-2 rounded-xl"
             :to="path"
             active-class=""
             exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"

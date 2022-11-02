@@ -344,13 +344,12 @@ import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { Index } from "src/apis/runs/index"
+import appIcon from "src/assets/app_icon.svg"
 import dayjs from "src/logic/dayjs"
 import { Autoplay, Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { computed } from "vue"
 import { useRouter } from "vue-router"
-
-import appIcon from "~assets/app_icon.svg"
 
 // Import Swiper styles
 import "swiper/css"
@@ -373,7 +372,7 @@ useHead(
       meta: [
         { property: "og:title", content: title },
         { property: "og:description", content: description },
-        { property: "og:image", content:process.env.APP_URL + appIcon },
+        { property: "og:image", content: process.env.APP_URL + appIcon },
         {
           property: "og:url",
           content: process.env.APP_URL,
