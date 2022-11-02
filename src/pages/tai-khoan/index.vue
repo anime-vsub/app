@@ -54,7 +54,7 @@
     </q-item>
   </header>
 
-  <q-pull-to-refresh @refresh="refresh" class="pt-[72px]">
+  <div class="pt-[72px]">
     <div class="mt-4">
       <router-link
         class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
@@ -214,7 +214,7 @@
         </q-item-section>
       </q-item>
     </q-list>
-  </q-pull-to-refresh>
+  </div>
   <!-- dialogs login -->
   <q-dialog
     v-model="showDialogLogin"

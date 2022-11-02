@@ -91,7 +91,6 @@
     </q-card>
   </div>
 
-  <q-pull-to-refresh v-else @refresh="refresh">
     <q-infinite-scroll
       ref="infiniteScrollRef"
       @load="onLoad"
@@ -139,7 +138,6 @@
         </div>
       </template>
     </q-infinite-scroll>
-  </q-pull-to-refresh>
 </template>
 
 <script lang="ts" setup>
