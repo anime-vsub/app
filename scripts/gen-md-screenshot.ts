@@ -9,7 +9,7 @@ const screenshots = fs
   .map((name) => `./meta/screenshoots/${name}`)
 
 const md = screenshots.map((src) => {
-  return `<a href="${src}"><img src="${src}" width="120px"></a>`
+  return `<a href="${src}"><img src="${src}" ></a>`
 })
 
 const readme = fs.readFileSync(pathToReadme, "utf8")
@@ -27,9 +27,6 @@ if (indexStartScrns === -1 || indexEndScrns === -1) {
 fs.writeFileSync(
   pathToReadme,
   readme.slice(0, indexStartScrns) +
-    `<!--screenshot-->
-<div style="overflow-x: scroll; white-space: nowrap">
-   ${md.join("\n")}
-</div>` +
+    `<!--screenshot-->${md.join("\n")}` +
     readme.slice(indexEndScrns - 1)
 )

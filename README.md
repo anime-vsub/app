@@ -5,13 +5,10 @@
 
 ## Screenshot
 
-<!--screenshot-->
-<div style="overflow-x: scroll; white-space: nowrap">
-   <a href="./meta/screenshoots/2022-11-02 105058.jpeg"><img src="./meta/screenshoots/2022-11-02 105058.jpeg" width="120px"></a>
-<a href="./meta/screenshoots/2022-11-02 150257.jpeg"><img src="./meta/screenshoots/2022-11-02 150257.jpeg" width="120px"></a>
-<a href="./meta/screenshoots/2022-11-02 150331.jpeg"><img src="./meta/screenshoots/2022-11-02 150331.jpeg" width="120px"></a>
-<a href="./meta/screenshoots/2022-11-02 150406.jpeg"><img src="./meta/screenshoots/2022-11-02 150406.jpeg" width="120px"></a>
-<a href="./meta/screenshoots/2022-11-02 150545.jpeg"><img src="./meta/screenshoots/2022-11-02 150545.jpeg" width="120px"></a>
-<a href="./meta/screenshoots/2022-11-02 150627.jpeg"><img src="./meta/screenshoots/2022-11-02 150627.jpeg" width="120px"></a>
-</div>
+<!--screenshot--><a href="./meta/screenshoots/2022-11-02 105058.jpeg"><img src="./meta/screenshoots/2022-11-02 105058.jpeg" ></a>
+<a href="./meta/screenshoots/2022-11-02 150257.jpeg"><img src="./meta/screenshoots/2022-11-02 150257.jpeg" ></a>
+<a href="./meta/screenshoots/2022-11-02 150331.jpeg"><img src="./meta/screenshoots/2022-11-02 150331.jpeg" ></a>
+<a href="./meta/screenshoots/2022-11-02 150406.jpeg"><img src="./meta/screenshoots/2022-11-02 150406.jpeg" ></a>
+<a href="./meta/screenshoots/2022-11-02 150545.jpeg"><img src="./meta/screenshoots/2022-11-02 150545.jpeg" ></a>
+<a href="./meta/screenshoots/2022-11-02 150627.jpeg"><img src="./meta/screenshoots/2022-11-02 150627.jpeg" ></a>
 <!--/screenshot-->
