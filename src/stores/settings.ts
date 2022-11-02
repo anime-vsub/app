@@ -5,6 +5,7 @@ export const useSettingsStore = defineStore("settings", {
     player: {
       autoNext: true,
       enableRemindStop: true,
+      volume: 1,
     },
   }),
   persist: true,

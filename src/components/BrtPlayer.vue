@@ -888,7 +888,7 @@ watch(
 )
 // eslint-disable-next-line functional/no-let
 let artEnded = false
-const artLoading = ref(true)
+const artLoading = ref(false)
 const artDuration = ref<number>(0)
 const artCurrentTime = ref<number>(0)
 const setArtCurrentTime = (currentTime: number) => {
@@ -931,7 +931,7 @@ watch(
 
       const cur = progressInCloud.data()?.cur
 
-      if (cur) {
+      if (cur && !artControlProgressHoving.value /* disable if user hoving to progress bar */) {
         setArtCurrentTime(cur)
         addNotice(`Đã khôi phục phiên xem trước ${parseTime(cur)}`)
       }
@@ -950,7 +950,10 @@ const setArtPlaybackRate = (value: number) => {
   video.value.playbackRate = value
   addNotice(`Tốc độ phát ${value}x`)
 }
-const artVolume = ref(1)
+const artVolume = computed<number>({
+  get: () => settingsStore.player.volume,
+  set: (val) => settingsStore.player.volume = val
+})
 const setArtVolume = (value: number) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   video.value!.volume = value
@@ -2030,6 +2033,9 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
   }
   .art-subtitle {
     font-size: 20px;
+  }
+  .art-control-onlyText {
+    font-size: 18px;
   }
 }
 
