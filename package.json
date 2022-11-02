@@ -14,7 +14,7 @@
     "test": "vitest run",
     "quasar": "quasar",
     "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts",
-    "release": "bumpp package.json --commit --push --tag"
+    "release": "bumpp package.json --commit --tag && git branch release -f && git push -u release && git push -u main && git push --tags"
   },
   "dependencies": {
     "@firebase/app": "^0.8.2",
