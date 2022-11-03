@@ -872,13 +872,19 @@ const notificationStore = useNotificationStore()
 const settingsStore = useSettingsStore()
 
 const extensionHelperInstalled = ref(typeof window.Http !== "undefined")
-if (!extensionHelperInstalled) {
+let createdChecker = false
+watch(extensionHelperInstalled, installed => {
+  if (!installed && !createdChecker) {
+    createdChecker = true
   const { stop: stopInterval } = useIntervalFn(() => {
     extensionHelperInstalled.value = typeof window.Http !== "undefined"
-    if (extensionHelperInstalled.value)
-    stopInterval()
+    if (extensionHelperInstalled.value) {
+      stopInterval()
+      createdChecker = false
+      }
   }, 1000)
   }
+}, { immediate: true })
 
 const query = ref("")
 const {
