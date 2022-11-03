@@ -34,27 +34,30 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
+import { computed } from "vue"
 
 const title = "Lỗi • Cần cài đặt extension trợ giúp"
 const description =
   "Ứng dụng này cần cài đặt extension trợ giúp để hoạt động bình thường."
 
-useHead({
-  title,
-  description,
-  meta: [
-    { property: "og:title", content: title },
-    { property: "og:description", content: description },
-    {
-      property: "og:url",
-    },
-  ],
-  link: [
-    {
-      rel: "canonical",
-    },
-  ],
-})
+useHead(
+  computed(() => ({
+    title,
+    description,
+    meta: [
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      {
+        property: "og:url",
+      },
+    ],
+    link: [
+      {
+        rel: "canonical",
+      },
+    ],
+  }))
+)
 </script>
 
 <style lang="scss" scoped>

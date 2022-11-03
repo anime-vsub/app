@@ -1,11 +1,11 @@
-import type { HttpOptions } from "@capacitor-community/http"
 import { C_URL } from "src/constants"
 
 export async function get(
-  url: string | HttpOptions,
+  url: string | GetOptions,
   headers?: Record<string, string>
 ) {
   console.log("get: ", url)
+  // eslint-disable-next-line functional/no-throw-statement
   if (!window.Http) throw new Error("EXTENSION_HELPER_REQUIRED")
 
   const response = await window.Http.get(
@@ -65,6 +65,7 @@ export async function post(
       ...headers,
     },
   })
+  // eslint-disable-next-line functional/no-throw-statement
   if (!window.Http) throw new Error("EXTENSION_HELPER_REQUIRED")
 
   const response = await window.Http.post({

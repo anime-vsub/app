@@ -43,7 +43,7 @@
         @ratechange="
           artPlaybackRate = ($event.target as HTMLVideoElement).playbackRate
         "
-        @volumechange="artVolume = $event.target.volume"
+        @volumechange="artVolume = ($event.target as HTMLVideoElement).volume"
         @canplay=";(artLoading = false), onVideoCanPlay()"
         @canplaythrough="artLoading = false"
         @suspend="artLoading = false"
@@ -57,7 +57,7 @@
         @touchstart="onBDTouchStart"
         @touchmove="onBDTouchMove"
         @touchend="onBDTouchEnd"
-        @click="onClickSkip($event, true)"
+        @click="onClickSkip"
         @mousemove="setArtControlShow(true)"
         v-show="holdedBD || !artControlShow"
       />
@@ -71,7 +71,7 @@
           @touchstart="onBDTouchStart"
           @touchmove="onBDTouchMove"
           @touchend="onBDTouchEnd"
-          @click="onClickSkip($event, false)"
+          @click="onClickSkip"
           @mousemove="setArtControlShow(true)"
           v-show="holdedBD || artControlShow"
         >
@@ -216,7 +216,7 @@
                     {{
                       currentSeason !== nextChap.season.value
                         ? `Tiếp theo: ${nextChap.season.name}`
-                        : `Tiếp theo: Tập ${nextChap.chap.name}`
+                        : `Tiếp theo: Tập ${nextChap.chap?.name}`
                     }}
                     (Shift + N)
                   </q-tooltip>

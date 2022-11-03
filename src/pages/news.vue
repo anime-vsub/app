@@ -105,7 +105,7 @@
         'news-item': viewMode === 2,
       }"
       v-ripple
-      @click="open(item.href, item.title)"
+      @click="open(item.href)"
     >
       <div>
         <q-img no-spinner :src="item.image" class="image" />
@@ -173,8 +173,8 @@ async function onLoad(page: number, done: (noMore: boolean) => void) {
 
   done(news.length === 0)
 }
-function open(url: string, title: string) {
-  window.open(url, { windowName: title })
+function open(url: string) {
+  window.open(url)
 }
 </script>
 

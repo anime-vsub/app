@@ -872,16 +872,17 @@ const notificationStore = useNotificationStore()
 const settingsStore = useSettingsStore()
 
 const extensionHelperInstalled = ref(typeof window.Http !== "undefined")
+// eslint-disable-next-line functional/no-let
 let createdChecker = false
 watch(
   extensionHelperInstalled,
   (installed) => {
     if (!installed && !createdChecker) {
       createdChecker = true
-      const { stop: stopInterval } = useIntervalFn(() => {
+      const { pause: pauseInterval } = useIntervalFn(() => {
         extensionHelperInstalled.value = typeof window.Http !== "undefined"
         if (extensionHelperInstalled.value) {
-          stopInterval()
+          pauseInterval()
           createdChecker = false
         }
       }, 1000)
