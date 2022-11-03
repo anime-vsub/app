@@ -779,6 +779,7 @@ import "@fontsource/caveat"
 
 // =========== suth
 
+import { useIntervalFn } from "@vueuse/core"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
@@ -795,7 +796,6 @@ import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
-import { useIntervalFn } from "@vueuse/core"
 
 const drawers = [
   {
@@ -873,18 +873,22 @@ const settingsStore = useSettingsStore()
 
 const extensionHelperInstalled = ref(typeof window.Http !== "undefined")
 let createdChecker = false
-watch(extensionHelperInstalled, installed => {
-  if (!installed && !createdChecker) {
-    createdChecker = true
-  const { stop: stopInterval } = useIntervalFn(() => {
-    extensionHelperInstalled.value = typeof window.Http !== "undefined"
-    if (extensionHelperInstalled.value) {
-      stopInterval()
-      createdChecker = false
-      }
-  }, 1000)
-  }
-}, { immediate: true })
+watch(
+  extensionHelperInstalled,
+  (installed) => {
+    if (!installed && !createdChecker) {
+      createdChecker = true
+      const { stop: stopInterval } = useIntervalFn(() => {
+        extensionHelperInstalled.value = typeof window.Http !== "undefined"
+        if (extensionHelperInstalled.value) {
+          stopInterval()
+          createdChecker = false
+        }
+      }, 1000)
+    }
+  },
+  { immediate: true }
+)
 
 const query = ref("")
 const {

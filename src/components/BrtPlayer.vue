@@ -904,16 +904,15 @@ const setArtCurrentTime = (currentTime: number) => {
 let disableBackupProgressViewing = false
 watch(
   [() => props.currentChap, () => authStore.user_data],
+  // eslint-disable-next-line camelcase
   async ([currentChap, user_data]) => {
+    // eslint-disable-next-line camelcase
     if (currentChap && user_data) {
       disableBackupProgressViewing = true
       setArtCurrentTime(0)
 
-      const userRef = doc(
-        db,
-        "users",
-        sha256(user_data.email + user_data.name)
-      )
+      // eslint-disable-next-line camelcase
+      const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
       const seasonRef = doc(
         userRef,
         "history",
