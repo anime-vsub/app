@@ -6,7 +6,10 @@ export async function get(
   headers?: Record<string, string>
 ) {
   console.log("get: ", url)
-  const response = await Http.get(
+  if (!window.Http)
+  throw new Error("EXTENSION_HELPER_REQUIRED")
+  
+  const response = await window.Http.get(
     typeof url === "object"
       ? url
       : {
@@ -63,8 +66,10 @@ export async function post(
       ...headers,
     },
   })
+  if (!window.Http)
+  throw new Error("EXTENSION_HELPER_REQUIRED")
 
-  const response = await Http.post({
+  const response = await window.Http.post({
     url: C_URL + url,
     headers: {
       "user-agent":

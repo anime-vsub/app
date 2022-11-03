@@ -877,7 +877,7 @@ if (!extensionHelperInstalled) {
     extensionHelperInstalled.value = typeof window.Http !== "undefined"
     if (extensionHelperInstalled.value)
     stopInterval()
-  }, 1e3)
+  }, 1000)
   }
 
 const query = ref("")
