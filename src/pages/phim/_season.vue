@@ -114,15 +114,15 @@
             >
               <div
                 v-if="
-                  !_cacheDataSeasons.get(value) ||
-                  _cacheDataSeasons.get(value)?.status === 'pending'
+                  !(_tmp = _cacheDataSeasons.get(value)) ||
+                  _tmp.status === 'pending'
                 "
                 class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
               >
                 <q-spinner style="color: #00be06" size="3em" :thickness="3" />
               </div>
               <div
-                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
+                v-else-if="_tmp.status === 'error'"
                 class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
               >
                 {{ t("loi-khi-lay-du-lieu") }}
@@ -137,17 +137,36 @@
                 >
               </div>
 
-              <ChapsGridQBtn
-                v-else
-                grid
-                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-                :season="value"
-                :find="
-                  (item) => value === currentSeason && item.id === currentChap
-                "
-                :progress-chaps="progressChaps"
-                class-item="px-3 !py-[6px] mb-3"
-              />
+              <template v-else>
+                <div v-if="_tmp.response.update" class="mb-2 text-gray-300">
+                  {{
+                    t("tap-moi-chieu-vao-_time-_day", [
+                      dayjs(
+                        new Date(
+                          `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
+                        )
+                      ).format("HH:MM"),
+                      _tmp.response.update[0] === 7
+                        ? "Chủ nhật"
+                        : `thứ ${_tmp.response.update[0]}`,
+                      _tmp.response.update[0] > new Date().getDay() + 1
+                        ? "tuần sau"
+                        : "tuần này",
+                    ])
+                  }}
+                </div>
+
+                <ChapsGridQBtn
+                  grid
+                  :chaps="_tmp.response.chaps"
+                  :season="value"
+                  :find="
+                    (item) => value === currentSeason && item.id === currentChap
+                  "
+                  :progress-chaps="progressChaps"
+                  class-item="px-3 !py-[6px] mb-3"
+                />
+              </template>
             </q-tab-panel>
           </q-tab-panels>
         </template>
@@ -211,8 +230,8 @@
         <div>
           <h5 class="text-gray-400 text-weight-normal">
             {{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}
-
             <span v-if="currentDataSeason?.update">
+              &bull;
               {{
                 t("tap-moi-chieu-vao-_time-_day", [
                   dayjs(
@@ -223,9 +242,9 @@
                   currentDataSeason.update[0] === 7
                     ? "Chủ nhật"
                     : `thứ ${currentDataSeason.update[0]}`,
-                  currentDataSeason.update[0] > new Date().getDay()
+                  currentDataSeason.update[0] > new Date().getDay() + 1
                     ? "tuần sau"
-                    : "",
+                    : "tuần này",
                 ])
               }}
             </span>
@@ -335,7 +354,7 @@
       </div>
 
       <div class="text-[#9a9a9a] mt-2">
-        <span>{{ t("ten-khac") }} </span>
+        <span>{{ t("ten-khac") }}</span>
 
         <span class="text-[#eee] leading-relaxed">{{ data.othername }}</span>
       </div>
@@ -1000,6 +1019,11 @@ function share() {
 // ================ status ================
 
 const gridModeTabsSeasons = ref(false)
+
+let _tmp:
+  | ResponseDataSeasonPending
+  | ResponseDataSeasonSuccess
+  | ResponseDataSeasonError
 </script>
 
 <style lang="scss" scoped>

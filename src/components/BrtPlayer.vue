@@ -310,7 +310,8 @@
                     anchor="top middle"
                     self="bottom middle"
                     :offset="[0, 20]"
-                    class="min-w-[200px] max-w-[329px] flex column flex-nowrap overflow-visible"
+                    class="min-w-[200px] min-h-[165px] max-w-[329px] flex column flex-nowrap overflow-visible"
+                    ref="menuChapsRef"
                   >
                     <div>
                       <div
@@ -322,7 +323,7 @@
 
                         <q-btn
                           dense
-                          round
+                          round unelevated
                           @click="gridModeTabsSeasons = !gridModeTabsSeasons"
                         >
                           <Icon
@@ -368,7 +369,7 @@
                     >
                       <div
                         v-if="!seasons"
-                        class="flex-1 flex items-center justify-center"
+                        class="flex-1 flex items-center justify-center py-4"
                       >
                         <q-spinner color="main" size="3em" :thickness="3" />
                       </div>
@@ -387,8 +388,8 @@
                           >
                             <div
                               v-if="
-                                !_cacheDataSeasons.get(value) ||
-                                _cacheDataSeasons.get(value)?.status ===
+                                !(_tmp = _cacheDataSeasons.get(value)) ||
+                                _tmp.status ===
                                   'pending'
                               "
                               class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
@@ -401,7 +402,7 @@
                             </div>
                             <div
                               v-else-if="
-                                _cacheDataSeasons.get(value)?.status === 'error'
+                               _tmp.status === 'error'
                               "
                               class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
                             >
@@ -417,10 +418,29 @@
                               >
                             </div>
 
+<template v-else>
+
+<div v-if="_tmp.response.update" class="mb-2 text-gray-300">
+  {{
+    t("tap-moi-chieu-vao-_time-_day", [
+      dayjs(
+        new Date(
+          `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
+        )
+      ).format("HH:MM"),
+      _tmp.response.update[0] === 7
+        ? "Chủ nhật"
+        : `thứ ${_tmp.response.update[0]}`,
+      _tmp.response.update[0] > new Date().getDay() + 1
+        ? "tuần sau"
+        : "tuần này",
+    ])
+  }}
+</div>
+
                             <ChapsGridQBtn
-                              v-else
                               grid
-                              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                              :chaps="_tmp.response.chaps"
                               :season="value"
                               :find="
                                 (item) =>
@@ -428,12 +448,17 @@
                                   item.id === currentChap
                               "
                               :progress-chaps="progressChaps"
-                              class-item="px-3 py-[6px] mb-3"
+                              class-item="px-3 !py-[6px] mb-3"
                             />
+
+</template>
                           </q-tab-panel>
                         </q-tab-panels>
                       </template>
                     </div>
+
+
+                  <q-resize-observer @resize="menuChapsRef?.updatePosition ()" />
                   </q-menu>
                 </q-btn>
               </div>
@@ -742,6 +767,7 @@ import {
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
+import dayjs from "src/logic/dayjs"
 
 import type { Source } from "./sources"
 
@@ -856,6 +882,7 @@ watchEffect(() => {
   }, 70)
 })
 
+const menuChapsRef  =ref<QMenu>()
 // =========================== huuuu player API。馬鹿馬鹿しい ====================================
 
 const currentStream = computed(() => {
@@ -1682,6 +1709,11 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       break
   }
 })
+
+
+let _tmp:  | ResponseDataSeasonPending
+    | ResponseDataSeasonSuccess
+    | ResponseDataSeasonError
 </script>
 
 <style lang="scss" scoped>
