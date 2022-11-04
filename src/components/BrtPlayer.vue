@@ -970,12 +970,11 @@ const setArtVolume = (value: number) => {
 // eslint-disable-next-line functional/no-let
 let lastVolumeBeforeMute: number
 const toggleMuted = () => {
-  const newValue = artVolume.value === 0 ? (lastVolumeBeforeMute ?? 0.05) : 0
+  const newValue = artVolume.value === 0 ? lastVolumeBeforeMute ?? 0.05 : 0
 
-  if (artVolume.value > 0){
+  if (artVolume.value > 0) {
     lastVolumeBeforeMute = artVolume.value
   }
-
 
   setArtVolume(newValue)
 
