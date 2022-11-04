@@ -1035,6 +1035,9 @@ function share() {
 // ================ status ================
 
 const gridModeTabsSeasons = ref(false)
+watch(seasonActive, () => {
+  gridModeTabsSeasons.value = false
+})
 
 // eslint-disable-next-line functional/no-let
 let _tmp:

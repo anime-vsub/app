@@ -837,6 +837,7 @@ const documentVisibility = useDocumentVisibility()
 // ===== setup effect =====
 
 const seasonActive = ref<string>()
+
 // sync data by active route
 watch(
   () => props.currentSeason,
@@ -858,6 +859,9 @@ watch(
 )
 
 const gridModeTabsSeasons = ref(false)
+watch(seasonActive, () => {
+  gridModeTabsSeasons.value = false
+})
 // @scrollIntoView
 const tabsRef = ref<QTab>()
 watchEffect(() => {
