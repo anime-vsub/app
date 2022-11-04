@@ -323,7 +323,8 @@
 
                         <q-btn
                           dense
-                          round unelevated
+                          round
+                          unelevated
                           @click="gridModeTabsSeasons = !gridModeTabsSeasons"
                         >
                           <Icon
@@ -389,8 +390,7 @@
                             <div
                               v-if="
                                 !(_tmp = _cacheDataSeasons.get(value)) ||
-                                _tmp.status ===
-                                  'pending'
+                                _tmp.status === 'pending'
                               "
                               class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
                             >
@@ -401,9 +401,7 @@
                               />
                             </div>
                             <div
-                              v-else-if="
-                               _tmp.status === 'error'
-                              "
+                              v-else-if="_tmp.status === 'error'"
                               class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
                             >
                               {{ t("loi-khi-lay-du-lieu") }}
@@ -418,47 +416,50 @@
                               >
                             </div>
 
-<template v-else>
+                            <template v-else>
+                              <div
+                                v-if="_tmp.response.update"
+                                class="mb-2 text-gray-300"
+                              >
+                                {{
+                                  t("tap-moi-chieu-vao-_time-_day", [
+                                    dayjs(
+                                      new Date(
+                                        `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
+                                      )
+                                    ).format("HH:MM"),
+                                    _tmp.response.update[0] === 7
+                                      ? "Chủ nhật"
+                                      : `thứ ${_tmp.response.update[0]}`,
+                                    _tmp.response.update[0] >
+                                    new Date().getDay() + 1
+                                      ? "tuần sau"
+                                      : "tuần này",
+                                  ])
+                                }}
+                              </div>
 
-<div v-if="_tmp.response.update" class="mb-2 text-gray-300">
-  {{
-    t("tap-moi-chieu-vao-_time-_day", [
-      dayjs(
-        new Date(
-          `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
-        )
-      ).format("HH:MM"),
-      _tmp.response.update[0] === 7
-        ? "Chủ nhật"
-        : `thứ ${_tmp.response.update[0]}`,
-      _tmp.response.update[0] > new Date().getDay() + 1
-        ? "tuần sau"
-        : "tuần này",
-    ])
-  }}
-</div>
-
-                            <ChapsGridQBtn
-                              grid
-                              :chaps="_tmp.response.chaps"
-                              :season="value"
-                              :find="
-                                (item) =>
-                                  value === currentSeason &&
-                                  item.id === currentChap
-                              "
-                              :progress-chaps="progressChaps"
-                              class-item="px-3 !py-[6px] mb-3"
-                            />
-
-</template>
+                              <ChapsGridQBtn
+                                grid
+                                :chaps="_tmp.response.chaps"
+                                :season="value"
+                                :find="
+                                  (item) =>
+                                    value === currentSeason &&
+                                    item.id === currentChap
+                                "
+                                :progress-chaps="progressChaps"
+                                class-item="px-3 !py-[6px] mb-3"
+                              />
+                            </template>
                           </q-tab-panel>
                         </q-tab-panels>
                       </template>
                     </div>
 
-
-                  <q-resize-observer @resize="menuChapsRef?.updatePosition ()" />
+                    <q-resize-observer
+                      @resize="menuChapsRef?.updatePosition()"
+                    />
                   </q-menu>
                 </q-btn>
               </div>
@@ -745,14 +746,14 @@ import {
   useMouseInElement,
 } from "@vueuse/core"
 import { app } from "boot/firebase"
-import ArtDialog from "components/ArtDialog.vue"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { debounce, QTab, QTooltip, throttle, useQuasar } from "quasar"
+import { debounce, QMenu, QTab, QTooltip, throttle, useQuasar } from "quasar"
 import sha256 from "sha256"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
+import dayjs from "src/logic/dayjs"
 import Hls from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
@@ -767,7 +768,6 @@ import {
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
-import dayjs from "src/logic/dayjs"
 
 import type { Source } from "./sources"
 
@@ -871,6 +871,7 @@ watchEffect(() => {
   if (!tabsRef.value) return
   if (!props.currentSeason) return
 
+  // eslint-disable-next-line no-unused-expressions
   gridModeTabsSeasons.value // watch value
 
   setTimeout(() => {
@@ -882,7 +883,7 @@ watchEffect(() => {
   }, 70)
 })
 
-const menuChapsRef  =ref<QMenu>()
+const menuChapsRef = ref<QMenu>()
 // =========================== huuuu player API。馬鹿馬鹿しい ====================================
 
 const currentStream = computed(() => {
@@ -1710,10 +1711,12 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
   }
 })
 
-
-let _tmp:  | ResponseDataSeasonPending
-    | ResponseDataSeasonSuccess
-    | ResponseDataSeasonError
+// eslint-disable-next-line functional/no-let
+let _tmp:
+  | ResponseDataSeasonPending
+  | ResponseDataSeasonSuccess
+  | ResponseDataSeasonError
+  | undefined
 </script>
 
 <style lang="scss" scoped>

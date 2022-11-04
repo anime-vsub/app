@@ -577,6 +577,7 @@ async function fetchSeason(season: string) {
       console.log("large chap. spliting...")
       const { chaps } = response
 
+      // eslint-disable-next-line functional/no-let
       let indexMetaSeason = seasons.value.findIndex(
         (item) => item.value === season
       )
@@ -928,6 +929,7 @@ watchEffect(() => {
   if (!tabsRef.value) return
   if (!currentSeason.value) return
 
+  // eslint-disable-next-line no-unused-expressions
   gridModeTabsSeasons.value // watch value
 
   setTimeout(() => {
@@ -1020,10 +1022,12 @@ function share() {
 
 const gridModeTabsSeasons = ref(false)
 
+// eslint-disable-next-line functional/no-let
 let _tmp:
   | ResponseDataSeasonPending
   | ResponseDataSeasonSuccess
   | ResponseDataSeasonError
+  | undefined
 </script>
 
 <style lang="scss" scoped>
