@@ -34,7 +34,7 @@
             outlined
             class="font-weight-normal input-search bg-[rgba(255,255,255,0)] w-full"
             input-style="background-color: transparent"
-            placeholder="Tìm kiếm"
+            placeholder="{{ t('tim-kiem') }}"
             @focus="focusing = true"
             @blur="focusing = false"
             @keydown.stop
@@ -64,12 +64,14 @@
                 class="px-4 mt-1 py-[0.5rem] flex items-center w-full justify-between"
               >
                 <div>
-                  <span class="text-gray-400 mr-1">Tìm kiếm: </span>
+                  <span class="text-gray-400 mr-1"
+                    >{{ t("tim-kiem-_keyword") }}
+                  </span>
                   <span class="font-bold truncate">{{ query }}</span>
                 </div>
 
                 <button class="key-enter" type="submit">
-                  <span>Enter</span>
+                  <span>{{ t("enter") }}</span>
                 </button>
               </li>
               <li
@@ -155,17 +157,23 @@
                 />
                 <div v-else class="text-center">
                   <div class="text-subtitle1 font-weight-medium">
-                    Lỗi không xác định
+                    {{ t("loi-khong-xac-dinh") }}
                   </div>
-                  <q-btn outline rounded color="main" @click="refreshFavorites"
-                    >Thử lại</q-btn
+                  <q-btn
+                    outline
+                    rounded
+                    color="main"
+                    @click="refreshFavorites"
+                    >{{ t("thu-lai") }}</q-btn
                   >
                 </div>
               </q-card-section>
             </q-card>
 
-            <router-link to="/tai-khoan/follow" class="block py-2 text-center"
-              >Xem tất cả</router-link
+            <router-link
+              to="/tai-khoan/follow"
+              class="block py-2 text-center"
+              >{{ t("xem-tat-ca") }}</router-link
             >
           </q-menu>
         </q-btn>
@@ -289,11 +297,12 @@
                         {{ item.seasonName }} tập {{ item.last.name }}
                       </div>
                       <div class="text-grey mt-2">
-                        Xem lúc
                         {{
-                          item.timestamp.format(
-                            item.timestamp.isToday() ? "HH:mm" : "DD/MM/YYYY"
-                          )
+                          t("xem-luc-_value", [
+                            item.timestamp.format(
+                              item.timestamp.isToday() ? "HH:mm" : "DD/MM/YYYY"
+                            ),
+                          ])
                         }}
                       </div>
                     </div>
@@ -302,17 +311,23 @@
 
                 <div v-else class="text-center">
                   <div class="text-subtitle1 font-weight-medium">
-                    Lỗi không xác định
+                    {{ t("loi-khong-xac-dinh") }}
                   </div>
-                  <q-btn outline rounded color="main" @click="refreshHistories"
-                    >Thử lại</q-btn
+                  <q-btn
+                    outline
+                    rounded
+                    color="main"
+                    @click="refreshHistories"
+                    >{{ t("thu-lai") }}</q-btn
                   >
                 </div>
               </q-card-section>
             </q-card>
 
-            <router-link to="/tai-khoan/history" class="block py-2 text-center"
-              >Xem tất cả</router-link
+            <router-link
+              to="/tai-khoan/history"
+              class="block py-2 text-center"
+              >{{ t("xem-tat-ca") }}</router-link
             >
           </q-menu>
         </q-btn>
@@ -373,7 +388,9 @@
                       <q-item-section>
                         <q-item-label class="text-subtitle1 text-weight-normal"
                           >{{ item.name }}
-                          <span class="text-grey"> đã cập nhật </span>
+                          <span class="text-grey">
+                            {{ t("da-cap-nhat") }}
+                          </span>
                           {{ item.chap }}</q-item-label
                         >
                         <q-item-label class="text-grey">{{
@@ -407,8 +424,11 @@
                   v-if="notificationStore.items.length < notificationStore.max"
                   class="text-grey text-center mt-3 mx-2 mb-3"
                 >
-                  Do API server không đầy đủ bạn phải xóa những thông báo mới để
-                  xem những thông báo cũ
+                  {{
+                    t(
+                      "do-api-server-khong-day-du-ban-phai-xoa-nhung-thong-bao-moi-de-xem-nhung-thong-bao-cu"
+                    )
+                  }}
                 </div>
               </q-card-section>
             </q-card>
@@ -470,7 +490,7 @@
                     />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>Trung tâm cá nhân</q-item-label>
+                    <q-item-label>{{ t("trung-tam-ca-nhan") }}</q-item-label>
                   </q-item-section>
                 </q-item>
 
@@ -483,7 +503,7 @@
                     <Icon icon="carbon:translate" width="20" height="20" />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>Ngôn ngữ</q-item-label>
+                    <q-item-label>{{ t("ngon-ngu") }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <Icon icon="fluent:chevron-right-24-regular" />
@@ -503,7 +523,7 @@
                     />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>Cài đặt</q-item-label>
+                    <q-item-label>{{ t("cai-dat") }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <Icon icon="fluent:chevron-right-24-regular" />
@@ -515,7 +535,7 @@
                     <Icon icon="fa:sign-out" width="20" height="20" />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>Thoát</q-item-label>
+                    <q-item-label>{{ t("thoat") }}</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -531,20 +551,29 @@
                       />
                     </q-btn>
                   </q-item-section>
-                  <q-item-section> Chọn ngôn ngữ của bạn </q-item-section>
+                  <q-item-section>
+                    {{ t("chon-ngon-ngu-cua-ban") }}
+                  </q-item-section>
                 </q-item>
 
                 <q-separator class="bg-[rgba(255,255,255,0.1)]" />
 
-                <q-item v-for="i in 3" :key="i" clickable v-ripple>
+                <q-item
+                  v-for="{ name, code } in languages"
+                  :key="code"
+                  clickable
+                  v-ripple
+                  @click="settingsStore.locale = code"
+                >
                   <q-item-section avatar class="min-w-0">
                     <Icon
+                      v-if="settingsStore.locale === code"
                       icon="fluent:checkmark-24-regular"
                       width="20"
                       height="20"
                     />
                   </q-item-section>
-                  <q-item-section>Tiếng Việt</q-item-section>
+                  <q-item-section>{{ name }}</q-item-section>
                 </q-item>
               </q-list>
 
@@ -559,12 +588,14 @@
                       />
                     </q-btn>
                   </q-item-section>
-                  <q-item-section> Chọn ngôn ngữ của bạn </q-item-section>
+                  <q-item-section>
+                    {{ t("chon-ngon-ngu-cua-ban") }}
+                  </q-item-section>
                 </q-item>
 
                 <q-item clickable v-ripple>
                   <q-item-section>
-                    <q-item-label>Tự động phát</q-item-label>
+                    <q-item-label>{{ t("tu-dong-phat") }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <q-toggle
@@ -576,7 +607,9 @@
                 </q-item>
                 <q-item clickable v-ripple>
                   <q-item-section>
-                    <q-item-label>Nhắc tôi tạm dừng xem</q-item-label>
+                    <q-item-label>{{
+                      t("nhac-toi-tam-dung-xem")
+                    }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <q-toggle
@@ -600,7 +633,7 @@
           @click="showDialogLogin = true"
         >
           <Icon icon="fluent:person-24-regular" width="20" height="20" />
-          Đăng nhập
+          {{ t("dang-nhap") }}
         </q-btn>
 
         <q-btn
@@ -612,7 +645,7 @@
           target="_blank"
         >
           <Icon icon="fluent:phone-24-regular" width="20" height="20" />
-          App
+          {{ t("app") }}
         </q-btn>
       </q-toolbar>
     </q-header>
@@ -709,7 +742,7 @@
           <q-btn dense round flat />
 
           <div class="flex-1 text-center text-subtitle1">
-            Đăng nhập để đồng bộ dữ liệu
+            {{ t("dang-nhap-de-dong-bo-du-lieu") }}
           </div>
 
           <q-btn dense round icon="close" v-close-popup />
@@ -736,7 +769,7 @@
               :type="showPassword ? 'text' : 'password'"
               name="password"
               class="input w-full"
-              placeholder="Mật khẩu mới"
+              placeholder="{{ t('mat-khau-moi') }}"
               @keydown.stop
             />
             <q-btn
@@ -755,7 +788,9 @@
             </q-btn>
           </div>
 
-          <div class="text-grey text-center mt-5 mb-4">Tìm lại mật khẩu</div>
+          <div class="text-grey text-center mt-5 mb-4">
+            {{ t("tim-lai-mat-khau") }}
+          </div>
 
           <q-btn
             type="submit"
@@ -763,7 +798,7 @@
             rounded
             class="bg-main w-full"
             :disable="!email || !password"
-            >Đăng nhập</q-btn
+            >{{ t("dang-nhap") }}</q-btn
           >
         </form>
       </q-card-section>
@@ -787,39 +822,42 @@ import { debounce, useQuasar } from "quasar"
 import { History } from "src/apis/runs/history"
 import { PreSearch } from "src/apis/runs/pre-search"
 import { TuPhim } from "src/apis/runs/tu-phim"
+import { languages } from "src/i18n"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
 import { useSettingsStore } from "stores/settings"
 import { computed, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
 
+const { t } = useI18n()
 const drawers = [
   {
     icon: "fluent:home-24-regular",
     active: "fluent:home-24-filled",
-    name: "Trang chủ",
+    name: t("trang-chu"),
     path: "/",
   },
   {
     icon: "ant-design:fire-outlined",
     active: "ant-design:fire-filled",
-    name: "Thịnh hành",
+    name: t("thinh-hanh"),
     path: "/bang-xep-hang",
   },
   {
     icon: "ic:outline-filter-alt",
     active: "ic:round-filter-alt",
-    name: "Mục lục",
+    name: t("muc-luc"),
     path: "/danh-sach/all",
   },
   {
     icon: "fluent:calendar-clock-24-regular",
     active: "fluent:calendar-clock-24-filled",
-    name: "Lịch chiếu",
+    name: t("lich-chieu"),
     path: "/lich-chieu-phim",
   },
 
@@ -828,39 +866,39 @@ const drawers = [
   {
     icon: "material-symbols:favorite-outline-rounded",
     active: "material-symbols:favorite-rounded",
-    name: "Theo dõi",
+    name: t("theo-doi"),
     path: "/tai-khoan/follow",
   },
   {
     icon: "fluent:history-24-regular",
     active: "fluent:history-24-filled",
-    name: "Lịch sử",
+    name: t("lich-su"),
     path: "/tai-khoan/history",
   },
 ]
 const drawersBottom = [
   {
-    name: "Về chúng tôi",
+    name: t("ve-chung-toi"),
     href: "https://anime-vsub.github.io/about",
   },
   {
-    name: "Liên hệ chúng tôi",
+    name: t("lien-he-chung-toi"),
     href: "mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub",
   },
   {
-    name: "Tải ứng dụng",
+    name: t("tai-ung-dung"),
     href: "https://anime-vsub.github.io",
   },
   {
-    name: "Điều khoản sử dụng",
+    name: t("dieu-khoan-su-dung"),
     href: "https://anime-vsub.github.io/tems-of-use",
   },
   {
-    name: "Chính sách riêng tư",
+    name: t("chinh-sach-rieng-tu"),
     href: "https://anime-vsub.github.io/privacy-police",
   },
   {
-    name: "Khiếu nại vi phạm",
+    name: t("khieu-nai-vi-pham"),
     href: "https://anime-vsub.github.io/disclaimer",
   },
 ]
@@ -927,7 +965,7 @@ const $q = useQuasar()
 
 async function login() {
   const loader = $q.loading.show({
-    message: "Đang xác thực. Vui lòng đợi...",
+    message: t("dang-xac-thuc-vui-long-doi"),
     boxClass: "bg-dark text-light-9",
     spinnerColor: "main",
     delay: Infinity,
@@ -941,14 +979,14 @@ async function login() {
     password.value = ""
     $q.notify({
       position: "bottom-right",
-      message: `Đã đăng nhập với tư cách ${data.name}`,
+      message: t("da-dang-nhap-voi-tu-cach-_user", [data.name]),
     })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error(err)
     $q.notify({
       position: "bottom-right",
-      message: "Đăng nhập thất bại",
+      message: t("dang-nhap-that-bai"),
       caption: err.message,
     })
   } finally {
@@ -959,7 +997,7 @@ async function logout() {
   authStore.logout()
   $q.notify({
     position: "bottom-right",
-    message: "Đã đăng xuất",
+    message: t("da-dang-xuat"),
   })
 }
 

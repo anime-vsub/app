@@ -1,9 +1,9 @@
 <template>
   <header class="fixed z-1000 bg-dark-page w-full">
     <q-toolbar>
-      <q-toolbar-title class="text-center absolute w-full"
-        >Tin tức</q-toolbar-title
-      >
+      <q-toolbar-title class="text-center absolute w-full">{{
+        t("tin-tuc")
+      }}</q-toolbar-title>
       <q-space />
 
       <div
@@ -147,7 +147,9 @@ import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import dayjs from "src/logic/dayjs"
 import { ref, shallowReactive } from "vue"
+import { useI18n } from "vue-i18n"
 
+const { t } = useI18n()
 // https://tinanime.com/api/news/?p=3
 
 const infiniteScrollRef = ref<QInfiniteScroll>()

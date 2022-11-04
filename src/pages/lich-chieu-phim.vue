@@ -7,7 +7,7 @@
         </q-avatar>
         <div class="flex items-center">
           <div class="text-subtitle1 text-weight-medium text-[20px] ml-3">
-            Lịch chiếu
+            {{ t("lich-chieu") }}
           </div>
         </div>
       </div>
@@ -81,9 +81,9 @@
         <div
           class="w-full my-7 flex relative items-center justify-center before:content-DEFAULT before:absolute before:w-full before:h-[1px] before:bg-[rgba(200,200,200,0.5)] text-[14px]"
         >
-          <span class="px-2 bg-dark-page z-2 text-grey"
-            >Bây giờ:{{ dayjs().format("HH:mm") }}</span
-          >
+          <span class="px-2 bg-dark-page z-2 text-grey">{{
+            t("bay-gio-_value", [dayjs().format("HH:mm")])
+          }}</span>
         </div>
 
         <!-- next on today -->
@@ -144,13 +144,15 @@ import "swiper/css"
 import { dayTextToNum } from "src/logic/dayTextToNum"
 import dayjs from "src/logic/dayjs"
 import { computed, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 // eslint-disable-next-line import/order
 import { useHead } from "@vueuse/head"
 
+const { t } = useI18n()
 useHead(
   computed(() => {
-    const title = "Lịch chiếu"
+    const title = t("lich-chieu")
 
     const description = title
 

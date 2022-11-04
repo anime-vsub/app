@@ -13,7 +13,7 @@
     <div v-if="data?.filter" class="px-4 mt-2">
       <div v-if="!defaultsOptions.gener">
         <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
-          >Thể loại:
+          >{{ t("the-loai") }}
         </span>
         <q-btn
           v-for="item in data.filter.gener"
@@ -39,7 +39,7 @@
 
       <div>
         <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
-          >Sắp xếp:
+          >{{ t("sap-xep") }}
         </span>
         <q-btn
           v-for="item in data.filter.sorter"
@@ -59,7 +59,7 @@
 
       <div>
         <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
-          >Loại:
+          >{{ t("loai") }}
         </span>
         <q-btn
           v-for="item in data.filter.typer"
@@ -79,7 +79,7 @@
 
       <div>
         <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
-          >Mùa:
+          >{{ t("mua") }}
         </span>
         <q-btn
           v-for="item in data.filter.seaser"
@@ -99,7 +99,7 @@
 
       <div>
         <span class="text-subtitle1 text-white text-[14px] text-weight-medium"
-          >Năm:
+          >{{ t("nam") }}
         </span>
         <q-btn
           v-for="item in data.filter.year"
@@ -151,9 +151,11 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, reactive, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
 
+const { t } = useI18n()
 const route = useRoute()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
@@ -228,7 +230,7 @@ const watcherData = watch(data, (data) => {
 
   title.value =
     route.params.type_normal === "danh-sach" && route.params.value === "all"
-      ? "Mục lục"
+      ? t("muc-luc")
       : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         data.title!
   watcherData()

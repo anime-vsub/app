@@ -2,7 +2,7 @@
   <header class="fixed top-0 z-1000 w-full bg-dark-page">
     <q-toolbar class="relative">
       <q-toolbar-title class="text-center text-[16px] w-full line-clamp-1">
-        Thông báo
+        {{ t("thong-bao") }}
       </q-toolbar-title>
     </q-toolbar>
   </header>
@@ -38,7 +38,8 @@
             <q-item>
               <q-item-section>
                 <q-item-label class="text-subtitle1 text-weight-normal"
-                  >{{ item.name }} <span class="text-grey"> đã cập nhật </span>
+                  >{{ item.name }}
+                  <span class="text-grey"> {{ t("da-cap-nhat") }} </span>
                   {{ item.chap }}</q-item-label
                 >
                 <q-item-label class="text-grey">{{ item.time }}</q-item-label>
@@ -61,8 +62,11 @@
         v-if="notificationStore.items.length < notificationStore.max"
         class="text-grey text-center mt-3 mx-2 mb-3"
       >
-        Do API server không đầy đủ bạn phải xóa những thông báo mới để xem những
-        thông báo cũ
+        {{
+          t(
+            "do-api-server-khong-day-du-ban-phai-xoa-nhung-thong-bao-moi-de-xem-nhung-thong-bao-cu"
+          )
+        }}
       </div>
     </template>
 
@@ -76,7 +80,7 @@
           width="250"
           class="mx-auto mb-1"
         />
-        Không có thông báo mới nào
+        {{ t("khong-co-thong-bao-moi-nao") }}
       </div>
     </div>
   </div>
@@ -90,7 +94,7 @@
         width="250"
         class="mx-auto mb-1"
       />
-      Đăng nhập để xem các thông báo anime mới.
+      {{ t("dang-nhap-de-xem-cac-thong-bao-anime-moi") }}
     </div>
   </div>
 </template>
@@ -100,8 +104,10 @@ import { Icon } from "@iconify/vue"
 import ScreenLoading from "src/components/ScreenLoading.vue"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
+const { t } = useI18n()
 const router = useRouter()
 const notificationStore = useNotificationStore()
 const authStore = useAuthStore()

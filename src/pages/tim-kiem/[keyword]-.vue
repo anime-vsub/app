@@ -1,7 +1,7 @@
 <template>
   <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
     <div class="text-[16px] py-2 px-4">
-      Tìm kiếm:
+      {{ t("tim-kiem") }}
       <span class="text-weight-medium">{{ route.params.keyword }}</span>
     </div>
   </q-page-sticky>
@@ -40,14 +40,16 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
 
+const { t } = useI18n()
 const route = useRoute()
 const infiniteScrollRef = ref()
 useHead(
   computed(() => {
-    const title = `Tìm kiếm: ${route.params.keyword}`
+    const title = t("tim-kiem-_keyword", [route.params.keyword])
     const description = title
 
     return {

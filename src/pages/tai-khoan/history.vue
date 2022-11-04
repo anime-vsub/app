@@ -1,6 +1,6 @@
 <template>
   <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
-    <div class="text-[16px] py-2 px-4">Anime đã xem</div>
+    <div class="text-[16px] py-2 px-4">{{ t("anime-da-xem") }}</div>
   </q-page-sticky>
 
   <div class="pt-[32px]">
@@ -62,11 +62,12 @@
                 {{ item.seasonName }} tập {{ item.last.name }}
               </div>
               <div class="text-grey mt-2">
-                Xem lúc
                 {{
-                  item.timestamp.format(
-                    item.timestamp.isToday() ? "HH:mm" : "DD/MM/YYYY"
-                  )
+                  t("xem-luc-_value", [
+                    item.timestamp.format(
+                      item.timestamp.isToday() ? "HH:mm" : "DD/MM/YYYY"
+                    ),
+                  ])
                 }}
               </div>
             </div>
@@ -94,12 +95,14 @@ import { QInfiniteScroll } from "quasar"
 import { History } from "src/apis/runs/history"
 import { parseTime } from "src/logic/parseTime"
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
+const { t } = useI18n()
 useHead(
   computed(() => {
-    const title = "Lịch sử xem Anime"
+    const title = t("lich-su-xem-anime")
     const description = title
 
     return {

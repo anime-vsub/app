@@ -7,7 +7,7 @@
         width="240"
         class="mx-auto"
       />
-      <div class="my-1">Đã xảy ra lỗi</div>
+      <div class="my-1">{{ t("da-xay-ra-loi") }}</div>
       <q-btn
         dense
         no-caps
@@ -16,17 +16,21 @@
         class="px-2"
         @click="emit('click:retry')"
         style="color: #00be06"
-        >Thử lại</q-btn
+        >t('thu-lai')</q-btn
       >
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from "vue-i18n"
+
 defineProps<{
   noImage?: boolean
 }>()
 const emit = defineEmits<{
   (name: "click:retry"): void
 }>()
+
+const { t } = useI18n()
 </script>

@@ -52,7 +52,7 @@
     <div class="col-3 relative">
       <div class="absolute w-full h-full flex column">
         <div class="py-1 px-4 text-subtitle1 flex items-center justify-between">
-          Chọn tập
+          {{ t("chon-tap") }}
 
           <q-btn
             dense
@@ -117,7 +117,7 @@
                 v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
                 class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
               >
-                Lỗi khi lấy dữ liệu
+                {{ t("loi-khi-lay-du-lieu") }}
                 <br />
                 <q-btn
                   dense
@@ -125,7 +125,7 @@
                   rounded
                   style="color: #00be06"
                   @click="fetchSeason(value)"
-                  >Thử lại</q-btn
+                  >{{ t("thu-lai") }}</q-btn
                 >
               </div>
 
@@ -202,32 +202,29 @@
       <div class="flex justify-between">
         <div>
           <h5 class="text-gray-400 text-weight-normal">
-            {{ formatView(data.views) }} lượt xem
+            {{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}
 
             <span v-if="currentDataSeason?.update">
-              &bull; Tập mới chiếu vào
               {{
-                dayjs(
-                  new Date(
-                    `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
-                  )
-                ).format("HH:MM")
-              }}
-              {{
-                currentDataSeason.update[0] === 7
-                  ? "Chủ nhật"
-                  : `thứ ${currentDataSeason.update[0]}`
-              }}
-              {{
-                currentDataSeason.update[0] > new Date().getDay()
-                  ? "tuần sau"
-                  : ""
+                t("tap-moi-chieu-vao-_time-_day", [
+                  dayjs(
+                    new Date(
+                      `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
+                    )
+                  ).format("HH:MM"),
+                  currentDataSeason.update[0] === 7
+                    ? "Chủ nhật"
+                    : `thứ ${currentDataSeason.update[0]}`,
+                  currentDataSeason.update[0] > new Date().getDay()
+                    ? "tuần sau"
+                    : "",
+                ])
               }}
             </span>
           </h5>
 
           <div class="text-gray-400">
-            Tác giả
+            {{ t("tac-gia") }}
             <template v-for="(item, index) in data.authors" :key="item.name">
               <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
                 item.name
@@ -235,7 +232,7 @@
               ><template v-if="index < data.authors.length - 1">, </template>
             </template>
             <div class="divider"></div>
-            sản xuất bởi {{ data.studio }}
+            {{ t("san-xuat-boi-_studio", [data.studio]) }}
           </div>
         </div>
 
@@ -271,7 +268,7 @@
             @click="share"
           >
             <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
-            <span class="text-[12px] mt-1">Chia sẻ</span>
+            <span class="text-[12px] mt-1">{{ t("chia-se") }}</span>
           </q-btn>
         </div>
       </div>
@@ -281,7 +278,7 @@
         <div class="divider"></div>
         {{ data.yearOf }}
         <div class="divider"></div>
-        Cập nhật tới tập {{ data.duration }}
+        {{ t("cap-nhat-toi-tap-_duration", [data.duration]) }}
         <div class="divider"></div>
         <router-link
           v-for="item in data.contries"
@@ -303,7 +300,7 @@
         </div>
         <div class="divider"></div>
         <span class="text-gray-400">
-          {{ formatView(data.count_rate) }} người đánh giá
+          {{ t("_rate-nguoi-danh-gia", [formatView(data.count_rate)]) }}
         </span>
         <div class="divider"></div>
         <!-- <span class="text-gray-400">
@@ -325,24 +322,24 @@
           :to="item.path"
           class="text-[rgb(28,199,73)]"
         >
-          #{{ item.name.replace(/ /, "_") }}
+          {{ t("tag-_val", [item.name.replace(/ /, "_")]) }}
         </router-link>
       </div>
 
       <div class="text-[#9a9a9a] mt-2">
-        <span>Tên khác: </span>
+        <span>{{ t("ten-khac") }} </span>
 
         <span class="text-[#eee] leading-relaxed">{{ data.othername }}</span>
       </div>
 
-      <div class="mt-5 text-[#eee] text-[16px]">Giới thiệu</div>
+      <div class="mt-5 text-[#eee] text-[16px]">{{ t("gioi-thieu") }}</div>
       <p
         class="mt-3 leading-loose whitespace-pre-wrap text-[#9a9a9a]"
         v-html="data.description"
       />
     </div>
     <div class="col-3">
-      <div class="text-h6 mt-3 text-subtitle1">Đề xuất</div>
+      <div class="text-h6 mt-3 text-subtitle1">{{ t("de-xuat") }}</div>
 
       <CardVertical
         v-for="item in data?.toPut"
@@ -394,6 +391,7 @@ import {
   watch,
   watchEffect,
 } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
@@ -405,6 +403,7 @@ import { useRoute, useRouter } from "vue-router"
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -543,7 +542,7 @@ async function fetchSeason(season: string) {
 
           hash:
             data.value?.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
-          name: "Trailer",
+          name: t("trailer"),
         },
       ]
     } else if (response.chaps.length > 50) {
@@ -634,7 +633,11 @@ useHead(
   computed(() => {
     if (!data.value || !currentMetaChap.value) return {}
 
-    const title = `Tập ${currentMetaChap.value.name} ${data.value.name} (${data.value.othername})`
+    const title = t("tap-_chap-_name-_othername", [
+      currentMetaChap.value.name,
+      data.value.name,
+      data.value.othername,
+    ])
     const description = data.value.description
 
     return {
@@ -659,54 +662,55 @@ useHead(
   })
 )
 
-const nextChap = computed<
-  | {
-      season: Exclude<typeof seasons.value, undefined>[0]
-      chap?: Exclude<typeof currentDataSeason.value, undefined>["chaps"][0]
-    }
-  | undefined
+interface SiblingChap {
+  season: Exclude<typeof seasons.value, undefined>[0]
+  chap?: Exclude<typeof currentDataSeason.value, undefined>["chaps"][0]
+}
+const nextChap = computed(
   // eslint-disable-next-line vue/return-in-computed-property
->(() => {
-  if (!currentDataSeason.value) return
-  // get index currentChap
-  const indexCurrentChap = !currentMetaChap.value
-    ? -1
-    : currentDataSeason.value.chaps.indexOf(currentMetaChap.value)
-  if (indexCurrentChap === -1) {
-    console.warn("current index not found %i", indexCurrentChap)
-    return
-  }
-
-  const isLastChapOfSeason =
-    indexCurrentChap === currentDataSeason.value.chaps.length - 1
-  if (!isLastChapOfSeason) {
-    return {
-      season: currentMetaSeason.value,
-      chap: currentDataSeason.value.chaps[indexCurrentChap + 1],
+  (): SiblingChap | undefined => {
+    if (!currentDataSeason.value) return
+    // get index currentChap
+    const indexCurrentChap = !currentMetaChap.value
+      ? -1
+      : currentDataSeason.value.chaps.indexOf(currentMetaChap.value)
+    if (indexCurrentChap === -1) {
+      console.warn("current index not found %i", indexCurrentChap)
+      return
     }
-  }
 
-  if (!seasons.value) return
-  // if current last chap of season
-  // check season of last
-  const indexSeason = !currentMetaSeason.value
-    ? -1
-    : seasons.value.indexOf(currentMetaSeason.value)
-  if (indexSeason === -1) {
-    console.warn("current index not found %i", indexSeason)
-    return
-  }
-
-  const isLastSeason = indexSeason === seasons.value.length - 1
-  if (!isLastSeason) {
-    // first chap of next season
-    return {
-      season: seasons.value[indexSeason + 1],
+    const isLastChapOfSeason =
+      indexCurrentChap === currentDataSeason.value.chaps.length - 1
+    if (!isLastChapOfSeason) {
+      return {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        season: currentMetaSeason.value!,
+        chap: currentDataSeason.value.chaps[indexCurrentChap + 1],
+      }
     }
-  }
 
-  console.info("[[===THE END===]]")
-})
+    if (!seasons.value) return
+    // if current last chap of season
+    // check season of last
+    const indexSeason = !currentMetaSeason.value
+      ? -1
+      : seasons.value.indexOf(currentMetaSeason.value)
+    if (indexSeason === -1) {
+      console.warn("current index not found %i", indexSeason)
+      return
+    }
+
+    const isLastSeason = indexSeason === seasons.value.length - 1
+    if (!isLastSeason) {
+      // first chap of next season
+      return {
+        season: seasons.value[indexSeason + 1],
+      }
+    }
+
+    console.info("[[===THE END===]]")
+  }
+)
 // const prevChap = computed<
 //   | {
 //       season: typeof seasons.value[0]
@@ -797,7 +801,7 @@ watch(
             id: currentMetaChap.id,
             backuplinks: "1",
           })
-        ).data
+        ).data as string
       )
     } catch (err) {
       console.log({
@@ -942,7 +946,7 @@ async function toggleFollow() {
   if (!authStore.isLogged) {
     $q.notify({
       position: "bottom-right",
-      message: "Hãy đăng nhập trước để theo dõi",
+      message: t("hay-dang-nhap-truoc-de-theo-doi"),
     })
     return
   }
@@ -955,8 +959,8 @@ async function toggleFollow() {
   $q.notify({
     position: "bottom-right",
     message: followed.value
-      ? "Đã thêm vào danh sách theo dõi"
-      : "Đã xóa khỏi danh sách theo dõi",
+      ? t("da-them-vao-danh-sach-theo-doi")
+      : t("da-xoa-khoi-danh-sach-theo-doi"),
   })
 }
 
@@ -967,8 +971,14 @@ function share() {
     return
   }
   navigator.share?.({
-    title: `Xem ${data.value.name} series ${currentMetaSeason.value.name}`,
-    text: `Xem ${data.value.name} tập ${currentMetaChap.value.name}`,
+    title: t("xem-_name-season-_season", [
+      data.value.name,
+      currentMetaSeason.value.name,
+    ]),
+    text: t("xem-_name-tap-_chap", [
+      data.value.name,
+      currentMetaChap.value.name,
+    ]),
     url: C_URL + route.path,
   })
 }

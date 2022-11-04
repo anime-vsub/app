@@ -25,9 +25,9 @@
 
       <div v-if="data.process" class="mt-2">
         <template v-if="data.year"
-          >{{ data.year }} <span class="mx-1">|</span> </template
-        >Tập
-        {{ data.process }}
+          >{{ data.year }} <span class="mx-1">{{ t("or") }}</span>
+        </template>
+        {{ t("tap-_chap", [data.process]) }}
       </div>
 
       <p v-if="data.description" class="text-grey mt-2 line-clamp-2">
@@ -38,7 +38,7 @@
         v-if="showStar"
         class="flex items-center text-white font-weight-medium mt-2"
       >
-        <span class="font-weight-normal text-gray-400">Đánh giá: </span>
+        <span class="font-weight-normal text-gray-400">t('danh-gia') </span>
         <Star class="mr-1 ml-1" /> {{ data.rate }}
       </div>
 
@@ -53,7 +53,7 @@
         <Icon icon="bi:bookmark-plus" />
         <!-- <Icon icon="bi:bookmark-check" /> -->
 
-        Yêu thích
+        {{ t("yeu-thich") }}
       </q-btn>
     </div>
   </router-link>
@@ -61,9 +61,11 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { useI18n } from "vue-i18n"
 
 import Star from "./Star.vue"
 
+const { t } = useI18n()
 defineProps<{
   data: {
     path: string
@@ -72,6 +74,7 @@ defineProps<{
     year?: string | number
     process: string
     description?: string
+    rate?: number
   }
   threeLine?: boolean
   showStar?: boolean

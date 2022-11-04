@@ -24,9 +24,9 @@
             authStore.user.username
           }}</q-item-label>
         </template>
-        <q-item-label v-else class="text-subtitle1 text-weight-normal"
-          >Đăng nhập/Đăng ký</q-item-label
-        >
+        <q-item-label v-else class="text-subtitle1 text-weight-normal">{{
+          t("dang-nhap-dang-ky")
+        }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <div class="flex items-center flex-nowrap">
@@ -60,7 +60,7 @@
         class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
         to="/tai-khoan/history"
       >
-        Lịch sử
+        {{ t("lich-su") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"
@@ -141,7 +141,7 @@
         class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
         to="/tai-khoan/follow"
       >
-        Theo dõi
+        {{ t("theo-doi") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"
@@ -186,7 +186,7 @@
           <Icon icon="fluent:settings-24-regular" width="25" height="25" />
         </q-item-section>
         <q-item-section>
-          <q-item-label>Cài đặt</q-item-label>
+          <q-item-label>{{ t("cai-dat") }}</q-item-label>
         </q-item-section>
       </q-item>
       <q-item
@@ -202,7 +202,7 @@
           />
         </q-item-section>
         <q-item-section>
-          <q-item-label>Phản hồi</q-item-label>
+          <q-item-label>{{ t("phan-hoi") }}</q-item-label>
         </q-item-section>
       </q-item>
       <q-item clickable v-ripple to="/tai-khoan/about">
@@ -210,7 +210,7 @@
           <Icon icon="fluent:info-24-regular" width="25" height="25" />
         </q-item-section>
         <q-item-section>
-          <q-item-label>Giới thiệu</q-item-label>
+          <q-item-label>{{ t("gioi-thieu") }}</q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
@@ -228,7 +228,7 @@
           <q-btn dense round />
 
           <div class="flex-1 text-center text-subtitle1">
-            Đăng nhập để đồng bộ dữ liệu
+            {{ t("dang-nhap-de-dong-bo-du-lieu") }}
           </div>
 
           <q-btn dense round icon="close" v-close-popup />
@@ -254,7 +254,7 @@
               :type="showPassword ? 'text' : 'password'"
               name="password"
               class="input"
-              placeholder="Mật khẩu mới"
+              placeholder="{{ t('mat-khau-moi') }}"
             />
             <q-btn
               dense
@@ -272,14 +272,16 @@
             </q-btn>
           </div>
 
-          <div class="text-grey text-center mt-5 mb-4">Tìm lại mật khẩu</div>
+          <div class="text-grey text-center mt-5 mb-4">
+            {{ t("tim-lai-mat-khau") }}
+          </div>
 
           <q-btn
             type="submit"
             no-caps
             class="bg-main w-full"
             :disable="!email || !password"
-            >Đăng nhập</q-btn
+            >{{ t("dang-nhap") }}</q-btn
           >
         </form>
       </q-card-section>
@@ -294,9 +296,9 @@
     full-width
   >
     <q-card class="bg-dark-500 h-min-[500px] px-4 pb-2 pt-4">
-      <div class="text-subtitle1 text-weight-normal">QR của bạn</div>
+      <div class="text-subtitle1 text-weight-normal">{{ t("qr-cua-ban") }}</div>
       <div class="text-grey">
-        Quét QR Code này trên thiết bị khác để đăng nhập
+        {{ t("quet-qr-code-nay-tren-thiet-bi-khac-de-dang-nhap") }}
       </div>
 
       <div class="mt-5">
@@ -320,10 +322,12 @@ import { TuPhim } from "src/apis/runs/tu-phim"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
 import { ref, watch, watchEffect } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 // import QrScanner from "qr-scanner"
 
+const { t } = useI18n()
 const showDialogLogin = ref(false)
 const showDialogQR = ref(false)
 
@@ -337,7 +341,7 @@ const authStore = useAuthStore()
 
 async function login() {
   const loader = $q.loading.show({
-    message: "Đang xác thực. Vui lòng đợi...",
+    message: t("dang-xac-thuc-vui-long-doi"),
     boxClass: "bg-dark text-light-9",
     spinnerColor: "main",
     delay: Infinity,
@@ -351,14 +355,14 @@ async function login() {
     password.value = ""
     $q.notify({
       position: "bottom-right",
-      message: `Đã đăng nhập với tư cách ${data.name}`,
+      message: t("da-dang-nhap-voi-tu-cach-_name", [data.name]),
     })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error(err)
     $q.notify({
       position: "bottom-right",
-      message: "Đăng nhập thất bại",
+      message: t("dang-nhap-that-bai"),
       caption: err.message,
     })
   } finally {
@@ -385,7 +389,7 @@ watchEffect(() => {
     .catch((err) => {
       $q.notify({
         position: "bottom-right",
-        message: "Lỗi khi tạo QR Code",
+        message: t("loi-khi-tao-qr-code"),
         caption: err + "",
       })
     })
@@ -463,7 +467,7 @@ watch(qrRef, (qrRef) => {
 // ========== scan qr code ==========
 function startScanQR() {
   $q.notify({
-    message: "Quét QR hiện đang bảo trì",
+    message: t("quet-qr-hien-dang-bao-tri"),
   })
 }
 </script>

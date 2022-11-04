@@ -1,6 +1,6 @@
 <template>
   <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
-    <div class="text-[16px] py-2 px-4">Anime đã theo dõi</div>
+    <div class="text-[16px] py-2 px-4">{{ t("anime-da-theo-doi") }}</div>
   </q-page-sticky>
 
   <!-- main -->
@@ -38,11 +38,13 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { computed, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 
+const { t } = useI18n()
 useHead(
   computed(() => {
-    const title = "Anime đang theo dõi"
+    const title = t("anime-dang-theo-doi")
     const description = title
 
     return {

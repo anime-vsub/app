@@ -163,7 +163,7 @@
         to="/bang-xep-hang/day"
         class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between"
       >
-        Đề xuất
+        {{ t("de-xuat") }}
         <Icon
           icon="fluent:chevron-right-24-regular"
           class="text-grey"
@@ -180,7 +180,7 @@
         to="/bang-xep-hang/day"
         class="px-4 md:px-13 text-subtitle1 text-weight-normal mx-2 flex items-center justify-between"
       >
-        Top
+        {{ t("top") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"
@@ -226,7 +226,7 @@
         to="/anime-sap-chieu"
         class="px-4 md:px-13 text-subtitle1 text-weight-normal mx-2 flex items-center justify-between"
       >
-        Sắp chiếu
+        {{ t("sap-chieu") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"
@@ -275,8 +275,8 @@
                       {{ tmp.format("HH:mm") }}
                     </div>
                     <div class="coming_soon-text-day">
-                      <template v-if="isTodayF"> Hôm nay </template>
-                      <template v-else> Ngày mai </template>
+                      <template v-if="isTodayF"> {{ t("hom-nay") }} </template>
+                      <template v-else> {{ t("ngay-mai") }} </template>
                     </div>
                   </template>
                   <template v-else>
@@ -296,7 +296,9 @@
 
                   <!-- <template v-else>{{ tmp.format("DD/MM") }}</template> -->
                 </div>
-                <span v-else class="coming_soon-text-unknown">Sắp chiếu</span>
+                <span v-else class="coming_soon-text-unknown">{{
+                  t("sap-chieu")
+                }}</span>
               </div>
             </div>
 
@@ -314,7 +316,7 @@
         to="/anime-moi"
         class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between"
       >
-        Mới cập nhật
+        {{ t("moi-cap-nhat") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"
@@ -349,6 +351,7 @@ import dayjs from "src/logic/dayjs"
 import { Autoplay, Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 // Import Swiper styles
@@ -359,12 +362,14 @@ import "swiper/css/autoplay"
 import "swiper/css/grid"
 // Import Swiper Vue.js components
 
+const { t } = useI18n()
 useHead(
   computed(() => {
     const title = "AnimeVsub"
 
-    const description =
-      "Xem anime vietsub online xem trên điện thoại di động và máy tính nhanh nhất"
+    const description = t(
+      "xem-anime-vietsub-online-xem-tren-dien-thoai-di-dong-va-may-tinh-nhanh-nhat"
+    )
 
     return {
       title,

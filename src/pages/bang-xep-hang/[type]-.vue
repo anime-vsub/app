@@ -7,7 +7,7 @@
         </q-avatar>
         <div class="flex items-center">
           <div class="text-subtitle1 text-weight-medium text-[20px] ml-3">
-            Thịnh hành
+            {{ t("thinh-hanh") }}
           </div>
         </div>
       </div>
@@ -60,24 +60,26 @@ import ScreenLoading from "components/ScreenLoading.vue"
 import { BangXepHangType } from "src/apis/runs/bang-xep-hang/[type]"
 import ranks from "src/logic/ranks"
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
 
+const { t } = useI18n()
 const route = useRoute()
 
 const types = [
-  ["Mặc định", ""],
-  ["Ngày", "day"],
-  ["Tháng", "month"],
-  ["Năm", "year"],
-  ["Đánh giá", "voted"],
-  ["Mùa", "season"],
+  [t("mac-dinh"), ""],
+  [t("ngay"), "day"],
+  [t("thang"), "month"],
+  [t("nam"), "year"],
+  [t("danh-gia"), "voted"],
+  [t("mua"), "season"],
 ]
 useHead(
   computed(() => {
-    const title = `Bảng xếp hạng Anime theo ${
-      (types.find((item) => item[1] === route.params.type) ?? types[0])[0]
-    }`
+    const title = t("bang-xep-hang-anime-theo-_type", [
+      (types.find((item) => item[1] === route.params.type) ?? types[0])[0],
+    ])
 
     const description = title
 

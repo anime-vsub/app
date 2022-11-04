@@ -17,11 +17,11 @@
 
         <span v-if="!data.chap">
           <template v-if="data.process[0] === data.process[1]">
-            {{ data.process[0] }} tập
+            {{ t("_chap-tap", [data.process[0]]) }}
           </template>
-          <template v-else> Tập {{ data.process }} </template>
+          <template v-else> {{ t("tap-_chap", [data.process]) }} </template>
         </span>
-        <span v-else>Tập {{ data.chap }}</span>
+        <span v-else>{{ t("tap-_chap", [data.chap]) }}</span>
       </BottomBlur>
       <Quality
         v-if="data.quality"
@@ -45,11 +45,13 @@
 import BottomBlur from "components/BottomBlur.vue"
 import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import ranks from "src/logic/ranks"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
 
+const { t } = useI18n()
 const router = useRouter()
 
 defineProps<{

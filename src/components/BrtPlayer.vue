@@ -84,8 +84,7 @@
                   {{ name }}
                 </div>
                 <div v-if="nameCurrentChap" class="art-subtitle text-gray-300">
-                  Tập
-                  {{ nameCurrentChap }}
+                  {{ t("tap-_chap", [nameCurrentChap]) }}
                 </div>
               </div>
             </div>
@@ -111,7 +110,7 @@
                   transition-show="jump-up"
                   transition-hide="jump-down"
                 >
-                  Đổi relay
+                  {{ t("doi-relay") }}
                 </q-tooltip>
               </q-btn>
             </div>
@@ -203,7 +202,7 @@
                     width="18"
                     height="18"
                   />
-                  Tiếp
+                  {{ t("tiep") }}
 
                   <q-tooltip
                     v-if="nextChap"
@@ -214,11 +213,12 @@
                     transition-hide="jump-down"
                   >
                     {{
-                      currentSeason !== nextChap.season.value
-                        ? `Tiếp theo: ${nextChap.season.name}`
-                        : `Tiếp theo: Tập ${nextChap.chap?.name}`
+                      t("_message-hint-next", [
+                        currentSeason !== nextChap.season.value
+                          ? `Tiếp theo: ${nextChap.season.name}`
+                          : `Tiếp theo: Tập ${nextChap.chap?.name}`,
+                      ])
                     }}
-                    (Shift + N)
                   </q-tooltip>
                 </q-btn>
 
@@ -293,7 +293,7 @@
                     width="18"
                     height="18"
                   />
-                  EP {{ nameCurrentChap }}
+                  {{ t("ep-_chap", [nameCurrentChap]) }}
 
                   <q-tooltip
                     v-if="!showDialogChapter"
@@ -303,7 +303,7 @@
                     transition-show="jump-up"
                     transition-hide="jump-down"
                   >
-                    Danh sách tập
+                    {{ t("danh-sach-tap") }}
                   </q-tooltip>
                 </q-btn>
               </div>
@@ -334,7 +334,7 @@
                     <div
                       class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
                     >
-                      Chất lượng
+                      {{ t("chat-luong") }}
 
                       <q-btn
                         dense
@@ -376,7 +376,7 @@
                     transition-show="jump-up"
                     transition-hide="jump-down"
                   >
-                    Chất lượng
+                    {{ t("chat-luong") }}
                   </q-tooltip>
                 </q-btn>
                 <q-btn
@@ -392,7 +392,7 @@
                     width="18"
                     height="18"
                   />
-                  {{ artPlaybackRate }}x
+                  {{ t("_playback-x", [artPlaybackRate]) }}
 
                   <q-menu
                     v-model="showMenuPlaybackRate"
@@ -404,7 +404,7 @@
                     <div
                       class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
                     >
-                      Tốc độ
+                      {{ t("toc-do") }}
 
                       <q-btn
                         dense
@@ -446,7 +446,7 @@
                     transition-show="jump-up"
                     transition-hide="jump-down"
                   >
-                    Tốc độ phát
+                    {{ t("toc-do-phat") }}
                   </q-tooltip>
                 </q-btn>
                 <q-btn
@@ -574,10 +574,10 @@
       <ArtDialog
         :model-value="artFullscreen && showDialogSetting"
         @update:model-value="showDialogSetting = $event"
-        title="Xem thêm"
+        title="{{ t('xem-them') }}"
         fit
       >
-        <div class="text-zinc-500 text-[12px] mb-2">Chất lượng</div>
+        <div class="text-zinc-500 text-[12px] mb-2">{{ t("chat-luong") }}</div>
         <div>
           <q-btn
             dense
@@ -594,7 +594,9 @@
           >
         </div>
 
-        <div class="text-zinc-500 text-[12px] mt-4 mb-2">Tốc độ phát lại</div>
+        <div class="text-zinc-500 text-[12px] mt-4 mb-2">
+          {{ t("toc-do-phat-lai") }}
+        </div>
         <div class="flex flex-nowrap mx-[-8px]">
           <q-btn
             dense
@@ -610,7 +612,7 @@
         </div>
 
         <div class="flex items-center justify-between mt-4 mb-2">
-          Tự động phát
+          {{ t("tu-dong-phat") }}
           <q-toggle
             v-model="settingsStore.player.autoNext"
             size="sm"
@@ -621,7 +623,7 @@
       <ArtDialog
         :model-value="artFullscreen && showDialogChapter"
         @update:model-value="showDialogChapter = $event"
-        title="Danh sách tập"
+        title="{{ t('danh-sach-tap') }}"
         fit
       >
         <div class="h-full w-full flex column flex-nowrap">
@@ -675,14 +677,14 @@
                 v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
                 class="text-center"
               >
-                Lỗi khi lấy dữ liệu
+                {{ t("loi-khi-lay-du-lieu") }}
                 <br />
                 <q-btn
                   dense
                   no-caps
                   style="color: #00be06"
                   @click="fetchSeason(value)"
-                  >Thử lại</q-btn
+                  >{{ t("thu-lai") }}</q-btn
                 >
               </div>
               <ChapsGridQBtn
@@ -744,10 +746,12 @@ import {
   watch,
   watchEffect,
 } from "vue"
+import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
 import type { Source } from "./sources"
 
+const { t } = useI18n()
 // fix toolip fullscreen not hide if change fullscreen
 
 // keyboard binding
@@ -934,7 +938,7 @@ watch(
         !artControlProgressHoving.value /* disable if user hoving to progress bar */
       ) {
         setArtCurrentTime(cur)
-        addNotice(`Đã khôi phục phiên xem trước ${parseTime(cur)}`)
+        addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
       }
       disableBackupProgressViewing = false
     }
@@ -949,7 +953,7 @@ const setArtPlaybackRate = (value: number) => {
     return
   }
   video.value.playbackRate = value
-  addNotice(`Tốc độ phát ${value}x`)
+  addNotice(t("toc-do-phat-_value-x", [value]))
 }
 const artVolume = computed<number>({
   get: () => settingsStore.player.volume,
@@ -971,7 +975,7 @@ const toggleMuted = () => {
     setArtVolume(0)
   }
 
-  addNotice(`Âm lượng ${Math.round(artVolume.value * 100)}%`)
+  addNotice(t("am-luong-_volume", [Math.round(artVolume.value * 100)]))
 }
 
 // value control other
@@ -1003,7 +1007,7 @@ onBeforeRouteLeave(() => {
 const artQuality = ref<string>()
 const setArtQuality = (value: string) => {
   artQuality.value = value
-  addNotice(`Chất lượng đã chuyển sang ${value}`)
+  addNotice(t("chat-luong-da-chuyen-sang-_value", [value]))
 }
 
 function onVideoProgress(event: Event) {
@@ -1155,12 +1159,12 @@ function onVideoError(event: Event) {
   console.log("video error ", (event.target as HTMLVideoElement).error)
 
   $q.notify({
-    message: "Đã gặp sự cố khi phát lại",
+    message: t("da-gap-su-co-khi-phat-lai"),
     position: "bottom-right",
     timeout: 0,
     actions: [
       {
-        label: "Thử lại",
+        label: t("thu-lai"),
         color: "white",
         handler() {
           console.log("retry force")
@@ -1171,7 +1175,7 @@ function onVideoError(event: Event) {
         },
       },
       {
-        label: "Remount",
+        label: t("remount"),
         color: "white",
         handler: remount,
       },
@@ -1183,8 +1187,8 @@ function onVideoEnded() {
   if (props.nextChap && settingsStore.player.autoNext) {
     addNotice(
       props.currentSeason !== props.nextChap.season.value
-        ? `Đang phát season ${props.nextChap.season.name}`
-        : "Đang phát tập tiếp theo"
+        ? t("dang-phat-season-_season", [props.nextChap.season.name])
+        : t("dang-phat-tap-tiep-theo")
     )
 
     router.push({
@@ -1216,8 +1220,8 @@ if (settingsStore.player.enableRemindStop) {
     setArtPlaying(false)
 
     $q.dialog({
-      title: "Xác nhận",
-      message: "Bạn vẫn đang xem chứ?",
+      title: t("xac-nhan"),
+      message: t("ban-van-dang-xem-chu"),
       cancel: true,
       persistent: false,
     })
@@ -1249,8 +1253,8 @@ if (settingsStore.player.enableRemindStop) {
 }
 function runRemount() {
   $q.dialog({
-    title: "Relay change",
-    message: "Bạn đang muốn đổi relay khác?",
+    title: t("relay-change"),
+    message: t("ban-dang-muon-doi-relay-khac"),
     cancel: true,
     persistent: false,
   }).onOk(remount)
@@ -1265,7 +1269,7 @@ function remount() {
   if (!currentStream.value) {
     $q.notify({
       position: "bottom-right",
-      message: "Video tạm thời không khả dụng",
+      message: t("video-tam-thoi-khong-kha-dung"),
     })
 
     return
@@ -1608,14 +1612,14 @@ function upVolume() {
   if (artVolume.value < 1) {
     const newVal = Math.min(1, artVolume.value + 0.05)
     setArtVolume(newVal)
-    addNotice(`Âm lượng ${Math.round(newVal * 100)}%`)
+    addNotice(t("am-luong-_volume", [Math.round(newVal * 100)]))
   }
 }
 function downVolume() {
   if (artVolume.value > 0) {
     const newVal = Math.max(0, artVolume.value - 0.05)
     setArtVolume(newVal)
-    addNotice(`Âm lượng ${Math.round(newVal * 100)}%`)
+    addNotice(t("am-luong-_volume", [Math.round(newVal * 100)]))
   }
 }
 useEventListener(window, "keydown", (event: KeyboardEvent) => {
