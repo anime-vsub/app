@@ -28,7 +28,7 @@
     >
       {{ item.name }}
       <q-linear-progress
-        v-if="(tmp = progressChaps.get(item.id))"
+        v-if="(tmp = progressChaps?.get(item.id))"
         :value="tmp.cur / tmp.dur"
         rounded
         color="main"
@@ -51,7 +51,7 @@ const props = defineProps<{
   classItem?: string
   classActive?: string
   grid?: boolean
-  progressChaps: Map<
+  progressChaps?: Map<
     string,
     {
       cur: number
@@ -67,7 +67,7 @@ function scrollToView() {
 
 watchEffect(scrollToView)
 // eslint-disable-next-line functional/no-let
-let tmp: ReturnType<typeof props.progressChaps.get>
+let tmp: ReturnType<Exclude<typeof props.progressChaps, undefined>["get"]>
 </script>
 
 <style lang="scss" scoped>

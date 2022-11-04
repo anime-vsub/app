@@ -24,9 +24,8 @@
         :seasons="seasons"
         :_cache-data-seasons="_cacheDataSeasons"
         :fetch-season="fetchSeason"
-        :progress-chaps="progressChaps"
         @cur-update="
-          progressChaps.set($event.id, {
+          currentDataCache?.progressChaps?.set($event.id, {
             cur: $event.cur,
             dur: $event.dur,
           })
@@ -163,7 +162,7 @@
                   :find="
                     (item) => value === currentSeason && item.id === currentChap
                   "
-                  :progress-chaps="progressChaps"
+                  :progress-chaps="_tmp.progressChaps"
                   class-item="px-3 !py-[6px] mb-3"
                 />
               </template>
@@ -378,10 +377,6 @@
       />
     </div>
   </div>
-
-  <!--
-      followed
-    -->
 </template>
 
 <script lang="ts" setup>
@@ -431,6 +426,7 @@ import { useRoute, useRouter } from "vue-router"
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+const authStore = useAuthStore()
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -440,8 +436,6 @@ const realIdCurrentSeason = computed(() => {
   if (!currentSeason.value) return
 
   const lastIndexDolar = currentSeason.value.lastIndexOf("$")
-
-  console.log(currentSeason.value.slice(0, lastIndexDolar))
 
   if (lastIndexDolar === -1) return currentSeason.value
 
@@ -519,13 +513,16 @@ watch(
 
 interface ResponseDataSeasonPending {
   status: "pending"
+  progressChaps?: Awaited<ReturnType<typeof getProgressChaps>> | null /* null is status fetching */
 }
 interface ResponseDataSeasonSuccess {
   status: "success"
+  progressChaps?: Awaited<ReturnType<typeof getProgressChaps>> | null /* null is status fetching */
   response: Awaited<ReturnType<typeof PhimIdChap>>
 }
 interface ResponseDataSeasonError {
   status: "error"
+  progressChaps?: Awaited<ReturnType<typeof getProgressChaps>> | null /* null is status fetching */
   response: {
     status: number
   }
@@ -538,6 +535,19 @@ const _cacheDataSeasons = reactive<
     | ResponseDataSeasonError
   >
 >(new Map())
+watch([_cacheDataSeasons, () => authStore.user_data], ([cache, user_data]) => {
+  if (!user_data) return;
+
+  // help me
+  cache.forEach(async (item, season) => {
+    if (item.status === "error") return
+
+    if (item.progressChaps || item.progressChaps === null) return
+
+    item.progressChaps = null // set is fetching
+    item.progressChaps = await getProgressChaps(season)
+  })
+})
 
 async function fetchSeason(season: string) {
   if (!seasons.value) {
@@ -549,9 +559,12 @@ async function fetchSeason(season: string) {
     return
   }
 
-  _cacheDataSeasons.set(season, {
+
+  _cacheDataSeasons.set(season,  {
     status: "pending",
+
   })
+  const currentDataSeason =_cacheDataSeasons.get(season )!
   try {
     console.log("fetch chaps on season")
 
@@ -601,13 +614,19 @@ async function fetchSeason(season: string) {
 
           console.log("set %s by %s", value, chaps[0].id)
 
-          _cacheDataSeasons.set(value, {
+const dataOnCache = _cacheDataSeasons.get(value)
+const newData = {
             status: "success",
             response: {
               ...response,
               chaps,
             },
-          })
+          }
+          if (dataOnCache) {
+            Object.assign(dataOnCache, newData)
+          } else {
+            _cacheDataSeasons.set(value, dataOnCache)
+          }
 
           return {
             name,
@@ -623,13 +642,15 @@ async function fetchSeason(season: string) {
       return
     }
 
-    _cacheDataSeasons.set(season, {
+    Object.assign(currentDataSeason, {
       status: "success",
       response,
     })
+
+    console.log(_cacheDataSeasons)
   } catch (err) {
     console.warn(err)
-    _cacheDataSeasons.set(season, {
+    Object.assign(currentDataSeason,  {
       status: "error",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       response: err as any,
@@ -650,13 +671,14 @@ watch(seasonActive, (seasonActive) => {
   fetchSeason(seasonActive)
 })
 
-const currentDataSeason = computed(() => {
+const currentDataCache = computed(() => {
   const inCache = _cacheDataSeasons.get(currentSeason.value)
 
-  if (inCache?.status === "success") return inCache.response
+  if (inCache?.status === "success") return inCache
 
   return undefined
 })
+const currentDataSeason = computed(() => currentDataCache.value?.response)
 const currentChap = computed(() => {
   if (route.params.chap) return route.params.chap as string
 
@@ -879,23 +901,17 @@ const sources = computed<Source[] | undefined>(() =>
   })
 )
 
-const authStore = useAuthStore()
-const progressChaps = shallowReactive<
-  Map<
+
+  async function getProgressChaps(currentSeason: string):  Map<
     string,
     {
       cur: number
       dur: number
     }
-  >
->(new Map())
-
-watch(
-  [currentSeason, () => authStore.user_data],
-  // eslint-disable-next-line camelcase
-  async ([currentSeason, user_data]) => {
+  > {
+    const {user_data}=authStore
     // eslint-disable-next-line camelcase
-    if (!user_data || !currentSeason) {
+    if (!user_data) {
       return
     }
 
@@ -907,9 +923,9 @@ watch(
     const seasonRef = doc(userRef, "history", currentSeason!)
     const chapRef = collection(seasonRef, "chaps")
 
-    progressChaps.clear()
     const { docs } = await getDocs(chapRef)
 
+const progressChaps = new Map()
     docs.forEach((item) => {
       const { cur, dur } = item.data()
       progressChaps.set(item.id, {
@@ -917,11 +933,9 @@ watch(
         dur,
       })
     })
-  },
-  {
-    immediate: true,
+
+    return progressChaps
   }
-)
 
 // @scrollIntoView
 const tabsRef = ref<QTab>()

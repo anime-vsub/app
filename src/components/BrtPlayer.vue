@@ -448,7 +448,7 @@
                                     value === currentSeason &&
                                     item.id === currentChap
                                 "
-                                :progress-chaps="progressChaps"
+                                :progress-chaps="_tmp.progressChaps"
                                 class-item="px-3 !py-[6px] mb-3"
                               />
                             </template>
@@ -829,13 +829,6 @@ const props = defineProps<{
     | ResponseDataSeasonError
   >
   fetchSeason: (season: string) => Promise<void>
-  progressChaps: Map<
-    string,
-    {
-      cur: number
-      dur: number
-    }
-  >
 }>()
 
 const playerWrapRef = ref<HTMLDivElement>()
