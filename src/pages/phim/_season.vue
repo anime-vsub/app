@@ -467,7 +467,7 @@ watch(
     console.log("data refreshed")
 
     const season = data.value.season ?? []
-
+    console.log("raw season: ", season)
     if (season.length > 0) {
       seasons.value = season.map((item) => {
         return {
@@ -475,6 +475,7 @@ watch(
           value: router.resolve(item.path).params.season as string,
         }
       })
+      return
     }
 
     seasons.value = [
@@ -549,13 +550,21 @@ async function fetchSeason(season: string) {
       console.log("large chap. spliting...")
       const { chaps } = response
 
-      const indexMetaSeason =
-        seasons.value.findIndex((item) => item.value === season) >>> 0
+      let indexMetaSeason = seasons.value.findIndex(
+        (item) => item.value === season
+      )
+
+      if (indexMetaSeason === -1)
+        indexMetaSeason = seasons.value.findIndex(
+          (item) => item.value === realIdSeason
+        )
+
+      console.log("index %s = %i", season, indexMetaSeason)
+
       const nameSeason = seasons.value[indexMetaSeason].name
 
-      seasons.value.splice(
-        indexMetaSeason,
-        1,
+      const newSeasons = [
+        ...seasons.value.slice(0, indexMetaSeason),
         ...unflat(chaps, 50).map((chaps, index) => {
           const value = index === 0 ? realIdSeason : `${realIdSeason}$${index}`
           const name = `${nameSeason} (${chaps[0].name} - ${
@@ -576,10 +585,13 @@ async function fetchSeason(season: string) {
             name,
             value,
           }
-        })
-      )
-
-      console.log(seasons.value)
+        }),
+        ...seasons.value.slice(indexMetaSeason + 1),
+      ]
+      console.log("current seasons: ", seasons.value)
+      seasons.value = newSeasons
+      console.log("new seasons: ", newSeasons)
+      console.log("set seasons: ", seasons.value)
       return
     }
 
