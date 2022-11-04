@@ -16,12 +16,12 @@ const routes: RouteRecordRaw[] = [
         meta: {
           hideDrawer: true,
           transparentHeader: true,
-          styleFn(offset , height) {
+          styleFn(offset, height) {
             return {
-              height: height + 'px',
-              marginTop: -offset + 'px'
+              height: height + "px",
+              marginTop: -offset + "px",
             }
-          }
+          },
         },
       },
       {

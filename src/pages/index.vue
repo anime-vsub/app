@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="loading"
-    class="absolute w-full h-full overflow-hidden loader"
-  >
+  <div v-if="loading" class="absolute w-full h-full overflow-hidden loader">
     <div class="swiper-hot mt-[-60px]">
       <q-responsive :ratio="aspectRatio" class="poster">
         <q-skeleton type="rect" width="100%" height="100%" />

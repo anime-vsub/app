@@ -836,7 +836,7 @@ import { useRoute, useRouter } from "vue-router"
 import NotExistsExtension from "./NotExistsExtension.vue"
 
 const { t } = useI18n()
-const drawers = computed(() => ([
+const drawers = computed(() => [
   {
     icon: "fluent:home-24-regular",
     active: "fluent:home-24-filled",
@@ -876,8 +876,8 @@ const drawers = computed(() => ([
     name: t("lich-su"),
     path: "/tai-khoan/history",
   },
-]))
-const drawersBottom = computed(() => ([
+])
+const drawersBottom = computed(() => [
   {
     name: t("ve-chung-toi"),
     href: "https://anime-vsub.github.io/about",
@@ -902,7 +902,7 @@ const drawersBottom = computed(() => ([
     name: t("khieu-nai-vi-pham"),
     href: "https://anime-vsub.github.io/disclaimer",
   },
-]))
+])
 
 const route = useRoute()
 const router = useRouter()
