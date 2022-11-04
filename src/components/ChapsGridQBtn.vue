@@ -41,8 +41,8 @@
 <script lang="ts" setup>
 import { QBtn } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
-import { ref, watchEffect } from "vue"
+import { scrollXIntoView } from "src/helpers/scrollIntoView"
+import { ref, watchEffect, defineExpose } from "vue"
 
 const props = defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
@@ -61,11 +61,11 @@ const props = defineProps<{
 }>()
 
 const activeRef = ref<QBtn>()
-
-watchEffect(() => {
+function scrollToView() {
   if (activeRef.value?.$el) scrollXIntoView(activeRef.value.$el)
-})
+}
 
+watchEffect(scrollToView)
 // eslint-disable-next-line functional/no-let
 let tmp: ReturnType<typeof props.progressChaps.get>
 </script>
