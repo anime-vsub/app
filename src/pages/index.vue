@@ -1,12 +1,21 @@
 <template>
   <div
     v-if="loading"
-    class="absolute w-full h-[calc(100%+60px)] mt-[-60px] overflow-hidden loader"
+    class="absolute w-full h-full overflow-hidden loader"
   >
     <div class="swiper-hot mt-[-60px]">
       <q-responsive :ratio="aspectRatio" class="poster">
         <q-skeleton type="rect" width="100%" height="100%" />
       </q-responsive>
+      <div
+        class="mark-b w-full h-[30%] z-101 absolute bottom-0 pointer-events-none"
+        :style="{
+          'background-image': `linear-gradient(
+            rgba(17, 19, 25, 0) 2%,
+            rgb(17, 19, 25) 94%
+          )`,
+        }"
+      />
     </div>
 
     <div class="px-4 md:px-13 relative">
@@ -71,7 +80,7 @@
         delay: 5000,
         disableOnInteraction: false,
       }"
-      class="swiper-hot mt-[-60px]"
+      class="swiper-hot"
     >
       <swiper-slide
         v-for="(item, index) in data.carousel"

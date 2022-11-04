@@ -727,7 +727,7 @@
     </q-drawer>
 
     <q-page-container>
-      <q-page>
+      <q-page :style-fn="route.meta?.styleFn">
         <router-view v-if="extensionHelperInstalled" v-slot="{ Component }">
           <component :is="Component" />
         </router-view>
