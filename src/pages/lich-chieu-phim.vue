@@ -170,7 +170,6 @@ import { ref, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
-
 const router = useRouter()
 
 const { loading, data, refreshAsync } = useRequest(() => LichChieuPhim())

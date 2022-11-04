@@ -50,14 +50,14 @@
 
 <script lang="ts" setup>
 defineProps<{
-  modelValue: boolean;
-  title: string;
-  fit?: boolean;
-}>();
+  modelValue: boolean
+  title: string
+  fit?: boolean
+}>()
 
 const emit = defineEmits<{
-  (name: "update:model-value", v: false): void;
-}>();
+  (name: "update:model-value", v: false): void
+}>()
 </script>
 
 <style lang="scss" scoped>
