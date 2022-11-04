@@ -3,6 +3,7 @@ import { boot } from "quasar/wrappers"
 import { loadLocalize } from "src/i18n"
 import enUS from "src/i18n/messages/en-US.json"
 import { useSettingsStore } from "stores/settings"
+import type { Ref } from "vue"
 import { watch } from "vue"
 import { createI18n } from "vue-i18n"
 
@@ -22,7 +23,7 @@ export default boot(({ app }) => {
     legacy: false,
     messages: {
       "en-US": enUS,
-    } as Record<string, unknown>,
+    },
   })
   const settingsStore = useSettingsStore()
 
@@ -32,7 +33,7 @@ export default boot(({ app }) => {
       const messages = await loadLocalize(locale)
 
       i18n.global.setLocaleMessage(locale, messages)
-      i18n.global.locale.value = locale
+      ;(i18n.global.locale as Ref<string>).value = locale
       document.querySelector("html")?.setAttribute("lang", locale)
       dayjs.locale(locale)
     },
