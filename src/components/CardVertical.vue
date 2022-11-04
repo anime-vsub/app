@@ -38,7 +38,7 @@
         v-if="showStar"
         class="flex items-center text-white font-weight-medium mt-2"
       >
-        <span class="font-weight-normal text-gray-400">t('danh-gia') </span>
+        <span class="font-weight-normal text-gray-400">{{t('danh-gia')}} </span>
         <Star class="mr-1 ml-1" /> {{ data.rate }}
       </div>
 
