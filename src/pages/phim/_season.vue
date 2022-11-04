@@ -656,7 +656,7 @@ async function fetchSeason(season: string) {
 
           hash:
             data.value?.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
-          name: t("trailer"),
+          name: "Trailer",
         },
       ]
     } else if (response.chaps.length > 50) {
