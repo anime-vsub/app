@@ -34,7 +34,7 @@
             outlined
             class="font-weight-normal input-search bg-[rgba(255,255,255,0)] w-full"
             input-style="background-color: transparent"
-            placeholder="{{ t('tim-kiem') }}"
+            :placeholder="t('tim-kiem')"
             @focus="focusing = true"
             @blur="focusing = false"
             @keydown.stop
@@ -572,6 +572,7 @@
                       width="20"
                       height="20"
                     />
+                    <span v-else class="block w-[20px]" />
                   </q-item-section>
                   <q-item-section>{{ name }}</q-item-section>
                 </q-item>
@@ -835,7 +836,7 @@ import { useRoute, useRouter } from "vue-router"
 import NotExistsExtension from "./NotExistsExtension.vue"
 
 const { t } = useI18n()
-const drawers = [
+const drawers = computed(() => ([
   {
     icon: "fluent:home-24-regular",
     active: "fluent:home-24-filled",
@@ -875,8 +876,8 @@ const drawers = [
     name: t("lich-su"),
     path: "/tai-khoan/history",
   },
-]
-const drawersBottom = [
+]))
+const drawersBottom = computed(() => ([
   {
     name: t("ve-chung-toi"),
     href: "https://anime-vsub.github.io/about",
@@ -901,7 +902,7 @@ const drawersBottom = [
     name: t("khieu-nai-vi-pham"),
     href: "https://anime-vsub.github.io/disclaimer",
   },
-]
+]))
 
 const route = useRoute()
 const router = useRouter()

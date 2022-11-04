@@ -3,6 +3,8 @@ import { loadLocalize } from "src/i18n"
 import { useSettingsStore } from "stores/settings"
 import { watch } from "vue"
 import { createI18n } from "vue-i18n"
+import dayjs from "dayjs"
+import enUS from "src/i18n/messages/en-US.json?raw"
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare module "vue-i18n" {
@@ -16,8 +18,11 @@ declare module "vue-i18n" {
 
 export default boot(({ app }) => {
   const i18n = createI18n({
-    locale: "en-US",
+    fallbackLocale: "en-US",
     legacy: false,
+    messages : {
+      "en-US": JSON.parse(enUS)
+      }
   })
   const settingsStore = useSettingsStore()
 
@@ -27,6 +32,9 @@ export default boot(({ app }) => {
       const messages = await loadLocalize(locale)
 
       i18n.global.setLocaleMessage(locale, messages)
+        i18n.global.locale .value = locale
+        document.querySelector('html').setAttribute('lang', locale)
+        dayjs.locale(locale)
     },
     { immediate: true }
   )

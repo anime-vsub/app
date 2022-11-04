@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import { getNavigatorLanguage } from "src/i18n"
 
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
@@ -7,7 +8,7 @@ export const useSettingsStore = defineStore("settings", {
       enableRemindStop: true,
       volume: 1,
     },
-    locale: "en-US",
+    locale: getNavigatorLanguage()
   }),
   persist: true,
 })
