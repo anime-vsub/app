@@ -50,16 +50,24 @@
       </div>
     </div>
     <div class="col-3 relative">
-      <div class="absolute w-full h-full flex column">
+      <div class="absolute w-full h-full flex column flex-nowrap">
         <div class="py-1 px-4 text-subtitle1 flex items-center justify-between">
-          {{ t("chon-tap") }}
+          {{ gridModeTabsSeasons ? t("chon-season") : t("chon-tap") }}
 
           <q-btn
             dense
             round
             @click="gridModeTabsSeasons = !gridModeTabsSeasons"
           >
-            <Icon icon="fluent:apps-list-24-regular" width="20" height="20" />
+            <Icon
+              :icon="
+                gridModeTabsSeasons
+                  ? 'fluent:grid-kanban-20-regular'
+                  : 'fluent:apps-list-24-regular'
+              "
+              width="20"
+              height="20"
+            />
           </q-btn>
         </div>
 
@@ -70,9 +78,9 @@
         <template v-else>
           <q-tabs
             v-model="seasonActive"
-            class="min-w-0 w-full tabs-seasons relative"
+            class="min-w-0 w-full tabs-seasons"
             :class="{
-              'grid-mode': gridModeTabsSeasons,
+              'grid-mode scrollbar-custom': gridModeTabsSeasons,
             }"
             no-caps
             dense
@@ -89,7 +97,7 @@
               :key="item.value"
               :name="item.value"
               :label="item.name"
-              :ref="(el: QTab) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
+              :ref="(el: QTab) => item.value === seasonActive && (tabsRef = el as QTab)"
             />
           </q-tabs>
 
@@ -97,7 +105,7 @@
             v-model="seasonActive"
             animated
             keep-alive
-            class="flex-1 w-full bg-transparent"
+            class="flex-1 w-full bg-transparent panels-seasons"
           >
             <q-tab-panel
               v-for="({ value }, index) in seasons"
@@ -376,7 +384,7 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
 import { C_URL, labelToQuality } from "src/constants"
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
+import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
@@ -901,19 +909,14 @@ watchEffect(() => {
   if (!tabsRef.value) return
   if (!currentSeason.value) return
 
-  setTimeout(() => {
-    console.log("scroll now")
-    if (tabsRef.value?.$el) scrollXIntoView(tabsRef.value.$el)
-  }, 70)
-})
-const tabsDialogRef = ref<QTab>()
-watchEffect(() => {
-  if (!tabsDialogRef.value) return
-  if (!currentSeason.value) return
+  gridModeTabsSeasons.value // watch value
 
   setTimeout(() => {
     console.log("scroll now")
-    if (tabsDialogRef.value?.$el) scrollXIntoView(tabsDialogRef.value.$el)
+    if (tabsRef.value?.$el) {
+      if (gridModeTabsSeasons.value) scrollYIntoView(tabsRef.value.$el)
+      else scrollXIntoView(tabsRef.value.$el)
+    }
   }, 70)
 })
 const followed = ref(false)
@@ -1059,15 +1062,5 @@ const gridModeTabsSeasons = ref(false)
   z-index: 12;
 }
 
-.tabs-seasons {
-  &.grid-mode:deep(.q-tabs__content) {
-    @apply flex-wrap absolute top-0 left-0 w-full z-9999 bg-[var(--q-dark-page)];
-  }
-}
-</style>
-
-<style lang="scss">
-.q-panel {
-  @apply scrollbar-custom;
-}
+@import "./tabs-seasons.scss";
 </style>

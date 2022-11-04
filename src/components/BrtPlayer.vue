@@ -305,6 +305,136 @@
                   >
                     {{ t("danh-sach-tap") }}
                   </q-tooltip>
+
+                  <q-menu
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[0, 20]"
+                    class="min-w-[200px] max-w-[329px] flex column flex-nowrap overflow-visible"
+                  >
+                    <div>
+                      <div
+                        class="py-1 px-4 text-subtitle1 flex items-center justify-between"
+                      >
+                        {{
+                          gridModeTabsSeasons ? t("chon-season") : t("chon-tap")
+                        }}
+
+                        <q-btn
+                          dense
+                          round
+                          @click="gridModeTabsSeasons = !gridModeTabsSeasons"
+                        >
+                          <Icon
+                            :icon="
+                              gridModeTabsSeasons
+                                ? 'fluent:grid-kanban-20-regular'
+                                : 'fluent:apps-list-24-regular'
+                            "
+                            width="20"
+                            height="20"
+                          />
+                        </q-btn>
+                      </div>
+
+                      <q-tabs
+                        v-model="seasonActive"
+                        class="min-w-0 w-full tabs-seasons"
+                        :class="{
+                          'grid-mode scrollbar-custom': gridModeTabsSeasons,
+                        }"
+                        no-caps
+                        dense
+                        inline-label
+                        active-class="c--main"
+                        v-if="
+                          seasons &&
+                          (seasons.length > 1 ||
+                            (seasons.length === 0 && seasons[0].name !== ''))
+                        "
+                      >
+                        <q-tab
+                          v-for="item in seasons"
+                          :key="item.value"
+                          :name="item.value"
+                          :label="item.name"
+                          :ref="(el: QTab) => item.value === seasonActive && (tabsRef = el as QTab)"
+                        />
+                      </q-tabs>
+                    </div>
+
+                    <div
+                      class="h-full min-h-0 overflow-y-auto scrollbar-custom"
+                    >
+                      <div
+                        v-if="!seasons"
+                        class="flex-1 flex items-center justify-center"
+                      >
+                        <q-spinner color="main" size="3em" :thickness="3" />
+                      </div>
+
+                      <template v-else>
+                        <q-tab-panels
+                          v-model="seasonActive"
+                          animated
+                          keep-alive
+                          class="flex-1 w-full bg-transparent panels-seasons"
+                        >
+                          <q-tab-panel
+                            v-for="({ value }, index) in seasons"
+                            :key="index"
+                            :name="value"
+                          >
+                            <div
+                              v-if="
+                                !_cacheDataSeasons.get(value) ||
+                                _cacheDataSeasons.get(value)?.status ===
+                                  'pending'
+                              "
+                              class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+                            >
+                              <q-spinner
+                                style="color: #00be06"
+                                size="3em"
+                                :thickness="3"
+                              />
+                            </div>
+                            <div
+                              v-else-if="
+                                _cacheDataSeasons.get(value)?.status === 'error'
+                              "
+                              class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
+                            >
+                              {{ t("loi-khi-lay-du-lieu") }}
+                              <br />
+                              <q-btn
+                                dense
+                                no-caps
+                                rounded
+                                style="color: #00be06"
+                                @click="fetchSeason(value)"
+                                >{{ t("thu-lai") }}</q-btn
+                              >
+                            </div>
+
+                            <ChapsGridQBtn
+                              v-else
+                              grid
+                              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                              :season="value"
+                              :find="
+                                (item) =>
+                                  value === currentSeason &&
+                                  item.id === currentChap
+                              "
+                              :progress-chaps="progressChaps"
+                              class-item="px-3 py-[6px] mb-3"
+                            />
+                          </q-tab-panel>
+                        </q-tab-panels>
+                      </template>
+                    </div>
+                  </q-menu>
                 </q-btn>
               </div>
 
@@ -568,142 +698,6 @@
       </div>
 
       <!-- /notices -->
-
-      <!-- dialogs -->
-      <!--    dialog is settings    -->
-      <ArtDialog
-        :model-value="artFullscreen && showDialogSetting"
-        @update:model-value="showDialogSetting = $event"
-        title="{{ t('xem-them') }}"
-        fit
-      >
-        <div class="text-zinc-500 text-[12px] mb-2">{{ t("chat-luong") }}</div>
-        <div>
-          <q-btn
-            dense
-            flat
-            no-caps
-            class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
-            v-for="({ html }, index) in sources"
-            :class="{
-              'c--main': html === artQuality || (!artQuality && index === 0),
-            }"
-            :key="html"
-            @click="setArtQuality(html)"
-            >{{ html }}</q-btn
-          >
-        </div>
-
-        <div class="text-zinc-500 text-[12px] mt-4 mb-2">
-          {{ t("toc-do-phat-lai") }}
-        </div>
-        <div class="flex flex-nowrap mx-[-8px]">
-          <q-btn
-            dense
-            flat
-            no-caps
-            class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
-            v-for="{ name, value } in playbackRates"
-            :key="name"
-            :class="artPlaybackRate === value ? 'c--main' : 'text-stone-200'"
-            @click="setArtPlaybackRate(value)"
-            >{{ name }}</q-btn
-          >
-        </div>
-
-        <div class="flex items-center justify-between mt-4 mb-2">
-          {{ t("tu-dong-phat") }}
-          <q-toggle
-            v-model="settingsStore.player.autoNext"
-            size="sm"
-            color="green"
-          />
-        </div>
-      </ArtDialog>
-      <ArtDialog
-        :model-value="artFullscreen && showDialogChapter"
-        @update:model-value="showDialogChapter = $event"
-        title="{{ t('danh-sach-tap') }}"
-        fit
-      >
-        <div class="h-full w-full flex column flex-nowrap">
-          <q-tabs
-            v-model="seasonActive"
-            no-caps
-            dense
-            inline-label
-            active-class="c--main"
-            indicator-color="transparent"
-            v-if="
-              seasons &&
-              (seasons.length > 1 ||
-                (seasons.length === 0 && seasons[0].name !== ''))
-            "
-          >
-            <q-tab
-              v-for="item in seasons"
-              :key="item.value"
-              :name="item.value"
-              :label="item.name"
-              class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[3px]"
-              content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-              :ref="(el: QTab) => item.value === currentSeason && (tabsRef = el as QTab)"
-            />
-          </q-tabs>
-
-          <q-tab-panels
-            v-model="seasonActive"
-            animated
-            keep-alive
-            class="flex-1 mt-4 bg-transparent"
-          >
-            <q-tab-panel
-              v-for="{ value } in seasons"
-              :key="value"
-              :name="value"
-              class="h-full py-0 !px-0 flex justify-around place-items-center place-content-start relative overflow-y-auto pb-3"
-            >
-              <div
-                v-if="_cacheDataSeasons.get(value)?.status === 'pending'"
-                class="flex justify-center"
-              >
-                <q-spinner-infinity
-                  style="color: #00be06"
-                  size="3em"
-                  :thickness="3"
-                />
-              </div>
-              <div
-                v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
-                class="text-center"
-              >
-                {{ t("loi-khi-lay-du-lieu") }}
-                <br />
-                <q-btn
-                  dense
-                  no-caps
-                  style="color: #00be06"
-                  @click="fetchSeason(value)"
-                  >{{ t("thu-lai") }}</q-btn
-                >
-              </div>
-              <ChapsGridQBtn
-                v-else
-                class-item="!px-3 !py-2 !mx-1"
-                class-active="!bg-[rgba(0,194,52,.15)]"
-                grid
-                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
-                :season="value"
-                :find="
-                  (item) => value === currentSeason && item.id === currentChap
-                "
-                :progress-chaps="progressChaps"
-              />
-            </q-tab-panel>
-          </q-tab-panels>
-        </div>
-      </ArtDialog>
-      <!-- /dialogs -->
     </q-responsive>
   </div>
 </template>
@@ -843,14 +837,22 @@ watch(
     immediate: true,
   }
 )
+
+const gridModeTabsSeasons = ref(false)
 // @scrollIntoView
 const tabsRef = ref<QTab>()
 watchEffect(() => {
   if (!tabsRef.value) return
   if (!props.currentSeason) return
 
+  gridModeTabsSeasons.value // watch value
+
   setTimeout(() => {
-    if (tabsRef.value?.$el) scrollXIntoView(tabsRef.value.$el)
+    console.log("scroll now")
+    if (tabsRef.value?.$el) {
+      if (gridModeTabsSeasons.value) scrollYIntoView(tabsRef.value.$el)
+      else scrollXIntoView(tabsRef.value.$el)
+    }
   }, 70)
 })
 
@@ -1600,7 +1602,6 @@ function addNotice(text: string) {
 const wrapVolumeRef = ref<HTMLDivElement>()
 const { isOutside: artVolumeOutside } = useMouseInElement(wrapVolumeRef)
 
-const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)
 
 watch(showDialogChapter, (status) => {
@@ -2150,5 +2151,12 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
 <style lang="scss" scoped>
 .art-layer-controller :deep(.q-btn .q-focus-helper) {
   display: none;
+}
+
+@import "src/pages/phim/tabs-seasons.scss";
+
+.grid-mode {
+  @apply absolute;
+  height: calc(100% - 41.59px) !important;
 }
 </style>
