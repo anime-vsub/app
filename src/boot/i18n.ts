@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import { boot } from "quasar/wrappers"
 import { loadLocalize } from "src/i18n"
-import enUS from "src/i18n/messages/en-US.json?raw"
+import enUS from "src/i18n/messages/en-US.json"
 import { useSettingsStore } from "stores/settings"
 import { watch } from "vue"
 import { createI18n } from "vue-i18n"
@@ -21,7 +21,7 @@ export default boot(({ app }) => {
     fallbackLocale: "en-US",
     legacy: false,
     messages: {
-      "en-US": JSON.parse(enUS),
+      "en-US": enUS,
     },
   })
   const settingsStore = useSettingsStore()

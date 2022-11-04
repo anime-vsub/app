@@ -25,7 +25,7 @@
 
       <div v-if="data.process" class="mt-2">
         <template v-if="data.year"
-          >{{ data.year }} <span class="mx-1">{{ t("or") }}</span>
+          >{{ data.year }} <span class="mx-1">|</span>
         </template>
         {{ t("tap-_chap", [data.process]) }}
       </div>

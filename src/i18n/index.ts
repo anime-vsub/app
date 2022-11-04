@@ -1,9 +1,7 @@
 import ISO6391 from "iso-639-1"
 
 export function loadLocalize(locale: string) {
-  return import(`./messages/${locale}.json?raw`).then((res) =>
-    JSON.parse(res.default)
-  )
+  return import(`./messages/${locale}.json`).then((res) => res.default)
 }
 
 const reg = /[\w-]+(?=\.json$)/
