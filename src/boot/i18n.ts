@@ -22,7 +22,7 @@ export default boot(({ app }) => {
     legacy: false,
     messages: {
       "en-US": enUS,
-    },
+    } as Record<string, unknown>,
   })
   const settingsStore = useSettingsStore()
 
@@ -33,7 +33,7 @@ export default boot(({ app }) => {
 
       i18n.global.setLocaleMessage(locale, messages)
       i18n.global.locale.value = locale
-      document.querySelector("html").setAttribute("lang", locale)
+      document.querySelector("html")?.setAttribute("lang", locale)
       dayjs.locale(locale)
     },
     { immediate: true }
