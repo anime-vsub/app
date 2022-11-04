@@ -109,7 +109,8 @@ module.exports = configure(function (/* ctx */) {
             include: path.resolve(__dirname, "./src/i18n/**"),
           },
         ],
-        ["vite-plugin-rewrite-all"]
+        ["vite-plugin-rewrite-all"],
+        ["vite-plugin-remove-console"]
       ],
     },
 

@@ -63,6 +63,7 @@ specifiers:
   tsx: ^3.10.1
   typescript: ^4.8.4
   uuid: ^9.0.0
+  vite-plugin-remove-console: ^1.1.0
   vite-plugin-rewrite-all: ^1.0.0
   vite-plugin-windicss: ^1.8.8
   vitest: '0.22'
@@ -141,6 +142,7 @@ devDependencies:
   semver: 7.3.8
   tsx: 3.11.0
   typescript: 4.8.4
+  vite-plugin-remove-console: 1.1.0
   vite-plugin-rewrite-all: 1.0.0
   vite-plugin-windicss: 1.8.8
   vitest: 0.22.1_jsdom@20.0.2+sass@1.32.11
@@ -7783,6 +7785,10 @@ packages:
   /vary/1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+    dev: true
+
+  /vite-plugin-remove-console/1.1.0:
+    resolution: {integrity: sha512-FZ0gLEsRqgHPCl+blHpT3h004+InKrGddmBXTfs7Cj/xWY7FdHpL9Zc9kgjxh8zIzjZ/MblsPDDEqg5BVHIXDA==}
     dev: true
 
   /vite-plugin-rewrite-all/1.0.0:
