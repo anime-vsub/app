@@ -969,12 +969,12 @@ const setArtVolume = (value: number) => {
 let lastVolumeBeforeMute: number
 const toggleMuted = () => {
   const newValue = artVolume.value === 0 ? (lastVolumeBeforeMute ?? 0.05) : 0
-  
+
   if (artVolume.value > 0){
     lastVolumeBeforeMute = artVolume.value
   }
-  
-  
+
+
   setArtVolume(newValue)
 
   addNotice(t("am-luong-_volume", [Math.round(newValue * 100)]))
@@ -1624,6 +1624,14 @@ function downVolume() {
     addNotice(t("am-luong-_volume", [Math.round(newVal * 100)]))
   }
 }
+function skipOpening() {
+  setArtCurrentTime(
+    (artCurrentTime.value = Math.min(
+      artCurrentTime.value + 90,
+      artDuration.value
+    ))
+  )
+}
 useEventListener(window, "keydown", (event: KeyboardEvent) => {
   switch (event.code) {
     case "Space": {
@@ -1668,6 +1676,9 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
           },
         })
 
+      break
+    case "KeyJ":
+      skipOpening()
       break
   }
 })
