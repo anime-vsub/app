@@ -85,14 +85,16 @@
     <div v-ripple @click="showDialogInforma = true" class="relative mt-6">
       <div class="relative flex items-center justify-between">
         <div class="flex-1 mt-4 mb-2">
-          <h1 class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px] leading-normal">
+          <h1
+            class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px] leading-normal"
+          >
             {{ data.name }}
           </h1>
           <h5 class="text-gray-400 text-weight-normal">
             {{ formatView(data.views) }} lượt xem
 
             <span v-if="currentDataSeason?.update">
-               &bull; Tập mới chiếu vào
+              &bull; Tập mới chiếu vào
               {{
                 dayjs(
                   new Date(
@@ -663,6 +665,7 @@ async function fetchSeason(season: string) {
       console.log("large chap. spliting...")
       const { chaps } = response
 
+      // eslint-disable-next-line functional/no-let
       let indexMetaSeason = seasons.value.findIndex(
         (item) => item.value === season
       )

@@ -93,7 +93,9 @@
               </q-btn>
 
               <div class="">
-                <div class="line-clamp-1 text-[18px] text-weight-medium leading-normal">
+                <div
+                  class="line-clamp-1 text-[18px] text-weight-medium leading-normal"
+                >
                   {{ name }}
                 </div>
                 <div v-if="nameCurrentChap" class="text-gray-300">
@@ -815,9 +817,22 @@ watch(
 
       if (!authStore.user_data) return
 
-      const userRef = doc(db, "users", sha256(authStore.user_data.email + authStore.user_data.name))
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const seasonRef = doc(userRef, "history", props.currentSeason!.slice(0, props.currentSeason.lastIndexOf("$") >>> 0))
+      const userRef = doc(
+        db,
+        "users",
+        sha256(authStore.user_data.email + authStore.user_data.name)
+      )
+
+      const seasonRef = doc(
+        userRef,
+        "history",
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        props.currentSeason!.slice(
+          0,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          props.currentSeason!.lastIndexOf("$") >>> 0
+        )
+      )
       const chapRef = doc(seasonRef, "chaps", currentChap)
 
       const progressInCloud = await getDoc(chapRef)
@@ -947,7 +962,11 @@ watch(
       })
     }
 
-    const seasonRef = doc(userRef, "history", currentSeason.slice(0, currentSeason.lastIndexOf("$") >>> 0))
+    const seasonRef = doc(
+      userRef,
+      "history",
+      currentSeason.slice(0, currentSeason.lastIndexOf("$") >>> 0)
+    )
 
     if (!(await getDoc(seasonRef)).exists()) {
       //
