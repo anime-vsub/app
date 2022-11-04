@@ -1,10 +1,11 @@
+import dayjs from "dayjs"
 import { boot } from "quasar/wrappers"
 import { loadLocalize } from "src/i18n"
+import enUS from "src/i18n/messages/en-US.json"
 import { useSettingsStore } from "stores/settings"
+import type { Ref } from "vue"
 import { watch } from "vue"
 import { createI18n } from "vue-i18n"
-import dayjs from "dayjs"
-import enUS from "src/i18n/messages/en-US.json?raw"
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 declare module "vue-i18n" {
@@ -20,9 +21,9 @@ export default boot(({ app }) => {
   const i18n = createI18n({
     fallbackLocale: "en-US",
     legacy: false,
-    messages : {
-      "en-US": JSON.parse(enUS)
-      }
+    messages: {
+      "en-US": enUS,
+    },
   })
   const settingsStore = useSettingsStore()
 
@@ -32,9 +33,9 @@ export default boot(({ app }) => {
       const messages = await loadLocalize(locale)
 
       i18n.global.setLocaleMessage(locale, messages)
-        i18n.global.locale .value = locale
-        document.querySelector('html').setAttribute('lang', locale)
-        dayjs.locale(locale)
+      ;(i18n.global.locale as Ref<string>).value = locale
+      document.querySelector("html")?.setAttribute("lang", locale)
+      dayjs.locale(locale)
     },
     { immediate: true }
   )

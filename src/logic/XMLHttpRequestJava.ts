@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { HttpOptions } from "@capacitor-community/http"
 import { get } from "src/logic/http"
 
 import { base64ToArrayBuffer } from "./base64ToArrayBuffer"
@@ -11,7 +10,7 @@ export class XMLHttpRequestJava {
   private url = ""
   private aborted = false
 
-  public responseType?: HttpOptions["responseType"]
+  public responseType?: PostOptions["responseType"]
   public readyState: 0 | 1 | 2 | 3 | 4 = 0
   public status = 0
   public response?: ArrayBuffer
@@ -71,22 +70,30 @@ export class XMLHttpRequestJava {
           : res.data
 
       if (this.aborted) return
+
+      const size =
+        typeof res.data === "string" ? res.data.length : res.data.byteLength
       this.resHeaders = new Headers(res.headers)
       this.readyState = 2
       this.status = 200
-      this.onprogress?.({ ...this, loaded: 0, total: res.data.length })
+      this.onprogress?.({
+        ...this,
+        loaded: 0,
+        total: size,
+      })
       this.onreadystatechange?.(this)
 
-      if (this.responseType === "arraybuffer") this.response = res.data
-      else this.responseText = res.data
+      if (this.responseType === "arraybuffer")
+        this.response = res.data as ArrayBuffer
+      else this.responseText = res.data as string
 
       this.readyState = 4
       if (this.aborted) return
       this.onreadystatechange?.(this)
       this.onprogress?.({
         ...this,
-        loaded: res.data.length,
-        total: res.data.length,
+        loaded: size,
+        total: size,
       })
     } catch (err: any) {
       this.onerror?.(err)
