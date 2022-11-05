@@ -404,15 +404,7 @@ import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
-import {
-  computed,
-  reactive,
-  ref,
-  shallowReactive,
-  shallowRef,
-  watch,
-  watchEffect,
-} from "vue"
+import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
@@ -513,16 +505,22 @@ watch(
 
 interface ResponseDataSeasonPending {
   status: "pending"
-  progressChaps?: Awaited<ReturnType<typeof getProgressChaps>> | null /* null is status fetching */
+  progressChaps?: Awaited<
+    ReturnType<typeof getProgressChaps>
+  > | null /* null is status fetching */
 }
 interface ResponseDataSeasonSuccess {
   status: "success"
-  progressChaps?: Awaited<ReturnType<typeof getProgressChaps>> | null /* null is status fetching */
+  progressChaps?: Awaited<
+    ReturnType<typeof getProgressChaps>
+  > | null /* null is status fetching */
   response: Awaited<ReturnType<typeof PhimIdChap>>
 }
 interface ResponseDataSeasonError {
   status: "error"
-  progressChaps?: Awaited<ReturnType<typeof getProgressChaps>> | null /* null is status fetching */
+  progressChaps?: Awaited<
+    ReturnType<typeof getProgressChaps>
+  > | null /* null is status fetching */
   response: {
     status: number
   }
@@ -535,8 +533,10 @@ const _cacheDataSeasons = reactive<
     | ResponseDataSeasonError
   >
 >(new Map())
+// eslint-disable-next-line camelcase
 watch([_cacheDataSeasons, () => authStore.user_data], ([cache, user_data]) => {
-  if (!user_data) return;
+  // eslint-disable-next-line camelcase
+  if (!user_data) return
 
   // help me
   cache.forEach(async (item, season) => {
@@ -559,12 +559,11 @@ async function fetchSeason(season: string) {
     return
   }
 
-
-  _cacheDataSeasons.set(season,  {
+  _cacheDataSeasons.set(season, {
     status: "pending",
-
   })
-  const currentDataSeason =_cacheDataSeasons.get(season )!
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const currentDataSeason = _cacheDataSeasons.get(season)!
   try {
     console.log("fetch chaps on season")
 
@@ -614,8 +613,8 @@ async function fetchSeason(season: string) {
 
           console.log("set %s by %s", value, chaps[0].id)
 
-const dataOnCache = _cacheDataSeasons.get(value)
-const newData = {
+          const dataOnCache = _cacheDataSeasons.get(value)
+          const newData = {
             status: "success",
             response: {
               ...response,
@@ -650,7 +649,7 @@ const newData = {
     console.log(_cacheDataSeasons)
   } catch (err) {
     console.warn(err)
-    Object.assign(currentDataSeason,  {
+    Object.assign(currentDataSeason, {
       status: "error",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       response: err as any,
@@ -901,41 +900,41 @@ const sources = computed<Source[] | undefined>(() =>
   })
 )
 
-
-  async function getProgressChaps(currentSeason: string):  Map<
-    string,
-    {
-      cur: number
-      dur: number
-    }
-  > {
-    const {user_data}=authStore
-    // eslint-disable-next-line camelcase
-    if (!user_data) {
-      return
-    }
-
-    const db = getFirestore(app)
-
-    // eslint-disable-next-line camelcase
-    const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const seasonRef = doc(userRef, "history", currentSeason!)
-    const chapRef = collection(seasonRef, "chaps")
-
-    const { docs } = await getDocs(chapRef)
-
-const progressChaps = new Map()
-    docs.forEach((item) => {
-      const { cur, dur } = item.data()
-      progressChaps.set(item.id, {
-        cur,
-        dur,
-      })
-    })
-
-    return progressChaps
+async function getProgressChaps(currentSeason: string): Map<
+  string,
+  {
+    cur: number
+    dur: number
   }
+> {
+  // eslint-disable-next-line camelcase
+  const { user_data } = authStore
+  // eslint-disable-next-line camelcase
+  if (!user_data) {
+    return
+  }
+
+  const db = getFirestore(app)
+
+  // eslint-disable-next-line camelcase
+  const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const seasonRef = doc(userRef, "history", currentSeason!)
+  const chapRef = collection(seasonRef, "chaps")
+
+  const { docs } = await getDocs(chapRef)
+
+  const progressChaps = new Map()
+  docs.forEach((item) => {
+    const { cur, dur } = item.data()
+    progressChaps.set(item.id, {
+      cur,
+      dur,
+    })
+  })
+
+  return progressChaps
+}
 
 // @scrollIntoView
 const tabsRef = ref<QTab>()
