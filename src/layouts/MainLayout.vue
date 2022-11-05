@@ -123,7 +123,7 @@
 
         <q-space />
 
-        <q-btn v-if="authStore.isLogged" round class="mr-2">
+        <q-btn v-if="authStore.isLogged" round unelevated class="mr-2">
           <Icon
             :icon="
               showMenuFollow
@@ -178,7 +178,7 @@
           </q-menu>
         </q-btn>
 
-        <q-btn v-if="authStore.isLogged" round class="mr-2">
+        <q-btn v-if="authStore.isLogged" round unelevated class="mr-2">
           <Icon
             :icon="
               showMenuHistory
@@ -332,7 +332,7 @@
           </q-menu>
         </q-btn>
 
-        <q-btn v-if="authStore.isLogged" round class="mr-2">
+        <q-btn v-if="authStore.isLogged" round unelevated class="mr-2">
           <Icon
             :icon="
               showMenuNotify
@@ -410,6 +410,7 @@
                             <q-btn
                               round
                               dense
+                              unelevated
                               icon="close"
                               @click="notificationStore.remove(item.id)"
                             />
@@ -435,7 +436,7 @@
           </q-menu>
         </q-btn>
 
-        <q-btn v-if="authStore.isLogged" flat round>
+        <q-btn v-if="authStore.isLogged" flat round unelevated>
           <q-avatar size="35px">
             <img
               v-if="authStore.user_data?.avatar"
@@ -543,7 +544,12 @@
               <q-list v-if="tabMenuAccountActive === 'locale'">
                 <q-item>
                   <q-item-section avatar class="min-w-0">
-                    <q-btn round dense @click="tabMenuAccountActive = 'normal'">
+                    <q-btn
+                      round
+                      dense
+                      unelevated
+                      @click="tabMenuAccountActive = 'normal'"
+                    >
                       <Icon
                         icon="fluent:ios-arrow-ltr-24-regular"
                         width="20"
@@ -581,7 +587,12 @@
               <q-list v-if="tabMenuAccountActive === 'setting'">
                 <q-item>
                   <q-item-section avatar class="min-w-0">
-                    <q-btn round dense @click="tabMenuAccountActive = 'normal'">
+                    <q-btn
+                      round
+                      dense
+                      unelevated
+                      @click="tabMenuAccountActive = 'normal'"
+                    >
                       <Icon
                         icon="fluent:ios-arrow-ltr-24-regular"
                         width="20"
@@ -624,23 +635,60 @@
             </q-card>
           </q-menu>
         </q-btn>
-        <q-btn
-          v-else
-          flat
-          stack
-          no-caps
-          rounded
-          class="font-weight-normal"
-          @click="showDialogLogin = true"
-        >
-          <Icon icon="fluent:person-24-regular" width="20" height="20" />
-          {{ t("dang-nhap") }}
-        </q-btn>
+        <template v-else>
+          <q-btn round unelevated>
+            <Icon icon="carbon:translate" width="24" height="24" />
+
+            <q-menu class="bg-dark-page">
+              <q-list>
+                <q-item>
+                  <q-item-section>
+                    {{ t("chon-ngon-ngu-cua-ban") }}
+                  </q-item-section>
+                </q-item>
+
+                <q-separator class="bg-[rgba(255,255,255,0.1)]" />
+
+                <q-item
+                  v-for="{ name, code } in languages"
+                  :key="code"
+                  clickable
+                  v-ripple
+                  @click="settingsStore.locale = code"
+                >
+                  <q-item-section avatar class="min-w-0">
+                    <Icon
+                      v-if="settingsStore.locale === code"
+                      icon="fluent:checkmark-24-regular"
+                      width="20"
+                      height="20"
+                    />
+                    <span v-else class="block w-[20px]" />
+                  </q-item-section>
+                  <q-item-section>{{ name }}</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+          <q-btn
+            flat
+            stack
+            no-caps
+            rounded
+            unelevated
+            class="font-weight-normal"
+            @click="showDialogLogin = true"
+          >
+            <Icon icon="fluent:person-24-regular" width="20" height="20" />
+            {{ t("dang-nhap") }}
+          </q-btn>
+        </template>
 
         <q-btn
           flat
           no-caps
           rounded
+          unelevated
           class="font-weight-normal"
           href="https://anime-vsub.github.io"
           target="_blank"
@@ -737,56 +785,61 @@
   </q-layout>
 
   <q-dialog v-model="showDialogLogin">
-    <q-card class="h-[60vh] bg-dark-500">
+    <q-card class="h-[60vh] bg-dark-500 min-w-[300px]">
       <q-card-section>
         <div class="flex justify-between">
-          <q-btn dense round flat />
+          <q-btn dense round flat unelevated />
 
           <div class="flex-1 text-center text-subtitle1">
             {{ t("dang-nhap-de-dong-bo-du-lieu") }}
           </div>
 
-          <q-btn dense round icon="close" v-close-popup />
+          <q-btn dense round unelevated icon="close" v-close-popup />
         </div>
       </q-card-section>
 
       <q-card-section>
         <form @submit.prevent="login">
           <div>
-            <input
+            <q-input
               v-model="email"
+              outlined
               required
               type="email"
               name="email"
-              class="input w-full"
+              class="login-input w-full"
               placeholder="E-mail"
               @keydown.stop
             />
           </div>
           <div class="mt-4 relative flex items-center flex-nowrap input-wrap">
-            <input
+            <q-input
               v-model="password"
+              outlined
               required
               :type="showPassword ? 'text' : 'password'"
               name="password"
-              class="input w-full"
-              placeholder="{{ t('mat-khau-moi') }}"
+              class="login-input w-full"
+              :placeholder="t('mat-khau')"
               @keydown.stop
-            />
-            <q-btn
-              dense
-              round
-              class="mr-1"
-              @click="showPassword = !showPassword"
             >
-              <Icon
-                v-if="showPassword"
-                icon="fluent:eye-24-regular"
-                width="22"
-                height="22"
-              />
-              <Icon v-else icon="fluent:eye-off-24-regular" />
-            </q-btn>
+              <template v-slot:append>
+                <q-btn
+                  round
+                  unelevated
+                  class="mr-1"
+                  @click="showPassword = !showPassword"
+                >
+                  <Icon
+                    v-if="showPassword"
+                    icon="fluent:eye-24-regular"
+                    width="22"
+                    height="22"
+                  />
+                  <Icon v-else icon="fluent:eye-off-24-regular" />
+                </q-btn>
+              </template>
+            </q-input>
           </div>
 
           <div class="text-grey text-center mt-5 mb-4">
@@ -797,6 +850,7 @@
             type="submit"
             no-caps
             rounded
+            unelevated
             class="bg-main w-full"
             :disable="!email || !password"
             >{{ t("dang-nhap") }}</q-btn
@@ -1147,5 +1201,23 @@ watch(showMenuAccount, (val) => {
     height: 23px;
     color: #b9bbbe;
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.login-input :deep(.q-field__native) {
+  background-color: transparent !important;
+
+  &,
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+.login-input :deep(.q-field__control),
+.login-input :deep(.q-field__append) {
+  height: 45px !important;
 }
 </style>
