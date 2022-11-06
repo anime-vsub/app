@@ -9,14 +9,12 @@
       />
       <div class="my-1">{{ t("da-xay-ra-loi") }}</div>
       <q-btn
-        dense
         no-caps
         outline
         rounded
-        class="px-2"
         @click="emit('click:retry')"
         style="color: #00be06"
-        >t('thu-lai')</q-btn
+        >{{t('thu-lai')}}</q-btn
       >
     </div>
   </div>
