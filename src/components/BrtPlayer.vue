@@ -1657,12 +1657,12 @@ function skipOpening() {
     ))
   )
 }
+import {checkContentEditable} from "src/helpers/checkContentEditable"
 useEventListener(window, "keydown", (event: KeyboardEvent) => {
   switch (event.code) {
     case "Space": {
       if (
-        (event.target as HTMLElement | undefined)?.nodeName !== "TEXTAREA" &&
-        (event.target as HTMLElement | undefined)?.nodeName !== "INPUT"
+      !checkContentEditable(event.target as HTMLElement | null)
       )
         event.preventDefault()
       const playing = artPlaying.value

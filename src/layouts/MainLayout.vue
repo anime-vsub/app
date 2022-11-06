@@ -38,6 +38,7 @@
             @focus="focusing = true"
             @blur="focusing = false"
             @keydown.stop
+            ref="inputSearchRef"
           >
             <template v-slot:append>
               <q-separator vertical inset class="bg-[rgba(153,153,153,0.3)]" />
@@ -1101,6 +1102,20 @@ watch(
 const tabMenuAccountActive = ref<"normal" | "locale" | "setting">("normal")
 watch(showMenuAccount, (val) => {
   if (val) tabMenuAccountActive.value = "normal"
+})
+
+// key bind
+import { useEventListener } from "@vueuse/core"
+import {checkContentEditable } from "src/helpers/checkContentEditable"
+
+const inputSearchRef = ref<QInput>()
+useEventListener(window, "keypress", event => {
+  if (checkContentEditable(document.activeElement)) return
+
+  if (event.code === 'Slash') {
+    event.preventDefault()
+    inputSearchRef.value?.focus()
+  }
 })
 </script>
 
