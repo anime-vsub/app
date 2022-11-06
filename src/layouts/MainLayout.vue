@@ -16,7 +16,7 @@
           @click="showDrawer = !showDrawer"
         />
 
-        <router-link to="/" class="flex items-end">
+        <router-link to="/" class="flex flex-nowrap items-end">
           <img src="~assets/app_icon.svg" width="35" height="35" />
           <span style="font-family: Caveat" class="text-[25px]">nimeVsub</span>
         </router-link>
@@ -25,7 +25,7 @@
 
         <form
           @submit.prevent="router.push(`/tim-kiem/${query}`)"
-          class="relative min-w-[164px] w-full max-w-[598px]"
+          class="relative md:min-w-[164px] md:w-full max-w-[598px]"
         >
           <q-input
             v-model="query"
