@@ -390,7 +390,7 @@ import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import Quality from "components/Quality.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
-import { QTab, useQuasar } from "quasar"
+import { QBtn, QImg, QResponsive, QSkeleton, QSpinner, QTab, QTabPanel, QTabPanels, QTabs, QVideo, useQuasar } from "quasar"
 import sha256 from "sha256"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import { PhimId } from "src/apis/runs/phim/[id]"
@@ -407,7 +407,9 @@ import { useAuthStore } from "stores/auth"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { useRoute, useRouter } from "vue-router"
+import { RouterLink, useRoute, useRouter } from "vue-router"
+
+import type { ResponseDataSeasonError, ResponseDataSeasonPending, ResponseDataSeasonSuccess } from "./response-data-season"
 
 // ================ follow ================
 // =======================================================
@@ -503,28 +505,6 @@ watch(
   }
 )
 
-interface ResponseDataSeasonPending {
-  status: "pending"
-  progressChaps?: Awaited<
-    ReturnType<typeof getProgressChaps>
-  > | null /* null is status fetching */
-}
-interface ResponseDataSeasonSuccess {
-  status: "success"
-  progressChaps?: Awaited<
-    ReturnType<typeof getProgressChaps>
-  > | null /* null is status fetching */
-  response: Awaited<ReturnType<typeof PhimIdChap>>
-}
-interface ResponseDataSeasonError {
-  status: "error"
-  progressChaps?: Awaited<
-    ReturnType<typeof getProgressChaps>
-  > | null /* null is status fetching */
-  response: {
-    status: number
-  }
-}
 const _cacheDataSeasons = reactive<
   Map<
     string,
@@ -614,7 +594,7 @@ async function fetchSeason(season: string) {
           console.log("set %s by %s", value, chaps[0].id)
 
           const dataOnCache = _cacheDataSeasons.get(value)
-          const newData = {
+          const newData: ResponseDataSeasonSuccess = {
             status: "success",
             response: {
               ...response,
@@ -624,7 +604,7 @@ async function fetchSeason(season: string) {
           if (dataOnCache) {
             Object.assign(dataOnCache, newData)
           } else {
-            _cacheDataSeasons.set(value, dataOnCache)
+            _cacheDataSeasons.set(value, newData)
           }
 
           return {
@@ -900,18 +880,14 @@ const sources = computed<Source[] | undefined>(() =>
   })
 )
 
-async function getProgressChaps(currentSeason: string): Map<
-  string,
-  {
-    cur: number
-    dur: number
-  }
-> {
+async function getProgressChaps(
+  currentSeason: string
+): Promise<Map<string, { cur: number; dur: number }> | null> {
   // eslint-disable-next-line camelcase
   const { user_data } = authStore
   // eslint-disable-next-line camelcase
   if (!user_data) {
-    return
+    return null
   }
 
   const db = getFirestore(app)

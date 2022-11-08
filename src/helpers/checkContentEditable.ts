@@ -1,7 +1,6 @@
-
 const tags = ["INPUT", "TEXTAREA"]
 
-export function checkContentEditable (el?: HTMLElement | null): boolean {
+export function checkContentEditable(el: Element | null): boolean {
   if (!el) return false
 
   return tags.includes(el.tagName)

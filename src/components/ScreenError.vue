@@ -14,7 +14,7 @@
         rounded
         @click="emit('click:retry')"
         style="color: #00be06"
-        >{{t('thu-lai')}}</q-btn
+        >{{ t("thu-lai") }}</q-btn
       >
     </div>
   </div>

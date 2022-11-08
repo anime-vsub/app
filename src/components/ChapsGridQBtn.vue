@@ -57,7 +57,7 @@ const props = defineProps<{
       cur: number
       dur: number
     }
-  >
+  > | null
 }>()
 
 const activeRef = ref<QBtn>()
@@ -67,7 +67,9 @@ function scrollToView() {
 
 watchEffect(scrollToView)
 // eslint-disable-next-line functional/no-let
-let tmp: ReturnType<Exclude<typeof props.progressChaps, undefined>["get"]>
+let tmp: ReturnType<
+  Exclude<typeof props.progressChaps, undefined | null>["get"]
+>
 </script>
 
 <style lang="scss" scoped>

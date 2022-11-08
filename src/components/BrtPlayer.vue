@@ -258,7 +258,7 @@
                   >
                     <q-slider
                       :model-value="artVolume"
-                      @update:model-value="setArtVolume($event)"
+                      @update:model-value="setArtVolume($event??0)"
                       :min="0"
                       :max="1"
                       :step="0.05"
@@ -748,14 +748,15 @@ import {
 import { app } from "boot/firebase"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { debounce, QMenu, QTab, QTooltip, throttle, useQuasar } from "quasar"
+import { debounce, QBtn, QMenu, QResizeObserver, QResponsive, QSlider, QSpinner, QTab, QTabPanel, QTabPanels, QTabs, QTooltip, throttle, useQuasar } from "quasar"
 import sha256 from "sha256"
-import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
+import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
 import Hls from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
+import type { ResponseDataSeasonError, ResponseDataSeasonPending, ResponseDataSeasonSuccess } from "src/pages/phim/response-data-season"
 import { useAuthStore } from "stores/auth"
 import { useSettingsStore } from "stores/settings"
 import {
@@ -778,20 +779,6 @@ const { t } = useI18n()
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
-
-interface ResponseDataSeasonPending {
-  status: "pending"
-}
-interface ResponseDataSeasonSuccess {
-  status: "success"
-  response: Awaited<ReturnType<typeof PhimIdChap>>
-}
-interface ResponseDataSeasonError {
-  status: "error"
-  response: {
-    status: number
-  }
-}
 
 const router = useRouter()
 const $q = useQuasar()
@@ -1128,7 +1115,7 @@ const saveCurTimeToPer = throttle(async () => {
   if (!seasonRefCache) return
 
   if (disableBackupProgressViewing) return
-  if (!props.currentChap ) return
+  if (!props.currentChap) return
 
   const chapRef = doc(seasonRefCache, "chaps", props.currentChap)
 
@@ -1657,13 +1644,10 @@ function skipOpening() {
     ))
   )
 }
-import {checkContentEditable} from "src/helpers/checkContentEditable"
 useEventListener(window, "keydown", (event: KeyboardEvent) => {
   switch (event.code) {
     case "Space": {
-      if (
-      !checkContentEditable(event.target as HTMLElement | null)
-      )
+      if (!checkContentEditable(event.target as Element | null))
         event.preventDefault()
       const playing = artPlaying.value
       setArtPlaying(!playing)

@@ -31,7 +31,8 @@
             v-model="query"
             dense
             rounded
-            outlined clearable
+            outlined
+            clearable
             class="font-weight-normal input-search bg-[rgba(255,255,255,0)] w-full"
             input-style="background-color: transparent"
             :placeholder="t('tim-kiem')"
@@ -440,7 +441,7 @@
         </q-btn>
 
         <q-btn flat round unelevated>
-          <q-avatar  v-if="authStore.isLogged" size="35px">
+          <q-avatar v-if="authStore.isLogged" size="35px">
             <img
               v-if="authStore.user_data?.avatar"
               :src="authStore.user_data.avatar"
@@ -452,59 +453,58 @@
               height="30"
             />
           </q-avatar>
-            <Icon
-              v-else
-              icon="fluent:settings-24-regular"
-              width="30"
-              height="30"
-            />
+          <Icon
+            v-else
+            icon="fluent:settings-24-regular"
+            width="30"
+            height="30"
+          />
 
           <q-menu v-model="showMenuAccount" class="bg-dark-page">
             <q-card class="transparent w-[280px] px-2 pb-3">
               <q-list v-if="tabMenuAccountActive === 'normal'">
-                <template  v-if="authStore.isLogged">
-                <q-item>
-                  <q-item-section avatar>
-                    <q-avatar size="45px">
-                      <img
-                        v-if="authStore.user_data?.avatar"
-                        :src="authStore.user_data.avatar"
-                      />
+                <template v-if="authStore.isLogged">
+                  <q-item>
+                    <q-item-section avatar>
+                      <q-avatar size="45px">
+                        <img
+                          v-if="authStore.user_data?.avatar"
+                          :src="authStore.user_data.avatar"
+                        />
+                        <Icon
+                          v-else
+                          icon="fluent:person-circle-24-filled"
+                          width="45"
+                          height="45"
+                        />
+                      </q-avatar>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label class="font-weight-medium text-subtitle1">{{
+                        authStore.user_data!.name
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-separator class="bg-[rgba(255,255,255,0.1)]" />
+
+                  <q-item
+                    clickable
+                    v-ripple
+                    to="/tai-khoan/edit-profile"
+                    active-class=""
+                  >
+                    <q-item-section avatar class="min-w-0">
                       <Icon
-                        v-else
-                        icon="fluent:person-circle-24-filled"
-                        width="45"
-                        height="45"
+                        icon="fluent:info-24-regular"
+                        width="20"
+                        height="20"
                       />
-                    </q-avatar>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="font-weight-medium text-subtitle1">{{
-                      authStore.user_data!.name
-                    }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-separator class="bg-[rgba(255,255,255,0.1)]" />
-
-                <q-item
-                  clickable
-                  v-ripple
-                  to="/tai-khoan/edit-profile"
-                  active-class=""
-                >
-                  <q-item-section avatar class="min-w-0">
-                    <Icon
-                      icon="fluent:info-24-regular"
-                      width="20"
-                      height="20"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>{{ t("trung-tam-ca-nhan") }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>{{ t("trung-tam-ca-nhan") }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
                 </template>
                 <template v-else>
                   <q-item>
@@ -514,7 +514,6 @@
                   </q-item>
 
                   <q-separator class="bg-[rgba(255,255,255,0.1)]" />
-
                 </template>
 
                 <q-item
@@ -553,7 +552,12 @@
                   </q-item-section>
                 </q-item>
 
-                <q-item v-if="authStore.isLogged" clickable v-ripple @click="logout">
+                <q-item
+                  v-if="authStore.isLogged"
+                  clickable
+                  v-ripple
+                  @click="logout"
+                >
                   <q-item-section avatar class="min-w-0">
                     <Icon icon="fa:sign-out" width="20" height="20" />
                   </q-item-section>
@@ -658,20 +662,19 @@
           </q-menu>
         </q-btn>
 
-
-          <q-btn
-           v-if="!authStore.isLogged"
-            flat
-            stack
-            no-caps
-            rounded
-            unelevated
-            class="font-weight-normal"
-            @click="showDialogLogin = true"
-          >
-            <Icon icon="fluent:person-24-regular" width="20" height="20" />
-            {{ t("dang-nhap") }}
-          </q-btn>
+        <q-btn
+          v-if="!authStore.isLogged"
+          flat
+          stack
+          no-caps
+          rounded
+          unelevated
+          class="font-weight-normal"
+          @click="showDialogLogin = true"
+        >
+          <Icon icon="fluent:person-24-regular" width="20" height="20" />
+          {{ t("dang-nhap") }}
+        </q-btn>
 
         <q-btn
           flat
@@ -858,14 +861,15 @@ import "@fontsource/caveat"
 
 // =========== suth
 
-import { useIntervalFn } from "@vueuse/core"
+import { useEventListener, useIntervalFn } from "@vueuse/core"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
-import { debounce, useQuasar } from "quasar"
+import { debounce, QInput, useQuasar } from "quasar"
 import { History } from "src/apis/runs/history"
 import { PreSearch } from "src/apis/runs/pre-search"
 import { TuPhim } from "src/apis/runs/tu-phim"
+import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { languages } from "src/i18n"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
@@ -877,6 +881,8 @@ import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
+
+// key bind
 
 const { t } = useI18n()
 const drawers = computed(() => [
@@ -1092,15 +1098,11 @@ watch(showMenuAccount, (val) => {
   if (val) tabMenuAccountActive.value = "normal"
 })
 
-// key bind
-import { useEventListener } from "@vueuse/core"
-import {checkContentEditable } from "src/helpers/checkContentEditable"
-
 const inputSearchRef = ref<QInput>()
-useEventListener(window, "keypress", event => {
+useEventListener(window, "keypress", (event) => {
   if (checkContentEditable(document.activeElement)) return
 
-  if (event.code === 'Slash') {
+  if (event.code === "Slash") {
     event.preventDefault()
     inputSearchRef.value?.focus()
   }
@@ -1226,7 +1228,7 @@ useEventListener(window, "keypress", event => {
 </style>
 
 <style lang="scss" scoped>
-  .hidden-focus-helper :deep(.q-focus-helper) {
-    display: none !important;
-  }
-  </style>
+.hidden-focus-helper :deep(.q-focus-helper) {
+  display: none !important;
+}
+</style>
