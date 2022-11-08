@@ -15,7 +15,7 @@
     "typing": "vue-tsc --noEmit",
     "quasar": "quasar",
     "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts",
-    "release": "bumpp package.json --commit --tag --push"
+    "release": "pnpm test && pnpm typing && bumpp package.json --commit --tag --push"
   },
   "dependencies": {
     "@firebase/app": "^0.8.2",
