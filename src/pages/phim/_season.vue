@@ -145,8 +145,8 @@
                           `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
                         )
                       ).format("HH:MM"),
-                      _tmp.response.update[0] === 7
-                        ? "Chủ nhật"
+                      _tmp.response.update[0] === 0
+                        ? "chủ nhật"
                         : `thứ ${_tmp.response.update[0]}`,
                       _tmp.response.update[0] > new Date().getDay() + 1
                         ? "tuần sau"
@@ -238,8 +238,8 @@
                       `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
                     )
                   ).format("HH:MM"),
-                  currentDataSeason.update[0] === 7
-                    ? "Chủ nhật"
+                  currentDataSeason.update[0] === 0
+                    ? "chủ nhật"
                     : `thứ ${currentDataSeason.update[0]}`,
                   currentDataSeason.update[0] > new Date().getDay() + 1
                     ? "tuần sau"

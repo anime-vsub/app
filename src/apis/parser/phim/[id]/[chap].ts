@@ -24,7 +24,7 @@ export default function PhimIdChap(html: string) {
   const [day, hour, minus] =
     $(".schedule-title-main > h4 > strong:nth-child(3)")
       .text()
-      .match(/(Thứ [^\s]+) vào lúc (\d+) giờ (\d+) phút/i)
+      .match(/(Thứ [^\s]+|chủ nhật) vào lúc (\d+) giờ (\d+) phút/i)
       ?.slice(1) ?? []
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const image = $(".Image img").attr("src")!
