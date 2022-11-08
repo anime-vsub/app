@@ -5,3 +5,4 @@
 /node_modules
 .eslintrc.js
 /src-ssr
+/src/logic/hls-module.js

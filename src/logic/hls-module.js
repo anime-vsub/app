@@ -1,4 +1,4 @@
-import { XMLHttpRequestJava } from "./XMLHttpRequestJava"
+// import { XMLHttpRequestJava } from "./XMLHttpRequestJava"
 import { fetchJava } from "./fetchJava"
 
 export default (function() {
@@ -14544,7 +14544,7 @@ var xhr_loader_XhrLoader = /*#__PURE__*/function () {
         stats.tfirst = Math.max(window.performance.now(), stats.trequest);
       }
 
-      
+
             stats.tload = Math.max(stats.tfirst, window.performance.now());
             var data, len;
 
@@ -14566,18 +14566,18 @@ var xhr_loader_XhrLoader = /*#__PURE__*/function () {
 
     })
     .catch(err => {
-      
+
       if (stats.aborted) {
         return;
       } // >= HEADERS_RECEIVED
-      
+
       // clear xhr timeout and rearm it if readyState less than 4
       window.clearTimeout(this.requestTimeout);
-      
+
       if (stats.tfirst === 0) {
         stats.tfirst = Math.max(window.performance.now(), stats.trequest);
       }
-      
+
       // if max nb of retries reached or if http status between 400 and 499 (such error cannot be recovered, retrying is useless), return error
       if (stats.retry >= config.maxRetry || status >= 400 && status < 499) {
         logger["logger"].error(status + " while loading " + context.url);
