@@ -439,8 +439,8 @@
           </q-menu>
         </q-btn>
 
-        <q-btn v-if="authStore.isLogged" flat round unelevated>
-          <q-avatar size="35px">
+        <q-btn flat round unelevated>
+          <q-avatar  v-if="authStore.isLogged" size="35px">
             <img
               v-if="authStore.user_data?.avatar"
               :src="authStore.user_data.avatar"
@@ -452,10 +452,17 @@
               height="30"
             />
           </q-avatar>
+            <Icon
+              v-else
+              icon="fluent:settings-24-regular"
+              width="30"
+              height="30"
+            />
 
           <q-menu v-model="showMenuAccount" class="bg-dark-page">
             <q-card class="transparent w-[280px] px-2 pb-3">
               <q-list v-if="tabMenuAccountActive === 'normal'">
+                <template  v-if="authStore.isLogged">
                 <q-item>
                   <q-item-section avatar>
                     <q-avatar size="45px">
@@ -498,6 +505,18 @@
                   </q-item-section>
                 </q-item>
 
+                </template>
+                <template v-else>
+                  <q-item>
+                    <q-item-section>    
+                      {{ t("cai-dat") }}
+                    </q-item-section>
+                  </q-item>
+
+                  <q-separator class="bg-[rgba(255,255,255,0.1)]" />
+
+                </template>
+
                 <q-item
                   clickable
                   v-ripple
@@ -527,14 +546,14 @@
                     />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>{{ t("cai-dat") }}</q-item-label>
+                    <q-item-label>{{ t("cai-dat-chung") }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <Icon icon="fluent:chevron-right-24-regular" />
                   </q-item-section>
                 </q-item>
 
-                <q-item clickable v-ripple @click="logout">
+                <q-item v-if="authStore.isLogged" clickable v-ripple @click="logout">
                   <q-item-section avatar class="min-w-0">
                     <Icon icon="fa:sign-out" width="20" height="20" />
                   </q-item-section>
@@ -638,42 +657,10 @@
             </q-card>
           </q-menu>
         </q-btn>
-        <template v-else>
-          <q-btn round unelevated>
-            <Icon icon="carbon:translate" width="24" height="24" />
 
-            <q-menu class="bg-dark-page">
-              <q-list>
-                <q-item>
-                  <q-item-section>
-                    {{ t("chon-ngon-ngu-cua-ban") }}
-                  </q-item-section>
-                </q-item>
 
-                <q-separator class="bg-[rgba(255,255,255,0.1)]" />
-
-                <q-item
-                  v-for="{ name, code } in languages"
-                  :key="code"
-                  clickable
-                  v-ripple
-                  @click="settingsStore.locale = code"
-                >
-                  <q-item-section avatar class="min-w-0">
-                    <Icon
-                      v-if="settingsStore.locale === code"
-                      icon="fluent:checkmark-24-regular"
-                      width="20"
-                      height="20"
-                    />
-                    <span v-else class="block w-[20px]" />
-                  </q-item-section>
-                  <q-item-section>{{ name }}</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
           <q-btn
+           v-if="!authStore.isLogged"
             flat
             stack
             no-caps
@@ -685,7 +672,6 @@
             <Icon icon="fluent:person-24-regular" width="20" height="20" />
             {{ t("dang-nhap") }}
           </q-btn>
-        </template>
 
         <q-btn
           flat
