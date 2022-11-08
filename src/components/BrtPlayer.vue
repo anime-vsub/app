@@ -1128,9 +1128,9 @@ const saveCurTimeToPer = throttle(async () => {
   if (!seasonRefCache) return
 
   if (disableBackupProgressViewing) return
+  if (!props.currentChap ) return
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const chapRef = doc(seasonRefCache, "chaps", props.currentChap!)
+  const chapRef = doc(seasonRefCache, "chaps", props.currentChap)
 
   await Promise.all([
     setDoc(
