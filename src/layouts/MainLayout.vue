@@ -385,8 +385,8 @@
                     <q-item
                       v-for="item in notificationStore.items"
                       :key="item.id"
-                      clickable
                       :to="item.path"
+                      class="hidden-focus-helper"
                     >
                       <q-item-section>
                         <q-item-label class="text-subtitle1 text-weight-normal"
@@ -1238,3 +1238,9 @@ useEventListener(window, "keypress", event => {
   height: 45px !important;
 }
 </style>
+
+<style lang="scss" scoped>
+  .hidden-focus-helper :deep(.q-focus-helper) {
+    display: none !important;
+  }
+  </style>
