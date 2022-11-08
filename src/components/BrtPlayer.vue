@@ -748,6 +748,7 @@ import {
 import { app } from "boot/firebase"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import type Hlsjs from "hls.js"
 import { debounce, QBtn, QMenu, QResizeObserver, QResponsive, QSlider, QSpinner, QTab, QTabPanel, QTabPanels, QTabs, QTooltip, throttle, useQuasar } from "quasar"
 import sha256 from "sha256"
 import { playbackRates } from "src/constants"
@@ -1274,9 +1275,8 @@ function runRemount() {
     persistent: false,
   }).onOk(remount)
 }
-
 // eslint-disable-next-line functional/no-let
-let currentHls: typeof Hls
+let currentHls: Hlsjs
 onBeforeUnmount(() => currentHls?.destroy())
 function remount() {
   currentHls?.destroy()
@@ -1299,10 +1299,8 @@ function remount() {
   switch (type) {
     case "hls":
     case "m3u":
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       // eslint-disable-next-line no-case-declarations
-      const hls = new Hls() as typeof Hls
+      const hls = new Hls()
       currentHls = hls
       // customLoader(hls.config)
       hls.loadSource(url)

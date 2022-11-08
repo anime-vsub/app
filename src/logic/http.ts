@@ -1,14 +1,13 @@
 import { C_URL } from "src/constants"
 
-export async function get(
-  url: string | GetOptions,
-  headers?: Record<string, string>
-) {
+export async function get<
+  ResponseType extends "arraybuffer" | undefined = undefined
+>(url: string | GetOptions<ResponseType>, headers?: Record<string, string>) {
   console.log("get: ", url)
   // eslint-disable-next-line functional/no-throw-statement
   if (!window.Http) throw new Error("EXTENSION_HELPER_REQUIRED")
 
-  const response = await window.Http.get(
+  const response = (await window.Http.get(
     typeof url === "object"
       ? url
       : {
@@ -41,7 +40,7 @@ export async function get(
     }
 
     return response
-  })
+  })) as HttpResponse<ResponseType>
 
   console.log("get-result: ", response)
   // eslint-disable-next-line functional/no-throw-statement
@@ -68,7 +67,7 @@ export async function post(
   // eslint-disable-next-line functional/no-throw-statement
   if (!window.Http) throw new Error("EXTENSION_HELPER_REQUIRED")
 
-  const response = await window.Http.post({
+  const response = (await window.Http.post({
     url: C_URL + url,
     headers: {
       "user-agent":
@@ -77,7 +76,7 @@ export async function post(
       ...headers,
     },
     data,
-  })
+  })) as HttpResponse<undefined>
 
   console.log("post-result: ", response)
   // eslint-disable-next-line functional/no-throw-statement

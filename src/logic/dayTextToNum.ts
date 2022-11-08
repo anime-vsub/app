@@ -1,4 +1,4 @@
-const map: Map<string, number> = {
+const map: Record<string, number> = {
   // tiếng việt
   "chủ nhật": 0,
   "thứ 2": 1,

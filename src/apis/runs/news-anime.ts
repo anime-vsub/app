@@ -11,16 +11,14 @@ async function fetchFromMgn(page: number): Promise<string> {
   return html
 }
 async function fetchFromTinAnime(page: number) {
-  const {
-    data: { data },
-  } = await get(`https://tinanime.com/api/news/?p=${page}`)
+  const { data } = await get(`https://tinanime.com/api/news/?p=${page}`)
 
   const by = {
     icon: "https://tinanime.com/logos/114x114.png",
     name: "TinAnime",
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return data.map((item: any) => {
+  return JSON.parse(data).map((item: any) => {
     return {
       image: item.thumbnail,
       href: `https://tinanime.com/${item.slug}`,
