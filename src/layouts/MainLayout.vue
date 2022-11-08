@@ -31,7 +31,7 @@
             v-model="query"
             dense
             rounded
-            outlined
+            outlined clearable
             class="font-weight-normal input-search bg-[rgba(255,255,255,0)] w-full"
             input-style="background-color: transparent"
             :placeholder="t('tim-kiem')"
@@ -508,7 +508,7 @@
                 </template>
                 <template v-else>
                   <q-item>
-                    <q-item-section>    
+                    <q-item-section>
                       {{ t("cai-dat") }}
                     </q-item-section>
                   </q-item>
