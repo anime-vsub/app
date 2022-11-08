@@ -70,3 +70,4 @@ jobs:
         uses: softprops/action-gh-release@v0.1.14
         with:
           files: ${{steps.sign_app.outputs.signedReleaseFile}}
+          body: ${{ steps.changelog.outputs.changelog }}
