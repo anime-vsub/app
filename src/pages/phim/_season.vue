@@ -103,8 +103,8 @@
                 ).format("HH:MM")
               }}
               {{
-                currentDataSeason.update[0] === 7
-                  ? "Chủ nhật"
+                currentDataSeason.update[0] === 0
+                  ? "chủ nhật"
                   : `thứ ${currentDataSeason.update[0]}`
               }}
               {{
