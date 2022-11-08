@@ -1,5 +1,5 @@
 declare module "hls.js" {
-  import hls from "hls.js/src/hls"
+  import hls from "hls.js"
 
   export default hls
 }
