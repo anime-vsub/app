@@ -385,6 +385,8 @@
                     <q-item
                       v-for="item in notificationStore.items"
                       :key="item.id"
+                      clickable
+                      :to="item.path"
                     >
                       <q-item-section>
                         <q-item-label class="text-subtitle1 text-weight-normal"
