@@ -29,13 +29,25 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     setUser(value: User, expires: Date) {
       this.user_data = value
-      cookie.set("user_data", JSON.stringify(value), { expires })
+      cookie.set("user_data", JSON.stringify(value), {
+        expires,
+        sameSite: "None",
+        secure: true,
+      })
     },
     setToken(name: string, value: string, expires: Date) {
       this.token_name = name
       this.token_value = value
-      cookie.set("token_name", name, { expires })
-      cookie.set("token_value", value, { expires })
+      cookie.set("token_name", name, {
+        expires,
+        sameSite: "None",
+        secure: true,
+      })
+      cookie.set("token_value", value, {
+        expires,
+        sameSite: "None",
+        secure: true,
+      })
     },
     deleteUser() {
       this.user_data = null

@@ -749,6 +749,8 @@ import { app } from "boot/firebase"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import type Hlsjs from "hls.js"
+import type { PlaylistLoaderConstructor } from "hls.js"
+import Hls from "hls.js"
 import {
   debounce,
   QBtn,
@@ -770,7 +772,7 @@ import { playbackRates } from "src/constants"
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
-import Hls from "hls.js"
+import { fetchJava } from "src/logic/fetchJava"
 import { parseTime } from "src/logic/parseTime"
 import type {
   ResponseDataSeasonError,
@@ -1297,7 +1299,6 @@ function runRemount() {
 // eslint-disable-next-line functional/no-let
 let currentHls: Hlsjs
 onBeforeUnmount(() => currentHls?.destroy())
-import { fetchJava } from "src/logic/fetchJava"
 function remount() {
   currentHls?.destroy()
 
@@ -1323,7 +1324,8 @@ function remount() {
       const hls = new Hls({
         debug: import.meta.env.isDev,
         progressive: true,
-        pLoader: class CustomLoader extends Hls.DefaultConfig.loader {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        pLoader: class CustomLoader extends (Hls.DefaultConfig.loader as any) {
           loadInternal(): void {
             const { config, context } = this
             if (!config) {
@@ -1341,11 +1343,15 @@ function remount() {
               abort() {
                 controller.abort()
               },
+              onreadystatechange: <(() => void) | null>null,
+              onprogress: <((eventt: {loaded: number; total: number}) => void) | null>null,
+              response: <ArrayBuffer|null>null,
+              responseText: <string|null>null,
             })
             const headers = new Headers()
             if (this.context.headers)
-              for (const [key, val] in Object.entries(this.context.headers))
-                headers.set(key, val)
+              for (const [key, val] of Object.entries(this.context.headers))
+                headers.set(key, val as string)
 
             if (context.rangeEnd) {
               headers.set(
@@ -1367,7 +1373,8 @@ function remount() {
               signal: controller.signal,
             })
               .then(async (res) => {
-                let byteLength
+                // eslint-disable-next-line functional/no-let
+                let byteLength: number
                 if (context.responseType === "arraybuffer") {
                   xhr.response = await res.arrayBuffer()
                   byteLength = xhr.response.byteLength
@@ -1383,9 +1390,11 @@ function remount() {
                   loaded: byteLength,
                   total: byteLength,
                 })
+                // eslint-disable-next-line promise/always-return
                 xhr.onreadystatechange?.()
               })
               .catch((e) => {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 this.callbacks!.onError(
                   { code: xhr.status, text: e.message },
                   context,
@@ -1393,7 +1402,7 @@ function remount() {
                 )
               })
           }
-        },
+        } as unknown as PlaylistLoaderConstructor,
       })
       currentHls = hls
       // customLoader(hls.config)
