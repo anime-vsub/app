@@ -58,7 +58,6 @@
             <ul
               class="absolute w-full bg-dark-page left-0 max-h-[80vh] overflow-y-auto scrollbar-custom pb-4 top-[calc(100%+8px)] shadow-8"
               v-show="focusing"
-              @mousedown.stop.prevent
               @click.stop.prevent
             >
               <li
