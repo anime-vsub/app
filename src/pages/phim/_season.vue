@@ -390,7 +390,19 @@ import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import Quality from "components/Quality.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
-import { QBtn, QImg, QResponsive, QSkeleton, QSpinner, QTab, QTabPanel, QTabPanels, QTabs, QVideo, useQuasar } from "quasar"
+import {
+  QBtn,
+  QImg,
+  QResponsive,
+  QSkeleton,
+  QSpinner,
+  QTab,
+  QTabPanel,
+  QTabPanels,
+  QTabs,
+  QVideo,
+  useQuasar,
+} from "quasar"
 import sha256 from "sha256"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import { PhimId } from "src/apis/runs/phim/[id]"
@@ -409,7 +421,11 @@ import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
 
-import type { ResponseDataSeasonError, ResponseDataSeasonPending, ResponseDataSeasonSuccess } from "./response-data-season"
+import type {
+  ResponseDataSeasonError,
+  ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
+} from "./response-data-season"
 
 // ================ follow ================
 // =======================================================

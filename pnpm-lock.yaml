@@ -36,7 +36,7 @@ specifiers:
   eslint-config-prettier: ^8.5.0
   eslint-plugin-vue: ^9.6.0
   group-array: ^1.0.0
-  hls.js: 1.2.4
+  hls.js: 1.2.5
   htmlparser2: ^8.0.1
   iso-639-1: ^2.1.15
   js-base64: ^3.7.2
@@ -86,7 +86,7 @@ dependencies:
   dayjs: 1.11.6
   eruda2: 0.0.2-b8
   group-array: 1.0.0
-  hls.js: 1.2.4
+  hls.js: 1.2.5
   htmlparser2: 8.0.1
   iso-639-1: 2.1.15
   js-base64: 3.7.2
@@ -4843,8 +4843,8 @@ packages:
     hasBin: true
     dev: true
 
-  /hls.js/1.2.4:
-    resolution: {integrity: sha512-yC3K79Kzq1W+OgjT12JxKMDXv9DbfvulppxmPBl7D04SaTyd2IwWk5eNASQV1mUaPlKbjr16yI9292qpSGo0ig==}
+  /hls.js/1.2.5:
+    resolution: {integrity: sha512-1xW5PBJcQu2MsQDnqoFtCfaxxJ1hHwJHRThxDtrKRcrltTtSi4A62xgOsey+KK8MTMD6i4w5fcmBBz1U62ihvQ==}
     dev: false
 
   /html-encoding-sniffer/3.0.0:

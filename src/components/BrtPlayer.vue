@@ -258,7 +258,7 @@
                   >
                     <q-slider
                       :model-value="artVolume"
-                      @update:model-value="setArtVolume($event??0)"
+                      @update:model-value="setArtVolume($event ?? 0)"
                       :min="0"
                       :max="1"
                       :step="0.05"
@@ -749,15 +749,34 @@ import { app } from "boot/firebase"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import type Hlsjs from "hls.js"
-import { debounce, QBtn, QMenu, QResizeObserver, QResponsive, QSlider, QSpinner, QTab, QTabPanel, QTabPanels, QTabs, QTooltip, throttle, useQuasar } from "quasar"
+import {
+  debounce,
+  QBtn,
+  QMenu,
+  QResizeObserver,
+  QResponsive,
+  QSlider,
+  QSpinner,
+  QTab,
+  QTabPanel,
+  QTabPanels,
+  QTabs,
+  QTooltip,
+  throttle,
+  useQuasar,
+} from "quasar"
 import sha256 from "sha256"
 import { playbackRates } from "src/constants"
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
-import Hls from "src/logic/hls"
+import Hls from "hls.js"
 import { parseTime } from "src/logic/parseTime"
-import type { ResponseDataSeasonError, ResponseDataSeasonPending, ResponseDataSeasonSuccess } from "src/pages/phim/response-data-season"
+import type {
+  ResponseDataSeasonError,
+  ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
+} from "src/pages/phim/response-data-season"
 import { useAuthStore } from "stores/auth"
 import { useSettingsStore } from "stores/settings"
 import {
@@ -1278,6 +1297,7 @@ function runRemount() {
 // eslint-disable-next-line functional/no-let
 let currentHls: Hlsjs
 onBeforeUnmount(() => currentHls?.destroy())
+import { fetchJava } from "src/logic/fetchJava"
 function remount() {
   currentHls?.destroy()
 
@@ -1300,7 +1320,81 @@ function remount() {
     case "hls":
     case "m3u":
       // eslint-disable-next-line no-case-declarations
-      const hls = new Hls()
+      const hls = new Hls({
+        debug: import.meta.env.isDev,
+        progressive: true,
+        pLoader: class CustomLoader extends Hls.DefaultConfig.loader {
+          loadInternal(): void {
+            const { config, context } = this
+            if (!config) {
+              return
+            }
+
+            const { stats } = this
+            stats.loading.first = 0
+            stats.loaded = 0
+
+            const controller = new AbortController()
+            const xhr = (this.loader = {
+              readyState: 0,
+              status: 0,
+              abort() {
+                controller.abort()
+              },
+            })
+            const headers = new Headers()
+            if (this.context.headers)
+              for (const [key, val] in Object.entries(this.context.headers))
+                headers.set(key, val)
+
+            if (context.rangeEnd) {
+              headers.set(
+                "Range",
+                "bytes=" + context.rangeStart + "-" + (context.rangeEnd - 1)
+              )
+            }
+
+            xhr.onreadystatechange = this.readystatechange.bind(this)
+            xhr.onprogress = this.loadprogress.bind(this)
+            self.clearTimeout(this.requestTimeout)
+            this.requestTimeout = self.setTimeout(
+              this.loadtimeout.bind(this),
+              config.timeout
+            )
+
+            fetchJava(context.url, {
+              headers,
+              signal: controller.signal,
+            })
+              .then(async (res) => {
+                let byteLength
+                if (context.responseType === "arraybuffer") {
+                  xhr.response = await res.arrayBuffer()
+                  byteLength = xhr.response.byteLength
+                } else {
+                  xhr.responseText = await res.text()
+                  byteLength = xhr.responseText.length
+                }
+
+                xhr.readyState = 4
+                xhr.status = 200
+
+                xhr.onprogress?.({
+                  loaded: byteLength,
+                  total: byteLength,
+                })
+                xhr.onreadystatechange?.()
+              })
+              .catch((e) => {
+                this.callbacks!.onError(
+                  { code: xhr.status, text: e.message },
+                  context,
+                  xhr
+                )
+              })
+          }
+        },
+      })
       currentHls = hls
       // customLoader(hls.config)
       hls.loadSource(url)
