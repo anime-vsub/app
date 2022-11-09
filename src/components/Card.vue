@@ -1,5 +1,7 @@
 <template>
-  <q-card flat dense class="bg-transparent" @click="router.push(data.path)">
+  <router-link :to="data.path">
+    
+  <q-card flat dense class="bg-transparent">
     <q-img
       no-spinner
       :src="data.image"
@@ -39,6 +41,8 @@
       <Star class="inline" />
     </div>
   </q-card>
+
+  </router-link>
 </template>
 
 <script lang="ts" setup>

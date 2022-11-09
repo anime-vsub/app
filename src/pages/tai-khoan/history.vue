@@ -27,10 +27,10 @@
                   (item.timestamp.get("month") + 1)
             }}
           </div>
-          <div
+          <router-link
             class="bg-transparent flex mt-1 mb-4"
             style="white-space: initial"
-            @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
+            :to="`/phim/${item.id}/${item.last.chap}`"
           >
             <q-img
               no-spinner
@@ -71,7 +71,7 @@
                 }}
               </div>
             </div>
-          </div>
+          </router-link>
         </template>
 
         <template v-slot:loading>
