@@ -420,7 +420,7 @@
                               dense
                               unelevated
                               icon="close"
-                              @click.stop="notificationStore.remove(item.id)"
+                              @click.prevent="notificationStore.remove(item.id)"
                             />
                           </div>
                         </div>
