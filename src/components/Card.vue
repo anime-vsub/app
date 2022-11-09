@@ -1,47 +1,45 @@
 <template>
   <router-link :to="data.path">
-    
-  <q-card flat dense class="bg-transparent">
-    <q-img
-      no-spinner
-      :src="data.image"
-      :ratio="280 / 400"
-      :initial-ratio="744 / 530"
-      class="!rounded-[4px]"
-    >
-      <BottomBlur class="update-info-layer">
-        <template v-if="trending">
-          <!-- <div class="text-[30px]">#{{ trending }}</div> -->
-          <div class="card-title line-clamp-2 h-[42px]">
-            {{ data.name }}
-          </div>
-        </template>
-
-        <span v-if="!data.chap">
-          <template v-if="data.process[0] === data.process[1]">
-            {{ t("_chap-tap", [data.process[0]]) }}
-          </template>
-          <template v-else> {{ t("tap-_chap", [data.process]) }} </template>
-        </span>
-        <span v-else>{{ t("tap-_chap", [data.chap]) }}</span>
-      </BottomBlur>
-      <Quality
-        v-if="data.quality"
-        :class="trending ? 'right-0 absolute' : undefined"
-        >{{ data.quality }}</Quality
+    <q-card flat dense class="bg-transparent">
+      <q-img
+        no-spinner
+        :src="data.image"
+        :ratio="280 / 400"
+        :initial-ratio="744 / 530"
+        class="!rounded-[4px]"
       >
-      <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
-    </q-img>
-    <a v-if="!trending" href="#" class="line-clamp-2 min-h-10 mt-1">{{
-      data.name
-    }}</a>
-    <div v-else class="flex items-center text-weight-medium">
-      {{ data.rate }}
+        <BottomBlur class="update-info-layer">
+          <template v-if="trending">
+            <!-- <div class="text-[30px]">#{{ trending }}</div> -->
+            <div class="card-title line-clamp-2 h-[42px]">
+              {{ data.name }}
+            </div>
+          </template>
 
-      <Star class="inline" />
-    </div>
-  </q-card>
+          <span v-if="!data.chap">
+            <template v-if="data.process[0] === data.process[1]">
+              {{ t("_chap-tap", [data.process[0]]) }}
+            </template>
+            <template v-else> {{ t("tap-_chap", [data.process]) }} </template>
+          </span>
+          <span v-else>{{ t("tap-_chap", [data.chap]) }}</span>
+        </BottomBlur>
+        <Quality
+          v-if="data.quality"
+          :class="trending ? 'right-0 absolute' : undefined"
+          >{{ data.quality }}</Quality
+        >
+        <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
+      </q-img>
+      <a v-if="!trending" href="#" class="line-clamp-2 min-h-10 mt-1">{{
+        data.name
+      }}</a>
+      <div v-else class="flex items-center text-weight-medium">
+        {{ data.rate }}
 
+        <Star class="inline" />
+      </div>
+    </q-card>
   </router-link>
 </template>
 

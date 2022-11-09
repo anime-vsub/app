@@ -1344,9 +1344,11 @@ function remount() {
                 controller.abort()
               },
               onreadystatechange: <(() => void) | null>null,
-              onprogress: <((eventt: {loaded: number; total: number}) => void) | null>null,
-              response: <ArrayBuffer|null>null,
-              responseText: <string|null>null,
+              onprogress: <
+                ((eventt: { loaded: number; total: number }) => void) | null
+              >null,
+              response: <ArrayBuffer | null>null,
+              responseText: <string | null>null,
             })
             const headers = new Headers()
             if (this.context.headers)

@@ -59,9 +59,11 @@
               class="absolute w-full bg-dark-page left-0 max-h-[80vh] overflow-y-auto scrollbar-custom pb-4 top-[calc(100%+8px)] shadow-8"
               v-show="focusing"
               @click.stop.prevent
-              @mousedown="event => {
-                if (event.button === 2) event.preventDefault()
-              }"
+              @mousedown="
+                (event) => {
+                  if (event.button === 2) event.preventDefault()
+                }
+              "
               @contextmenu.prevent.stop
             >
               <li
