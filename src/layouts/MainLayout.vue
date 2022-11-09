@@ -419,7 +419,7 @@
                               dense
                               unelevated
                               icon="close"
-                              @click="notificationStore.remove(item.id)"
+                              @click.stop="notificationStore.remove(item.id)"
                             />
                           </div>
                         </div>
