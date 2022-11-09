@@ -48,13 +48,11 @@ import BottomBlur from "components/BottomBlur.vue"
 import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import ranks from "src/logic/ranks"
 import { useI18n } from "vue-i18n"
-import { useRouter } from "vue-router"
 
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
 
 const { t } = useI18n()
-const router = useRouter()
 
 defineProps<{
   data: TPost
