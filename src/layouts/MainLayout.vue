@@ -64,7 +64,6 @@
                   if (event.button === 2) event.preventDefault()
                 }
               "
-              @contextmenu.prevent.stop
             >
               <li
                 v-if="query"
