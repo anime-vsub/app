@@ -942,7 +942,7 @@ const setArtCurrentTime = (currentTime: number) => {
 // eslint-disable-next-line functional/no-let
 let disableBackupProgressViewing = false
 watch(
-  [() => props.currentChap, () =>  authStore.uid],
+  [() => props.currentChap, () => authStore.uid],
   async ([currentChap, uid]) => {
     if (currentChap && uid) {
       disableBackupProgressViewing = true

@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import { i18n } from "src/boot/i18n"
 import { get } from "src/logic/http"
 import { useAuthStore } from "stores/auth"
 
@@ -7,7 +8,7 @@ export async function AjaxLike(id: string, value: boolean) {
 
   if (!token_name || !token_value)
     // eslint-disable-next-line functional/no-throw-statement
-    throw new Error("TOKEN_REQUIRED_FOR_NOTIFICATION")
+    throw new Error(i18n.global.t("errors.require_login_to", [i18n.global.t("theo-doi-anime-nay")]))
 
   const { data } = await get(
     `/ajax/notification?Bookmark=true&filmId=${id}&type=${
@@ -21,12 +22,12 @@ export async function AjaxLike(id: string, value: boolean) {
   return parseInt(data)
 }
 
-export async function checkIsLile(id: string) {
+export async function checkIsLike(id: string) {
   const { token_name, token_value } = useAuthStore()
 
   if (!token_name || !token_value)
     // eslint-disable-next-line functional/no-throw-statement
-    throw new Error("TOKEN_REQUIRED_FOR_NOTIFICATION")
+    throw new Error("REQUIRE_LOGiN_TO_FETCH_LIKE")
 
   const { data } = await get(`/ajax/notification?Bookmark=true&filmId=${id}`, {
     cookie: `${token_name}=${token_value}`,

@@ -9,6 +9,7 @@ import {
   where,
 } from "@firebase/firestore"
 import { app } from "boot/firebase"
+import { i18n } from "src/boot/i18n"
 import dayjs from "src/logic/dayjs"
 import { useAuthStore } from "stores/auth"
 
@@ -31,8 +32,14 @@ interface ItemData {
 export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
   const authStore = useAuthStore()
 
+  if (!authStore.uid)
   // eslint-disable-next-line functional/no-throw-statement
-  if (!authStore.uid) throw new Error("LOGIN_REQUIRED")
+    throw new Error(
+      i18n.global.t(
+        "errors.require_login_to",
+        i18n.global.t("xem-lich-su-gan-day")
+      )
+    )
 
   const db = getFirestore(app)
 

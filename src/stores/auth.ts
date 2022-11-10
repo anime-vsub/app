@@ -3,6 +3,7 @@ import { defineStore } from "pinia"
 import { parse } from "set-cookie-parser"
 import sha256 from "sha256"
 import { DangNhap } from "src/apis/runs/dang-nhap"
+import { i18n } from "src/boot/i18n"
 import { post } from "src/logic/http"
 
 interface User {
@@ -100,8 +101,13 @@ export const useAuthStore = defineStore("auth", {
       this.deleteUser()
     },
     async changePassword(newPassword: string) {
+      if (!this.user_data)
       // eslint-disable-next-line functional/no-throw-statement
-      if (!this.user_data) throw new Error("YOU_CAN_LOGIN")
+        throw new Error(
+          i18n.global.t("errors.require_login_to", [
+            i18n.global.t("thay-doi-mat-khau"),
+          ])
+        )
 
       const { headers } = await post(
         "/account/info/",

@@ -2,6 +2,7 @@
 import type TypeNormalValueParser from "src/apis/parser/[type_normal]/[value]"
 import Worker from "src/apis/workers/[type_normal]/[value]?worker"
 import { PostWorker } from "src/apis/wrap-worker"
+import { i18n } from "src/boot/i18n"
 import { get } from "src/logic/http"
 import { useAuthStore } from "stores/auth"
 
@@ -10,7 +11,7 @@ export async function TuPhim(page: number) {
 
   if (!token_name || !token_value)
     // eslint-disable-next-line functional/no-throw-statement
-    throw new Error("TOKEN_REQUIRED_FOR_NOTIFICATION")
+    throw new Error(i18n.global.t("errors.require_login_to", [i18n.global.t("xem-anime-da-theo-doi")]))
 
   const { data: html } = await get(`/tu-phim/trang-${page}.html`, {
     cookie: `${token_name}=${token_value}`,

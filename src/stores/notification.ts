@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 import { useQuasar } from "quasar"
 import { AjaxNotification } from "src/apis/runs/ajax/notification"
+import { i18n } from "src/boot/i18n"
 import { post } from "src/logic/http"
 import { ref, shallowRef, watch } from "vue"
 
@@ -66,8 +67,9 @@ export const useNotificationStore = defineStore(
         id,
       })
 
+      if (JSON.parse(data).status !== 1)
       // eslint-disable-next-line functional/no-throw-statement
-      if (JSON.parse(data).status !== 1) throw new Error("DELETE_FAILED")
+        throw new Error(i18n.global.t("errors.xoa-thong-bao-that-bai"))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       refresh(() => {})
     }

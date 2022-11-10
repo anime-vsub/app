@@ -17,14 +17,14 @@ declare module "vue-i18n" {
 }
 /* eslint-enable @typescript-eslint/no-empty-interface */
 
+export const i18n = createI18n({
+  fallbackLocale: "en-US",
+  legacy: false,
+  messages: {
+    "en-US": enUS,
+  },
+})
 export default boot(({ app }) => {
-  const i18n = createI18n({
-    fallbackLocale: "en-US",
-    legacy: false,
-    messages: {
-      "en-US": enUS,
-    },
-  })
   const settingsStore = useSettingsStore()
 
   watch(

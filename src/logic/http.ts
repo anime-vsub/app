@@ -1,11 +1,18 @@
+import { i18n } from "src/boot/i18n"
 import { C_URL } from "src/constants"
 
 export async function get<
   ResponseType extends "arraybuffer" | undefined = undefined
 >(url: string | GetOptions<ResponseType>, headers?: Record<string, string>) {
   console.log("get: ", url)
-  // eslint-disable-next-line functional/no-throw-statement
-  if (!window.Http) throw new Error("EXTENSION_HELPER_REQUIRED")
+
+  if (!window.Http)
+    // eslint-disable-next-line functional/no-throw-statement
+    throw new Error(
+      i18n.global.t(
+        "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
+      )
+    )
 
   const response = (await window.Http.get(
     typeof url === "object"
@@ -64,8 +71,14 @@ export async function post(
       ...headers,
     },
   })
-  // eslint-disable-next-line functional/no-throw-statement
-  if (!window.Http) throw new Error("EXTENSION_HELPER_REQUIRED")
+
+  if (!window.Http)
+    // eslint-disable-next-line functional/no-throw-statement
+    throw new Error(
+      i18n.global.t(
+        "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
+      )
+    )
 
   const response = (await window.Http.post({
     url: C_URL + url,

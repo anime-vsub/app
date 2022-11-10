@@ -3,21 +3,40 @@
   "editor.guides.bracketPairs": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": ["source.fixAll.eslint"],
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
+  "editor.codeActionsOnSave": [
+    "source.fixAll.eslint"
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "vue"
+  ],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["phút"],
+  "cSpell.words": [
+    "phút"
+  ],
   "ionic.previewInEditor": true,
   "vue-i18n.i18nPaths": "src/i18n",
   "i18n-ally.keystyle": "flat",
-  "i18n-ally.localesPaths": ["src/i18n", "src/i18n/messages"],
+  "i18n-ally.localesPaths": [
+    "src/i18n",
+    "src/i18n/messages"
+  ],
   "i18n-ally.extract.ignoredByFiles": {
-    "src/components/BrtPlayer.vue": ["Space", "Space"],
-    "src/pages/[_type-normal]/[value].vue": [" • "],
+    "src/components/BrtPlayer.vue": [
+      "Space",
+      "Space"
+    ],
+    "src/pages/[_type-normal]/[value].vue": [
+      " • "
+    ],
     "src/pages/phim/_season.vue": [
       "${nameSeason} (${chaps[0].name} - ${\n            chaps[chaps.length - 1].name\n          })"
     ],
-    "src/pages/tai-khoan/index.vue": ["bg-dark text-light-9"],
+    "src/pages/tai-khoan/index.vue": [
+      "bg-dark text-light-9"
+    ],
     "src/pages/lich-chieu-phim.vue": [
       "\n          T{{ dayTextToNum(item.day) }}\n          ",
       "/{{ item.month }}"
@@ -25,11 +44,14 @@
     "src/pages/news.vue": [
       "&bull;\n            {{ dayjs(item.time).locale(\"vi\").fromNow() }}\n          "
     ],
-    "src/pages/tai-khoan/edit-profile.vue": ["bg-dark text-light-9"],
+    "src/pages/tai-khoan/edit-profile.vue": [
+      "bg-dark text-light-9"
+    ],
     "src/layouts/MainLayout.vue": [
       "mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub",
       "bg-dark text-light-9"
     ]
   },
-  "scss.lint.unknownAtRules": "ignore"
+  "scss.lint.unknownAtRules": "ignore",
+  "i18n-ally.sourceLanguage": "vi-VN"
 }
