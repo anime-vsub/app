@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write, get, delete: if false;
+        
+    	match /users {
+      	allow read, write, get, delete: if false;
+      }
+      match /users/{hash} {
+      	function hasOnly(keys) {
+        	return request.resource.data.keys().hasOnly(keys)
+        }
+      
+      
+      	allow create: if hasOnly(["name", "email"]) &&
+        	request.resource.data.name != null && 
+          request.resource.data.email != null;
+        allow delete, update: if false;
+        allow get: if true;
+        
+        match /history/{season} {
+        	allow create: if hasOnly(["first", "poster", "seasonName", "name"]) &&
+          	request.resource.data.first is string &&
+          	request.resource.data.poster is string &&
+          	request.resource.data.seasonName is string &&
+          	request.resource.data.name is string
+          allow delete: if false;
+          allow update: if 
+            request.resource.data.last != null &&
+            request.resource.data.last.keys().hasOnly(["chap", "name", "cur", "dur"]) &&
+            request.resource.data.last.chap is string &&
+            request.resource.data.last.name is string &&
+            request.resource.data.last.cur is number &&
+            request.resource.data.last.dur is number;
+          allow read: if true;
+          
+          match /chaps/{chap} {
+          	allow create, update: if hasOnly(["cur", "dur", "name"]) &&
+            	request.resource.data.cur is number &&
+              request.resource.data.dur is number &&
+              request.resource.data.name is string;
+            allow delete: if false;
+            allow read: if true ;
+          }
+        }
+      }
+    }
+  }
+}
