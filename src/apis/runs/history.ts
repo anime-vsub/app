@@ -9,7 +9,6 @@ import {
   where,
 } from "@firebase/firestore"
 import { app } from "boot/firebase"
-import sha256 from "sha256"
 import dayjs from "src/logic/dayjs"
 import { useAuthStore } from "stores/auth"
 
@@ -32,21 +31,12 @@ interface ItemData {
 export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
   const authStore = useAuthStore()
 
-  // eslint-disable-next-line camelcase
-  const user_data = authStore.user_data
-
-  // eslint-disable-next-line camelcase, functional/no-throw-statement
-  if (!user_data) throw new Error("LOGIN_REQUIRED")
+  // eslint-disable-next-line functional/no-throw-statement
+  if (!authStore.uid) throw new Error("LOGIN_REQUIRED")
 
   const db = getFirestore(app)
 
-  const historyRef = collection(
-    db,
-    "users",
-    // eslint-disable-next-line camelcase
-    sha256(user_data.email + user_data.name),
-    "history"
-  )
+  const historyRef = collection(db, "users", authStore.uid, "history")
   const q = query(
     historyRef,
     where("timestamp", "!=", null),

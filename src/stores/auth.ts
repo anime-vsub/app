@@ -1,6 +1,7 @@
 import cookie from "js-cookie"
 import { defineStore } from "pinia"
 import { parse } from "set-cookie-parser"
+import sha256 from "sha256"
 import { DangNhap } from "src/apis/runs/dang-nhap"
 import { post } from "src/logic/http"
 
@@ -21,6 +22,10 @@ export const useAuthStore = defineStore("auth", {
   getters: {
     user(state) {
       return state.user_data
+    },
+    uid(state) {
+      if (!state.user_data) return null
+      return sha256(state.user_data.email + state.user_data.name)
     },
     isLogged(state) {
       return !!state.token_name && !!state.token_value && !!state.user_data

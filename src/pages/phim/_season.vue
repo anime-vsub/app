@@ -403,7 +403,6 @@ import {
   QVideo,
   useQuasar,
 } from "quasar"
-import sha256 from "sha256"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
@@ -899,17 +898,11 @@ const sources = computed<Source[] | undefined>(() =>
 async function getProgressChaps(
   currentSeason: string
 ): Promise<Map<string, { cur: number; dur: number }> | null> {
-  // eslint-disable-next-line camelcase
-  const { user_data } = authStore
-  // eslint-disable-next-line camelcase
-  if (!user_data) {
-    return null
-  }
+  if (!authStore.uid) return null
 
   const db = getFirestore(app)
 
-  // eslint-disable-next-line camelcase
-  const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
+  const userRef = doc(db, "users", authStore.uid)
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const seasonRef = doc(userRef, "history", currentSeason!)
   const chapRef = collection(seasonRef, "chaps")

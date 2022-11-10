@@ -767,7 +767,6 @@ import {
   throttle,
   useQuasar,
 } from "quasar"
-import sha256 from "sha256"
 import { playbackRates } from "src/constants"
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
@@ -943,16 +942,13 @@ const setArtCurrentTime = (currentTime: number) => {
 // eslint-disable-next-line functional/no-let
 let disableBackupProgressViewing = false
 watch(
-  [() => props.currentChap, () => authStore.user_data],
-  // eslint-disable-next-line camelcase
-  async ([currentChap, user_data]) => {
-    // eslint-disable-next-line camelcase
-    if (currentChap && user_data) {
+  [() => props.currentChap, () =>  authStore.uid],
+  async ([currentChap, uid]) => {
+    if (currentChap && uid) {
       disableBackupProgressViewing = true
       setArtCurrentTime(0)
 
-      // eslint-disable-next-line camelcase
-      const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
+      const userRef = doc(db, "users", uid)
       const seasonRef = doc(
         userRef,
         "history",
@@ -1084,8 +1080,8 @@ watch(
     // eslint-disable-next-line camelcase
     if (!user_data || !currentSeason) return
 
-    // eslint-disable-next-line camelcase
-    const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const userRef = doc(db, "users", authStore.uid!)
 
     if (!(await getDoc(userRef)).exists()) {
       console.log("create new user")
