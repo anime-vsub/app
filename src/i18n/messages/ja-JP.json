@@ -52,6 +52,7 @@
   "email": "Eメール",
   "enter": "入る",
   "ep-_chap": "EP {0}",
+  "errors.danh-sach-phat-khong-ton-tai": "プレイリストが存在しません",
   "errors.loi-khong-xac-dinh-khi": "不明なエラー",
   "errors.require_login_to": "{0} にログインする必要があります",
   "errors.xoa-thong-bao-that-bai": "失敗メッセージのクリア",
@@ -100,6 +101,7 @@
   "the-loai": "カテゴリー：",
   "theo-doi": "従う",
   "theo-doi-anime-nay": "このアニメを見る",
+  "theo-vao-danh-sach-phat": "プレイリストに追加する",
   "thinh-hanh": "人気",
   "thoat": "出口",
   "thong-bao": "通知する",
@@ -133,5 +135,6 @@
   "xem-tat-ca": "すべてを見る",
   "xem-them": "続きを見る",
   "xem-thong-bao": "発表を見る",
+  "xoa-danh-sach-phat": "プレイリストを削除",
   "yeu-thich": "お気に入り"
 }

@@ -52,6 +52,7 @@
   "email": "Email",
   "enter": "Enter",
   "ep-_chap": "EP {0}",
+  "errors.danh-sach-phat-khong-ton-tai": "Danh sách phát không tồn tại",
   "errors.loi-khong-xac-dinh-khi": "Lỗi không xác định khi",
   "errors.require_login_to": "Bạn phải đăng nhập để {0}",
   "errors.xoa-thong-bao-that-bai": "Xóa thông báo thất bại",
@@ -100,6 +101,7 @@
   "the-loai": "Thể loại:",
   "theo-doi": "Theo dõi",
   "theo-doi-anime-nay": "theo dõi anime này",
+  "theo-vao-danh-sach-phat": "thêm vào danh sách phát",
   "thinh-hanh": "Thịnh hành",
   "thoat": "Thoát",
   "thong-bao": "Thông báo",
@@ -133,5 +135,6 @@
   "xem-tat-ca": "Xem tất cả",
   "xem-them": "Xem thêm",
   "xem-thong-bao": "xem thông báo",
+  "xoa-danh-sach-phat": "xóa danh sách phát",
   "yeu-thich": "Yêu thích"
 }

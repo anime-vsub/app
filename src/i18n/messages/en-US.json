@@ -52,6 +52,7 @@
   "email": "Email",
   "enter": "Enter",
   "ep-_chap": "EP {0}",
+  "errors.danh-sach-phat-khong-ton-tai": "Playlist does not exist",
   "errors.loi-khong-xac-dinh-khi": "Unknown error when",
   "errors.require_login_to": "You must be logged in to {0}",
   "errors.xoa-thong-bao-that-bai": "Clear failure message",
@@ -100,6 +101,7 @@
   "the-loai": "Category:",
   "theo-doi": "Follow",
   "theo-doi-anime-nay": "watch this anime",
+  "theo-vao-danh-sach-phat": "add to playlist",
   "thinh-hanh": "Popular",
   "thoat": "Exit",
   "thong-bao": "Notify",
@@ -133,5 +135,6 @@
   "xem-tat-ca": "See all",
   "xem-them": "see more",
   "xem-thong-bao": "see announcement",
+  "xoa-danh-sach-phat": "delete playlist",
   "yeu-thich": "Favourite"
 }
