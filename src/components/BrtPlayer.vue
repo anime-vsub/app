@@ -1749,7 +1749,8 @@ function skipOpening() {
 }
 useEventListener(window, "keydown", (event: KeyboardEvent) => {
   switch (event.code) {
-    case "Space": {
+    case "Space":
+    case "KeyK": {
       if (!checkContentEditable(event.target as Element | null))
         event.preventDefault()
       const playing = artPlaying.value
