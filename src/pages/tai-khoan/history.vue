@@ -97,7 +97,6 @@ import { parseTime } from "src/logic/parseTime"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { useRouter } from "vue-router"
 
 const { t } = useI18n()
 useHead(
@@ -121,8 +120,6 @@ useHead(
     }
   })
 )
-
-const router = useRouter()
 
 const { loading, data: histories, run } = useRequest(() => History())
 
