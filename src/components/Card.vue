@@ -30,9 +30,9 @@
       >
       <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
     </q-img>
-    <a v-if="!trending" href="#" class="line-clamp-2 min-h-10 mt-1">{{
+    <span v-if="!trending" class="a line-clamp-2 min-h-10 mt-1">{{
       data.name
-    }}</a>
+    }}</span>
     <div v-else class="flex items-center text-weight-medium">
       {{ data.rate }}
 
@@ -59,7 +59,7 @@ defineProps<{
 </script>
 
 <style lang="scss" scoped>
-a {
+.a {
   text-decoration: none;
   user-select: none;
   color: rgb(255, 255, 255);
