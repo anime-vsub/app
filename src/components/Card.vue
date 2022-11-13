@@ -64,7 +64,7 @@ defineProps<{
   user-select: none;
   color: rgb(255, 255, 255);
 
-  height: 40px;
+  // height: 40px;
   position: relative;
   padding: 0.1rem 0px 0px;
   padding: {
