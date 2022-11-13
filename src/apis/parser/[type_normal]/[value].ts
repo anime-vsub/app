@@ -12,8 +12,8 @@ export default function TypeNormalValue(
     .find(".TPostMv")
     .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
-  const curPage = parseInt($(".current").attr("data") ?? "1")
-  const maxPage = parseInt($(".larger:last-child").attr("data") ?? "1")
+  const curPage = parseInt($(".current").attr("data") ?? $(".current").attr("title") ?? "1")
+  const maxPage = parseInt($(".larger:last-child, .wp-pagenavi > *:last-child").attr("data") ?? $(".larger:last-child, .wp-pagenavi > *:last-child").attr("title") ?? "1")
 
   if (onlyItems) {
     return { items, curPage, maxPage }
