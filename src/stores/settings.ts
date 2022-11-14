@@ -9,6 +9,7 @@ export const useSettingsStore = defineStore("settings", {
       volume: 1,
     },
     locale: getNavigatorLanguage(),
+    infinityScroll: true
   }),
   persist: true,
 })

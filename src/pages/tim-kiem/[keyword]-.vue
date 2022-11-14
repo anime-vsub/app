@@ -1,9 +1,12 @@
 <template>
-  <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
+  <q-page-sticky position="top" class="bg-dark-page z-10 children:w-full children:py-2 children:!flex children:justify-between">
     <div class="text-[16px] py-2 px-4">
       {{ t("tim-kiem") }}
       <span class="text-weight-medium">{{ route.params.keyword }}</span>
+      <span v-if="data" class="text-gray-300 text-[14px]"> &bull;
+      {{ data?.maxPage }} trang </span>
     </div>
+      <pagination.Pagination :max="data?.maxPage" class="mr-4" />
   </q-page-sticky>
 
   <div class="pt-[32px]">
@@ -11,21 +14,11 @@
     <template v-else-if="data">
       <ScreenNotFound v-if="data.items.length === 0" />
 
-      <q-infinite-scroll
-        v-else
-        ref="infiniteScrollRef"
-        @load="onLoad"
-        :offset="250"
-        class="px-4"
-      >
-        <GridCard :items="data.items" />
 
-        <template v-slot:loading>
-          <div class="row justify-center q-my-md">
-            <q-spinner class="c--main" size="40px" />
-          </div>
-        </template>
-      </q-infinite-scroll>
+        <pagination.InfiniteScroll v-else
+                ref="infiniteScrollRef" @load="onLoad">
+          <GridCard :items="data.items" />
+        </pagination.InfiniteScroll>
     </template>
     <ScreenError v-else @click:retry="run" />
   </div>
@@ -42,11 +35,14 @@ import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
+import pagination from "components/pagination"
+import { usePage } from "src/composibles/page"
 
 const { t } = useI18n()
 const route = useRoute()
 const infiniteScrollRef = ref()
+const page = usePage()
 useHead(
   computed(() => {
     const title = t("tim-kiem-_keyword", [route.params.keyword])
@@ -70,9 +66,9 @@ useHead(
 )
 
 const { data, loading, run } = useRequest(
-  () => TypeNormalValue("tim-kiem", route.params.keyword, 1, true),
+  () => TypeNormalValue("tim-kiem", route.params.keyword, page.value, true),
   {
-    refreshDeps: [() => route.params.keyword],
+    refreshDeps: [() => route.params.keyword, page],
     refreshDepsAction() {
       run()
       infiniteScrollRef.value?.reset()

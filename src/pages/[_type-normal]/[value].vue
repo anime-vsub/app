@@ -1,12 +1,15 @@
 <template>
-  <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
-    <div class="text-[16px] py-2 px-4">
-      {{ title }}
+  <q-page-sticky position="top" class="bg-dark-page z-10 children:w-full children:py-2 children:!flex children:justify-between">
+      <div class="text-[16px] py-2 px-4">
+        {{ title }}
 
-      <span v-if="textFilter" class="text-grey text-[14px]"
-        ><span class="mx-1">&bull;</span>{{ textFilter }}</span
-      >
-    </div>
+        <span v-if="textFilter" class="text-grey text-[14px]"
+          ><span class="mx-1">&bull;</span>{{ textFilter }}</span
+        >
+      </div>
+
+
+      <pagination.Pagination :max="data?.maxPage" class="mr-4" />
   </q-page-sticky>
 
   <div class="pt-[32px]">
@@ -122,21 +125,10 @@
     <template v-else-if="data">
       <ScreenNotFound v-if="data.items.length === 0" />
 
-      <q-infinite-scroll
-        v-else
-        ref="infiniteScrollRef"
-        @load="onLoad"
-        :offset="250"
-        class="px-4"
-      >
-        <GridCard :items="data.items" />
-
-        <template v-slot:loading>
-          <div class="row justify-center q-my-md">
-            <q-spinner class="c--main" size="40px" />
-          </div>
-        </template>
-      </q-infinite-scroll>
+        <pagination.InfiniteScroll v-else
+                ref="infiniteScrollRef" @load="onLoad">
+          <GridCard :items="data.items" />
+        </pagination.InfiniteScroll>
     </template>
     <ScreenError v-else @click:retry="run" />
   </div>
@@ -154,10 +146,15 @@ import { computed, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
+import { useSettingsStore } from "stores/settings"
+import pagination from "components/pagination"
+import { usePage } from "src/composibles/page"
 
 const { t } = useI18n()
 const route = useRoute()
 const infiniteScrollRef = ref<QInfiniteScroll>()
+const settingsStore = useSettingsStore()
+const page = usePage()
 
 const genres = reactive<string[]>([])
 const seaser = ref<string | null>(null)
@@ -171,9 +168,7 @@ const defaultsOptions = computed<{
   seaser?: string
   year?: string
 }>(() => {
-  // eslint-disable-next-line camelcase
-  const { type_normal, value } = route.params as Record<string, string>
-
+  const { type_normal , value } = route.params
   // ":type_normal(quoc-gia|tag)/:value",
   // [":type_normal(season)/:value+"
   // eslint-disable-next-line camelcase
@@ -222,7 +217,9 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   )
 }
 
-const { data, run, loading } = useRequest(() => fetchTypeNormalValue(1, false))
+const { data, run, loading } = useRequest(() => fetchTypeNormalValue(page.value, false), {
+  refreshDeps: [ page ]
+})
 
 const title = ref("")
 const watcherData = watch(data, (data) => {
@@ -284,15 +281,22 @@ const textFilter = computed(() => {
 })
 
 watch(
-  [genres, seaser, sorter, typer, year, defaultsOptions],
+  [genres, seaser, sorter, typer, year],
   () => {
+    console.log("refresh by watcher options")
     run()
     infiniteScrollRef.value?.reset()
   },
-  {
-    deep: true,
-  }
+  { deep: true }
 )
+watch(defaultsOptions, (newVal, oldVal) => {
+  if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+    console.log("refresh by watcher options")
+
+    run()
+    infiniteScrollRef.value?.reset()
+  }
+})
 
 // eslint-disable-next-line functional/no-let
 let nextPage = 2

@@ -564,9 +564,29 @@
                 </q-item>
 
                 <q-item
+                  clickable
+                  v-ripple class="rounded-xl"
+                  @click="tabMenuAccountActive = 'pagination'"
+                >
+                  <q-item-section avatar class="min-w-0">
+                    <Icon
+                      icon="fluent:phone-vertical-scroll-24-regular"
+                      width="20"
+                      height="20"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Cuộn vô hạn</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-toggle v-model="settingsStore.infinityScroll" dense color="main" />
+                  </q-item-section>
+                </q-item>
+
+                <q-item
                   v-if="authStore.isLogged"
                   clickable
-                  v-ripple
+                  v-ripple class="rounded-xl"
                   @click="logout"
                 >
                   <q-item-section avatar class="min-w-0">
