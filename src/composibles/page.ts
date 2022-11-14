@@ -11,6 +11,10 @@ export function usePage() {
 
     const { page } = route.query
 
-    return (page && isFinite(page) ? parseInt(page) : undefined) ?? 1
+    return (
+      (page && isFinite(page as unknown as number)
+        ? parseInt(page as string)
+        : undefined) ?? 1
+    )
   })
 }

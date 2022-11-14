@@ -5,7 +5,9 @@ const routes: RouteRecordRaw[] = [
     path: "/:mainPath(.*)*/trang-:page(\\d+)",
     alias: ["/:mainPath(.*)*/trang-:page(\\d+).html"],
     redirect(to) {
-      return `/${to.params.mainPath.join("/")}?page=${to.params.page}`
+      return `/${(to.params.mainPath as string[]).join("/")}?page=${
+        to.params.page
+      }`
     },
   },
   {
