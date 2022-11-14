@@ -4,7 +4,7 @@
       class="bg-dark-page min-w-[300px] max-h-[647px] max-w-[664px] px-6 rounded-xl"
     >
       <q-card-section class="py-2 flex items-center justify-between px-0">
-        <div class="text-[16px]">Lưu vào...</div>
+        <div class="text-[16px]">{{ t("luu-vao") }}</div>
         <q-btn round flat icon="close" v-close-popup />
       </q-card-section>
 
@@ -16,7 +16,7 @@
           <q-spinner color="main" size="40px" />
         </div>
         <div v-else-if="playlists === null" class="pt-3 pb-9 text-center px-0">
-          Không có danh sách phát nào
+          {{ t("khong-co-danh-sach-phat-nao") }}
         </div>
         <q-list v-else class="px-0">
           <q-item v-for="item in playlists" :key="item.id" class="px-0">
@@ -32,7 +32,9 @@
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ item.name }}</q-item-label>
-              <q-item-label caption>{{ item.size }} anime</q-item-label>
+              <q-item-label caption>{{
+                t("_size-anime", [item.size])
+              }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -48,7 +50,7 @@
             <Icon icon="fluent:add-24-regular" width="20" height="20" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Tạo danh sách phát mới</q-item-label>
+            <q-item-label>{{ t("tao-danh-sach-phat-moi") }}</q-item-label>
           </q-item-section>
         </q-item>
         <div v-else class="mt-4">
@@ -56,7 +58,7 @@
             v-model="nameNewPlaylist"
             bottom-slots
             label=""
-            placeholder="Nhập theo danh sách phát..."
+            :placeholder="t('nhap-ten-danh-sach-phat')"
             counter
             maxlength="150"
             dense
@@ -72,7 +74,7 @@
             @keypress.enter="createNewPlaylist"
           >
             <template v-slot:label>
-              <div class="text-[18px] text-white mb-3">Tên</div>
+              <div class="text-[18px] text-white mb-3">{{ t("ten") }}</div>
             </template>
           </q-input>
 
@@ -83,10 +85,15 @@
               flat
               no-caps
               @click="creatingPlaylist = false"
-              >Hủy</q-btn
+              >{{ t("huy") }}</q-btn
             >
-            <q-btn color="blue" rounded flat no-caps @click="createNewPlaylist"
-              >Tạo</q-btn
+            <q-btn
+              color="blue"
+              rounded
+              flat
+              no-caps
+              @click="createNewPlaylist"
+              >{{ t("tao") }}</q-btn
             >
           </q-card-actions>
         </div>
@@ -101,6 +108,7 @@ import { computedAsync } from "@vueuse/core"
 import { useQuasar } from "quasar"
 import { usePlaylistStore } from "stores/playlist"
 import { ref } from "vue"
+import { useI18n } from "vue-i18n"
 
 const props = defineProps<{
   exists: (id: string) => Promise<boolean> | boolean
@@ -112,6 +120,7 @@ const emit = defineEmits<{
   (name: "after-create-playlist", idPlaylist: string): Promise<void> | void
 }>()
 const $q = useQuasar()
+const { t } = useI18n()
 
 const playlistStore = usePlaylistStore()
 
@@ -150,7 +159,7 @@ async function createNewPlaylist() {
     await emit("after-create-playlist", id)
     $q.notify({
       position: "bottom-right",
-      message: `Đã tạo danh sách phát ${nameNewPlaylist.value}`,
+      message: t("da-tao-danh-sach-phat-_name", [nameNewPlaylist.value]),
     })
 
     creatingPlaylist.value = false

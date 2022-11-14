@@ -55,7 +55,7 @@
                 <q-input
                   v-model="newName"
                   bottom-slots
-                  placeholder="Tiêu đề"
+                  :placeholder="t('tieu-de')"
                   counter
                   maxlength="150"
                   dense
@@ -72,10 +72,16 @@
                 <div
                   class="flex items-center justify-end mt-1 mr-[-16px] text-[16px]"
                 >
-                  <q-btn rounded unelevated no-caps @click="editingName = false"
-                    >Hủy</q-btn
+                  <q-btn
+                    rounded
+                    unelevated
+                    no-caps
+                    @click="editingName = false"
+                    >{{ t("huy") }}</q-btn
                   >
-                  <q-btn rounded unelevated no-caps type="submit">Lưu</q-btn>
+                  <q-btn rounded unelevated no-caps type="submit">{{
+                    t("luu")
+                  }}</q-btn>
                 </div>
               </form>
 
@@ -113,7 +119,9 @@
                         />
                       </q-item-section>
                       <q-item-section>
-                        <q-item-label>Xóa danh sách phát</q-item-label>
+                        <q-item-label>{{
+                          t("xoa-danh-sach-phat")
+                        }}</q-item-label>
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -159,7 +167,7 @@
               <q-input
                 v-model="newDescription"
                 bottom-slots
-                placeholder="Mô tả"
+                :placeholder="t('mo-ta')"
                 counter
                 maxlength="5000"
                 dense
@@ -178,9 +186,11 @@
                   unelevated
                   no-caps
                   @click="editingDescription = false"
-                  >Hủy</q-btn
+                  >{{ t("huy") }}</q-btn
                 >
-                <q-btn rounded unelevated no-caps type="submit">Lưu</q-btn>
+                <q-btn rounded unelevated no-caps type="submit">{{
+                  t("luu")
+                }}</q-btn>
               </div>
             </form>
           </div>
@@ -202,7 +212,7 @@
             height="23"
             class="mr-2"
           />
-          <span class="text-[16px]">Sắp xếp</span>
+          <span class="text-[16px]">{{ t("sap-xep") }}</span>
 
           <q-menu class="rounded-xl bg-[rgba(35,35,35,1)]" auto-close>
             <q-card class="transparent">
@@ -213,7 +223,7 @@
                   @click="sorter = 'asc'"
                 >
                   <q-item-section>
-                    <q-item-label>Ngày thêm (mới nhất)</q-item-label>
+                    <q-item-label>{{ t("ngay-them-moi-nhat") }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item
@@ -222,7 +232,7 @@
                   @click="sorter = 'desc'"
                 >
                   <q-item-section>
-                    <q-item-label>Ngày thêm (cũ nhất)</q-item-label>
+                    <q-item-label>{{ t("ngay-them-cu-nhat") }}</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -253,9 +263,9 @@
             >
             <div class="text-grey mt-1">
               <template v-if="item.nameSeason"
-                >{{ item.nameSeason }} tập
+                >{{ t("_season-tap", [item.nameSeason]) }}
               </template>
-              <template v-else>Tập</template>
+              <template v-else>{{ t("Tap") }}</template>
               {{ item.nameChap }}
             </div>
           </div>
@@ -283,7 +293,9 @@
                         />
                       </q-item-section>
                       <q-item-section>
-                        <q-item-label>Thêm vào danh sách phát</q-item-label>
+                        <q-item-label>{{
+                          t("them-vao-danh-sach-phat")
+                        }}</q-item-label>
                       </q-item-section>
                     </q-item>
                     <q-item
@@ -298,7 +310,9 @@
                         />
                       </q-item-section>
                       <q-item-section>
-                        <q-item-label>Xóa khỏi danh sách phát</q-item-label>
+                        <q-item-label>{{
+                          t("xoa-khoi-danh-sach-phat")
+                        }}</q-item-label>
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -315,7 +329,7 @@
         </template>
       </q-infinite-scroll>
       <div v-else class="text-center pt-4">
-        Chưa có video nào trong danh sách phát này
+        {{ t("chua-co-video-nao-trong-danh-sach-phat-nay") }}
       </div>
     </div>
   </div>
@@ -361,7 +375,7 @@ const { data: metaPlaylist, run: runGetMetaPlaylist } = useRequest(
 
     const meta = playlists.find((item) => item.id === route.params.playlist)
     // eslint-disable-next-line functional/no-throw-statement
-    if (!meta) throw new Error("Danh sách phát không tồn tại")
+    if (!meta) throw new Error(t("danh-sach-phat-khong-ton-tai"))
 
     const poster = await playlistStore.getPosterPlaylist(meta.id)
 
@@ -447,7 +461,7 @@ async function onLoad(index: number, done: (end: boolean) => void) {
 
   const meta = playlists.find((item) => item.id === route.params.playlist)
   // eslint-disable-next-line functional/no-throw-statement
-  if (!meta) throw new Error("Danh sách phát không tồn tại")
+  if (!meta) throw new Error(t("danh-sach-phat-khong-ton-tai"))
 
   const moviesMore = await playlistStore
     .getAnimesFromPlaylist(
@@ -494,12 +508,12 @@ watch(editingDescription, (editing) => {
 async function updateNewName() {
   try {
     // eslint-disable-next-line functional/no-throw-statement
-    if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
+    if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
     await playlistStore.renamePlaylist(metaPlaylist.value.id, newName.value)
     editingName.value = false
     $q.notify({
       position: "bottom-right",
-      message: "Đã cập nhật tên danh sách phát",
+      message: t("da-cap-nhat-ten-danh-sach-phat"),
     })
   } catch (err) {
     $q.notify({
@@ -511,7 +525,7 @@ async function updateNewName() {
 async function updateNewDescription() {
   try {
     // eslint-disable-next-line functional/no-throw-statement
-    if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
+    if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
     await playlistStore.setDescriptionPlaylist(
       metaPlaylist.value.id,
       newDescription.value
@@ -519,7 +533,7 @@ async function updateNewDescription() {
     editingDescription.value = false
     $q.notify({
       position: "bottom-right",
-      message: "Đã cập nhật mô tả danh sách phát",
+      message: t("da-cap-nhat-mo-ta-danh-sach-phat"),
     })
   } catch (err) {
     $q.notify({
@@ -532,13 +546,13 @@ async function updateNewDescription() {
 async function removePlaylist() {
   try {
     // eslint-disable-next-line functional/no-throw-statement
-    if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
+    if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
     await playlistStore.deletePlaylist(metaPlaylist.value.id)
     editingDescription.value = false
-    router.push("/feed")
+    router.push("/tai-khoan/follow")
     $q.notify({
       position: "bottom-right",
-      message: "Đã xóa danh sách phát",
+      message: t("da-xoa-danh-sach-phat"),
     })
   } catch (err) {
     $q.notify({
@@ -569,7 +583,7 @@ async function addAnimePlaylist(idPlaylist: string) {
     )
     $q.notify({
       position: "bottom-right",
-      message: "Đã theo vào danh sách phát",
+      message: t("da-theo-vao-danh-sach-phat"),
     })
   } catch (err) {
     $q.notify({
@@ -587,7 +601,7 @@ async function removeAnimePlaylist(
     await playlistStore.deleteAnimeFromPlaylist(idPlaylist, season)
     $q.notify({
       position: "bottom-right",
-      message: "Đã xoá khỏi danh sách phát",
+      message: t("da-xoa-khoi-danh-sach-phat"),
     })
     movies.value = movies.value?.filter((item) => item.season !== season)
   } catch (err) {

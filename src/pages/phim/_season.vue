@@ -1100,7 +1100,7 @@ async function addAnimePlaylist(idPlaylist: string) {
     })
     $q.notify({
       position: "bottom-right",
-      message: "Đã theo vào danh sách phát",
+      message: t("da-theo-vao-danh-sach-phat"),
     })
   } catch (err) {
     $q.notify({
@@ -1116,7 +1116,7 @@ async function removeAnimePlaylist(idPlaylist: string) {
     await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)
     $q.notify({
       position: "bottom-right",
-      message: "Đã xoá khỏi danh sách phát",
+      message: t("da-xoa-khoi-danh-sach-phat"),
     })
   } catch (err) {
     $q.notify({
