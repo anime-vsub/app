@@ -365,7 +365,7 @@
             <q-card class="bg-dark-page max-w-[435px]">
               <q-card-section>
                 <q-list v-if="notificationStore.loading" class="bg-transparent">
-                  <q-item v-for="item in 12" :key="item">
+                  <q-item v-for="item in 12" :key="item" class="rounded-xl">
                     <q-item-section>
                       <q-item-label class="text-subtitle1 text-weight-normal">
                         <q-skeleton type="text" width="40%" />
@@ -475,7 +475,7 @@
             <q-card class="transparent w-[280px] px-2 pb-3">
               <q-list v-if="tabMenuAccountActive === 'normal'">
                 <template v-if="authStore.isLogged">
-                  <q-item>
+                  <q-item class="rounded-xl">
                     <q-item-section avatar>
                       <q-avatar size="45px">
                         <img
@@ -503,7 +503,7 @@
                     clickable
                     v-ripple
                     to="/tai-khoan/edit-profile"
-                    active-class=""
+                    active-class="" class="rounded-xl"
                   >
                     <q-item-section avatar class="min-w-0">
                       <Icon
@@ -518,7 +518,7 @@
                   </q-item>
                 </template>
                 <template v-else>
-                  <q-item>
+                  <q-item class="rounded-xl">
                     <q-item-section>
                       {{ t("cai-dat") }}
                     </q-item-section>
@@ -529,7 +529,7 @@
 
                 <q-item
                   clickable
-                  v-ripple
+                  v-ripple class="rounded-xl"
                   @click="tabMenuAccountActive = 'locale'"
                 >
                   <q-item-section avatar class="min-w-0">
@@ -545,7 +545,7 @@
 
                 <q-item
                   clickable
-                  v-ripple
+                  v-ripple class="rounded-xl"
                   @click="tabMenuAccountActive = 'setting'"
                 >
                   <q-item-section avatar class="min-w-0">
@@ -579,7 +579,7 @@
               </q-list>
 
               <q-list v-if="tabMenuAccountActive === 'locale'">
-                <q-item>
+                <q-item class="rounded-xl">
                   <q-item-section avatar class="min-w-0">
                     <q-btn
                       round
@@ -605,7 +605,7 @@
                   v-for="{ name, code } in languages"
                   :key="code"
                   clickable
-                  v-ripple
+                  v-ripple class="rounded-xl"
                   @click="settingsStore.locale = code"
                 >
                   <q-item-section avatar class="min-w-0">
@@ -622,7 +622,7 @@
               </q-list>
 
               <q-list v-if="tabMenuAccountActive === 'setting'">
-                <q-item>
+                <q-item class="rounded-xl">
                   <q-item-section avatar class="min-w-0">
                     <q-btn
                       round
@@ -642,7 +642,7 @@
                   </q-item-section>
                 </q-item>
 
-                <q-item clickable v-ripple>
+                <q-item clickable v-ripple class="rounded-xl">
                   <q-item-section>
                     <q-item-label>{{ t("tu-dong-phat") }}</q-item-label>
                   </q-item-section>
@@ -654,7 +654,7 @@
                     />
                   </q-item-section>
                 </q-item>
-                <q-item clickable v-ripple>
+                <q-item clickable v-ripple class="rounded-xl">
                   <q-item-section>
                     <q-item-label>{{
                       t("nhac-toi-tam-dung-xem")
