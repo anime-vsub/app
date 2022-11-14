@@ -1,6 +1,8 @@
 <template>
   <div v-if="metaPlaylist && movies" class="row">
-    <div class="h-[calc(100vh-58px)] w-[360px] py-4">
+    <div class="w-[360px]">
+      <div class="fixed h-[calc(100vh-58px)] w-[360px] py-4 ">
+        
       <div class="relative h-full bg-[#594d42] px-5 py-6 overflow-hidden rounded-[15px]">
         <div class="absolute top-0 left-0 right-0 bottom-0">
 
@@ -63,7 +65,7 @@
             </q-menu>
           </q-btn>
 
-          <div class="row mt-4">
+          <!-- <div class="row mt-4">
             <div class="col-6 pr-1">
               <q-btn rounded unelevated class="w-full bg-[rgba(255,255,255,0.9)] text-dark" no-caps>
                 <div class="w-full line-clamp-1 text-left px-5">
@@ -80,7 +82,7 @@
                 </div>
               </q-btn>
             </div>
-          </div>
+          </div> -->
 
           <div v-if="!editingDescription" class="mt-6 flex">
             <p class="flex-1">{{metaPlaylist.description ?? "Không có thông tin mô tả"}}</p>
@@ -101,6 +103,7 @@
         </div>
       </div>
     </div>
+      </div>
 
     <div v-if="movies" class="col pl-4 pt-4">
       <q-infinite-scroll v-if="movies.length > 0" ref="infiniteScrollRef" @load="onLoad" :offset="250">
