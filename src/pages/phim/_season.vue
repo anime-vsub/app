@@ -1096,7 +1096,7 @@ const showDialogAddToPlaylist = ref(false)
       await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)
       $q.notify({
         position: "bottom-right",
-        message: `Đã xoá khởi danh sách phát`
+        message: `Đã xoá khỏi danh sách phát`
       })
     }catch(err) {
       $q.notify({

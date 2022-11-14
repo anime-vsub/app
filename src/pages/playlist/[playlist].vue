@@ -2,7 +2,7 @@
   <div v-if="metaPlaylist && movies" class="row">
     <div class="w-[360px]">
       <div class="fixed h-[calc(100vh-58px)] w-[360px] py-4 ">
-        
+
       <div class="relative h-full bg-[#594d42] px-5 py-6 overflow-hidden rounded-[15px]">
         <div class="absolute top-0 left-0 right-0 bottom-0">
 
@@ -276,13 +276,7 @@
     data: movies,
     run: runGetMovies
   } = useRequest(() => {
-    const {
-      playlists
-    } = playlistStore
-    if (!playlists) return playlists;
-
-    if (!playlists.find(item => item.id === route.params.playlist)) throw new Error("Danh sách phát không tồn tại")
-
+    console.log("larger movies")
     infiniteScrollRef.value?.reset()
 
     return playlistStore.getAnimesFromPlaylist(route.params.playlist, undefined, sorter.value)
@@ -296,7 +290,7 @@
         }
       }))
   }, {
-    refreshDeps: [() => playlistStore.playlists, () => route.params.playlist, sorter],
+    refreshDeps: [() => route.params.playlist, sorter],
     refreshDepsAction() {
       runGetMovies()
     }
@@ -464,8 +458,9 @@
       await playlistStore.deleteAnimeFromPlaylist(idPlaylist, season)
       $q.notify({
         position: "bottom-right",
-        message: `Đã xoá khởi danh sách phát`
+        message: `Đã xoá khỏi danh sách phát`
       })
+      movies.value = movies.value.filter(item => item.season !== season)
     } catch (err) {
       $q.notify({
         position: "bottom-right",
