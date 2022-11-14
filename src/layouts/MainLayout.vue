@@ -301,9 +301,9 @@
                       <span class="line-clamp-3 mt-1">{{ item.name }}</span>
                       <div class="text-grey mt-1">
                         <template v-if="item.seasonName"
-                          >{{ t('_season-tap', [item.seasonName]) }}
+                          >{{ t("_season-tap", [item.seasonName]) }}
                         </template>
-                        <template v-else>{{ t('Tap') }}</template>
+                        <template v-else>{{ t("Tap") }}</template>
                         {{ item.last.name }}
                       </div>
                       <div class="text-grey mt-2">
@@ -566,11 +566,7 @@
                   </q-item-section>
                 </q-item>
 
-                <q-item
-                  clickable
-                  v-ripple
-                  class="rounded-xl"
-                >
+                <q-item clickable v-ripple class="rounded-xl">
                   <q-item-section avatar class="min-w-0">
                     <Icon
                       icon="fluent:phone-vertical-scroll-24-regular"
@@ -579,7 +575,7 @@
                     />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>{{ t('cuon-vo-han') }}</q-item-label>
+                    <q-item-label>{{ t("cuon-vo-han") }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <q-toggle

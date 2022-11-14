@@ -17,10 +17,9 @@
 </template>
 
 <script lang="ts" setup>
-import { QInfiniteScroll } from "quasar";
+import { QInfiniteScroll } from "quasar"
 import { useSettingsStore } from "stores/settings"
 import { defineExpose, ref } from "vue"
-
 
 const settingsStore = useSettingsStore()
 const infiniteScrollRef = ref<QInfiniteScroll>()

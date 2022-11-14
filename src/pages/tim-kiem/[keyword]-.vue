@@ -7,7 +7,7 @@
       {{ t("tim-kiem") }}
       <span class="text-weight-medium">{{ route.params.keyword }}</span>
       <span v-if="data" class="text-gray-300 text-[14px]">
-        &bull; {{ t('_maxPage-trang', [data?.maxPage]) }}
+        &bull; {{ t("_maxPage-trang", [data?.maxPage]) }}
       </span>
     </div>
     <pagination.Pagination :max="data?.maxPage" class="mr-4" />
