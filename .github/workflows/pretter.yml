@@ -39,3 +39,4 @@ jobs:
           author_name: GitHub Actions
           author_email: actions@github.com
           message: 'chore: `prettier -w`'
+          push: origin main
