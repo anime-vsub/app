@@ -10,7 +10,6 @@ import {
   deleteDoc,
   doc,
   getDoc,
-  setDoc,
   getDocs,
   getFirestore,
   increment,
@@ -18,14 +17,14 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  setDoc,
   startAfter,
   updateDoc,
-  limit
 } from "@firebase/firestore"
-import {useFirestore}from"src/composibles/useFirestore"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
 import { app } from "src/boot/firebase"
+import { useFirestore } from "src/composibles/useFirestore"
 import { computed } from "vue"
 
 import { useAuthStore } from "./auth"
@@ -34,68 +33,36 @@ export const usePlaylistStore = defineStore("playlist", () => {
   const db = getFirestore(app)
   const authStore = useAuthStore()
 
-  const playlists = useFirestore<{
-        name: string
-        public: boolean
-        created: Timestamp
-      }>(computed(() => {
-    if (!authStore.uid) return null
+  // eslint-disable-next-line no-use-before-define
+  const playlists = useFirestore<Playlist_Playlist[]>(
+    computed(() => {
+      if (!authStore.uid) return null
 
-    const userRef = doc(db, "users", authStore.uid)
+      const userRef = doc(db, "users", authStore.uid)
 
-        return query(collection(userRef, "playlist"), orderBy("created", "desc"))
-        }), null
-        )
-
+      return query(collection(userRef, "playlist"), orderBy("created", "desc"))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }) as unknown as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    null as any
+  )
 
   interface Playlist_Movies_Movie {
     name: string
     poster: string
-    nameSeason: string;
+    nameSeason: string
     chap: string
     nameChap: string
     add_at: Timestamp
   }
   interface Playlist_Playlist {
+    id: string
     name: string
+    description?: string
     public: string
     created: Timestamp
+    updated?: Timestamp
     size: number
-  }
-
-  async function getMetaPlaylist(uid: string) {
-    if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
-      throw new Error(
-        i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-danh-sach-phat"),
-        ])
-      )
-
-    const userRef = doc(db, "users", authStore.uid)
-
-    const [meta, firstMovie] = await Promise.all([
-      getDoc(
-        doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>
-      ).then((res) => res.data()),
-      getDocs(
-        query(
-          collection(
-            userRef,
-            "playlist"
-          ) as CollectionReference<Playlist_Movies_Movie>,
-          orderBy("created", "desc"),
-          limit(1)
-        )
-      ).then((res) => res.docs?.[0].data()),
-    ])
-
-    if (!meta) return null
-
-    return {
-      ...meta,
-      first: firstMovie,
-    }
   }
 
   async function createPlaylist(name: string, isPublic: boolean) {
@@ -110,7 +77,9 @@ export const usePlaylistStore = defineStore("playlist", () => {
     const userRef = doc(db, "users", authStore.uid)
 
     return addDoc(
-      collection(userRef, "playlist") as CollectionReference<Playlist_Playlist>,
+      collection(userRef, "playlist") as CollectionReference<
+        Omit<Playlist_Playlist, "id">
+      >,
       {
         name,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -168,11 +137,10 @@ export const usePlaylistStore = defineStore("playlist", () => {
     return updateDoc(
       doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>,
       {
-        description
+        description,
       }
     )
   }
-
 
   async function publicPlaylist(uid: string, isPublic: boolean) {
     if (!authStore.uid)
@@ -197,6 +165,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
   // prv
   async function addAnimeToPlaylist(
     uidPlaylist: string,
+    season: string,
     anime: Omit<Playlist_Movies_Movie, "add_at">
   ) {
     if (!authStore.uid)
@@ -219,7 +188,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       doc(
         playlistRef,
         "movies",
-        `${anime.season}`
+        `${season}`
       ) as DocumentReference<Playlist_Movies_Movie>,
       {
         ...anime,
@@ -229,14 +198,11 @@ export const usePlaylistStore = defineStore("playlist", () => {
     )
     await updateDoc(playlistRef, {
       size: increment(1),
-      updated: serverTimestamp()
+      updated: serverTimestamp(),
     })
   }
 
-  async function deleteAnimeFromPlaylist(
-    uidPlaylist: string,
-    season: string
-  ) {
+  async function deleteAnimeFromPlaylist(uidPlaylist: string, season: string) {
     if (!authStore.uid)
       // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
@@ -251,14 +217,11 @@ export const usePlaylistStore = defineStore("playlist", () => {
     await deleteDoc(doc(playlistRef, "movies", season))
     await updateDoc(playlistRef, {
       size: increment(-1),
-      updated: serverTimestamp()
+      updated: serverTimestamp(),
     })
   }
 
-  async function hasAnimeOfPlaylist(
-    uidPlaylist: string,
-    season: string
-  ) {
+  async function hasAnimeOfPlaylist(uidPlaylist: string, season: string) {
     if (!authStore.uid)
       // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
@@ -270,20 +233,15 @@ export const usePlaylistStore = defineStore("playlist", () => {
     const userRef = doc(db, "users", authStore.uid)
     const playlistRef = doc(userRef, "playlist", uidPlaylist)
 
-
-    return getDoc(
-      doc(
-        playlistRef,
-        "movies",
-        `${season}`
-      )
-    ).then(res => res.exists())
+    return getDoc(doc(playlistRef, "movies", `${season}`)).then((res) =>
+      res.exists()
+    )
   }
 
   async function getAnimesFromPlaylist(
     uidPlaylist: string,
     lastAnimeDoc?: QueryDocumentSnapshot<Playlist_Movies_Movie>,
-    sorter: "asc" | "desc"
+    sorter?: "asc" | "desc"
   ) {
     if (!authStore.uid)
       // eslint-disable-next-line functional/no-throw-statement
@@ -302,13 +260,12 @@ export const usePlaylistStore = defineStore("playlist", () => {
           playlistRef,
           "movies"
         ) as CollectionReference<Playlist_Movies_Movie>,
-        orderBy("add_at", sorter),
+        orderBy("add_at", sorter ?? "asc"),
         ...(lastAnimeDoc ? [startAfter(lastAnimeDoc)] : []),
         limit(20)
       )
     ).then((res) => res.docs)
   }
-
 
   async function getPosterPlaylist(idPlaylist: string) {
     if (!authStore.uid)
@@ -322,17 +279,17 @@ export const usePlaylistStore = defineStore("playlist", () => {
     const userRef = doc(db, "users", authStore.uid)
 
     return getDocs(
-        query(
-          collection(
-            userRef,
-            "playlist",
-            idPlaylist,
-            "movies"
-          ) as CollectionReference<Playlist_Movies_Movie>,
-          orderBy("add_at", "asc"),
-          limit(1)
-        )
-      ).then((res) => res.docs?.[0].data().poster ?? null)
+      query(
+        collection(
+          userRef,
+          "playlist",
+          idPlaylist,
+          "movies"
+        ) as CollectionReference<Playlist_Movies_Movie>,
+        orderBy("add_at", "asc"),
+        limit(1)
+      )
+    ).then((res) => res.docs?.[0].data().poster ?? null)
   }
 
   return {

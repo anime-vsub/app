@@ -294,7 +294,9 @@
             @click="share"
           >
             <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
-            <span class="text-[14px] font-weight-normal ml-1">{{ t("chia-se") }}</span>
+            <span class="text-[14px] font-weight-normal ml-1">{{
+              t("chia-se")
+            }}</span>
           </q-btn>
           <q-btn
             no-caps
@@ -303,8 +305,14 @@
             class="bg-[rgba(113,113,113,0.3)] mr-4 text-weight-normal"
             @click="showDialogAddToPlaylist = true"
           >
-            <Icon icon="fluent:add-square-multiple-16-regular" width="28" height="28" />
-            <span class="text-[14px] font-weight-normal ml-1">{{ t("luu") }}</span>
+            <Icon
+              icon="fluent:add-square-multiple-16-regular"
+              width="28"
+              height="28"
+            />
+            <span class="text-[14px] font-weight-normal ml-1">{{
+              t("luu")
+            }}</span>
           </q-btn>
         </div>
       </div>
@@ -369,21 +377,22 @@
       </div>
 
       <div class="mt-5 text-[#eee] text-[16px]">{{ t("gioi-thieu") }}</div>
-<div class="flex mt-3">
-<div>
-
-      <q-img v-if="data?.image" width="152px" class="rounded-xl" :src="data.image" />
+      <div class="flex mt-3">
+        <div>
+          <q-img
+            v-if="data?.image"
+            width="152px"
+            class="rounded-xl"
+            :src="data.image"
+          />
+        </div>
+        <div class="flex-1 ml-4">
+          <p
+            class="leading-loose whitespace-pre-wrap text-[#9a9a9a]"
+            v-html="data.description"
+          />
+        </div>
       </div>
-      <div class="flex-1 ml-4">
-
-      <p
-        class="leading-loose whitespace-pre-wrap text-[#9a9a9a]"
-        v-html="data.description"
-      />
-      </div>
-</div>
-
-
     </div>
     <div class="col-3">
       <div class="text-h6 mt-3 text-subtitle1">{{ t("de-xuat") }}</div>
@@ -399,10 +408,18 @@
     </div>
   </div>
 
-  <AddToPlaylist v-model="showDialogAddToPlaylist" :exists="id => currentSeason ? playlistStore.hasAnimeOfPlaylist(id, currentSeason) : false"
-  @action:add="addAnimePlaylist"
-   @action:del="removeAnimePlaylist"
-   @after-create-playlist="addAnimePlaylist" />
+  <AddToPlaylist
+    v-model="showDialogAddToPlaylist"
+    :exists="
+      (id) =>
+        currentSeason
+          ? playlistStore.hasAnimeOfPlaylist(id, currentSeason)
+          : false
+    "
+    @action:add="addAnimePlaylist"
+    @action:del="removeAnimePlaylist"
+    @after-create-playlist="addAnimePlaylist"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -410,6 +427,7 @@ import { collection, doc, getDocs, getFirestore } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
 import { app } from "boot/firebase"
+import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import CardVertical from "components/CardVertical.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
@@ -441,17 +459,17 @@ import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
+import { usePlaylistStore } from "stores/playlist"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
-import { usePlaylistStore } from "stores/playlist"
+
 import type {
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
   ResponseDataSeasonSuccess,
 } from "./response-data-season"
-import AddToPlaylist from "components/AddToPlaylist.vue"
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -729,7 +747,10 @@ useHead(
       meta: [
         { property: "og:title", content: title },
         { property: "og:description", content: description },
-        { property: "og:image", content: currentDataSeason.value?.poster ?? data.value.poster },
+        {
+          property: "og:image",
+          content: currentDataSeason.value?.poster ?? data.value.poster,
+        },
         {
           property: "og:url",
           content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
@@ -1060,51 +1081,50 @@ let _tmp:
 // =========== playlist ===========
 const showDialogAddToPlaylist = ref(false)
 
-  async function addAnimePlaylist(idPlaylist: string) {
-    const { value : metaSeason } = currentMetaSeason
+async function addAnimePlaylist(idPlaylist: string) {
+  const { value: metaSeason } = currentMetaSeason
 
-    if (!metaSeason) return
-    if (!currentDataSeason.value && !data.value) return
-    if (!currentSeason.value) return;
-    if (!currentChap.value) return;
-    if (!currentMetaChap.value.name) return;
+  if (!metaSeason) return
+  if (!currentDataSeason.value || !data.value) return
+  if (!currentSeason.value) return
+  if (!currentChap.value) return
+  if (!currentMetaChap.value) return
 
-    try {
-      await playlistStore.addAnimeToPlaylist(idPlaylist, {
-        name: data.value.name,
-        poster: currentDataSeason.value?.poster ?? data.value.poster,
-        season: currentSeason.value,
-        nameSeason: metaSeason.name,
-        chap: currentChap.value,
-        nameChap: currentMetaChap.value.name,
-      })
-      $q.notify({
-        position: "bottom-right",
-        message: `Đã theo vào danh sách phát`
-      })
-    }catch (err) {
-      $q.notify({
+  try {
+    await playlistStore.addAnimeToPlaylist(idPlaylist, currentSeason.value, {
+      name: data.value.name,
+      poster: currentDataSeason.value?.poster ?? data.value.poster,
+      nameSeason: metaSeason.name,
+      chap: currentChap.value,
+      nameChap: currentMetaChap.value.name,
+    })
+    $q.notify({
       position: "bottom-right",
-        message: err.message
-      })
-    }
-  }
-  async function removeAnimePlaylist(idPlaylist: string) {
-    if (!currentSeason.value) return ;
-
-    try {
-      await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)
-      $q.notify({
-        position: "bottom-right",
-        message: `Đã xoá khỏi danh sách phát`
-      })
-    }catch(err) {
-      $q.notify({
+      message: "Đã theo vào danh sách phát",
+    })
+  } catch (err) {
+    $q.notify({
       position: "bottom-right",
-        message: err.message
-      })
-    }
+      message: (err as Error).message,
+    })
   }
+}
+async function removeAnimePlaylist(idPlaylist: string) {
+  if (!currentSeason.value) return
+
+  try {
+    await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)
+    $q.notify({
+      position: "bottom-right",
+      message: "Đã xoá khỏi danh sách phát",
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

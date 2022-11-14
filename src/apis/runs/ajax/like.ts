@@ -8,7 +8,11 @@ export async function AjaxLike(id: string, value: boolean) {
 
   if (!token_name || !token_value)
     // eslint-disable-next-line functional/no-throw-statement
-    throw new Error(i18n.global.t("errors.require_login_to", [i18n.global.t("theo-doi-anime-nay")]))
+    throw new Error(
+      i18n.global.t("errors.require_login_to", [
+        i18n.global.t("theo-doi-anime-nay"),
+      ])
+    )
 
   const { data } = await get(
     `/ajax/notification?Bookmark=true&filmId=${id}&type=${

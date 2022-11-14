@@ -68,7 +68,7 @@ export const useNotificationStore = defineStore(
       })
 
       if (JSON.parse(data).status !== 1)
-      // eslint-disable-next-line functional/no-throw-statement
+        // eslint-disable-next-line functional/no-throw-statement
         throw new Error(i18n.global.t("errors.xoa-thong-bao-that-bai"))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       refresh(() => {})

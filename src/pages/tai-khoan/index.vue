@@ -124,9 +124,11 @@
 
           <span class="line-clamp-2 min-h-10 mt-1">{{ item.name }}</span>
           <div class="text-grey">
-           <template v-if="item.seasonName">{{ item.seasonName }} tập </template>
-           <template v-else>Tập</template>
-           {{ item.last.name }}
+            <template v-if="item.seasonName"
+              >{{ item.seasonName }} tập
+            </template>
+            <template v-else>Tập</template>
+            {{ item.last.name }}
           </div>
         </q-card>
       </div>

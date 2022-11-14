@@ -102,7 +102,7 @@ export const useAuthStore = defineStore("auth", {
     },
     async changePassword(newPassword: string) {
       if (!this.user_data)
-      // eslint-disable-next-line functional/no-throw-statement
+        // eslint-disable-next-line functional/no-throw-statement
         throw new Error(
           i18n.global.t("errors.require_login_to", [
             i18n.global.t("thay-doi-mat-khau"),

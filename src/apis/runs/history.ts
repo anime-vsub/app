@@ -33,7 +33,7 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
   const authStore = useAuthStore()
 
   if (!authStore.uid)
-  // eslint-disable-next-line functional/no-throw-statement
+    // eslint-disable-next-line functional/no-throw-statement
     throw new Error(
       i18n.global.t(
         "errors.require_login_to",

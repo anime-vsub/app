@@ -1,29 +1,35 @@
-import type { Ref } from 'vue'
-import { computed, isRef, ref, watch } from 'vue'
-import type { DocumentData, DocumentReference, DocumentSnapshot, Query, QueryDocumentSnapshot } from '@firebase/firestore'
-import type { MaybeRef } from '@vueuse/shared'
-import { isDef, tryOnScopeDispose } from '@vueuse/shared'
-import { onSnapshot } from '@firebase/firestore'
+import type {
+  DocumentData,
+  DocumentReference,
+  DocumentSnapshot,
+  Query,
+  QueryDocumentSnapshot,
+} from "@firebase/firestore"
+import { onSnapshot } from "@firebase/firestore"
+import type { MaybeRef } from "@vueuse/shared"
+import { isDef, tryOnScopeDispose } from "@vueuse/shared"
+import type { Ref } from "vue"
+import { computed, isRef, ref, watch } from "vue"
 
+// eslint-disable-next-line functional/no-mixed-type
 export interface UseFirestoreOptions {
   errorHandler?: (err: Error) => void
   autoDispose?: boolean
 }
 
-export type FirebaseDocRef<T> =
-  Query<T> |
-  DocumentReference<T>
+export type FirebaseDocRef<T> = Query<T> | DocumentReference<T>
 
-function getData<T>(
-  docRef: DocumentSnapshot<T> | QueryDocumentSnapshot<T>,
-) {
-  const data = docRef.data()
+function getData<T>(docRef: DocumentSnapshot<T> | QueryDocumentSnapshot<T>) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const data = docRef.data()!
 
-data.id = docRef.id
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ;(data as any).id = docRef.id
 
   return data
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isDocumentReference<T>(docRef: any): docRef is DocumentReference<T> {
   return (docRef.path?.match(/\//g) || []).length % 2 !== 0
 }
@@ -43,7 +49,7 @@ export function useFirestore<T extends DocumentData>(
 export function useFirestore<T extends DocumentData>(
   maybeDocRef: MaybeRef<DocumentReference<T> | false>,
   initialValue?: T | undefined,
-  options?: UseFirestoreOptions,
+  options?: UseFirestoreOptions
 ): Ref<T | undefined | null>
 export function useFirestore<T extends DocumentData>(
   maybeDocRef: MaybeRef<Query<T> | false>,
@@ -59,8 +65,9 @@ export function useFirestore<T extends DocumentData>(
  */
 export function useFirestore<T extends DocumentData>(
   maybeDocRef: MaybeRef<FirebaseDocRef<T> | false>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialValue: any = undefined,
-  options: UseFirestoreOptions = {},
+  options: UseFirestoreOptions = {}
 ) {
   const {
     errorHandler = (err: Error) => console.error(err),
@@ -71,25 +78,32 @@ export function useFirestore<T extends DocumentData>(
     ? maybeDocRef
     : computed(() => maybeDocRef)
 
-  let close = () => { }
+  // eslint-disable-next-line functional/no-let, @typescript-eslint/no-empty-function
+  let close = () => {}
   const data = ref() as Ref<T | T[] | null | undefined>
 
-function run  (docRef) {7
+  function run(docRef: boolean | FirebaseDocRef<T>) {
     close()
     if (!refOfDocRef.value) {
       data.value = initialValue
+    } else if (isDocumentReference<T>(refOfDocRef.value)) {
+      close = onSnapshot(
+        docRef as DocumentReference<T>,
+        (snapshot) => {
+          data.value = getData(snapshot) || null
+        },
+        errorHandler
+      )
+    } else {
+      close = onSnapshot(
+        docRef as Query<T>,
+        (snapshot) => {
+          data.value = snapshot.docs.map(getData).filter(isDef)
+        },
+        errorHandler
+      )
     }
-    else if (isDocumentReference<T>(refOfDocRef.value)) {
-      close = onSnapshot(docRef as DocumentReference<T>, (snapshot) => {
-        data.value = getData(snapshot) || null
-      }, errorHandler)
-    }
-    else {
-      close = onSnapshot(docRef as Query<T>, (snapshot) => {
-        data.value = snapshot.docs.map(getData).filter(isDef)
-      }, errorHandler)
-    }
-}
+  }
 
   watch(refOfDocRef, run)
 
@@ -99,13 +113,14 @@ function run  (docRef) {7
     })
   }
 
-let setuped = false
+  // eslint-disable-next-line functional/no-let
+  let setuped = false
   return computed(() => {
-if (!setuped) {
-  setuped = true;
-  run(refOfDocRef.value)
-}
+    if (!setuped) {
+      setuped = true
+      run(refOfDocRef.value)
+    }
 
-     return  data.value
+    return data.value
   })
 }

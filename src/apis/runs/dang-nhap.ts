@@ -1,6 +1,6 @@
 import type AccountInfoParser from "src/apis/parser/account/info"
 import Worker from "src/apis/workers/account/info?worker"
-import {i18n} from "src/boot/i18n"
+import { i18n } from "src/boot/i18n"
 import { C_URL } from "src/constants"
 import { post } from "src/logic/http"
 import { Md5 } from "ts-md5"

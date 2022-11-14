@@ -62,15 +62,15 @@ const routes: RouteRecordRaw[] = [
         component: () => import("pages/playlist/[playlist].vue"),
         meta: {
           footer: false,
-        }
+        },
       },
       {
         path: "feed",
         component: () => import("pages/feed.vue"),
         meta: {
           footer: false,
-        }
-      }
+        },
+      },
     ],
   },
   {

@@ -1,71 +1,127 @@
 <template>
   <div v-if="metaPlaylist && movies" class="row">
     <div class="w-[360px]">
-      <div class="fixed h-[calc(100vh-58px)] w-[360px] py-4 ">
-
-      <div class="relative h-full bg-[#594d42] px-5 py-6 overflow-hidden rounded-[15px]">
-        <div class="absolute top-0 left-0 right-0 bottom-0">
-
-          <div class="w-[200%] opacity-[0.7] transform translate-x-[-25%] filter blur-[30px]">
-            <img v-if="metaPlaylist.poster" class="h-auto w-full" :src="metaPlaylist.poster" />
-          </div>
-          <div class="absolute top-0 left-0 right-0 bottom-0"
-            style="background: linear-gradient(to bottom, rgba(89,77,66,0.800) 0%, rgba(89,77,66,0.298) 33%, var(--q-dark-page) 100%)" />
-        </div>
-
-        <div class="relative z-2">
-          <q-img v-if="metaPlaylist.poster" class="rounded-xl" :src="metaPlaylist.poster" />
-          <div>
-
-            <div v-if="!editingName"
-              class="text-[28px] text-weight-medium py-6 leading-normal flex items-center justify-between">
-
-              {{ metaPlaylist.name }}
-              <q-btn round unelevated dense flat class="text-[14px]" @click="editingName = true">
-                <Icon icon="fluent:edit-24-regular" width="22" height="22" />
-              </q-btn>
+      <div class="fixed h-[calc(100vh-58px)] w-[360px] py-4">
+        <div
+          class="relative h-full bg-[#594d42] px-5 py-6 overflow-hidden rounded-[15px]"
+        >
+          <div class="absolute top-0 left-0 right-0 bottom-0">
+            <div
+              class="w-[200%] opacity-[0.7] transform translate-x-[-25%] filter blur-[30px]"
+            >
+              <img
+                v-if="metaPlaylist.poster"
+                class="h-auto w-full"
+                :src="metaPlaylist.poster"
+              />
             </div>
-            <form @submit.prevent="updateNewName" v-else class="py-6">
-              <q-input v-model="newName" bottom-slots placeholder="Tiêu đề" counter maxlength="150" dense
-                class="fix-input" stack-label :input-style="{
-                  'font-size': '28px',
-                  'font-weight': 500,
-                  'padding-left': '0px'
-                }" color="white" :rules="[val => !!val || 'Bắt buộc']" />
-              <div class="flex items-center justify-end mt-1 mr-[-16px] text-[16px]">
-                <q-btn rounded unelevated no-caps @click="editingName = false">Hủy</q-btn>
-                <q-btn rounded unelevated no-caps type="submit">Lưu</q-btn>
+            <div
+              class="absolute top-0 left-0 right-0 bottom-0"
+              :style="{
+                background: `linear-gradient(
+                  to bottom,
+                  rgba(89, 77, 66, 0.8) 0%,
+                  rgba(89, 77, 66, 0.298) 33%,
+                  var(--q-dark-page) 100%
+                )`,
+              }"
+            />
+          </div>
+
+          <div class="relative z-2">
+            <q-img
+              v-if="metaPlaylist.poster"
+              class="rounded-xl"
+              :src="metaPlaylist.poster"
+            />
+            <div>
+              <div
+                v-if="!editingName"
+                class="text-[28px] text-weight-medium py-6 leading-normal flex items-center justify-between"
+              >
+                {{ metaPlaylist.name }}
+                <q-btn
+                  round
+                  unelevated
+                  dense
+                  flat
+                  class="text-[14px]"
+                  @click="editingName = true"
+                >
+                  <Icon icon="fluent:edit-24-regular" width="22" height="22" />
+                </q-btn>
               </div>
-            </form>
+              <form @submit.prevent="updateNewName" v-else class="py-6">
+                <q-input
+                  v-model="newName"
+                  bottom-slots
+                  placeholder="Tiêu đề"
+                  counter
+                  maxlength="150"
+                  dense
+                  class="fix-input"
+                  stack-label
+                  :input-style="{
+                    fontSize: '28px',
+                    fontWeight: '500',
+                    paddingLeft: '0px',
+                  }"
+                  color="white"
+                  :rules="[(val) => !!val || 'Bắt buộc']"
+                />
+                <div
+                  class="flex items-center justify-end mt-1 mr-[-16px] text-[16px]"
+                >
+                  <q-btn rounded unelevated no-caps @click="editingName = false"
+                    >Hủy</q-btn
+                  >
+                  <q-btn rounded unelevated no-caps type="submit">Lưu</q-btn>
+                </div>
+              </form>
 
-
-            <div class="text-[13px] text-[rgba(255,255,255,0.7)]">{{ metaPlaylist.size }} video Cập nhật
-              {{ dayjs((metaPlaylist.updated ?? metaPlaylist.created).toDate()).fromNow()}}
+              <div class="text-[13px] text-[rgba(255,255,255,0.7)]">
+                {{ metaPlaylist.size }} video Cập nhật
+                {{
+                  dayjs(
+                    (metaPlaylist.updated ?? metaPlaylist.created).toDate()
+                  ).fromNow()
+                }}
+              </div>
             </div>
-          </div>
 
+            <q-btn
+              round
+              unelevated
+              dense
+              class="mt-7 bg-[rgba(255,255,255,0.1)] w-[36px] h-[36px]"
+            >
+              <Icon
+                icon="fluent:more-vertical-24-regular"
+                width="25"
+                height="25"
+              />
 
-          <q-btn round unelevated dense class="mt-7 bg-[rgba(255,255,255,0.1)] w-[36px] h-[36px]">
-            <Icon icon="fluent:more-vertical-24-regular" width="25" height="25" />
+              <q-menu class="rounded-xl bg-[rgba(35,35,35,1)]">
+                <q-card class="transparent">
+                  <q-list class="transparent">
+                    <q-item clickable @click="removePlaylist">
+                      <q-item-section avatar class="min-w-0">
+                        <Icon
+                          icon="fluent:delete-24-regular"
+                          width="20"
+                          height="20"
+                        />
+                      </q-item-section>
+                      <q-item-section>
+                        <q-item-label>Xóa danh sách phát</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-card>
+              </q-menu>
+            </q-btn>
 
-
-            <q-menu class="rounded-xl bg-[rgba(35,35,35,1)]">
-              <q-card class="transparent">
-                <q-list class="transparent">
-                  <q-item clickable @click="removePlaylist">
-                    <q-item-section avatar class="min-w-0">
-                      <Icon icon="fluent:delete-24-regular" width="20" height="20" />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>Xóa danh sách phát</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-card>
-            </q-menu>
-          </q-btn>
-
-          <!-- <div class="row mt-4">
+            <!-- <div class="row mt-4">
             <div class="col-6 pr-1">
               <q-btn rounded unelevated class="w-full bg-[rgba(255,255,255,0.9)] text-dark" no-caps>
                 <div class="w-full line-clamp-1 text-left px-5">
@@ -84,44 +140,87 @@
             </div>
           </div> -->
 
-          <div v-if="!editingDescription" class="mt-6 flex">
-            <p class="flex-1">{{metaPlaylist.description ?? "Không có thông tin mô tả"}}</p>
-            <q-btn round unelevated dense flat class="text-[14px]" @click="editingDescription = true">
-              <Icon icon="fluent:edit-24-regular" width="22" height="22" />
-            </q-btn>
-          </div>
-          <form v-else @submit.prevent="updateNewDescription" class="pt-6">
-            <q-input v-model="newDescription" bottom-slots placeholder="Mô tả" counter maxlength="5000" dense
-              class="fix-input" stack-label :input-style="{
-                  'padding-left': '0px'
-                }" color="white" />
-            <div class="flex items-center justify-end mt-1 mr-[-16px] text-[16px]">
-              <q-btn rounded unelevated no-caps @click="editingDescription = false">Hủy</q-btn>
-              <q-btn rounded unelevated no-caps type="submit">Lưu</q-btn>
+            <div v-if="!editingDescription" class="mt-6 flex">
+              <p class="flex-1">
+                {{ metaPlaylist.description ?? "Không có thông tin mô tả" }}
+              </p>
+              <q-btn
+                round
+                unelevated
+                dense
+                flat
+                class="text-[14px]"
+                @click="editingDescription = true"
+              >
+                <Icon icon="fluent:edit-24-regular" width="22" height="22" />
+              </q-btn>
             </div>
-          </form>
+            <form v-else @submit.prevent="updateNewDescription" class="pt-6">
+              <q-input
+                v-model="newDescription"
+                bottom-slots
+                placeholder="Mô tả"
+                counter
+                maxlength="5000"
+                dense
+                class="fix-input"
+                stack-label
+                :input-style="{
+                  paddingLeft: '0px',
+                }"
+                color="white"
+              />
+              <div
+                class="flex items-center justify-end mt-1 mr-[-16px] text-[16px]"
+              >
+                <q-btn
+                  rounded
+                  unelevated
+                  no-caps
+                  @click="editingDescription = false"
+                  >Hủy</q-btn
+                >
+                <q-btn rounded unelevated no-caps type="submit">Lưu</q-btn>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-      </div>
 
     <div v-if="movies" class="col pl-4 pt-4">
-      <q-infinite-scroll v-if="movies.length > 0" ref="infiniteScrollRef" @load="onLoad" :offset="250">
+      <q-infinite-scroll
+        v-if="movies.length > 0"
+        ref="infiniteScrollRef"
+        @load="onLoad"
+        :offset="250"
+      >
         <q-btn rounded no-caps class="mb-2">
-          <Icon icon="fluent:text-align-left-24-regular" width="23" height="23" class="mr-2" />
+          <Icon
+            icon="fluent:text-align-left-24-regular"
+            width="23"
+            height="23"
+            class="mr-2"
+          />
           <span class="text-[16px]">Sắp xếp</span>
-
-
 
           <q-menu class="rounded-xl bg-[rgba(35,35,35,1)]" auto-close>
             <q-card class="transparent">
               <q-list class="transparent">
-                <q-item clickable :focused="sorter === 'asc'" @click="sorter = 'asc'">
+                <q-item
+                  clickable
+                  :focused="sorter === 'asc'"
+                  @click="sorter = 'asc'"
+                >
                   <q-item-section>
                     <q-item-label>Ngày thêm (mới nhất)</q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-item clickable :focused="sorter === 'desc'" @click="sorter = 'desc'">
+                <q-item
+                  clickable
+                  :focused="sorter === 'desc'"
+                  @click="sorter = 'desc'"
+                >
                   <q-item-section>
                     <q-item-label>Ngày thêm (cũ nhất)</q-item-label>
                   </q-item-section>
@@ -131,18 +230,31 @@
           </q-menu>
         </q-btn>
 
-        <router-link v-for="item in movies" :key="item.id" class="bg-transparent flex flex-nowrap mb-5 group"
-          style="white-space: initial" :to="`/phim/${item.season}/${item.chap}`">
+        <router-link
+          v-for="item in movies"
+          :key="item.season"
+          class="bg-transparent flex flex-nowrap mb-5 group"
+          style="white-space: initial"
+          :to="`/phim/${item.season}/${item.chap}`"
+        >
           <div>
-
-            <q-img no-spinner :src="item.poster" :ratio="1920 / 1080" class="!rounded-xl w-[150px]" />
+            <q-img
+              no-spinner
+              :src="item.poster"
+              :ratio="1920 / 1080"
+              class="!rounded-xl w-[150px]"
+            />
           </div>
 
           <div class="pl-2 flex-1">
-
-            <span class="line-clamp-3 mt-1 font-weight-medium leading-normal text-[16px]">{{ item.name }}</span>
+            <span
+              class="line-clamp-3 mt-1 font-weight-medium leading-normal text-[16px]"
+              >{{ item.name }}</span
+            >
             <div class="text-grey mt-1">
-              <template v-if="item.nameSeason">{{ item.nameSeason }} tập </template>
+              <template v-if="item.nameSeason"
+                >{{ item.nameSeason }} tập
+              </template>
               <template v-else>Tập</template>
               {{ item.nameChap }}
             </div>
@@ -150,23 +262,40 @@
 
           <div class="items-center invisible flex group-hover:!visible md:pr-6">
             <q-btn flat round @click.prevent>
-
-              <Icon icon="fluent:more-vertical-24-regular" width="25" height="25" />
+              <Icon
+                icon="fluent:more-vertical-24-regular"
+                width="25"
+                height="25"
+              />
 
               <q-menu class="rounded-xl bg-[rgba(35,35,35,1)]">
                 <q-card class="transparent">
                   <q-list class="transparent">
-                    <q-item clickable @click="seasonWantsToBeAddedToOtherPlaylist = (item)">
+                    <q-item
+                      clickable
+                      @click="seasonWantsToBeAddedToOtherPlaylist = item"
+                    >
                       <q-item-section avatar class="min-w-0">
-                        <Icon icon="fluent:add-square-multiple-16-regular" width="20" height="20" />
+                        <Icon
+                          icon="fluent:add-square-multiple-16-regular"
+                          width="20"
+                          height="20"
+                        />
                       </q-item-section>
                       <q-item-section>
                         <q-item-label>Thêm vào danh sách phát</q-item-label>
                       </q-item-section>
                     </q-item>
-                    <q-item clickable @click="removeAnimePlaylist(undefined, item.season)">
+                    <q-item
+                      clickable
+                      @click="removeAnimePlaylist(undefined, item.season)"
+                    >
                       <q-item-section avatar class="min-w-0">
-                        <Icon icon="fluent:delete-24-regular" width="20" height="20" />
+                        <Icon
+                          icon="fluent:delete-24-regular"
+                          width="20"
+                          height="20"
+                        />
                       </q-item-section>
                       <q-item-section>
                         <q-item-label>Xóa khỏi danh sách phát</q-item-label>
@@ -185,306 +314,306 @@
           </div>
         </template>
       </q-infinite-scroll>
-      <div v-else class="text-center pt-4">Chưa có video nào trong danh sách phát này</div>
-
-
+      <div v-else class="text-center pt-4">
+        Chưa có video nào trong danh sách phát này
+      </div>
     </div>
-
   </div>
 
-
-  <AddToPlaylist :model-value="seasonWantsToBeAddedToOtherPlaylist !== null" @update:model-value="(event) => {
-    if (!event) seasonWantsToBeAddedToOtherPlaylist = null
-  }" :exists="fnExists" @action:add="addAnimePlaylist" @action:del="removeAnimePlaylist"
-    @after-create-playlist="addAnimePlaylist" />
+  <AddToPlaylist
+    :model-value="seasonWantsToBeAddedToOtherPlaylist !== null"
+    @update:model-value="
+      (event: boolean) => {
+        if (!event) seasonWantsToBeAddedToOtherPlaylist = null
+      }
+    "
+    :exists="fnExists"
+    @action:add="addAnimePlaylist"
+    @action:del="removeAnimePlaylist"
+    @after-create-playlist="addAnimePlaylist"
+  />
 </template>
 
 <script lang="ts" setup>
-  import {
-    useHead
-  } from "@vueuse/head"
-  import BottomBlur from "components/BottomBlur.vue"
-  import CardVertical from "components/CardVertical.vue"
-  import ScreenError from "components/ScreenError.vue"
-  import ScreenLoading from "components/ScreenLoading.vue"
-  import {
-    BangXepHangType
-  } from "src/apis/runs/bang-xep-hang/[type]"
-  import ranks from "src/logic/ranks"
-  import {
-    computed,
-    watch,
-    ref
-  } from "vue"
-  import {
-    useI18n
-  } from "vue-i18n"
-  import {
-    useRequest
-  } from "vue-request"
-  import {
-    useRoute,
-    useRouter
-  } from "vue-router"
-  import {
-    usePlaylistStore
-  } from "stores/playlist"
-  import dayjs from "src/logic/dayjs"
-  import {
-    Icon
-  } from "@iconify/vue"
-  import {
-    useQuasar
-  } from "quasar"
-  import AddToPlaylist from "components/AddToPlaylist.vue"
+import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
+import AddToPlaylist from "components/AddToPlaylist.vue"
+import { QInfiniteScroll, useQuasar } from "quasar"
+import dayjs from "src/logic/dayjs"
+import { usePlaylistStore } from "stores/playlist"
+import { computed, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
+import { useRequest } from "vue-request"
+import { useRoute, useRouter } from "vue-router"
 
-  const {
-    t
-  } = useI18n()
-  const route = useRoute()
-  const router = useRouter()
-  const $q = useQuasar()
-  const playlistStore = usePlaylistStore()
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
+const $q = useQuasar()
+const playlistStore = usePlaylistStore()
 
-  const infiniteScrollRef = ref < QInfiniteScroll > ()
+const infiniteScrollRef = ref<QInfiniteScroll>()
 
-  const {
-    data: metaPlaylist,
-    run: runGetMetaPlaylist,
-    error: errorGetMetaPlaylist
-  } = useRequest(async () => {
-    const {
-      playlists
-    } = playlistStore
-    if (!playlists) return playlists;
+const { data: metaPlaylist, run: runGetMetaPlaylist } = useRequest(
+  async () => {
+    const { playlists } = playlistStore
+    if (!playlists) return playlists
 
-    const meta = playlists.find(item => item.id === route.params.playlist)
+    const meta = playlists.find((item) => item.id === route.params.playlist)
+    // eslint-disable-next-line functional/no-throw-statement
     if (!meta) throw new Error("Danh sách phát không tồn tại")
 
     const poster = await playlistStore.getPosterPlaylist(meta.id)
 
-
-    return {...meta, poster}
-  }, {
+    return { ...meta, poster }
+  },
+  {
     refreshDeps: [() => playlistStore.playlists, () => route.params.playlist],
     refreshDepsAction() {
       runGetMetaPlaylist()
-    }
-  })
-  const sorter = ref<"asc" | "desc">("asc")
-  const {
-    data: movies,
-    run: runGetMovies
-  } = useRequest(() => {
+    },
+  }
+)
+const sorter = ref<"asc" | "desc">("asc")
+const { data: movies, run: runGetMovies } = useRequest(
+  () => {
     console.log("larger movies")
     infiniteScrollRef.value?.reset()
 
-    return playlistStore.getAnimesFromPlaylist(route.params.playlist, undefined, sorter.value)
-      .then(items => items.map(item => {
-        const data = item.data()
-        return {
-          ...data,
-          "$doc": item,
-          season: item.id,
-          add_at: dayjs(data.add_at.toDate())
-        }
-      }))
-  }, {
+    return playlistStore
+      .getAnimesFromPlaylist(
+        route.params.playlist as string,
+        undefined,
+        sorter.value
+      )
+      .then((items) =>
+        items.map((item) => {
+          const data = item.data()
+          return {
+            ...data,
+            $doc: item,
+            season: item.id,
+            add_at: dayjs(data.add_at.toDate()),
+          }
+        })
+      )
+  },
+  {
     refreshDeps: [() => route.params.playlist, sorter],
     refreshDepsAction() {
       runGetMovies()
-    }
-  })
+    },
+  }
+)
 
+useHead(
+  computed(() => {
+    if (!metaPlaylist.value) return {}
 
-  useHead(
-    computed(() => {
-      if (!metaPlaylist.value) return {};
+    const title = `(${metaPlaylist.value.size}) ${metaPlaylist.value.name}`
 
-      const title = `(${metaPlaylist.value.size}) ${metaPlaylist.value.name}`
+    const description = metaPlaylist.value.description ?? title
 
-      const description = metaPlaylist.value.description ?? title
-
-      return {
-        title,
-        description,
-        meta: [{
-            property: "og:title",
-            content: title
-          },
-          {
-            property: "og:description",
-            content: description
-          },
-          {
-            property: "og:url",
-            content: process.env.APP_URL + `playlist/${route.params.playlist}`,
-          },
-        ],
-        link: [{
+    return {
+      title,
+      description,
+      meta: [
+        {
+          property: "og:title",
+          content: title,
+        },
+        {
+          property: "og:description",
+          content: description,
+        },
+        {
+          property: "og:url",
+          content: process.env.APP_URL + `playlist/${route.params.playlist}`,
+        },
+      ],
+      link: [
+        {
           rel: "canonical",
           href: process.env.APP_URL + `playlist/${route.params.playlist}`,
-        }, ],
-      }
-    })
-  )
+        },
+      ],
+    }
+  })
+)
 
+async function onLoad(index: number, done: (end: boolean) => void) {
+  const { playlists } = playlistStore
+  if (!playlists) return done(true)
 
-  async function onLoad(index: number, done: (end: boolean) => void) {
-    const {
-      playlists
-    } = playlistStore
-    if (!playlists) return done(true);
+  const meta = playlists.find((item) => item.id === route.params.playlist)
+  // eslint-disable-next-line functional/no-throw-statement
+  if (!meta) throw new Error("Danh sách phát không tồn tại")
 
-    const meta = playlists.find(item => item.id === route.params.playlist)
-    if (!meta) throw new Error("Danh sách phát không tồn tại")
-
-    const moviesMore = await playlistStore.getAnimesFromPlaylist(meta.id, movies.value[movies.value.length - 1]?. ["$doc"], sorter.value).then(
-      items =>
-      items.map(item => {
+  const moviesMore = await playlistStore
+    .getAnimesFromPlaylist(
+      meta.id,
+      movies.value?.[movies.value.length - 1]?.$doc,
+      sorter.value
+    )
+    .then((items) =>
+      items.map((item) => {
         const data = item.data()
         return {
           ...data,
-          "$doc": item,
+          $doc: item,
           season: item.id,
-          add_at: dayjs(data.add_at.toDate())
+          add_at: dayjs(data.add_at.toDate()),
         }
-      }))
+      })
+    )
 
-    movies.value = [
-      ...movies.value,
-      ...moviesMore
-    ]
+  movies.value = [...(movies.value ?? []), ...moviesMore]
 
-    done(moviesMore.length === 0)
+  done(moviesMore.length === 0)
+}
+
+const editingName = ref(false)
+const editingDescription = ref(false)
+const newName = ref("")
+watch(editingName, (editing) => {
+  if (editing) {
+    newName.value = metaPlaylist.value?.name ?? ""
+  } else {
+    newName.value = ""
   }
-
-  const editingName = ref(false)
-  const editingDescription = ref(false)
-  const newName = ref("")
-  watch(editingName, editing => {
-    if (editing) {
-      newName.value = metaPlaylist.value.name
-    } else {
-      newName.value = ""
-    }
-  })
-  const newDescription = ref("")
-  watch(editingDescription, editing => {
-    if (editing) {
-      newDescription.value = metaPlaylist.value.description ?? ""
-    } else {
-      newDescription.value = ""
-    }
-  })
-
-  async function updateNewName() {
-    try {
-      if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
-      await playlistStore.renamePlaylist(metaPlaylist.value.id, newName.value)
-      editingName.value = false
-      $q.notify({
-        position: "bottom-right",
-        message: "Đã cập nhật tên danh sách phát"
-      })
-    } catch (err) {
-      $q.notify({
-        position: "bottom-right",
-        message: err.message
-      })
-    }
+})
+const newDescription = ref("")
+watch(editingDescription, (editing) => {
+  if (editing) {
+    newDescription.value = metaPlaylist.value?.description ?? ""
+  } else {
+    newDescription.value = ""
   }
-  async function updateNewDescription() {
-    try {
-      if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
-      await playlistStore.setDescriptionPlaylist(metaPlaylist.value.id, newDescription.value)
-      editingDescription.value = false
-      $q.notify({
-        position: "bottom-right",
-        message: "Đã cập nhật mô tả danh sách phát"
-      })
-    } catch (err) {
-      $q.notify({
-        position: "bottom-right",
-        message: err.message
-      })
-    }
-  }
+})
 
-  async function removePlaylist() {
-    try {
-      if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
-      await playlistStore.deletePlaylist(metaPlaylist.value.id, newDescription.value)
-      editingDescription.value = false
-      router.push("/feed")
-      $q.notify({
-        position: "bottom-right",
-        message: "Đã xóa danh sách phát"
-      })
-    } catch (err) {
-      $q.notify({
-        position: "bottom-right",
-        message: err.message
-      })
-    }
+async function updateNewName() {
+  try {
+    // eslint-disable-next-line functional/no-throw-statement
+    if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
+    await playlistStore.renamePlaylist(metaPlaylist.value.id, newName.value)
+    editingName.value = false
+    $q.notify({
+      position: "bottom-right",
+      message: "Đã cập nhật tên danh sách phát",
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
   }
+}
+async function updateNewDescription() {
+  try {
+    // eslint-disable-next-line functional/no-throw-statement
+    if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
+    await playlistStore.setDescriptionPlaylist(
+      metaPlaylist.value.id,
+      newDescription.value
+    )
+    editingDescription.value = false
+    $q.notify({
+      position: "bottom-right",
+      message: "Đã cập nhật mô tả danh sách phát",
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
+  }
+}
 
-  const seasonWantsToBeAddedToOtherPlaylist = ref < dwjefigre | null > (null)
-  const fnExists = (idPlaylist: string) => {
-    if (!seasonWantsToBeAddedToOtherPlaylist.value) return false
-    return playlistStore.hasAnimeOfPlaylist(idPlaylist, seasonWantsToBeAddedToOtherPlaylist.value.season)
+async function removePlaylist() {
+  try {
+    // eslint-disable-next-line functional/no-throw-statement
+    if (!metaPlaylist.value) throw new Error("Danh sách phát không tồn tại")
+    await playlistStore.deletePlaylist(metaPlaylist.value.id)
+    editingDescription.value = false
+    router.push("/feed")
+    $q.notify({
+      position: "bottom-right",
+      message: "Đã xóa danh sách phát",
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
   }
+}
 
+const seasonWantsToBeAddedToOtherPlaylist = ref<
+  Exclude<typeof movies.value, undefined>[0] | null
+>(null)
+const fnExists = (idPlaylist: string) => {
+  if (!seasonWantsToBeAddedToOtherPlaylist.value) return false
+  return playlistStore.hasAnimeOfPlaylist(
+    idPlaylist,
+    seasonWantsToBeAddedToOtherPlaylist.value.season
+  )
+}
 
-  async function addAnimePlaylist(idPlaylist: string) {
-    if (!seasonWantsToBeAddedToOtherPlaylist.value) return;
-    try {
-      await playlistStore.addAnimeToPlaylist(idPlaylist, seasonWantsToBeAddedToOtherPlaylist.value["$doc"].data())
-      $q.notify({
-        position: "bottom-right",
-        message: `Đã theo vào danh sách phát`
-      })
-    } catch (err) {
-      $q.notify({
-        position: "bottom-right",
-        message: err.message
-      })
-    }
+async function addAnimePlaylist(idPlaylist: string) {
+  if (!seasonWantsToBeAddedToOtherPlaylist.value) return
+  try {
+    await playlistStore.addAnimeToPlaylist(
+      idPlaylist,
+      seasonWantsToBeAddedToOtherPlaylist.value.season,
+      seasonWantsToBeAddedToOtherPlaylist.value.$doc.data()
+    )
+    $q.notify({
+      position: "bottom-right",
+      message: "Đã theo vào danh sách phát",
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
   }
-  async function removeAnimePlaylist(idPlaylist = metaPlaylist.value.id, season = seasonWantsToBeAddedToOtherPlaylist
-    .value.season) {
-    if (!idPlaylist || !season) return
-    try {
-      await playlistStore.deleteAnimeFromPlaylist(idPlaylist, season)
-      $q.notify({
-        position: "bottom-right",
-        message: `Đã xoá khỏi danh sách phát`
-      })
-      movies.value = movies.value.filter(item => item.season !== season)
-    } catch (err) {
-      $q.notify({
-        position: "bottom-right",
-        message: err.message
-      })
-    }
+}
+async function removeAnimePlaylist(
+  idPlaylist = metaPlaylist.value?.id,
+  season = seasonWantsToBeAddedToOtherPlaylist.value?.season
+) {
+  if (!idPlaylist || !season) return
+  try {
+    await playlistStore.deleteAnimeFromPlaylist(idPlaylist, season)
+    $q.notify({
+      position: "bottom-right",
+      message: "Đã xoá khỏi danh sách phát",
+    })
+    movies.value = movies.value?.filter((item) => item.season !== season)
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .fix-input :deep(.q-field__native) {
-    background-color: transparent !important;
+.fix-input :deep(.q-field__native) {
+  background-color: transparent !important;
 
-    &,
-    &:focus,
-    &:focus-visible {
-      outline: none !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
+  &,
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
   }
+}
 
-  .fix-input :deep(.q-field__control),
-  .fix-input :deep(.q-field__append) {
-    height: 45px !important;
-  }
+.fix-input :deep(.q-field__control),
+.fix-input :deep(.q-field__append) {
+  height: 45px !important;
+}
 </style>

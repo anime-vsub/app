@@ -300,7 +300,9 @@
                     <div class="pl-2 flex-1">
                       <span class="line-clamp-3 mt-1">{{ item.name }}</span>
                       <div class="text-grey mt-1">
-                        <template v-if="item.seasonName">{{ item.seasonName }} tập </template>
+                        <template v-if="item.seasonName"
+                          >{{ item.seasonName }} tập
+                        </template>
                         <template v-else>Tập</template>
                         {{ item.last.name }}
                       </div>
@@ -466,7 +468,10 @@
             height="30"
           />
 
-          <q-menu v-model="showMenuAccount" class="rounded-xl bg-dark-page shadow-xl">
+          <q-menu
+            v-model="showMenuAccount"
+            class="rounded-xl bg-dark-page shadow-xl"
+          >
             <q-card class="transparent w-[280px] px-2 pb-3">
               <q-list v-if="tabMenuAccountActive === 'normal'">
                 <template v-if="authStore.isLogged">
@@ -724,7 +729,6 @@
       </q-toolbar>
 
       <div class="h-full overflow-y-auto scrollbar-custom">
-
         <q-list class="mx-2">
           <template
             v-for="{ icon, active, name, path, divider } in drawers"
@@ -758,43 +762,37 @@
             </q-item>
           </template>
 
-
-
           <!-- playlist -->
 
-            <q-separator
-            v-if="playlistStore.playlists?.length > 0"
-              class="bg-[rgba(255,255,255,0.1)] my-6 mr-2"
-            />
+          <q-separator
+            v-if="playlistStore.playlists && playlistStore.playlists.length > 0"
+            class="bg-[rgba(255,255,255,0.1)] my-6 mr-2"
+          />
 
-           <q-item
-             v-for="item in playlistStore.playlists"
-             :key="item.id"
-             :to="`/playlist/${item.id}`"
-             clickable
-             v-ripple
-             class="min-h-0 my-2 rounded-xl"
-             active-class=""
-             exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
-           >
-             <q-item-section avatar class="pr-0 min-w-0">
-               <Icon
-                 icon="fluent:navigation-play-20-regular"
-                 width="23"
-                 height="23"
-               />
-             </q-item-section>
-             <q-item-section class="ml-5">
-               <q-item-label class="text-[16px]">{{ item.name }}</q-item-label>
-             </q-item-section>
-           </q-item>
-
+          <q-item
+            v-for="item in playlistStore.playlists"
+            :key="item.id"
+            :to="`/playlist/${item.id}`"
+            clickable
+            v-ripple
+            class="min-h-0 my-2 rounded-xl"
+            active-class=""
+            exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
+          >
+            <q-item-section avatar class="pr-0 min-w-0">
+              <Icon
+                icon="fluent:navigation-play-20-regular"
+                width="23"
+                height="23"
+              />
+            </q-item-section>
+            <q-item-section class="ml-5">
+              <q-item-label class="text-[16px]">{{ item.name }}</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
 
-        <div
-          v-if="hideDrawer ? true : showDrawer"
-          class="text-gray-500"
-        >
+        <div v-if="hideDrawer ? true : showDrawer" class="text-gray-500">
           <a
             v-for="item in drawersBottom"
             :key="item.name"
@@ -804,8 +802,7 @@
             >{{ item.name }}</a
           >
         </div>
-        </div>
-
+      </div>
     </q-drawer>
 
     <q-page-container>
@@ -916,8 +913,8 @@ import { languages } from "src/i18n"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
-import { useSettingsStore } from "stores/settings"
 import { usePlaylistStore } from "stores/playlist"
+import { useSettingsStore } from "stores/settings"
 import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"

@@ -59,7 +59,9 @@
             <div class="pl-2">
               <span class="line-clamp-3 mt-1">{{ item.name }}</span>
               <div class="text-grey mt-1">
-                <template v-if="item.seasonName">{{ item.seasonName }} tập </template>
+                <template v-if="item.seasonName"
+                  >{{ item.seasonName }} tập
+                </template>
                 <template v-else>Tập</template>
                 {{ item.last.name }}
               </div>
