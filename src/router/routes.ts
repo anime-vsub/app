@@ -2,6 +2,13 @@ import type { RouteRecordRaw } from "vue-router"
 
 const routes: RouteRecordRaw[] = [
   {
+    path: "/:mainPath(.*)*/trang-:page(\\d+)",
+    alias: ["/:mainPath(.*)*/trang-:page(\\d+).html"],
+    redirect(to, from) {
+      return `/${to.params.mainPath.join("/")}?page=${to.params.page}`
+    }
+  },
+  {
     path: "/",
     component: () => import("pages/index_outlet.vue"),
     meta: {
