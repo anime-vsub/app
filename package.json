@@ -26,6 +26,7 @@
     "@vueuse/core": "^9.4.0",
     "@vueuse/firebase": "^9.5.0",
     "@vueuse/head": "^0.9.8",
+    "@vueuse/shared": "^9.5.0",
     "cheerio": "1.0.0-rc.12",
     "dayjs": "^1.11.5",
     "eruda2": "0.0.2-b8",

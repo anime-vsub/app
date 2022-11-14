@@ -27,6 +27,7 @@ specifiers:
   '@vueuse/core': ^9.4.0
   '@vueuse/firebase': ^9.5.0
   '@vueuse/head': ^0.9.8
+  '@vueuse/shared': ^9.5.0
   autoprefixer: ^10.4.12
   bumpp: ^8.2.1
   chalk: ^5.1.2
@@ -84,6 +85,7 @@ dependencies:
   '@vueuse/core': 9.4.0_vue@3.2.41
   '@vueuse/firebase': 9.5.0_vue@3.2.41
   '@vueuse/head': 0.9.8_vue@3.2.41
+  '@vueuse/shared': 9.5.0_vue@3.2.41
   cheerio: 1.0.0-rc.12
   dayjs: 1.11.6
   eruda2: 0.0.2-b8
@@ -1700,7 +1702,7 @@ packages:
     peerDependencies:
       vue: '>=2.7 || >=3'
     dependencies:
-      '@vueuse/shared': 9.4.0_vue@3.2.41
+      '@vueuse/shared': 9.5.0_vue@3.2.41
       '@zhead/schema': 0.8.5
       '@zhead/schema-vue': 0.8.5_vue@3.2.41
       vue: 3.2.41
