@@ -282,7 +282,7 @@
               width="28"
               height="28"
             />
-            <span class="text-[12px] mt-1">{{
+            <span class="text-[14px] font-weight-normal ml-1">{{
               follows ? formatView(follows) : "Theo dõi"
             }}</span>
           </q-btn>
@@ -294,7 +294,17 @@
             @click="share"
           >
             <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
-            <span class="text-[12px] mt-1">{{ t("chia-se") }}</span>
+            <span class="text-[14px] font-weight-normal ml-1">{{ t("chia-se") }}</span>
+          </q-btn>
+          <q-btn
+            no-caps
+            rounded
+            unelevated
+            class="bg-[rgba(113,113,113,0.3)] mr-4 text-weight-normal"
+            @click="showDialogAddToPlaylist = true"
+          >
+            <Icon icon="fluent:add-square-multiple-16-regular" width="28" height="28" />
+            <span class="text-[14px] font-weight-normal ml-1">{{ t("luu") }}</span>
           </q-btn>
         </div>
       </div>
@@ -359,10 +369,21 @@
       </div>
 
       <div class="mt-5 text-[#eee] text-[16px]">{{ t("gioi-thieu") }}</div>
+<div class="flex mt-3">
+<div>
+
+      <q-img v-if="data?.image" width="152px" class="rounded-xl" :src="data.image" />
+      </div>
+      <div class="flex-1 ml-4">
+
       <p
-        class="mt-3 leading-loose whitespace-pre-wrap text-[#9a9a9a]"
+        class="leading-loose whitespace-pre-wrap text-[#9a9a9a]"
         v-html="data.description"
       />
+      </div>
+</div>
+
+
     </div>
     <div class="col-3">
       <div class="text-h6 mt-3 text-subtitle1">{{ t("de-xuat") }}</div>
@@ -377,6 +398,11 @@
       />
     </div>
   </div>
+
+  <AddToPlaylist v-model="showDialogAddToPlaylist" :exists="id => currentSeason ? playlistStore.hasAnimeOfPlaylist(id, currentSeason) : false"
+  @action:add="addAnimePlaylist"
+   @action:del="removeAnimePlaylist"
+   @after-create-playlist="addAnimePlaylist" />
 </template>
 
 <script lang="ts" setup>
@@ -403,7 +429,7 @@ import {
   QVideo,
   useQuasar,
 } from "quasar"
-import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
+import { AjaxLike, checkIsLike } from "src/apis/runs/ajax/like"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
@@ -419,13 +445,13 @@ import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
-
+import { usePlaylistStore } from "stores/playlist"
 import type {
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
   ResponseDataSeasonSuccess,
 } from "./response-data-season"
-
+import AddToPlaylist from "components/AddToPlaylist.vue"
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -436,6 +462,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const authStore = useAuthStore()
+const playlistStore = usePlaylistStore()
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -702,7 +729,7 @@ useHead(
       meta: [
         { property: "og:title", content: title },
         { property: "og:description", content: description },
-        { property: "og:image", content: data.value.poster },
+        { property: "og:image", content: currentDataSeason.value?.poster ?? data.value.poster },
         {
           property: "og:url",
           content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
@@ -955,7 +982,7 @@ watch(
     }
 
     if (seasonId) {
-      followed.value = await checkIsLile(seasonId)
+      followed.value = await checkIsLike(seasonId)
     } else {
       followed.value = false
       follows.value = 0
@@ -1029,6 +1056,55 @@ let _tmp:
   | ResponseDataSeasonSuccess
   | ResponseDataSeasonError
   | undefined
+
+// =========== playlist ===========
+const showDialogAddToPlaylist = ref(false)
+
+  async function addAnimePlaylist(idPlaylist: string) {
+    const { value : metaSeason } = currentMetaSeason
+
+    if (!metaSeason) return
+    if (!currentDataSeason.value && !data.value) return
+    if (!currentSeason.value) return;
+    if (!currentChap.value) return;
+    if (!currentMetaChap.value.name) return;
+
+    try {
+      await playlistStore.addAnimeToPlaylist(idPlaylist, {
+        name: data.value.name,
+        poster: currentDataSeason.value?.poster ?? data.value.poster,
+        season: currentSeason.value,
+        nameSeason: metaSeason.name,
+        chap: currentChap.value,
+        nameChap: currentMetaChap.value.name,
+      })
+      $q.notify({
+        position: "bottom-right",
+        message: `Đã theo vào danh sách phát`
+      })
+    }catch (err) {
+      $q.notify({
+      position: "bottom-right",
+        message: err.message
+      })
+    }
+  }
+  async function removeAnimePlaylist(idPlaylist: string) {
+    if (!currentSeason.value) return ;
+
+    try {
+      await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)
+      $q.notify({
+        position: "bottom-right",
+        message: `Đã xoá khởi danh sách phát`
+      })
+    }catch(err) {
+      $q.notify({
+      position: "bottom-right",
+        message: err.message
+      })
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

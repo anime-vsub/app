@@ -705,7 +705,7 @@
       :breakpoint="500"
       :overlay="hideDrawer"
       :behavior="hideDrawer ? 'mobile' : undefined"
-      class="bg-dark-page"
+      class="bg-dark-page overflow-visible column flex-nowrap"
     >
       <q-toolbar v-if="hideDrawer">
         <q-btn
@@ -723,53 +723,89 @@
         </router-link>
       </q-toolbar>
 
-      <q-list class="mx-2">
-        <template
-          v-for="{ icon, active, name, path, divider } in drawers"
-          :key="name"
-        >
-          <q-separator
-            v-if="divider"
-            class="bg-[rgba(255,255,255,0.1)] my-6 mr-2"
-          />
-          <q-item
-            v-else
-            clickable
-            v-ripple
-            class="min-h-0 my-2 rounded-xl"
-            :to="path"
-            active-class=""
-            exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
-          >
-            <q-item-section avatar class="pr-0 min-w-0">
-              <Icon
-                v-if="router.resolve(path!).fullPath !== route.fullPath"
-                :icon="icon"
-                width="23"
-                height="23"
-              />
-              <Icon v-else :icon="active" width="23" height="23" />
-            </q-item-section>
-            <q-item-section class="ml-5">
-              <q-item-label class="text-[16px]">{{ name }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </template>
-      </q-list>
+      <div class="h-full overflow-y-auto scrollbar-custom">
 
-      <div
-        v-if="hideDrawer ? true : showDrawer"
-        class="absolute bottom-0 left-0 w-full text-gray-500"
-      >
-        <a
-          v-for="item in drawersBottom"
-          :key="item.name"
-          class="py-2 px-4 block"
-          :href="item.href"
-          target="_blank"
-          >{{ item.name }}</a
+        <q-list class="mx-2">
+          <template
+            v-for="{ icon, active, name, path, divider } in drawers"
+            :key="name"
+          >
+            <q-separator
+              v-if="divider"
+              class="bg-[rgba(255,255,255,0.1)] my-6 mr-2"
+            />
+            <q-item
+              v-else
+              clickable
+              v-ripple
+              class="min-h-0 my-2 rounded-xl"
+              :to="path"
+              active-class=""
+              exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
+            >
+              <q-item-section avatar class="pr-0 min-w-0">
+                <Icon
+                  v-if="router.resolve(path!).fullPath !== route.fullPath"
+                  :icon="icon"
+                  width="23"
+                  height="23"
+                />
+                <Icon v-else :icon="active" width="23" height="23" />
+              </q-item-section>
+              <q-item-section class="ml-5">
+                <q-item-label class="text-[16px]">{{ name }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+
+
+
+          <!-- playlist -->
+
+            <q-separator
+            v-if="playlistStore.playlists?.length > 0"
+              class="bg-[rgba(255,255,255,0.1)] my-6 mr-2"
+            />
+
+           <q-item
+             v-for="item in playlistStore.playlists"
+             :key="item.id"
+             :to="`/playlist/${item.id}`"
+             clickable
+             v-ripple
+             class="min-h-0 my-2 rounded-xl"
+             active-class=""
+             exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
+           >
+             <q-item-section avatar class="pr-0 min-w-0">
+               <Icon
+                 icon="fluent:navigation-play-20-regular"
+                 width="23"
+                 height="23"
+               />
+             </q-item-section>
+             <q-item-section class="ml-5">
+               <q-item-label class="text-[16px]">{{ item.name }}</q-item-label>
+             </q-item-section>
+           </q-item>
+
+        </q-list>
+
+        <div
+          v-if="hideDrawer ? true : showDrawer"
+          class="text-gray-500"
         >
-      </div>
+          <a
+            v-for="item in drawersBottom"
+            :key="item.name"
+            class="py-2 px-4 block"
+            :href="item.href"
+            target="_blank"
+            >{{ item.name }}</a
+          >
+        </div>
+        </div>
+
     </q-drawer>
 
     <q-page-container>
@@ -881,6 +917,7 @@ import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
 import { useSettingsStore } from "stores/settings"
+import { usePlaylistStore } from "stores/playlist"
 import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -964,6 +1001,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const notificationStore = useNotificationStore()
 const settingsStore = useSettingsStore()
+const playlistStore = usePlaylistStore()
 
 const extensionHelperInstalled = ref(typeof window.Http !== "undefined")
 // eslint-disable-next-line functional/no-let
