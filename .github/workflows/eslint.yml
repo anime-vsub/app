@@ -46,5 +46,12 @@ jobs:
         run: pnpm i
 
       - name: Run ESLint
-        run: pnpm lint
-        continue-on-error: true
+        run: pnpm lint --fix
+        
+      
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          message: 'chore: `eslint --fix`'
