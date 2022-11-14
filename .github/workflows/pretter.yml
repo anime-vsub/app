@@ -36,6 +36,6 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
-          message: 'chore: format code'
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          message: 'chore: `prettier -w`'
