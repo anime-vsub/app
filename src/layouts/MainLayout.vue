@@ -359,7 +359,7 @@
             :label="notificationStore.max"
           />
 
-          <q-menu v-model="showMenuNotify" class="scrollbar-custom">
+          <q-menu v-model="showMenuNotify" class="scrollbar-custom shadow-xl">
             <q-card class="bg-dark-page max-w-[435px]">
               <q-card-section>
                 <q-list v-if="notificationStore.loading" class="bg-transparent">
@@ -783,7 +783,7 @@
   </q-layout>
 
   <q-dialog v-model="showDialogLogin">
-    <q-card class="h-[60vh] bg-dark-500 min-w-[300px]">
+    <q-card class="h-[60vh] bg-dark-500 min-w-[300px] rounded-xl">
       <q-card-section>
         <div class="flex justify-between">
           <q-btn dense round flat unelevated />
