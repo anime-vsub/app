@@ -310,7 +310,7 @@
                     anchor="top middle"
                     self="bottom middle"
                     :offset="[0, 20]"
-                    class="min-w-[200px] min-h-[165px] max-w-[329px] flex column flex-nowrap overflow-visible"
+                    class="rounded-xl shadow-xl bg-[rgba(28,28,30,1)] min-w-[200px] min-h-[165px] max-w-[329px] flex column flex-nowrap overflow-visible"
                     ref="menuChapsRef"
                   >
                     <div>
@@ -485,7 +485,7 @@
                     anchor="top middle"
                     self="bottom middle"
                     :offset="[0, 20]"
-                    class="min-w-[200px]"
+                    class="rounded-xl shadow-xl min-w-[200px]"
                   >
                     <div
                       class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
@@ -555,7 +555,7 @@
                     anchor="top middle"
                     self="bottom middle"
                     :offset="[0, 20]"
-                    class="min-w-[200px]"
+                    class="rounded-xl shadow-xl min-w-[200px]"
                   >
                     <div
                       class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"

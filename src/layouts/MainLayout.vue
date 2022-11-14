@@ -142,7 +142,7 @@
 
           <q-menu
             v-model="showMenuFollow"
-            class="flex flex-nowrap column bg-dark-page"
+            class="flex flex-nowrap column bg-dark-page shadow-xl"
           >
             <q-card
               class="transparent shadow-none w-[415px] scrollbar-custom overflow-y-auto"
@@ -197,7 +197,7 @@
 
           <q-menu
             v-model="showMenuHistory"
-            class="flex flex-nowrap column bg-dark-page"
+            class="flex flex-nowrap column bg-dark-page shadow-xl"
           >
             <q-card
               class="transparent shadow-none w-[415px] scrollbar-custom overflow-y-auto"
@@ -464,7 +464,7 @@
             height="30"
           />
 
-          <q-menu v-model="showMenuAccount" class="bg-dark-page">
+          <q-menu v-model="showMenuAccount" class="rounded-xl bg-dark-page shadow-xl">
             <q-card class="transparent w-[280px] px-2 pb-3">
               <q-list v-if="tabMenuAccountActive === 'normal'">
                 <template v-if="authStore.isLogged">
