@@ -12,14 +12,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          # Make sure the actual branch is checked out when running on pull requests
-          ref: ${{ github.head_ref }}
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.2
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          # This part is also where you can pass other options, for example:
-          prettier_options: --write \"**/*.{ts,vue,scss,html,md,json}\" --ignore-path .gitignore,.prettierignore
+          node-version: 18
+
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Install depends
+        run: pnpm i
+
+      - name: Format
+        run: pnpm format
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          message: 'chore: format code'
