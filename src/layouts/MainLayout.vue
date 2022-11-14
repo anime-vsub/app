@@ -301,9 +301,9 @@
                       <span class="line-clamp-3 mt-1">{{ item.name }}</span>
                       <div class="text-grey mt-1">
                         <template v-if="item.seasonName"
-                          >{{ item.seasonName }} tập
+                          >{{ t('_season-tap', [item.seasonName]) }}
                         </template>
-                        <template v-else>Tập</template>
+                        <template v-else>{{ t('Tap') }}</template>
                         {{ item.last.name }}
                       </div>
                       <div class="text-grey mt-2">
@@ -503,7 +503,8 @@
                     clickable
                     v-ripple
                     to="/tai-khoan/edit-profile"
-                    active-class="" class="rounded-xl"
+                    active-class=""
+                    class="rounded-xl"
                   >
                     <q-item-section avatar class="min-w-0">
                       <Icon
@@ -529,7 +530,8 @@
 
                 <q-item
                   clickable
-                  v-ripple class="rounded-xl"
+                  v-ripple
+                  class="rounded-xl"
                   @click="tabMenuAccountActive = 'locale'"
                 >
                   <q-item-section avatar class="min-w-0">
@@ -545,7 +547,8 @@
 
                 <q-item
                   clickable
-                  v-ripple class="rounded-xl"
+                  v-ripple
+                  class="rounded-xl"
                   @click="tabMenuAccountActive = 'setting'"
                 >
                   <q-item-section avatar class="min-w-0">
@@ -565,8 +568,8 @@
 
                 <q-item
                   clickable
-                  v-ripple class="rounded-xl"
-                  @click="tabMenuAccountActive = 'pagination'"
+                  v-ripple
+                  class="rounded-xl"
                 >
                   <q-item-section avatar class="min-w-0">
                     <Icon
@@ -576,17 +579,22 @@
                     />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>Cuộn vô hạn</q-item-label>
+                    <q-item-label>{{ t('cuon-vo-han') }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-toggle v-model="settingsStore.infinityScroll" dense color="main" />
+                    <q-toggle
+                      v-model="settingsStore.infinityScroll"
+                      dense
+                      color="main"
+                    />
                   </q-item-section>
                 </q-item>
 
                 <q-item
                   v-if="authStore.isLogged"
                   clickable
-                  v-ripple class="rounded-xl"
+                  v-ripple
+                  class="rounded-xl"
                   @click="logout"
                 >
                   <q-item-section avatar class="min-w-0">
@@ -625,7 +633,8 @@
                   v-for="{ name, code } in languages"
                   :key="code"
                   clickable
-                  v-ripple class="rounded-xl"
+                  v-ripple
+                  class="rounded-xl"
                   @click="settingsStore.locale = code"
                 >
                   <q-item-section avatar class="min-w-0">

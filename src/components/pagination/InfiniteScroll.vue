@@ -1,5 +1,4 @@
 <template>
-
   <q-infinite-scroll
     ref="infiniteScrollRef"
     @load="(index, done) => emit('load', index, done)"
@@ -18,23 +17,27 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, defineExpose } from "vue"
+import { QInfiniteScroll } from "quasar";
+import { useSettingsStore } from "stores/settings"
+import { defineExpose, ref } from "vue"
 
-  import { useSettingsStore } from "stores/settings"
 
-  const settingsStore = useSettingsStore()
-  const infiniteScrollRef = ref<QInfiniteScroll>()
+const settingsStore = useSettingsStore()
+const infiniteScrollRef = ref<QInfiniteScroll>()
 
-  const emit = defineEmits<{
-    (name: "load", fn: (index: number, done: boolean) => void): Promise<void> | void
-  }>()
+const emit = defineEmits<{
+  (
+    name: "load",
+    index: number,
+    fn: (done?: boolean | undefined) => void
+  ): Promise<void> | void
+}>()
 
-  defineExpose({
-    reset() {
-      infiniteScrollRef.value?.reset()
-    }
-  })
+defineExpose({
+  reset() {
+    infiniteScrollRef.value?.reset()
+  },
+})
 </script>
 
-<style>
-</style>
+<style></style>

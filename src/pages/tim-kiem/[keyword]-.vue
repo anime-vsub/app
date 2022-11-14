@@ -1,12 +1,16 @@
 <template>
-  <q-page-sticky position="top" class="bg-dark-page z-10 children:w-full children:py-2 children:!flex children:justify-between">
+  <q-page-sticky
+    position="top"
+    class="bg-dark-page z-10 children:w-full children:py-2 children:!flex children:justify-between"
+  >
     <div class="text-[16px] py-2 px-4">
       {{ t("tim-kiem") }}
       <span class="text-weight-medium">{{ route.params.keyword }}</span>
-      <span v-if="data" class="text-gray-300 text-[14px]"> &bull;
-      {{ data?.maxPage }} trang </span>
+      <span v-if="data" class="text-gray-300 text-[14px]">
+        &bull; {{ t('_maxPage-trang', [data?.maxPage]) }}
+      </span>
     </div>
-      <pagination.Pagination :max="data?.maxPage" class="mr-4" />
+    <pagination.Pagination :max="data?.maxPage" class="mr-4" />
   </q-page-sticky>
 
   <div class="pt-[32px]">
@@ -14,11 +18,9 @@
     <template v-else-if="data">
       <ScreenNotFound v-if="data.items.length === 0" />
 
-
-        <pagination.InfiniteScroll v-else
-                ref="infiniteScrollRef" @load="onLoad">
-          <GridCard :items="data.items" />
-        </pagination.InfiniteScroll>
+      <pagination.InfiniteScroll v-else ref="infiniteScrollRef" @load="onLoad">
+        <GridCard :items="data.items" />
+      </pagination.InfiniteScroll>
     </template>
     <ScreenError v-else @click:retry="run" />
   </div>
@@ -30,14 +32,13 @@ import GridCard from "components/GridCard.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
-import { QInfiniteScroll } from "quasar"
+import pagination from "components/pagination"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
+import { usePage } from "src/composibles/page"
 import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { useRoute, useRouter } from "vue-router"
-import pagination from "components/pagination"
-import { usePage } from "src/composibles/page"
+import { useRoute } from "vue-router"
 
 const { t } = useI18n()
 const route = useRoute()

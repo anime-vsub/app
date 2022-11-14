@@ -1,6 +1,7 @@
 {
   "Tap": "Practice",
   "_chap-tap": "{0} episodes",
+  "_maxPage-trang": "{0} pages",
   "_message-hint-next": "{0} (Shift N)",
   "_playback-x": "{0}x",
   "_rate-nguoi-danh-gia": "{0} reviewer",
@@ -27,6 +28,7 @@
   "chon-season": "Select season",
   "chon-tap": "Select episode",
   "chua-co-video-nao-trong-danh-sach-phat-nay": "There are no videos in this playlist yet",
+  "cuon-vo-han": "Infinite scroll",
   "da-cap-nhat": "Updated",
   "da-cap-nhat-mo-ta-danh-sach-phat": "Updated playlist description",
   "da-cap-nhat-ten-danh-sach-phat": "Updated playlist name",

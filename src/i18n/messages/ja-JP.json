@@ -1,6 +1,7 @@
 {
   "Tap": "練習",
   "_chap-tap": "{0} エピソード",
+  "_maxPage-trang": "{0} ページ",
   "_message-hint-next": "{0} (シフト N)",
   "_playback-x": "{0}×",
   "_rate-nguoi-danh-gia": "{0} レビュー担当者",
@@ -27,6 +28,7 @@
   "chon-season": "シーズンを選択",
   "chon-tap": "エピソードを選択",
   "chua-co-video-nao-trong-danh-sach-phat-nay": "この再生リストにはまだ動画がありません",
+  "cuon-vo-han": "無限スクロール",
   "da-cap-nhat": "更新しました",
   "da-cap-nhat-mo-ta-danh-sach-phat": "プレイリストの説明を更新",
   "da-cap-nhat-ten-danh-sach-phat": "プレイリスト名を更新しました",

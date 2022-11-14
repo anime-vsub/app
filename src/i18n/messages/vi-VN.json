@@ -1,6 +1,7 @@
 {
   "Tap": "Tập",
   "_chap-tap": "{0} tập",
+  "_maxPage-trang": "{0} trang",
   "_message-hint-next": "{0} (Shift + N)",
   "_playback-x": "{0}x",
   "_rate-nguoi-danh-gia": "{0} người đánh giá",
@@ -27,6 +28,7 @@
   "chon-season": "Chọn season",
   "chon-tap": "Chọn tập",
   "chua-co-video-nao-trong-danh-sach-phat-nay": "Chưa có video nào trong danh sách phát này",
+  "cuon-vo-han": "Cuộn vô hạn",
   "da-cap-nhat": "Đã cập nhật",
   "da-cap-nhat-mo-ta-danh-sach-phat": "Đã cập nhật mô tả danh sách phát",
   "da-cap-nhat-ten-danh-sach-phat": "Đã cập nhật tên danh sách phát",
@@ -113,7 +115,6 @@
   "tao": "Tạo",
   "tao-danh-sach-phat": "tạo danh sách phát",
   "tao-danh-sach-phat-moi": "Tạo danh sách phát mới",
-  "tap": "Tập",
   "tap-_chap": "Tập {0}",
   "tap-_chap-_name-_othername": "Tập {0} {1} {2}",
   "tap-moi-chieu-vao-_time-_day": "Tập mới chiếu vào {0} {1} {2}",
