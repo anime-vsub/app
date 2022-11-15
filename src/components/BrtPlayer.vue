@@ -192,6 +192,7 @@
                       params: {
                         season: nextChap.season.value,
                         chap: nextChap.chap?.id,
+          chapName: nextChap.chap ? parseChapName(nextChap.chap.name) : undefined
                       },
                     }
                   "
@@ -791,6 +792,8 @@ import {
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
+import { parseChapName } from "src/logic/parseChapName"
+
 import type { Source } from "./sources"
 
 const { t } = useI18n()
@@ -1229,6 +1232,7 @@ function onVideoEnded() {
       params: {
         season: props.nextChap.season.value,
         chap: props.nextChap.chap?.id,
+        chapName: props.nextChap.chap ? parseChapName(props.nextChap.chap.name) : undefined
       },
     })
   }
@@ -1782,6 +1786,7 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
           params: {
             season: props.nextChap.season.value,
             chap: props.nextChap.chap?.id,
+            seasonName: props.nextChap.chap ? parseChapName(props.nextChap.chap.name) : undefined
           },
         })
 

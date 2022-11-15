@@ -22,6 +22,7 @@
         params: {
           season,
           chap: item.id,
+          chapName: parseChapName(item.name)
         },
       }"
       :ref="(el: QBtn) => find(item) && (activeRef = el as QBtn)"
@@ -43,6 +44,7 @@ import { QBtn } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { ref, watchEffect } from "vue"
+import { parseChapName } from "src/logic/parseChapName"
 
 const props = defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean

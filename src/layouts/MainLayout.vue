@@ -269,7 +269,7 @@
                   <router-link
                     class="bg-transparent flex mt-1 mb-4 flex-nowrap"
                     style="white-space: initial"
-                    :to="`/phim/${item.id}/${item.last.chap}`"
+                    :to="`/phim/${item.id}/${parseChapName(item.last.name)}-${item.last.chap}`"
                   >
                     <div class="w-[149px]">
                       <q-img
@@ -944,6 +944,7 @@ import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import { parseChapName } from "src/logic/parseChapName"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
 
