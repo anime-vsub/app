@@ -33,10 +33,12 @@ jobs:
       - name: Format
         run: pnpm format
 
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
         with:
-          author_name: GitHub Actions
-          author_email: actions@github.com
-          message: 'chore: `prettier -w`'
-          push: origin main
+          commit-message: 'chore: `prettier -w`'
+          branch: prettier-fix
+          delete-branch: true
+          title: "[chore]: prettier -w"
+          body: "Format code with `prettier -w`"
+  

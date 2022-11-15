@@ -43,12 +43,13 @@ jobs:
 
       - name: Run ESLint
         run: pnpm lint --fix
-        
-      
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
         with:
-          author_name: GitHub Actions
-          author_email: actions@github.com
-          message: 'chore: `eslint --fix`'
-          push: origin main
+          commit-message: 'chore: `eslint --fix`'
+          branch: eslint-fix
+          delete-branch: true
+          title: "[chore]: eslint --fix"
+          body: "Format code with `eslint --fix`"
+          
