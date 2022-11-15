@@ -3,14 +3,14 @@
     position="top"
     class="bg-dark-page z-10 children:w-full children:py-2 children:!flex children:justify-between"
   >
-    <div class="text-[16px] py-2 px-4">{{ t("anime-da-theo-doi") }}</div>
+    <div class="text-[18px] py-2 px-4">{{ t("anime-da-theo-doi") }}</div>
 
     <pagination.Pagination :max="data?.maxPage" class="mr-4" />
   </q-page-sticky>
 
   <!-- main -->
 
-  <div class="pt-[32px]">
+  <div class="pt-[48px]">
     <SkeletonGridCard v-if="loading" :count="12" />
     <template v-else-if="data">
       <ScreenNotFound v-if="data.items.length === 0" />

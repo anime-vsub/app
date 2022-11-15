@@ -3,17 +3,17 @@
     position="top"
     class="bg-dark-page z-10 children:w-full children:py-2 children:!flex children:justify-between"
   >
-    <div class="text-[16px] py-2 px-4">
-      {{ t("tim-kiem") }}
-      <span class="text-weight-medium">{{ route.params.keyword }}</span>
+    <div class="text-[18px] py-2 px-4">
+      <span class="text-gray-400 mr-1">{{ t("tim-kiem") }}: </span>
+      <span class="font-bold truncate">{{ route.params.keyword }}</span>
       <span v-if="data" class="text-gray-300 text-[14px]">
-        &bull; {{ t("_maxPage-trang", [data?.maxPage]) }}
+        <span class="mx-3">&bull;</span>{{ t("_maxPage-trang", [data?.maxPage]) }} kết quả
       </span>
     </div>
     <pagination.Pagination :max="data?.maxPage" class="mr-4" />
   </q-page-sticky>
 
-  <div class="pt-[32px]">
+  <div class="pt-[48px]">
     <SkeletonGridCard v-if="loading" :count="12" />
     <template v-else-if="data">
       <ScreenNotFound v-if="data.items.length === 0" />

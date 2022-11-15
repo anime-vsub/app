@@ -1,6 +1,6 @@
 <template>
   <q-page-sticky position="top" class="children:w-full bg-dark-page z-10">
-    <div class="text-[16px] py-2 px-4">{{ t("tai-khoan") }}</div>
+    <div class="text-[18px] py-2 px-4">{{ t("tai-khoan") }}</div>
   </q-page-sticky>
 
   <div v-if="authStore.isLogged" class="pt-[32px]">
