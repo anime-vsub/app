@@ -356,12 +356,12 @@ import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import { QInfiniteScroll, useQuasar } from "quasar"
 import dayjs from "src/logic/dayjs"
+import { parseChapName } from "src/logic/parseChapName"
 import { usePlaylistStore } from "stores/playlist"
 import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import { parseChapName } from "src/logic/parseChapName"
 
 const { t } = useI18n()
 const route = useRoute()

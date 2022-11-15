@@ -457,6 +457,7 @@ import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
+import { parseChapName } from "src/logic/parseChapName"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
 import { usePlaylistStore } from "stores/playlist"
@@ -730,7 +731,6 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
-import { parseChapName } from "src/logic/parseChapName"
 // TOOD: check chapName in url is chapName
 watchEffect(() => {
   if (!currentMetaChap.value) return

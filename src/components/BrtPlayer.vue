@@ -775,6 +775,7 @@ import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
 import { fetchJava } from "src/logic/fetchJava"
+import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
 import type {
   ResponseDataSeasonError,
@@ -794,7 +795,6 @@ import {
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
-import { parseChapName } from "src/logic/parseChapName"
 
 import type { Source } from "./sources"
 

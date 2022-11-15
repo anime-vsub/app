@@ -43,8 +43,8 @@
 import { QBtn } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
-import { ref, watchEffect } from "vue"
 import { parseChapName } from "src/logic/parseChapName"
+import { ref, watchEffect } from "vue"
 
 const props = defineProps<{
   find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean

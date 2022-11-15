@@ -99,11 +99,11 @@ import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import { QInfiniteScroll } from "quasar"
 import { History } from "src/apis/runs/history"
+import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { parseChapName } from "src/logic/parseChapName"
 
 const { t } = useI18n()
 useHead(
