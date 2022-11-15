@@ -4,15 +4,20 @@
     class="bg-dark-page z-10 children:w-full children:py-2 children:!flex children:justify-between"
   >
     <div class="text-[18px] py-2 px-4">
-      <template  v-if="title">
-      {{ title }}
+      <template v-if="title">
+        {{ title }}
 
-      <span v-if="textFilter" class="text-grey text-[14px]"
-        ><span class="mx-1">&bull;</span>{{ textFilter }}</span
-      >
-
+        <span v-if="textFilter" class="text-grey text-[14px]"
+          ><span class="mx-1">&bull;</span>{{ textFilter }}</span
+        >
       </template>
-    <q-skeleton v-else type="rect" width="180px" height="16px" class="rounded-lg" />
+      <q-skeleton
+        v-else
+        type="rect"
+        width="180px"
+        height="16px"
+        class="rounded-lg"
+      />
     </div>
 
     <pagination.Pagination :max="data?.maxPage" class="mr-4" />
