@@ -30,7 +30,9 @@
           <router-link
             class="bg-transparent flex mt-1 mb-4"
             style="white-space: initial"
-            :to="`/phim/${item.id}/${parseChapName(item.last.name)}-${item.last.chap}`"
+            :to="`/phim/${item.id}/${parseChapName(item.last.name)}-${
+              item.last.chap
+            }`"
           >
             <q-img
               no-spinner
@@ -101,7 +103,7 @@ import { parseTime } from "src/logic/parseTime"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { parseChapName} from "src/logic/parseChapName"
+import { parseChapName } from "src/logic/parseChapName"
 
 const { t } = useI18n()
 useHead(

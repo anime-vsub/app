@@ -22,7 +22,7 @@
         params: {
           season,
           chap: item.id,
-          chapName: parseChapName(item.name)
+          chapName: parseChapName(item.name),
         },
       }"
       :ref="(el: QBtn) => find(item) && (activeRef = el as QBtn)"

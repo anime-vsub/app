@@ -96,7 +96,13 @@
           :key="item.id"
           class="bg-transparent inline-block history-item mr-2"
           style="white-space: initial"
-          @click="router.push(`/phim/${item.id}/${parseChapName(item.last.name)}-${item.last.chap}`)"
+          @click="
+            router.push(
+              `/phim/${item.id}/${parseChapName(item.last.name)}-${
+                item.last.chap
+              }`
+            )
+          "
         >
           <q-img
             no-spinner
@@ -329,7 +335,7 @@ import { ref, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
-import { parseChapName} from "src/logic/parseChapName"
+import { parseChapName } from "src/logic/parseChapName"
 // import QrScanner from "qr-scanner"
 
 const { t } = useI18n()

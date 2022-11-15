@@ -192,7 +192,9 @@
                       params: {
                         season: nextChap.season.value,
                         chap: nextChap.chap?.id,
-          chapName: nextChap.chap ? parseChapName(nextChap.chap.name) : undefined
+                        chapName: nextChap.chap
+                          ? parseChapName(nextChap.chap.name)
+                          : undefined,
                       },
                     }
                   "
@@ -1232,7 +1234,9 @@ function onVideoEnded() {
       params: {
         season: props.nextChap.season.value,
         chap: props.nextChap.chap?.id,
-        chapName: props.nextChap.chap ? parseChapName(props.nextChap.chap.name) : undefined
+        chapName: props.nextChap.chap
+          ? parseChapName(props.nextChap.chap.name)
+          : undefined,
       },
     })
   }
@@ -1786,7 +1790,9 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
           params: {
             season: props.nextChap.season.value,
             chap: props.nextChap.chap?.id,
-            seasonName: props.nextChap.chap ? parseChapName(props.nextChap.chap.name) : undefined
+            seasonName: props.nextChap.chap
+              ? parseChapName(props.nextChap.chap.name)
+              : undefined,
           },
         })
 

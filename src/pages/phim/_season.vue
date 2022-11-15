@@ -730,30 +730,31 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
-import { parseChapName} from "src/logic/parseChapName"
+import { parseChapName } from "src/logic/parseChapName"
 // TOOD: check chapName in url is chapName
 watchEffect(() => {
-  if (!currentMetaChap.value) return ;
+  if (!currentMetaChap.value) return
 
-if (!route.params.chap) return // this first chap not need
+  if (!route.params.chap) return // this first chap not need
 
   const correctChapName = parseChapName(currentMetaChap.value.name)
   const urlChapName = route.params.chapName
 
-
   if (urlChapName) {
     // check is valid if not valid redirect
-    if (correctChapName === urlChapName) return;
+    if (correctChapName === urlChapName) return
 
-    console.warn(`chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`)
+    console.warn(
+      `chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
+    )
     router.replace({
       name: route.name,
       query: route.query,
       hash: route.hash,
       params: {
         ...route.params,
-        chapName: correctChapName
-      }
+        chapName: correctChapName,
+      },
     })
   } else {
     // old type url /phim/:season/:chap
@@ -765,8 +766,8 @@ if (!route.params.chap) return // this first chap not need
       hash: route.hash,
       params: {
         ...route.params,
-        chapName: correctChapName
-      }
+        chapName: correctChapName,
+      },
     })
   }
 })

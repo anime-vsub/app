@@ -245,7 +245,9 @@
           :key="item.season"
           class="bg-transparent flex flex-nowrap mb-5 group"
           style="white-space: initial"
-          :to="`/phim/${item.season}/${parseChapName(item.nameChap)}-${item.chap}`"
+          :to="`/phim/${item.season}/${parseChapName(item.nameChap)}-${
+            item.chap
+          }`"
         >
           <div>
             <q-img
@@ -359,7 +361,7 @@ import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
-import { parseChapName} from "src/logic/parseChapName"
+import { parseChapName } from "src/logic/parseChapName"
 
 const { t } = useI18n()
 const route = useRoute()
