@@ -55,3 +55,4 @@ jobs:
           author_name: GitHub Actions
           author_email: actions@github.com
           message: 'chore: `eslint --fix`'
+          push: origin main
