@@ -31,9 +31,7 @@ jobs:
           run_install: false
 
       - name: Install depends
-        run: |
-          | npm i
-          | pnpm i
+        run: npm i && pnpm i
 
       - name: Typing
         run: pnpm typing
