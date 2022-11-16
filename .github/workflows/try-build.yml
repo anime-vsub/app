@@ -11,7 +11,7 @@ on:
     - cron: '15 10 * * 5'
 
 jobs:
-  eslint:
+  build:
     name: Try build 
     runs-on: ubuntu-latest
     steps:
