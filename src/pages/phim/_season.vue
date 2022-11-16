@@ -753,7 +753,8 @@ watchEffect(() => {
       query: route.query,
       hash: route.hash,
       params: {
-        ...route.params,
+        season: route.params.season,
+        chap: route.params.chap,
         chapName: correctChapName,
       },
     })
@@ -767,7 +768,8 @@ watchEffect(() => {
       query: route.query,
       hash: route.hash,
       params: {
-        ...route.params,
+        season: route.params.season,
+        chap: route.params.chap,
         chapName: correctChapName,
       },
     })
