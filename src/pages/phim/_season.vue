@@ -217,7 +217,7 @@
 
   <div v-else class="mx-4 row">
     <div class="col-9 pr-4">
-      <div class="flex-1 mt-4 mb-2">
+      <div class="flex-1 mt-4">
         <h1
           class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px] leading-normal"
         >
@@ -227,7 +227,7 @@
 
       <div class="flex justify-between">
         <div>
-          <h5 class="text-gray-400 text-weight-normal">
+          <h5 class="text-gray-400 text-weight-normal leading-normal mb-2">
             {{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}
             <span v-if="currentDataSeason?.update">
               &bull;
@@ -272,7 +272,7 @@
           >
             <Icon
               v-if="followed"
-              icon="material-symbols:bookmark-added-outline-rounded"
+              icon="material-symbols:bookmark-added-rounded"
               width="28"
               height="28"
             />
