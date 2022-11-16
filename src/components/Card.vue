@@ -71,10 +71,9 @@
             <template v-if="data.time_release !== undefined">
               &bull;
               <template v-if="data.time_release"
-                >Công chiếu trong
-                {{ dayjs(data.time_release).fromNow() }}</template
+                >{{ t('cong-chieu-trong-_ago', [dayjs(data.time_release).fromNow()]) }}</template
               ><template v-else
-                >Ngày công chiếu chưa xác định</template
+                >{{ t('ngay-cong-chieu-chua-xac-dinh') }}</template
               ></template
             >
           </h4>
