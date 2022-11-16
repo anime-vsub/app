@@ -187,16 +187,15 @@
                   :disable="!nextChap"
                   replace
                   :to="
-                    nextChap && {
-                      name: 'watch-anime',
-                      params: {
-                        season: nextChap.season.value,
-                        chap: nextChap.chap?.id,
-                        chapName: nextChap.chap
-                          ? parseChapName(nextChap.chap.name)
-                          : undefined,
-                      },
-                    }
+                    nextChap
+                      ? `/phim/${nextChap.season.value}/${
+                          nextChap.chap
+                            ? parseChapName(nextChap.chap.name) +
+                              '-' +
+                              nextChap.chap?.id
+                            : ''
+                        }`
+                      : undefined
                   "
                 >
                   <Icon
@@ -1160,16 +1159,15 @@ function onVideoEnded() {
         : t("dang-phat-tap-tiep-theo")
     )
 
-    router.push({
-      name: "watch-anime",
-      params: {
-        season: props.nextChap.season.value,
-        chap: props.nextChap.chap?.id,
-        chapName: props.nextChap.chap
-          ? parseChapName(props.nextChap.chap.name)
-          : undefined,
-      },
-    })
+    router.push(
+      `/phim/${props.nextChap.season.value}/${
+        props.nextChap.chap
+          ? parseChapName(props.nextChap.chap.name) +
+            "-" +
+            props.nextChap.chap?.id
+          : ""
+      }`
+    )
   }
 }
 
@@ -1729,16 +1727,15 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       break
     case "KeyN":
       if (event.shiftKey && props.nextChap)
-        router.push({
-          name: "watch-anime",
-          params: {
-            season: props.nextChap.season.value,
-            chap: props.nextChap.chap?.id,
-            seasonName: props.nextChap.chap
-              ? parseChapName(props.nextChap.chap.name)
-              : undefined,
-          },
-        })
+        router.push(
+          `/phim/${props.nextChap.season.value}/${
+            props.nextChap.chap
+              ? parseChapName(props.nextChap.chap.name) +
+                "-" +
+                props.nextChap.chap?.id
+              : ""
+          }`
+        )
 
       break
     case "KeyJ":
