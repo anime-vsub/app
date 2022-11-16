@@ -70,11 +70,12 @@
             }}</template>
             <template v-if="data.time_release !== undefined">
               &bull;
-              <template v-if="data.time_release"
-                >{{ t('cong-chieu-trong-_ago', [dayjs(data.time_release).fromNow()]) }}</template
-              ><template v-else
-                >{{ t('ngay-cong-chieu-chua-xac-dinh') }}</template
-              ></template
+              <template v-if="data.time_release">{{
+                t("cong-chieu-trong-_ago", [dayjs(data.time_release).fromNow()])
+              }}</template
+              ><template v-else>{{
+                t("ngay-cong-chieu-chua-xac-dinh")
+              }}</template></template
             >
           </h4>
 
