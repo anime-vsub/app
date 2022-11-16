@@ -516,7 +516,7 @@ watch(error, (error) => {
     router.push({
       name: "not_found",
       params: {
-        pathMatch: route.path,
+        catchAll: route.path,
       },
       query: {
         message: error.message,
