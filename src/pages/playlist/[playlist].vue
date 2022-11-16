@@ -371,14 +371,18 @@ const playlistStore = usePlaylistStore()
 
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
-const { data: metaPlaylist, run: runGetMetaPlaylist } = useRequest(
+const {
+  data: metaPlaylist,
+  run: runGetMetaPlaylist,
+  error: errorMetaPlaylist,
+} = useRequest(
   async () => {
     const { playlists } = playlistStore
     if (!playlists) return playlists
 
     const meta = playlists.find((item) => item.id === route.params.playlist)
     // eslint-disable-next-line functional/no-throw-statement
-    if (!meta) throw new Error(t("danh-sach-phat-khong-ton-tai"))
+    if (!meta) throw new Error("NOT_FOUND")
 
     const poster = await playlistStore.getPosterPlaylist(meta.id)
 
@@ -391,6 +395,19 @@ const { data: metaPlaylist, run: runGetMetaPlaylist } = useRequest(
     },
   }
 )
+watch(errorMetaPlaylist, (err) => {
+  if (err?.message === "NOT_FOUND") {
+    $q.notify({
+      message: t("danh-sach-phat-khong-ton-tai"),
+    })
+    router.push({
+      name: "not_found",
+      path: route.path,
+      query: route.query,
+      hash: route.hash,
+    })
+  }
+})
 const sorter = ref<"asc" | "desc">("asc")
 const { data: movies, run: runGetMovies } = useRequest(
   () => {

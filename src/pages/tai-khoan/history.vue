@@ -98,14 +98,17 @@ import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import { QInfiniteScroll } from "quasar"
-import { History } from "src/apis/runs/history"
+import dayjs from "src/logic/dayjs"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
+import { useHistoryStore } from "stores/history"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 
 const { t } = useI18n()
+const historyStore = useHistoryStore()
+
 useHead(
   computed(() => {
     const title = t("lich-su-xem-anime")
@@ -128,10 +131,26 @@ useHead(
   })
 )
 
-const { loading, data: histories, run } = useRequest(() => History())
+const {
+  loading,
+  data: histories,
+  run,
+} = useRequest(
+  (
+    lastDoc: typeof historyStore.loadMoreAfter extends (
+      LastDoc: infer R
+    ) => void
+      ? R
+      : unknown
+  ) => {
+    return historyStore.loadMoreAfter(lastDoc)
+  }
+)
 
 async function onLoad(page: number, done: (end: boolean) => void) {
-  const items = await History(histories.value)
+  const items = await historyStore.loadMoreAfter(
+    histories.value?.[histories.value.length - 1]?.$doc
+  )
 
   histories.value = [...(histories.value ?? []), ...items]
   done(items.length === 0)

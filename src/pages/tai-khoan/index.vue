@@ -70,7 +70,7 @@
         />
       </router-link>
       <div
-        v-if="loadingHistories"
+        v-if="historyStore.last30Item === null"
         class="h-[146px] mx-4 overflow-x-hidden whitespace-nowrap"
       >
         <q-card
@@ -88,11 +88,11 @@
         </q-card>
       </div>
       <div
-        v-else-if="!errorHistories"
+        v-else-if="!historyStore.last30ItemError"
         class="mx-4 overflow-x-auto whitespace-nowrap"
       >
         <q-card
-          v-for="item in histories"
+          v-for="item in historyStore.last30Item"
           :key="item.id"
           class="bg-transparent inline-block history-item mr-2"
           style="white-space: initial"
@@ -142,7 +142,7 @@
         v-else
         no-image
         class="h-[146px] px-4"
-        @click:retry="runHistories"
+        @click:retry="historyStore.refreshLast30ItemError"
       />
     </div>
 
@@ -327,11 +327,11 @@ import SkeletonCard from "components/SkeletonCard.vue"
 import { compressToBase64 } from "lz-string"
 import QRCode from "qrcode"
 import { useQuasar } from "quasar"
-import { History } from "src/apis/runs/history"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
+import { useHistoryStore } from "stores/history"
 import { ref, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -349,6 +349,7 @@ const password = ref("")
 
 const $q = useQuasar()
 const authStore = useAuthStore()
+const historyStore = useHistoryStore()
 
 async function login() {
   const loader = $q.loading.show({
@@ -406,15 +407,6 @@ watchEffect(() => {
     })
 })
 
-// ============ fetch history =============
-const {
-  data: histories,
-  loading: loadingHistories,
-  run: runHistories,
-  error: errorHistories,
-  // refreshAsync: refreshHistories,
-} = useRequest(() => History(), { manual: true })
-
 // ========== favorite =========
 const {
   data: favorites,
@@ -428,13 +420,8 @@ watch(
   () => authStore.isLogged,
   (isLogged) => {
     if (isLogged) {
-      runHistories()
       runFavorites()
     } else {
-      histories.value = undefined
-      loadingHistories.value = false
-      errorHistories.value = undefined
-
       favorites.value = undefined
       loadingFavorites.value = false
       errorFavorites.value = undefined
@@ -442,7 +429,6 @@ watch(
   }
 )
 if (authStore.isLogged) {
-  runHistories()
   runFavorites()
 }
 

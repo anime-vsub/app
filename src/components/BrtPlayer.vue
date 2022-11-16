@@ -732,14 +732,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { DocumentData, DocumentReference } from "@firebase/firestore"
-import {
-  doc,
-  getDoc,
-  getFirestore,
-  serverTimestamp,
-  setDoc,
-} from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
 import {
   useDocumentVisibility,
@@ -748,7 +740,6 @@ import {
   useIntervalFn,
   useMouseInElement,
 } from "@vueuse/core"
-import { app } from "boot/firebase"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import type Hlsjs from "hls.js"
@@ -783,6 +774,7 @@ import type {
   ResponseDataSeasonSuccess,
 } from "src/pages/phim/response-data-season"
 import { useAuthStore } from "stores/auth"
+import { useHistoryStore } from "stores/history"
 import { useSettingsStore } from "stores/settings"
 import {
   computed,
@@ -804,10 +796,10 @@ const { t } = useI18n()
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
+const historyStore = useHistoryStore()
 
 const router = useRouter()
 const $q = useQuasar()
-const db = getFirestore(app)
 
 interface SiblingChap {
   season: {
@@ -822,7 +814,7 @@ interface SiblingChap {
 
 const props = defineProps<{
   sources?: Source[]
-  currentSeason?: string
+  currentSeason: string
   nameCurrentSeason?: string
   currentChap?: string
   nameCurrentChap?: string
@@ -944,39 +936,31 @@ const setArtCurrentTime = (currentTime: number) => {
   artCurrentTime.value = currentTime
 }
 // eslint-disable-next-line functional/no-let
-let disableBackupProgressViewing = false
+let progressRestored = false
 watch(
   [() => props.currentChap, () => authStore.uid],
   async ([currentChap, uid]) => {
     if (currentChap && uid) {
-      disableBackupProgressViewing = true
-      setArtCurrentTime(0)
+      progressRestored = false
 
-      const userRef = doc(db, "users", uid)
-      const seasonRef = doc(
-        userRef,
-        "history",
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        props.currentSeason!.slice(
-          0,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          props.currentSeason!.lastIndexOf("$") >>> 0
-        )
-      )
-      const chapRef = doc(seasonRef, "chaps", currentChap)
+      try {
+        setArtCurrentTime(0)
+        const cur = (
+          await historyStore.getProgressChap(props.currentSeason, currentChap)
+        )?.cur
 
-      const progressInCloud = await getDoc(chapRef)
-
-      const cur = progressInCloud.data()?.cur
-
-      if (
-        cur &&
-        !artControlProgressHoving.value /* disable if user hoving to progress bar */
-      ) {
-        setArtCurrentTime(cur)
-        addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
+        if (
+          cur &&
+          !artControlProgressHoving.value /* disable if user hoving to progress bar */
+        ) {
+          setArtCurrentTime(cur)
+          addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
+        }
+      } catch (err) {
+        console.error(err)
       }
-      disableBackupProgressViewing = false
+
+      progressRestored = true
     }
   },
   { immediate: true }
@@ -1073,52 +1057,24 @@ function onVideoCanPlay() {
   activeTime = Date.now()
 }
 
-// eslint-disable-next-line functional/no-let
-let seasonRefCache: null | DocumentReference<DocumentData>
 watch(
-  [() => authStore.user_data, () => props.currentSeason],
+  [
+    () => authStore.user_data,
+    () => props.currentSeason,
+    () => props.nameCurrentSeason,
+  ],
   // eslint-disable-next-line camelcase
-  async ([user_data, currentSeason]) => {
-    seasonRefCache = null
-
+  async ([user_data, currentSeason, seasonName]) => {
     // eslint-disable-next-line camelcase
-    if (!user_data || !currentSeason) return
+    if (!user_data || !currentSeason || !seasonName) return
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const userRef = doc(db, "users", authStore.uid!)
-
-    if (!(await getDoc(userRef)).exists()) {
-      console.log("create new user")
-      await setDoc(userRef, {
-        // eslint-disable-next-line camelcase
-        email: user_data.email,
-        // eslint-disable-next-line camelcase
-        name: user_data.name,
-      })
-    }
-
-    const seasonRef = doc(
-      userRef,
-      "history",
-      currentSeason.slice(0, currentSeason.lastIndexOf("$") >>> 0)
-    )
-
-    if (!(await getDoc(seasonRef)).exists()) {
-      //
-      console.log("create new record")
-      await setDoc(seasonRef, {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        first: props.seasons![0].value,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        poster: props.poster!,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        seasonName: props.nameCurrentSeason!,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        name: props.name!,
-      })
-    }
-
-    seasonRefCache = seasonRef
+    await historyStore.createSeason(currentSeason, {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      poster: props.poster!,
+      seasonName,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      name: props.name!,
+    })
   },
   { immediate: true }
 )
@@ -1134,38 +1090,15 @@ const emit = defineEmits<{
   ): void
 }>()
 const saveCurTimeToPer = throttle(async () => {
-  if (!seasonRefCache) return
-
-  if (disableBackupProgressViewing) return
+  if (!progressRestored) return
   if (!props.currentChap) return
+  if (!props.nameCurrentChap) return
 
-  const chapRef = doc(seasonRefCache, "chaps", props.currentChap)
-
-  await Promise.all([
-    setDoc(
-      seasonRefCache,
-      {
-        timestamp: serverTimestamp(),
-        last: {
-          chap: props.currentChap,
-          name: props.nameCurrentChap,
-          cur: artCurrentTime.value,
-          dur: artDuration.value,
-        },
-      },
-      { merge: true }
-    ).catch((err) => console.error("update time error", err)),
-    setDoc(
-      chapRef,
-      {
-        cur: artCurrentTime.value,
-        dur: artDuration.value,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        name: props.nameCurrentChap!,
-      },
-      { merge: true }
-    ).catch((err) => console.error("update progress error", err)),
-  ])
+  await historyStore.setProgressChap(props.currentSeason, props.currentChap, {
+    cur: artCurrentTime.value,
+    dur: artDuration.value,
+    name: props.nameCurrentChap,
+  })
 
   emit("cur-update", {
     cur: artCurrentTime.value,

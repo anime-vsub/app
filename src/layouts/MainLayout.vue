@@ -204,7 +204,7 @@
             >
               <q-card-section>
                 <div
-                  v-if="loadingHistories"
+                  v-if="historyStore.last30Item === null"
                   v-for="i in 12"
                   :key="i"
                   class="flex mt-1 mb-4 flex-nowrap"
@@ -242,14 +242,24 @@
                 </div>
 
                 <template
-                  v-else-if="histories"
-                  v-for="(item, index) in histories"
+                  v-else-if="
+                    historyStore.last30Item &&
+                    historyStore.last30Item.length > 0
+                  "
+                  v-for="(item, index) in historyStore.last30Item.map(
+                    (item) => {
+                      return {
+                        ...item,
+                        timestamp: dayjs(item.timestamp.toDate()),
+                      }
+                    }
+                  )"
                   :key="item.id"
                 >
                   <div
                     v-if="
-                      !histories![index - 1] ||
-                      !histories![index - 1].timestamp.isSame(
+                      !historyStore.last30Item![index - 1] ||
+                      !dayjs(historyStore.last30Item![index - 1].timestamp.toDate()).isSame(
                         item.timestamp,
                         'day'
                       )
@@ -329,7 +339,7 @@
                     outline
                     rounded
                     color="main"
-                    @click="refreshHistories"
+                    @click="historyStore.refreshLast30ItemError"
                     >{{ t("thu-lai") }}</q-btn
                   >
                 </div>
@@ -935,14 +945,15 @@ import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import { debounce, QInput, useQuasar } from "quasar"
-import { History } from "src/apis/runs/history"
 import { PreSearch } from "src/apis/runs/pre-search"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { languages } from "src/i18n"
+import dayjs from "src/logic/dayjs"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
+import { useHistoryStore } from "stores/history"
 import { useNotificationStore } from "stores/notification"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
@@ -1030,6 +1041,7 @@ const authStore = useAuthStore()
 const notificationStore = useNotificationStore()
 const settingsStore = useSettingsStore()
 const playlistStore = usePlaylistStore()
+const historyStore = useHistoryStore()
 
 const extensionHelperInstalled = ref(typeof window.Http !== "undefined")
 // eslint-disable-next-line functional/no-let
@@ -1128,23 +1140,7 @@ const showMenuHistory = ref(false)
 const showMenuFollow = ref(false)
 const showMenuNotify = ref(false)
 const showMenuAccount = ref(false)
-// history
-const {
-  data: histories,
-  loading: loadingHistories,
-  refreshAsync: refreshHistories,
-} = useRequest(() => History(), {
-  manual: true,
-  cacheKey: "histories",
-  cacheTime: 60 * 60 * 1000,
-})
-watch(
-  showMenuHistory,
-  (state) => {
-    if (state) refreshHistories()
-  },
-  { immediate: true }
-)
+
 // follow
 const {
   data: favorites,
