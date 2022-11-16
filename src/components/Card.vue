@@ -1,7 +1,7 @@
 <template>
   <router-link :to="data.path">
-    <q-card flat dense class="bg-transparent" @click.prevent
-    @mousemove="eventMouseoverCard = $event">
+    <q-card flat dense class="bg-transparent"
+    @mousemove="data.description ? ((eventMouseoverCard = $event)) : undefined">
       <q-img
         no-spinner
         :src="data.image"
@@ -42,11 +42,14 @@
         </div>
     </q-card>
 
-    <q-menu ref="menuRef" no-parent-event anchor="center right" self="center left"  touch-position class="bg-[rgba(20,22,27,0.98)] scrollbar-custom" max-width="280px" @mouseover.stop>
+    <q-menu v-if="data.description" ref="menuRef" no-parent-event anchor="center right" self="center left"  touch-position class="bg-[rgba(20,22,27,0.98)] scrollbar-custom overflow-x-visible max-w-[280px] md:max-w-[320px]" @mouseover.stop>
       <q-card class="bg-transparent"  ref="cardMenuRef">
         <q-card-section>
           <h3 class="text-subtitle1 font-weight-medium line-clamp-3 leading-normal">{{ data.name }}</h3>
-          <h4 class="text-grey-5 text-[13px] leading-normal">{{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}</h4>
+          <h4 class="text-grey-5 text-[13px] leading-normal">
+            {{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}
+            <template v-if="data.time_release !== undefined"> &bull; <template v-if="data.time_release">Công chiếu trong {{ dayjs(data.time_release).fromNow() }}</template><template v-else>Ngày công chiếu chưa xác định</template></template>
+          </h4>
 
 <div class="flex items-center mt-3">
           <Quality
@@ -93,12 +96,13 @@ import { ref, watch } from "vue"
 import { useElementHover , useMouseInElement} from '@vueuse/core'
 import { debounce } from "quasar"
 
+import dayjs from "src/logic/dayjs"
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
 
 const { t } = useI18n()
 
-defineProps<{
+const props = defineProps<{
   data: TPost
   trending?: number
 }>()
@@ -108,10 +112,12 @@ const menuRef  =ref<QMenu>()
 const imgRef = ref<QImg>()
 const cardMenuRef = ref<QCard>()
 
+const eventMouseoverCard = ref< MouseEvent | null > ( null )
+
+if (props.data.description) {
 const mouseInCard     = useElementHover(imgRef)
 const mouseInCardMenu = useElementHover(cardMenuRef)
 
-const eventMouseoverCard = ref< MouseEvent | null > ( null )
 
 const showMenu = debounce(() =>  menuRef.value?.show(eventMouseoverCard.value), 700)
 watch([mouseInCard, mouseInCardMenu], debounce(([ outsideCard, outsideCardMenu ]) => {
@@ -119,6 +125,7 @@ watch([mouseInCard, mouseInCardMenu], debounce(([ outsideCard, outsideCardMenu ]
   if ( outsideCard || outsideCardMenu )showMenu()
   else menuRef.value?.hide()
 }, 10))
+}
 </script>
 
 <style lang="scss" scoped>
@@ -175,7 +182,7 @@ watch([mouseInCard, mouseInCardMenu], debounce(([ outsideCard, outsideCardMenu ]
 
 .tags {
   > * {
-    @apply mr-3;
+    @apply mr-3 inline-block;
   }
 
   @media (max-width: 767px) {
