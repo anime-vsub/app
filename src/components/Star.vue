@@ -1,10 +1,12 @@
 <template>
+  <div class="flex items-center font-weight-medium">
+
   <svg
     width="16px"
     height="16px"
     viewBox="0 0 28 27"
     version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns="http://www.w3.org/2000/svg" class="mr-1"
   >
     <g
       id="V1.12.0_UI_4391_Watch-Page-Add-Rating"
@@ -16,7 +18,7 @@
       <g
         id="4391-6_1920_info"
         transform="translate(-948.000000, -906.000000)"
-        fill="#1CC749"
+        fill="#07f217"
         fill-rule="nonzero"
       >
         <g id="Group-10-Copy-10" transform="translate(906.000000, 880.000000)">
@@ -30,4 +32,14 @@
       </g>
     </g>
   </svg>
+
+<template v-if="label">{{ label }}</template>
+  </div>
 </template>
+
+
+<script lang="ts" setup>
+  defineProps<{
+    label?: string
+  }>()
+  </script>
