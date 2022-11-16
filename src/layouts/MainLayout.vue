@@ -242,10 +242,7 @@
                 </div>
 
                 <template v-else-if="histories">
-                  <div
-                    v-if="histories.length === 0"
-                    class="text-center"
-                  >
+                  <div v-if="histories.length === 0" class="text-center">
                     <div class="text-gray-400 text-subtitle1 py-2">
                       {{ t("chua-co-lich-su-xem") }}
                     </div>
@@ -253,24 +250,22 @@
 
                   <template
                     v-else
-                    v-for="(item, index) in histories.map(
-                      (item) => {
-                        return {
-                          ...item,
-                          timestamp: dayjs(item.timestamp.toDate()),
-                        }
+                    v-for="(item, index) in histories.map((item) => {
+                      return {
+                        ...item,
+                        timestamp: dayjs(item.timestamp.toDate()),
                       }
-                    )"
+                    })"
                     :key="item.id"
                   >
                     <div
                       v-if="
-                      !histories[index - 1] ||
-                      !dayjs(histories[index - 1].timestamp.toDate()).isSame(
-                        item.timestamp,
-                        'day'
-                      )
-                    "
+                        !histories[index - 1] ||
+                        !dayjs(histories[index - 1].timestamp.toDate()).isSame(
+                          item.timestamp,
+                          'day'
+                        )
+                      "
                       class="text-subtitle2 text-weight-normal"
                     >
                       {{
@@ -1158,8 +1153,8 @@ const {
   refreshAsync: refreshHistories,
 } = useRequest(() => historyStore.loadMoreAfter(), {
   manual: true,
-  cacheKey: "histories",
-  staleTime: 60 * 60 * 1000,
+  cacheKey: "history",
+  cacheTime: 5 * 60 * 1000, //
 })
 watch(
   showMenuHistory,
@@ -1177,7 +1172,7 @@ const {
 } = useRequest(() => TuPhim(1), {
   manual: true,
   cacheKey: "favorites",
-  staleTime: 60 * 60 * 1000,
+  cacheTime: 5 * 60 * 1000,
 })
 watch(
   showMenuFollow,
