@@ -43,9 +43,7 @@ export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
     .map((_i, item) => getInfoAnchor(cheerio.find(item)))
     .toArray()
   const timeschedule = cheerio.find(".mli-timeschedule")
-  const countdown =
-    int(timeschedule.attr("data-timer_second")) ??
-    undefined
+  const countdown = int(timeschedule.attr("data-timer_second")) ?? undefined
 
   return {
     path,
@@ -63,6 +61,10 @@ export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
     studio,
     genre,
     time_release:
-      timeschedule ? (countdown === undefined ? undefined  : Math.round(now / 1e3 + countdown) * 1e3) ?? null : undefined,
+      timeschedule.length > 0
+        ? (countdown === undefined
+            ? undefined
+            : Math.round(now / 1e3 + countdown) * 1e3) ?? null
+        : undefined,
   }
 }
