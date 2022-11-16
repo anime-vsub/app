@@ -1185,7 +1185,7 @@ async function removeAnimePlaylist(idPlaylist: string) {
 
 .tags {
   > * {
-    @apply mr-3;
+    @apply mr-3 inline-block;
   }
 
   @media (max-width: 767px) {
