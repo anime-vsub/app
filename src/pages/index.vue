@@ -101,8 +101,7 @@
           </div>
           <div class="focus-item-info">
             <span class="focus-item-score">
-              <Star />
-              {{ item.rate }}
+              <Star :label="item.rate" />
             </span>
             <span class="focus-item-year">{{ item.year }}</span>
             <span class="focus-item-update">

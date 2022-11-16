@@ -217,7 +217,7 @@
 
   <div v-else class="mx-4 row">
     <div class="col-9 pr-4">
-      <div class="flex-1 mt-4 mb-2">
+      <div class="flex-1 mt-4">
         <h1
           class="line-clamp-2 text-weight-medium py-0 my-0 text-[18px] leading-normal"
         >
@@ -227,7 +227,7 @@
 
       <div class="flex justify-between">
         <div>
-          <h5 class="text-gray-400 text-weight-normal">
+          <h5 class="text-gray-400 text-weight-normal leading-normal mb-2">
             {{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}
             <span v-if="currentDataSeason?.update">
               &bull;
@@ -272,7 +272,7 @@
           >
             <Icon
               v-if="followed"
-              icon="material-symbols:bookmark-added-outline-rounded"
+              icon="material-symbols:bookmark-added-rounded"
               width="28"
               height="28"
             />
@@ -748,7 +748,8 @@ watchEffect(() => {
       `chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
     )
     router.replace({
-      name: route.name,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      name: route.name!,
       query: route.query,
       hash: route.hash,
       params: {
@@ -761,7 +762,8 @@ watchEffect(() => {
     // replace
     console.info("this url old type redirect to new type url")
     router.replace({
-      name: route.name,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      name: route.name!,
       query: route.query,
       hash: route.hash,
       params: {
@@ -1185,7 +1187,7 @@ async function removeAnimePlaylist(idPlaylist: string) {
 
 .tags {
   > * {
-    @apply mr-3;
+    @apply mr-3 inline-block;
   }
 
   @media (max-width: 767px) {

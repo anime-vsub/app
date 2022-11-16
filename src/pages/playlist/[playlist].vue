@@ -107,7 +107,7 @@
                 height="25"
               />
 
-              <q-menu class="rounded-xl bg-[rgba(35,35,35,1)]">
+              <q-menu class="rounded-xl bg-dark-menu">
                 <q-card class="transparent">
                   <q-list class="transparent">
                     <q-item clickable @click="removePlaylist">
@@ -214,7 +214,7 @@
           />
           <span class="text-[16px]">{{ t("sap-xep") }}</span>
 
-          <q-menu class="rounded-xl bg-[rgba(35,35,35,1)]" auto-close>
+          <q-menu class="rounded-xl bg-dark-menu" auto-close>
             <q-card class="transparent">
               <q-list class="transparent">
                 <q-item
@@ -280,7 +280,7 @@
                 height="25"
               />
 
-              <q-menu class="rounded-xl bg-[rgba(35,35,35,1)]">
+              <q-menu class="rounded-xl bg-dark-menu">
                 <q-card class="transparent">
                   <q-list class="transparent">
                     <q-item

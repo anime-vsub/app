@@ -41,7 +41,7 @@
         <span class="font-weight-normal text-gray-400"
           >{{ t("danh-gia") }}
         </span>
-        <Star class="mr-1 ml-1" /> {{ data.rate }}
+        <Star class="mr-1 ml-1" :label="data.rate" />
       </div>
 
       <q-btn
