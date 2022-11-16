@@ -423,10 +423,8 @@
 </template>
 
 <script lang="ts" setup>
-import { collection, doc, getDocs, getFirestore } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
-import { app } from "boot/firebase"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import CardVertical from "components/CardVertical.vue"
@@ -460,6 +458,7 @@ import { post } from "src/logic/http"
 import { parseChapName } from "src/logic/parseChapName"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
+import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
@@ -482,6 +481,7 @@ const router = useRouter()
 const { t } = useI18n()
 const authStore = useAuthStore()
 const playlistStore = usePlaylistStore()
+const historyStore = useHistoryStore()
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -991,23 +991,23 @@ async function getProgressChaps(
 ): Promise<Map<string, { cur: number; dur: number }> | null> {
   if (!authStore.uid) return null
 
-  const db = getFirestore(app)
-
-  const userRef = doc(db, "users", authStore.uid)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const seasonRef = doc(userRef, "history", currentSeason!)
-  const chapRef = collection(seasonRef, "chaps")
-
-  const { docs } = await getDocs(chapRef)
-
   const progressChaps = new Map()
-  docs.forEach((item) => {
-    const { cur, dur } = item.data()
-    progressChaps.set(item.id, {
-      cur,
-      dur,
+
+  try {
+    const docs = await historyStore.getProgressChaps(currentSeason)
+    docs.forEach((item) => {
+      const { cur, dur } = item.data()
+      progressChaps.set(item.id, {
+        cur,
+        dur,
+      })
     })
-  })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
+  }
 
   return progressChaps
 }

@@ -70,6 +70,7 @@ specifiers:
   vite-plugin-rewrite-all: ^1.0.0
   vite-plugin-windicss: ^1.8.8
   vitest: '0.22'
+  vn-remove-accents: ^1.0.0
   vue: ^3.2.41
   vue-i18n: ^9.2.2
   vue-request: 2.0.0-rc.4
@@ -111,6 +112,7 @@ dependencies:
   swiper: 8.4.4
   ts-md5: 1.3.1
   uuid: 9.0.0
+  vn-remove-accents: 1.0.0
   vue: 3.2.41
   vue-i18n: 9.2.2_vue@3.2.41
   vue-request: 2.0.0-rc.4_vue@3.2.41
@@ -7990,6 +7992,10 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vn-remove-accents/1.0.0:
+    resolution: {integrity: sha512-apEy3PAKFes8J/HjsHy6qT0LIIJ7E+y5uVIhwi3rO1hRPhTC8WZziZtp7Lw4UNgQlQ7fuSjOfg77sjD2uni4vQ==}
+    dev: false
 
   /vue-demi/0.13.11_vue@3.2.41:
     resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
