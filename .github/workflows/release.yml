@@ -10,17 +10,39 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Install depends
+        run: pnpm i
+
+      - run: Test
+        run: pnpm test
+
+      - run: Typing
+        run: pnpm typing
+
       - name: Push to branch `release`
         run: |
           git branch release -f
           git push origin release -f
-  
+
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@v4.0.1
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
-  
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
