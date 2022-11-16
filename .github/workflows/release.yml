@@ -23,7 +23,7 @@ jobs:
         run: npm i
 
       - name: Typing
-        run: pnpm typing
+        run: npm run typing
         
   release:
     needs: typing
