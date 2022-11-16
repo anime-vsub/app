@@ -1253,8 +1253,8 @@ watch(documentVisibility, (visibility) => {
   }
 })
 
-if (settingsStore.player.enableRemindStop) {
-  const { resume } = useIntervalFn(() => {
+{
+  const { resume, pause } = useIntervalFn(() => {
     if (!artPlaying.value) return
 
     setArtPlaying(false)
@@ -1276,7 +1276,20 @@ if (settingsStore.player.enableRemindStop) {
       })
   }, 1 /* hours */ * 3600_000)
 
-  const resumeDelay = debounce(resume, 1_000)
+  const resumeDelay = debounce(() => {
+    if (settingsStore.player.enableRemindStop) resume()
+  }, 1_000)
+  watch(
+    () => settingsStore.player.enableRemindStop,
+    (enabled) => {
+      if (!enabled) {
+        resumeDelay.cancel()
+        pause()
+      } else {
+        resumeDelay()
+      }
+    }
+  )
   ;[
     "mousedown",
     "mouseup",
