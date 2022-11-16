@@ -147,10 +147,8 @@ describe("getInfoTPost", () => {
     </div>
     </div>
     </article>`)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-let
-    let tmp: any
     expect(
-      JSON.parse(JSON.stringify((tmp = getInfoTPost($("article"), Date.now()))))
+      JSON.parse(JSON.stringify(getInfoTPost($("article"), Date.now())))
     ).toEqual({
       path: "/phim/detective-conan-movie-25-halloween-no-hanayome-a4418/",
       image:
@@ -174,7 +172,7 @@ describe("getInfoTPost", () => {
         { path: "/the-loai/mystery/", name: "Mystery" },
         { path: "/the-loai/hanh-dong/", name: "Action" },
       ],
-      time_release: null
+      time_release: null,
     })
   })
 })

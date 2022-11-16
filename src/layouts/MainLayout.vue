@@ -363,7 +363,10 @@
             :label="notificationStore.max"
           />
 
-          <q-menu v-model="showMenuNotify" class="bg-dark-page scrollbar-custom shadow-xl">
+          <q-menu
+            v-model="showMenuNotify"
+            class="bg-dark-page scrollbar-custom shadow-xl"
+          >
             <q-card class="bg-transparent max-w-[435px]">
               <q-card-section>
                 <q-list v-if="notificationStore.loading" class="bg-transparent">

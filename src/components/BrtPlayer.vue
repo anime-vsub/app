@@ -795,7 +795,6 @@ import {
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
-
 import type { Source } from "./sources"
 
 const { t } = useI18n()

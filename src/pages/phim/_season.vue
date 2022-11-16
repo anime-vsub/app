@@ -748,7 +748,8 @@ watchEffect(() => {
       `chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
     )
     router.replace({
-      name: route.name,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      name: route.name!,
       query: route.query,
       hash: route.hash,
       params: {
@@ -761,7 +762,8 @@ watchEffect(() => {
     // replace
     console.info("this url old type redirect to new type url")
     router.replace({
-      name: route.name,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      name: route.name!,
       query: route.query,
       hash: route.hash,
       params: {
