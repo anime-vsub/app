@@ -1062,18 +1062,17 @@ watch(
     () => authStore.user_data,
     () => props.currentSeason,
     () => props.nameCurrentSeason,
+    () => props.poster,
   ],
   // eslint-disable-next-line camelcase
-  async ([user_data, currentSeason, seasonName]) => {
+  async ([user_data, currentSeason, seasonName, poster]) => {
     // eslint-disable-next-line camelcase
-    if (!user_data || !currentSeason || !seasonName) return
-
+    if (!user_data || !currentSeason || !seasonName || !poster) return
+    console.log("set new season poster %s", poster)
     await historyStore.createSeason(currentSeason, {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      poster: props.poster!,
+      poster,
       seasonName,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      name: props.name!,
+      name: props.name,
     })
   },
   { immediate: true }
