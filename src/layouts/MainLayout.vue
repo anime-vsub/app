@@ -204,7 +204,7 @@
             >
               <q-card-section>
                 <div
-                  v-if="historyStore.last30Item === undefined"
+                  v-if="loadingHistories"
                   v-for="i in 12"
                   :key="i"
                   class="flex mt-1 mb-4 flex-nowrap"
@@ -241,9 +241,9 @@
                   </div>
                 </div>
 
-                <template v-else-if="historyStore.last30Item">
+                <template v-else-if="histories">
                   <div
-                    v-if="historyStore.last30Item.length === 0"
+                    v-if="histories.length === 0"
                     class="text-center"
                   >
                     <div class="text-gray-400 text-subtitle1 py-2">
@@ -253,7 +253,7 @@
 
                   <template
                     v-else
-                    v-for="(item, index) in historyStore.last30Item.map(
+                    v-for="(item, index) in histories.map(
                       (item) => {
                         return {
                           ...item,
@@ -265,8 +265,8 @@
                   >
                     <div
                       v-if="
-                      !historyStore.last30Item![index - 1] ||
-                      !dayjs(historyStore.last30Item![index - 1].timestamp.toDate()).isSame(
+                      !histories[index - 1] ||
+                      !dayjs(histories[index - 1].timestamp.toDate()).isSame(
                         item.timestamp,
                         'day'
                       )
@@ -349,7 +349,7 @@
                     outline
                     rounded
                     color="main"
-                    @click="historyStore.refreshLast30ItemError"
+                    @click="refreshHistories"
                     >{{ t("thu-lai") }}</q-btn
                   >
                 </div>
@@ -1150,6 +1150,24 @@ const showMenuHistory = ref(false)
 const showMenuFollow = ref(false)
 const showMenuNotify = ref(false)
 const showMenuAccount = ref(false)
+
+// history
+const {
+  data: histories,
+  loading: loadingHistories,
+  refreshAsync: refreshHistories,
+} = useRequest(() => historyStore.loadMoreAfter(), {
+  manual: true,
+  cacheKey: "histories",
+  staleTime: 60 * 60 * 1000,
+})
+watch(
+  showMenuHistory,
+  (state) => {
+    if (state) refreshHistories()
+  },
+  { immediate: true }
+)
 
 // follow
 const {
