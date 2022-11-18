@@ -204,7 +204,7 @@
             >
               <q-card-section>
                 <div
-                  v-if="historyStore.last30Item === null"
+                  v-if="loadingHistories"
                   v-for="i in 12"
                   :key="i"
                   class="flex mt-1 mb-4 flex-nowrap"
@@ -241,94 +241,99 @@
                   </div>
                 </div>
 
-                <template
-                  v-else-if="
-                    historyStore.last30Item &&
-                    historyStore.last30Item.length > 0
-                  "
-                  v-for="(item, index) in historyStore.last30Item.map(
-                    (item) => {
+                <template v-else-if="histories">
+                  <div v-if="histories.length === 0" class="text-center">
+                    <div class="text-gray-400 text-subtitle1 py-2">
+                      {{ t("chua-co-lich-su-xem") }}
+                    </div>
+                  </div>
+
+                  <template
+                    v-else
+                    v-for="(item, index) in histories.map((item) => {
                       return {
                         ...item,
                         timestamp: dayjs(item.timestamp.toDate()),
                       }
-                    }
-                  )"
-                  :key="item.id"
-                >
-                  <div
-                    v-if="
-                      !historyStore.last30Item![index - 1] ||
-                      !dayjs(historyStore.last30Item![index - 1].timestamp.toDate()).isSame(
-                        item.timestamp,
-                        'day'
-                      )
-                    "
-                    class="text-subtitle2 text-weight-normal"
+                    })"
+                    :key="item.id"
                   >
-                    {{
-                      item.timestamp.isToday()
-                        ? "Hôm nay"
-                        : item.timestamp.isYesterday()
-                        ? "Hôm qua"
-                        : item.timestamp.get("date") +
-                          " thg " +
-                          (item.timestamp.get("month") + 1)
-                    }}
-                  </div>
-                  <router-link
-                    class="bg-transparent flex mt-1 mb-4 flex-nowrap"
-                    style="white-space: initial"
-                    :to="`/phim/${item.id}/${parseChapName(item.last.name)}-${
-                      item.last.chap
-                    }`"
-                  >
-                    <div class="w-[149px]">
-                      <q-img
-                        no-spinner
-                        :src="item.poster"
-                        :ratio="1920 / 1080"
-                        class="!rounded-[4px]"
-                      >
-                        <BottomBlur class="px-0 h-[40%]">
-                          <div
-                            class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
-                          >
-                            <q-linear-progress
-                              :value="item.last.cur / item.last.dur"
-                              rounded
-                              color="main"
-                              class="!h-[3px]"
-                            />
-                          </div>
-                        </BottomBlur>
-                        <span
-                          class="absolute text-white z-10 text-[12px] bottom-2 right-2"
-                          >{{ parseTime(item.last.cur) }}</span
+                    <div
+                      v-if="
+                        !histories[index - 1] ||
+                        !dayjs(histories[index - 1].timestamp.toDate()).isSame(
+                          item.timestamp,
+                          'day'
+                        )
+                      "
+                      class="text-subtitle2 text-weight-normal"
+                    >
+                      {{
+                        item.timestamp.isToday()
+                          ? "Hôm nay"
+                          : item.timestamp.isYesterday()
+                          ? "Hôm qua"
+                          : item.timestamp.get("date") +
+                            " thg " +
+                            (item.timestamp.get("month") + 1)
+                      }}
+                    </div>
+                    <router-link
+                      class="bg-transparent flex mt-1 mb-4 flex-nowrap"
+                      style="white-space: initial"
+                      :to="`/phim/${item.id}/${parseChapName(item.last.name)}-${
+                        item.last.chap
+                      }`"
+                    >
+                      <div class="w-[149px]">
+                        <q-img
+                          no-spinner
+                          :src="item.poster"
+                          :ratio="1920 / 1080"
+                          class="!rounded-[4px]"
                         >
-                      </q-img>
-                    </div>
+                          <BottomBlur class="px-0 h-[40%]">
+                            <div
+                              class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
+                            >
+                              <q-linear-progress
+                                :value="item.last.cur / item.last.dur"
+                                rounded
+                                color="main"
+                                class="!h-[3px]"
+                              />
+                            </div>
+                          </BottomBlur>
+                          <span
+                            class="absolute text-white z-10 text-[12px] bottom-2 right-2"
+                            >{{ parseTime(item.last.cur) }}</span
+                          >
+                        </q-img>
+                      </div>
 
-                    <div class="pl-2 flex-1">
-                      <span class="line-clamp-3 mt-1">{{ item.name }}</span>
-                      <div class="text-grey mt-1">
-                        <template v-if="item.seasonName"
-                          >{{ t("_season-tap", [item.seasonName]) }}
-                        </template>
-                        <template v-else>{{ t("Tap") }}</template>
-                        {{ item.last.name }}
+                      <div class="pl-2 flex-1">
+                        <span class="line-clamp-3 mt-1">{{ item.name }}</span>
+                        <div class="text-grey mt-1">
+                          <template v-if="item.seasonName"
+                            >{{ t("_season-tap", [item.seasonName]) }}
+                          </template>
+                          <template v-else>{{ t("Tap") }}</template>
+                          {{ item.last.name }}
+                        </div>
+                        <div class="text-grey mt-2">
+                          {{
+                            t("xem-luc-_value", [
+                              item.timestamp.format(
+                                item.timestamp.isToday()
+                                  ? "HH:mm"
+                                  : "DD/MM/YYYY"
+                              ),
+                            ])
+                          }}
+                        </div>
                       </div>
-                      <div class="text-grey mt-2">
-                        {{
-                          t("xem-luc-_value", [
-                            item.timestamp.format(
-                              item.timestamp.isToday() ? "HH:mm" : "DD/MM/YYYY"
-                            ),
-                          ])
-                        }}
-                      </div>
-                    </div>
-                  </router-link>
+                    </router-link>
+                  </template>
                 </template>
 
                 <div v-else class="text-center">
@@ -339,7 +344,7 @@
                     outline
                     rounded
                     color="main"
-                    @click="historyStore.refreshLast30ItemError"
+                    @click="refreshHistories"
                     >{{ t("thu-lai") }}</q-btn
                   >
                 </div>
@@ -1141,6 +1146,24 @@ const showMenuFollow = ref(false)
 const showMenuNotify = ref(false)
 const showMenuAccount = ref(false)
 
+// history
+const {
+  data: histories,
+  loading: loadingHistories,
+  refreshAsync: refreshHistories,
+} = useRequest(() => historyStore.loadMoreAfter(), {
+  manual: true,
+  cacheKey: "history",
+  cacheTime: 5 * 60 * 1000, //
+})
+watch(
+  showMenuHistory,
+  (state) => {
+    if (state) refreshHistories()
+  },
+  { immediate: true }
+)
+
 // follow
 const {
   data: favorites,
@@ -1149,7 +1172,7 @@ const {
 } = useRequest(() => TuPhim(1), {
   manual: true,
   cacheKey: "favorites",
-  staleTime: 60 * 60 * 1000,
+  cacheTime: 5 * 60 * 1000,
 })
 watch(
   showMenuFollow,

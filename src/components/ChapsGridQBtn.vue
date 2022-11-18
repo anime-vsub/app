@@ -17,14 +17,7 @@
         },
       ]"
       replace
-      :to="{
-        name: 'watch-anime',
-        params: {
-          season,
-          chap: item.id,
-          chapName: parseChapName(item.name),
-        },
-      }"
+      :to="`/phim/${season}/${parseChapName(item.name)}-${item.id}`"
       :ref="(el: QBtn) => find(item) && (activeRef = el as QBtn)"
     >
       {{ item.name }}

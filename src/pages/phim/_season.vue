@@ -20,7 +20,7 @@
         :name-current-chap="currentMetaChap?.name"
         :next-chap="nextChap"
         :name="data.name"
-        :poster="currentDataSeason?.poster ?? data.poster"
+        :poster="currentDataSeason?.poster"
         :seasons="seasons"
         :_cache-data-seasons="_cacheDataSeasons"
         :fetch-season="fetchSeason"
@@ -753,7 +753,8 @@ watchEffect(() => {
       query: route.query,
       hash: route.hash,
       params: {
-        ...route.params,
+        season: route.params.season,
+        chap: route.params.chap,
         chapName: correctChapName,
       },
     })
@@ -767,7 +768,8 @@ watchEffect(() => {
       query: route.query,
       hash: route.hash,
       params: {
-        ...route.params,
+        season: route.params.season,
+        chap: route.params.chap,
         chapName: correctChapName,
       },
     })

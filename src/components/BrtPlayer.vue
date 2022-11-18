@@ -187,16 +187,15 @@
                   :disable="!nextChap"
                   replace
                   :to="
-                    nextChap && {
-                      name: 'watch-anime',
-                      params: {
-                        season: nextChap.season.value,
-                        chap: nextChap.chap?.id,
-                        chapName: nextChap.chap
-                          ? parseChapName(nextChap.chap.name)
-                          : undefined,
-                      },
-                    }
+                    nextChap
+                      ? `/phim/${nextChap.season.value}/${
+                          nextChap.chap
+                            ? parseChapName(nextChap.chap.name) +
+                              '-' +
+                              nextChap.chap?.id
+                            : ''
+                        }`
+                      : undefined
                   "
                 >
                   <Icon
@@ -1062,18 +1061,17 @@ watch(
     () => authStore.user_data,
     () => props.currentSeason,
     () => props.nameCurrentSeason,
+    () => props.poster,
   ],
   // eslint-disable-next-line camelcase
-  async ([user_data, currentSeason, seasonName]) => {
+  async ([user_data, currentSeason, seasonName, poster]) => {
     // eslint-disable-next-line camelcase
-    if (!user_data || !currentSeason || !seasonName) return
-
+    if (!user_data || !currentSeason || !seasonName || !poster) return
+    console.log("set new season poster %s", poster)
     await historyStore.createSeason(currentSeason, {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      poster: props.poster!,
+      poster,
       seasonName,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      name: props.name!,
+      name: props.name,
     })
   },
   { immediate: true }
@@ -1161,16 +1159,15 @@ function onVideoEnded() {
         : t("dang-phat-tap-tiep-theo")
     )
 
-    router.push({
-      name: "watch-anime",
-      params: {
-        season: props.nextChap.season.value,
-        chap: props.nextChap.chap?.id,
-        chapName: props.nextChap.chap
-          ? parseChapName(props.nextChap.chap.name)
-          : undefined,
-      },
-    })
+    router.push(
+      `/phim/${props.nextChap.season.value}/${
+        props.nextChap.chap
+          ? parseChapName(props.nextChap.chap.name) +
+            "-" +
+            props.nextChap.chap?.id
+          : ""
+      }`
+    )
   }
 }
 
@@ -1730,16 +1727,15 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       break
     case "KeyN":
       if (event.shiftKey && props.nextChap)
-        router.push({
-          name: "watch-anime",
-          params: {
-            season: props.nextChap.season.value,
-            chap: props.nextChap.chap?.id,
-            seasonName: props.nextChap.chap
-              ? parseChapName(props.nextChap.chap.name)
-              : undefined,
-          },
-        })
+        router.push(
+          `/phim/${props.nextChap.season.value}/${
+            props.nextChap.chap
+              ? parseChapName(props.nextChap.chap.name) +
+                "-" +
+                props.nextChap.chap?.id
+              : ""
+          }`
+        )
 
       break
     case "KeyJ":

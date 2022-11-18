@@ -3,7 +3,7 @@
     <div
       v-for="item in items"
       :key="item.name"
-      class="col-4 col-sm-3 col-md-2 px-[5px] md:px-[10px] py-2"
+      class="col-4 col-sm-3 col-md-2 px-[10px] py-2"
     >
       <Card :data="item" />
     </div>
