@@ -59,7 +59,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     id: string
     name: string
     description?: string
-    public: string
+    public: boolean
     created: Timestamp
     updated?: Timestamp
     size: number
@@ -82,8 +82,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       >,
       {
         name,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        public: isPublic as any,
+        public: isPublic,
         created: serverTimestamp(),
         size: 0,
       }
@@ -156,8 +155,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     return updateDoc(
       doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>,
       {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        public: isPublic as any,
+        public: isPublic,
       }
     )
   }
