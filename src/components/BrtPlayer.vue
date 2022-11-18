@@ -1056,6 +1056,7 @@ function onVideoCanPlay() {
   activeTime = Date.now()
 }
 
+// eslint-disable-next-line functional/no-let
 let seasonReady = false
 watch(
   [
@@ -1067,8 +1068,14 @@ watch(
   // eslint-disable-next-line camelcase
   async ([user_data, currentSeason, seasonName, poster]) => {
     seasonReady = false
+    if (
     // eslint-disable-next-line camelcase
-    if (!user_data || !currentSeason || typeof seasonName !== "string" || !poster) return
+      !user_data ||
+      !currentSeason ||
+      typeof seasonName !== "string" ||
+      !poster
+    )
+      return
     console.log("set new season poster %s", poster)
     await historyStore.createSeason(currentSeason, {
       poster,
@@ -1094,6 +1101,7 @@ const saveCurTimeToPer = throttle(async () => {
   if (!progressRestored) return
   if (!seasonReady) return
   if (!props.currentChap) return
+  if (typeof props.nameCurrentChap !== "string") return
 
   await historyStore.setProgressChap(props.currentSeason, props.currentChap, {
     cur: artCurrentTime.value,
