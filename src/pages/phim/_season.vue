@@ -70,7 +70,7 @@
           </q-btn>
         </div>
 
-        <div v-if="loading" class="flex-1 flex items-center justify-center">
+        <div v-if="!data && !error" class="flex-1 flex items-center justify-center">
           <q-spinner color="main" size="3em" :thickness="3" />
         </div>
 
