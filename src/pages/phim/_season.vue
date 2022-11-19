@@ -464,6 +464,7 @@ import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
+import { getRealSeasonId } from "src/logic/getRealSeasonId"
 
 import type {
   ResponseDataSeasonError,
@@ -490,11 +491,7 @@ const currentMetaSeason = computed(() => {
 const realIdCurrentSeason = computed(() => {
   if (!currentSeason.value) return
 
-  const lastIndexDolar = currentSeason.value.lastIndexOf("$")
-
-  if (lastIndexDolar === -1) return currentSeason.value
-
-  return currentSeason.value.slice(0, lastIndexDolar)
+return getRealSeasonId(currentSeason.value)
 })
 
 const { data, run, error, loading } = useRequest(
@@ -608,9 +605,7 @@ async function fetchSeason(season: string) {
   try {
     console.log("fetch chaps on season")
 
-    const lastIndexDolar = season.lastIndexOf("$")
-    const realIdSeason =
-      lastIndexDolar === -1 ? season : season.slice(0, lastIndexDolar)
+    const realIdSeason =getRealSeasonId(season)
 
     const response = await PhimIdChap(realIdSeason)
 
