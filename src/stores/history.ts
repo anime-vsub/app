@@ -35,6 +35,7 @@ export const useHistoryStore = defineStore("history", () => {
   interface HistoryItem {
     name: string
     poster: string
+    season: string
     seasonName: string
 
     last?: {
@@ -126,7 +127,7 @@ export const useHistoryStore = defineStore("history", () => {
 
   async function createSeason(
     seasonId: string,
-    info: Omit<HistoryItem, "timestamp">
+    info: Omit<HistoryItem, "timestamp" | "season">
   ) {
     if (!authStore.uid)
       // eslint-disable-next-line functional/no-throw-statement
@@ -142,7 +143,8 @@ export const useHistoryStore = defineStore("history", () => {
       getRealSeasonId(seasonId)
     ) as DocumentReference<HistoryItem>
 
-    if (!(await getDoc(seasonRef)).exists()) await setDoc(seasonRef, info)
+    if (!(await getDoc(seasonRef)).exists())
+      await setDoc(seasonRef, { season: seasonId, ...info })
   }
 
   // children /chaps/:chap
@@ -198,14 +200,14 @@ export const useHistoryStore = defineStore("history", () => {
         i18n.global.t("errors.require_login_to", ["lưu lịch sử xem"])
       )
 
-    season = getRealSeasonId(season)
+    const realSeason = getRealSeasonId(season)
 
     const seasonRef = doc(
       db,
       "users",
       authStore.uid,
       "history",
-      season
+      realSeason
     ) as DocumentReference<Required<HistoryItem>>
     const chapRef = doc(
       seasonRef,
@@ -218,6 +220,7 @@ export const useHistoryStore = defineStore("history", () => {
         seasonRef,
         {
           timestamp: serverTimestamp(),
+          season,
           last: {
             chap,
             ...info,

@@ -64,7 +64,6 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
       if (!data.timestamp) return
 
       return {
-        id: item.id,
         ...data,
         timestamp: dayjs(data.timestamp.toDate()),
         rawTimestamp: data.timestamp,

@@ -448,7 +448,7 @@
                                 :find="
                                   (item) =>
                                     value === currentSeason &&
-                                    item.id === currentChap
+                                    (item.season ?? item.id) === currentChap
                                 "
                                 :progress-chaps="_tmp.progressChaps"
                                 class-item="px-3 !py-[6px] mb-3"

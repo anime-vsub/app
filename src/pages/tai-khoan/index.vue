@@ -98,7 +98,7 @@
           style="white-space: initial"
           @click="
             router.push(
-              `/phim/${item.id}/${parseChapName(item.last.name)}-${
+              `/phim/${(item.season ?? item.id)}/${parseChapName(item.last.name)}-${
                 item.last.chap
               }`
             )

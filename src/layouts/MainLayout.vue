@@ -281,7 +281,7 @@
                     <router-link
                       class="bg-transparent flex mt-1 mb-4 flex-nowrap"
                       style="white-space: initial"
-                      :to="`/phim/${item.id}/${parseChapName(item.last.name)}-${
+                      :to="`/phim/${item.season ?? item.id}/${parseChapName(item.last.name)}-${
                         item.last.chap
                       }`"
                     >
