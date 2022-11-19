@@ -537,6 +537,14 @@ watch(
       return
     }
 
+
+        // check season on tasks
+          if (seasons.value?.some(item => item.value === realIdCurrentSeason.value)) {
+            console.log("exists on cache by data previous season")
+            return
+          }
+
+
     console.log("data refreshed")
 
     const season = data.value.season ?? []
