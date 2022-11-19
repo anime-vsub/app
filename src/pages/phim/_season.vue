@@ -454,6 +454,7 @@ import { C_URL, labelToQuality } from "src/constants"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
 import { formatView } from "src/logic/formatView"
+import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { post } from "src/logic/http"
 import { parseChapName } from "src/logic/parseChapName"
 import { unflat } from "src/logic/unflat"
@@ -464,7 +465,6 @@ import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
-import { getRealSeasonId } from "src/logic/getRealSeasonId"
 
 import type {
   ResponseDataSeasonError,
