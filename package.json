@@ -16,6 +16,7 @@
     "typing": "vue-tsc --noEmit",
     "quasar": "quasar",
     "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts",
+    "ci": "pnpm format && pnpm lint --fix && pnpm typing",
     "release": "bumpp package.json --commit --tag --push"
   },
   "dependencies": {

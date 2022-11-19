@@ -30,9 +30,9 @@
           <router-link
             class="bg-transparent flex mt-1 mb-4"
             style="white-space: initial"
-            :to="`/phim/${item.season ?? item.id}/${parseChapName(item.last.name)}-${
-              item.last.chap
-            }`"
+            :to="`/phim/${item.season ?? item.id}/${parseChapName(
+              item.last.name
+            )}-${item.last.chap}`"
           >
             <q-img
               no-spinner

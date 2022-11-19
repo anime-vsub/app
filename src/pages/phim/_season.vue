@@ -70,7 +70,10 @@
           </q-btn>
         </div>
 
-        <div v-if="!data && !error" class="flex-1 flex items-center justify-center">
+        <div
+          v-if="!data && !error"
+          class="flex-1 flex items-center justify-center"
+        >
           <q-spinner color="main" size="3em" :thickness="3" />
         </div>
 
@@ -491,7 +494,7 @@ const currentMetaSeason = computed(() => {
 const realIdCurrentSeason = computed(() => {
   if (!currentSeason.value) return
 
-return getRealSeasonId(currentSeason.value)
+  return getRealSeasonId(currentSeason.value)
 })
 
 const { data, run, error, loading } = useRequest(
@@ -537,13 +540,13 @@ watch(
       return
     }
 
-
-        // check season on tasks
-          if (seasons.value?.some(item => item.value === realIdCurrentSeason.value)) {
-            console.log("exists on cache by data previous season")
-            return
-          }
-
+    // check season on tasks
+    if (
+      seasons.value?.some((item) => item.value === realIdCurrentSeason.value)
+    ) {
+      console.log("exists on cache by data previous season")
+      return
+    }
 
     console.log("data refreshed")
 
@@ -613,7 +616,7 @@ async function fetchSeason(season: string) {
   try {
     console.log("fetch chaps on season")
 
-    const realIdSeason =getRealSeasonId(season)
+    const realIdSeason = getRealSeasonId(season)
 
     const response = await PhimIdChap(realIdSeason)
 

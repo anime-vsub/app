@@ -448,7 +448,7 @@
                                 :find="
                                   (item) =>
                                     value === currentSeason &&
-                                    (item.season ?? item.id) === currentChap
+                                    item.id === currentChap
                                 "
                                 :progress-chaps="_tmp.progressChaps"
                                 class-item="px-3 !py-[6px] mb-3"
@@ -1069,7 +1069,7 @@ watch(
   async ([user_data, currentSeason, seasonName, poster]) => {
     seasonReady = false
     if (
-    // eslint-disable-next-line camelcase
+      // eslint-disable-next-line camelcase
       !user_data ||
       !currentSeason ||
       typeof seasonName !== "string" ||
