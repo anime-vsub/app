@@ -2,10 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
-      allow read, write, get, delete: if false;
+      allow read, write: if false;
         
     	match /users {
-      	allow read, write, get, delete: if false;
+      	allow get, list, create, update, delete: if false;
       }
       match /users/{hash} {
       	function hasOnly(keys) {
@@ -16,12 +16,11 @@ service cloud.firestore {
       	allow create: if hasOnly(["name", "email"]) &&
         	request.resource.data.name != null && 
           request.resource.data.email != null;
-        allow delete, update: if false;
+        allow delete, update, list: if false;
         allow get: if true;
         
         match /history/{season} {
-        	allow create: if hasOnly(["first", "poster", "seasonName", "name"]) &&
-          	request.resource.data.first is string &&
+        	allow create: if hasOnly(["poster", "seasonName", "name"]) &&
           	request.resource.data.poster is string &&
           	request.resource.data.seasonName is string &&
           	request.resource.data.name is string
@@ -33,7 +32,7 @@ service cloud.firestore {
             request.resource.data.last.name is string &&
             request.resource.data.last.cur is number &&
             request.resource.data.last.dur is number;
-          allow read: if true;
+          allow get, list: if true;
           
           match /chaps/{chap} {
           	allow create, update: if hasOnly(["cur", "dur", "name"]) &&
@@ -41,7 +40,39 @@ service cloud.firestore {
               request.resource.data.dur is number &&
               request.resource.data.name is string;
             allow delete: if false;
-            allow read: if true ;
+            allow get, list: if true;
+          }
+        }
+        
+        
+        match /playlist/{playlist} {
+        	allow create: if hasOnly(["name", "public", "created", "size"]) &&
+          	request.resource.data.name is string &&
+            request.resource.data.public is bool &&
+            request.resource.data.created is timestamp &&
+            request.resource.data.size is number;
+          allow delete: if true;
+        	allow update: if request.resource.data.name is string ||
+          	request.resource.data.public is bool ||
+            request.resource.data.size is number ||
+            request.resource.data.poster is string ||
+            request.resource.data.description is string ||
+            request.resource.data.updated is timestamp;
+          allow get, list: if true;
+          
+          match /movies/{movies} {
+          	allow create: if hasOnly(["name", "poster", "seasonName", "chap", "nameChap", "add_at"]) &&
+          	request.resource.data.name is string &&
+          	request.resource.data.poster is string &&
+          	request.resource.data.seasonName is string &&
+          	request.resource.data.chap is string &&
+          	request.resource.data.nameChap is string &&
+          	request.resource.data.add_at is timestamp;
+            allow create: if true;
+            allow update: if false;
+            allow delete: if true;
+            allow get, list: if true;
+         	  // list, get, create, update, delete;
           }
         }
       }
