@@ -217,8 +217,8 @@
                     {{
                       t("_message-hint-next", [
                         currentSeason !== nextChap.season.value
-                          ? `Tiếp theo: ${nextChap.season.name}`
-                          : `Tiếp theo: Tập ${nextChap.chap?.name}`,
+                          ? t('tiep-theo-_season', [nextChap.season.name])
+                          : t('tiep-theo-tap-_chap', [nextChap.chap?.name]),
                       ])
                     }}
                   </q-tooltip>
@@ -250,7 +250,7 @@
                       transition-show="jump-up"
                       transition-hide="jump-down"
                     >
-                      {{ artVolume === 0 ? "Bật tiếng (m)" : "Tắt tiếng (m)" }}
+                      {{ artVolume === 0 ? t('bat-tieng-m') : t('tat-tieng-m') }}
                     </q-tooltip>
                   </q-btn>
 
@@ -646,8 +646,8 @@
                   >
                     {{
                       settingsStore.ui.modeMovie
-                        ? "Chế độ xem mặc định (t)"
-                        : "Chế độ xem rạp phim (t)"
+                        ? t('che-do-xem-mac-dinh-t')
+                        : t('che-do-xem-rap-phim-t')
                     }}
                   </q-tooltip>
                 </q-btn>
@@ -684,8 +684,8 @@
                   >
                     {{
                       artFullscreen
-                        ? "Thoát khỏi chế độ toàn màn hình (f)"
-                        : "Toàn màn hình (f)"
+                        ? t('thoat-khoi-che-do-toan-man-hinh-f')
+                        : t('toan-man-hinh-f')
                     }}
                   </q-tooltip>
                 </q-btn>
