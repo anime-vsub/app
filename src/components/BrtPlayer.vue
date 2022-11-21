@@ -217,8 +217,8 @@
                     {{
                       t("_message-hint-next", [
                         currentSeason !== nextChap.season.value
-                          ? `Tiếp theo: ${nextChap.season.name}`
-                          : `Tiếp theo: Tập ${nextChap.chap?.name}`,
+                          ? t("tiep-theo-_season", [nextChap.season.name])
+                          : t("tiep-theo-tap-_chap", [nextChap.chap?.name]),
                       ])
                     }}
                   </q-tooltip>
@@ -250,7 +250,9 @@
                       transition-show="jump-up"
                       transition-hide="jump-down"
                     >
-                      {{ artVolume === 0 ? "Bật tiếng (m)" : "Tắt tiếng (m)" }}
+                      {{
+                        artVolume === 0 ? t("bat-tieng-m") : t("tat-tieng-m")
+                      }}
                     </q-tooltip>
                   </q-btn>
 
@@ -288,6 +290,14 @@
                   rounded
                   @click="showDialogChapter = true"
                   class="text-weight-normal art-btn only-fscrn"
+                  :style="{
+                    display: settingsStore.ui.modeMovie
+                      ? 'block !important'
+                      : '',
+                  }"
+                  :class="{
+                    'ml-6': settingsStore.ui.modeMovie,
+                  }"
                 >
                   <Icon
                     icon="fluent:list-24-regular"
@@ -542,7 +552,7 @@
                   flat
                   no-caps
                   rounded
-                  class="mr-6 ttext-weight-normal art-btn"
+                  class="mr-6 text-weight-normal art-btn"
                 >
                   <Icon
                     icon="fluent:top-speed-24-regular"
@@ -612,6 +622,46 @@
                   flat
                   round
                   no-caps
+                  class="mr-6 text-weight-normal art-btn"
+                  @click="
+                    settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie
+                  "
+                >
+                  <Icon
+                    v-if="!settingsStore.ui.modeMovie"
+                    icon="ph:rectangle"
+                    class="art-icon"
+                    width="24"
+                    height="24"
+                  />
+                  <Icon
+                    v-else
+                    icon="lucide:rectangle-horizontal"
+                    class="art-icon"
+                    width="24"
+                    height="24"
+                  />
+
+                  <q-tooltip
+                    ref="tooltipModeMovieRef"
+                    anchor="top middle"
+                    self="bottom middle"
+                    class="bg-dark text-[14px] text-weight-medium"
+                    transition-show="jump-up"
+                    transition-hide="jump-down"
+                  >
+                    {{
+                      settingsStore.ui.modeMovie
+                        ? t("che-do-xem-mac-dinh-t")
+                        : t("che-do-xem-rap-phim-t")
+                    }}
+                  </q-tooltip>
+                </q-btn>
+                <q-btn
+                  dense
+                  flat
+                  round
+                  no-caps
                   class="text-weight-normal art-btn"
                   @click="toggleArtFullscreen"
                 >
@@ -640,8 +690,8 @@
                   >
                     {{
                       artFullscreen
-                        ? "Thoát khỏi chế độ toàn màn hình (f)"
-                        : "Toàn màn hình (f)"
+                        ? t("thoat-khoi-che-do-toan-man-hinh-f")
+                        : t("toan-man-hinh-f")
                     }}
                   </q-tooltip>
                 </q-btn>
@@ -1028,6 +1078,12 @@ onBeforeRouteLeave(() => {
 
   return true
 })
+
+const tooltipModeMovieRef = ref<QTooltip>()
+watch(
+  () => settingsStore.ui.modeMovie,
+  () => tooltipModeMovieRef.value?.hide()
+)
 
 const artQuality = ref<string>()
 const setArtQuality = (value: string) => {
@@ -1756,6 +1812,9 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       break
     case "KeyJ":
       skipOpening()
+      break
+    case "KeyT":
+      settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie
       break
   }
 })
