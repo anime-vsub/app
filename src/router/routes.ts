@@ -3,7 +3,6 @@ import type { RouteRecordRaw } from "vue-router"
 const routes: RouteRecordRaw[] = [
   {
     path: "/:mainPath(.*)*/trang-:page(\\d+)",
-    alias: ["/:mainPath(.*)*/trang-:page(\\d+).html"],
     redirect(to) {
       return `/${(to.params.mainPath as string[]).join("/")}?page=${
         to.params.page
@@ -60,7 +59,6 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "bang-xep-hang/:type(day|voted|month|season|year)?",
-        alias: ["bang-xep-hang/:type(day|voted|month|season|year)?.html"],
         component: () => import("pages/bang-xep-hang/[type]-.vue"),
         meta: {
           footer: false,
@@ -165,6 +163,15 @@ const routes: RouteRecordRaw[] = [
     },
   },
 
+  // try remove .html after url
+  {
+    path: "/:catchAll(.*)*.html",
+    redirect(to) {
+      console.log(to)
+      return `/${(to.params.catchAll as string[]).join("/")}`
+    }
+  },
+  
   // Always leave this as last one,
   // but you can also remove it
   {
