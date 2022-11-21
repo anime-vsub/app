@@ -18,7 +18,6 @@
   <div v-if="!seasons" class="flex-1 flex items-center justify-center">
     <q-spinner color="main" size="3em" :thickness="3" />
   </div>
-
   <template v-else>
     <q-tabs
       v-model="seasonActive"
@@ -128,7 +127,7 @@ import type {
 
 const props = defineProps<{
   fetchSeason: (season: string) => Promise<void>
-  seasons:
+  seasons?:
     | {
         name: string
         value: string
@@ -140,8 +139,8 @@ const props = defineProps<{
     | ResponseDataSeasonSuccess
     | ResponseDataSeasonError
   >
-  currentSeason: undefined | string
-  currentChap: string | undefined
+  currentSeason?: undefined | string
+  currentChap?: string | undefined
 }>()
 const { t } = useI18n()
 
