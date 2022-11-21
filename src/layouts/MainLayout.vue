@@ -918,6 +918,12 @@
             </q-input>
           </div>
 
+          <div class="text-center text-gray-300 my-3">
+            {{ t('dang-nhap-bang-tai-khoan-cua-ban-tren') }}
+            <a href="https://animevietsub.cc" target="_blank">AnimeVietsub</a>.
+            {{ t('du-lieu-cua-ban-se-duoc-dong-bo-ca-o-do-va-day') }}
+          </div>
+
           <div class="text-grey text-center mt-5 mb-4">
             {{ t("tim-lai-mat-khau") }}
           </div>
