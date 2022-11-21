@@ -939,11 +939,16 @@ let progressRestored = false
 watch(
   [() => props.currentChap, () => authStore.uid],
   async ([currentChap, uid]) => {
-    if (currentChap && uid) {
+    if (currentChap) {
       progressRestored = false
 
-      try {
+      if (!uid) {
+        // not login
         setArtCurrentTime(0)
+        return
+      }
+
+      try {
         const cur = (
           await historyStore.getProgressChap(props.currentSeason, currentChap)
         )?.cur
