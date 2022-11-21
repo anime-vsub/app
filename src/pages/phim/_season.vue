@@ -1,9 +1,12 @@
 <template>
   <!-- skeleton first load -->
   <div class="row mx-4">
-    <div class="col-9" :class="{
-      'col-12': settingsStore.ui.modeMovie
-    }">
+    <div
+      class="col-9"
+      :class="{
+        'col-12': settingsStore.ui.modeMovie,
+      }"
+    >
       <q-responsive
         v-if="!data"
         :ratio="841 / 483"
@@ -52,128 +55,13 @@
     </div>
     <div v-if="!settingsStore.ui.modeMovie" class="col-3 relative">
       <div class="absolute w-full h-full flex column flex-nowrap">
-        <div class="py-1 px-4 text-subtitle1 flex items-center justify-between">
-          {{ gridModeTabsSeasons ? t("chon-season") : t("chon-tap") }}
-
-          <q-btn
-            dense
-            round
-            @click="gridModeTabsSeasons = !gridModeTabsSeasons"
-          >
-            <Icon
-              :icon="
-                gridModeTabsSeasons
-                  ? 'fluent:grid-kanban-20-regular'
-                  : 'fluent:apps-list-24-regular'
-              "
-              width="20"
-              height="20"
-            />
-          </q-btn>
-        </div>
-
-        <div
-          v-if="!data && !error"
-          class="flex-1 flex items-center justify-center"
-        >
-          <q-spinner color="main" size="3em" :thickness="3" />
-        </div>
-
-        <template v-else>
-          <q-tabs
-            v-model="seasonActive"
-            class="min-w-0 w-full tabs-seasons"
-            :class="{
-              'grid-mode scrollbar-custom': gridModeTabsSeasons,
-            }"
-            no-caps
-            dense
-            inline-label
-            active-class="c--main"
-            v-if="
-              seasons &&
-              (seasons.length > 1 ||
-                (seasons.length === 0 && seasons[0].name !== ''))
-            "
-          >
-            <q-tab
-              v-for="item in seasons"
-              :key="item.value"
-              :name="item.value"
-              :label="item.name"
-              :ref="(el: QTab) => item.value === seasonActive && (tabsRef = el as QTab)"
-            />
-          </q-tabs>
-
-          <q-tab-panels
-            v-model="seasonActive"
-            animated
-            keep-alive
-            class="flex-1 w-full bg-transparent panels-seasons"
-          >
-            <q-tab-panel
-              v-for="({ value }, index) in seasons"
-              :key="index"
-              :name="value"
-            >
-              <div
-                v-if="
-                  !(_tmp = _cacheDataSeasons.get(value)) ||
-                  _tmp.status === 'pending'
-                "
-                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
-              >
-                <q-spinner style="color: #00be06" size="3em" :thickness="3" />
-              </div>
-              <div
-                v-else-if="_tmp.status === 'error'"
-                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-              >
-                {{ t("loi-khi-lay-du-lieu") }}
-                <br />
-                <q-btn
-                  dense
-                  no-caps
-                  rounded
-                  style="color: #00be06"
-                  @click="fetchSeason(value)"
-                  >{{ t("thu-lai") }}</q-btn
-                >
-              </div>
-
-              <template v-else>
-                <div v-if="_tmp.response.update" class="mb-2 text-gray-300">
-                  {{
-                    t("tap-moi-chieu-vao-_time-_day", [
-                      dayjs(
-                        new Date(
-                          `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
-                        )
-                      ).format("HH:MM"),
-                      _tmp.response.update[0] === 0
-                        ? "chủ nhật"
-                        : `thứ ${_tmp.response.update[0]}`,
-                      _tmp.response.update[0] > new Date().getDay() + 1
-                        ? "tuần sau"
-                        : "tuần này",
-                    ])
-                  }}
-                </div>
-
-                <ChapsGridQBtn
-                  grid
-                  :chaps="_tmp.response.chaps"
-                  :season="value"
-                  :find="
-                    (item) => value === currentSeason && item.id === currentChap
-                  "
-                  :progress-chaps="_tmp.progressChaps"
-                  class-item="px-3 !py-[6px] mb-3"
-                />
-              </template>
-            </q-tab-panel>
-          </q-tab-panels>
-        </template>
+        <FragmentChaps
+          :fetch-season="fetchSeason"
+          :seasons="seasons"
+          :_cache-data-seasons="_cacheDataSeasons"
+          :current-season="currentSeason"
+          :current-chap="currentChap"
+        />
       </div>
     </div>
   </div>
@@ -244,11 +132,11 @@
                     )
                   ).format("HH:MM"),
                   currentDataSeason.update[0] === 0
-                    ? "chủ nhật"
-                    : `thứ ${currentDataSeason.update[0]}`,
+                    ? t('chu-nhat')
+                    : t('thu-_day', [currentDataSeason.update[0]]),
                   currentDataSeason.update[0] > new Date().getDay() + 1
-                    ? "tuần sau"
-                    : "tuần này",
+                    ? t('tuan-sau')
+                    : t('tuan-nay'),
                 ])
               }}
             </span>
@@ -400,135 +288,20 @@
       </div>
     </div>
     <div class="col-3">
-
-      <q-responsive  v-if="settingsStore.ui.modeMovie"
-      :ratio="841 / 483 * 3/9"
-      class=" mt-6 rounded-xl bg-[rgba(0,0,0,0.3)] shadow shadow-[rgba(0,0,0,0.4)] max-h-[calc(100vh-169px)]">
-          <div class="w-full h-full flex column flex-nowrap">
-            <div class="py-1 px-4 text-subtitle1 flex items-center justify-between">
-              {{ gridModeTabsSeasons ? t("chon-season") : t("chon-tap") }}
-
-              <q-btn
-                dense
-                round
-                @click="gridModeTabsSeasons = !gridModeTabsSeasons"
-              >
-                <Icon
-                  :icon="
-                    gridModeTabsSeasons
-                      ? 'fluent:grid-kanban-20-regular'
-                      : 'fluent:apps-list-24-regular'
-                  "
-                  width="20"
-                  height="20"
-                />
-              </q-btn>
-            </div>
-
-            <div
-              v-if="!data && !error"
-              class="flex-1 flex items-center justify-center"
-            >
-              <q-spinner color="main" size="3em" :thickness="3" />
-            </div>
-
-            <template v-else>
-              <q-tabs
-                v-model="seasonActive"
-                class="min-w-0 w-full tabs-seasons"
-                :class="{
-                  'grid-mode scrollbar-custom': gridModeTabsSeasons,
-                }"
-                no-caps
-                dense
-                inline-label
-                active-class="c--main"
-                v-if="
-                  seasons &&
-                  (seasons.length > 1 ||
-                    (seasons.length === 0 && seasons[0].name !== ''))
-                "
-              >
-                <q-tab
-                  v-for="item in seasons"
-                  :key="item.value"
-                  :name="item.value"
-                  :label="item.name"
-                  :ref="(el: QTab) => item.value === seasonActive && (tabsRef = el as QTab)"
-                />
-              </q-tabs>
-
-              <q-tab-panels
-                v-model="seasonActive"
-                animated
-                keep-alive
-                class="flex-1 w-full bg-transparent panels-seasons"
-              >
-                <q-tab-panel
-                  v-for="({ value }, index) in seasons"
-                  :key="index"
-                  :name="value"
-                >
-                  <div
-                    v-if="
-                      !(_tmp = _cacheDataSeasons.get(value)) ||
-                      _tmp.status === 'pending'
-                    "
-                    class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
-                  >
-                    <q-spinner style="color: #00be06" size="3em" :thickness="3" />
-                  </div>
-                  <div
-                    v-else-if="_tmp.status === 'error'"
-                    class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-                  >
-                    {{ t("loi-khi-lay-du-lieu") }}
-                    <br />
-                    <q-btn
-                      dense
-                      no-caps
-                      rounded
-                      style="color: #00be06"
-                      @click="fetchSeason(value)"
-                      >{{ t("thu-lai") }}</q-btn
-                    >
-                  </div>
-
-                  <template v-else>
-                    <div v-if="_tmp.response.update" class="mb-2 text-gray-300">
-                      {{
-                        t("tap-moi-chieu-vao-_time-_day", [
-                          dayjs(
-                            new Date(
-                              `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
-                            )
-                          ).format("HH:MM"),
-                          _tmp.response.update[0] === 0
-                            ? "chủ nhật"
-                            : `thứ ${_tmp.response.update[0]}`,
-                          _tmp.response.update[0] > new Date().getDay() + 1
-                            ? "tuần sau"
-                            : "tuần này",
-                        ])
-                      }}
-                    </div>
-
-                    <ChapsGridQBtn
-                      grid
-                      :chaps="_tmp.response.chaps"
-                      :season="value"
-                      :find="
-                        (item) => value === currentSeason && item.id === currentChap
-                      "
-                      :progress-chaps="_tmp.progressChaps"
-                      class-item="px-3 !py-[6px] mb-3"
-                    />
-                  </template>
-                </q-tab-panel>
-              </q-tab-panels>
-            </template>
-          </div>
-
+      <q-responsive
+        v-if="settingsStore.ui.modeMovie"
+        :ratio="((841 / 483) * 3) / 9"
+        class="mt-6 rounded-xl bg-[rgba(0,0,0,0.3)] shadow shadow-[rgba(0,0,0,0.4)] max-h-[calc(100vh-169px)]"
+      >
+        <div class="w-full h-full flex column flex-nowrap">
+          <FragmentChaps
+            :fetch-season="fetchSeason"
+            :seasons="seasons"
+            :_cache-data-seasons="_cacheDataSeasons"
+            :current-season="currentSeason"
+            :current-chap="currentChap"
+          />
+        </div>
       </q-responsive>
 
       <div class="text-h6 mt-3 text-subtitle1">{{ t("de-xuat") }}</div>
@@ -564,7 +337,7 @@ import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import CardVertical from "components/CardVertical.vue"
-import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import FragmentChaps from "components/FragmentChaps.vue"
 import Quality from "components/Quality.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
@@ -574,10 +347,6 @@ import {
   QResponsive,
   QSkeleton,
   QSpinner,
-  QTab,
-  QTabPanel,
-  QTabPanels,
-  QTabs,
   QVideo,
   useQuasar,
 } from "quasar"
@@ -587,7 +356,6 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
 import { C_URL, labelToQuality } from "src/constants"
-import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
 import { formatView } from "src/logic/formatView"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
@@ -597,11 +365,12 @@ import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
-import { useSettingsStore} from "stores/settings"
+import { useSettingsStore } from "stores/settings"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
+
 
 import type {
   ResponseDataSeasonError,
@@ -660,7 +429,7 @@ watch(error, (error) => {
     })
 })
 
-const seasons = ref<
+const seasons = shallowRef<
   {
     name: string
     value: string
@@ -839,19 +608,6 @@ async function fetchSeason(season: string) {
   }
 }
 
-const seasonActive = ref<string>()
-// sync data by active route
-watch(currentSeason, (val) => (seasonActive.value = val), {
-  immediate: true,
-})
-
-watch(seasonActive, (seasonActive) => {
-  if (!seasonActive) return
-
-  // download data season active
-  fetchSeason(seasonActive)
-})
-
 const currentDataCache = computed(() => {
   const inCache = _cacheDataSeasons.get(currentSeason.value)
 
@@ -891,7 +647,7 @@ watchEffect(() => {
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${route.params.chap}`,
       query: route.query,
-      hash: route.hash
+      hash: route.hash,
     })
   } else {
     // old type url /phim/:season/:chap
@@ -900,7 +656,7 @@ watchEffect(() => {
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${route.params.chap}`,
       query: route.query,
-      hash: route.hash
+      hash: route.hash,
     })
   }
 })
@@ -1143,23 +899,7 @@ async function getProgressChaps(
   return progressChaps
 }
 
-// @scrollIntoView
-const tabsRef = ref<QTab>()
-watchEffect(() => {
-  if (!tabsRef.value) return
-  if (!currentSeason.value) return
 
-  // eslint-disable-next-line no-unused-expressions
-  gridModeTabsSeasons.value // watch value
-
-  setTimeout(() => {
-    console.log("scroll now")
-    if (tabsRef.value?.$el) {
-      if (gridModeTabsSeasons.value) scrollYIntoView(tabsRef.value.$el)
-      else scrollXIntoView(tabsRef.value.$el)
-    }
-  }, 70)
-})
 const followed = ref(false)
 const follows = ref(0)
 
@@ -1238,19 +978,6 @@ function share() {
     url: C_URL + route.path,
   })
 }
-// ================ status ================
-
-const gridModeTabsSeasons = ref(false)
-watch(seasonActive, () => {
-  gridModeTabsSeasons.value = false
-})
-
-// eslint-disable-next-line functional/no-let
-let _tmp:
-  | ResponseDataSeasonPending
-  | ResponseDataSeasonSuccess
-  | ResponseDataSeasonError
-  | undefined
 
 // =========== playlist ===========
 const showDialogAddToPlaylist = ref(false)
@@ -1360,6 +1087,4 @@ async function removeAnimePlaylist(idPlaylist: string) {
   transform: translateX(-50%);
   z-index: 12;
 }
-
-@import "./tabs-seasons.scss";
 </style>
