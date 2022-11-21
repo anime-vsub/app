@@ -147,17 +147,24 @@ const { t } = useI18n()
 
 const seasonActive = ref<string>()
 // sync data by active route
-
-const gridModeTabsSeasons = ref(false)
-watch(seasonActive, () => {
-  gridModeTabsSeasons.value = false
-})
+watch(
+  () => props.currentSeason,
+  (val) => (seasonActive.value = val),
+  {
+    immediate: true,
+  }
+)
 
 watch(seasonActive, (seasonActive) => {
   if (!seasonActive) return
 
   // download data season active
   props.fetchSeason(seasonActive)
+})
+
+const gridModeTabsSeasons = ref(false)
+watch(seasonActive, () => {
+  gridModeTabsSeasons.value = false
 })
 
 // @scrollIntoView
