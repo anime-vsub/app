@@ -754,30 +754,18 @@ watchEffect(() => {
       `chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
     )
     router.replace({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      name: route.name!,
+      path: `/phim/${route.params.season}/${correctChapName}-${route.params.chap}`,
       query: route.query,
-      hash: route.hash,
-      params: {
-        season: route.params.season,
-        chap: route.params.chap,
-        chapName: correctChapName,
-      },
+      hash: route.hash
     })
   } else {
     // old type url /phim/:season/:chap
     // replace
     console.info("this url old type redirect to new type url")
     router.replace({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      name: route.name!,
+      path: `/phim/${route.params.season}/${correctChapName}-${route.params.chap}`,
       query: route.query,
-      hash: route.hash,
-      params: {
-        season: route.params.season,
-        chap: route.params.chap,
-        chapName: correctChapName,
-      },
+      hash: route.hash
     })
   }
 })
