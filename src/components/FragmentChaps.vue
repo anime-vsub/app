@@ -187,5 +187,5 @@ let _tmp:
 </script>
 
 <style lang="scss" scoped>
-@import "../tabs-seasons.scss";
+@import "../pages/phim/tabs-seasons.scss";
 </style>
