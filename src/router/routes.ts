@@ -169,9 +169,9 @@ const routes: RouteRecordRaw[] = [
     redirect(to) {
       console.log(to)
       return `/${(to.params.catchAll as string[]).join("/")}`
-    }
+    },
   },
-  
+
   // Always leave this as last one,
   // but you can also remove it
   {

@@ -9,7 +9,7 @@ export const useSettingsStore = defineStore("settings", {
       volume: 1,
     },
     ui: {
-      modeMovie: false
+      modeMovie: false,
     },
     locale: getNavigatorLanguage(),
     infinityScroll: true,

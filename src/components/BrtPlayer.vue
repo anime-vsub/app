@@ -217,8 +217,8 @@
                     {{
                       t("_message-hint-next", [
                         currentSeason !== nextChap.season.value
-                          ? t('tiep-theo-_season', [nextChap.season.name])
-                          : t('tiep-theo-tap-_chap', [nextChap.chap?.name]),
+                          ? t("tiep-theo-_season", [nextChap.season.name])
+                          : t("tiep-theo-tap-_chap", [nextChap.chap?.name]),
                       ])
                     }}
                   </q-tooltip>
@@ -250,7 +250,9 @@
                       transition-show="jump-up"
                       transition-hide="jump-down"
                     >
-                      {{ artVolume === 0 ? t('bat-tieng-m') : t('tat-tieng-m') }}
+                      {{
+                        artVolume === 0 ? t("bat-tieng-m") : t("tat-tieng-m")
+                      }}
                     </q-tooltip>
                   </q-btn>
 
@@ -289,10 +291,12 @@
                   @click="showDialogChapter = true"
                   class="text-weight-normal art-btn only-fscrn"
                   :style="{
-                    display: settingsStore.ui.modeMovie ? 'block !important' : ''
+                    display: settingsStore.ui.modeMovie
+                      ? 'block !important'
+                      : '',
                   }"
                   :class="{
-                    'ml-6': settingsStore.ui.modeMovie
+                    'ml-6': settingsStore.ui.modeMovie,
                   }"
                 >
                   <Icon
@@ -619,7 +623,9 @@
                   round
                   no-caps
                   class="mr-6 text-weight-normal art-btn"
-                  @click="settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie"
+                  @click="
+                    settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie
+                  "
                 >
                   <Icon
                     v-if="!settingsStore.ui.modeMovie"
@@ -646,8 +652,8 @@
                   >
                     {{
                       settingsStore.ui.modeMovie
-                        ? t('che-do-xem-mac-dinh-t')
-                        : t('che-do-xem-rap-phim-t')
+                        ? t("che-do-xem-mac-dinh-t")
+                        : t("che-do-xem-rap-phim-t")
                     }}
                   </q-tooltip>
                 </q-btn>
@@ -684,8 +690,8 @@
                   >
                     {{
                       artFullscreen
-                        ? t('thoat-khoi-che-do-toan-man-hinh-f')
-                        : t('toan-man-hinh-f')
+                        ? t("thoat-khoi-che-do-toan-man-hinh-f")
+                        : t("toan-man-hinh-f")
                     }}
                   </q-tooltip>
                 </q-btn>
@@ -1073,9 +1079,11 @@ onBeforeRouteLeave(() => {
   return true
 })
 
-
 const tooltipModeMovieRef = ref<QTooltip>()
-watch(() => settingsStore.ui.modeMovie, () => tooltipModeMovieRef.value?.hide())
+watch(
+  () => settingsStore.ui.modeMovie,
+  () => tooltipModeMovieRef.value?.hide()
+)
 
 const artQuality = ref<string>()
 const setArtQuality = (value: string) => {

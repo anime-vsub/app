@@ -132,11 +132,11 @@
                     )
                   ).format("HH:MM"),
                   currentDataSeason.update[0] === 0
-                    ? t('chu-nhat')
-                    : t('thu-_day', [currentDataSeason.update[0]]),
+                    ? t("chu-nhat")
+                    : t("thu-_day", [currentDataSeason.update[0]]),
                   currentDataSeason.update[0] > new Date().getDay() + 1
-                    ? t('tuan-sau')
-                    : t('tuan-nay'),
+                    ? t("tuan-sau")
+                    : t("tuan-nay"),
                 ])
               }}
             </span>
@@ -370,7 +370,6 @@ import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
-
 
 import type {
   ResponseDataSeasonError,
@@ -898,7 +897,6 @@ async function getProgressChaps(
 
   return progressChaps
 }
-
 
 const followed = ref(false)
 const follows = ref(0)

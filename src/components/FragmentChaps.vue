@@ -88,11 +88,11 @@
                   )
                 ).format("HH:MM"),
                 _tmp.response.update[0] === 0
-                  ? t('chu-nhat')
-                  : t('thu-_day', [_tmp.response.update[0]]),
+                  ? t("chu-nhat")
+                  : t("thu-_day", [_tmp.response.update[0]]),
                 _tmp.response.update[0] > new Date().getDay() + 1
-                  ? t('tuan-sau')
-                  : t('tuan-nay'),
+                  ? t("tuan-sau")
+                  : t("tuan-nay"),
               ])
             }}
           </div>
