@@ -406,12 +406,10 @@ watch(error, (error) => {
     router.push({
       name: "not_found",
       params: {
-        catchAll: route.path,
+        catchAll: route.path.split("/").slice(1),
       },
-      query: {
-        message: error.message,
-        cause: error.cause + "",
-      },
+      query: route.query,
+      hash: route.hash
     })
 })
 
