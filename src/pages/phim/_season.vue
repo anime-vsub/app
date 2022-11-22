@@ -138,6 +138,58 @@
             </template>
             <div class="divider"></div>
             {{ t("san-xuat-boi-_studio", [data.studio]) }}
+            <div class="divider" />
+            <span class="text-main cursor-pointer">
+              {{ t("toi-muon-danh-gia") }}
+              <q-menu class="bg-dark-page">
+                <q-card class="bg-transparent">
+                  <q-card-section class="flex items-center text-gray-200">
+                    <Star :label="pointRate" class="mr-2 text-[16px]" />
+                    {{ t("voi") }}
+                    {{ t("_rate-nguoi-danh-gia", [formatView(countRate)]) }}
+                  </q-card-section>
+                  <q-card-section class="pt-0">
+                    <div class="text-gray-400">{{ t("danh-gia-cua-ban") }}</div>
+
+                    <q-rating
+                      v-model="myRate"
+                      @update:model-value="sendRate"
+                      no-reset
+                      :readonly="rated"
+                      class="mt-2"
+                      size="2em"
+                      color="grey"
+                      max="10"
+                      :color-selected="[
+                        'light-green-3',
+                        'light-green-6',
+                        'light-green-7',
+
+                        'light-green-8',
+                        'light-green-9',
+                        'green',
+
+                        'green-5',
+                        'green-6',
+                        'green-7',
+                        'green-8',
+                      ]"
+                    >
+                      <template
+                        v-for="(item, i) in ratesText"
+                        :key="i"
+                        v-slot:[`tip-${i+1}`]
+                      >
+                        <q-tooltip
+                          class="bg-dark text-[14px] text-weight-medium"
+                          >{{ item }}</q-tooltip
+                        >
+                      </template>
+                    </q-rating>
+                  </q-card-section>
+                </q-card>
+              </q-menu>
+            </span>
           </div>
         </div>
 
@@ -217,13 +269,13 @@
 
         <div class="inline-flex items-center">
           <div class="text-[16px] text-weight-medium mr-1">
-            {{ data.rate }}
+            {{ pointRate }}
           </div>
           <Star />
         </div>
         <div class="divider"></div>
         <span class="text-gray-400">
-          {{ t("_rate-nguoi-danh-gia", [formatView(data.count_rate)]) }}
+          {{ t("_rate-nguoi-danh-gia", [formatView(countRate)]) }}
         </span>
         <div class="divider"></div>
         <!-- <span class="text-gray-400">
@@ -338,6 +390,7 @@ import {
   useQuasar,
 } from "quasar"
 import { AjaxLike, checkIsLike } from "src/apis/runs/ajax/like"
+import { AjaxRate } from "src/apis/runs/ajax/rate"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
@@ -405,12 +458,10 @@ watch(error, (error) => {
     router.push({
       name: "not_found",
       params: {
-        catchAll: route.path,
+        catchAll: route.path.split("/").slice(1),
       },
-      query: {
-        message: error.message,
-        cause: error.cause + "",
-      },
+      query: route.query,
+      hash: route.hash,
     })
 })
 
@@ -1008,6 +1059,76 @@ async function removeAnimePlaylist(idPlaylist: string) {
       position: "bottom-right",
       message: (err as Error).message,
     })
+  }
+}
+
+// =================== rate ======================
+const countRate = ref(0)
+const pointRate = ref(0)
+watch(data, (data) => {
+  if (!data) {
+    countRate.value = 0
+    pointRate.value = 0
+    return
+  }
+
+  countRate.value = data.count_rate
+  pointRate.value = data.rate
+})
+const myRate = ref(0)
+const rated = ref(false)
+const ratesText = computed(() => [
+  t("phim-chan"),
+  t("phim-hoi-chan"),
+  t("kem"),
+  t("hoi-kem"),
+  t("tam-duoc"),
+  t("duoc"),
+  t("co-ve-hay"),
+  t("hay"),
+  t("tuyet"),
+  t("hoan-hao"),
+])
+watch(currentSeason, () => {
+  myRate.value = 0
+  rated.value = false
+})
+async function sendRate() {
+  if (rated.value) return
+
+  rated.value = true
+
+  try {
+    // eslint-disable-next-line camelcase
+    const { success, count_rate, rate } = await AjaxRate(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      seasonId.value!,
+      myRate.value
+    )
+
+    if (success) {
+      $q.notify({
+        position: "bottom-right",
+        message: t("danh-gia-da-duoc-gui"),
+      })
+      // eslint-disable-next-line camelcase
+      countRate.value = count_rate
+      pointRate.value = rate
+
+      return
+    }
+
+    $q.notify({
+      position: "bottom-right",
+      message: t("ban-da-danh-gia-anime-nay-truoc-day"),
+    })
+    myRate.value = rate
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
+    rated.value = false
   }
 }
 </script>

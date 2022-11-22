@@ -35,7 +35,8 @@
     "src/pages/tim-kiem/[keyword]-.vue": [
       "&bull; {{ t('_maxPage-trang', [data?.maxPage]) }}\n      ",
       "&bull; {{ t('_maxPage-trang', [data?.maxPage]) }}\n      "
-    ]
+    ],
+    "src/apis/runs/ajax/rate.ts": ["${token_name}=${token_value}"]
   },
   "scss.lint.unknownAtRules": "ignore",
   "i18n-ally.sourceLanguage": "vi-VN",
