@@ -124,21 +124,7 @@
             {{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}
             <span v-if="currentDataSeason?.update">
               &bull;
-              {{
-                t("tap-moi-chieu-vao-_time-_day", [
-                  dayjs(
-                    new Date(
-                      `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
-                    )
-                  ).format("HH:MM"),
-                  currentDataSeason.update[0] === 0
-                    ? t("chu-nhat")
-                    : t("thu-_day", [currentDataSeason.update[0]]),
-                  currentDataSeason.update[0] > new Date().getDay() + 1
-                    ? t("tuan-sau")
-                    : t("tuan-nay"),
-                ])
-              }}
+              <MessageScheludeChap :update="currentDataSeason.update" />
             </span>
           </h5>
 
@@ -341,6 +327,7 @@ import FragmentChaps from "components/FragmentChaps.vue"
 import Quality from "components/Quality.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
+import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import {
   QBtn,
   QImg,
@@ -356,7 +343,6 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
 import { C_URL, labelToQuality } from "src/constants"
-import dayjs from "src/logic/dayjs"
 import { formatView } from "src/logic/formatView"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { post } from "src/logic/http"
