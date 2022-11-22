@@ -144,7 +144,7 @@
               <q-menu class="bg-dark-page">
                 <q-card class="bg-transparent">
                   <q-card-section class="flex items-center text-gray-200">
-                  <Star :label="data.rate" class="mr-2 text-[16px]" /> với {{ t("_rate-nguoi-danh-gia", [formatView(data.count_rate)]) }}
+                  <Star :label="pointRate" class="mr-2 text-[16px]" /> với {{ t("_rate-nguoi-danh-gia", [formatView(countRate)]) }}
                   </q-card-section>
                   <q-card-section class="pt-0">
                     <div class="text-gray-400">Đánh giá của bạn</div>
@@ -260,13 +260,13 @@
 
         <div class="inline-flex items-center">
           <div class="text-[16px] text-weight-medium mr-1">
-            {{ data.rate }}
+            {{ pointRate }}
           </div>
           <Star />
         </div>
         <div class="divider"></div>
         <span class="text-gray-400">
-          {{ t("_rate-nguoi-danh-gia", [formatView(data.count_rate)]) }}
+          {{ t("_rate-nguoi-danh-gia", [formatView(countRate)]) }}
         </span>
         <div class="divider"></div>
         <!-- <span class="text-gray-400">
@@ -1054,6 +1054,18 @@ async function removeAnimePlaylist(idPlaylist: string) {
 }
 
 // =================== rate ======================
+const countRate = ref(0)
+const pointRate = ref(0)
+watch(data, data => {
+  if (!data) {
+    countRate.value = 0
+    pointRate.value  = 0
+    return
+  }
+
+  countRate.value = data.count_rate
+  pointRate.value = data.rate
+})
 const myRate = ref(0)
 const rated = ref(false)
 const ratesText = ['Phim chán', 'Phim hơi chán', 'Kém', 'Hơi kém', 'Tạm được', 'Được', 'Có vẻ hay', 'Hay', 'Tuyệt', 'Hoàn hảo']
@@ -1074,8 +1086,8 @@ async function sendRate() {
         position: "bottom-right",
         message: "Đánh giá đã được gửi"
       })
-      data.value.count_rate = count_rate
-      data.value.rate = rate
+      countRate.value = count_rate
+       pointRate.value  = rate
 
       return
     }
