@@ -9,7 +9,9 @@ export async function AjaxRate(id: string, score: number) {
   if (!token_name || !token_value)
     // eslint-disable-next-line functional/no-throw-statement
     throw new Error(
-      i18n.global.t("errors.require_login_to", ["đánh giá Anime này"])
+      i18n.global.t("errors.require_login_to", [
+        i18n.global.t("danh-gia-anime-nay"),
+      ])
     )
 
   const { data } = await get(
@@ -36,6 +38,6 @@ export async function AjaxRate(id: string, score: number) {
       }
     default:
       // eslint-disable-next-line functional/no-throw-statement
-      throw new Error("response not control")
+      throw new Error(i18n.global.t("response-not-control"))
   }
 }

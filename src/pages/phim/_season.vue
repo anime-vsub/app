@@ -140,15 +140,16 @@
             {{ t("san-xuat-boi-_studio", [data.studio]) }}
             <div class="divider" />
             <span class="text-main cursor-pointer">
-              Tôi muốn đánh giá
+              {{ t("toi-muon-danh-gia") }}
               <q-menu class="bg-dark-page">
                 <q-card class="bg-transparent">
                   <q-card-section class="flex items-center text-gray-200">
-                    <Star :label="pointRate" class="mr-2 text-[16px]" /> với
+                    <Star :label="pointRate" class="mr-2 text-[16px]" />
+                    {{ t("voi") }}
                     {{ t("_rate-nguoi-danh-gia", [formatView(countRate)]) }}
                   </q-card-section>
                   <q-card-section class="pt-0">
-                    <div class="text-gray-400">Đánh giá của bạn</div>
+                    <div class="text-gray-400">{{ t("danh-gia-cua-ban") }}</div>
 
                     <q-rating
                       v-model="myRate"
@@ -1076,18 +1077,18 @@ watch(data, (data) => {
 })
 const myRate = ref(0)
 const rated = ref(false)
-const ratesText = [
-  "Phim chán",
-  "Phim hơi chán",
-  "Kém",
-  "Hơi kém",
-  "Tạm được",
-  "Được",
-  "Có vẻ hay",
-  "Hay",
-  "Tuyệt",
-  "Hoàn hảo",
-]
+const ratesText = computed(() => [
+  t("phim-chan"),
+  t("phim-hoi-chan"),
+  t("kem"),
+  t("hoi-kem"),
+  t("tam-duoc"),
+  t("duoc"),
+  t("co-ve-hay"),
+  t("hay"),
+  t("tuyet"),
+  t("hoan-hao"),
+])
 watch(currentSeason, () => {
   myRate.value = 0
   rated.value = false
@@ -1108,7 +1109,7 @@ async function sendRate() {
     if (success) {
       $q.notify({
         position: "bottom-right",
-        message: "Đánh giá đã được gửi",
+        message: t("danh-gia-da-duoc-gui"),
       })
       // eslint-disable-next-line camelcase
       countRate.value = count_rate
@@ -1119,7 +1120,7 @@ async function sendRate() {
 
     $q.notify({
       position: "bottom-right",
-      message: "Bạn đã đánh giá Anime này trước đây",
+      message: t("ban-da-danh-gia-anime-nay-truoc-day"),
     })
     myRate.value = rate
   } catch (err) {
