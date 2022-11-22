@@ -403,10 +403,10 @@ watch(errorMetaPlaylist, (err) => {
     router.push({
       name: "not_found",
       params: {
-        catchAll: route.path.split("/").slice(1)
+        catchAll: route.path.split("/").slice(1),
       },
       query: route.query,
-      hash: route.hash
+      hash: route.hash,
     })
   }
 })
