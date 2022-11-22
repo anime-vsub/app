@@ -5,6 +5,8 @@
    <h1 style="font-size: 16px">AnimeVsub</h1>
 </div>
 
+> **The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.ga**
+
 > The goal of this application is to allow users to interact intuitively and explore new Anime sets in place of the outdated web interface of [animevsub](https://animevietsub.tv).
 >
 > And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `downloading...`, enjoy the best quality Anime episodes and no `downloading...`
