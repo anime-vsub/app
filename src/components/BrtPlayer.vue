@@ -433,22 +433,9 @@
                                 v-if="_tmp.response.update"
                                 class="mb-2 text-gray-300"
                               >
-                                {{
-                                  t("tap-moi-chieu-vao-_time-_day", [
-                                    dayjs(
-                                      new Date(
-                                        `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
-                                      )
-                                    ).format("HH:MM"),
-                                    _tmp.response.update[0] === 0
-                                      ? "chủ nhật"
-                                      : `thứ ${_tmp.response.update[0]}`,
-                                    _tmp.response.update[0] >
-                                    new Date().getDay() + 1
-                                      ? "tuần sau"
-                                      : "tuần này",
-                                  ])
-                                }}
+                                <MessageScheludeChap
+                                  :update="_tmp.response.update"
+                                />
                               </div>
 
                               <ChapsGridQBtn
@@ -791,6 +778,7 @@ import {
 } from "@vueuse/core"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import type Hlsjs from "hls.js"
 import type { PlaylistLoaderConstructor } from "hls.js"
 import Hls from "hls.js"
@@ -813,7 +801,6 @@ import {
 import { playbackRates } from "src/constants"
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
-import dayjs from "src/logic/dayjs"
 import { fetchJava } from "src/logic/fetchJava"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"

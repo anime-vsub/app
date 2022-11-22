@@ -33,7 +33,13 @@ export default function PhimIdChap(html: string) {
 
   return {
     chaps,
-    update: !day ? null : [dayTextToNum(day.toLowerCase()), +hour, +minus],
+    update: !day
+      ? null
+      : ([dayTextToNum(day.toLowerCase()), +hour, +minus] as [
+          number,
+          number,
+          number
+        ]),
     image,
     poster,
   }

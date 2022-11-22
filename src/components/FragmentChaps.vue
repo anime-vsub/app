@@ -79,21 +79,7 @@
 
         <template v-else>
           <div v-if="_tmp.response.update" class="mb-2 text-gray-300">
-            {{
-              t("tap-moi-chieu-vao-_time-_day", [
-                dayjs(
-                  new Date(
-                    `${_tmp.response.update[1]}:${_tmp.response.update[2]} 1/1/0`
-                  )
-                ).format("HH:MM"),
-                _tmp.response.update[0] === 0
-                  ? t("chu-nhat")
-                  : t("thu-_day", [_tmp.response.update[0]]),
-                _tmp.response.update[0] > new Date().getDay() + 1
-                  ? t("tuan-sau")
-                  : t("tuan-nay"),
-              ])
-            }}
+            <MessageScheludeChap :update="_tmp.response.update" />
           </div>
 
           <ChapsGridQBtn
@@ -113,9 +99,9 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import { QBtn, QSpinner, QTab, QTabPanel, QTabPanels, QTabs } from "quasar"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
-import dayjs from "src/logic/dayjs"
 import { ref, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 
