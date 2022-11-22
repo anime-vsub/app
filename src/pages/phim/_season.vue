@@ -138,6 +138,49 @@
             </template>
             <div class="divider"></div>
             {{ t("san-xuat-boi-_studio", [data.studio]) }}
+            <div class="divider" />
+            <span class="text-main cursor-pointer">
+              Tôi muốn đánh giá
+              <q-menu class="bg-dark-page">
+                <q-card class="bg-transparent">
+                  <q-card-section class="flex items-center text-gray-200">
+                  <Star :label="data.rate" class="mr-2 text-[16px]" /> với {{ t("_rate-nguoi-danh-gia", [formatView(data.count_rate)]) }}
+                  </q-card-section>
+                  <q-card-section class="pt-0">
+                    <div class="text-gray-400">Đánh giá của bạn</div>
+
+ <q-rating
+ v-model="myRate"
+ @update:model-value="sendRate"
+ no-reset
+ :readonly="rated"
+        class="mt-2"
+        size="2em"
+        color="grey"
+         max="10"
+        :color-selected="[
+          'light-green-3',
+          'light-green-6',
+          'light-green-7',
+
+          'light-green-8',
+          'light-green-9',
+          'green',
+
+          'green-5',
+          'green-6',
+          'green-7',
+          'green-8'
+          ]"
+      >
+<template v-for="(item, i) in ratesText" :key="i" v-slot:[`tip-${i+1}`]>
+    <q-tooltip class="bg-dark  text-[14px] text-weight-medium">{{ item }}</q-tooltip>
+  </template>
+      </q-rating>
+                  </q-card-section>
+                </q-card>
+              </q-menu>
+            </span>
           </div>
         </div>
 
@@ -1007,6 +1050,47 @@ async function removeAnimePlaylist(idPlaylist: string) {
       position: "bottom-right",
       message: (err as Error).message,
     })
+  }
+}
+
+// =================== rate ======================
+const myRate = ref(0)
+const rated = ref(false)
+const ratesText = ['Phim chán', 'Phim hơi chán', 'Kém', 'Hơi kém', 'Tạm được', 'Được', 'Có vẻ hay', 'Hay', 'Tuyệt', 'Hoàn hảo']
+watch(currentSeason, currentSeason => {
+  myRate.value = 0
+  rated.value = false
+})
+async function sendRate() {
+  if (rated.value) return
+
+  rated.value = true
+
+  try {
+    const { success, count_rate, rate } = await AjaxRate(seasonId.value! , myRate.value)
+
+    if (success) {
+      $q.notify({
+        position: "bottom-right",
+        message: "Đánh giá đã được gửi"
+      })
+      data.value.count_rate = count_rate
+      data.value.rate = rate
+
+      return
+    }
+
+    $q.notify({
+      position: "bottom-right",
+      message: "Bạn đã đánh giá Anime này trước đây"
+    })
+    myRate.value = rate
+  } catch(err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message
+    })
+    rated.value = false
   }
 }
 </script>
