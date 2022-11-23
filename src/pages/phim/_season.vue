@@ -1100,10 +1100,13 @@ async function sendRate() {
     if (myRate.value < 5)
       await new Promise<void>((resolve, reject) => {
         $q.dialog({
-          title: `Bạn chắc muốn đánh giá ${myRate.value} sao cho season này chứ?`,
-          message: `Bạn chỉ có thể đánh giá một lần cho mỗi season Anime và không thể sửa lại sau khi đánh giá. Hãy chắc chắn rằng bạn cảm thấy <span class="text-weight-medium">${
-            ratesText.value[myRate.value - 1]
-          }</span>`,
+          title: t("ban-chac-muon-danh-gia-_star-sao-cho-season-nay-chu", [
+            myRate.value,
+          ]),
+          message: t(
+            "ban-chi-co-the-danh-gia-mot-lan-cho-moi-season-anime-va-khong-the-sua-lai-sau-khi-danh-gia-hay-chac-chan-rang-ban-cam-thay--b-_text--b",
+            [ratesText.value[myRate.value - 1]]
+          ),
           html: true,
           focus: "cancel",
           ok: { rounded: true, flat: true },

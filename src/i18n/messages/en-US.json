@@ -12,6 +12,8 @@
   "anime-da-xem": "Anime watched",
   "anime-dang-theo-doi": "Anime is watching",
   "app": "App",
+  "ban-chac-muon-danh-gia-_star-sao-cho-season-nay-chu": "Are you sure you want to rate {0} stars for this season?",
+  "ban-chi-co-the-danh-gia-mot-lan-cho-moi-season-anime-va-khong-the-sua-lai-sau-khi-danh-gia-hay-chac-chan-rang-ban-cam-thay--b-_text--b": "You can only rate once per Anime season and cannot be re-rated after rating. \nMake sure you feel <span class=\"text-weight-medium\">{0}</span>",
   "ban-da-danh-gia-anime-nay-truoc-day": "You have rated this Anime before",
   "ban-dang-muon-doi-relay-khac": "You want to change another relay?",
   "ban-van-dang-xem-chu": "Are you still watching?",

@@ -12,6 +12,8 @@
   "anime-da-xem": "見たアニメ",
   "anime-dang-theo-doi": "アニメは見ている",
   "app": "アプリ",
+  "ban-chac-muon-danh-gia-_star-sao-cho-season-nay-chu": "今シーズンの {0} つ星を評価してもよろしいですか?",
+  "ban-chi-co-the-danh-gia-mot-lan-cho-moi-season-anime-va-khong-the-sua-lai-sau-khi-danh-gia-hay-chac-chan-rang-ban-cam-thay--b-_text--b": "評価できるのはアニメ シーズンごとに 1 回だけで、評価後に再評価することはできません。 \n<span class=\"text-weight-medium\">{0}</span> を感じるようにしてください",
   "ban-da-danh-gia-anime-nay-truoc-day": "このアニメを以前に評価したことがあります",
   "ban-dang-muon-doi-relay-khac": "別のリレーを変更しますか?",
   "ban-van-dang-xem-chu": "まだ見てますか？",
