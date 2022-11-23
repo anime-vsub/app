@@ -93,7 +93,7 @@
                 dense
                 flat
                 round
-                @click="runRemount"
+                @click.stop="runRemount"
                 :disable="!currentStream"
                 class="mr-2"
               >
@@ -1251,7 +1251,8 @@ watch(documentVisibility, (visibility) => {
     $q.dialog({
       title: t("xac-nhan"),
       message: t("ban-van-dang-xem-chu"),
-      cancel: true,
+      cancel: { rounded: true, flat: true },
+      ok: { rounded: true, flat: true },
       persistent: false,
     })
       .onOk(() => {
@@ -1297,7 +1298,8 @@ function runRemount() {
   $q.dialog({
     title: t("relay-change"),
     message: t("ban-dang-muon-doi-relay-khac"),
-    cancel: true,
+    cancel: { rounded: true, flat: true },
+    ok: { rounded: true, flat: true },
     persistent: false,
   }).onOk(remount)
 }
