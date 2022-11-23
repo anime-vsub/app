@@ -8,11 +8,11 @@ export default defineConfig({
   safelist: ["children:!px-0", "!py-[6px]", "children:!flex"],
   theme: {
     screens: {
-      xs: { min: "0px", max: "599.99px" },
-      sm: { min: "600px", max: "1023.99px" },
-      md: { min: "1024px", max: "1439.99px" },
-      lg: { min: "1440px", max: "1919.99px" },
-      xl: { min: "1920px" },
+      // xs: { min: "0px", max: "599.99px" },
+      sm: "600px", // { min: "600px", max: "1023.99px" },
+      md: "1024px", // { min: "1024px", max: "1439.99px" },
+      lg: "1440px", // { min: "1440px", max: "1919.99px" },
+      xl: "1920px", // { min: "1920px" },
     },
   },
 })
