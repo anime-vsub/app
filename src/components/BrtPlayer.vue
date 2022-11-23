@@ -1651,6 +1651,7 @@ let lastPositionClickIsLeft: boolean | null = null
 let timeoutDbClick: number | NodeJS.Timeout | null = null
 const countSkip = ref(0)
 function onClickSkip(event: MouseEvent) {
+  if (document.querySelector(".q-menu")) return // prevent if menu showing
   // click
   const now = Date.now()
 
