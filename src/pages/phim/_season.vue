@@ -1096,38 +1096,66 @@ watch(currentSeason, () => {
 async function sendRate() {
   if (rated.value) return
 
-  rated.value = true
-
   try {
-    // eslint-disable-next-line camelcase
-    const { success, count_rate, rate } = await AjaxRate(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      seasonId.value!,
-      myRate.value
-    )
+    if (myRate.value < 5)
+      await new Promise<void>((resolve, reject) => {
+        $q.dialog({
+          title: `Bạn chắc muốn đánh giá ${myRate.value} sao cho season này chứ?`,
+          message: `Bạn chỉ có thể đánh giá một lần cho mỗi season Anime và không thể sửa lại sau khi đánh giá. Hãy chắc chắn rằng bạn cảm thấy <span class="text-weight-medium">${
+            ratesText.value[myRate.value - 1]
+          }</span>`,
+          html: true,
+          focus: "cancel",
+          ok: { rounded: true, flat: true },
+          cancel: { rounded: true, flat: true },
+        })
+          .onOk(() => {
+            resolve()
+          })
+          .onCancel(() => {
+            reject()
+          })
+          .onDismiss(() => {
+            reject()
+          })
+      })
 
-    if (success) {
+    rated.value = true
+
+    try {
+      // eslint-disable-next-line camelcase
+      const { success, count_rate, rate } = await AjaxRate(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        seasonId.value!,
+        myRate.value
+      )
+
+      if (success) {
+        $q.notify({
+          position: "bottom-right",
+          message: t("danh-gia-da-duoc-gui"),
+        })
+        // eslint-disable-next-line camelcase
+        countRate.value = count_rate
+        pointRate.value = rate
+
+        return
+      }
+
       $q.notify({
         position: "bottom-right",
-        message: t("danh-gia-da-duoc-gui"),
+        message: t("ban-da-danh-gia-anime-nay-truoc-day"),
       })
-      // eslint-disable-next-line camelcase
-      countRate.value = count_rate
-      pointRate.value = rate
-
-      return
+      myRate.value = rate
+    } catch (err) {
+      $q.notify({
+        position: "bottom-right",
+        message: (err as Error).message,
+      })
+      rated.value = false
     }
-
-    $q.notify({
-      position: "bottom-right",
-      message: t("ban-da-danh-gia-anime-nay-truoc-day"),
-    })
-    myRate.value = rate
-  } catch (err) {
-    $q.notify({
-      position: "bottom-right",
-      message: (err as Error).message,
-    })
+  } catch {
+    myRate.value = 0
     rated.value = false
   }
 }
