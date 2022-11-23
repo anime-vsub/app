@@ -1,12 +1,12 @@
 import fs from "fs"
 import { resolve } from "path"
 
-const dir = resolve(__dirname, "..", "meta/screenshoots")
+const dir = resolve(__dirname, "..", "meta/screenshots")
 const pathToReadme = resolve(__dirname, "../README.md")
 
 const screenshots = fs
   .readdirSync(dir)
-  .map((name) => `./meta/screenshoots/${name}`)
+  .map((name) => `./meta/screenshots/${name}`)
 
 const md = screenshots.map((src) => {
   return `<a href="${src}"><img src="${src}" style="margin-top: 8px"></a>`
