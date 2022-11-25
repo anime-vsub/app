@@ -447,7 +447,9 @@
                                     value === currentSeason &&
                                     item.id === currentChap
                                 "
-                                :progress-chaps="_tmp.progressChaps"
+                                :progress-chaps="
+                                  (progressWatchStore.get(value) as unknown as any)?.response
+                                "
                                 class-item="px-3 !py-[6px] mb-3"
                               />
                             </template>
@@ -804,6 +806,7 @@ import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
+import type { ProgressWatchStore } from "src/pages/phim/_season.interface"
 import type {
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
@@ -869,6 +872,7 @@ const props = defineProps<{
     | ResponseDataSeasonError
   >
   fetchSeason: (season: string) => Promise<void>
+  progressWatchStore: ProgressWatchStore
 }>()
 
 const playerWrapRef = ref<HTMLDivElement>()
@@ -974,9 +978,9 @@ const setArtCurrentTime = (currentTime: number) => {
 // eslint-disable-next-line functional/no-let
 let progressRestored = false
 watch(
-  [() => props.currentChap, () => authStore.uid],
-  async ([currentChap, uid]) => {
-    if (currentChap) {
+  [() => props.currentChap, () => props.currentSeason, () => authStore.uid],
+  async ([currentChap, currentSeason, uid]) => {
+    if (currentChap && currentSeason) {
       progressRestored = false
 
       if (!uid) {
@@ -986,8 +990,9 @@ watch(
       }
 
       try {
+        console.log(":restore progress")
         const cur = (
-          await historyStore.getProgressChap(props.currentSeason, currentChap)
+          await historyStore.getProgressChap(currentSeason, currentChap)
         )?.cur
 
         if (
@@ -1314,7 +1319,6 @@ function remount() {
       position: "bottom-right",
       message: t("video-tam-thoi-khong-kha-dung"),
     })
-
     return
   }
 

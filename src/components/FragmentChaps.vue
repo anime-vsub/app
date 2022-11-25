@@ -47,6 +47,7 @@
       animated
       keep-alive
       class="flex-1 w-full bg-transparent panels-seasons"
+      v-show="!gridModeTabsSeasons"
     >
       <q-tab-panel
         v-for="({ value }, index) in seasons"
@@ -87,7 +88,7 @@
             :chaps="_tmp.response.chaps"
             :season="value"
             :find="(item) => value === currentSeason && item.id === currentChap"
-            :progress-chaps="_tmp.progressChaps"
+            :progress-chaps="(progressWatchStore.get(value) as unknown as any)?.response"
             class-item="px-3 !py-[6px] mb-3"
           />
         </template>
@@ -102,6 +103,10 @@ import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import { QBtn, QSpinner, QTab, QTabPanel, QTabPanels, QTabs } from "quasar"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
+import type {
+  ProgressWatchStore,
+  Season,
+} from "src/pages/phim/_season.interface"
 import { ref, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 
@@ -113,12 +118,7 @@ import type {
 
 const props = defineProps<{
   fetchSeason: (season: string) => Promise<void>
-  seasons?:
-    | {
-        name: string
-        value: string
-      }[]
-    | undefined
+  seasons?: Season[] | undefined
   _cacheDataSeasons: Map<
     string,
     | ResponseDataSeasonPending
@@ -127,6 +127,7 @@ const props = defineProps<{
   >
   currentSeason?: undefined | string
   currentChap?: string | undefined
+  progressWatchStore: ProgressWatchStore
 }>()
 const { t } = useI18n()
 
