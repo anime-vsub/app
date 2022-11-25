@@ -22,11 +22,15 @@ export async function AjaxNotification() {
   const data = JSON.parse(json)
 
   if (data.status === 0)
+    // {status: 0, html: 'Not login', total: 0}
+
     // eslint-disable-next-line functional/no-throw-statement
     throw new Error(
-      i18n.global.t("errors.loi-khong-xac-dinh-khi", [
-        i18n.global.t("cap-nhat-thong-bao"),
-      ])
+      data.html.toLowerCase() === "not login"
+        ? "NOT_LOGIN"
+        : i18n.global.t("errors.loi-khong-xac-dinh-khi", [
+            i18n.global.t("cap-nhat-thong-bao"),
+          ])
     )
 
   return {

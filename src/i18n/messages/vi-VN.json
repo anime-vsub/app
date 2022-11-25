@@ -200,5 +200,8 @@
   "xem-thong-bao": "xem thông báo",
   "xoa-danh-sach-phat": "Xóa danh sách phát",
   "xoa-khoi-danh-sach-phat": "Xóa khỏi danh sách phát",
-  "yeu-thich": "Yêu thích"
+  "yeu-thich": "Yêu thích",
+  "yeu-cau-dang-nhap-lai": "Yêu cầu đăng nhập lại",
+  "cookie-hien-khong-dong-bo-ban-can-dang-nhap-lai": "Cookie hiện không đồng bộ. Bạn cần đăng nhập lại",
+  "nhan-thong-bao-that-bai": "Nhận thông báo thất bại"
 }

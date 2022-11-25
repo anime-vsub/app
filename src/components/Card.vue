@@ -172,7 +172,7 @@ if (props.data.description) {
   user-select: none;
   color: rgb(255, 255, 255);
 
-  height: 40px;
+  min-height: 42px;
   position: relative;
   padding: 0.1rem 0px 0px;
   padding: {

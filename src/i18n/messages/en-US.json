@@ -200,5 +200,8 @@
   "xem-thong-bao": "see announcement",
   "xoa-danh-sach-phat": "delete playlist",
   "xoa-khoi-danh-sach-phat": "Remove from playlist",
-  "yeu-thich": "Favourite"
+  "yeu-thich": "Favourite",
+  "cookie-hien-khong-dong-bo-ban-can-dang-nhap-lai": "Cookies are now asynchronous. \nYou need to login again",
+  "nhan-thong-bao-that-bai": "Receive failure notification",
+  "yeu-cau-dang-nhap-lai": "Requires re-login"
 }

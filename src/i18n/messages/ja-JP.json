@@ -200,5 +200,8 @@
   "xem-thong-bao": "発表を見る",
   "xoa-danh-sach-phat": "プレイリストを削除",
   "xoa-khoi-danh-sach-phat": "プレイリストから削除",
-  "yeu-thich": "お気に入り"
+  "yeu-thich": "お気に入り",
+  "cookie-hien-khong-dong-bo-ban-can-dang-nhap-lai": "Cookie は非同期になりました。\n再度ログインする必要があります",
+  "nhan-thong-bao-that-bai": "失敗通知を受け取る",
+  "yeu-cau-dang-nhap-lai": "再ログインが必要"
 }
