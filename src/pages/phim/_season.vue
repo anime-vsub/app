@@ -535,7 +535,7 @@ watch(
 
     // help me
     progressWatchStore.forEach(async (item, season) => {
-      if (item.status && item.status !== "error") return // "pending" or "success"
+      if (item.status && item.status !== "error" && item.status !== "queue") return // "pending" or "success"
 
       Object.assign(item, {
         status: "pending",
