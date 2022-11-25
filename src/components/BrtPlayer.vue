@@ -355,7 +355,7 @@
                         v-model="seasonActive"
                         class="min-w-0 w-full tabs-seasons"
                         :class="{
-                          'grid-mode scrollbar-custom': gridModeTabsSeasons,
+                          'grid-mode bg-[rgba(28,28,30,1)] scrollbar-custom': gridModeTabsSeasons,
                         }"
                         no-caps
                         dense
@@ -379,6 +379,9 @@
 
                     <div
                       class="h-full min-h-0 overflow-y-auto scrollbar-custom"
+                      :style="{
+                        overflow: gridModeTabsSeasons ? 'hidden' : ''
+                      }"
                     >
                       <div
                         v-if="!seasons"

@@ -1,6 +1,7 @@
 .tabs-seasons {
+  @apply z-10;
   &.grid-mode:deep(.q-tabs__content) {
-    @apply flex-wrap absolute top-0 left-0 w-full z-9999 bg-[var(--q-dark-page)] text-gray-300;
+    @apply flex-wrap absolute top-0 left-0 w-full z-9999 text-gray-300;
   }
   &.grid-mode {
     @apply h-full overflow-y-auto;
