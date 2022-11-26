@@ -30,7 +30,10 @@
       "mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub",
       "bg-dark text-light-9",
       "Slash",
-      ".\n            {{ t('du-lieu-cua-ban-se-duoc-dong-bo-ca-o-do-va-day') }}\n          "
+      ".\n            {{ t('du-lieu-cua-ban-se-duoc-dong-bo-ca-o-do-va-day') }}\n          ",
+      "\n                        ({{\n                          t(\"da-co-ban-cap-nhat-moi-_newVersion\", [\n                            newVersionAble,\n                          ])\n                        }}\n                        ",
+      ")\n                      ",
+      ".\n            {{ t(\"du-lieu-cua-ban-se-duoc-dong-bo-ca-o-do-va-day\") }}\n          "
     ],
     "src/pages/tim-kiem/[keyword]-.vue": [
       "&bull; {{ t('_maxPage-trang', [data?.maxPage]) }}\n      ",

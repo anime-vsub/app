@@ -91,6 +91,12 @@ module.exports = configure(function (/* ctx */) {
                   protocol: "wss",
                   clientPort: 443,
                 }
+              : process.env.CODESPACE_NAME
+              ? {
+                  host: `${process.env.CODESPACE_NAME}-9000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`,
+                  protocol: "wss",
+                  clientPort: 443,
+                }
               : true,
           },
         })
@@ -110,7 +116,7 @@ module.exports = configure(function (/* ctx */) {
           },
         ],
         ["vite-plugin-rewrite-all"],
-        ["vite-plugin-remove-console"]
+        ["vite-plugin-remove-console"],
       ],
     },
 
@@ -125,8 +131,8 @@ module.exports = configure(function (/* ctx */) {
       config: {
         dark: true,
         loadingBar: {
-          color: "main"
-        }
+          color: "main",
+        },
       },
 
       // iconSet: 'material-icons', // Quasar icon set
@@ -204,7 +210,7 @@ module.exports = configure(function (/* ctx */) {
     },
 
     bin: {
-      linuxAndroidStudio: "./noop.sh"
+      linuxAndroidStudio: "./noop.sh",
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
