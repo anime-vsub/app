@@ -980,8 +980,7 @@ const setArtCurrentTime = (currentTime: number) => {
   artCurrentTime.value = currentTime
 }
 // eslint-disable-next-line functional/no-let
-let progressRestored = false
-let restoringProgress = false
+let progressRestored: false | string = false
 watch(
   [() => props.currentChap, () => props.currentSeason, () => authStore.uid],
   async ([currentChap, currentSeason, uid]) => {
@@ -994,7 +993,6 @@ watch(
         return
       }
 
-      restoringProgress = true
       try {
         console.log(":restore progress")
         const cur = (
@@ -1007,13 +1005,15 @@ watch(
         ) {
           setArtCurrentTime(cur)
           addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
+        } else {
+          throw new Error("NOT_RESET")
         }
       } catch (err) {
-        console.error(err)
+        setArtCurrentTime(0)
+        if (err?.message !== "NOT_RESET") console.error(err)
       }
-      restoringProgress = false
 
-      progressRestored = true
+      progressRestored = `${currentSeason}/${currentChap}`
     }
   },
   { immediate: true }
@@ -1157,27 +1157,29 @@ const emit = defineEmits<{
     }
   ): void
 }>()
-const saveCurTimeToPer = throttle(async () => {
-  if (!progressRestored) return
-  if (!seasonReady) return
-  if (!props.currentChap) return
-  if (typeof props.nameCurrentChap !== "string") return
-  if (restoringProgress) return
+const saveCurTimeToPer = throttle(
+  async (
+    currentSeason: string,
+    currentChap: string,
+    cur: number,
+    dur: number,
+    nameCurrentChap: string
+  ) => {
+    await historyStore.setProgressChap(currentSeason, currentChap, {
+      cur,
+      dur,
+      name: nameCurrentChap,
+    })
 
-  await historyStore.setProgressChap(props.currentSeason, props.currentChap, {
-    cur: artCurrentTime.value,
-    dur: artDuration.value,
-    name: props.nameCurrentChap,
-  })
-
-  emit("cur-update", {
-    cur: artCurrentTime.value,
-    dur: artDuration.value,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    id: props.currentChap!,
-  })
-  console.log("save viewing progress")
-}, 3_000)
+    emit("cur-update", {
+      cur,
+      dur,
+      id: currentChap,
+    })
+    console.log("save viewing progress")
+  },
+  3_000
+)
 function onVideoTimeUpdate() {
   if (
     artPlaying.value &&
@@ -1191,7 +1193,19 @@ function onVideoTimeUpdate() {
   ) {
     artControlShow.value = false
   }
-  saveCurTimeToPer()
+
+  if (!progressRestored) return
+  if (!seasonReady) return
+  if (!props.currentChap) return
+  if (typeof props.nameCurrentChap !== "string") return
+
+  saveCurTimeToPer(
+    props.currentSeason,
+    props.currentChap,
+    artCurrentTime.value,
+    artDuration.value,
+    props.nameCurrentChap
+  )
 }
 function onVideoError(event: Event) {
   if (!(event.target as HTMLVideoElement).error) return
@@ -1319,7 +1333,7 @@ function runRemount() {
 // eslint-disable-next-line functional/no-let
 let currentHls: Hlsjs
 onBeforeUnmount(() => currentHls?.destroy())
-function remount() {
+function remount(resetCurrentTime?: boolean) {
   currentHls?.destroy()
 
   if (!currentStream.value) {
@@ -1443,8 +1457,16 @@ function remount() {
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (playing) video.value!.play()
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  video.value!.currentTime = currentTime
+
+  if (
+    resetCurrentTime
+      ? props.currentChap &&
+        progressRestored === `${props.currentSeason}/${props.currentChap}`
+      : true
+  )
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    video.value!.currentTime = currentTime
+  else setArtCurrentTime((video.value!.currentTime = 0))
 }
 const watcherVideoTagReady = watch(video, (video) => {
   if (!video) return
@@ -1461,16 +1483,13 @@ const watcherVideoTagReady = watch(video, (video) => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ((Hls as unknown as any).isSupported()) {
-        remount()
+        remount(true)
       } else {
         const canPlay = video.canPlayType("application/vnd.apple.mpegurl")
         if (canPlay === "probably" || canPlay === "maybe") {
           video.src = url
         }
       }
-
-      if (!restoringProgress)
-        setArtCurrentTime(0)
     },
     { immediate: true }
   )
