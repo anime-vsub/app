@@ -981,6 +981,7 @@ const setArtCurrentTime = (currentTime: number) => {
 }
 // eslint-disable-next-line functional/no-let
 let progressRestored = false
+let restoringProgress = false
 watch(
   [() => props.currentChap, () => props.currentSeason, () => authStore.uid],
   async ([currentChap, currentSeason, uid]) => {
@@ -993,6 +994,7 @@ watch(
         return
       }
 
+      restoringProgress = true
       try {
         console.log(":restore progress")
         const cur = (
@@ -1009,6 +1011,7 @@ watch(
       } catch (err) {
         console.error(err)
       }
+      restoringProgress = false
 
       progressRestored = true
     }
@@ -1159,6 +1162,7 @@ const saveCurTimeToPer = throttle(async () => {
   if (!seasonReady) return
   if (!props.currentChap) return
   if (typeof props.nameCurrentChap !== "string") return
+  if (restoringProgress) return
 
   await historyStore.setProgressChap(props.currentSeason, props.currentChap, {
     cur: artCurrentTime.value,
@@ -1464,6 +1468,9 @@ const watcherVideoTagReady = watch(video, (video) => {
           video.src = url
         }
       }
+
+      if (!restoringProgress)
+        setArtCurrentTime(0)
     },
     { immediate: true }
   )
