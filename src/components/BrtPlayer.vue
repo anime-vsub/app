@@ -1006,11 +1006,12 @@ watch(
           setArtCurrentTime(cur)
           addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
         } else {
+          // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")
         }
       } catch (err) {
         setArtCurrentTime(0)
-        if (err?.message !== "NOT_RESET") console.error(err)
+        if ((err as Error)?.message !== "NOT_RESET") console.error(err)
       }
 
       progressRestored = `${currentSeason}/${currentChap}`
@@ -1466,6 +1467,7 @@ function remount(resetCurrentTime?: boolean) {
   )
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     video.value!.currentTime = currentTime
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   else setArtCurrentTime((video.value!.currentTime = 0))
 }
 const watcherVideoTagReady = watch(video, (video) => {
