@@ -218,5 +218,6 @@
   "extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu": "Extension AnimeVsub Helper は、アプリケーションがサーバーにリクエストを送信するための重要なブリッジです。",
   "loi-can-cai-dat-extension-tro-giup": "エラー • 拡張機能のヘルプをインストールする必要があります",
   "ung-dung-nay-can-cai-dat-extension-tro-giup-de-hoat-dong-binh-thuong": "このアプリケーションが正しく動作するには、ヘルパー拡張機能をインストールする必要があります。",
-  "ung-dung-nay-khong-the-hoat-dong-ma-khong-co-extension-animevsub-helper": "このアプリは、AnimeVsub Helper 拡張機能がないと動作しません"
+  "ung-dung-nay-khong-the-hoat-dong-ma-khong-co-extension-animevsub-helper": "このアプリは、AnimeVsub Helper 拡張機能がないと動作しません",
+  "cho": "与える"
 }

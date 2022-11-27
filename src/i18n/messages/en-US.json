@@ -218,5 +218,6 @@
   "extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu": "Extension AnimeVsub Helper is an important bridge for the application to send requests to the server.",
   "loi-can-cai-dat-extension-tro-giup": "Error • Need to install extension help",
   "ung-dung-nay-can-cai-dat-extension-tro-giup-de-hoat-dong-binh-thuong": "This application needs to install the helper extension to work properly.",
-  "ung-dung-nay-khong-the-hoat-dong-ma-khong-co-extension-animevsub-helper": "This app can't work without AnimeVsub Helper extension"
+  "ung-dung-nay-khong-the-hoat-dong-ma-khong-co-extension-animevsub-helper": "This app can't work without AnimeVsub Helper extension",
+  "cho": "give"
 }
