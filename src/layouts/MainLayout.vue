@@ -1339,7 +1339,7 @@ async function checkForUpdate() {
     ).then((res) => res.json())
 
   checkingForUpdate.value = false
-  if (semverGt(version, tagName.slice(1))) {
+  if (semverGt(tagName.slice(1), version)) {
     // new version avaliable
     newVersionAble.value = tagName.slice(1)
     $q.dialog({
