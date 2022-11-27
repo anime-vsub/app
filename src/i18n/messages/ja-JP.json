@@ -212,5 +212,12 @@
   "xoa-danh-sach-phat": "プレイリストを削除",
   "xoa-khoi-danh-sach-phat": "プレイリストから削除",
   "yeu-cau-dang-nhap-lai": "再ログインが必要",
-  "yeu-thich": "お気に入り"
+  "yeu-thich": "お気に入り",
+  "cai-dat-extension-animevsub-helper": "拡張機能 AnimeVsub Helper をインストールする",
+  "can-cai-dat-extension-tro-giup": "ヘルプ拡張機能をインストールする必要があります",
+  "extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu": "Extension AnimeVsub Helper は、アプリケーションがサーバーにリクエストを送信するための重要なブリッジです。",
+  "loi-can-cai-dat-extension-tro-giup": "エラー • 拡張機能のヘルプをインストールする必要があります",
+  "ung-dung-nay-can-cai-dat-extension-tro-giup-de-hoat-dong-binh-thuong": "このアプリケーションが正しく動作するには、ヘルパー拡張機能をインストールする必要があります。",
+  "ung-dung-nay-khong-the-hoat-dong-ma-khong-co-extension-animevsub-helper": "このアプリは、AnimeVsub Helper 拡張機能がないと動作しません",
+  "cho": "与える"
 }
