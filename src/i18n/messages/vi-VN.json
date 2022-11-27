@@ -212,5 +212,11 @@
   "xoa-danh-sach-phat": "Xóa danh sách phát",
   "xoa-khoi-danh-sach-phat": "Xóa khỏi danh sách phát",
   "yeu-cau-dang-nhap-lai": "Yêu cầu đăng nhập lại",
-  "yeu-thich": "Yêu thích"
+  "yeu-thich": "Yêu thích",
+  "can-cai-dat-extension-tro-giup": "Cần cài đặt Extension trợ giúp",
+  "ung-dung-nay-khong-the-hoat-dong-ma-khong-co-extension-animevsub-helper": "Ứng dụng này không thể hoạt động mà không có extension AnimeVsub Helper",
+  "extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu": "Extension AnimeVsub Helper là cầu nối quan trọng để ứng dụng gửi các yêu cầu tới máy chủ.",
+  "cai-dat-extension-animevsub-helper": "Cài đặt extension AnimeVsub Helper",
+  "loi-can-cai-dat-extension-tro-giup": "Lỗi • Cần cài đặt extension trợ giúp",
+  "ung-dung-nay-can-cai-dat-extension-tro-giup-de-hoat-dong-binh-thuong": "Ứng dụng này cần cài đặt extension trợ giúp để hoạt động bình thường."
 }

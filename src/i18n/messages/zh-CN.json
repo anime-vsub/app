@@ -212,5 +212,11 @@
   "xoa-danh-sach-phat": "删除播放列表",
   "xoa-khoi-danh-sach-phat": "从播放列表中删除",
   "yeu-cau-dang-nhap-lai": "需要重新登录",
-  "yeu-thich": "最喜欢的"
+  "yeu-thich": "最喜欢的",
+  "cai-dat-extension-animevsub-helper": "安装扩展 AnimeVsub Helper",
+  "can-cai-dat-extension-tro-giup": "需要安装帮助扩展",
+  "extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu": "Extension AnimeVsub Helper是应用程序向服务器发送请求的重要桥梁。",
+  "loi-can-cai-dat-extension-tro-giup": "错误 • 需要安装扩展帮助",
+  "ung-dung-nay-can-cai-dat-extension-tro-giup-de-hoat-dong-binh-thuong": "此应用程序需要安装辅助扩展才能正常工作。",
+  "ung-dung-nay-khong-the-hoat-dong-ma-khong-co-extension-animevsub-helper": "如果没有 AnimeVsub Helper 扩展，此应用程序将无法运行"
 }

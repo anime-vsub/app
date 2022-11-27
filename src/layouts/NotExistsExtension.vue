@@ -8,12 +8,11 @@
         class="airflow-icon mx-auto"
       />
 
-      <h3 class="text-[24px] mt-10">Cần cài đặt Extension trợ giúp</h3>
+      <h3 class="text-[24px] mt-10">{{ t('can-cai-dat-extension-tro-giup') }}</h3>
       <p class="text-[14px] mt-3 text-gray-400 leading-normal">
-        Ứng dụng này không thể hoạt động mà không có extension AnimeVsub Helper
+        {{ t('ung-dung-nay-khong-the-hoat-dong-ma-khong-co-extension-animevsub-helper') }}
         <br />
-        Extension AnimeVsub Helper là cầu nối quan trọng để ứng dụng gửi các yêu
-        cầu tới máy chủ.
+        {{ t('extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu') }}
         <br />
         <q-btn
           no-caps
@@ -23,7 +22,7 @@
           class="mt-4"
           target="_blank"
           href="https://github.com/anime-vsub/extension-animevsub-helper"
-          >Cài đặt extension AnimeVsub Helper</q-btn
+          >{{ t('cai-dat-extension-animevsub-helper') }}</q-btn
         >
       </p>
       <!-- <img src="~assets/ic_question_exit.png" width="278" /> -->
@@ -35,11 +34,14 @@
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
 import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 
-const title = "Lỗi • Cần cài đặt extension trợ giúp"
+const { t } = useI18n()
+
+const title = computed(() => t('loi-can-cai-dat-extension-tro-giup'))
 const description =
-  "Ứng dụng này cần cài đặt extension trợ giúp để hoạt động bình thường."
-
+ computed(() =>  t('ung-dung-nay-can-cai-dat-extension-tro-giup-de-hoat-dong-binh-thuong')
+)
 useHead(
   computed(() => ({
     title,
