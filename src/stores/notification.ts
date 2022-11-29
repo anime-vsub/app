@@ -1,3 +1,4 @@
+import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
 import { useQuasar } from "quasar"
 import { AjaxNotification } from "src/apis/runs/ajax/notification"
@@ -31,14 +32,32 @@ export const useNotificationStore = defineStore(
 
         items.value = result.items
         max.value = result.max
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
+      } catch (err) {
+        if ((err as Error)?.message === "NOT_LOGIN") {
+          // cookie not sync
+          $q.dialog({
+            title: i18n.global.t("yeu-cau-dang-nhap-lai"),
+            message: i18n.global.t(
+              "cookie-hien-khong-dong-bo-ban-can-dang-nhap-lai"
+            ),
+            ok: {
+              flat: true,
+              rounded: true,
+            },
+            persistent: true, // TODO
+          }).onOk(() => {
+            authStore.logout()
+            // updateNotification()
+          })
+
+          return
+        }
         console.error(err)
 
         $q.notify({
           position: "bottom-right",
-          message: "Nhận thông báo thất bại",
-          caption: err.message,
+          message: i18n.global.t("nhan-thong-bao-that-bai"),
+          caption: (err as Error).message,
         })
 
         timeout = setTimeout(updateNotification, 10 * 60_000)
@@ -66,8 +85,9 @@ export const useNotificationStore = defineStore(
         id,
       })
 
-      // eslint-disable-next-line functional/no-throw-statement
-      if (JSON.parse(data).status !== 1) throw new Error("DELETE_FAILED")
+      if (JSON.parse(data).status !== 1)
+        // eslint-disable-next-line functional/no-throw-statement
+        throw new Error(i18n.global.t("errors.xoa-thong-bao-that-bai"))
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       refresh(() => {})
     }

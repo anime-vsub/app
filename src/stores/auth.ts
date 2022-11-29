@@ -1,7 +1,9 @@
 import cookie from "js-cookie"
 import { defineStore } from "pinia"
 import { parse } from "set-cookie-parser"
+import sha256 from "sha256"
 import { DangNhap } from "src/apis/runs/dang-nhap"
+import { i18n } from "src/boot/i18n"
 import { post } from "src/logic/http"
 
 interface User {
@@ -22,6 +24,10 @@ export const useAuthStore = defineStore("auth", {
     user(state) {
       return state.user_data
     },
+    uid(state) {
+      if (!state.user_data) return null
+      return sha256(state.user_data.email + state.user_data.name)
+    },
     isLogged(state) {
       return !!state.token_name && !!state.token_value && !!state.user_data
     },
@@ -29,13 +35,25 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     setUser(value: User, expires: Date) {
       this.user_data = value
-      cookie.set("user_data", JSON.stringify(value), { expires })
+      cookie.set("user_data", JSON.stringify(value), {
+        expires,
+        sameSite: "None",
+        secure: true,
+      })
     },
     setToken(name: string, value: string, expires: Date) {
       this.token_name = name
       this.token_value = value
-      cookie.set("token_name", name, { expires })
-      cookie.set("token_value", value, { expires })
+      cookie.set("token_name", name, {
+        expires,
+        sameSite: "None",
+        secure: true,
+      })
+      cookie.set("token_value", value, {
+        expires,
+        sameSite: "None",
+        secure: true,
+      })
     },
     deleteUser() {
       this.user_data = null
@@ -49,7 +67,11 @@ export const useAuthStore = defineStore("auth", {
     },
     setTokenByCookie(cookie: string) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const token = parse(cookie).find((item) => item.name.startsWith("token"))!
+      const token = cookie
+        .split(",")
+        .map((item) => parse(item))
+        .flat(1)
+        .find((item) => item.name.startsWith("token"))!
       // set token
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.setToken(token.name, token.value, token.expires!)
@@ -79,8 +101,13 @@ export const useAuthStore = defineStore("auth", {
       this.deleteUser()
     },
     async changePassword(newPassword: string) {
-      // eslint-disable-next-line functional/no-throw-statement
-      if (!this.user_data) throw new Error("YOU_CAN_LOGIN")
+      if (!this.user_data)
+        // eslint-disable-next-line functional/no-throw-statement
+        throw new Error(
+          i18n.global.t("errors.require_login_to", [
+            i18n.global.t("thay-doi-mat-khau"),
+          ])
+        )
 
       const { headers } = await post(
         "/account/info/",

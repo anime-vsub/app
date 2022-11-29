@@ -161,7 +161,7 @@ import groupArray from "group-array"
 import { LichChieuPhim } from "src/apis/runs/lich-chieu-phim"
 // Import Swiper styles
 import "swiper/css"
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
+import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { dayTextToNum } from "src/logic/dayTextToNum"
 import dayjs from "src/logic/dayjs"
 import type { Swiper as TSwiper } from "swiper"

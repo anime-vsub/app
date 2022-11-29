@@ -485,7 +485,9 @@
                 :find="
                   (item) => value === currentSeason && item.id === currentChap
                 "
-                :progress-chaps="progressChaps"
+                                :progress-chaps="
+                                  (progressWatchStore.get(value) as unknown as any)?.response
+                                "
               />
             </q-tab-panel>
           </q-tab-panels>
@@ -664,7 +666,7 @@ import { QTab, throttle, useQuasar } from "quasar"
 import sha256 from "sha256"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
+import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import Hls from "src/logic/hls"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
@@ -678,6 +680,7 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
+import type { ProgressWatchStore } from "src/pages/phim/_season.interface"
 
 import type { Source } from "./sources"
 
@@ -725,13 +728,7 @@ const props = defineProps<{
     | ResponseDataSeasonError
   >
   fetchSeason: (season: string) => Promise<void>
-  progressChaps: Map<
-    string,
-    {
-      cur: number
-      dur: number
-    }
-  >
+  progressWatchStore: ProgressWatchStore
 }>()
 
 // ===== setup effect =====
