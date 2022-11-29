@@ -23,9 +23,9 @@
       :seasons="seasons"
       :_cache-data-seasons="_cacheDataSeasons"
       :fetch-season="fetchSeason"
-      :progress-chaps="progressChaps"
+        :progressWatchStore="progressWatchStore"
       @cur-update="
-        progressChaps.set($event.id, {
+        currentProgresWatch?.set($event.id, {
           cur: $event.cur,
           dur: $event.dur,
         })
@@ -94,24 +94,9 @@
             {{ formatView(data.views) }} lượt xem
 
             <span v-if="currentDataSeason?.update">
-              &bull; Tập mới chiếu vào
-              {{
-                dayjs(
-                  new Date(
-                    `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`
-                  )
-                ).format("HH:MM")
-              }}
-              {{
-                currentDataSeason.update[0] === 0
-                  ? "chủ nhật"
-                  : `thứ ${currentDataSeason.update[0]}`
-              }}
-              {{
-                currentDataSeason.update[0] > new Date().getDay()
-                  ? "tuần sau"
-                  : ""
-              }}
+              &bull;
+
+              <MessageScheludeChap :update="currentDataSeason.update" />
             </span>
           </h5>
         </div>
@@ -234,7 +219,7 @@
       v-model="seasonActive"
       animated
       keep-alive
-      class="h-full bg-transparent overflow-y-visible whitespace-nowrap mb-3 mx-[-8px]"
+      class="h-full bg-transparent overflow-y-visible whitespace-nowrap mb-3 mx-[-8px] panels-navigator"
     >
       <q-tab-panel
         v-for="{ value } in seasons"
@@ -267,7 +252,9 @@
           :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
           :season="value"
           :find="(item) => value === currentSeason && item.id === currentChap"
-          :progress-chaps="progressChaps"
+                                :progressChaps="
+                                  (progressWatchStore.get(value) as unknown as any)?.response
+                                "
         />
       </q-tab-panel>
     </q-tab-panels>
@@ -375,7 +362,9 @@
               :find="
                 (item) => value === currentSeason && item.id === currentChap
               "
-              :progress-chaps="progressChaps"
+                                :progressChaps="
+                                  (progressWatchStore.get(value) as unknown as any)?.response
+                                "
               class-item="px-4 py-[10px] mx-2 mb-3"
             />
           </q-tab-panel>
@@ -477,7 +466,6 @@
 
 <script lang="ts" setup>
 import { Share } from "@capacitor/share"
-import { collection, doc, getDocs, getFirestore } from "@firebase/firestore"
 import { Icon } from "@iconify/vue"
 import { app } from "boot/firebase"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -494,7 +482,7 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
 import { C_URL, labelToQuality } from "src/constants"
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
+import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import dayjs from "src/logic/dayjs"
 import { formatView } from "src/logic/formatView"
 import { post } from "src/logic/http"
@@ -511,6 +499,9 @@ import {
 } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+import { useHistoryStore } from "stores/history"
+import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
+import { getRealSeasonId } from "src/logic/getRealSeasonId"
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -519,6 +510,7 @@ import { useRoute, useRouter } from "vue-router"
 
 const route = useRoute()
 const router = useRouter()
+const historyStore = useHistoryStore()
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -527,13 +519,7 @@ const currentMetaSeason = computed(() => {
 const realIdCurrentSeason = computed(() => {
   if (!currentSeason.value) return
 
-  const lastIndexDolar = currentSeason.value.lastIndexOf("$")
-
-  console.log(currentSeason.value.slice(0, lastIndexDolar))
-
-  if (lastIndexDolar === -1) return currentSeason.value
-
-  return currentSeason.value.slice(0, lastIndexDolar)
+  return getRealSeasonId(currentSeason.value)
 })
 
 const { data, run, error, loading } = useRequest(
@@ -626,12 +612,18 @@ const _cacheDataSeasons = reactive<
     | ResponseDataSeasonError
   >
 >(new Map())
+const progressWatchStore = reactive<ProgressWatchStore>(new Map())
 
 async function fetchSeason(season: string) {
   if (!seasons.value) {
     console.warn("seasons not ready")
     return
   }
+
+  if (!progressWatchStore.has(season))
+    progressWatchStore.set(season, { status: "queue" })
+  else console.log(">> progress %s exists", season)
+
   if (_cacheDataSeasons.get(season)?.status === "success") {
     console.info("use data from cache not fetch")
     return
@@ -640,12 +632,12 @@ async function fetchSeason(season: string) {
   _cacheDataSeasons.set(season, {
     status: "pending",
   })
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const currentDataSeason = _cacheDataSeasons.get(season)!
   try {
     console.log("fetch chaps on season")
 
-    const lastIndexDolar = season.lastIndexOf("$")
-    const realIdSeason =
-      lastIndexDolar === -1 ? season : season.slice(0, lastIndexDolar)
+    const realIdSeason = getRealSeasonId(season)
 
     const response = await PhimIdChap(realIdSeason)
 
@@ -658,7 +650,7 @@ async function fetchSeason(season: string) {
 
           hash:
             data.value?.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
-          name: "Trailer",
+          name: t("trailer"),
         },
       ]
     } else if (response.chaps.length > 50) {
@@ -689,13 +681,19 @@ async function fetchSeason(season: string) {
 
           console.log("set %s by %s", value, chaps[0].id)
 
-          _cacheDataSeasons.set(value, {
+          const dataOnCache = _cacheDataSeasons.get(value)
+          const newData: ResponseDataSeasonSuccess = {
             status: "success",
             response: {
               ...response,
               chaps,
             },
-          })
+          }
+          if (dataOnCache) {
+            Object.assign(dataOnCache, newData)
+          } else {
+            _cacheDataSeasons.set(value, newData)
+          }
 
           return {
             name,
@@ -711,13 +709,15 @@ async function fetchSeason(season: string) {
       return
     }
 
-    _cacheDataSeasons.set(season, {
+    Object.assign(currentDataSeason, {
       status: "success",
       response,
     })
+
+    console.log(_cacheDataSeasons)
   } catch (err) {
     console.warn(err)
-    _cacheDataSeasons.set(season, {
+    Object.assign(currentDataSeason, {
       status: "error",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       response: err as any,
@@ -740,6 +740,13 @@ watch(seasonActive, (seasonActive) => {
 
 const currentDataSeason = computed(() => {
   const inCache = _cacheDataSeasons.get(currentSeason.value)
+
+  if (inCache?.status === "success") return inCache.response
+
+  return undefined
+})
+const currentProgresWatch = computed(() => {
+  const inCache = progressWatchStore.get(currentSeason.value)
 
   if (inCache?.status === "success") return inCache.response
 
@@ -887,36 +894,48 @@ const sources = computed<Source[] | undefined>(() =>
 )
 
 const authStore = useAuthStore()
-const progressChaps = shallowReactive<
-  Map<
-    string,
-    {
-      cur: number
-      dur: number
-    }
-  >
->(new Map())
 
 watch(
-  [currentSeason, () => authStore.user_data],
+  [progressWatchStore, () => authStore.user_data],
   // eslint-disable-next-line camelcase
-  async ([currentSeason, user_data]) => {
+  ([progressWatchStore, user_data]) => {
     // eslint-disable-next-line camelcase
-    if (!user_data || !currentSeason) {
-      return
-    }
+    if (!user_data) return
 
-    const db = getFirestore(app)
+    // help me
+    progressWatchStore.forEach(async (item, season) => {
+      if (item.status && item.status !== "error" && item.status !== "queue")
+        return // "pending" or "success"
 
-    // eslint-disable-next-line camelcase
-    const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const seasonRef = doc(userRef, "history", currentSeason!)
-    const chapRef = collection(seasonRef, "chaps")
+      Object.assign(item, {
+        status: "pending",
+      })
+      try {
+        console.log("%c fetch progress view", "color: blue")
+        Object.assign(item, {
+          status: "success",
+          response: await getProgressChaps(season),
+        })
+      } catch (err) {
+        Object.assign(item, {
+          status: "error",
+          error: err as Error,
+        })
+      }
+    })
+  }
+)
 
-    progressChaps.clear()
-    const { docs } = await getDocs(chapRef)
 
+async function getProgressChaps(
+  currentSeason: string
+): Promise<Map<string, { cur: number; dur: number }> | null> {
+  if (!authStore.uid) return null
+
+  const progressChaps = new Map()
+
+  try {
+    const docs = await historyStore.getProgressChaps(currentSeason)
     docs.forEach((item) => {
       const { cur, dur } = item.data()
       progressChaps.set(item.id, {
@@ -924,11 +943,16 @@ watch(
         dur,
       })
     })
-  },
-  {
-    immediate: true,
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
   }
-)
+
+  return progressChaps
+}
+
 
 // @scrollIntoView
 const tabsRef = ref<QTab>()
@@ -1089,3 +1113,10 @@ const showDialogInforma = ref(false)
   z-index: 12;
 }
 </style>
+
+<style lang="scss" scoped>
+  .panels-navigator :deep(.q-panel){
+    overflow-y: hidden;
+    @apply scrollbar-hide;
+  }
+  </style>

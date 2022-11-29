@@ -17,18 +17,12 @@
         },
       ]"
       replace
-      :to="{
-        name: 'watch-anime',
-        params: {
-          season,
-          chap: item.id,
-        },
-      }"
+      :to="`/phim/${season}/${parseChapName(item.name)}-${item.id}`"
       :ref="(el: QBtn) => find(item) && (activeRef = el as QBtn)"
     >
       {{ item.name }}
       <q-linear-progress
-        v-if="(tmp = progressChaps.get(item.id))"
+        v-if="(tmp = progressChaps?.get(item.id))"
         :value="tmp.cur / tmp.dur"
         rounded
         color="main"
@@ -41,7 +35,8 @@
 <script lang="ts" setup>
 import { QBtn } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
-import { scrollXIntoView } from "src/helpers/scrollXIntoView"
+import { scrollYIntoView } from "src/helpers/scrollIntoView"
+import { parseChapName } from "src/logic/parseChapName"
 import { ref, watchEffect } from "vue"
 
 const props = defineProps<{
@@ -51,23 +46,25 @@ const props = defineProps<{
   classItem?: string
   classActive?: string
   grid?: boolean
-  progressChaps: Map<
+  progressChaps?: Map<
     string,
     {
       cur: number
       dur: number
     }
-  >
+  > | null
 }>()
 
 const activeRef = ref<QBtn>()
+function scrollToView() {
+  if (activeRef.value?.$el) scrollYIntoView(activeRef.value.$el)
+}
 
-watchEffect(() => {
-  if (activeRef.value?.$el) scrollXIntoView(activeRef.value.$el)
-})
-
+watchEffect(scrollToView)
 // eslint-disable-next-line functional/no-let
-let tmp: ReturnType<typeof props.progressChaps.get>
+let tmp: ReturnType<
+  Exclude<typeof props.progressChaps, undefined | null>["get"]
+>
 </script>
 
 <style lang="scss" scoped>
