@@ -58,6 +58,6 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (name: "update:model-value", v: false): void
+  (name: "update:model-value", v: boolean): void
 }>()
 </script>

@@ -1,6 +1,12 @@
 {
   "extends": "@quasar/app-vite/tsconfig-preset",
   "compilerOptions": {
-    "baseUrl": "."
+    /* bypass check node_modules */
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "preserveSymlinks": true,
+    "noEmitOnError": false,
+    /* end */
+    "baseUrl": "./"
   }
 }

@@ -252,7 +252,7 @@ function onEnter(event: Event) {
   keyword.value = query.value
 
   searching.value = false
-  event.target?.blur()
+  ;(event.target as HTMLInputElement)?.blur()
 }
 
 function onBack() {
