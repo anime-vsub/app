@@ -663,14 +663,38 @@ import { app } from "boot/firebase"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import Hls from "hls.js"
-import { QBtn, QCard, QDialog, QIcon, QItem, QItemLabel, QItemSection, QList, QResponsive, QSpinner, QSpinnerInfinity, QTab, QTabPanel, QTabPanels, QTabs, QToggle, throttle, useQuasar } from "quasar"
+import {
+  QBtn,
+  QCard,
+  QDialog,
+  QIcon,
+  QItem,
+  QItemLabel,
+  QItemSection,
+  QList,
+  QResponsive,
+  QSpinner,
+  QSpinnerInfinity,
+  QTab,
+  QTabPanel,
+  QTabPanels,
+  QTabs,
+  QToggle,
+  throttle,
+  useQuasar,
+} from "quasar"
 import sha256 from "sha256"
 import { playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
 import { parseTime } from "src/logic/parseTime"
-import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface";
-import type { ProgressWatchStore, ResponseDataSeasonError, ResponseDataSeasonPending , Season } from "src/pages/phim/_season.interface"
+import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface"
+import type {
+  ProgressWatchStore,
+  ResponseDataSeasonError,
+  ResponseDataSeasonPending,
+  Season,
+} from "src/pages/phim/_season.interface"
 import { useAuthStore } from "stores/auth"
 import { useSettingsStore } from "stores/settings"
 import {
@@ -1193,6 +1217,7 @@ function remount() {
                 )
               })
           }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as unknown as any,
       })
       currentHls = hls
