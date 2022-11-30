@@ -30,7 +30,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ["windi", "firebase", "i18n", "axios"],
+    boot: ["windi", "firebase", "i18n"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -56,7 +56,7 @@ module.exports = configure(function (/* ctx */) {
         node: "node16",
       },
 
-      vueRouterMode: "hash", // available values: 'hash', 'history'
+      vueRouterMode: "history", // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -91,6 +91,12 @@ module.exports = configure(function (/* ctx */) {
                   protocol: "wss",
                   clientPort: 443,
                 }
+              : process.env.CODESPACE_NAME
+              ? {
+                  host: `${process.env.CODESPACE_NAME}-9000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`,
+                  protocol: "wss",
+                  clientPort: 443,
+                }
               : true,
           },
         })
@@ -109,6 +115,8 @@ module.exports = configure(function (/* ctx */) {
             include: path.resolve(__dirname, "./src/i18n/**"),
           },
         ],
+        ["vite-plugin-rewrite-all"],
+        ["vite-plugin-remove-console"],
       ],
     },
 
@@ -122,6 +130,9 @@ module.exports = configure(function (/* ctx */) {
     framework: {
       config: {
         dark: true,
+        loadingBar: {
+          color: "main",
+        },
       },
 
       // iconSet: 'material-icons', // Quasar icon set
@@ -135,7 +146,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ["AppFullscreen", "Notify", "Dialog", "Loading"],
+      plugins: ["AppFullscreen", "Notify", "Dialog", "Loading", "LoadingBar"],
     },
 
     // animations: 'all', // --- includes all animations
@@ -199,7 +210,7 @@ module.exports = configure(function (/* ctx */) {
     },
 
     bin: {
-      linuxAndroidStudio: "./noop.sh"
+      linuxAndroidStudio: "./noop.sh",
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron

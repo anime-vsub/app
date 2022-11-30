@@ -33,8 +33,8 @@ import { onMounted, ref } from "vue"
 const statusChaptersScroll = ref<"start" | "startImp" | "end" | "pending">(
   "start"
 )
-const onChaptersScroll = debounce(function ({ target }: MouseEvent) {
-  const { scrollLeft, offsetWidth, scrollWidth } = target
+const onChaptersScroll = debounce(function ({ target }: UIEvent) {
+  const { scrollLeft, offsetWidth, scrollWidth } = target as HTMLDivElement
 
   if (scrollLeft === 0) {
     statusChaptersScroll.value =
@@ -53,6 +53,7 @@ const onChaptersScroll = debounce(function ({ target }: MouseEvent) {
 
 const wapScrollRef = ref<HTMLDivElement>()
 onMounted(() => {
-  onChaptersScroll({ target: wapScrollRef.value })
+  if (wapScrollRef.value)
+    onChaptersScroll({ target: wapScrollRef.value } as unknown as UIEvent)
 })
 </script>

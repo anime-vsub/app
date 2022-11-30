@@ -485,7 +485,7 @@
                 :find="
                   (item) => value === currentSeason && item.id === currentChap
                 "
-                                :progress-chaps="
+                :progress-chaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
                                 "
               />
@@ -662,13 +662,15 @@ import { Icon } from "@iconify/vue"
 import { app } from "boot/firebase"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import { QTab, throttle, useQuasar } from "quasar"
+import Hls from "hls.js"
+import { QBtn, QCard, QDialog, QIcon, QItem, QItemLabel, QItemSection, QList, QResponsive, QSpinner, QSpinnerInfinity, QTab, QTabPanel, QTabPanels, QTabs, QToggle, throttle, useQuasar } from "quasar"
 import sha256 from "sha256"
-import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
-import Hls from "src/logic/hls"
+import { fetchJava } from "src/logic/fetchJava"
 import { parseTime } from "src/logic/parseTime"
+import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface";
+import type { ProgressWatchStore, ResponseDataSeasonError, ResponseDataSeasonPending , Season } from "src/pages/phim/_season.interface"
 import { useAuthStore } from "stores/auth"
 import { useSettingsStore } from "stores/settings"
 import {
@@ -680,26 +682,11 @@ import {
   watchEffect,
 } from "vue"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
-import type { ProgressWatchStore } from "src/pages/phim/_season.interface"
 
 import type { Source } from "./sources"
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
-
-interface ResponseDataSeasonPending {
-  status: "pending"
-}
-interface ResponseDataSeasonSuccess {
-  status: "success"
-  response: Awaited<ReturnType<typeof PhimIdChap>>
-}
-interface ResponseDataSeasonError {
-  status: "error"
-  response: {
-    status: number
-  }
-}
 
 const router = useRouter()
 const $q = useQuasar()
@@ -717,10 +704,7 @@ const props = defineProps<{
   }
   name: string
   poster?: string
-  seasons?: {
-    value: string
-    name: string
-  }[]
+  seasons?: Season[]
   _cacheDataSeasons: Map<
     string,
     | ResponseDataSeasonPending
@@ -1101,7 +1085,7 @@ function runRemount() {
 }
 
 // eslint-disable-next-line functional/no-let
-let currentHls: typeof Hls
+let currentHls: Hls
 onBeforeUnmount(() => currentHls?.destroy())
 function remount() {
   currentHls?.destroy()
@@ -1124,10 +1108,93 @@ function remount() {
   switch (type) {
     case "hls":
     case "m3u":
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       // eslint-disable-next-line no-case-declarations
-      const hls = new Hls() as typeof Hls
+      const hls = new Hls({
+        debug: import.meta.env.isDev,
+        progressive: true,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        pLoader: class CustomLoader extends (Hls.DefaultConfig.loader as any) {
+          loadInternal(): void {
+            const { config, context } = this
+            if (!config) {
+              return
+            }
+
+            const { stats } = this
+            stats.loading.first = 0
+            stats.loaded = 0
+
+            const controller = new AbortController()
+            const xhr = (this.loader = {
+              readyState: 0,
+              status: 0,
+              abort() {
+                controller.abort()
+              },
+              onreadystatechange: <(() => void) | null>null,
+              onprogress: <
+                ((eventt: { loaded: number; total: number }) => void) | null
+              >null,
+              response: <ArrayBuffer | null>null,
+              responseText: <string | null>null,
+            })
+            const headers = new Headers()
+            if (this.context.headers)
+              for (const [key, val] of Object.entries(this.context.headers))
+                headers.set(key, val as string)
+
+            if (context.rangeEnd) {
+              headers.set(
+                "Range",
+                "bytes=" + context.rangeStart + "-" + (context.rangeEnd - 1)
+              )
+            }
+
+            xhr.onreadystatechange = this.readystatechange.bind(this)
+            xhr.onprogress = this.loadprogress.bind(this)
+            self.clearTimeout(this.requestTimeout)
+            this.requestTimeout = self.setTimeout(
+              this.loadtimeout.bind(this),
+              config.timeout
+            )
+
+            fetchJava(context.url, {
+              headers,
+              signal: controller.signal,
+            })
+              .then(async (res) => {
+                // eslint-disable-next-line functional/no-let
+                let byteLength: number
+                if (context.responseType === "arraybuffer") {
+                  xhr.response = await res.arrayBuffer()
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  byteLength = xhr.response!.byteLength
+                } else {
+                  xhr.responseText = await res.text()
+                  byteLength = xhr.responseText.length
+                }
+
+                xhr.readyState = 4
+                xhr.status = 200
+
+                xhr.onprogress?.({
+                  loaded: byteLength,
+                  total: byteLength,
+                })
+                // eslint-disable-next-line promise/always-return
+                xhr.onreadystatechange?.()
+              })
+              .catch((e) => {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                this.callbacks!.onError(
+                  { code: xhr.status, text: e.message },
+                  context,
+                  xhr
+                )
+              })
+          }
+        } as unknown as any,
+      })
       currentHls = hls
       // customLoader(hls.config)
       hls.loadSource(url)
