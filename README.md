@@ -12,6 +12,9 @@
 > And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `downloading...`, enjoy the best quality Anime episodes and no `downloading...`
 
 [![Build APK](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml) [![Test](https://github.com/anime-vsub/app/actions/workflows/test.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/test.yml) <img src="https://img.shields.io/github/v/release/anime-vsub/app?color=green&display_name=tag&label=APK"> [![GitHub license](https://img.shields.io/github/license/anime-vsub/app)](https://github.com/anime-vsub/app/blob/main/LICENSE) [![CodeQL](https://github.com/anime-vsub/app/actions/workflows/codeql.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/codeql.yml) [![ESLint](https://github.com/anime-vsub/app/actions/workflows/eslint.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/eslint.yml)
+[![Prettier](https://github.com/anime-vsub/app/actions/workflows/pretter.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/pretter.yml)
+[![TypeScript Checker Declaration](https://github.com/anime-vsub/app/actions/workflows/typing.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/typing.yml)
+[![Try build](https://github.com/anime-vsub/app/actions/workflows/try-build.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/try-build.yml)
 
 ## Screenshot
 

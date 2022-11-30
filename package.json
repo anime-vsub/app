@@ -7,17 +7,20 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .ts,.vue ./",
+    "pretit": "prettier \"**/*.{ts,vue,scss,html,md,json}\" --ignore-path .gitignore,.prettierignore",
     "format": "prettier --write \"**/*.{ts,vue,scss,html,md,json}\" --ignore-path .gitignore,.prettierignore",
     "dev": "quasar dev",
     "build": "quasar build",
     "test:watch": "vitest",
     "test": "vitest run",
+    "typing": "vue-tsc --noEmit",
     "dev:android": "pnpm dev -m capacitor -T android",
     "build:android": "pnpm build -m capacitor -T android",
     "quasar": "quasar",
     "icongenie": "icongenie generate -m capacitor -i meta/app_icon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim",
     "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts",
-    "release": "tsx scripts/release.ts"
+    "release": "tsx scripts/release.ts",
+    "ci": "pnpm format && pnpm lint --fix && pnpm typing"
   },
   "dependencies": {
     "@firebase/app": "^0.8.2",
@@ -35,7 +38,7 @@
     "dayjs": "^1.11.5",
     "eruda2": "0.0.2-b8",
     "group-array": "^1.0.0",
-    "hls.js": "1.2.4",
+    "hls.js": "1.2.7",
     "htmlparser2": "^8.0.1",
     "iso-639-1": "^2.1.15",
     "js-base64": "^3.7.2",
@@ -107,6 +110,7 @@
     "typescript": "^4.8.4",
     "vite-plugin-windicss": "^1.8.8",
     "vitest": "^0.24.3",
+    "vue-tsc": "^1.0.10",
     "windicss": "^3.5.6"
   },
   "engines": {

@@ -23,7 +23,7 @@
       :seasons="seasons"
       :_cache-data-seasons="_cacheDataSeasons"
       :fetch-season="fetchSeason"
-        :progressWatchStore="progressWatchStore"
+      :progressWatchStore="progressWatchStore"
       @cur-update="
         currentProgresWatch?.set($event.id, {
           cur: $event.cur,
@@ -252,7 +252,7 @@
           :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
           :season="value"
           :find="(item) => value === currentSeason && item.id === currentChap"
-                                :progressChaps="
+          :progressChaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
                                 "
         />
@@ -362,7 +362,7 @@
               :find="
                 (item) => value === currentSeason && item.id === currentChap
               "
-                                :progressChaps="
+              :progressChaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
                                 "
               class-item="px-4 py-[10px] mx-2 mb-3"
@@ -467,15 +467,31 @@
 <script lang="ts" setup>
 import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
-import { app } from "boot/firebase"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import GridCard from "components/GridCard.vue"
 import Quality from "components/Quality.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
-import { QTab, useQuasar } from "quasar"
-import sha256 from "sha256"
+import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
+import {
+  QBtn,
+  QCard,
+  QCardSection,
+  QDialog,
+  QIcon,
+  QImg,
+  QResponsive,
+  QSkeleton,
+  QSpinner,
+  QSpinnerInfinity,
+  QTab,
+  QTabPanel,
+  QTabPanels,
+  QTabs,
+  QVideo,
+  useQuasar,
+} from "quasar"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
@@ -483,25 +499,24 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import type { Source } from "src/components/sources"
 import { C_URL, labelToQuality } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
-import dayjs from "src/logic/dayjs"
 import { formatView } from "src/logic/formatView"
+import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
-import {
-  computed,
-  reactive,
-  ref,
-  shallowReactive,
-  shallowRef,
-  watch,
-  watchEffect,
-} from "vue"
-import { useRequest } from "vue-request"
-import { useRoute, useRouter } from "vue-router"
 import { useHistoryStore } from "stores/history"
-import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
-import { getRealSeasonId } from "src/logic/getRealSeasonId"
+import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
+import { useI18n } from "vue-i18n"
+import { useRequest } from "vue-request"
+import { RouterLink, useRoute, useRouter } from "vue-router"
+
+import type {
+  ProgressWatchStore,
+  ResponseDataSeasonError,
+  ResponseDataSeasonPending,
+  Season,
+} from "./_season.interface"
+import { ResponseDataSeasonSuccess } from "./_season.interface"
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -511,6 +526,7 @@ import { getRealSeasonId } from "src/logic/getRealSeasonId"
 const route = useRoute()
 const router = useRouter()
 const historyStore = useHistoryStore()
+const { t } = useI18n()
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -550,12 +566,7 @@ watch(error, (error) => {
     })
 })
 
-const seasons = ref<
-  {
-    name: string
-    value: string
-  }[]
->()
+const seasons = shallowRef<Season[]>()
 watch(
   data,
   () => {
@@ -591,19 +602,6 @@ watch(
   }
 )
 
-interface ResponseDataSeasonPending {
-  status: "pending"
-}
-interface ResponseDataSeasonSuccess {
-  status: "success"
-  response: Awaited<ReturnType<typeof PhimIdChap>>
-}
-interface ResponseDataSeasonError {
-  status: "error"
-  response: {
-    status: number
-  }
-}
 const _cacheDataSeasons = reactive<
   Map<
     string,
@@ -926,7 +924,6 @@ watch(
   }
 )
 
-
 async function getProgressChaps(
   currentSeason: string
 ): Promise<Map<string, { cur: number; dur: number }> | null> {
@@ -936,7 +933,8 @@ async function getProgressChaps(
 
   try {
     const docs = await historyStore.getProgressChaps(currentSeason)
-    docs.forEach((item) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    docs.forEach((item: any) => {
       const { cur, dur } = item.data()
       progressChaps.set(item.id, {
         cur,
@@ -952,7 +950,6 @@ async function getProgressChaps(
 
   return progressChaps
 }
-
 
 // @scrollIntoView
 const tabsRef = ref<QTab>()
@@ -1115,8 +1112,8 @@ const showDialogInforma = ref(false)
 </style>
 
 <style lang="scss" scoped>
-  .panels-navigator :deep(.q-panel){
-    overflow-y: hidden;
-    @apply scrollbar-hide;
-  }
-  </style>
+.panels-navigator :deep(.q-panel) {
+  overflow-y: hidden;
+  @apply scrollbar-hide;
+}
+</style>

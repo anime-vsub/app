@@ -40,7 +40,6 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
 
   const db = getFirestore(app)
 
-
   const historyRef = collection(
     db,
     "users",

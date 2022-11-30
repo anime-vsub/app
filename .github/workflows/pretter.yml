@@ -1,26 +1,14 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# ESLint is a tool for identifying and reporting on patterns
-# found in ECMAScript/JavaScript code.
-# More details at https://github.com/eslint/eslint
-# and https://eslint.org
+name: Prettier
 
-name: ESLint
-
+# This action works with pull requests and pushes
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "main" ]
-  schedule:
-    - cron: '15 10 * * 5'
+  push:
+    branches:
+      - main
 
 jobs:
-  eslint:
-    name: Run eslint scanning
+  prettier:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -45,14 +33,13 @@ jobs:
       - name: Install depends
         run: pnpm i
 
-      - name: Run ESLint
-        run: pnpm lint #--fix
-        
-      
+      - name: Fretit
+        run: pnpm pretit
+
       # - name: Commit changes
       #   uses: EndBug/add-and-commit@v9
       #   with:
       #     author_name: GitHub Actions
       #     author_email: actions@github.com
-      #     message: 'chore: `eslint --fix`'
+      #     message: 'chore: `prettier -w`'
       #     push: origin main

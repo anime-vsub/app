@@ -1,8 +1,10 @@
 import type { HttpOptions } from "@capacitor-community/http"
-// import { CapacitorHttp as Http } from "@capacitor/core"
+import { CapacitorHttp } from "@capacitor/core"
 import { C_URL } from "src/constants"
 
 const isSpa = process.env.MODE === "spa"
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Http: typeof CapacitorHttp = isSpa ? (window as any).Http : CapacitorHttp
 
 export async function get(
   url: string | HttpOptions,
@@ -59,7 +61,11 @@ export async function post(
     headers: {
       "user-agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-      ...isSpa ? {} : { "content-type": "application/x-www-form-urlencoded; charset=UTF-8" },
+      ...(isSpa
+        ? {}
+        : {
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          }),
       ...headers,
     },
     data,
