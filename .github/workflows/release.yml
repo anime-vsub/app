@@ -4,7 +4,7 @@ on:
     tags:
       - "v*.*.*"
 jobs:
-  typing:
+  ci:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -25,6 +25,8 @@ jobs:
       - name: Typing
         run: npm run typing
         
+      - name: Test
+        run: npm run test
   release:
     needs: typing
     runs-on: ubuntu-latest
