@@ -5,7 +5,7 @@ import { parserDom } from "../../__helpers__/parserDom"
 export default function PhimIdChap(html: string) {
   const $ = parserDom(html)
 
-  const chaps = $(".list-episode:eq(0)")
+  const chaps = $("#list-server .list-episode .episode")
     .find("a")
     .map((_i, item) => {
       const $item = $(item)
