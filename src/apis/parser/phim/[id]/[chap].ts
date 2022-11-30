@@ -5,7 +5,7 @@ import { parserDom } from "../../__helpers__/parserDom"
 export default function PhimIdChap(html: string) {
   const $ = parserDom(html)
 
-  const chaps = $(".list-episode:eq(0)")
+  const chaps = $("#list-server .list-episode .episode")
     .find("a")
     .map((_i, item) => {
       const $item = $(item)
@@ -33,7 +33,13 @@ export default function PhimIdChap(html: string) {
 
   return {
     chaps,
-    update: !day ? null : [dayTextToNum(day.toLowerCase()), +hour, +minus],
+    update: !day
+      ? null
+      : ([dayTextToNum(day.toLowerCase()), +hour, +minus] as [
+          number,
+          number,
+          number
+        ]),
     image,
     poster,
   }
