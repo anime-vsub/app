@@ -514,7 +514,7 @@ import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
-Season,
+  Season,
 } from "./_season.interface"
 import { ResponseDataSeasonSuccess } from "./_season.interface"
 // ================ follow ================
@@ -581,7 +581,7 @@ watch(
     const season = data.value.season ?? []
 
     if (season.length > 0) {
-      seasons.value = season.map((item: any) => {
+      seasons.value = season.map((item) => {
         return {
           name: item.name,
           value: router.resolve(item.path).params.season as string,
@@ -933,6 +933,7 @@ async function getProgressChaps(
 
   try {
     const docs = await historyStore.getProgressChaps(currentSeason)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     docs.forEach((item: any) => {
       const { cur, dur } = item.data()
       progressChaps.set(item.id, {

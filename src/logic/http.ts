@@ -3,6 +3,7 @@ import { CapacitorHttp } from "@capacitor/core"
 import { C_URL } from "src/constants"
 
 const isSpa = process.env.MODE === "spa"
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Http: typeof CapacitorHttp = isSpa ? (window as any).Http : CapacitorHttp
 
 export async function get(
