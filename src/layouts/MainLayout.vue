@@ -911,11 +911,11 @@
               <q-item-section avatar class="pr-0 min-w-0">
                 <Icon
                   v-if="router.resolve(path!).fullPath !== route.fullPath"
-                  :icon="icon"
+                  :icon="icon!"
                   width="23"
                   height="23"
                 />
-                <Icon v-else :icon="active" width="23" height="23" />
+                <Icon v-else :icon="active!" width="23" height="23" />
               </q-item-section>
               <q-item-section class="ml-5">
                 <q-item-label class="text-[16px]">{{ name }}</q-item-label>
