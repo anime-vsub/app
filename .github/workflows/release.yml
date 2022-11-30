@@ -28,7 +28,7 @@ jobs:
       - name: Test
         run: npm run test
   release:
-    needs: typing
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
