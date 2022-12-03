@@ -862,7 +862,7 @@ const props = defineProps<{
   currentChap?: string
   nameCurrentChap?: string
   nextChap?: SiblingChap
-  // prevChap?: SiblingChap
+  prevChap?: SiblingChap
   name: string
   poster?: string
   seasons?: {
@@ -882,8 +882,48 @@ const props = defineProps<{
 const playerWrapRef = ref<HTMLDivElement>()
 const documentVisibility = useDocumentVisibility()
 
-// ===== setup effect =====
+function emitNextChap(noNotice?: boolean) {
+  if (!props.nextChap) return
 
+  if (!noNotice)
+    addNotice(
+      props.currentSeason !== props.nextChap.season.value
+        ? `Đang phát season ${props.nextChap.season.name} sau`
+        : `Đang phát tập ${props.nextChap.chap?.name ?? ""} tiếp theo`
+    )
+
+  router.push(
+    `/phim/${props.nextChap.season.value}/${
+      props.nextChap.chap
+        ? parseChapName(props.nextChap.chap.name) +
+          "-" +
+          props.nextChap.chap?.id
+        : ""
+    }`
+  )
+}
+function emitPrevChap(noNotice?: boolean) {
+  if (!props.prevChap) return
+
+  if (!noNotice)
+    addNotice(
+      props.currentSeason !== props.prevChap.season.value
+        ? `Đang phát season ${props.prevChap.season.name} trước`
+        : `Đang phát tập ${props.prevChap.chap?.name ?? ""} trước`
+    )
+
+  router.push(
+    `/phim/${props.prevChap.season.value}/${
+      props.prevChap.chap
+        ? parseChapName(props.prevChap.chap.name) +
+          "-" +
+          props.prevChap.chap?.id
+        : ""
+    }`
+  )
+}
+
+// ===== setup effect =====
 const seasonActive = ref<string>()
 
 // sync data by active route
@@ -1240,21 +1280,7 @@ function onVideoError(event: Event) {
 function onVideoEnded() {
   artEnded = true
   if (props.nextChap && settingsStore.player.autoNext) {
-    addNotice(
-      props.currentSeason !== props.nextChap.season.value
-        ? t("dang-phat-season-_season", [props.nextChap.season.name])
-        : t("dang-phat-tap-tiep-theo")
-    )
-
-    router.push(
-      `/phim/${props.nextChap.season.value}/${
-        props.nextChap.chap
-          ? parseChapName(props.nextChap.chap.name) +
-            "-" +
-            props.nextChap.chap?.id
-          : ""
-      }`
-    )
+    emitNextChap()
   }
 }
 
@@ -1824,17 +1850,10 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       toggleMuted()
       break
     case "KeyN":
-      if (event.shiftKey && props.nextChap)
-        router.push(
-          `/phim/${props.nextChap.season.value}/${
-            props.nextChap.chap
-              ? parseChapName(props.nextChap.chap.name) +
-                "-" +
-                props.nextChap.chap?.id
-              : ""
-          }`
-        )
-
+      if (event.shiftKey) emitNextChap(true)
+      break
+    case "KeyP":
+      if (event.shiftKey) emitPrevChap(true)
       break
     case "KeyJ":
       skipOpening()
@@ -1843,6 +1862,27 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie
       break
   }
+})
+// keybind for headphone control
+navigator.mediaSession?.setActionHandler("pause", () => {
+  const playing = artPlaying.value
+  setArtPlaying(false)
+  if (playing) setArtControlShow(true)
+})
+navigator.mediaSession?.setActionHandler("play", () => {
+  setArtPlaying(true)
+})
+navigator.mediaSession?.setActionHandler("previoustrack", () => {
+  emitPrevChap()
+})
+navigator.mediaSession?.setActionHandler("nexttrack", () => {
+  emitNextChap()
+})
+onBeforeUnmount(() => {
+  navigator.mediaSession?.setActionHandler("pause", null)
+  navigator.mediaSession?.setActionHandler("play", null)
+  navigator.mediaSession?.setActionHandler("previoustrack", null)
+  navigator.mediaSession?.setActionHandler("nexttrack", null)
 })
 
 // eslint-disable-next-line functional/no-let
