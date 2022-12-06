@@ -15,7 +15,7 @@
       >
         <div
           v-for="([name, value], index) in types"
-          :ref="(el) => index === activeIndex && (pagItemActiveRef = el as HTMLDivElement)"
+          :ref="(el) => void(index === activeIndex && (pagItemActiveRef = el as HTMLDivElement))"
           :key="value"
           class="relative inline-block px-4 py-1"
           v-ripple

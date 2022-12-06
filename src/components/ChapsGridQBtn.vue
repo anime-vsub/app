@@ -18,7 +18,7 @@
       ]"
       replace
       :to="`/phim/${season}/${parseChapName(item.name)}-${item.id}`"
-      :ref="(el: QBtn) => find(item) && (activeRef = el as QBtn)"
+      :ref="(el: QBtn) =>void( find(item) && (activeRef = el as QBtn))"
     >
       {{ item.name }}
       <q-linear-progress

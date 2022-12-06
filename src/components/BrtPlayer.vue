@@ -435,7 +435,7 @@
               :label="item.name"
               class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[3px]"
               content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-              :ref="(el: QTab) => item.value === currentSeason && (tabsRef = el as QTab)"
+              :ref="(el: QTab) => void(item.value === currentSeason && (tabsRef = el as QTab))"
             />
           </q-tabs>
 
