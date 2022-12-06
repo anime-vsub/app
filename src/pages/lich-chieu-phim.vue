@@ -16,7 +16,7 @@
       >
         <div
           v-for="(item, index) in data"
-          :ref="(el) => activeIndex === index && (pagItemActiveRef = el as HTMLDivElement)"
+          :ref="(el) =>void( activeIndex === index && (pagItemActiveRef = el as HTMLDivElement))"
           :key="index"
           class="relative inline-block px-4"
           v-ripple

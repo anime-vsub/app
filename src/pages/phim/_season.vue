@@ -279,7 +279,7 @@
         :label="item.name"
         class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[6px]"
         content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-        :ref="(el: QTab) => item.value === seasonActive && (tabsRef = el as QTab)"
+        :ref="(el: QTab) => void(item.value === seasonActive && (tabsRef = el as QTab))"
       />
     </q-tabs>
 
@@ -322,7 +322,7 @@
             :key="item.value"
             :name="item.value"
             :label="item.name"
-            :ref="(el: QTab) => item.value === seasonActive && (tabsDialogRef = el as QTab)"
+            :ref="(el: QTab) =>void( item.value === seasonActive && (tabsDialogRef = el as QTab))"
           />
         </q-tabs>
 
