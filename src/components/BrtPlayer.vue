@@ -373,7 +373,7 @@
                           :key="item.value"
                           :name="item.value"
                           :label="item.name"
-                          :ref="(el: QTab) => item.value === seasonActive && (tabsRef = el as QTab)"
+                          :ref="(el: QTab) => void (item.value === seasonActive && (tabsRef = el as QTab))"
                         />
                       </q-tabs>
                     </div>
