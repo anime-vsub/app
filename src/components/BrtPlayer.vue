@@ -1319,10 +1319,18 @@ watch(documentVisibility, (visibility) => {
         console.warn("cancel continue play")
       })
   }, 1 /* hours */ * 3600_000)
-
   const resumeDelay = debounce(() => {
     if (settingsStore.player.enableRemindStop) resume()
   }, 1_000)
+
+  watch(artPlaying, (playing) => {
+    if(playing) {
+      resumeDelay()
+    } else {
+      pause()
+    }
+  }, {immediate:true})
+
   watch(
     () => settingsStore.player.enableRemindStop,
     (enabled) => {
