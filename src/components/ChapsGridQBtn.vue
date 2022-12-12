@@ -16,7 +16,6 @@
           'mb-3': grid,
         },
       ]"
-      replace
       :to="`/phim/${season}/${parseChapName(item.name)}-${item.id}`"
       :ref="(el: QBtn) => void (find(item) && (activeRef = el as QBtn))"
     >
