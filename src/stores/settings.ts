@@ -10,6 +10,8 @@ export const useSettingsStore = defineStore("settings", {
     },
     ui: {
       modeMovie: false,
+      newPlayer: true,
+      shortcutsQAP: true,
     },
     locale: getNavigatorLanguage(),
     infinityScroll: true,

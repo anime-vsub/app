@@ -24,6 +24,7 @@
       class="player__wrap max-h-[calc(100vh-169px)]"
       :class="{
         fullscreen: artFullscreen,
+        'desktop-mode': settingsStore.ui.newPlayer,
       }"
     >
       <video
@@ -175,75 +176,127 @@
             </q-btn>
           </div>
 
-          <div class="toolbar-bottom" @click.stop>
-            <div class="art-more-controls flex items-center justify-between">
-              <div class="flex items-center">
-                <q-btn
-                  dense
-                  flat
-                  no-caps
-                  rounded
-                  class="mr-6 text-weight-normal art-btn"
-                  :disable="!nextChap"
-                  replace
-                  :to="
-                    nextChap
-                      ? `/phim/${nextChap.season.value}/${
-                          nextChap.chap
-                            ? parseChapName(nextChap.chap.name) +
-                              '-' +
-                              nextChap.chap?.id
-                            : ''
-                        }`
-                      : undefined
-                  "
-                >
-                  <Icon
-                    icon="fluent:next-24-regular"
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
-                  />
-                  {{ t("tiep") }}
-
-                  <q-tooltip
-                    v-if="nextChap"
-                    anchor="top middle"
-                    self="bottom middle"
-                    class="bg-dark text-[14px] text-weight-medium"
-                    transition-show="jump-up"
-                    transition-hide="jump-down"
+          <div class="toolbar-bottom">
+            <div @click.stop>
+              <div class="art-controls only-fscrn">
+                <div class="art-controls-left">
+                  <div
+                    class="art-control art-control-time art-control-onlyText"
+                    data-index="30"
+                    style="cursor: auto"
                   >
-                    {{
-                      t("_message-hint-next", [
-                        currentSeason !== nextChap.season.value
-                          ? t("tiep-theo-_season", [nextChap.season.name])
-                          : t("tiep-theo-tap-_chap", [nextChap.chap?.name]),
-                      ])
-                    }}
-                  </q-tooltip>
-                </q-btn>
+                    {{ parseTime(artCurrentTime) }} /
+                    {{ parseTime(artDuration) }}
+                  </div>
+                </div>
+              </div>
 
-                <div
-                  class="flex items-center mr-6 text-weight-normal art-btn art-volume"
-                  :class="{ active: !artVolumeOutside }"
-                  ref="wrapVolumeRef"
-                >
-                  <q-btn round flat dense @click="toggleMuted">
+              <div
+                class="art-control-progress"
+                @mousedown.stop="onIndicatorMove"
+                @mousemove.stop="onIndicatorMove"
+                @mouseover="artControlProgressHoving = true"
+                @mouseout="artControlProgressHoving = false"
+              >
+                <div class="art-control-progress-inner" ref="progressInnerRef">
+                  <div
+                    class="art-progress-loaded"
+                    :style="{
+                      width: `${artPercentageResourceLoaded * 100}%`,
+                    }"
+                  />
+                  <div
+                    v-if="artControlProgressHoving && !currentingTime"
+                    class="art-progress-hoved"
+                    :data-title="parseTime(artCurrentTimeHoving)"
+                    :style="{
+                      width: `${(artCurrentTimeHoving / artDuration) * 100}%`,
+                    }"
+                  />
+                  <div
+                    class="art-progress-played"
+                    :style="{
+                      width: `${(artCurrentTime / artDuration) * 100}%`,
+                    }"
+                  >
+                    <div
+                      class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
+                      :data-title="parseTime(artCurrentTimeHoving)"
+                      @mousedown.stop="currentingTime = true"
+                      @mousemove.stop="onIndicatorMove"
+                    >
+                      <img width="16" heigth="16" src="~assets/indicator.svg" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="art-more-controls flex items-center justify-between">
+                <div class="flex items-center">
+                  <q-btn
+                    dense
+                    flat
+                    no-caps
+                    rounded
+                    class="mr-5 text-weight-normal art-btn desktop-mode:flex"
+                    @click="setArtPlaying(!artPlaying)"
+                  >
+                    <svg
+                      v-if="artPlaying"
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                      aria-hidden="true"
+                      role="img"
+                      class="art-icon iconify iconify--fluent"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      data-v-0a4390b6=""
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M 6 3 A 2.25 2.25 0 0 0 4 5.25 v 13.35 A 2.25 2.25 0 0 0 6 21 h 1 A 2.25 2.25 0 0 0 9 18.6 V 5.25 A 2.25 2.25 0 0 0 7 3 Z m 11 0 A 2.25 2.25 0 0 0 15 5.4 v 13.5 A 2.25 2.25 0 0 0 17 21 h 1 A 2.25 2.25 0 0 0 20 18.75 V 5.25 A 2.25 2.25 0 0 0 18 3 Z"
+                      ></path>
+                    </svg>
                     <Icon
-                      :icon="
-                        [
-                          'fluent:speaker-off-24-regular',
-                          'fluent:speaker-1-24-regular',
-                          'fluent:speaker-2-24-regular',
-                        ][artVolume === 0 ? 0 : artVolume < 0.5 ? 1 : 2]
-                      "
-                      class="mr-2 art-icon"
+                      v-else
+                      icon="fluent:play-24-filled"
+                      class="art-icon"
                       width="18"
                       height="18"
                     />
+                  </q-btn>
+                  <q-btn
+                    dense
+                    flat
+                    no-caps
+                    rounded
+                    class="mr-6 desktop-mode:mr-5 text-weight-normal art-btn"
+                    :disable="!nextChap"
+                    :to="
+                      nextChap
+                        ? `/phim/${nextChap.season.value}/${
+                            nextChap.chap
+                              ? parseChapName(nextChap.chap.name) +
+                                '-' +
+                                nextChap.chap?.id
+                              : ''
+                          }`
+                        : undefined
+                    "
+                  >
+                    <Icon
+                      icon="fluent:next-24-regular"
+                      class="art-icon"
+                      width="18"
+                      height="18"
+                    />
+                    <span class="ml-2 desktop-mode:hidden">{{
+                      t("tiep")
+                    }}</span>
 
                     <q-tooltip
+                      v-if="nextChap"
                       anchor="top middle"
                       self="bottom middle"
                       class="bg-dark text-[14px] text-weight-medium"
@@ -251,495 +304,607 @@
                       transition-hide="jump-down"
                     >
                       {{
-                        artVolume === 0 ? t("bat-tieng-m") : t("tat-tieng-m")
+                        t("_message-hint-next", [
+                          currentSeason !== nextChap.season.value
+                            ? t("tiep-theo-_season", [nextChap.season.name])
+                            : t("tiep-theo-tap-_chap", [nextChap.chap?.name]),
+                        ])
                       }}
                     </q-tooltip>
                   </q-btn>
 
                   <div
-                    class="overflow-hidden py-1 w-0 transition-width duration-300 ease-in-out slider"
-                    @mouseout.stop
+                    class="flex items-center mr-1 text-weight-normal art-btn art-volume"
+                    :class="{ active: !artVolumeOutside }"
+                    ref="wrapVolumeRef"
                   >
-                    <q-slider
-                      :model-value="artVolume"
-                      @update:model-value="setArtVolume($event ?? 0)"
-                      :min="0"
-                      :max="1"
-                      :step="0.05"
-                      dense
-                      color="white"
-                      track-size="3px"
-                      thumb-size="17px"
-                    />
-                  </div>
-                </div>
+                    <q-btn round flat dense @click="toggleMuted">
+                      <Icon
+                        :icon="
+                          [
+                            'fluent:speaker-off-24-regular',
+                            'fluent:speaker-1-24-regular',
+                            'fluent:speaker-2-24-regular',
+                          ][artVolume === 0 ? 0 : artVolume < 0.5 ? 1 : 2]
+                        "
+                        class="mr-2 art-icon"
+                        width="18"
+                        height="18"
+                      />
 
-                <div
-                  class="art-control art-control-time art-control-onlyText hide-fscrn"
-                  data-index="30"
-                  style="cursor: auto"
-                >
-                  {{ parseTime(artCurrentTime) }} /
-                  {{ parseTime(artDuration) }}
-                </div>
-
-                <q-btn
-                  dense
-                  flat
-                  no-caps
-                  rounded
-                  @click="showDialogChapter = true"
-                  class="text-weight-normal art-btn only-fscrn"
-                  :style="{
-                    display: settingsStore.ui.modeMovie
-                      ? 'block !important'
-                      : '',
-                  }"
-                  :class="{
-                    'ml-6': settingsStore.ui.modeMovie,
-                  }"
-                >
-                  <Icon
-                    icon="fluent:list-24-regular"
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
-                  />
-                  {{ t("ep-_chap", [nameCurrentChap]) }}
-
-                  <q-tooltip
-                    v-if="!showDialogChapter"
-                    anchor="top middle"
-                    self="bottom middle"
-                    class="bg-dark text-[14px] text-weight-medium"
-                    transition-show="jump-up"
-                    transition-hide="jump-down"
-                  >
-                    {{ t("danh-sach-tap") }}
-                  </q-tooltip>
-
-                  <q-menu
-                    anchor="top middle"
-                    self="bottom middle"
-                    :offset="[0, 20]"
-                    class="rounded-xl shadow-xl bg-[rgba(28,28,30,1)] min-w-[200px] min-h-[165px] max-w-[329px] flex column flex-nowrap overflow-visible"
-                    ref="menuChapsRef"
-                  >
-                    <div>
-                      <div
-                        class="py-1 px-4 text-subtitle1 flex items-center justify-between"
+                      <q-tooltip
+                        anchor="top middle"
+                        self="bottom middle"
+                        class="bg-dark text-[14px] text-weight-medium"
+                        transition-show="jump-up"
+                        transition-hide="jump-down"
                       >
                         {{
-                          gridModeTabsSeasons ? t("chon-season") : t("chon-tap")
+                          artVolume === 0 ? t("bat-tieng-m") : t("tat-tieng-m")
                         }}
+                      </q-tooltip>
+                    </q-btn>
+
+                    <div
+                      class="overflow-hidden py-1 flex items-center w-0 transition-width duration-300 ease-in-out slider"
+                      @mouseout.stop
+                    >
+                      <q-slider
+                        :model-value="artVolume"
+                        @update:model-value="setArtVolume($event ?? 0)"
+                        :min="0"
+                        :max="1"
+                        :step="0.05"
+                        dense
+                        color="white"
+                        track-size="3px"
+                        thumb-size="17px"
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    class="ml-2 art-control art-control-time art-control-onlyText hide-fscrn"
+                    data-index="30"
+                    style="cursor: auto"
+                  >
+                    {{ parseTime(artCurrentTime) }} /
+                    {{ parseTime(artDuration) }}
+                  </div>
+
+                  <q-btn
+                    dense
+                    flat
+                    no-caps
+                    rounded
+                    @click="showDialogChapter = true"
+                    class="ml-6 desktop-mode:ml-7 text-weight-normal art-btn only-fscrn"
+                    :style="{
+                      display: settingsStore.ui.modeMovie
+                        ? 'block !important'
+                        : '',
+                    }"
+                  >
+                    <Icon
+                      icon="fluent:list-24-regular"
+                      class="mr-2 art-icon"
+                      width="18"
+                      height="18"
+                    />
+                    {{ t("ep-_chap", [nameCurrentChap]) }}
+
+                    <q-tooltip
+                      v-if="!showDialogChapter"
+                      anchor="top middle"
+                      self="bottom middle"
+                      class="bg-dark text-[14px] text-weight-medium"
+                      transition-show="jump-up"
+                      transition-hide="jump-down"
+                    >
+                      {{ t("danh-sach-tap") }}
+                    </q-tooltip>
+
+                    <q-menu
+                      v-model="showMenuSelectChap"
+                      anchor="top middle"
+                      self="bottom middle"
+                      :offset="[0, 20]"
+                      class="rounded-xl shadow-xl bg-[rgba(28,28,30,1)] min-w-[200px] min-h-[165px] max-w-[329px] flex column flex-nowrap overflow-visible"
+                      ref="menuChapsRef"
+                    >
+                      <div>
+                        <div
+                          class="py-1 px-4 text-subtitle1 flex items-center justify-between"
+                        >
+                          {{
+                            gridModeTabsSeasons
+                              ? t("chon-season")
+                              : t("chon-tap")
+                          }}
+
+                          <q-btn
+                            dense
+                            round
+                            unelevated
+                            @click="gridModeTabsSeasons = !gridModeTabsSeasons"
+                          >
+                            <Icon
+                              :icon="
+                                gridModeTabsSeasons
+                                  ? 'fluent:grid-kanban-20-regular'
+                                  : 'fluent:apps-list-24-regular'
+                              "
+                              width="20"
+                              height="20"
+                            />
+                          </q-btn>
+                        </div>
+
+                        <q-tabs
+                          v-model="seasonActive"
+                          class="min-w-0 w-full tabs-seasons"
+                          :class="{
+                            'grid-mode bg-[rgba(28,28,30,1)] scrollbar-custom':
+                              gridModeTabsSeasons,
+                          }"
+                          no-caps
+                          dense
+                          inline-label
+                          active-class="c--main"
+                          v-if="
+                            seasons &&
+                            (seasons.length > 1 ||
+                              (seasons.length === 0 && seasons[0].name !== ''))
+                          "
+                        >
+                          <q-tab
+                            v-for="item in seasons"
+                            :key="item.value"
+                            :name="item.value"
+                            :label="item.name"
+                            :ref="(el: QTab) => void (item.value === seasonActive && (tabsRef = el as QTab))"
+                          />
+                        </q-tabs>
+                      </div>
+
+                      <div
+                        class="h-full min-h-0 overflow-y-auto scrollbar-custom"
+                        :style="{
+                          overflow: gridModeTabsSeasons ? 'hidden' : '',
+                        }"
+                      >
+                        <div
+                          v-if="!seasons"
+                          class="flex-1 flex items-center justify-center py-4"
+                        >
+                          <q-spinner color="main" size="3em" :thickness="3" />
+                        </div>
+
+                        <template v-else>
+                          <q-tab-panels
+                            v-model="seasonActive"
+                            animated
+                            keep-alive
+                            class="flex-1 w-full bg-transparent panels-seasons"
+                          >
+                            <q-tab-panel
+                              v-for="({ value }, index) in seasons"
+                              :key="index"
+                              :name="value"
+                            >
+                              <div
+                                v-if="
+                                  !(_tmp = _cacheDataSeasons.get(value)) ||
+                                  _tmp.status === 'pending'
+                                "
+                                class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+                              >
+                                <q-spinner
+                                  style="color: #00be06"
+                                  size="3em"
+                                  :thickness="3"
+                                />
+                              </div>
+                              <div
+                                v-else-if="_tmp.status === 'error'"
+                                class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
+                              >
+                                {{ t("loi-khi-lay-du-lieu") }}
+                                <br />
+                                <q-btn
+                                  dense
+                                  no-caps
+                                  rounded
+                                  style="color: #00be06"
+                                  @click="fetchSeason(value)"
+                                  >{{ t("thu-lai") }}</q-btn
+                                >
+                              </div>
+
+                              <template v-else>
+                                <div
+                                  v-if="_tmp.response.update"
+                                  class="mb-2 text-gray-300"
+                                >
+                                  <MessageScheludeChap
+                                    :update="_tmp.response.update"
+                                  />
+                                </div>
+
+                                <ChapsGridQBtn
+                                  grid
+                                  :chaps="_tmp.response.chaps"
+                                  :season="value"
+                                  :find="
+                                    (item) =>
+                                      value === currentSeason &&
+                                      item.id === currentChap
+                                  "
+                                  :progress-chaps="
+                                  (progressWatchStore.get(value) as unknown as any)?.response
+                                "
+                                  class-item="px-3 !py-[6px] mb-3"
+                                />
+                              </template>
+                            </q-tab-panel>
+                          </q-tab-panels>
+                        </template>
+                      </div>
+
+                      <q-resize-observer
+                        @resize="menuChapsRef?.updatePosition()"
+                      />
+                    </q-menu>
+                  </q-btn>
+                </div>
+
+                <div>
+                  <q-btn
+                    v-if="settingsStore.ui.shortcutsQAP"
+                    dense
+                    flat
+                    no-caps
+                    rounded
+                    class="mr-6 desktop-mode:mr-5 text-weight-normal art-btn"
+                  >
+                    <Icon
+                      icon="bi:badge-hd"
+                      class="mr-2 art-icon"
+                      width="18"
+                      height="18"
+                    />
+                    {{ artQuality }}
+
+                    <q-menu
+                      v-model="showMenuQuality"
+                      anchor="top middle"
+                      self="bottom middle"
+                      :offset="[0, 20]"
+                      class="rounded-xl shadow-xl min-w-[200px]"
+                    >
+                      <div
+                        class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                      >
+                        {{ t("chat-luong") }}
 
                         <q-btn
                           dense
+                          flat
                           round
-                          unelevated
-                          @click="gridModeTabsSeasons = !gridModeTabsSeasons"
-                        >
-                          <Icon
-                            :icon="
-                              gridModeTabsSeasons
-                                ? 'fluent:grid-kanban-20-regular'
-                                : 'fluent:apps-list-24-regular'
-                            "
-                            width="20"
-                            height="20"
-                          />
-                        </q-btn>
-                      </div>
-
-                      <q-tabs
-                        v-model="seasonActive"
-                        class="min-w-0 w-full tabs-seasons"
-                        :class="{
-                          'grid-mode bg-[rgba(28,28,30,1)] scrollbar-custom':
-                            gridModeTabsSeasons,
-                        }"
-                        no-caps
-                        dense
-                        inline-label
-                        active-class="c--main"
-                        v-if="
-                          seasons &&
-                          (seasons.length > 1 ||
-                            (seasons.length === 0 && seasons[0].name !== ''))
-                        "
-                      >
-                        <q-tab
-                          v-for="item in seasons"
-                          :key="item.value"
-                          :name="item.value"
-                          :label="item.name"
-                          :ref="(el: QTab) => void (item.value === seasonActive && (tabsRef = el as QTab))"
+                          icon="close"
+                          class="text-zinc-500"
+                          v-close-popup
                         />
-                      </q-tabs>
-                    </div>
-
-                    <div
-                      class="h-full min-h-0 overflow-y-auto scrollbar-custom"
-                      :style="{
-                        overflow: gridModeTabsSeasons ? 'hidden' : '',
-                      }"
-                    >
-                      <div
-                        v-if="!seasons"
-                        class="flex-1 flex items-center justify-center py-4"
-                      >
-                        <q-spinner color="main" size="3em" :thickness="3" />
                       </div>
-
-                      <template v-else>
-                        <q-tab-panels
-                          v-model="seasonActive"
-                          animated
-                          keep-alive
-                          class="flex-1 w-full bg-transparent panels-seasons"
-                        >
-                          <q-tab-panel
-                            v-for="({ value }, index) in seasons"
-                            :key="index"
-                            :name="value"
-                          >
-                            <div
-                              v-if="
-                                !(_tmp = _cacheDataSeasons.get(value)) ||
-                                _tmp.status === 'pending'
-                              "
-                              class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+                      <div
+                        class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
+                      >
+                        <BottomBlurRelative>
+                          <ul class="mx-[-16px]">
+                            <li
+                              v-for="({ html }, index) in sources"
+                              :key="html"
+                              class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
+                              :class="{
+                                'c--main':
+                                  html === artQuality ||
+                                  (!artQuality && index === 0),
+                              }"
+                              @click="setArtQuality(html)"
                             >
-                              <q-spinner
-                                style="color: #00be06"
-                                size="3em"
-                                :thickness="3"
-                              />
-                            </div>
-                            <div
-                              v-else-if="_tmp.status === 'error'"
-                              class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
-                            >
-                              {{ t("loi-khi-lay-du-lieu") }}
-                              <br />
-                              <q-btn
-                                dense
-                                no-caps
-                                rounded
-                                style="color: #00be06"
-                                @click="fetchSeason(value)"
-                                >{{ t("thu-lai") }}</q-btn
-                              >
-                            </div>
+                              {{ html }}
+                            </li>
+                          </ul>
+                        </BottomBlurRelative>
+                      </div>
+                    </q-menu>
 
-                            <template v-else>
-                              <div
-                                v-if="_tmp.response.update"
-                                class="mb-2 text-gray-300"
-                              >
-                                <MessageScheludeChap
-                                  :update="_tmp.response.update"
-                                />
-                              </div>
-
-                              <ChapsGridQBtn
-                                grid
-                                :chaps="_tmp.response.chaps"
-                                :season="value"
-                                :find="
-                                  (item) =>
-                                    value === currentSeason &&
-                                    item.id === currentChap
-                                "
-                                :progress-chaps="
-                                  (progressWatchStore.get(value) as unknown as any)?.response
-                                "
-                                class-item="px-3 !py-[6px] mb-3"
-                              />
-                            </template>
-                          </q-tab-panel>
-                        </q-tab-panels>
-                      </template>
-                    </div>
-
-                    <q-resize-observer
-                      @resize="menuChapsRef?.updatePosition()"
-                    />
-                  </q-menu>
-                </q-btn>
-              </div>
-
-              <div>
-                <q-btn
-                  dense
-                  flat
-                  no-caps
-                  rounded
-                  class="mr-6 text-weight-normal art-btn"
-                >
-                  <Icon
-                    icon="bi:badge-hd"
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
-                  />
-                  {{ artQuality }}
-
-                  <q-menu
-                    v-model="showMenuQuality"
-                    anchor="top middle"
-                    self="bottom middle"
-                    :offset="[0, 20]"
-                    class="rounded-xl shadow-xl min-w-[200px]"
-                  >
-                    <div
-                      class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                    <q-tooltip
+                      v-if="!showMenuQuality"
+                      anchor="top middle"
+                      self="bottom middle"
+                      class="bg-dark text-[14px] text-weight-medium"
+                      transition-show="jump-up"
+                      transition-hide="jump-down"
                     >
                       {{ t("chat-luong") }}
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    v-if="settingsStore.ui.shortcutsQAP"
+                    dense
+                    flat
+                    no-caps
+                    rounded
+                    class="mr-6 desktop-mode:mr-5 text-weight-normal art-btn"
+                  >
+                    <Icon
+                      icon="fluent:top-speed-24-regular"
+                      class="mr-2 art-icon"
+                      width="18"
+                      height="18"
+                    />
+                    {{ t("_playback-x", [artPlaybackRate]) }}
 
-                      <q-btn
-                        dense
-                        flat
-                        round
-                        icon="close"
-                        class="text-zinc-500"
-                        v-close-popup
-                      />
-                    </div>
-                    <div
-                      class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
+                    <q-menu
+                      v-model="showMenuPlaybackRate"
+                      anchor="top middle"
+                      self="bottom middle"
+                      :offset="[0, 20]"
+                      class="rounded-xl shadow-xl min-w-[200px]"
                     >
-                      <BottomBlurRelative>
-                        <ul class="mx-[-16px]">
-                          <li
+                      <div
+                        class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                      >
+                        {{ t("toc-do") }}
+
+                        <q-btn
+                          dense
+                          flat
+                          round
+                          icon="close"
+                          class="text-zinc-500"
+                          v-close-popup
+                        />
+                      </div>
+                      <div
+                        class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
+                      >
+                        <BottomBlurRelative>
+                          <ul class="mx-[-16px]">
+                            <li
+                              v-for="{ name, value } in [
+                                ...playbackRates,
+                              ].reverse()"
+                              :key="value"
+                              class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
+                              :class="{
+                                'c--main': value === artPlaybackRate,
+                              }"
+                              @click="setArtPlaybackRate(value)"
+                            >
+                              {{ name }}
+                            </li>
+                          </ul>
+                        </BottomBlurRelative>
+                      </div>
+                    </q-menu>
+
+                    <q-tooltip
+                      v-if="!showMenuPlaybackRate"
+                      anchor="top middle"
+                      self="bottom middle"
+                      class="bg-dark text-[14px] text-weight-medium"
+                      transition-show="jump-up"
+                      transition-hide="jump-down"
+                    >
+                      {{ t("toc-do-phat") }}
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    dense
+                    flat
+                    round
+                    no-caps
+                    class="mr-6 desktop-mode:mr-5 text-weight-normal art-btn"
+                  >
+                    <Icon
+                      icon="fluent:settings-28-filled"
+                      class="art-icon"
+                      width="24"
+                      height="24"
+                    />
+
+                    <q-menu
+                      v-model="showMenuSettings"
+                      anchor="top middle"
+                      self="bottom middle"
+                      :offset="[-25, 20]"
+                      class="rounded-xl shadow-xl min-w-[200px]"
+                    >
+                      <div
+                        class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                      >
+                        {{ t("cai-dat") }}
+
+                        <q-btn
+                          dense
+                          flat
+                          round
+                          icon="close"
+                          class="text-zinc-500"
+                          v-close-popup
+                        />
+                      </div>
+                      <div
+                        class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative py-3"
+                      >
+                        <div class="text-zinc-500 text-[12px] mb-2">
+                          {{ t("chat-luong") }}
+                        </div>
+                        <div>
+                          <q-btn
+                            dense
+                            flat
+                            no-caps
+                            class="px-2 flex-1 text-weight-norrmal py-2 c--main rounded-xl"
                             v-for="({ html }, index) in sources"
-                            :key="html"
-                            class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
                             :class="{
                               'c--main':
                                 html === artQuality ||
                                 (!artQuality && index === 0),
                             }"
+                            :key="html"
                             @click="setArtQuality(html)"
+                            >{{ html }}</q-btn
                           >
-                            {{ html }}
-                          </li>
-                        </ul>
-                      </BottomBlurRelative>
-                    </div>
-                  </q-menu>
+                        </div>
 
-                  <q-tooltip
-                    v-if="!showMenuQuality"
-                    anchor="top middle"
-                    self="bottom middle"
-                    class="bg-dark text-[14px] text-weight-medium"
-                    transition-show="jump-up"
-                    transition-hide="jump-down"
-                  >
-                    {{ t("chat-luong") }}
-                  </q-tooltip>
-                </q-btn>
-                <q-btn
-                  dense
-                  flat
-                  no-caps
-                  rounded
-                  class="mr-6 text-weight-normal art-btn"
-                >
-                  <Icon
-                    icon="fluent:top-speed-24-regular"
-                    class="mr-2 art-icon"
-                    width="18"
-                    height="18"
-                  />
-                  {{ t("_playback-x", [artPlaybackRate]) }}
-
-                  <q-menu
-                    v-model="showMenuPlaybackRate"
-                    anchor="top middle"
-                    self="bottom middle"
-                    :offset="[0, 20]"
-                    class="rounded-xl shadow-xl min-w-[200px]"
-                  >
-                    <div
-                      class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
-                    >
-                      {{ t("toc-do") }}
-
-                      <q-btn
-                        dense
-                        flat
-                        round
-                        icon="close"
-                        class="text-zinc-500"
-                        v-close-popup
-                      />
-                    </div>
-                    <div
-                      class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
-                    >
-                      <BottomBlurRelative>
-                        <ul class="mx-[-16px]">
-                          <li
-                            v-for="{ name, value } in [
-                              ...playbackRates,
-                            ].reverse()"
-                            :key="value"
-                            class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
-                            :class="{
-                              'c--main': value === artPlaybackRate,
-                            }"
+                        <div class="text-zinc-500 text-[12px] mt-4 mb-2">
+                          {{ t("toc-do-phat-lai") }}
+                        </div>
+                        <div class="flex flex-nowrap mx-[-8px]">
+                          <q-btn
+                            dense
+                            flat
+                            no-caps
+                            class="px-2 flex-1 text-weight-norrmal py-2 c--main rounded-xl"
+                            v-for="{ name, value } in playbackRates"
+                            :key="name"
+                            :class="
+                              artPlaybackRate === value
+                                ? 'c--main'
+                                : 'text-stone-200'
+                            "
                             @click="setArtPlaybackRate(value)"
+                            >{{ name }}</q-btn
                           >
-                            {{ name }}
-                          </li>
-                        </ul>
-                      </BottomBlurRelative>
-                    </div>
-                  </q-menu>
+                        </div>
 
-                  <q-tooltip
-                    v-if="!showMenuPlaybackRate"
-                    anchor="top middle"
-                    self="bottom middle"
-                    class="bg-dark text-[14px] text-weight-medium"
-                    transition-show="jump-up"
-                    transition-hide="jump-down"
+                        <div
+                          class="flex items-center justify-between mt-4 mb-2"
+                        >
+                          {{ t("tu-dong-phat") }}
+                          <q-toggle
+                            v-model="settingsStore.player.autoNext"
+                            size="sm"
+                            color="green"
+                          />
+                        </div>
+
+                        <div
+                          class="flex items-center justify-between mt-4 mb-2"
+                        >
+                          {{ t("giao-dien-moi") }}
+                          <q-toggle
+                            v-model="settingsStore.ui.newPlayer"
+                            size="sm"
+                            color="blue"
+                          />
+                        </div>
+
+                        <div
+                          class="flex items-center justify-between mt-4 mb-2"
+                        >
+                          {{ t("loi-tat-chat-luong-and-toc-do") }}
+                          <q-toggle
+                            v-model="settingsStore.ui.shortcutsQAP"
+                            size="sm"
+                            color="blue"
+                          />
+                        </div>
+                      </div>
+                    </q-menu>
+
+                    <q-tooltip
+                      v-if="!showMenuSettings"
+                      anchor="top middle"
+                      self="bottom middle"
+                      class="bg-dark text-[14px] text-weight-medium"
+                      transition-show="jump-up"
+                      transition-hide="jump-down"
+                    >
+                      {{ t("cai-dat") }}
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    dense
+                    flat
+                    round
+                    no-caps
+                    class="mr-6 desktop-mode:mr-5 text-weight-normal art-btn"
+                    @click="
+                      settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie
+                    "
                   >
-                    {{ t("toc-do-phat") }}
-                  </q-tooltip>
-                </q-btn>
-                <q-btn
-                  dense
-                  flat
-                  round
-                  no-caps
-                  class="mr-6 text-weight-normal art-btn"
-                  @click="
-                    settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie
-                  "
-                >
-                  <Icon
-                    v-if="!settingsStore.ui.modeMovie"
-                    icon="ph:rectangle"
-                    class="art-icon"
-                    width="24"
-                    height="24"
-                  />
-                  <Icon
-                    v-else
-                    icon="lucide:rectangle-horizontal"
-                    class="art-icon"
-                    width="24"
-                    height="24"
-                  />
+                    <Icon
+                      v-if="!settingsStore.ui.modeMovie"
+                      icon="ph:rectangle"
+                      class="art-icon"
+                      width="24"
+                      height="24"
+                    />
+                    <Icon
+                      v-else
+                      icon="lucide:rectangle-horizontal"
+                      class="art-icon"
+                      width="24"
+                      height="24"
+                    />
 
-                  <q-tooltip
-                    ref="tooltipModeMovieRef"
-                    anchor="top middle"
-                    self="bottom middle"
-                    class="bg-dark text-[14px] text-weight-medium"
-                    transition-show="jump-up"
-                    transition-hide="jump-down"
+                    <q-tooltip
+                      ref="tooltipModeMovieRef"
+                      anchor="top middle"
+                      self="bottom middle"
+                      class="bg-dark text-[14px] text-weight-medium"
+                      transition-show="jump-up"
+                      transition-hide="jump-down"
+                    >
+                      {{
+                        settingsStore.ui.modeMovie
+                          ? t("che-do-xem-mac-dinh-t")
+                          : t("che-do-xem-rap-phim-t")
+                      }}
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    dense
+                    flat
+                    round
+                    no-caps
+                    class="text-weight-normal art-btn"
+                    @click="toggleArtFullscreen"
                   >
-                    {{
-                      settingsStore.ui.modeMovie
-                        ? t("che-do-xem-mac-dinh-t")
-                        : t("che-do-xem-rap-phim-t")
-                    }}
-                  </q-tooltip>
-                </q-btn>
-                <q-btn
-                  dense
-                  flat
-                  round
-                  no-caps
-                  class="text-weight-normal art-btn"
-                  @click="toggleArtFullscreen"
-                >
-                  <Icon
-                    v-if="!artFullscreen"
-                    icon="fluent:full-screen-maximize-24-regular"
-                    class="art-icon"
-                    width="24"
-                    height="24"
-                  />
-                  <Icon
-                    v-else
-                    icon="fluent:full-screen-minimize-24-regular"
-                    class="art-icon"
-                    width="24"
-                    height="24"
-                  />
+                    <Icon
+                      v-if="!artFullscreen"
+                      icon="fluent:full-screen-maximize-24-regular"
+                      class="art-icon"
+                      width="24"
+                      height="24"
+                    />
+                    <Icon
+                      v-else
+                      icon="fluent:full-screen-minimize-24-regular"
+                      class="art-icon"
+                      width="24"
+                      height="24"
+                    />
 
-                  <q-tooltip
-                    ref="tooltipFullscreenRef"
-                    anchor="top middle"
-                    self="bottom middle"
-                    class="bg-dark text-[14px] text-weight-medium"
-                    transition-show="jump-up"
-                    transition-hide="jump-down"
-                  >
-                    {{
-                      artFullscreen
-                        ? t("thoat-khoi-che-do-toan-man-hinh-f")
-                        : t("toan-man-hinh-f")
-                    }}
-                  </q-tooltip>
-                </q-btn>
-              </div>
-            </div>
-
-            <div
-              class="art-control-progress"
-              @mousedown.stop="onIndicatorMove"
-              @mousemove.stop="onIndicatorMove"
-              @mouseover="artControlProgressHoving = true"
-              @mouseout="artControlProgressHoving = false"
-            >
-              <div class="art-control-progress-inner" ref="progressInnerRef">
-                <div
-                  class="art-progress-loaded"
-                  :style="{
-                    width: `${artPercentageResourceLoaded * 100}%`,
-                  }"
-                />
-                <div
-                  v-if="artControlProgressHoving && !currentingTime"
-                  class="art-progress-hoved"
-                  :data-title="parseTime(artCurrentTimeHoving)"
-                  :style="{
-                    width: `${(artCurrentTimeHoving / artDuration) * 100}%`,
-                  }"
-                />
-                <div
-                  class="art-progress-played"
-                  :style="{
-                    width: `${(artCurrentTime / artDuration) * 100}%`,
-                  }"
-                >
-                  <div
-                    class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
-                    :data-title="parseTime(artCurrentTimeHoving)"
-                    @mousedown.stop="currentingTime = true"
-                    @mousemove.stop="onIndicatorMove"
-                  >
-                    <img width="16" heigth="16" src="~assets/indicator.svg" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="art-controls only-fscrn">
-              <div class="art-controls-left">
-                <div
-                  class="art-control art-control-time art-control-onlyText"
-                  data-index="30"
-                  style="cursor: auto"
-                >
-                  {{ parseTime(artCurrentTime) }} /
-                  {{ parseTime(artDuration) }}
+                    <q-tooltip
+                      ref="tooltipFullscreenRef"
+                      anchor="top middle"
+                      self="bottom middle"
+                      class="bg-dark text-[14px] text-weight-medium"
+                      transition-show="jump-up"
+                      transition-hide="jump-down"
+                    >
+                      {{
+                        artFullscreen
+                          ? t("thoat-khoi-che-do-toan-man-hinh-f")
+                          : t("toan-man-hinh-f")
+                      }}
+                    </q-tooltip>
+                  </q-btn>
                 </div>
               </div>
             </div>
@@ -1228,6 +1393,8 @@ function onVideoTimeUpdate() {
     artControlShow.value &&
     !showMenuQuality.value &&
     !showMenuPlaybackRate.value &&
+    !showMenuSettings.value &&
+    !showMenuSelectChap.value &&
     artVolumeOutside.value &&
     !artControlProgressHoving.value &&
     Date.now() - activeTime >= 3e3
@@ -1806,6 +1973,8 @@ watch(showDialogChapter, (status) => {
 
 const showMenuQuality = ref(false)
 const showMenuPlaybackRate = ref(false)
+const showMenuSettings = ref(false)
+const showMenuSelectChap = ref(false)
 
 function upVolume() {
   if (artVolume.value < 1) {
@@ -1956,17 +2125,19 @@ let _tmp:
     }
   }
   .toolbar-bottom {
+    transition: padding 0.2s ease-in-out;
     padding: 50px 7px 0;
     padding: {
       left: 16px;
       right: 16px;
       bottom: 8px;
     }
-    display: flex;
-    flex-direction: column-reverse;
-    @apply h-min-[100px] z-60;
+    // display: flex;
+    // flex-direction: column-reverse;
+    min-height: 100px;
+    @apply z-60;
     background: {
-      image: linear-gradient(to top, #000, #0006, #0000);
+      image: linear-gradient(to bottom, #0000, #0006, #000);
       position: bottom;
       repeat: repeat-x;
     }
@@ -2326,6 +2497,107 @@ let _tmp:
       @media (min-width: $breakpoint-sm-min) {
         height: 25px;
         width: 25px;
+      }
+    }
+  }
+}
+
+.desktop-mode\:flex {
+  display: none;
+}
+.player__wrap.desktop-mode {
+  .desktop-mode\:hidden {
+    display: none;
+  }
+  .desktop-mode\:flex {
+    display: flex;
+  }
+  .desktop-mode\:mr-5 {
+    @apply mr-5;
+  }
+  .desktop-mode\:ml-2 {
+    @apply ml-2;
+  }
+  .desktop-mode\:ml-7 {
+    @apply ml-7;
+  }
+
+  .art-layer-controller,
+  .toolbar-bottom {
+    background-image: none;
+    background-color: transparent;
+  }
+
+  .toolbar-top:before,
+  .toolbar-bottom:after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    z-index: -1;
+    transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
+    height: calc(100% + 37px);
+    background-size: 100% 250%;
+    background-repeat: repeat-x;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
+  }
+  .toolbar-top:before {
+    background-position: top;
+    padding-bottom: 37px;
+    top: 0;
+  }
+  .toolbar-bottom:after {
+    background-position: bottom;
+    padding-top: 37px;
+    bottom: 0;
+  }
+
+  .toolbar-bottom {
+    padding: {
+      bottom: 0 !important;
+      left: 20px !important;
+      right: 20px !important;
+    }
+    .art-more-controls {
+      margin: {
+        top: 0;
+        bottom: 16px;
+      }
+      .art-control-progress {
+        margin: {
+          left: 5px;
+          right: 5px;
+        }
+      }
+    }
+  }
+  .toolbar-top {
+    padding: {
+      top: 18px !important;
+      left: 20px !important;
+      right: 20px !important;
+    }
+    .art-subtitle {
+      color: rgb(255, 255, 255);
+    }
+  }
+  .art-controls-main {
+    display: none;
+  }
+
+  &.fullscreen {
+    .toolbar-bottom {
+      .art-control-onlyText {
+        display: none;
+      }
+      .art-more-controls {
+        margin: {
+          bottom: 20px;
+        }
+        .art-control-onlyText {
+          display: block;
+        }
       }
     }
   }
