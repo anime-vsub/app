@@ -1323,13 +1323,17 @@ watch(documentVisibility, (visibility) => {
     if (settingsStore.player.enableRemindStop) resume()
   }, 1_000)
 
-  watch(artPlaying, (playing) => {
-    if(playing) {
-      resumeDelay()
-    } else {
-      pause()
-    }
-  }, {immediate:true})
+  watch(
+    artPlaying,
+    (playing) => {
+      if (playing) {
+        resumeDelay()
+      } else {
+        pause()
+      }
+    },
+    { immediate: true }
+  )
 
   watch(
     () => settingsStore.player.enableRemindStop,
