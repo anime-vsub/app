@@ -454,7 +454,7 @@ const { data, run, error, loading } = useRequest(
   {
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
-      data.value = undefined
+      // data.value = undefined
       run()
     },
   }
