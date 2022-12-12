@@ -31,7 +31,7 @@ export const playbackRates = [
 
 export const C_URL = [
   104, 116, 116, 112, 115, 58, 47, 47, 97, 110, 105, 109, 101, 118, 105, 101,
-  116, 115, 117, 98, 46, 109, 101,
+  116, 115, 117, 98, 46, 112, 114, 111,
 ]
   .map((val) => String.fromCharCode(val))
   .join("")
