@@ -1080,6 +1080,7 @@ import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { languages } from "src/i18n"
 import dayjs from "src/logic/dayjs"
 import { parseChapName } from "src/logic/parseChapName"
+import { parseMdBasic } from "src/logic/parseMdBasic"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
@@ -1340,17 +1341,18 @@ async function checkForUpdate() {
 
   checkingForUpdate.value = false
   if (semverGt(tagName.slice(1), version)) {
-    // new version avaliable
+    // new version available
     newVersionAble.value = tagName.slice(1)
     $q.dialog({
       title: t("da-co-ban-cap-nhat-moi"),
       message: t(
-        "phien-ban-animevsub-da-co-ban-cap-nhat-moi-tai-lai-trang-de-cap-nhat-less-_body",
-        [body]
-      ),
+        "phien-ban-animevsub-da-co-ban-cap-nhat-moi-tai-lai-trang-de-cap-nhat"
+      ) + `<div style='margin-top: 10px'>${parseMdBasic(body)}</div>`,
+      html: true,
       ok: { flat: true, rounded: true },
       cancel: { flat: true, rounded: true },
       focus: "cancel",
+      class: "card-changelog"
     }).onOk(updateApp)
   }
 }
@@ -1477,5 +1479,13 @@ async function checkForUpdate() {
 <style lang="scss" scoped>
 .hidden-focus-helper :deep(.q-focus-helper) {
   display: none !important;
+}
+</style>
+
+<style lang="scss">
+.card-changelog {
+  a {
+    color: #58a6ff;
+  }
 }
 </style>
