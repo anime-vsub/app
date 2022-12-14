@@ -74,3 +74,12 @@ body {
     background: transparent;
   }
 }
+
+.text-shadow-menu {
+  text-shadow: 0 0 2px rgb(0 0 0 / 50%);
+}
+
+.m-transparency {
+  @apply bg-transparent;
+  text-shadow: 0 0 2px rgb(0 0 0 / 50%);
+}

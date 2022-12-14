@@ -5,7 +5,12 @@ import scrollSnap from "windicss/plugin/scroll-snap"
 
 export default defineConfig({
   plugins: [lineClamp, scrollSnap, forms],
-  safelist: ["children:!px-0", "!py-[6px]", "children:!flex"],
+  safelist: [
+    "children:!px-0",
+    "!py-[6px]",
+    "children:!flex",
+    "bg-[rgba(28,28,30,0.9)]",
+  ],
   theme: {
     screens: {
       // xs: { min: "0px", max: "599.99px" },

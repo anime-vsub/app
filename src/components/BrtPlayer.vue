@@ -409,7 +409,10 @@
                       anchor="top middle"
                       self="bottom middle"
                       :offset="[0, 20]"
-                      class="rounded-xl shadow-xl bg-[rgba(28,28,30,1)] min-w-[200px] min-h-[165px] max-w-[329px] flex column flex-nowrap overflow-visible"
+                      class="rounded-xl bg-[rgba(28,28,30,1)] shadow-xl min-w-[200px] min-h-[165px] max-w-[329px] flex column flex-nowrap overflow-visible"
+                      :class="{
+                        'bg-opacity-95': settingsStore.ui.menuTransparency,
+                      }"
                       ref="menuChapsRef"
                     >
                       <div>
@@ -442,10 +445,9 @@
 
                         <q-tabs
                           v-model="seasonActive"
-                          class="min-w-0 w-full tabs-seasons"
+                          class="min-w-0 w-full bg-[rgba(45,45,45,0.9)] tabs-seasons"
                           :class="{
-                            'grid-mode bg-[rgba(28,28,30,1)] scrollbar-custom':
-                              gridModeTabsSeasons,
+                            'grid-mode scrollbar-custom': gridModeTabsSeasons,
                           }"
                           no-caps
                           dense
@@ -580,10 +582,13 @@
                       anchor="top middle"
                       self="bottom middle"
                       :offset="[0, 20]"
-                      class="rounded-xl shadow-xl min-w-[200px]"
+                      class="text-shadow-menu rounded-xl shadow-xl min-w-[200px]"
+                      :class="{
+                        'm-transparency': settingsStore.ui.menuTransparency,
+                      }"
                     >
                       <div
-                        class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                        class="bg-[rgba(45,45,45,0.9)] py-2 px-4 flex items-center justify-between relative"
                       >
                         {{ t("chat-luong") }}
 
@@ -597,7 +602,7 @@
                         />
                       </div>
                       <div
-                        class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
+                        class="bg-[rgba(28,28,30,0.9)] !min-h-0 px-4 relative"
                       >
                         <BottomBlurRelative>
                           <ul class="mx-[-16px]">
@@ -652,9 +657,12 @@
                       self="bottom middle"
                       :offset="[0, 20]"
                       class="rounded-xl shadow-xl min-w-[200px]"
+                      :class="{
+                        'm-transparency': settingsStore.ui.menuTransparency,
+                      }"
                     >
                       <div
-                        class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                        class="bg-[rgba(45,45,45,0.9)] py-2 px-4 flex items-center justify-between relative"
                       >
                         {{ t("toc-do") }}
 
@@ -668,7 +676,7 @@
                         />
                       </div>
                       <div
-                        class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative"
+                        class="bg-[rgba(28,28,30,0.9)] !min-h-0 px-4 relative"
                       >
                         <BottomBlurRelative>
                           <ul class="mx-[-16px]">
@@ -721,9 +729,12 @@
                       self="bottom middle"
                       :offset="[-25, 20]"
                       class="rounded-xl shadow-xl min-w-[200px]"
+                      :class="{
+                        'm-transparency': settingsStore.ui.menuTransparency,
+                      }"
                     >
                       <div
-                        class="bg-[rgba(45,45,45,0.95)] py-2 px-4 flex items-center justify-between relative"
+                        class="bg-[rgba(45,45,45,0.9)] py-2 px-4 flex items-center justify-between relative"
                       >
                         {{ t("cai-dat") }}
 
@@ -737,7 +748,7 @@
                         />
                       </div>
                       <div
-                        class="bg-[rgba(28,28,30,0.95)] !min-h-0 px-4 relative py-3"
+                        class="bg-[rgba(28,28,30,0.9)] !min-h-0 px-4 relative py-3"
                       >
                         <div class="text-zinc-500 text-[12px] mb-2">
                           {{ t("chat-luong") }}
@@ -809,6 +820,17 @@
                           {{ t("loi-tat-chat-luong-and-toc-do") }}
                           <q-toggle
                             v-model="settingsStore.ui.shortcutsQAP"
+                            size="sm"
+                            color="blue"
+                          />
+                        </div>
+
+                        <div
+                          class="flex items-center justify-between mt-4 mb-2"
+                        >
+                          Menu mờ
+                          <q-toggle
+                            v-model="settingsStore.ui.menuTransparency"
                             size="sm"
                             color="blue"
                           />
