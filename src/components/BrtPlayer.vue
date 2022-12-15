@@ -1706,7 +1706,7 @@ const watcherVideoTagReady = watch(video, (video) => {
   watch(
     () => currentStream.value?.url,
     (url) => {
-      if (!url) return
+      if (!url) return currentHls?.destroy()
 
       console.log("set url art %s", url)
 
