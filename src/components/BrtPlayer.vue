@@ -49,7 +49,6 @@
         @canplaythrough="artLoading = false"
         @suspend="artLoading = false"
         @waiting="artLoading = true"
-        @error="onVideoError"
         @ended="onVideoEnded"
       />
 
@@ -1437,35 +1436,35 @@ function onVideoTimeUpdate() {
     props.nameCurrentChap
   )
 }
-function onVideoError(event: Event) {
-  if (!(event.target as HTMLVideoElement).error) return
+// function onVideoError(event: Event) {
+//   if (!(event.target as HTMLVideoElement).error) return
 
-  console.log("video error ", (event.target as HTMLVideoElement).error)
+//   console.log("video error ", (event.target as HTMLVideoElement).error)
 
-  $q.notify({
-    message: t("da-gap-su-co-khi-phat-lai"),
-    position: "bottom-right",
-    timeout: 0,
-    actions: [
-      {
-        label: t("thu-lai"),
-        color: "white",
-        handler() {
-          console.log("retry force")
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          video.value!.load()
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          video.value!.play()
-        },
-      },
-      {
-        label: t("remount"),
-        color: "white",
-        handler: remount,
-      },
-    ],
-  })
-}
+//   $q.notify({
+//     message: t("da-gap-su-co-khi-phat-lai"),
+//     position: "bottom-right",
+//     timeout: 0,
+//     actions: [
+//       {
+//         label: t("thu-lai"),
+//         color: "white",
+//         handler() {
+//           console.log("retry force")
+//           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//           video.value!.load()
+//           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//           video.value!.play()
+//         },
+//       },
+//       {
+//         label: t("remount"),
+//         color: "white",
+//         handler: remount,
+//       },
+//     ],
+//   })
+// }
 function onVideoEnded() {
   artEnded = true
   if (props.nextChap && settingsStore.player.autoNext) {
@@ -1672,10 +1671,84 @@ function remount(resetCurrentTime?: boolean) {
       hls.loadSource(url)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       hls.attachMedia(video.value!)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      hls.on((Hls as unknown as any).Events.MANIFEST_PARSED, () => {
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (playing) video.value!.play()
+      })
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR: {
+              // try to recover network error
+              $q.notify({
+                message: t("loi-mang-khong-kha-dung"),
+                position: "bottom-right",
+                timeout: 0,
+                actions: [
+                  {
+                    label: t("thu-lai"),
+                    color: "yellow",
+                    noCaps: true,
+                    handler: () => hls.startLoad(),
+                  },
+                  {
+                    icon: "close",
+                    round: true,
+                  },
+                ],
+              })
+              break
+            }
+            case Hls.ErrorTypes.MEDIA_ERROR: {
+              $q.notify({
+                message: t("loi-trinh-phat-khong-xac-dinh"),
+                position: "bottom-right",
+                timeout: 0,
+                actions: [
+                  {
+                    label: t("thu-lai"),
+                    color: "yellow",
+                    noCaps: true,
+                    handler: () => hls.recoverMediaError(),
+                  },
+                  {
+                    icon: "close",
+                    round: true,
+                  },
+                ],
+              })
+              break
+            }
+            default: {
+              $q.notify({
+                message: t("da-gap-su-co-khi-phat-lai"),
+                position: "bottom-right",
+                timeout: 0,
+                actions: [
+                  {
+                    label: t("thu-lai"),
+                    color: "white",
+                    handler() {
+                      console.log("retry force")
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      video.value!.load()
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      video.value!.play()
+                    },
+                  },
+                  {
+                    label: t("remount"),
+                    color: "white",
+                    handler: remount,
+                  },
+                ],
+              })
+              break
+            }
+          }
+        } else {
+          console.warn("Player error: ", data)
+        }
       })
       break
     default:
