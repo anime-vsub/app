@@ -57,7 +57,7 @@
         <!-- overtime -->
         <template
           v-for="[time, items] in (_tmp = splitOverTime(
-              groupArray(data[activeIndex].items, 'time_release') as unknown as  Record<string, Awaited<ReturnType<typeof LichChieuPhim>>[0]['items']>
+              ((groupArray as unknown as any)(data[activeIndex].items, 'time_release'))
             ))[0]"
           :key="time"
         >
@@ -107,7 +107,7 @@
       </template>
       <template
         v-else
-        v-for="(items, time) in (groupArray(data[activeIndex].items, 'time_release') as Record<string, typeof data[0]['items']>)"
+        v-for="(items, time) in ((groupArray as unknown as any)(data[activeIndex].items, 'time_release')) as Record<string, Exclude<(typeof data.value), undefined>['0']['items']>"
         :key="time"
       >
         <div class="text-[12px] mt-7 mb-2 flex items-center">
@@ -128,7 +128,7 @@
       </template>
     </div>
 
-    <ScreenError v-else />
+    <ScreenError v-else :error="error" />
   </div>
 </template>
 
@@ -173,7 +173,7 @@ useHead(
   })
 )
 
-const { loading, data } = useRequest(() => LichChieuPhim())
+const { loading, data, error } = useRequest(() => LichChieuPhim())
 
 // eslint-disable-next-line functional/no-let
 let _tmp: ReturnType<typeof splitOverTime>
