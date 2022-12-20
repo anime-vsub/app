@@ -359,14 +359,7 @@
     </div>
   </div>
 
-  <ScreenError
-    v-else
-    :error="error"
-    @click:retry="() => {
-      error = undefined
-      run()
-    }"
-  />
+  <ScreenError v-else :error="error" @click:retry="resetErrorAndRun()" />
 
   <AddToPlaylist
     v-model="showDialogAddToPlaylist"
@@ -469,6 +462,10 @@ const { data, run, error, loading } = useRequest(
     },
   }
 )
+function resetErrorAndRun() {
+  error.value = undefined
+  run()
+}
 
 const seasons = shallowRef<Season[]>()
 const _cacheDataSeasons = reactive<
