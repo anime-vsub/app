@@ -23,7 +23,7 @@
         <GridCard :items="data.items" />
       </pagination.InfiniteScroll>
     </template>
-    <ScreenError v-else @click:retry="run" />
+    <ScreenError v-else @click:retry="run" :error="error" />
   </div>
 </template>
 
@@ -67,7 +67,7 @@ useHead(
   })
 )
 
-const { data, loading, run } = useRequest(
+const { data, loading, run, error } = useRequest(
   () => TypeNormalValue("tim-kiem", route.params.keyword, page.value, true),
   {
     refreshDeps: [() => route.params.keyword, page],

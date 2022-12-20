@@ -334,7 +334,7 @@
       <GridCard :items="data.lastUpdate" />
     </div>
   </template>
-  <ScreenError v-else class="absolute" />
+  <ScreenError v-else class="absolute" :error="error" @click:retry="run" />
 </template>
 
 <script setup lang="ts">
@@ -402,7 +402,7 @@ const router = useRouter()
 
 const aspectRatio = 622 / 350
 
-const { data, loading } = useRequest(() => Index())
+const { data, loading, error, run } = useRequest(() => Index())
 
 // eslint-disable-next-line functional/no-let, @typescript-eslint/no-explicit-any
 let tmp: any

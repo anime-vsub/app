@@ -1,34 +1,36 @@
 <template>
-  <div class="h-full w-full flex items-center">
-    <div class="text-center w-full">
-      <img
-        v-if="!noImage"
-        src="~assets/ic_22_cry.png"
-        width="240"
-        class="mx-auto"
-      />
-      <div class="my-1">{{ t("da-xay-ra-loi") }}</div>
-      <q-btn
-        no-caps
-        outline
-        rounded
-        @click="emit('click:retry')"
-        style="color: #00be06"
-        >{{ t("thu-lai") }}</q-btn
-      >
-    </div>
+  <div
+    class="h-full w-full flex items-center text-white text-center q-pa-md flex flex-center q-pa-md">
+    <component :is="componentErrors[typeError ?? 'unknown'] ?? componentErrors.unknown" :no-image="noImage"
+      :retry="() => emit('click:retry')" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from "vue-i18n"
+  import ErrorCloudflare from "./errors/cloudflare.vue"
+  import ErrorUnknown from "./errors/unknown.vue"
+import { computed } from "vue"
 
-defineProps<{
-  noImage?: boolean
-}>()
-const emit = defineEmits<{
-  (name: "click:retry"): void
-}>()
+  const props = defineProps < {
+    noImage ? : boolean
+    error ? : Error
+  } > ()
+  const emit = defineEmits < {
+    (name: "click:retry"): void
+  } > ()
 
-const { t } = useI18n()
+  const componentErrors = {
+    cloudflare: ErrorCloudflare,
+    unknown: ErrorUnknown
+  }
+
+
+  const typeError = computed(() => {
+    if (!props.error) return null
+
+    if (props.error.data?.includes("<title>Just a moment...</title>"))
+      return "cloudflare"
+
+    return null
+  })
 </script>

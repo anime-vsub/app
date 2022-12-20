@@ -19,7 +19,7 @@
         <GridCard :items="data.items" />
       </pagination.InfiniteScroll>
     </template>
-    <ScreenError v-else @click:retry="run" />
+    <ScreenError v-else @click:retry="run" :error="error" />
   </div>
 </template>
 
@@ -70,7 +70,7 @@ useHead(
 )
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
-const { data, loading, run } = useRequest(() => TuPhim(page.value), {
+const { data, loading, run, error } = useRequest(() => TuPhim(page.value), {
   refreshDeps: [page],
 })
 

@@ -143,6 +143,7 @@
         no-image
         class="h-[146px] px-4"
         @click:retry="historyStore.refreshLast30ItemError"
+        :error="historyStore.last30ItemError"
       />
     </div>
 
@@ -187,6 +188,7 @@
         no-image
         class="h-[203px] px-4"
         @click:retry="runFavorites"
+        :error="errorFavorites"
       />
     </div>
 

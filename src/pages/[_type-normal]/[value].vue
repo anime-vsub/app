@@ -140,7 +140,7 @@
         <GridCard :items="data.items" />
       </pagination.InfiniteScroll>
     </template>
-    <ScreenError v-else @click:retry="run" />
+    <ScreenError v-else @click:retry="run" :error="error" />
   </div>
 </template>
 
@@ -226,7 +226,7 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   )
 }
 
-const { data, run, loading } = useRequest(
+const { data, run, loading, error } = useRequest(
   () => fetchTypeNormalValue(page.value, false),
   {
     refreshDeps: [page],

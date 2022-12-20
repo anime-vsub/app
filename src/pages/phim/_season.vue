@@ -1,6 +1,6 @@
 <template>
   <!-- skeleton first load -->
-  <div class="row mx-4">
+  <div v-if="!error" class="row mx-4">
     <div
       class="col-9"
       :class="{
@@ -70,7 +70,7 @@
   </div>
 
   <div
-    v-if="loading || !data"
+    v-if="loading"
     class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px] row"
   >
     <div class="col-9 pr-4">
@@ -111,7 +111,7 @@
     </div>
   </div>
 
-  <div v-else class="mx-4 row">
+  <div v-else-if="data" class="mx-4 row">
     <div class="col-9 pr-4">
       <div class="flex-1 mt-4">
         <h1
@@ -359,6 +359,8 @@
     </div>
   </div>
 
+  <ScreenError v-else :error="error" @click:retry="error = null; run()" />
+
   <AddToPlaylist
     v-model="showDialogAddToPlaylist"
     :exists="
@@ -381,6 +383,7 @@ import BrtPlayer from "components/BrtPlayer.vue"
 import CardVertical from "components/CardVertical.vue"
 import FragmentChaps from "components/FragmentChaps.vue"
 import Quality from "components/Quality.vue"
+import ScreenError from "components/ScreenError.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
@@ -459,17 +462,6 @@ const { data, run, error, loading } = useRequest(
     },
   }
 )
-watch(error, (error) => {
-  if (error)
-    router.push({
-      name: "not_found",
-      params: {
-        catchAll: route.path.split("/").slice(1),
-      },
-      query: route.query,
-      hash: route.hash,
-    })
-})
 
 const seasons = shallowRef<Season[]>()
 const _cacheDataSeasons = reactive<

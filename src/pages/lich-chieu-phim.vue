@@ -128,7 +128,7 @@
       </template>
     </div>
 
-    <ScreenError v-else :error="error" />
+    <ScreenError v-else :error="error" @click:retry="run" />
   </div>
 </template>
 
@@ -173,7 +173,7 @@ useHead(
   })
 )
 
-const { loading, data, error } = useRequest(() => LichChieuPhim())
+const { loading, data, error, run } = useRequest(() => LichChieuPhim())
 
 // eslint-disable-next-line functional/no-let
 let _tmp: ReturnType<typeof splitOverTime>

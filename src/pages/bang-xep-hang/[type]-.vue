@@ -47,7 +47,7 @@
         <img v-if="index < 10" :src="ranks[index]" class="h-[1.5rem]" />
       </template>
     </CardVertical>
-    <ScreenError v-else @click:retry="run" class="absolute" />
+    <ScreenError v-else @click:retry="run" class="absolute" :error="error" />
   </div>
 </template>
 
@@ -104,7 +104,7 @@ useHead(
   })
 )
 
-const { data, loading, run } = useRequest(
+const { data, loading, run, error } = useRequest(
   () => BangXepHangType(route.params.type as string),
   {
     refreshDeps: [() => route.params.type],
