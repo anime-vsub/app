@@ -1345,14 +1345,15 @@ async function checkForUpdate() {
     newVersionAble.value = tagName.slice(1)
     $q.dialog({
       title: t("da-co-ban-cap-nhat-moi"),
-      message: t(
-        "phien-ban-animevsub-da-co-ban-cap-nhat-moi-tai-lai-trang-de-cap-nhat"
-      ) + `<div style='margin-top: 10px'>${parseMdBasic(body)}</div>`,
+      message:
+        t(
+          "phien-ban-animevsub-da-co-ban-cap-nhat-moi-tai-lai-trang-de-cap-nhat"
+        ) + `<div style='margin-top: 10px'>${parseMdBasic(body)}</div>`,
       html: true,
       ok: { flat: true, rounded: true },
       cancel: { flat: true, rounded: true },
       focus: "cancel",
-      class: "card-changelog"
+      class: "card-changelog",
     }).onOk(updateApp)
   }
 }
