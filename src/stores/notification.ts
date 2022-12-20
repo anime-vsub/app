@@ -23,6 +23,8 @@ export const useNotificationStore = defineStore(
 
     // eslint-disable-next-line functional/no-let
     let timeout: NodeJS.Timeout | number
+    // eslint-disable-next-line functional/no-let
+    let countFail = 0
     async function updateNotification() {
       if (timeout) clearTimeout(timeout)
 
@@ -54,11 +56,14 @@ export const useNotificationStore = defineStore(
         }
         console.error(err)
 
-        $q.notify({
-          position: "bottom-right",
-          message: i18n.global.t("nhan-thong-bao-that-bai"),
-          caption: (err as Error).message,
-        })
+        // allow failure 3 pinia
+        if (countFail > 3)
+          $q.notify({
+            position: "bottom-right",
+            message: i18n.global.t("nhan-thong-bao-that-bai"),
+            caption: (err as Error).message,
+          })
+        else countFail++
 
         timeout = setTimeout(updateNotification, 10 * 60_000)
       } finally {
