@@ -359,7 +359,14 @@
     </div>
   </div>
 
-  <ScreenError v-else :error="error" @click:retry="error = null; run()" />
+  <ScreenError
+    v-else
+    :error="error"
+    @click:retry="
+      error = undefined
+      run()
+    "
+  />
 
   <AddToPlaylist
     v-model="showDialogAddToPlaylist"
