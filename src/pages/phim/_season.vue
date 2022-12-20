@@ -362,10 +362,10 @@
   <ScreenError
     v-else
     :error="error"
-    @click:retry="
+    @click:retry="() => {
       error = undefined
       run()
-    "
+    }"
   />
 
   <AddToPlaylist
