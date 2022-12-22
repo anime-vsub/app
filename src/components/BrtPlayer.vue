@@ -442,6 +442,7 @@
                           </q-btn>
                         </div>
 
+                        <div v-show="gridModeTabsSeasons" class="h-[36px]" />
                         <q-tabs
                           v-model="seasonActive"
                           class="min-w-0 w-full tabs-seasons"
