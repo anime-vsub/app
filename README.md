@@ -1,15 +1,17 @@
-# Informal AnimeVsub Application!
+# AnimeVsub Application!
 
 <div style="text-align: center;">
    <img src="./meta/app_icon.svg" width="120px">
    <h1 style="font-size: 16px">AnimeVsub</h1>
 </div>
 
+**Download the app by downloading the latest [release version](https://github.com/anime-vsub/app/releases) or visit https://app.animevsub.ga to download it**
+
 > **The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.ga**
 
-> The goal of this application is to allow users to interact intuitively and explore new Anime sets in place of the outdated web interface of [animevsub](https://animevietsub.tv).
+> The goal of this application is to allow users to interact intuitively and explore new Anime sets in place of the outdated web interface of [animevietsub](https://animevietsub.pro).
 >
-> And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `downloading...`, enjoy the best quality Anime episodes and no `downloading...`
+> And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `loading...`, enjoy the best quality Anime episodes and no `loading...`
 
 [![Build APK](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml) [![Test](https://github.com/anime-vsub/app/actions/workflows/test.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/test.yml) <img src="https://img.shields.io/github/v/release/anime-vsub/app?color=green&display_name=tag&label=APK"> [![GitHub license](https://img.shields.io/github/license/anime-vsub/app)](https://github.com/anime-vsub/app/blob/main/LICENSE) [![CodeQL](https://github.com/anime-vsub/app/actions/workflows/codeql.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/codeql.yml) [![ESLint](https://github.com/anime-vsub/app/actions/workflows/eslint.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/eslint.yml)
 [![Prettier](https://github.com/anime-vsub/app/actions/workflows/pretter.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/pretter.yml)
