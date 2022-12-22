@@ -49,8 +49,10 @@
           rounded
           stack
           no-caps
-          v-for="{ icon, text } in browsers"
+          v-for="{ icon, text, href } in browsers"
           :key="text"
+          :href="href"
+          target="_blank"
         >
           <Icon :icon="icon" width="55" height="55" />
           <span class="mt-[5px] text-white text-[16px] text-weight-regular">{{
