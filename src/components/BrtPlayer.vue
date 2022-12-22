@@ -444,7 +444,7 @@
 
                         <q-tabs
                           v-model="seasonActive"
-                          class="min-w-0 w-full bg-[rgba(45,45,45,0.9)] tabs-seasons"
+                          class="min-w-0 w-full tabs-seasons"
                           :class="{
                             'grid-mode scrollbar-custom': gridModeTabsSeasons,
                           }"
@@ -472,6 +472,7 @@
                         class="h-full min-h-0 overflow-y-auto scrollbar-custom"
                         :style="{
                           overflow: gridModeTabsSeasons ? 'hidden' : '',
+                          opacity: gridModeTabsSeasons ? '0' : ''
                         }"
                       >
                         <div
