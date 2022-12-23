@@ -225,7 +225,7 @@
     <q-card class="h-[60vh] bg-dark-500">
       <q-card-section>
         <div class="flex justify-between">
-          <q-btn dense round />
+          <q-btn dense round unelevated/>
 
           <div class="flex-1 text-center text-subtitle1">
             Đăng nhập để đồng bộ dữ liệu
@@ -271,6 +271,14 @@
               <Icon v-else icon="fluent:eye-off-24-regular" />
             </q-btn>
           </div>
+
+
+          <div class="text-center text-gray-300 my-3">
+            Đăng nhập bằng tài khoản của bạn trên
+            <a href="https://animevietsub.cc" target="_blank">AnimeVietsub</a>.
+            Dữ liệu của bạn sẽ được đồng bộ cả ở đó và ở đây.
+          </div>
+
 
           <div class="text-grey text-center mt-5 mb-4">Tìm lại mật khẩu</div>
 
