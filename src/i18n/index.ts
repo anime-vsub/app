@@ -19,7 +19,5 @@ export const languages = langs.map((code) => {
 export function getNavigatorLanguage() {
   const lang = self.navigator?.language
 
-  if (lang && langs.includes(lang)) return lang
-
-  return "en-US"
+  return langs.find((item) => item.startsWith(lang)) ?? "en-US"
 }
