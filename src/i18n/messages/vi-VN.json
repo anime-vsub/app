@@ -228,5 +228,12 @@
   "xoa-danh-sach-phat": "Xóa danh sách phát",
   "xoa-khoi-danh-sach-phat": "Xóa khỏi danh sách phát",
   "yeu-cau-dang-nhap-lai": "Yêu cầu đăng nhập lại",
-  "yeu-thich": "Yêu thích"
+  "yeu-thich": "Yêu thích",
+  "ten-mien-chua-duoc-cap-phep": "Tên miền chưa được cấp phép",
+  "ten-mien": "Tên miền",
+  "chua-duoc-extension-cap-phep-truy-cap-co-the": "chưa được extension cấp phép truy cập. Có thể",
+  "tien-ich-animevsub-helper": "tiện ích AnimeVsub Helper",
+  "chua-duoc-cap-nhat-hoac-trang-web-nay-dang-gia-mao": "chưa được cập nhật hoặc trang web này đang giả mạo",
+  "vui-long-thu-cap-nhat-extension-neu-su-co-khong-duoc-khac-phuc-vui-long-gui-email-den": "Vui lòng thử cập nhật extension, nếu sự cố không được khắc phục vui lòng gửi email đến",
+  "phien-ban-extension": "Phiên bản Extension:"
 }

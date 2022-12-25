@@ -228,5 +228,12 @@
   "xoa-danh-sach-phat": "删除播放列表",
   "xoa-khoi-danh-sach-phat": "从播放列表中删除",
   "yeu-cau-dang-nhap-lai": "需要重新登录",
-  "yeu-thich": "最喜欢的"
+  "yeu-thich": "最喜欢的",
+  "chua-duoc-cap-nhat-hoac-trang-web-nay-dang-gia-mao": "尚未更新或该网站是假的",
+  "chua-duoc-extension-cap-phep-truy-cap-co-the": "扩展未授予访问权限。\n可能",
+  "phien-ban-extension": "扩展版本：",
+  "ten-mien": "领域",
+  "ten-mien-chua-duoc-cap-phep": "未经许可的域名",
+  "tien-ich-animevsub-helper": "AnimeVsub Helper 实用程序",
+  "vui-long-thu-cap-nhat-extension-neu-su-co-khong-duoc-khac-phuc-vui-long-gui-email-den": "请尝试更新扩展程序，如果问题未解决，请发送电子邮件至"
 }

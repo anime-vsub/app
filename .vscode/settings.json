@@ -40,7 +40,10 @@
       "&bull; {{ t('_maxPage-trang', [data?.maxPage]) }}\n      "
     ],
     "src/apis/runs/ajax/rate.ts": ["${token_name}=${token_value}"],
-    "src/components/errors/cloudflare.vue": [")\n      "]
+    "src/components/errors/cloudflare.vue": [")\n      "],
+    "src/components/errors/domain-strange.vue": [
+      "\n        {{ extensionVersion ?? \""
+    ]
   },
   "scss.lint.unknownAtRules": "ignore",
   "i18n-ally.sourceLanguage": "vi-VN",

@@ -228,5 +228,12 @@
   "xoa-danh-sach-phat": "プレイリストを削除",
   "xoa-khoi-danh-sach-phat": "プレイリストから削除",
   "yeu-cau-dang-nhap-lai": "再ログインが必要",
-  "yeu-thich": "お気に入り"
+  "yeu-thich": "お気に入り",
+  "chua-duoc-cap-nhat-hoac-trang-web-nay-dang-gia-mao": "更新されていないか、このサイトは偽物です",
+  "chua-duoc-extension-cap-phep-truy-cap-co-the": "拡張機能によってアクセスが許可されていません。 \n5月",
+  "phien-ban-extension": "拡張バージョン:",
+  "ten-mien": "ドメイン",
+  "ten-mien-chua-duoc-cap-phep": "ライセンスのないドメイン名",
+  "tien-ich-animevsub-helper": "AnimeVsub ヘルパー ユーティリティ",
+  "vui-long-thu-cap-nhat-extension-neu-su-co-khong-duoc-khac-phuc-vui-long-gui-email-den": "拡張機能を更新してみてください。問題が解決しない場合は、にメールしてください。"
 }

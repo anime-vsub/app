@@ -228,5 +228,12 @@
   "xoa-danh-sach-phat": "delete playlist",
   "xoa-khoi-danh-sach-phat": "Remove from playlist",
   "yeu-cau-dang-nhap-lai": "Requires re-login",
-  "yeu-thich": "Favourite"
+  "yeu-thich": "Favourite",
+  "chua-duoc-cap-nhat-hoac-trang-web-nay-dang-gia-mao": "has not been updated or this site is fake",
+  "chua-duoc-extension-cap-phep-truy-cap-co-the": "access has not been granted by the extension. \nMay",
+  "phien-ban-extension": "Extension Version:",
+  "ten-mien": "Domain",
+  "ten-mien-chua-duoc-cap-phep": "Unlicensed domain name",
+  "tien-ich-animevsub-helper": "AnimeVsub Helper utility",
+  "vui-long-thu-cap-nhat-extension-neu-su-co-khong-duoc-khac-phuc-vui-long-gui-email-den": "Please try updating the extension, if the problem is not fixed please email to"
 }

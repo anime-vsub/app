@@ -14,6 +14,7 @@
 import { computed } from "vue"
 
 import ErrorCloudflare from "./errors/cloudflare.vue"
+import ErrorDomainStrange from "./errors/domain-strange.vue"
 import ErrorUnknown from "./errors/unknown.vue"
 
 const props = defineProps<{
@@ -27,6 +28,7 @@ const emit = defineEmits<{
 
 const componentErrors = {
   cloudflare: ErrorCloudflare,
+  "domain-strange": ErrorDomainStrange,
   unknown: ErrorUnknown,
 }
 
@@ -35,6 +37,8 @@ const typeError = computed(() => {
 
   if (props.error.data?.includes("<title>Just a moment...</title>"))
     return "cloudflare"
+  if (props.error.message?.includes("Your domain is not permission to access the Http API"))
+    return "domain-strange"
 
   return null
 })
