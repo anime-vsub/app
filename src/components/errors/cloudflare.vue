@@ -39,7 +39,8 @@
           target="_blank"
           class="text-blue"
           >Urban VPN</a
-        >{{ t("la-mot-vpn-mien-phi") }}
+        >
+        {{ t("la-mot-vpn-mien-phi") }}
       </p>
 
       <div v-if="myip">
@@ -99,6 +100,7 @@ const myip = computedAsync<{
     .catch(() => {
       return get({
         url: "https://api.myip.com/",
+      // eslint-disable-next-line promise/no-nesting
       }).then((res) => JSON.parse(res.data))
     })
 }, null)
