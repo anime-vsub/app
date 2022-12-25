@@ -6,11 +6,12 @@
       width="240"
       class="mx-auto"
     />
-    <div style="font-size: 30vh">Error</div>
+    <div class="text-h4 mt-4">Error</div>
 
-    <div class="text-h2" style="opacity: 0.4">{{ t("da-xay-ra-loi") }}</div>
+    <div class="text-h6 text-weight-regular mt-4" style="opacity: 0.4">{{ t("da-xay-ra-loi") }}</div>
 
-    <q-btn no-caps outline rounded @click="retry" style="color: #00be06">{{
+    <q-btn 
+      class="q-mt-md" no-caps outline rounded @click="retry" style="color: #00be06">{{
       t("thu-lai")
     }}</q-btn>
   </div>
