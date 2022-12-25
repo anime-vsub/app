@@ -1145,7 +1145,7 @@ const drawersBottom = computed(() => [
   },
   {
     name: t("lien-he-chung-toi"),
-    href: "mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub",
+    href: "mailto:ogmo2r3q@duck.com?subject=Phản hồi ứng dụng web AnimeVsub",
   },
   {
     name: t("tai-ung-dung"),

@@ -21,7 +21,7 @@
     <q-item
       clickable
       v-ripple
-      href="mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.anime-vsub"
+      href="mailto:ogmo2r3q@duck.com?subject=Phản hồi ứng dụng web AnimeVsub"
     >
       <q-item-section>
         <q-item-label>Phản hồi</q-item-label>

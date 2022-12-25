@@ -27,7 +27,7 @@
     ],
     "src/pages/tai-khoan/edit-profile.vue": ["bg-dark text-light-9"],
     "src/layouts/MainLayout.vue": [
-      "mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub",
+      "mailto:ogmo2r3q@duck.com?subject=Phản hồi ứng dụng web AnimeVsub",
       "bg-dark text-light-9",
       "Slash",
       ".\n            {{ t('du-lieu-cua-ban-se-duoc-dong-bo-ca-o-do-va-day') }}\n          ",
