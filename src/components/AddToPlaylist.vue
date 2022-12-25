@@ -1,14 +1,14 @@
 <template>
   <q-dialog>
     <q-card
-      class="bg-dark-page min-w-[300px] max-h-[647px] max-w-[664px] px-6 rounded-xl"
+      class="bg-dark-page min-w-[300px] max-h-[647px] max-w-[664px] px-6 rounded-xl !max-h-[80%] flex flex-col flex-nowrap"
     >
       <q-card-section class="py-2 flex items-center justify-between px-0">
         <div class="text-[16px]">{{ t("luu-vao") }}</div>
         <q-btn round flat icon="close" v-close-popup />
       </q-card-section>
 
-      <q-card-section class="px-0 pt-0">
+      <q-card-section class="px-0 pt-0 min-h-0 flex flex-col flex-nowrap">
         <div
           v-if="playlists === undefined"
           class="flex pt-3 pb-9 items-center justify-center px-0"
@@ -18,7 +18,7 @@
         <div v-else-if="playlists === null" class="pt-3 pb-9 text-center px-0">
           {{ t("khong-co-danh-sach-phat-nao") }}
         </div>
-        <q-list v-else class="px-0">
+        <q-list v-else class="px-0 overflow-y-auto scrollbar-custom">
           <q-item v-for="item in playlists" :key="item.id" class="px-0">
             <q-item-section avatar class="min-w-0">
               <q-checkbox
