@@ -3,39 +3,59 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /{document=**} {
       allow read, write: if false;
-        
+
     	match /users {
       	allow get, list, create, update, delete: if false;
       }
       match /users/{hash} {
-      	function hasOnly(keys) {
-        	return request.resource.data.keys().hasOnly(keys)
+      	function hasAll(keys) {
+        	return request.resource.data.keys().hasAll(keys) &&
+          	request.resource.data.keys().hasOnly(keys)
         }
-      
-      
-      	allow create: if hasOnly(["name", "email"]) &&
-        	request.resource.data.name != null && 
-          request.resource.data.email != null;
+
+
+      	allow create: if request.resource.data.keys().hasOnly([]);
         allow delete, update, list: if false;
         allow get: if true;
-        
+
         match /history/{season} {
-        	allow create: if hasOnly(["poster", "seasonName", "name"]) &&
-          	request.resource.data.poster is string &&
-          	request.resource.data.seasonName is string &&
-          	request.resource.data.name is string
+        	allow create: if
+            (
+              hasAll(["poster", "season", "seasonName", "name"]) &&
+          	  request.resource.data.poster is string &&
+          	  request.resource.data.season is string &&
+          	  request.resource.data.seasonName is string &&
+          	  request.resource.data.name is string
+            ) ||
+            (
+              hasAll(["poster", "season", "seasonName", "name", "last", "timestamp"]) &&
+              request.resource.data.poster is string &&
+          	  request.resource.data.seasonName is string &&
+          	  request.resource.data.name is string &&
+              request.resource.data.last != null &&
+              request.resource.data.last.keys().hasOnly(["chap", "name", "cur", "dur"]) &&
+              request.resource.data.last.chap is string &&
+              request.resource.data.last.name is string &&
+              request.resource.data.last.cur is number &&
+              request.resource.data.last.dur is number &&
+              request.resource.data.season is string &&
+              request.resource.data.timestamp is timestamp
+            );
           allow delete: if false;
-          allow update: if 
+          allow update: if
+          	request.resource.data.diff(resource.data).affectedKeys().hasOnly(["last", "season", "timestamp"]) &&
             request.resource.data.last != null &&
             request.resource.data.last.keys().hasOnly(["chap", "name", "cur", "dur"]) &&
             request.resource.data.last.chap is string &&
             request.resource.data.last.name is string &&
             request.resource.data.last.cur is number &&
-            request.resource.data.last.dur is number;
+            request.resource.data.last.dur is number &&
+            request.resource.data.get("season", '') is string &&
+            request.resource.data.timestamp is timestamp;
           allow get, list: if true;
-          
+
           match /chaps/{chap} {
-          	allow create, update: if hasOnly(["cur", "dur", "name"]) &&
+          	allow create, update: if hasAll(["cur", "dur", "name"]) &&
             	request.resource.data.cur is number &&
               request.resource.data.dur is number &&
               request.resource.data.name is string;
@@ -43,31 +63,34 @@ service cloud.firestore {
             allow get, list: if true;
           }
         }
-        
-        
+
+
         match /playlist/{playlist} {
-        	allow create: if hasOnly(["name", "public", "created", "size"]) &&
+        	allow create: if hasAll(["name", "public", "created", "size"]) &&
           	request.resource.data.name is string &&
             request.resource.data.public is bool &&
             request.resource.data.created is timestamp &&
             request.resource.data.size is number;
           allow delete: if true;
-        	allow update: if request.resource.data.name is string ||
-          	request.resource.data.public is bool ||
-            request.resource.data.size is number ||
-            request.resource.data.poster is string ||
-            request.resource.data.description is string ||
-            request.resource.data.updated is timestamp;
+        	allow update: if
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(["name", "public", "size", "poster", "description", "updated"]) &&
+            request.resource.data.get("name", "") is string &&
+          	request.resource.data.get("public", true) is bool &&
+            request.resource.data.get("size", 0) is number &&
+            request.resource.data.get("poster", "") is string &&
+            request.resource.data.get("description", "") is string &&
+            (request.resource.data.updated == null || request.resource.data.updated is timestamp);
           allow get, list: if true;
-          
+
           match /movies/{movies} {
-          	allow create: if hasOnly(["name", "poster", "seasonName", "chap", "nameChap", "add_at"]) &&
-          	request.resource.data.name is string &&
-          	request.resource.data.poster is string &&
-          	request.resource.data.seasonName is string &&
-          	request.resource.data.chap is string &&
-          	request.resource.data.nameChap is string &&
-          	request.resource.data.add_at is timestamp;
+          	allow create: if
+              hasAll(["name", "poster", "seasonName", "chap", "nameChap", "add_at"]) &&
+              request.resource.data.name is string &&
+              request.resource.data.poster is string &&
+              request.resource.data.seasonName is string &&
+              request.resource.data.chap is string &&
+              request.resource.data.nameChap is string &&
+              request.resource.data.add_at is timestamp;
             allow create: if true;
             allow update: if false;
             allow delete: if true;
