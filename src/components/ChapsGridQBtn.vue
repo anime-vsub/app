@@ -52,11 +52,12 @@ const props = defineProps<{
       dur: number
     }
   > | null
+  deepScroll?: number
 }>()
 
 const activeRef = ref<QBtn>()
 function scrollToView() {
-  if (activeRef.value?.$el) scrollYIntoView(activeRef.value.$el)
+  if (activeRef.value?.$el) scrollYIntoView(activeRef.value.$el, props.deepScroll)
 }
 
 watchEffect(scrollToView)
