@@ -555,6 +555,7 @@
                                   :progress-chaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
                                 "
+                                  :deep-scroll="5"
                                   class-item="px-3 !py-[6px] mb-3"
                                 />
                               </template>
