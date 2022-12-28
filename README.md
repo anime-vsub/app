@@ -18,6 +18,11 @@
 [![TypeScript Checker Declaration](https://github.com/anime-vsub/app/actions/workflows/typing.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/typing.yml)
 [![Try build](https://github.com/anime-vsub/app/actions/workflows/try-build.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/try-build.yml)
 
+## Sponsor ☕
+If you find this project useful please support me through:
+
+[<img src="https://user-images.githubusercontent.com/45375496/209764740-d202626d-4acd-4517-a5dc-e94993eeeb0a.png" width="80" />](https://me.momo.vn/tachibshin)
+
 ## Screenshot
 
 <!--screenshot-->
