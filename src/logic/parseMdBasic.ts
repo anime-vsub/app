@@ -1,7 +1,7 @@
 function parseAnchor(md: string) {
   return md.replace(
     /(?:\[(.+)\]){1}?(?:\((.+)\)){1}?/g,
-    '<a href="$2}" target="_blank" alt="$1">$1</a>'
+    '<a href="$2" target="_blank" alt="$1">$1</a>'
   )
 }
 function parseLiterals(md: string) {
@@ -12,5 +12,5 @@ function parseUList(md: string) {
 }
 
 export function parseMdBasic(md: string) {
-  return parseUList(parseLiterals(parseAnchor(md)))
+  return parseUList(parseAnchor(parseLiterals((md))))
 }
