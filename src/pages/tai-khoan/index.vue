@@ -192,7 +192,7 @@
       <q-item
         clickable
         v-ripple
-        href="mailto:tachibshin@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub"
+        href="mailto:ogmo2r3q@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub"
       >
         <q-item-section avatar>
           <Icon
