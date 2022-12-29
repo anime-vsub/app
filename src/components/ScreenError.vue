@@ -15,6 +15,7 @@
         class="px-2"
         @click="emit('click:retry')"
         style="color: #00be06"
+        rounded
         >Thử lại</q-btn
       >
     </div>

@@ -244,6 +244,7 @@
             no-caps
             style="color: #00be06"
             @click="fetchSeason(value)"
+            rounded
             >Thử lại</q-btn
           >
         </div>
@@ -346,6 +347,7 @@
               Lỗi khi lấy dữ liệu
               <br />
               <q-btn
+                rounded
                 dense
                 no-caps
                 style="color: #00be06"
