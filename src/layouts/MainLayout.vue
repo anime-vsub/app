@@ -1153,15 +1153,15 @@ const drawersBottom = computed(() => [
   },
   {
     name: t("dieu-khoan-su-dung"),
-    href: "https://anime-vsub.github.io/tems-of-use",
+    href: "https://anime-vsub.github.io/about/tems-of-use",
   },
   {
     name: t("chinh-sach-rieng-tu"),
-    href: "https://anime-vsub.github.io/privacy-police",
+    href: "https://anime-vsub.github.io/about/privacy-police",
   },
   {
     name: t("khieu-nai-vi-pham"),
-    href: "https://anime-vsub.github.io/disclaimer",
+    href: "https://anime-vsub.github.io/about/disclaimer",
   },
 ])
 
