@@ -25,6 +25,7 @@
 
         <q-btn
           round
+          rounded
           icon="camera"
           class="absolute bottom-0 right-0 bg-[rgba(0,0,0,0.5)]"
           size="sm"
@@ -72,7 +73,7 @@
     </q-list>
 
     <div class="mx-3">
-      <q-btn outline color="red-5" class="w-full mt-10" @click="logout"
+      <q-btn outline rounded color="red-5" class="w-full mt-10" @click="logout"
         >Đăng xuất</q-btn
       >
     </div>
@@ -131,6 +132,7 @@
 
             <q-btn
               type="submit"
+              rounded
               no-caps
               class="text-main w-full"
               outline

@@ -471,6 +471,7 @@
                   dense
                   no-caps
                   style="color: #00be06"
+                  rounded
                   @click="fetchSeason(value)"
                   >Thử lại</q-btn
                 >
