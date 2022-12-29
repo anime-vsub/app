@@ -51,7 +51,7 @@ jobs:
           pnpm build:android --ide
 
       - name: Build Android App
-        uses: sparkfabrik/android-build-action@v1.2.0
+        uses: anime-vsub/android-build-action@1.2.1
         with:
             project-path: src-capacitor/android
             output-path: apk-release.apk
