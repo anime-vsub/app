@@ -139,7 +139,10 @@
         </div>
 
         <div class="overflow-y-auto">
-          <p class="whitespace-pre-wrap">{{ newVersion.body }}</p>
+          <p
+            class="whitespace-pre-wrap"
+            v-html="parseMdBasic(newVersion.body)"
+          />
         </div>
       </q-card-section>
 
@@ -169,6 +172,7 @@ import { App } from "@capacitor/app"
 import { Icon } from "@iconify/vue"
 import semverEq from "semver/functions/eq"
 import semverGt from "semver/functions/gt"
+import { parseMdBasic } from "src/logic/parseMdBasic"
 import { useNotificationStore } from "stores/notification"
 import { shallowRef } from "vue"
 import { useRoute } from "vue-router"
