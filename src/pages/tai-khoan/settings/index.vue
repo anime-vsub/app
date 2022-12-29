@@ -35,7 +35,7 @@
     <q-item
       clickable
       v-ripple
-      @click="open('https://anime-vsub.github.io/tems-of-use')"
+      @click="open('https://anime-vsub.github.io/about/tems-of-use?embed=true')"
     >
       <q-item-section>
         <q-item-label>Điều khoản sử dụng</q-item-label>
@@ -44,7 +44,7 @@
     <q-item
       clickable
       v-ripple
-      @click="open('https://anime-vsub.github.io/privacy-police')"
+      @click="open('https://anime-vsub.github.io/about/privacy-police?embed=true')"
     >
       <q-item-section>
         <q-item-label>Chính sách riêng tư</q-item-label>
@@ -53,7 +53,7 @@
     <q-item
       clickable
       v-ripple
-      @click="open('https://anime-vsub.github.io/disclaimer')"
+      @click="open('https://anime-vsub.github.io/about/disclaimer?embed=true')"
     >
       <q-item-section>
         <q-item-label>Tuyên bố từ chối trách nhiệm</q-item-label>
