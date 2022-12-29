@@ -17,7 +17,7 @@
         },
       ]"
       replace
-      :to="`/phim/${season}/${parseChapName(item.name)}-${item.id}`"
+      :to="`/phim/${season}/${item.id}`"
       :ref="(el: QBtn) =>void( find(item) && (activeRef = el as QBtn))"
     >
       {{ item.name }}
@@ -36,7 +36,6 @@
 import { QBtn } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { scrollYIntoView } from "src/helpers/scrollIntoView"
-import { parseChapName } from "src/logic/parseChapName"
 import { ref, watchEffect } from "vue"
 
 const props = defineProps<{
