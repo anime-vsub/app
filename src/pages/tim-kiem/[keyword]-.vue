@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts" setup>
+import { getAnalytics, logEvent } from "@firebase/analytics"
 import { useHead } from "@vueuse/head"
 import GridCard from "components/GridCard.vue"
 import ScreenError from "components/ScreenError.vue"
@@ -36,7 +37,7 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import pagination from "components/pagination"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { usePage } from "src/composibles/page"
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute } from "vue-router"
@@ -65,6 +66,15 @@ useHead(
       ],
     }
   })
+)
+// analytics
+const analytics = getAnalytics()
+watch(
+  () => route.params.keyword,
+  (keyword) =>
+    keyword &&
+    logEvent(analytics, "search", { search_term: keyword as string }),
+  { immediate: true }
 )
 
 const { data, loading, run, error } = useRequest(

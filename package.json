@@ -20,6 +20,7 @@
     "release": "bumpp package.json --commit --tag --push"
   },
   "dependencies": {
+    "@firebase/analytics": "^0.9.0",
     "@firebase/app": "^0.8.4",
     "@firebase/firestore": "^3.7.3",
     "@fontsource/caveat": "^4.5.9",

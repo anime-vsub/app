@@ -376,6 +376,7 @@
 </template>
 
 <script lang="ts" setup>
+import { getAnalytics, logEvent } from "@firebase/analytics"
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
@@ -1182,6 +1183,20 @@ async function sendRate() {
     rated.value = false
   }
 }
+
+// ================= analytics ===================
+const analytics = getAnalytics()
+watch(
+  [seasonId, currentMetaSeason, currentMetaChap],
+  async ([seasonId, currentMetaSeason, currentMetaChap]) => {
+    if (!currentMetaSeason) return
+    if (!currentMetaChap) return
+    logEvent(analytics, "watching", {
+      value: `${currentMetaSeason.name} - Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
+    })
+  },
+  { immediate: true }
+)
 </script>
 
 <style lang="scss" scoped>

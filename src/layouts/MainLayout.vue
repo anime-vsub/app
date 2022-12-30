@@ -102,7 +102,11 @@
                 class="relative"
                 v-ripple
               >
-                <router-link :to="item.path" class="flex flex-nowrap mt-5 mx-4">
+                <router-link
+                  :to="item.path"
+                  class="flex flex-nowrap mt-5 mx-4"
+                  @click="saveAnalytics"
+                >
                   <div>
                     <q-img
                       :ratio="267 / 400"
@@ -1060,6 +1064,7 @@
 </template>
 
 <script lang="ts" setup>
+import { getAnalytics, logEvent } from "@firebase/analytics"
 // eslint-disable-next-line import/order
 import { Icon } from "@iconify/vue"
 
@@ -1172,6 +1177,7 @@ const notificationStore = useNotificationStore()
 const settingsStore = useSettingsStore()
 const playlistStore = usePlaylistStore()
 const historyStore = useHistoryStore()
+const analytics = getAnalytics()
 
 const extensionHelperInstalled = ref(typeof window.Http !== "undefined")
 // eslint-disable-next-line functional/no-let
@@ -1202,6 +1208,11 @@ const {
   manual: true,
 })
 watch(query, debounce(run, 300))
+function saveAnalytics() {
+  logEvent(analytics, "search", {
+    search_terms: query.value,
+  })
+}
 
 const focusing = ref(false)
 
