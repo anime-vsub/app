@@ -416,23 +416,11 @@ const { data: movies, run: runGetMovies } = useRequest(
     console.log("larger movies")
     infiniteScrollRef.value?.reset()
 
-    return playlistStore
-      .getAnimesFromPlaylist(
-        route.params.playlist as string,
-        undefined,
-        sorter.value
-      )
-      .then((items) =>
-        items.map((item) => {
-          const data = item.data()
-          return {
-            ...data,
-            $doc: item,
-            season: item.id,
-            add_at: dayjs(data.add_at.toDate()),
-          }
-        })
-      )
+    return playlistStore.getAnimesFromPlaylist(
+      route.params.playlist as string,
+      undefined,
+      sorter.value
+    )
   },
   {
     refreshDeps: [() => route.params.playlist, sorter],
@@ -485,24 +473,11 @@ async function onLoad(index: number, done: (end: boolean) => void) {
   // eslint-disable-next-line functional/no-throw-statement
   if (!meta) throw new Error(t("danh-sach-phat-khong-ton-tai"))
 
-  const moviesMore = await playlistStore
-    .getAnimesFromPlaylist(
-      meta.id,
-      movies.value?.[movies.value.length - 1]?.$doc,
-      sorter.value
-    )
-    .then((items) =>
-      items.map((item) => {
-        const data = item.data()
-        return {
-          ...data,
-          $doc: item,
-          season: item.id,
-          add_at: dayjs(data.add_at.toDate()),
-        }
-      })
-    )
-
+  const moviesMore = await playlistStore.getAnimesFromPlaylist(
+    meta.id,
+    movies.value?.[movies.value.length - 1]?.$doc,
+    sorter.value
+  )
   movies.value = [...(movies.value ?? []), ...moviesMore]
 
   done(moviesMore.length === 0)
