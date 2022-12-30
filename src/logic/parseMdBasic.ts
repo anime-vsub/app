@@ -12,5 +12,5 @@ function parseUList(md: string) {
 }
 
 export function parseMdBasic(md: string) {
-  return parseUList(parseAnchor(parseLiterals((md))))
+  return parseUList(parseAnchor(parseLiterals(md)))
 }
