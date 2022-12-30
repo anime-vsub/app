@@ -1,6 +1,7 @@
 import type {
   CollectionReference,
   DocumentReference,
+  DocumentSnapshot,
   QueryDocumentSnapshot,
   Timestamp,
 } from "@firebase/firestore"
@@ -27,6 +28,13 @@ import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { computed, ref } from "vue"
 
 import { useAuthStore } from "./auth"
+
+const isCryptoReady = typeof crypto !== "undefined" // firefox not exists crypto
+const generateUUID = isCryptoReady
+  ? () => crypto.randomUUID()
+  : () => {
+      return parseInt(Math.random().toString().replace(".", "")).toString(34)
+    }
 
 export const useHistoryStore = defineStore("history", () => {
   const db = getFirestore(app)
@@ -216,18 +224,76 @@ export const useHistoryStore = defineStore("history", () => {
     ) as DocumentReference<HistoryItem_ChapItem>
 
     return Promise.all([
-      setDoc(
-        seasonRef,
-        {
-          timestamp: serverTimestamp(),
-          season,
-          last: {
-            chap,
-            ...info,
-          },
-        },
-        { merge: true }
-      ).catch((err) => console.error("update time error", err)),
+      // TODO: can't where after orderBy
+      // queue task this up function
+      getDocs(
+        query(
+          seasonRef.parent,
+          where("timestamp", "!=", null),
+          orderBy("timestamp", "desc"),
+          limit(1)
+        )
+      )
+        // update progress and seasonRef put down
+        .then(async ({ docs, size }) => {
+          // this is old data. not conflict data with save in previous then
+          // eslint-disable-next-line functional/no-let
+          let docOldDataSeason: DocumentSnapshot<Required<HistoryItem>> | null =
+            null
+          if (
+            size !== 0 &&
+            docs[0].id !== realSeason &&
+            !docs[0].id.endsWith(`#${realSeason}`)
+          ) {
+            docOldDataSeason = await getDoc(seasonRef)
+          }
+          // update to pre-read on history (indexed faster)
+          setDoc(
+            seasonRef,
+            {
+              timestamp: serverTimestamp(),
+              season,
+              last: {
+                chap,
+                ...info,
+              },
+            },
+            { merge: true }
+            // eslint-disable-next-line promise/no-nesting
+          ).catch((err) => console.error("update time error", err))
+
+          return docOldDataSeason
+        })
+        // create fake data replace fix #70
+        .then((oldData) => {
+          // eslint-disable-next-line promise/always-return
+          if (!oldData || !oldData.exists()) return
+          // clone now
+          const { poster, name, season, seasonName, last, timestamp } =
+            oldData.data()
+          // save by buff diff
+
+          const seasonRefOldData = doc(
+            seasonRef.parent,
+            `${generateUUID()}#${realSeason}`
+          )
+
+          setDoc(
+            seasonRefOldData,
+            { poster, name, season, seasonName, last, timestamp },
+            { merge: true }
+          ).catch((err) => {
+            console.error(
+              "create fake data history failed!",
+              oldData.data(),
+              err
+            )
+          })
+        })
+        .catch((err) => {
+          console.error("error with progress getDocs", err)
+        }),
+      // update to progress watch chaps, don't worry
       setDoc(chapRef, info, { merge: true }).catch((err) =>
         console.error("update progress error", err)
       ),
