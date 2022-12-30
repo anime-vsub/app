@@ -7,6 +7,10 @@ const routes: RouteRecordRaw[] = [
     meta: {
       footer: true,
       forceScrollBehavior: true,
+      screen: {
+        name: "home",
+        override: "Index",
+      },
     },
     children: [
       {
@@ -26,6 +30,15 @@ const routes: RouteRecordRaw[] = [
         component: () => import("pages/[_type-normal]/[value].vue"),
         meta: {
           footer: false,
+          screen: {
+            name: "home",
+            override: (to) =>
+              to.params.type_normal +
+              "/" +
+              (Array.isArray(to.params.value)
+                ? to.params.value.join("/")
+                : to.params.value),
+          },
         },
       },
       {
@@ -37,6 +50,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import("pages/lich-chieu-phim.vue"),
         meta: {
           footer: false,
+          screen: {
+            name: "home",
+            override: "Lich chieu phim",
+          },
         },
       },
       {
@@ -45,6 +62,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import("pages/bang-xep-hang/[type]-.vue"),
         meta: {
           footer: false,
+          screen: {
+            name: "home",
+            override: (to) => `bang-xep-hang/${to.params.type}`,
+          },
         },
       },
     ],
@@ -56,6 +77,9 @@ const routes: RouteRecordRaw[] = [
     meta: {
       footer: true,
       forceScrollBehavior: true,
+      screen: {
+        name: "search",
+      },
     },
   },
   {
@@ -65,6 +89,9 @@ const routes: RouteRecordRaw[] = [
     meta: {
       footer: true,
       forceScrollBehavior: true,
+      screen: {
+        name: "news",
+      },
     },
   },
   {
@@ -74,6 +101,9 @@ const routes: RouteRecordRaw[] = [
     meta: {
       footer: true,
       forceScrollBehavior: true,
+      screen: {
+        name: "notification",
+      },
     },
   },
   {
@@ -81,6 +111,9 @@ const routes: RouteRecordRaw[] = [
     component: () => import("pages/tai-khoan/index_outlet.vue"),
     meta: {
       forceScrollBehavior: true,
+      screen: {
+        name: "account",
+      },
     },
     children: [
       {
@@ -89,19 +122,40 @@ const routes: RouteRecordRaw[] = [
         component: () => import("pages/tai-khoan/index.vue"),
         meta: {
           footer: true,
+          screen: {
+            name: "account",
+          },
         },
       },
       {
         path: "edit-profile",
         component: () => import("pages/tai-khoan/edit-profile.vue"),
+        meta: {
+          screen: {
+            name: "account",
+            override: "editProfile",
+          },
+        },
       },
       {
         path: "history",
         component: () => import("pages/tai-khoan/history.vue"),
+        meta: {
+          screen: {
+            name: "account",
+            override: "history",
+          },
+        },
       },
       {
         path: "follow",
         component: () => import("pages/tai-khoan/follow.vue"),
+        meta: {
+          screen: {
+            name: "account",
+            override: "follow",
+          },
+        },
       },
       {
         path: "settings",
@@ -116,11 +170,23 @@ const routes: RouteRecordRaw[] = [
             component: () => import("pages/tai-khoan/settings/player.vue"),
           },
         ],
+        meta: {
+          screen: {
+            name: "account",
+            override: "settings",
+          },
+        },
       },
       {
         path: "about",
         alias: ["/tai-khoan/settings/about"],
         component: () => import("pages/tai-khoan/about.vue"),
+        meta: {
+          screen: {
+            name: "account",
+            override: "about",
+          },
+        },
       },
     ],
   },
@@ -132,6 +198,11 @@ const routes: RouteRecordRaw[] = [
     path: "/phim/:season/:prefix(\\D+)?:chap(\\d+)?",
     alias: ["/phim/:season/:prefix(.+)?-:chap(\\d+)?.html"],
     component: () => import("pages/phim/_season.vue"),
+    meta: {
+      screen: {
+        name: "watching",
+      },
+    },
   },
 
   // Always leave this as last one,
@@ -140,6 +211,11 @@ const routes: RouteRecordRaw[] = [
     name: "not_found",
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),
+    meta: {
+      screen: {
+        name: "not_found",
+      },
+    },
   },
 ]
 

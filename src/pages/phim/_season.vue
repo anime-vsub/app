@@ -467,6 +467,7 @@
 </template>
 
 <script lang="ts" setup>
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -1000,6 +1001,25 @@ watch(
   {
     immediate: true,
   }
+)
+// Analytics
+watch(
+  [seasonId, currentMetaSeason, currentMetaChap],
+  async ([seasonId, currentMetaSeason, currentMetaChap]) => {
+    if (!currentMetaSeason) return
+    if (!currentMetaChap) return
+
+    FirebaseAnalytics.logEvent({
+      name: "watching",
+      params: {
+        season: seasonId,
+        season_name: currentMetaSeason.name,
+        chap: currentMetaChap.id,
+        chap_name: currentMetaChap.name,
+      },
+    })
+  },
+  { immediate: true }
 )
 
 watch(

@@ -103,7 +103,7 @@
   <div v-if="!keyword" class="absolute top-0 h-[100%] w-full pt-[100px]">
     <!-- swiper -->
 
-    <swiper
+    <Swiper
       :slides-per-view="1"
       @swiper="onSwiper"
       @slideChange="onSlideChange"
@@ -143,7 +143,7 @@
         </q-pull-to-refresh>
         <ScreenError v-else @click:retry="runSearch" />
       </swiper-slide>
-    </swiper>
+    </Swiper>
   </div>
   <template v-else>
     <ScreenLoading v-if="loadingSearch" class="absolute pt-[100px]" />
@@ -184,6 +184,7 @@
 
 <script lang="ts" setup>
 import "swiper/css"
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Icon } from "@iconify/vue"
 // eslint-disable-next-line import/order
 import BottomBlur from "components/BottomBlur.vue"
@@ -192,7 +193,18 @@ import CardVertical from "components/CardVertical.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
-import { debounce } from "quasar"
+import {
+  debounce,
+  QBtn,
+  QInfiniteScroll,
+  QItem,
+  QItemLabel,
+  QItemSection,
+  QList,
+  QPullToRefresh,
+  QSpinner,
+  QToolbar,
+} from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { AjaxItem } from "src/apis/runs/ajax/item"
 import { PreSearch } from "src/apis/runs/pre-search"
@@ -236,7 +248,16 @@ const { data, run } = useRequest(
 )
 watch(
   query,
-  debounce(() => run(), 100)
+  debounce(() => {
+    run()
+
+    FirebaseAnalytics.logEvent({
+      name: "search",
+      params: {
+        search_term: query.value,
+      },
+    })
+  }, 100)
 )
 
 watchEffect(() => {
@@ -250,6 +271,14 @@ function onEnter(event: Event) {
   ]
 
   keyword.value = query.value
+
+
+  FirebaseAnalytics.logEvent({
+    name: "search",
+    params: {
+      search_term: query.value,
+    },
+  })
 
   searching.value = false
   ;(event.target as HTMLInputElement)?.blur()
