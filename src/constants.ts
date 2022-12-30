@@ -29,6 +29,8 @@ export const playbackRates = [
   },
 ]
 
+export const DELAY_SAVE_VIEWING_PROGRESS = 5_000
+
 export const C_URL = [
   104, 116, 116, 112, 115, 58, 47, 47, 97, 110, 105, 109, 101, 118, 105, 101,
   116, 115, 117, 98, 46, 112, 114, 111,

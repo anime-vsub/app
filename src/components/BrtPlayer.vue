@@ -650,19 +650,11 @@
 <script lang="ts" setup>
 import { Haptics } from "@capacitor/haptics"
 import { StatusBar } from "@capacitor/status-bar"
-import type { DocumentData, DocumentReference } from "@firebase/firestore"
-import {
-  doc,
-  getDoc,
-  getFirestore,
-  serverTimestamp,
-  setDoc,
-} from "@firebase/firestore"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
-import { app } from "boot/firebase"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
+import type { PlaylistLoaderConstructor } from "hls.js";
 import Hls from "hls.js"
 import {
   QBtn,
@@ -684,8 +676,7 @@ import {
   throttle,
   useQuasar,
 } from "quasar"
-import sha256 from "sha256"
-import { playbackRates } from "src/constants"
+import { DELAY_SAVE_VIEWING_PROGRESS, playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
 import { parseTime } from "src/logic/parseTime"
@@ -697,6 +688,7 @@ import type {
   Season,
 } from "src/pages/phim/_season.interface"
 import { useAuthStore } from "stores/auth"
+import { useHistoryStore } from "stores/history"
 import { useSettingsStore } from "stores/settings"
 import {
   computed,
@@ -706,20 +698,22 @@ import {
   watch,
   watchEffect,
 } from "vue"
+import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
 import type { Source } from "./sources"
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
+const historyStore = useHistoryStore()
 
 const router = useRouter()
 const $q = useQuasar()
-const db = getFirestore(app)
+const { t } = useI18n()
 
 const props = defineProps<{
   sources?: Source[]
-  currentSeason?: string
+  currentSeason: string
   nameCurrentSeason?: string
   currentChap?: string
   nameCurrentChap?: string
@@ -813,43 +807,41 @@ const setArtCurrentTime = (currentTime: number) => {
   artCurrentTime.value = currentTime
 }
 // eslint-disable-next-line functional/no-let
-let disableBackupProgressViewing = false
+let progressRestored: false | string = false
 watch(
-  () => props.currentChap,
-  async (currentChap) => {
-    if (currentChap) {
-      disableBackupProgressViewing = true
-      setArtCurrentTime(0)
+  [() => props.currentChap, () => props.currentSeason, () => authStore.uid],
+  async ([currentChap, currentSeason, uid]) => {
+    if (currentChap && currentSeason) {
+      progressRestored = false
 
-      if (!authStore.user_data) return
-
-      const userRef = doc(
-        db,
-        "users",
-        sha256(authStore.user_data.email + authStore.user_data.name)
-      )
-
-      const seasonRef = doc(
-        userRef,
-        "history",
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        props.currentSeason!.slice(
-          0,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          props.currentSeason!.lastIndexOf("$") >>> 0
-        )
-      )
-      const chapRef = doc(seasonRef, "chaps", currentChap)
-
-      const progressInCloud = await getDoc(chapRef)
-
-      const cur = progressInCloud.data()?.cur
-
-      if (cur) {
-        setArtCurrentTime(cur)
-        addNotice(`Đã khôi phục phiên xem trước ${parseTime(cur)}`)
+      if (!uid) {
+        // not login
+        setArtCurrentTime(0)
+        return
       }
-      disableBackupProgressViewing = false
+
+      try {
+        console.log(":restore progress")
+        const cur = (
+          await historyStore.getProgressChap(currentSeason, currentChap)
+        )?.cur
+
+        if (
+          cur &&
+          !holdedBD.value
+        ) {
+          setArtCurrentTime(cur)
+          addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
+        } else {
+          // eslint-disable-next-line functional/no-throw-statement
+          throw new Error("NOT_RESET")
+        }
+      } catch (err) {
+        setArtCurrentTime(0)
+        if ((err as Error)?.message !== "NOT_RESET") console.error(err)
+      }
+
+      progressRestored = `${currentSeason}/${currentChap}`
     }
   },
   { immediate: true }
@@ -945,51 +937,32 @@ function onVideoCanPlay() {
 }
 
 // eslint-disable-next-line functional/no-let
-let seasonRefCache: null | DocumentReference<DocumentData>
+let seasonReady = false
 watch(
-  [() => authStore.user_data, () => props.currentSeason],
+  [
+    () => authStore.user_data,
+    () => props.currentSeason,
+    () => props.nameCurrentSeason,
+    () => props.poster,
+  ],
   // eslint-disable-next-line camelcase
-  async ([user_data, currentSeason]) => {
-    seasonRefCache = null
-
-    // eslint-disable-next-line camelcase
-    if (!user_data || !currentSeason) return
-
-    // eslint-disable-next-line camelcase
-    const userRef = doc(db, "users", sha256(user_data.email + user_data.name))
-
-    if (!(await getDoc(userRef)).exists()) {
-      console.log("create new user")
-      await setDoc(userRef, {
-        // eslint-disable-next-line camelcase
-        email: user_data.email,
-        // eslint-disable-next-line camelcase
-        name: user_data.name,
-      })
-    }
-
-    const seasonRef = doc(
-      userRef,
-      "history",
-      currentSeason.slice(0, currentSeason.lastIndexOf("$") >>> 0)
+  async ([user_data, currentSeason, seasonName, poster]) => {
+    seasonReady = false
+    if (
+      // eslint-disable-next-line camelcase
+      !user_data ||
+      !currentSeason ||
+      typeof seasonName !== "string" ||
+      !poster
     )
-
-    if (!(await getDoc(seasonRef)).exists()) {
-      //
-      console.log("create new record")
-      await setDoc(seasonRef, {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        first: props.seasons![0].value,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        poster: props.poster!,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        seasonName: props.nameCurrentSeason!,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        name: props.name!,
-      })
-    }
-
-    seasonRefCache = seasonRef
+      return
+    console.log("set new season poster %s", poster)
+    await historyStore.createSeason(currentSeason, {
+      poster,
+      seasonName,
+      name: props.name,
+    })
+    seasonReady = true
   },
   { immediate: true }
 )
@@ -1004,48 +977,40 @@ const emit = defineEmits<{
     }
   ): void
 }>()
-const saveCurTimeToPer = throttle(async () => {
-  if (!seasonRefCache) return
+// eslint-disable-next-line functional/no-let
+let processingSaveCurTimeIn: string | null = null
+const saveCurTimeToPer = throttle(
+  async (
+    currentSeason: string,
+    currentChap: string,
+    cur: number,
+    dur: number,
+    nameCurrentChap: string
+  ) => {
+    const uid = `${currentSeason}/${currentChap}` // 255 byte
 
-  if (disableBackupProgressViewing) return
+    if (processingSaveCurTimeIn === uid) return // in progressing save this
+    processingSaveCurTimeIn = uid
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const chapRef = doc(seasonRefCache, "chaps", props.currentChap!)
+    await historyStore
+      .setProgressChap(currentSeason, currentChap, {
+        cur,
+        dur,
+        name: nameCurrentChap,
+      })
+      .finally(() => (processingSaveCurTimeIn = null))
+      .catch(() => console.warn("save viewing progress failed"))
 
-  await Promise.all([
-    setDoc(
-      seasonRefCache,
-      {
-        timestamp: serverTimestamp(),
-        last: {
-          chap: props.currentChap,
-          name: props.nameCurrentChap,
-          cur: artCurrentTime.value,
-          dur: artDuration.value,
-        },
-      },
-      { merge: true }
-    ).catch((err) => console.error("update time error", err)),
-    setDoc(
-      chapRef,
-      {
-        cur: artCurrentTime.value,
-        dur: artDuration.value,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        name: props.nameCurrentChap!,
-      },
-      { merge: true }
-    ).catch((err) => console.error("update progress error", err)),
-  ])
+    emit("cur-update", {
+      cur,
+      dur,
+      id: currentChap,
+    })
+    console.log("save viewing progress")
+  },
+  DELAY_SAVE_VIEWING_PROGRESS
+)
 
-  emit("cur-update", {
-    cur: artCurrentTime.value,
-    dur: artDuration.value,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    id: props.currentChap!,
-  })
-  console.log("save viewing progress")
-}, 3_000)
 function onVideoTimeUpdate() {
   if (
     artPlaying.value &&
@@ -1055,7 +1020,19 @@ function onVideoTimeUpdate() {
   ) {
     artControlShow.value = false
   }
-  saveCurTimeToPer()
+
+  if (!progressRestored) return
+  if (!seasonReady) return
+  if (!props.currentChap) return
+  if (typeof props.nameCurrentChap !== "string") return
+
+  saveCurTimeToPer(
+    props.currentSeason,
+    props.currentChap,
+    artCurrentTime.value,
+    artDuration.value,
+    props.nameCurrentChap
+  )
 }
 function onVideoError(event: Event) {
   console.log("video error ", event)
@@ -1112,22 +1089,21 @@ function runRemount() {
 // eslint-disable-next-line functional/no-let
 let currentHls: Hls
 onBeforeUnmount(() => currentHls?.destroy())
-function remount() {
+function remount(resetCurrentTime?: boolean) {
   currentHls?.destroy()
 
   if (!currentStream.value) {
     $q.notify({
       position: "bottom-right",
-      message: "Video tạm thời không khả dụng",
+      message: t("video-tam-thoi-khong-kha-dung"),
     })
-
     return
   }
 
   const { url, type } = currentStream.value
 
   const currentTime = artCurrentTime.value
-  const playing = !video.value?.paused || artPlaying.value || artEnded
+  const playing = artPlaying.value || artEnded
   artEnded = false
 
   switch (type) {
@@ -1218,18 +1194,91 @@ function remount() {
                 )
               })
           }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as unknown as any,
+        } as unknown as PlaylistLoaderConstructor,
       })
       currentHls = hls
       // customLoader(hls.config)
       hls.loadSource(url)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       hls.attachMedia(video.value!)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      hls.on((Hls as unknown as any).Events.MANIFEST_PARSED, () => {
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (playing) video.value!.play()
+      })
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR: {
+              // try to recover network error
+              $q.notify({
+                message: t("loi-mang-khong-kha-dung"),
+                position: "bottom-right",
+                timeout: 0,
+                actions: [
+                  {
+                    label: t("thu-lai"),
+                    color: "yellow",
+                    noCaps: true,
+                    handler: () => hls.startLoad(),
+                  },
+                  {
+                    icon: "close",
+                    round: true,
+                  },
+                ],
+              })
+              break
+            }
+            case Hls.ErrorTypes.MEDIA_ERROR: {
+              $q.notify({
+                message: t("loi-trinh-phat-khong-xac-dinh"),
+                position: "bottom-right",
+                timeout: 0,
+                actions: [
+                  {
+                    label: t("thu-lai"),
+                    color: "yellow",
+                    noCaps: true,
+                    handler: () => hls.recoverMediaError(),
+                  },
+                  {
+                    icon: "close",
+                    round: true,
+                  },
+                ],
+              })
+              break
+            }
+            default: {
+              $q.notify({
+                message: t("da-gap-su-co-khi-phat-lai"),
+                position: "bottom-right",
+                timeout: 0,
+                actions: [
+                  {
+                    label: t("thu-lai"),
+                    color: "white",
+                    handler() {
+                      console.log("retry force")
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      video.value!.load()
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      video.value!.play()
+                    },
+                  },
+                  {
+                    label: t("remount"),
+                    color: "white",
+                    handler: remount,
+                  },
+                ],
+              })
+              break
+            }
+          }
+        } else {
+          console.warn("Player error: ", data)
+        }
       })
       break
     default:
@@ -1239,8 +1288,17 @@ function remount() {
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (playing) video.value!.play()
+
+  if (
+    resetCurrentTime
+      ? props.currentChap &&
+        progressRestored === `${props.currentSeason}/${props.currentChap}`
+      : true
+  )
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    video.value!.currentTime = currentTime
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  video.value!.currentTime = currentTime
+  else setArtCurrentTime((video.value!.currentTime = 0))
 }
 const watcherVideoTagReady = watch(video, (video) => {
   if (!video) return
