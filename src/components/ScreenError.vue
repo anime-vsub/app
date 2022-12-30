@@ -37,7 +37,11 @@ const typeError = computed(() => {
 
   if (props.error.data?.includes("<title>Just a moment...</title>"))
     return "cloudflare"
-  if (props.error.message?.includes("Your domain is not permission to access the Http API"))
+  if (
+    props.error.message?.includes(
+      "Your domain is not permission to access the Http API"
+    )
+  )
     return "domain-strange"
 
   return null

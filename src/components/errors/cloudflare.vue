@@ -100,7 +100,7 @@ const myip = computedAsync<{
     .catch(() => {
       return get({
         url: "https://api.myip.com/",
-      // eslint-disable-next-line promise/no-nesting
+        // eslint-disable-next-line promise/no-nesting
       }).then((res) => JSON.parse(res.data))
     })
 }, null)

@@ -1,4 +1,4 @@
-import type { ComputedRef, Ref} from "vue";
+import type { ComputedRef, Ref } from "vue"
 import { ref, watchEffect } from "vue"
 
 export function useMemoControl<T>(

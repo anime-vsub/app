@@ -57,7 +57,8 @@ const props = defineProps<{
 
 const activeRef = ref<QBtn>()
 function scrollToView() {
-  if (activeRef.value?.$el) scrollYIntoView(activeRef.value.$el, props.deepScroll)
+  if (activeRef.value?.$el)
+    scrollYIntoView(activeRef.value.$el, props.deepScroll)
 }
 
 watchEffect(scrollToView)
