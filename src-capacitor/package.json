@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@capacitor-community/barcode-scanner": "^3.0.0",
+    "@capacitor-community/firebase-analytics": "^4.0.0",
     "@capacitor-community/http": "1.4.1",
     "@capacitor/android": "^4.3.0",
     "@capacitor/app": "^4.0.1",

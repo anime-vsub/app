@@ -44,7 +44,9 @@
     <q-item
       clickable
       v-ripple
-      @click="open('https://anime-vsub.github.io/about/privacy-police?embed=true')"
+      @click="
+        open('https://anime-vsub.github.io/about/privacy-police?embed=true')
+      "
     >
       <q-item-section>
         <q-item-label>Chính sách riêng tư</q-item-label>

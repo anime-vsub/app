@@ -1,3 +1,4 @@
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { route } from "quasar/wrappers"
 import {
   createMemoryHistory,
@@ -32,6 +33,17 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  })
+
+  Router.beforeResolve((to) => {
+    if (!to.meta.screen) return
+
+    const { name, override } = to.meta.screen
+
+    FirebaseAnalytics.setScreenName({
+      screenName: name,
+      nameOverride: typeof override === "string" ? override : override?.(to),
+    })
   })
 
   return Router

@@ -11,6 +11,7 @@ const firebaseConfig = {
   storageBucket: "animevsub-history-app.appspot.com",
   messagingSenderId: "12658633187",
   appId: "1:12658633187:web:56cf1588279277f3a698d6",
+  measurementId: "G-F2KJ27SHYK",
 }
 
 // Initialize Firebase

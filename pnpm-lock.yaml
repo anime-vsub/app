@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@capacitor-community/barcode-scanner': ^3.0.0
+  '@capacitor-community/firebase-analytics': ^4.0.0
   '@capacitor-community/http': ^1.4.1
   '@capacitor/app': ^4.0.1
   '@capacitor/browser': ^4.0.1
@@ -134,6 +135,7 @@ dependencies:
 
 devDependencies:
   '@capacitor-community/barcode-scanner': 3.0.0_@capacitor+core@4.3.0
+  '@capacitor-community/firebase-analytics': 4.0.0
   '@capacitor-community/http': 1.4.1
   '@capacitor/app': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/browser': 4.0.1_@capacitor+core@4.3.0
@@ -220,6 +222,12 @@ packages:
     resolution: {integrity: sha512-Jzr4phHyDS+C2ZE+eoVsuq15oFvFLVtAJmmegIjwVBcb3CxgRdkt/kdVurXgVKMQ6mJ6StYI7hALeMu2vkyC6A==}
     peerDependencies:
       '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
+    dev: true
+
+  /@capacitor-community/firebase-analytics/4.0.0:
+    resolution: {integrity: sha512-TwsIz504IrpVajdv5Fv01SYRJqo85oPz2j99xG+NGPCpn110jSRxC6EeHwRLCur8QpGokKlp4y1hd5utUvVUYw==}
     dependencies:
       '@capacitor/core': 4.3.0
     dev: true
@@ -556,8 +564,8 @@ packages:
       vue-i18n:
         optional: true
     dependencies:
-      '@intlify/message-compiler': 9.3.0-beta.10
-      '@intlify/shared': 9.3.0-beta.10
+      '@intlify/message-compiler': 9.3.0-beta.12
+      '@intlify/shared': 9.3.0-beta.12
       jsonc-eslint-parser: 1.4.1
       source-map: 0.6.1
       vue-i18n: 9.2.2_vue@3.2.41
@@ -586,11 +594,11 @@ packages:
       '@intlify/shared': 9.2.2
       source-map: 0.6.1
 
-  /@intlify/message-compiler/9.3.0-beta.10:
-    resolution: {integrity: sha512-RoOC6yceOykLRhN0NlbkNOBUx1el6iphx3W8NfOx3jHVNtfT1FYokx14/5sU3F1F0uxeG4sp6q+ppKvaF8o+ww==}
+  /@intlify/message-compiler/9.3.0-beta.12:
+    resolution: {integrity: sha512-A8/s7pb3v8nf6HG77qFPJntxgQKI9GXxGnkn7aO+b03/X/GkF/4WceDSAIk3i+yLeIgszeBn9GZ23tSg4sTEHA==}
     engines: {node: '>= 14'}
     dependencies:
-      '@intlify/shared': 9.3.0-beta.10
+      '@intlify/shared': 9.3.0-beta.11
       source-map: 0.6.1
     dev: true
 
@@ -598,8 +606,13 @@ packages:
     resolution: {integrity: sha512-wRwTpsslgZS5HNyM7uDQYZtxnbI12aGiBZURX3BTR9RFIKKRWpllTsgzHWvj3HKm3Y2Sh5LPC1r0PDCKEhVn9Q==}
     engines: {node: '>= 14'}
 
-  /@intlify/shared/9.3.0-beta.10:
-    resolution: {integrity: sha512-h93uAanbAt/XgjDHclrVB7xix6r7Uz11wx0iGNOCdHP7aA2LCJjUT3uNbekJjjbo+Fl5jzTSJZdm2SexzoqhRA==}
+  /@intlify/shared/9.3.0-beta.11:
+    resolution: {integrity: sha512-CtbotesxTRiC3bRyXyv1NG39fkqJ790f8z8xFaeIXSZpOdiyxoh5BIyypCzSFQZDGLwz0Q9gyWbW1XpxQJm68Q==}
+    engines: {node: '>= 14'}
+    dev: true
+
+  /@intlify/shared/9.3.0-beta.12:
+    resolution: {integrity: sha512-WsmaS54sA8xuwezPKpa/OMoaX1v2VF2fCgAmYS6prDr2ir0CkUFWPm9A8ilmxzv4nkS61/v8+vf4lGGkn5uBdA==}
     engines: {node: '>= 14'}
     dev: true
 
@@ -619,7 +632,7 @@ packages:
         optional: true
     dependencies:
       '@intlify/bundle-utils': 3.2.1_vue-i18n@9.2.2
-      '@intlify/shared': 9.3.0-beta.10
+      '@intlify/shared': 9.3.0-beta.12
       '@rollup/pluginutils': 4.2.1
       debug: 4.3.4
       fast-glob: 3.2.12
