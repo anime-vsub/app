@@ -25,6 +25,8 @@ import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
 import { app } from "src/boot/firebase"
 import { useFirestore } from "src/composibles/useFirestore"
+import dayjs from "src/logic/dayjs"
+import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
 import { computed } from "vue"
 
 import { useAuthStore } from "./auth"
@@ -190,6 +192,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       ) as DocumentReference<Playlist_Movies_Movie>,
       {
         ...anime,
+        poster: removeHostUrlImage(anime.poster),
         add_at: serverTimestamp(),
       },
       { merge: true }
@@ -262,7 +265,18 @@ export const usePlaylistStore = defineStore("playlist", () => {
         ...(lastAnimeDoc ? [startAfter(lastAnimeDoc)] : []),
         limit(20)
       )
-    ).then((res) => res.docs)
+    ).then((res) =>
+      res.docs.map((item) => {
+        const data = item.data()
+        return {
+          ...data,
+          poster: addHostUrlImage(data.poster),
+          $doc: item,
+          season: item.id,
+          add_at: dayjs(data.add_at.toDate()),
+        }
+      })
+    )
   }
 
   async function getPosterPlaylist(idPlaylist: string) {
@@ -287,7 +301,12 @@ export const usePlaylistStore = defineStore("playlist", () => {
         orderBy("add_at", "asc"),
         limit(1)
       )
-    ).then((res) => res.docs?.[0].data().poster ?? null)
+    )
+      .then((res) => res.docs?.[0].data().poster ?? null)
+      .then((poster) => {
+        if (poster) return addHostUrlImage(poster)
+        return poster
+      })
   }
 
   return {

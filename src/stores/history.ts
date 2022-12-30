@@ -25,6 +25,7 @@ import { defineStore } from "pinia"
 import { app } from "src/boot/firebase"
 import { useFirestore } from "src/composibles/useFirestore"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
+import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
 import { computed, ref } from "vue"
 
 import { useAuthStore } from "./auth"
@@ -62,7 +63,7 @@ export const useHistoryStore = defineStore("history", () => {
 
   const last30ItemError = ref<Error | null>(null)
   const _countRefeshLast30Item = ref(0)
-  const last30Item = useFirestore<
+  const _last30Item = useFirestore<
     Required<
       HistoryItem & {
         id: string
@@ -91,6 +92,12 @@ export const useHistoryStore = defineStore("history", () => {
         last30ItemError.value = err
       },
     }
+  )
+  const last30Item = computed(() =>
+    _last30Item.value?.map((item) => {
+      item.poster = addHostUrlImage(item.poster)
+      return item
+    })
   )
   function refreshLast30ItemError() {
     _countRefeshLast30Item.value++
@@ -126,6 +133,7 @@ export const useHistoryStore = defineStore("history", () => {
         return {
           id: doc.id,
           ...data,
+          poster: addHostUrlImage(data.poster),
           timestamp: dayjs(data.timestamp?.toDate()),
           $doc: doc,
         }
@@ -152,7 +160,11 @@ export const useHistoryStore = defineStore("history", () => {
     ) as DocumentReference<HistoryItem>
 
     if (!(await getDoc(seasonRef)).exists())
-      await setDoc(seasonRef, { season: seasonId, ...info })
+      await setDoc(seasonRef, {
+        season: seasonId,
+        ...info,
+        poster: removeHostUrlImage(info.poster),
+      })
   }
 
   // children /chaps/:chap
@@ -280,7 +292,14 @@ export const useHistoryStore = defineStore("history", () => {
 
           setDoc(
             seasonRefOldData,
-            { poster, name, season, seasonName, last, timestamp },
+            {
+              poster: removeHostUrlImage(poster),
+              name,
+              season,
+              seasonName,
+              last,
+              timestamp,
+            },
             { merge: true }
           ).catch((err) => {
             console.error(
