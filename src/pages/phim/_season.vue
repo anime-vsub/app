@@ -1012,10 +1012,7 @@ watch(
     FirebaseAnalytics.logEvent({
       name: "watching",
       params: {
-        season: seasonId,
-        season_name: currentMetaSeason.name,
-        chap: currentMetaChap.id,
-        chap_name: currentMetaChap.name,
+        value: `${currentMetaSeason.name} - Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
       },
     })
   },
