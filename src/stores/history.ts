@@ -149,7 +149,7 @@ export const useHistoryStore = defineStore("history", () => {
       // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          "lưu tiến trình xem season mới",
+          i18n.global.t("luu-tien-trinh-xem-season-moi"),
         ])
       )
 
@@ -217,7 +217,9 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
-        i18n.global.t("errors.require_login_to", ["lưu lịch sử xem"])
+        i18n.global.t("errors.require_login_to", [
+          i18n.global.t("luu-lich-su-xem"),
+        ])
       )
 
     const realSeason = getRealSeasonId(season)
@@ -254,7 +256,9 @@ export const useHistoryStore = defineStore("history", () => {
             null
           if (
             size !== 0 &&
-            docs[0].id !== realSeason &&
+            (docs[0].id !== realSeason ||
+              docs[0].data().timestamp.toDate().getDate() !==
+                new Date().getDate()) &&
             !docs[0].id.endsWith(`#${realSeason}`)
           ) {
             docOldDataSeason = await getDoc(seasonRef)
