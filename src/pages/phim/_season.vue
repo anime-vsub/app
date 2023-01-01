@@ -466,7 +466,7 @@ const { data, run, error, loading } = useRequest(
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
 
     await Promise.any([
-      fs.readFile(`/phim/${id}.json`, "utf8").then((text) => {
+      fs.readFile(`/phim/${id}.json`).then((text) => {
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
         if (result) Object.assign(result.value, text)
@@ -498,7 +498,11 @@ const { data, run, error, loading } = useRequest(
           console.log("[fs]: save cache to fs %s", id)
         })
       }),
-    ])
+    ]).catch((err) => {
+      console.error(err)
+      // eslint-disable-next-line promise/no-return-wrap
+      return Promise.reject(err)
+    })
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return result!.value
