@@ -2673,7 +2673,7 @@ const percentagePlaytimeText = useMemoControl(() => {
     z-index: -1;
     transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
     height: calc(100% + 37px);
-    background-size: 100% 250%;
+    background-size: 100% 200%;
     background-repeat: repeat-x;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
   }
