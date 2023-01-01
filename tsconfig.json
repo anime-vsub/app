@@ -8,6 +8,7 @@
     "noEmitOnError": false,
     /* end */
     "baseUrl": "./",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "esModuleInterop": true
   }
 }

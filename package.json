@@ -25,6 +25,7 @@
     "@firebase/firestore": "^3.7.3",
     "@fontsource/caveat": "^4.5.9",
     "@iconify/vue": "^4.0.0",
+    "@isomorphic-git/lightning-fs": "^4.6.0",
     "@quasar/extras": "^1.15.6",
     "@vueuse/core": "^9.6.0",
     "@vueuse/firebase": "^9.6.0",

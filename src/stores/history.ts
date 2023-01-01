@@ -252,67 +252,71 @@ export const useHistoryStore = defineStore("history", () => {
         .then(async ({ docs, size }) => {
           // this is old data. not conflict data with save in previous then
           // eslint-disable-next-line functional/no-let
-          let docOldDataSeason: DocumentSnapshot<Required<HistoryItem>> | null =
-            null
+          let oldData: DocumentSnapshot<Required<HistoryItem>> | null = null
+          // eslint-disable-next-line promise/always-return
           if (
             size !== 0 &&
             (docs[0].id !== realSeason ||
-              docs[0].data().timestamp.toDate().getDate() !==
+              docs[0].data().timestamp?.toDate().getDate() !==
                 new Date().getDate()) &&
             !docs[0].id.endsWith(`#${realSeason}`)
           ) {
-            docOldDataSeason = await getDoc(seasonRef)
+            oldData = await getDoc(seasonRef)
           }
           // update to pre-read on history (indexed faster)
-          setDoc(
-            seasonRef,
-            {
-              timestamp: serverTimestamp(),
-              season,
-              last: {
-                chap,
-                ...info,
+          await Promise.allSettled([
+            setDoc(
+              seasonRef,
+              {
+                timestamp: serverTimestamp(),
+                season,
+                last: {
+                  chap,
+                  ...info,
+                },
               },
-            },
-            { merge: true }
-            // eslint-disable-next-line promise/no-nesting
-          ).catch((err) => console.error("update time error", err))
+              { merge: true }
+              // eslint-disable-next-line promise/no-nesting
+            ).catch((err) => console.error("update time error", err)),
+            // create fake data replace fix #70
+            new Promise<void>((resolve, reject) => {
+              if (!oldData || !oldData.exists()) return resolve()
+              // clone now
+              const { poster, name, season, seasonName, last, timestamp } =
+                oldData.data()
+              // save by buff diff
 
-          return docOldDataSeason
+              const seasonRefOldData = doc(
+                seasonRef.parent,
+                `${generateUUID()}#${realSeason}`
+              )
+
+              setDoc(
+                seasonRefOldData,
+                {
+                  poster: removeHostUrlImage(poster),
+                  name,
+                  season,
+                  seasonName,
+                  last,
+                  timestamp,
+                },
+                { merge: true }
+              )
+                // eslint-disable-next-line promise/no-nesting
+                .then(resolve)
+                .catch((err) => {
+                  reject(err)
+                  console.error(
+                    "create fake data history failed!",
+                    oldData?.data(),
+                    err
+                  )
+                })
+            }),
+          ])
         })
-        // create fake data replace fix #70
-        .then((oldData) => {
-          // eslint-disable-next-line promise/always-return
-          if (!oldData || !oldData.exists()) return
-          // clone now
-          const { poster, name, season, seasonName, last, timestamp } =
-            oldData.data()
-          // save by buff diff
 
-          const seasonRefOldData = doc(
-            seasonRef.parent,
-            `${generateUUID()}#${realSeason}`
-          )
-
-          setDoc(
-            seasonRefOldData,
-            {
-              poster: removeHostUrlImage(poster),
-              name,
-              season,
-              seasonName,
-              last,
-              timestamp,
-            },
-            { merge: true }
-          ).catch((err) => {
-            console.error(
-              "create fake data history failed!",
-              oldData.data(),
-              err
-            )
-          })
-        })
         .catch((err) => {
           console.error("error with progress getDocs", err)
         }),
