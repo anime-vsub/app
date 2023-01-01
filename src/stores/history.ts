@@ -257,7 +257,7 @@ export const useHistoryStore = defineStore("history", () => {
           if (
             size !== 0 &&
             (docs[0].id !== realSeason ||
-              docs[0].data().timestamp.toDate().getDate() !==
+              docs[0].data().timestamp?.toDate().getDate() !==
                 new Date().getDate()) &&
             !docs[0].id.endsWith(`#${realSeason}`)
           ) {
