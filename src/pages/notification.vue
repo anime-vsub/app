@@ -49,7 +49,7 @@
               <q-item-section side>
                 <q-img
                   no-spinner
-                  :src="forceHttp2(item.image)"
+                  :src="forceHttp2(item.image!)"
                   width="120px"
                   :ratio="120 / 81"
                   class="rounded-sm"
