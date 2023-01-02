@@ -11,6 +11,7 @@ import {
 import { app } from "boot/firebase"
 import sha256 from "sha256"
 import dayjs from "src/logic/dayjs"
+import { addHostUrlImage } from "src/logic/urlImage"
 import { useAuthStore } from "stores/auth"
 
 interface ItemData {
@@ -64,6 +65,7 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
     return {
       id: item.id,
       ...data,
+      poster: addHostUrlImage(data.poster),
       timestamp: dayjs(data.timestamp.toDate()),
       rawTimestamp: data.timestamp,
     }
