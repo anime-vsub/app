@@ -653,17 +653,22 @@ let isTodayF = false
 </style>
 
 <style lang="scss" scoped>
+$offset: 0.1;
 .wpa-grid {
   //  display: flex;
   overflow-x: scroll;
   position: relative;
   .ctnr {
-    max-width: initial;
-    white-space: nowrap;
+    display: flex;
+    width: fit-content;
+    .card-wrap {
+      vertical-align: bottom;
+      // class="col-4 col-lg-3 col-xl-2 px-[5px] py-2"
+      max-width: calc((100vw - 16px) / #{3 + $offset});
+    }
   }
 }
 .card-wrap {
-  $offset: 0.1;
   display: inline-block;
   white-space: initial;
 
