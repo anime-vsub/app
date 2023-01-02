@@ -109,7 +109,7 @@
         @click="open(item.href, item.title)"
       >
         <div>
-          <q-img no-spinner :src="item.image" class="image" />
+          <q-img no-spinner :src="forceHttp2(item.image)" class="image" />
         </div>
 
         <div class="content">
@@ -122,7 +122,7 @@
           <q-card-section class="pt-0">
             <span class="text-caption text-grey">
               <img
-                :src="item.by.icon"
+                :src="forceHttp2(item.by.icon)"
                 width="18"
                 height="18"
                 class="inline-block mr-[5px]"
@@ -150,6 +150,7 @@ import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import dayjs from "src/logic/dayjs"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { ref, shallowReactive } from "vue"
 
 // Import Swiper Vue.js components

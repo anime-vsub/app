@@ -654,7 +654,7 @@ import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import type { PlaylistLoaderConstructor } from "hls.js";
+import type { PlaylistLoaderConstructor } from "hls.js"
 import Hls from "hls.js"
 import {
   QBtn,
@@ -826,10 +826,7 @@ watch(
           await historyStore.getProgressChap(currentSeason, currentChap)
         )?.cur
 
-        if (
-          cur &&
-          !holdedBD.value
-        ) {
+        if (cur && !holdedBD.value) {
           setArtCurrentTime(cur)
           addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
         } else {

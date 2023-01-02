@@ -272,7 +272,6 @@ function onEnter(event: Event) {
 
   keyword.value = query.value
 
-
   FirebaseAnalytics.logEvent({
     name: "search",
     params: {

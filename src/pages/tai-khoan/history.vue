@@ -43,7 +43,7 @@
           >
             <q-img
               no-spinner
-              :src="item.poster"
+              :src="forceHttp2(item.poster)"
               :ratio="1920 / 1080"
               class="!rounded-[4px] w-[min(210px,40%)]"
             >
@@ -101,6 +101,7 @@ import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import { QInfiniteScroll } from "quasar"
 import { History } from "src/apis/runs/history"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseTime } from "src/logic/parseTime"
 import { ref } from "vue"
 import { useRequest } from "vue-request"

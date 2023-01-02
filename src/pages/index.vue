@@ -112,7 +112,7 @@
         <q-img
           no-spinner
           :ratio="aspectRatio"
-          :src="item.image!"
+          :src="forceHttp2(item.image!)"
           class="poster"
         />
         <div class="drop-left"></div>
@@ -330,6 +330,7 @@ import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import dayjs from "src/logic/dayjs"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { useRouter } from "vue-router"
