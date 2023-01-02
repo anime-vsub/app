@@ -35,16 +35,16 @@ describe("urlImage", () => {
   describe("add host", () => {
     test("should url is removed host", () => {
       expect(addHostUrlImage("$@/image.png")).toEqual(
-        `${location.protocol}//${HOST_CURL}/image.png`
+        `https://${HOST_CURL}/image.png`
       )
       expect(addHostUrlImage("$@:433/image.png")).toEqual(
-        `${location.protocol}//${HOST_CURL}:433/image.png`
+        `https://${HOST_CURL}:433/image.png`
       )
       expect(addHostUrlImage("cdn.$@/image.png")).toEqual(
-        `${location.protocol}//cdn.${HOST_CURL}/image.png`
+        `https://cdn.${HOST_CURL}/image.png`
       )
       expect(addHostUrlImage("cdn.$@:433/image.png")).toEqual(
-        `${location.protocol}//cdn.${HOST_CURL}:433/image.png`
+        `https://cdn.${HOST_CURL}:433/image.png`
       )
     })
     test("should url is not remove host", () => {

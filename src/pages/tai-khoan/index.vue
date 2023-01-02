@@ -6,7 +6,10 @@
     >
       <q-item-section avatar>
         <q-avatar size="55px">
-          <img v-if="authStore.user?.avatar" :src="authStore.user.avatar" />
+          <img
+            v-if="authStore.user?.avatar"
+            :src="forceHttp2(authStore.user.avatar)"
+          />
           <Icon
             v-else
             icon="fluent:person-circle-20-filled"
@@ -100,7 +103,7 @@
         >
           <q-img
             no-spinner
-            :src="item.poster"
+            :src="forceHttp2(item.poster)"
             :ratio="1920 / 1080"
             class="!rounded-[4px]"
           >
@@ -323,6 +326,7 @@ import QRCode from "qrcode"
 import { useQuasar } from "quasar"
 import { History } from "src/apis/runs/history"
 import { TuPhim } from "src/apis/runs/tu-phim"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
 import { ref, watch, watchEffect } from "vue"
