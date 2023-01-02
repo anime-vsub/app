@@ -26,7 +26,7 @@
         :next-chap="nextChap"
         :prev-chap="prevChap"
         :name="data.name"
-        :poster="currentDataSeason?.poster"
+        :poster="currentDataSeason?.poster ? forceHttp2(currentDataSeason.poster) : undefined"
         :seasons="seasons"
         :_cache-data-seasons="_cacheDataSeasons"
         :fetch-season="fetchSeason"
@@ -317,7 +317,7 @@
             v-if="data?.image"
             width="152px"
             class="rounded-xl"
-            :src="data.image"
+            :src="forceHttp2(data.image)"
           />
         </div>
         <div class="flex-1 ml-4">
@@ -409,6 +409,7 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
 import { C_URL, labelToQuality } from "src/constants"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
 import { fs } from "src/logic/fs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"

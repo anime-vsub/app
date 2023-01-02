@@ -88,7 +88,7 @@
         <q-img
           no-spinner
           :ratio="aspectRatio"
-          :src="item.image!"
+          :src="forceHttp2(item.image!)"
           class="poster"
         />
         <div class="drop-left"></div>
@@ -353,12 +353,12 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { Index } from "src/apis/runs/index"
 import appIcon from "src/assets/app_icon.svg"
 import dayjs from "src/logic/dayjs"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { Autoplay, Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
-
 // Import Swiper styles
 import "swiper/css"
 import "swiper/css/pagination"

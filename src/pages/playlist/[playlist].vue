@@ -12,7 +12,7 @@
               <img
                 v-if="metaPlaylist.poster"
                 class="h-auto w-full"
-                :src="metaPlaylist.poster"
+                :src="forceHttp2(metaPlaylist.poster)"
               />
             </div>
             <div
@@ -32,7 +32,7 @@
             <q-img
               v-if="metaPlaylist.poster"
               class="rounded-xl"
-              :src="metaPlaylist.poster"
+              :src="forceHttp2(metaPlaylist.poster)"
             />
             <div>
               <div
@@ -252,7 +252,7 @@
           <div>
             <q-img
               no-spinner
-              :src="item.poster"
+              :src="forceHttp2(item.poster)"
               :ratio="1920 / 1080"
               class="!rounded-xl w-[150px]"
             />
@@ -356,12 +356,14 @@ import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import { QInfiniteScroll, useQuasar } from "quasar"
 import dayjs from "src/logic/dayjs"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseChapName } from "src/logic/parseChapName"
 import { usePlaylistStore } from "stores/playlist"
 import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
+
 
 const { t } = useI18n()
 const route = useRoute()

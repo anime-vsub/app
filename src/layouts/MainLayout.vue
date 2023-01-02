@@ -110,7 +110,7 @@
                   <div>
                     <q-img
                       :ratio="267 / 400"
-                      :src="item.image"
+                      :src="forceHttp2(item.image)"
                       width="90px"
                       class="rounded"
                     />
@@ -408,7 +408,7 @@
                       <div class="w-[149px]">
                         <q-img
                           no-spinner
-                          :src="item.poster"
+                          :src="forceHttp2(item.poster)"
                           :ratio="1920 / 1080"
                           class="!rounded-[4px]"
                         >
@@ -553,7 +553,7 @@
                         <div class="flex flex-nowrap">
                           <q-img
                             no-spinner
-                            :src="item.image"
+                            :src="forceHttp2(item.image!)"
                             width="128px"
                             :ratio="120 / 81"
                             class="rounded-sm"
@@ -592,7 +592,7 @@
           <q-avatar v-if="authStore.isLogged" size="35px">
             <img
               v-if="authStore.user_data?.avatar"
-              :src="authStore.user_data.avatar"
+              :src="forceHttp2(authStore.user_data.avatar)"
             />
             <Icon
               v-else
@@ -620,7 +620,7 @@
                       <q-avatar size="45px">
                         <img
                           v-if="authStore.user_data?.avatar"
-                          :src="authStore.user_data.avatar"
+                          :src="forceHttp2(authStore.user_data.avatar)"
                         />
                         <Icon
                           v-else
@@ -1084,6 +1084,7 @@ import { TuPhim } from "src/apis/runs/tu-phim"
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { languages } from "src/i18n"
 import dayjs from "src/logic/dayjs"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseMdBasic } from "src/logic/parseMdBasic"
 import { parseTime } from "src/logic/parseTime"

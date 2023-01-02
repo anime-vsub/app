@@ -108,7 +108,7 @@
       @click="open(item.href)"
     >
       <div>
-        <q-img no-spinner :src="item.image" class="image" />
+        <q-img no-spinner :src="forceHttp2(item.image)" class="image" />
       </div>
 
       <div class="content">
@@ -146,6 +146,7 @@ import { Icon } from "@iconify/vue"
 import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import dayjs from "src/logic/dayjs"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { ref, shallowReactive } from "vue"
 import { useI18n } from "vue-i18n"
 

@@ -3,7 +3,7 @@
     <div>
       <q-img
         no-spinner
-        :src="data.image"
+        :src="forceHttp2(data.image)"
         :ratio="280 / 400"
         width="110px"
         class="rounded-lg"
@@ -63,6 +63,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { useI18n } from "vue-i18n"
 
 import Star from "./Star.vue"

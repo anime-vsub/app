@@ -47,7 +47,7 @@
               <q-item-section side>
                 <q-img
                   no-spinner
-                  :src="item.image"
+                  :src="forceHttp2(item.image!)"
                   width="120px"
                   :ratio="120 / 81"
                   class="rounded-sm"
@@ -102,10 +102,12 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import ScreenLoading from "src/components/ScreenLoading.vue"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
+
 
 const { t } = useI18n()
 const router = useRouter()

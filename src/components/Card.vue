@@ -8,7 +8,7 @@
     >
       <q-img
         no-spinner
-        :src="data.image"
+        :src="forceHttp2(data.image)"
         :ratio="280 / 400"
         :initial-ratio="744 / 530"
         class="!rounded-[4px]"
@@ -120,6 +120,7 @@ import BottomBlur from "components/BottomBlur.vue"
 import { debounce, QCard, QCardSection, QImg, QMenu } from "quasar"
 import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import dayjs from "src/logic/dayjs"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
 import ranks from "src/logic/ranks"
 import { ref, watch } from "vue"
