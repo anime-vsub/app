@@ -16,7 +16,7 @@
   <template v-else-if="histories">
     <ScreenNotFound v-if="histories.length === 0" class="pt-[47px]" />
 
-    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[47px]">
+    <q-pull-to-refresh v-else @refresh="refresh" class="pt-[47px] px-4">
       <q-infinite-scroll @load="onLoad" :offset="250">
         <template v-for="(item, index) in histories" :key="item.id">
           <div
