@@ -14,7 +14,7 @@
 
   <!-- main -->
 
-  <SkeletonGridCard v-if="loading" :count="12" class="pt-[47px]" />
+  <SkeletonGridCard v-if="loading" :count="12" class="pt-[47px] px-4" />
   <template v-else-if="data">
     <ScreenNotFound v-if="data.items.length === 0" class="pt-[47px]" />
 
