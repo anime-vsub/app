@@ -398,7 +398,7 @@
           <div class="flex flex-nowrap">
             <q-img
               no-spinner
-              :src="forceHttp2(currentDataSeason?.image ?? data.image)"
+              :src="forceHttp2(currentDataSeason?.image ?? data.image!)"
               :ratio="280 / 400"
               width="110px"
               class="rounded-lg"
