@@ -11,6 +11,6 @@ export function removeHostUrlImage(url: string): string {
 export function addHostUrlImage(url: string): string {
   return url.replace(
     /^([^/]+.)?\$@(:\d+)?(?=\/)/,
-    location.protocol + "//$1" + location.hostname + "$2"
+    location.protocol + "//$1" + HOST_CURL + "$2"
   )
 }
