@@ -97,6 +97,7 @@
         <q-card
           v-for="item in histories"
           :key="item.id"
+          flat
           class="bg-transparent inline-block history-item mr-2"
           style="white-space: initial"
           @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
