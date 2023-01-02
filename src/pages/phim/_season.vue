@@ -398,7 +398,7 @@
           <div class="flex flex-nowrap">
             <q-img
               no-spinner
-              :src="currentDataSeason?.image ?? data.image"
+              :src="forceHttp2(currentDataSeason?.image ?? data.image)"
               :ratio="280 / 400"
               width="110px"
               class="rounded-lg"
@@ -502,6 +502,7 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import type { Source } from "src/components/sources"
 import { C_URL, labelToQuality } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { post } from "src/logic/http"

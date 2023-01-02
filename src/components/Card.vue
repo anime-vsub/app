@@ -3,7 +3,7 @@
     <q-card flat dense class="bg-transparent">
       <q-img
         no-spinner
-        :src="data.image"
+        :src="forceHttp2(data.image)"
         :ratio="280 / 400"
         :initial-ratio="744 / 530"
         class="!rounded-[4px]"
@@ -46,6 +46,7 @@
 <script lang="ts" setup>
 import BottomBlur from "components/BottomBlur.vue"
 import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
+import { forceHttp2 } from "src/logic/forceHttp2"
 import ranks from "src/logic/ranks"
 
 import Quality from "./Quality.vue"
