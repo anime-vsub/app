@@ -17,10 +17,10 @@ Offcial Website:
 - https://animevsub.netlify.app
 
 ## Sponsor ☕
-
 If you find this project useful please support me through:
-
-[<img src="https://user-images.githubusercontent.com/45375496/209764740-d202626d-4acd-4517-a5dc-e94993eeeb0a.png" width="80" />](https://me.momo.vn/tachibshin)
+| [<img src="https://user-images.githubusercontent.com/45375496/209764740-d202626d-4acd-4517-a5dc-e94993eeeb0a.png" width="80" />](https://me.momo.vn/tachibshin) | [<img src="https://user-images.githubusercontent.com/45375496/210380009-53fcdbb0-f6a4-4e7f-bfc9-e59938151805.png" width="80" />](https://anime-vsub.github.io/about/sponsors) |
+| :------------------: | :--------------------: |
+| [Momo](https://me.momo.vn/tachibshin) | [Timo or Bank](https://anime-vsub.github.io/about/sponsors) |
 
 ## Screenshot
 
