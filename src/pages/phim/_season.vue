@@ -26,7 +26,11 @@
         :next-chap="nextChap"
         :prev-chap="prevChap"
         :name="data.name"
-        :poster="currentDataSeason?.poster ? forceHttp2(currentDataSeason.poster) : undefined"
+        :poster="
+          currentDataSeason?.poster
+            ? forceHttp2(currentDataSeason.poster)
+            : undefined
+        "
         :seasons="seasons"
         :_cache-data-seasons="_cacheDataSeasons"
         :fetch-season="fetchSeason"

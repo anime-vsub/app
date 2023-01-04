@@ -145,7 +145,7 @@
         v-else
         no-image
         class="h-[146px] px-4"
-        @click:retry="historyStore.refreshLast30ItemError"
+        @click:retry="historyStore.refreshLast30Item"
         :error="historyStore.last30ItemError"
       />
     </div>
@@ -343,7 +343,6 @@ import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 // import QrScanner from "qr-scanner"
-
 
 const { t } = useI18n()
 const showDialogLogin = ref(false)
