@@ -29,7 +29,7 @@
           }"
           @click="swiperRef?.slideTo(index)"
         >
-          {{ dayTextToNum(item.day) === 0 ? "CN" : `T${dayTextToNum(item.day)}` }}
+          {{ dayTextToNum(item.day) === 0 ? "CN" : `T${dayTextToNum(item.day) + 1}` }}
           <br />
           <span
             :class="
