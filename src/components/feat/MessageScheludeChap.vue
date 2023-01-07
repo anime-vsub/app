@@ -5,7 +5,7 @@
       ...(update[0] === currentDay
         ? [t("hom-nay"), ""]
         : [
-            update[0] === 0 ? t("chu-nhat") : t("thu-_day", [update[0]]),
+            update[0] === 0 ? t("chu-nhat") : t("thu-_day", [update[0] + 1]),
             update[0] > currentDay ? t("tuan-sau") : t("tuan-nay"),
           ]),
     ])
