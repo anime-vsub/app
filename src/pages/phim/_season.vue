@@ -1250,12 +1250,13 @@ async function sendRate() {
 // ================= analytics ===================
 const analytics = getAnalytics()
 watch(
-  [seasonId, currentMetaSeason, currentMetaChap],
-  async ([seasonId, currentMetaSeason, currentMetaChap]) => {
+  [seasonId, currentMetaSeason, currentMetaChap, () => data.name],
+  async ([seasonId, currentMetaSeason, currentMetaChap, name]) => {
     if (!currentMetaSeason) return
     if (!currentMetaChap) return
+    if (!name) return
     logEvent(analytics, "watching", {
-      value: `${currentMetaSeason.name} - Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
+      value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
     })
   },
   { immediate: true }
