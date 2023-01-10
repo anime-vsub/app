@@ -1250,7 +1250,7 @@ async function sendRate() {
 // ================= analytics ===================
 const analytics = getAnalytics()
 watch(
-  [seasonId, currentMetaSeason, currentMetaChap, () => data.name],
+  [seasonId, currentMetaSeason, currentMetaChap, () => data.value?.name],
   async ([seasonId, currentMetaSeason, currentMetaChap, name]) => {
     if (!currentMetaSeason) return
     if (!currentMetaChap) return
