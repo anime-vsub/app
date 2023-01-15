@@ -6,7 +6,10 @@
   "editor.codeActionsOnSave": ["source.fixAll.eslint"],
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "i18n-ally.localesPaths": ["src/i18n"],
+  "i18n-ally.localesPaths": ["src/i18n", "src/i18n/messages"],
   "cSpell.words": ["phút"],
-  "ionic.previewInEditor": true
+  "ionic.previewInEditor": true,
+  "vue-i18n.i18nPaths": "src/i18n",
+  "i18n-ally.sourceLanguage": "vi-VN",
+  "i18n-ally.keystyle": "nested"
 }
