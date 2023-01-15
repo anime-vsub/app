@@ -26,7 +26,11 @@
           }"
           @click="activeIndex = index"
         >
-          {{ dayTextToNum(item.day) === 0 ? "CN" : `T${dayTextToNum(item.day) + 1}` }}
+          {{
+            dayTextToNum(item.day) === 0
+              ? "CN"
+              : `T${dayTextToNum(item.day) + 1}`
+          }}
           <br />
           <span
             class="relative inline-block before:content-DEFAULT before:hidden before:absolute before:h-[2px] before:w-full before:bg-[currentColor] before:bottom-[-4px] pb-[2px] before:rounded"
