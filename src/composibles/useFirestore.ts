@@ -9,7 +9,7 @@ import { onSnapshot } from "@firebase/firestore"
 import type { MaybeRef } from "@vueuse/shared"
 import { isDef, tryOnScopeDispose } from "@vueuse/shared"
 import type { Ref } from "vue"
-import { computed, isRef, ref, watch } from "vue"
+import { computed, isRef, ref } from "vue"
 
 // eslint-disable-next-line functional/no-mixed-type
 export interface UseFirestoreOptions {
@@ -38,24 +38,24 @@ export function useFirestore<T extends DocumentData>(
   maybeDocRef: MaybeRef<DocumentReference<T> | false>,
   initialValue: T,
   options?: UseFirestoreOptions
-): Ref<T | null>
+): [Ref<T | null>, () => void]
 export function useFirestore<T extends DocumentData>(
   maybeDocRef: MaybeRef<Query<T> | false>,
   initialValue: T[],
   options?: UseFirestoreOptions
-): Ref<T[]>
+): [Ref<T[]>, () => void]
 
 // nullable initial values
 export function useFirestore<T extends DocumentData>(
   maybeDocRef: MaybeRef<DocumentReference<T> | false>,
   initialValue?: T | undefined,
   options?: UseFirestoreOptions
-): Ref<T | undefined | null>
+): [Ref<T | undefined | null>, () => void]
 export function useFirestore<T extends DocumentData>(
   maybeDocRef: MaybeRef<Query<T> | false>,
   initialValue?: T[],
   options?: UseFirestoreOptions
-): Ref<T[] | undefined>
+): [Ref<T[] | undefined>, () => void]
 
 /**
  * Reactive Firestore binding. Making it straightforward to always keep your
@@ -68,7 +68,7 @@ export function useFirestore<T extends DocumentData>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialValue: any = undefined,
   options: UseFirestoreOptions = {}
-) {
+): [Ref<unknown>, () => void] {
   const {
     errorHandler = (err: Error) => console.error(err),
     autoDispose = true,
@@ -105,7 +105,7 @@ export function useFirestore<T extends DocumentData>(
     }
   }
 
-  watch(refOfDocRef, run)
+  // watch(refOfDocRef, run)
 
   if (autoDispose) {
     tryOnScopeDispose(() => {
@@ -115,12 +115,15 @@ export function useFirestore<T extends DocumentData>(
 
   // eslint-disable-next-line functional/no-let
   let setuped = false
-  return computed(() => {
-    if (!setuped) {
-      setuped = true
-      run(refOfDocRef.value)
-    }
+  return [
+    computed(() => {
+      if (!setuped) {
+        setuped = true
+        run(refOfDocRef.value)
+      }
 
-    return data.value
-  })
+      return data.value
+    }),
+    () => run(refOfDocRef.value),
+  ]
 }

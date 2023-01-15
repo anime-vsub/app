@@ -188,6 +188,16 @@ const routes: RouteRecordRaw[] = [
           },
         },
       },
+      {
+        path: "playlist/:playlist",
+        component: () => import("pages/tai-khoan/playlist/[playlist].vue"),
+        meta: {
+          screen: {
+            name: "account",
+            override: "playlist",
+          },
+        },
+      },
     ],
   },
 
