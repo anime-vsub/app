@@ -24,5 +24,5 @@ interface Http {
 }
 
 interface Window {
-  Http?: Http
+  Http: Http
 }
