@@ -73,6 +73,7 @@
     "@capacitor/browser": "^4.0.1",
     "@capacitor/core": "^4.3.0",
     "@capacitor/device": "^4.0.1",
+    "@capacitor/filesystem": "^4.1.4",
     "@capacitor/haptics": "^4.0.1",
     "@capacitor/preferences": "^4.0.1",
     "@capacitor/share": "^4.0.1",
