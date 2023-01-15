@@ -79,7 +79,7 @@
     <SkeletonGridCard class="mt-3" :count="12" />
   </div>
 
-  <div v-else class="mx-4">
+  <div v-else-if="data" class="mx-4">
     <q-responsive :ratio="16 / 9" />
 
     <div v-ripple @click="showDialogInforma = true" class="relative mt-6">
