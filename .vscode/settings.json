@@ -15,7 +15,8 @@
     "src/components/BrtPlayer.vue": ["Space", "Space"],
     "src/pages/[_type-normal]/[value].vue": [" • "],
     "src/pages/phim/_season.vue": [
-      "${nameSeason} (${chaps[0].name} - ${\n            chaps[chaps.length - 1].name\n          })"
+      "${nameSeason} (${chaps[0].name} - ${\n            chaps[chaps.length - 1].name\n          })",
+      "${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})"
     ],
     "src/pages/tai-khoan/index.vue": ["bg-dark text-light-9"],
     "src/pages/lich-chieu-phim.vue": [

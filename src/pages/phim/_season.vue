@@ -331,6 +331,22 @@
           />
         </div>
       </div>
+
+      <!-- comment embed -->
+      <div class="mt-5 flex items-center justify-between flex-nowrap">
+        <span class="text-subtitle1 text-[#eee]">{{ t("binh-luan") }}</span>
+        <q-toggle
+          v-model="settingsStore.ui.commentAnime"
+          color="main"
+          size="sm"
+        />
+      </div>
+      <EmbedFbCmt
+        v-if="settingsStore.ui.commentAnime"
+        :href="`http://animevietsub.tv/phim/-${seasonId}/`"
+        :lang="locale?.replace('-', '_')"
+        class="bg-gray-400 rounded-xl mt-3 overflow-hidden"
+      />
     </div>
     <div class="col-3">
       <q-responsive
@@ -392,6 +408,7 @@ import ScreenError from "components/ScreenError.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
+import { EmbedFbCmt } from "embed-fbcmt-client/vue"
 import {
   QBtn,
   QCard,
@@ -444,7 +461,7 @@ import type {
 
 const route = useRoute()
 const router = useRouter()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const playlistStore = usePlaylistStore()
 const historyStore = useHistoryStore()
