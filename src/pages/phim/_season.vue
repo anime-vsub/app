@@ -199,6 +199,19 @@
         <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
         <span class="text-[12px] mt-1">Chia sẻ</span>
       </q-btn>
+      <q-btn
+        stack
+        no-caps
+        class="mr-4 text-weight-normal"
+        @click="showDialogAddToPlaylist = true"
+      >
+        <Icon
+          icon="fluent:add-square-multiple-16-regular"
+          width="28"
+          height="28"
+        />
+        <span class="text-[12px] mt-1">{{ t("luu") }}</span>
+      </q-btn>
     </div>
 
     <div
@@ -477,12 +490,28 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+
+  <!-- need component ScreenError checker error -->
+
+  <AddToPlaylist
+    v-model="showDialogAddToPlaylist"
+    :exists="
+      (id) =>
+        currentSeason
+          ? playlistStore.hasAnimeOfPlaylist(id, currentSeason)
+          : false
+    "
+    @action:add="addAnimePlaylist"
+    @action:del="removeAnimePlaylist"
+    @after-create-playlist="addAnimePlaylist"
+  />
 </template>
 
 <script lang="ts" setup>
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
+import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import GridCard from "components/GridCard.vue"
@@ -523,6 +552,7 @@ import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { useSettingsStore } from "stores/settings"
+import { usePlaylistStore } from "stores/playlist"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -535,6 +565,7 @@ import type {
   Season,
 } from "./_season.interface"
 import { ResponseDataSeasonSuccess } from "./_season.interface"
+
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -545,6 +576,7 @@ const route = useRoute()
 const router = useRouter()
 const historyStore = useHistoryStore()
 const settingsStore = useSettingsStore()
+const playlistStore = usePlaylistStore()
 const { t, locale } = useI18n()
 
 const currentSeason = computed(() => route.params.season as string)
@@ -567,6 +599,7 @@ const { data, run, error, loading } = useRequest(
   {
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
+      if (!realIdCurrentSeason.value) return
       run()
     },
   }
@@ -1084,6 +1117,50 @@ function share() {
 // ================ status ================
 const showDialogChapter = ref(false)
 const showDialogInforma = ref(false)
+
+// =========== playlist ===========
+const showDialogAddToPlaylist = ref(false)
+async function addAnimePlaylist(idPlaylist: string) {
+  const { value: metaSeason } = currentMetaSeason
+  if (!metaSeason) return
+  if (!currentDataSeason.value || !data.value) return
+  if (!currentSeason.value) return
+  if (!currentChap.value) return
+  if (!currentMetaChap.value) return
+  try {
+    await playlistStore.addAnimeToPlaylist(idPlaylist, currentSeason.value, {
+      name: data.value.name,
+      poster: currentDataSeason.value?.poster ?? data.value.poster,
+      nameSeason: metaSeason.name,
+      chap: currentChap.value,
+      nameChap: currentMetaChap.value.name,
+    })
+    $q.notify({
+      position: "bottom-right",
+      message: t("da-theo-vao-danh-sach-phat"),
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
+  }
+}
+async function removeAnimePlaylist(idPlaylist: string) {
+  if (!currentSeason.value) return
+  try {
+    await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)
+    $q.notify({
+      position: "bottom-right",
+      message: t("da-xoa-khoi-danh-sach-phat"),
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

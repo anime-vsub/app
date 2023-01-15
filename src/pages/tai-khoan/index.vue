@@ -184,6 +184,31 @@
       />
     </div>
 
+    <div class="text-subtitle1 mx-3 mt-4">Danh sách phát</div>
+    <q-list class="mt-4">
+      <q-item
+        v-for="item in playlistStore.playlists"
+        :key="item.id"
+        :to="`/tai-khoan/playlist/${item.id}`"
+        clickable
+        v-ripple
+        class="min-h-0 my-2 rounded-xl"
+        active-class=""
+        exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
+      >
+        <q-item-section avatar class="pr-0 min-w-0">
+          <Icon
+            icon="fluent:navigation-play-20-regular"
+            width="23"
+            height="23"
+          />
+        </q-item-section>
+        <q-item-section class="ml-5">
+          <q-item-label class="text-[16px]">{{ item.name }}</q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
+
     <q-list class="mt-4">
       <q-item clickable v-ripple to="/tai-khoan/settings">
         <q-item-section avatar>
@@ -330,6 +355,7 @@ import { TuPhim } from "src/apis/runs/tu-phim"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
+import { usePlaylistStore } from "stores/playlist"
 import { ref, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
@@ -345,6 +371,7 @@ const password = ref("")
 
 const $q = useQuasar()
 const authStore = useAuthStore()
+const playlistStore = usePlaylistStore()
 
 async function login() {
   const loader = $q.loading.show({

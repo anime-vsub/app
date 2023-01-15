@@ -62,8 +62,7 @@ export const useHistoryStore = defineStore("history", () => {
   }
 
   const last30ItemError = ref<Error | null>(null)
-  const _countRefeshLast30Item = ref(0)
-  const _last30Item = useFirestore<
+  const [_last30Item, refreshLast30Item] = useFirestore<
     Required<
       HistoryItem & {
         id: string
@@ -71,9 +70,6 @@ export const useHistoryStore = defineStore("history", () => {
     >[]
   >(
     computed(() => {
-      // eslint-disable-next-line no-unused-expressions
-      _countRefeshLast30Item.value
-
       last30ItemError.value = null
       if (!authStore.uid) return null
 
@@ -99,9 +95,6 @@ export const useHistoryStore = defineStore("history", () => {
       return item
     })
   )
-  function refreshLast30ItemError() {
-    _countRefeshLast30Item.value++
-  }
 
   function loadMoreAfter(
     lastDoc?: QueryDocumentSnapshot<Required<HistoryItem>>
@@ -330,7 +323,7 @@ export const useHistoryStore = defineStore("history", () => {
   return {
     last30Item,
     last30ItemError,
-    refreshLast30ItemError,
+    refreshLast30Item,
     loadMoreAfter,
 
     createSeason,
