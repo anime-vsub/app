@@ -45,7 +45,7 @@
   </template>
 
   <div
-    v-if="loading || !data"
+    v-if="loading && !data"
     class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px]"
   >
     <q-responsive :ratio="16 / 9" />
@@ -287,6 +287,22 @@
     <div class="px-1 mx-[-8px]">
       <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
     </div>
+
+    <!-- comment embed -->
+    <div class="mt-5 flex items-center justify-between flex-nowrap">
+      <span class="text-subtitle1 text-[#eee]">Bình luận</span>
+      <q-toggle
+        v-model="settingsStore.ui.commentAnime"
+        color="main"
+        size="sm"
+      />
+    </div>
+    <EmbedFbCmt
+      v-if="settingsStore.ui.commentAnime"
+      :href="`http://animevietsub.tv/phim/-${seasonId}/`"
+      :lang="locale?.replace('-', '_')"
+      class="bg-gray-400 rounded-xl mt-3 overflow-hidden"
+    />
   </div>
 
   <!-- bottom sheet -->
@@ -461,9 +477,6 @@
       </q-card-section>
     </q-card>
   </q-dialog>
-  <!--
-      followed
-    -->
 </template>
 
 <script lang="ts" setup>
@@ -509,6 +522,7 @@ import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
+import { useSettingsStore } from "stores/settings"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -530,7 +544,8 @@ import { ResponseDataSeasonSuccess } from "./_season.interface"
 const route = useRoute()
 const router = useRouter()
 const historyStore = useHistoryStore()
-const { t } = useI18n()
+const settingsStore = useSettingsStore()
+const { t, locale } = useI18n()
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
