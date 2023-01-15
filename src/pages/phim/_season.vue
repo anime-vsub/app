@@ -345,7 +345,8 @@
         v-if="settingsStore.ui.commentAnime"
         :href="`http://animevietsub.tv/phim/-${seasonId}/`"
         :lang="locale?.replace('-', '_')"
-        class="bg-gray-400 rounded-xl mt-3 overflow-hidden"
+        no_socket
+        class="bg-gray-300 rounded-xl mt-3 overflow-hidden"
       />
     </div>
     <div class="col-3">
