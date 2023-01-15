@@ -3,14 +3,12 @@ import { CapacitorHttp } from "@capacitor/core"
 import { C_URL } from "src/constants"
 
 const isSpa = process.env.MODE === "spa"
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Http: typeof CapacitorHttp = isSpa ? (window as any).Http : CapacitorHttp
 
 export async function get(
   url: string | HttpOptions,
   headers?: Record<string, string>
 ) {
-  const response = await Http.get(
+  const response = await (isSpa ? window.Http : CapacitorHttp).get(
     typeof url === "object"
       ? url
       : {
@@ -56,7 +54,7 @@ export async function post(
   data: Record<string, number | string | boolean>,
   headers?: Record<string, string>
 ) {
-  const response = await Http.post({
+  const response = await (isSpa ? window.Http : CapacitorHttp).post({
     url: C_URL + url,
     headers: {
       "user-agent":
