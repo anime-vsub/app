@@ -74,7 +74,7 @@
   </div>
 
   <div
-    v-if="loading"
+    v-if="loading && !data"
     class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px] row"
   >
     <div class="col-9 pr-4">
@@ -548,8 +548,12 @@ watch(
   { immediate: true }
 )
 watch(
-  () => data.value?.season,
+  () => {
+    if (!data.value) return false
+    return data.value.season
+  },
   (season) => {
+    if (season === false) return
     // check season on tasks
     if (
       seasons.value?.some((item) => item.value === realIdCurrentSeason.value)
