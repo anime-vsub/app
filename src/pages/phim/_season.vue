@@ -558,14 +558,29 @@ const { data, run, error, loading } = useRequest(
         if (result) Object.assign(result.value, text)
         else result = ref(text as unknown as Awaited<ReturnType<typeof PhimId>>)
       }),
-      PhimId(realIdCurrentSeason.value).then((data) => {
-        // eslint-disable-next-line promise/always-return
+      PhimId(realIdCurrentSeason.value).then(async (data) => {
         if (result) Object.assign(result.value, data)
         else result = ref(data)
-        // eslint-disable-next-line promise/catch-or-return, promise/no-nesting, @typescript-eslint/no-explicit-any
-        fs.writeFile(`/phim/${id}.json`, data as unknown as any).then(() =>
+        // eslint-disable-next-line promise/always-return
+        switch (
+          await fs
+            .lstat("/phim")
+            // eslint-disable-next-line promise/no-nesting
+            .then((res) => res.isDirectory())
+            // eslint-disable-next-line promise/no-nesting
+            .catch(() => null)
+        ) {
+          case false:
+            await fs.unlink("/phim")
+            await fs.mkdir("/phim")
+            break
+          case null:
+            await fs.mkdir("/phim")
+        }
+        // eslint-disable-next-line promise/catch-or-return, promise/no-nesting, @typescript-eslint/no-explicit-any, promise/always-return
+        fs.writeFile(`/phim/${id}.json`, data as unknown as any).then(() => {
           console.log("[fs]: save cache to fs %s", id)
-        )
+        })
       }),
     ])
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
