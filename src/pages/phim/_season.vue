@@ -552,9 +552,9 @@ import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
-import type { Ref } from "vue";
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
+import type { Ref } from "vue";
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
