@@ -27,6 +27,7 @@ export const fs = {
   async lstat(path: string) {
     return Filesystem.stat({
       path,
+      directory: Directory.Cache,
     }).then(({ type }) => {
       return {
         isDirectory: () => type === "directory",
