@@ -27,7 +27,7 @@ import { app } from "src/boot/firebase"
 import { useFirestore } from "src/composibles/useFirestore"
 import dayjs from "src/logic/dayjs"
 import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
-import { computed } from "vue"
+import { computed, ref } from "vue"
 
 import { useAuthStore } from "./auth"
 
@@ -35,9 +35,11 @@ export const usePlaylistStore = defineStore("playlist", () => {
   const db = getFirestore(app)
   const authStore = useAuthStore()
 
+  const playlistsError = ref<Error | null>(null)
   // eslint-disable-next-line no-use-before-define
-  const playlists = useFirestore<Playlist_Playlist[]>(
+  const [playlists, refreshPlaylists] = useFirestore<Playlist_Playlist[]>(
     computed(() => {
+      playlistsError.value = null
       if (!authStore.uid) return null
 
       const userRef = doc(db, "users", authStore.uid)
@@ -46,7 +48,12 @@ export const usePlaylistStore = defineStore("playlist", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }) as unknown as any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    null as any
+    null as any,
+    {
+      errorHandler(err) {
+        playlistsError.value = err
+      },
+    }
   )
 
   interface Playlist_Movies_Movie {
@@ -311,6 +318,8 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   return {
     playlists,
+    playlistsError,
+    refreshPlaylists,
     // getMetaPlaylist,
     createPlaylist,
     deletePlaylist,

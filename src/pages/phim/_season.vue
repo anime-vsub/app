@@ -45,7 +45,7 @@
   </template>
 
   <div
-    v-if="loading || !data"
+    v-if="loading && !data"
     class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px]"
   >
     <q-responsive :ratio="16 / 9" />
@@ -79,7 +79,7 @@
     <SkeletonGridCard class="mt-3" :count="12" />
   </div>
 
-  <div v-else class="mx-4">
+  <div v-else-if="data" class="mx-4">
     <q-responsive :ratio="16 / 9" />
 
     <div v-ripple @click="showDialogInforma = true" class="relative mt-6">
@@ -199,6 +199,19 @@
         <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
         <span class="text-[12px] mt-1">Chia sẻ</span>
       </q-btn>
+      <q-btn
+        stack
+        no-caps
+        class="mr-4 text-weight-normal"
+        @click="showDialogAddToPlaylist = true"
+      >
+        <Icon
+          icon="fluent:add-square-multiple-16-regular"
+          width="28"
+          height="28"
+        />
+        <span class="text-[12px] mt-1">{{ t("luu") }}</span>
+      </q-btn>
     </div>
 
     <div
@@ -287,6 +300,22 @@
     <div class="px-1 mx-[-8px]">
       <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
     </div>
+
+    <!-- comment embed -->
+    <div class="mt-5 flex items-center justify-between flex-nowrap">
+      <span class="text-subtitle1 text-[#eee]">Bình luận</span>
+      <q-toggle
+        v-model="settingsStore.ui.commentAnime"
+        color="main"
+        size="sm"
+      />
+    </div>
+    <EmbedFbCmt
+      v-if="settingsStore.ui.commentAnime"
+      :href="`http://animevietsub.tv/phim/-${seasonId}/`"
+      :lang="locale?.replace('-', '_')"
+      class="bg-gray-400 rounded-xl mt-3 overflow-hidden"
+    />
   </div>
 
   <!-- bottom sheet -->
@@ -461,15 +490,28 @@
       </q-card-section>
     </q-card>
   </q-dialog>
-  <!--
-      followed
-    -->
+
+  <!-- need component ScreenError checker error -->
+
+  <AddToPlaylist
+    v-model="showDialogAddToPlaylist"
+    :exists="
+      (id) =>
+        currentSeason
+          ? playlistStore.hasAnimeOfPlaylist(id, currentSeason)
+          : false
+    "
+    @action:add="addAnimePlaylist"
+    @action:del="removeAnimePlaylist"
+    @after-create-playlist="addAnimePlaylist"
+  />
 </template>
 
 <script lang="ts" setup>
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
+import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import GridCard from "components/GridCard.vue"
@@ -510,7 +552,9 @@ import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
-import type { Ref} from "vue";
+import type { Ref } from "vue";
+import { usePlaylistStore } from "stores/playlist"
+import { useSettingsStore } from "stores/settings"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -523,6 +567,7 @@ import type {
   Season,
 } from "./_season.interface"
 import { ResponseDataSeasonSuccess } from "./_season.interface"
+
 // ================ follow ================
 // =======================================================
 // import SwipableBottom from "components/SwipableBottom.vue"
@@ -532,7 +577,9 @@ import { ResponseDataSeasonSuccess } from "./_season.interface"
 const route = useRoute()
 const router = useRouter()
 const historyStore = useHistoryStore()
-const { t } = useI18n()
+const settingsStore = useSettingsStore()
+const playlistStore = usePlaylistStore()
+const { t, locale } = useI18n()
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -590,6 +637,7 @@ const { data, run, error, loading } = useRequest(
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
       // data.value = undefined
+      if (!realIdCurrentSeason.value) return
       run()
     },
   }
@@ -1107,6 +1155,50 @@ function share() {
 // ================ status ================
 const showDialogChapter = ref(false)
 const showDialogInforma = ref(false)
+
+// =========== playlist ===========
+const showDialogAddToPlaylist = ref(false)
+async function addAnimePlaylist(idPlaylist: string) {
+  const { value: metaSeason } = currentMetaSeason
+  if (!metaSeason) return
+  if (!currentDataSeason.value || !data.value) return
+  if (!currentSeason.value) return
+  if (!currentChap.value) return
+  if (!currentMetaChap.value) return
+  try {
+    await playlistStore.addAnimeToPlaylist(idPlaylist, currentSeason.value, {
+      name: data.value.name,
+      poster: currentDataSeason.value?.poster ?? data.value.poster,
+      nameSeason: metaSeason.name,
+      chap: currentChap.value,
+      nameChap: currentMetaChap.value.name,
+    })
+    $q.notify({
+      position: "bottom-right",
+      message: t("da-theo-vao-danh-sach-phat"),
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
+  }
+}
+async function removeAnimePlaylist(idPlaylist: string) {
+  if (!currentSeason.value) return
+  try {
+    await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)
+    $q.notify({
+      position: "bottom-right",
+      message: t("da-xoa-khoi-danh-sach-phat"),
+    })
+  } catch (err) {
+    $q.notify({
+      position: "bottom-right",
+      message: (err as Error).message,
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>
