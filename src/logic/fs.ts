@@ -24,6 +24,15 @@ export const fs = {
       encoding: Encoding.UTF8,
     });
   },
+  async lstat(path: string) {
+    return Filesystem.stat({
+      path,
+    }).then(({ type }) => {
+      return {
+        isDirectory: () => type === "directory",
+      };
+    });
+  },
   async unlink(path: string) {
     path = removeFirstSlash(path);
 
