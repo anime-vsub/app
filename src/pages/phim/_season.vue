@@ -269,6 +269,7 @@
           :progressChaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
                                 "
+          scroll-x
         />
       </q-tab-panel>
     </q-tab-panels>

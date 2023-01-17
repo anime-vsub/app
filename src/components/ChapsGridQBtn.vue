@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { QBtn } from "quasar"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
-import { scrollYIntoView } from "src/helpers/scrollIntoView"
+import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import { ref, watchEffect } from "vue"
 
 const props = defineProps<{
@@ -52,11 +52,12 @@ const props = defineProps<{
       dur: number
     }
   > | null
+  scrollX?: boolean
 }>()
 
 const activeRef = ref<QBtn>()
 function scrollToView() {
-  if (activeRef.value?.$el) scrollYIntoView(activeRef.value.$el)
+  if (activeRef.value?.$el) (props.scrollX ? scrollXIntoView : scrollYIntoView)(activeRef.value.$el)
 }
 
 watchEffect(scrollToView)
