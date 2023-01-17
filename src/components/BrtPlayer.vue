@@ -676,6 +676,7 @@ import {
   throttle,
   useQuasar,
 } from "quasar"
+import { useMemoControl } from "src/composibles/memo-control"
 import { DELAY_SAVE_VIEWING_PROGRESS, playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
