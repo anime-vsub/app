@@ -547,6 +547,7 @@ import { C_URL, labelToQuality } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
+import { fs } from "src/logic/fs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
@@ -554,6 +555,7 @@ import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
+import type { Ref } from "vue";
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -591,15 +593,51 @@ const realIdCurrentSeason = computed(() => {
 })
 
 const { data, run, error, loading } = useRequest(
-  () => {
+  async () => {
     // const { }
-    return realIdCurrentSeason.value
-      ? PhimId(realIdCurrentSeason.value)
-      : Promise.reject()
+    const id = realIdCurrentSeason.value
+    if (!id) return Promise.reject()
+    // eslint-disable-next-line functional/no-let
+    let result: Ref<Awaited<ReturnType<typeof PhimId>>>
+    await Promise.any([
+      fs.readFile(`/phim/${id}.json`, "utf8").then((text) => {
+        console.log("[fs]: use cache from fs %s", id)
+        // eslint-disable-next-line promise/always-return
+        if (result) Object.assign(result.value, text)
+        else result = ref(text as unknown as Awaited<ReturnType<typeof PhimId>>)
+      }),
+      PhimId(realIdCurrentSeason.value).then(async (data) => {
+        if (result) Object.assign(result.value, data)
+        else result = ref(data)
+        // eslint-disable-next-line promise/always-return
+        switch (
+          await fs
+            .lstat("/phim")
+            // eslint-disable-next-line promise/no-nesting
+            .then((res) => res.isDirectory())
+            // eslint-disable-next-line promise/no-nesting
+            .catch(() => null)
+        ) {
+          case false:
+            await fs.unlink("/phim")
+            await fs.mkdir("/phim")
+            break
+          case null:
+            await fs.mkdir("/phim")
+        }
+        // eslint-disable-next-line promise/catch-or-return, promise/no-nesting, @typescript-eslint/no-explicit-any, promise/always-return
+        fs.writeFile(`/phim/${id}.json`, data as unknown as any).then(() => {
+          console.log("[fs]: save cache to fs %s", id)
+        })
+      }),
+    ])
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return result!.value
   },
   {
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
+      // data.value = undefined
       if (!realIdCurrentSeason.value) return
       run()
     },
