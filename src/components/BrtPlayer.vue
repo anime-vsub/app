@@ -390,7 +390,7 @@
             dense
             flat
             no-caps
-            class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
+            class="flex-1 text-weight-norrmal text-[13px] py-2 c--main"
             v-for="{ name, value } in playbackRates"
             :key="name"
             :class="artPlaybackRate === value ? 'c--main' : 'text-stone-200'"
