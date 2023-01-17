@@ -10,6 +10,7 @@ specifiers:
   '@capacitor/cli': ^4.3.0
   '@capacitor/core': ^4.3.0
   '@capacitor/device': ^4.0.1
+  '@capacitor/filesystem': ^4.1.4
   '@capacitor/haptics': ^4.0.1
   '@capacitor/preferences': ^4.0.1
   '@capacitor/share': ^4.0.1
@@ -27,6 +28,7 @@ dependencies:
   '@capacitor/cli': 4.3.0
   '@capacitor/core': 4.3.0
   '@capacitor/device': 4.0.1_@capacitor+core@4.3.0
+  '@capacitor/filesystem': 4.1.4_@capacitor+core@4.3.0
   '@capacitor/haptics': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/preferences': 4.0.1_@capacitor+core@4.3.0
   '@capacitor/share': 4.0.1_@capacitor+core@4.3.0
@@ -143,6 +145,14 @@ packages:
       '@capacitor/core': ^3.0.0
     dependencies:
       '@capacitor/core': 3.8.0
+    dev: false
+
+  /@capacitor/filesystem/4.1.4_@capacitor+core@4.3.0:
+    resolution: {integrity: sha512-ivko1RNK4hq63xhMacq8D6D97N5/SAafTsrmY/pghYrG6Cl2SEY0+IgRu7V9/VWeN3FSplyUPucjUTAFQxXN5g==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.3.0
     dev: false
 
   /@capacitor/haptics/4.0.1_@capacitor+core@4.3.0:
