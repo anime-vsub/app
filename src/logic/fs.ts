@@ -1,62 +1,19 @@
-import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
+import type { Directory } from "@capacitor/filesystem"
+import { Filesystem } from "@capacitor/filesystem"
+import { createFilesystem } from "capacitor-fs"
 
-import { removeFirstSlash } from "./removeFirstSlash";
+const fsStore = new Map<Directory, ReturnType<typeof createFilesystem>>()
+export function useFs(directory: Directory) {
+  const inStore = fsStore.get(directory)
 
-export const fs = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-  async readFile(path: string, _encode: "utf8"): Promise<any> {
-    return JSON.parse(
-      (
-        await Filesystem.readFile({
-          path: removeFirstSlash(path),
-          directory: Directory.Cache,
-          encoding: Encoding.UTF8,
-        })
-      ).data
-    );
-  },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async writeFile(path: string, data: any): Promise<void> {
-    await Filesystem.writeFile({
-      path: removeFirstSlash(path),
-      data: JSON.stringify(data),
-      directory: Directory.Cache,
-      encoding: Encoding.UTF8,
-    });
-  },
-  async lstat(path: string) {
-    return Filesystem.stat({
-      path,
-      directory: Directory.Cache,
-    }).then(({ type }) => {
-      return {
-        isDirectory: () => type === "directory",
-      };
-    });
-  },
-  async unlink(path: string) {
-    path = removeFirstSlash(path);
+  if (inStore) return inStore
 
-    const { type } = await Filesystem.stat({
-      path,
-    });
+  const fs = createFilesystem(Filesystem, {
+    directory,
+    base64Alway: true,
+    watcher: false,
+  })
+  fsStore.set(directory, fs)
 
-    if (type === "directory")
-      await Filesystem.rmdir({
-        path,
-        directory: Directory.Cache,
-        recursive: true,
-      });
-    else
-      await Filesystem.deleteFile({
-        path,
-        directory: Directory.Cache,
-      });
-  },
-  async mkdir(path: string) {
-    await Filesystem.mkdir({
-      path: removeFirstSlash(path),
-      directory: Directory.Cache,
-    });
-  },
-};
+  return fs
+}
