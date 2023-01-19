@@ -271,18 +271,18 @@
                 <div
                   class="art-progress-loaded"
                   :style="{
-                    width: `${artPercentageResourceLoaded * 100}%`,
+                    width: percentageResourceLoadedText,
                   }"
                 />
                 <div
                   class="art-progress-played"
                   :style="{
-                    width: `${(artCurrentTime / artDuration) * 100}%`,
+                    width: percentagePlaytimeText,
                   }"
                 >
                   <div
                     class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
-                    :data-title="parseTime(artCurrentTime)"
+                    :data-title="playtimeText"
                     @touchstart.stop="currentingTime = true"
                     @touchmove.stop="onIndicatorMove"
                     @touchend.stop="onIndicatorEnd"
@@ -300,8 +300,8 @@
                   data-index="30"
                   style="cursor: auto"
                 >
-                  {{ parseTime(artCurrentTime) }} /
-                  {{ parseTime(artDuration) }}
+                  {{ playtimeText }} /
+                  {{ durationText }}
                 </div>
               </div>
               <div class="art-controls-center"></div>
@@ -676,6 +676,7 @@ import {
   throttle,
   useQuasar,
 } from "quasar"
+import { useMemoControl } from "src/composibles/memo-control"
 import { DELAY_SAVE_VIEWING_PROGRESS, playbackRates } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
@@ -1569,6 +1570,24 @@ const showDialogQuality = ref(false)
 watch(showDialogChapter, (status) => {
   if (!status) seasonActive.value = props.currentSeason
 })
+
+// memo-control time and progress
+const showArtLayerController = computed(
+  () => holdedBD.value || artControlShow.value
+)
+
+const playtimeText = useMemoControl(() => {
+  return parseTime(artCurrentTime.value)
+}, showArtLayerController)
+const durationText = useMemoControl(() => {
+  return parseTime(artDuration.value)
+}, showArtLayerController)
+const percentageResourceLoadedText = useMemoControl(() => {
+  return `${artPercentageResourceLoaded.value * 100}%`
+}, showArtLayerController)
+const percentagePlaytimeText = useMemoControl(() => {
+  return `${(artCurrentTime.value / artDuration.value) * 100}%`
+}, showArtLayerController)
 </script>
 
 <style lang="scss" scoped>
