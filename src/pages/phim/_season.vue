@@ -510,6 +510,7 @@
 
 <script lang="ts" setup>
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
+import { Directory } from "@capacitor/filesystem"
 import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
 import AddToPlaylist from "components/AddToPlaylist.vue"
@@ -547,7 +548,7 @@ import { C_URL, labelToQuality } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
-import { fs } from "src/logic/fs"
+import { useFs } from "src/logic/fs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
@@ -581,6 +582,7 @@ const historyStore = useHistoryStore()
 const settingsStore = useSettingsStore()
 const playlistStore = usePlaylistStore()
 const { t, locale } = useI18n()
+const fsCache = useFs(Directory.Cache)
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -600,7 +602,7 @@ const { data, run, error, loading } = useRequest(
     // eslint-disable-next-line functional/no-let
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
     await Promise.any([
-      fs.readFile(`/phim/${id}.json`, "utf8").then((text) => {
+      fsCache.readFile(`/phim/${id}.json`).then((text) => {
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
         if (result) Object.assign(result.value, text)
@@ -611,7 +613,7 @@ const { data, run, error, loading } = useRequest(
         else result = ref(data)
         // eslint-disable-next-line promise/always-return
         switch (
-          await fs
+          await fsCache
             .lstat("/phim")
             // eslint-disable-next-line promise/no-nesting
             .then((res) => res.isDirectory())
@@ -619,14 +621,14 @@ const { data, run, error, loading } = useRequest(
             .catch(() => null)
         ) {
           case false:
-            await fs.unlink("/phim")
-            await fs.mkdir("/phim")
+            await fsCache.unlink("/phim")
+            await fsCache.mkdir("/phim")
             break
           case null:
-            await fs.mkdir("/phim")
+            await fsCache.mkdir("/phim")
         }
         // eslint-disable-next-line promise/catch-or-return, promise/no-nesting, @typescript-eslint/no-explicit-any, promise/always-return
-        fs.writeFile(`/phim/${id}.json`, data as unknown as any).then(() => {
+        fsCache.writeFile(`/phim/${id}.json`, data as unknown as any).then(() => {
           console.log("[fs]: save cache to fs %s", id)
         })
       }),
