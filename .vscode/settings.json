@@ -7,7 +7,7 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "i18n-ally.localesPaths": ["src/i18n", "src/i18n/messages"],
-  "cSpell.words": ["phút"],
+  "cSpell.words": ["ENDLIST", "EXTINF", "Phim", "phút", "Rawd"],
   "ionic.previewInEditor": true,
   "vue-i18n.i18nPaths": "src/i18n",
   "i18n-ally.sourceLanguage": "vi-VN",
