@@ -23,6 +23,7 @@ import { vi } from "vitest"
 import {
   downloadInfoAnime,
   downloadOfflineAnime,
+  getListDownload,
   getStatusDownload,
 } from "./offline-anime"
 
@@ -245,6 +246,103 @@ describe("offline-anime", () => {
           })) as { loaded: number; total: number }
         ).loaded
       ).toBe(0)
+    })
+  })
+  describe("getListDownload", () => {
+    test("should list normal", async () => {
+      try {
+        fs.rmSync(dir, { recursive: true })
+      } catch {}
+
+      await downloadInfoAnime({
+        season: "s1",
+        seasonName: "name s1",
+        info: {
+          name: "test",
+          poster:
+            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+          image:
+            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+          description: "description",
+          authors: [],
+        },
+      })
+      await downloadOfflineAnime({
+        season: "s1",
+        chap: "[chap]",
+        chapName: "chap name",
+
+        file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onprogress() {},
+        signal: new AbortController().signal,
+      })
+
+      const result = await getListDownload()
+
+      expect(result.size).toBe(1)
+      expect(result.get("s1").chaps.size).toBe(1)
+      expect(result.get("s1").chaps.get("[chap]").status).toBe(true)
+    }, 60_000)
+    test("should list paused", async () => {
+      try {
+        fs.rmSync(dir, { recursive: true })
+      } catch {}
+
+      await downloadInfoAnime({
+        season: "s1",
+        seasonName: "name s1",
+        info: {
+          name: "test",
+          poster:
+            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+          image:
+            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+          description: "description",
+          authors: [],
+        },
+      })
+      const abort = new AbortController()
+      await downloadOfflineAnime({
+        season: "s1",
+        chap: "[chap]",
+        chapName: "chap name",
+
+        file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
+        onprogress() {
+          abort.abort()
+        },
+        signal: abort.signal,
+      }).catch(NOOP)
+
+      const result = await getListDownload()
+
+      expect(result.size).toBe(1)
+      expect(result.get("s1").chaps.size).toBe(1)
+      expect(result.get("s1").chaps.get("[chap]").status.loaded).toBe(1)
+    }, 60_000)
+    test("should bypass anime not exists chap on task" , async () => {
+      try {
+        fs.rmSync(dir, { recursive: true })
+      } catch {}
+
+      await downloadInfoAnime({
+        season: "s1",
+        seasonName: "name s1",
+        info: {
+          name: "test",
+          poster:
+            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+          image:
+            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+          description: "description",
+          authors: [],
+        },
+      })
+
+      const result = await getListDownload()
+
+      expect(result.size).toBe(0)
     })
   })
 })

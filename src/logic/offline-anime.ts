@@ -12,7 +12,10 @@ const fsData = import.meta.env.TEST
 type MetaSeason = Pick<
   Awaited<ReturnType<typeof PhimId>>,
   "name" | "poster" | "image" | "description" | "authors"
->
+> & {
+  season: string
+  seasonName: string
+}
 interface MetaChap {
   chapName: string
   created: number
@@ -98,6 +101,7 @@ export async function downloadOfflineAnime({
   file,
   onprogress,
   signal,
+  created
 }: {
   season: string
   chap: string
@@ -105,6 +109,7 @@ export async function downloadOfflineAnime({
   file: string
   onprogress: (evt: { loaded: number; total: number }) => void
   signal: AbortSignal
+  created: number
 }) {
   const dir = ((import.meta.env.TEST ? "/var/tmp/" : "/") +
     `hls-offline/${season}/${chap}/`) as `/${string}/hls-offline/${string}/${string}/`
@@ -115,7 +120,7 @@ export async function downloadOfflineAnime({
       join(dir, "meta.json"),
       JSON.stringify(<MetaChap>{
         chapName,
-        created: new Date().getUTCMilliseconds(),
+        created
       })
     )
 
@@ -257,6 +262,8 @@ export async function downloadInfoAnime({
       : Promise.resolve(),
     fsData.writeFile(`${dir}/meta.json`, str),
   ])
+
+  return info
 }
 /**
  *
@@ -309,8 +316,10 @@ export async function getStatusDownload({
 export async function getListDownload() {
   const dir = (import.meta.env.TEST ? "/var/tmp/" : "/") + "hls-offline/"
 
-  return Promise.all(
-    (await fsData.readdir(dir)).map(async (season) => {
+  const animes = await Promise.all(
+    (
+      await fsData.readdir(dir)
+    ).map(async (season) => {
       const path = join(dir, season)
 
       try {
@@ -318,22 +327,30 @@ export async function getListDownload() {
           await fsData.readFile(path + "/meta.json", "utf8")
         ) as MetaSeason
 
-        const chaps = await Promise.all(
+        const chaps: [
+          string,
+          MetaChap & {
+            status: Awaited<ReturnType<typeof getStatusDownload>>
+          }
+        ] = await Promise.all(
           (
             await fsData.readdir(path)
           ).map(async (chap) => {
             const p = path + "/" + chap
 
             try {
-              return {
-                ...(JSON.parse(
-                  await fsData.readFile(p + "/meta.json", "utf8")
-                ) as MetaChap),
-                status: await getStatusDownload({
-                  season,
-                  chap,
-                }),
-              }
+              return [
+                chap,
+                {
+                  ...(JSON.parse(
+                    await fsData.readFile(p + "/meta.json", "utf8")
+                  ) as MetaChap),
+                  status: await getStatusDownload({
+                    season,
+                    chap,
+                  }),
+                },
+              ]
             } catch (err) {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               if ((err as unknown as any)?.code === "ENOENT") {
@@ -343,13 +360,22 @@ export async function getListDownload() {
           })
         ).then((res) => res.filter(Boolean) as Exclude<typeof res[0], void>[])
 
-        return { ...metaSeason, chaps }
+        if (chaps.length === 0) return undefined
+
+        return [
+          season,
+          { ...metaSeason, chaps: new Map<string, typeof chaps[0][1]>(chaps) },
+        ]
       } catch (err) {
+        console.error(err)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if ((err as unknown as any)?.code === "ENOENT") return undefined
         // eslint-disable-next-line functional/no-throw-statement
         throw err
       }
     })
-  ).then((res) => res.filter(Boolean))
+  ).then((res) => res.filter(Boolean) as Exclude<typeof res[0], void>[])
+
+
+  return new Map<string, typeof animes[0][1]>(animes)
 }
