@@ -21,6 +21,7 @@ import { vi } from "vitest"
 
 // eslint-disable-next-line import/first
 import {
+  deleteOfflineChapAnime,
   downloadInfoAnime,
   downloadOfflineAnime,
   getListDownload,
@@ -46,6 +47,7 @@ describe("offline-anime", () => {
         file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
         onprogress: fn,
         signal: new AbortController().signal,
+        created: new Date().getUTCMilliseconds(),
       })
 
       expect(fs.existsSync(dir + "/s1/[chap]/main.m3u8")).toBe(true)
@@ -67,6 +69,7 @@ describe("offline-anime", () => {
         file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
         onprogress: NOOP,
         signal: new AbortController().signal,
+        created: new Date().getUTCMilliseconds(),
       })
 
       const fn = vi.fn(NOOP)
@@ -78,6 +81,7 @@ describe("offline-anime", () => {
         file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
         onprogress: fn,
         signal: new AbortController().signal,
+        created: new Date().getUTCMilliseconds(),
       })
 
       expect(fn.mock.calls.length).toBe(0)
@@ -102,6 +106,7 @@ describe("offline-anime", () => {
             fnPause(loaded)
           },
           signal: abort.signal,
+          created: new Date().getUTCMilliseconds(),
         })
       } catch (err) {
         // eslint-disable-next-line functional/no-throw-statement
@@ -119,6 +124,7 @@ describe("offline-anime", () => {
         file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
         onprogress: ({ loaded }) => fnConti(loaded),
         signal: new AbortController().signal,
+        created: new Date().getUTCMilliseconds(),
       })
 
       expect((fnPause.mock.calls.at(-1)?.[0] ?? 0) + 1).toBe(
@@ -141,6 +147,7 @@ describe("offline-anime", () => {
         file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
         onprogress: fn,
         signal: abort.signal,
+        created: new Date().getUTCMilliseconds(),
       }).catch(NOOP)
 
       expect(fn.mock.calls.length).toBe(0)
@@ -149,17 +156,15 @@ describe("offline-anime", () => {
   describe("downloadInfoAnime", () => {
     test("should download info anime", async () => {
       const data = {
+        name: "test",
+        poster:
+          "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+        image:
+          "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+        description: "description",
+        authors: [],
         season: "s5",
         seasonName: "name s5",
-        info: {
-          name: "test",
-          poster:
-            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
-          image:
-            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
-          description: "description",
-          authors: [],
-        },
       }
 
       await downloadInfoAnime(data)
@@ -169,7 +174,7 @@ describe("offline-anime", () => {
       expect(fs.existsSync(dir + "/s5/meta.json")).toBe(true)
       expect(
         JSON.parse(fs.readFileSync(dir + "/s5/meta.json", "utf8"))
-      ).toEqual(data.info)
+      ).toEqual(data)
     })
   })
   describe("getStatusDownload", () => {
@@ -185,6 +190,7 @@ describe("offline-anime", () => {
         file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
         onprogress: NOOP,
         signal: new AbortController().signal,
+        created: new Date().getUTCMilliseconds(),
       })
 
       expect(
@@ -209,6 +215,7 @@ describe("offline-anime", () => {
           if (loaded === 1) abort.abort()
         },
         signal: abort.signal,
+        created: new Date().getUTCMilliseconds(),
       }).catch(NOOP)
 
       expect(
@@ -257,15 +264,13 @@ describe("offline-anime", () => {
       await downloadInfoAnime({
         season: "s1",
         seasonName: "name s1",
-        info: {
-          name: "test",
-          poster:
-            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
-          image:
-            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
-          description: "description",
-          authors: [],
-        },
+        name: "test",
+        poster:
+          "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+        image:
+          "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+        description: "description",
+        authors: [],
       })
       await downloadOfflineAnime({
         season: "s1",
@@ -276,13 +281,14 @@ describe("offline-anime", () => {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         onprogress() {},
         signal: new AbortController().signal,
+        created: new Date().getUTCMilliseconds(),
       })
 
       const result = await getListDownload()
 
       expect(result.size).toBe(1)
-      expect(result.get("s1").chaps.size).toBe(1)
-      expect(result.get("s1").chaps.get("[chap]").status).toBe(true)
+      expect(result.get("s1")?.chaps.size).toBe(1)
+      expect(result.get("s1")?.chaps?.get("[chap]")?.status).toBe(true)
     }, 60_000)
     test("should list paused", async () => {
       try {
@@ -292,15 +298,13 @@ describe("offline-anime", () => {
       await downloadInfoAnime({
         season: "s1",
         seasonName: "name s1",
-        info: {
-          name: "test",
-          poster:
-            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
-          image:
-            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
-          description: "description",
-          authors: [],
-        },
+        name: "test",
+        poster:
+          "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+        image:
+          "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+        description: "description",
+        authors: [],
       })
       const abort = new AbortController()
       await downloadOfflineAnime({
@@ -313,15 +317,16 @@ describe("offline-anime", () => {
           abort.abort()
         },
         signal: abort.signal,
+        created: new Date().getUTCMilliseconds(),
       }).catch(NOOP)
 
       const result = await getListDownload()
 
       expect(result.size).toBe(1)
-      expect(result.get("s1").chaps.size).toBe(1)
-      expect(result.get("s1").chaps.get("[chap]").status.loaded).toBe(1)
+      expect(result.get("s1")?.chaps?.size).toBe(1)
+      expect(result.get("s1")?.chaps?.get("[chap]")?.status?.loaded).toBe(1)
     }, 60_000)
-    test("should bypass anime not exists chap on task" , async () => {
+    test("should bypass anime not exists chap on task", async () => {
       try {
         fs.rmSync(dir, { recursive: true })
       } catch {}
@@ -329,20 +334,56 @@ describe("offline-anime", () => {
       await downloadInfoAnime({
         season: "s1",
         seasonName: "name s1",
-        info: {
-          name: "test",
-          poster:
-            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
-          image:
-            "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
-          description: "description",
-          authors: [],
-        },
+        name: "test",
+        poster:
+          "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+        image:
+          "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+        description: "description",
+        authors: [],
       })
 
       const result = await getListDownload()
 
       expect(result.size).toBe(0)
     })
+  })
+  test("deleteOfflineChapAnime", async () => {
+    try {
+      fs.rmSync(dir, { recursive: true })
+    } catch {}
+
+    await downloadInfoAnime({
+      season: "s1",
+      seasonName: "name s1",
+      name: "test",
+      poster:
+        "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+      image:
+        "https://file-examples.com/storage/fe2879c03363c669a9ef954/2017/10/file_example_JPG_100kB.jpg",
+      description: "description",
+      authors: [],
+    })
+    const abort = new AbortController()
+    await downloadOfflineAnime({
+      season: "s1",
+      chap: "[chap]",
+      chapName: "chap name",
+
+      file: "https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8",
+      onprogress() {
+        abort.abort()
+      },
+      signal: abort.signal,
+      created: new Date().getUTCMilliseconds(),
+    }).catch(NOOP)
+
+    await deleteOfflineChapAnime({
+      season: "s1",
+      chap: "[chap]",
+    })
+
+    expect(fs.existsSync(dir + "/s1")).toBe(true)
+    expect(fs.existsSync(dir + "/s1/[chap]")).toBe(false)
   })
 })
