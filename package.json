@@ -45,7 +45,7 @@
     "iso-639-1": "^2.1.15",
     "js-base64": "^3.7.2",
     "js-cookie": "^3.0.1",
-    "jwplayer8": "0.0.1-b1",
+    "jwplayer8": "0.0.2",
     "lz-string": "^1.4.4",
     "message-port-api": "^0.0.5",
     "path-browserify": "^1.0.1",
