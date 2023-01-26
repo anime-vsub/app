@@ -40,7 +40,7 @@
     "embed-fbcmt-client": "^0.1.32",
     "eruda2": "0.0.2-b8",
     "group-array": "^1.0.0",
-    "hls.js": "1.2.7",
+    "hls.js": "1.2.9",
     "htmlparser2": "^8.0.1",
     "iso-639-1": "^2.1.15",
     "js-base64": "^3.7.2",
