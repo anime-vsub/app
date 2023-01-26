@@ -10,7 +10,7 @@ export const useSettingsStore = defineStore("settings", {
     },
     ui: {
       modeMovie: false,
-commentAnime: true
+      commentAnime: true,
     },
     locale: getNavigatorLanguage(),
     infinityScroll: true,
