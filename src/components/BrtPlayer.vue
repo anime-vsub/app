@@ -1417,8 +1417,8 @@ const saveCurTimeToPer = throttle(
         dur,
         name: nameCurrentChap,
       })
+      .catch((err) => console.warn("save viewing progress failed: ", err))
       .finally(() => (processingSaveCurTimeIn = null))
-      .catch(() => console.warn("save viewing progress failed"))
 
     emit("cur-update", {
       cur,
