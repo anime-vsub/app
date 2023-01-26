@@ -521,7 +521,7 @@ import Quality from "components/Quality.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
-import { EmbedFbCmt } from "embed-fbcmt-client"
+import { EmbedFbCmt } from "embed-fbcmt-client/vue"
 import {
   QBtn,
   QCard,
