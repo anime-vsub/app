@@ -521,6 +521,7 @@ import Quality from "components/Quality.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
+import { EmbedFbCmt } from "embed-fbcmt-client"
 import {
   QBtn,
   QCard,
@@ -556,7 +557,7 @@ import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
-import type { Ref } from "vue";
+import type { Ref } from "vue"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -627,10 +628,12 @@ const { data, run, error, loading } = useRequest(
           case null:
             await fsCache.mkdir("/phim")
         }
-        // eslint-disable-next-line promise/catch-or-return, promise/no-nesting, @typescript-eslint/no-explicit-any, promise/always-return
-        fsCache.writeFile(`/phim/${id}.json`, data as unknown as any).then(() => {
-          console.log("[fs]: save cache to fs %s", id)
-        })
+        // eslint-disable-next-line promise/catch-or-return
+        fsCache
+          .writeFile(`/phim/${id}.json`, data as unknown as any)
+          .then(() => {
+            console.log("[fs]: save cache to fs %s", id)
+          })
       }),
     ])
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
