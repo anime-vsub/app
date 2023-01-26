@@ -1507,31 +1507,46 @@ watch(documentVisibility, (visibility) => {
 })
 
 {
-  const { resume, pause } = useIntervalFn(() => {
-    if (!artPlaying.value) return
+  let resume: (() => void) | null = null, pause:( () => void) | null = null
+  const resumeDelay = debounce(() => resume?.(), 1_000)
+  watch(
+    () => settingsStore.player.enableRemindStop,
+    (enabled) => {
+      if (enabled) {
+        if (resume)
+          resumeDelay()
+        else
+        { resume, pause } = useIntervalFn(() => {
+          if (!artPlaying.value) return
 
-    setArtPlaying(false)
+          setArtPlaying(false)
 
-    $q.dialog({
-      title: t("xac-nhan"),
-      message: t("ban-van-dang-xem-chu"),
-      cancel: { rounded: true, flat: true },
-      ok: { rounded: true, flat: true },
-      persistent: false,
-    })
-      .onOk(() => {
-        setArtPlaying(true)
-      })
-      .onDismiss(() => {
-        setArtPlaying(true)
-      })
-      .onCancel(() => {
-        console.warn("cancel continue play")
-      })
-  }, 1 /* hours */ * 3600_000)
-  const resumeDelay = debounce(() => {
-    if (settingsStore.player.enableRemindStop) resume()
-  }, 1_000)
+          $q.dialog({
+            title: t("xac-nhan"),
+            message: t("ban-van-dang-xem-chu"),
+            cancel: { rounded: true, flat: true },
+            ok: { rounded: true, flat: true },
+            persistent: false,
+          })
+            .onOk(() => {
+              setArtPlaying(true)
+            })
+            .onDismiss(() => {
+              setArtPlaying(true)
+            })
+            .onCancel(() => {
+              console.warn("cancel continue play")
+            })
+        }, 1 /* hours */ * 3600_000)
+
+      } else {
+        resumeDelay.cancel()
+        pause?.()
+      }
+    },
+    { immediate: true }
+  )
+
 
   watch(
     artPlaying,
@@ -1539,23 +1554,12 @@ watch(documentVisibility, (visibility) => {
       if (playing) {
         resumeDelay()
       } else {
-        pause()
+        pause?.()
       }
     },
     { immediate: true }
   )
 
-  watch(
-    () => settingsStore.player.enableRemindStop,
-    (enabled) => {
-      if (!enabled) {
-        resumeDelay.cancel()
-        pause()
-      } else {
-        resumeDelay()
-      }
-    }
-  )
   ;[
     "mousedown",
     "mouseup",
