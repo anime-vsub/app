@@ -509,9 +509,9 @@
 </template>
 
 <script lang="ts" setup>
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Directory } from "@capacitor/filesystem"
 import { Share } from "@capacitor/share"
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Icon } from "@iconify/vue"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -630,7 +630,9 @@ const { data, run, error, loading } = useRequest(
         }
         // eslint-disable-next-line promise/catch-or-return
         fsCache
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .writeFile(`/phim/${id}.json`, data as unknown as any)
+          // eslint-disable-next-line promise/always-return, promise/no-nesting
           .then(() => {
             console.log("[fs]: save cache to fs %s", id)
           })
