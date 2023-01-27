@@ -1507,38 +1507,42 @@ watch(documentVisibility, (visibility) => {
 })
 
 {
-  let resume: (() => void) | null = null, pause:( () => void) | null = null
+  // eslint-disable-next-line functional/no-let
+  let resume: (() => void) | null = null
+  // eslint-disable-next-line functional/no-let
+  let pause: (() => void) | null = null
   const resumeDelay = debounce(() => resume?.(), 1_000)
   watch(
     () => settingsStore.player.enableRemindStop,
     (enabled) => {
       if (enabled) {
-        if (resume)
-          resumeDelay()
-        else
-        { resume, pause } = useIntervalFn(() => {
-          if (!artPlaying.value) return
+        if (resume) resumeDelay()
+        else {
+          const interval = useIntervalFn(() => {
+            if (!artPlaying.value) return
 
-          setArtPlaying(false)
+            setArtPlaying(false)
 
-          $q.dialog({
-            title: t("xac-nhan"),
-            message: t("ban-van-dang-xem-chu"),
-            cancel: { rounded: true, flat: true },
-            ok: { rounded: true, flat: true },
-            persistent: false,
-          })
-            .onOk(() => {
-              setArtPlaying(true)
+            $q.dialog({
+              title: t("xac-nhan"),
+              message: t("ban-van-dang-xem-chu"),
+              cancel: { rounded: true, flat: true },
+              ok: { rounded: true, flat: true },
+              persistent: false,
             })
-            .onDismiss(() => {
-              setArtPlaying(true)
-            })
-            .onCancel(() => {
-              console.warn("cancel continue play")
-            })
-        }, 1 /* hours */ * 3600_000)
-
+              .onOk(() => {
+                setArtPlaying(true)
+              })
+              .onDismiss(() => {
+                setArtPlaying(true)
+              })
+              .onCancel(() => {
+                console.warn("cancel continue play")
+              })
+          }, 1 /* hours */ * 3600_000)
+          resume = interval.resume
+          pause = interval.pause
+        }
       } else {
         resumeDelay.cancel()
         pause?.()
@@ -1546,7 +1550,6 @@ watch(documentVisibility, (visibility) => {
     },
     { immediate: true }
   )
-
 
   watch(
     artPlaying,
@@ -1559,7 +1562,6 @@ watch(documentVisibility, (visibility) => {
     },
     { immediate: true }
   )
-
   ;[
     "mousedown",
     "mouseup",
