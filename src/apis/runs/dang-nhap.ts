@@ -17,7 +17,7 @@ export async function DangNhap(email: string, password: string) {
       password: "",
       // eslint-disable-next-line camelcase
       password_md5,
-      save_password: "",
+      save_password: "1",
       submit: "",
     }
   )

@@ -67,10 +67,7 @@ export const useAuthStore = defineStore("auth", () => {
   }
   function setTokenByCookie(cookie: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const token = cookie
-      .split(",")
-      .map((item) => parse(item))
-      .flat(1)
+    const token =parse(cookie)
       .find((item) => item.name.startsWith("token"))!
     // set token
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -80,8 +77,9 @@ export const useAuthStore = defineStore("auth", () => {
   // ** actions **
   async function login(email: string, password: string) {
     const data = await DangNhap(email, password)
-
+console.log({ cookie: data })
     const { expires } = setTokenByCookie(data.cookie)
+    console.log(expires.getTime(), expires + "")
     setUser(
       {
         avatar: data.avatar,
