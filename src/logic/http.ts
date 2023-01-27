@@ -64,11 +64,11 @@ export async function post(
       ...(isSpa
         ? {}
         : {
-            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "content-type": "application/x-www-form-urlencoded",
           }),
       ...headers,
     },
-    data,
+    data: new URLSearchParams(data).toString(),
   })
 
   // eslint-disable-next-line functional/no-throw-statement
