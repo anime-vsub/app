@@ -76,9 +76,8 @@ export const useAuthStore = defineStore("auth", () => {
   // ** actions **
   async function login(email: string, password: string) {
     const data = await DangNhap(email, password)
-    console.log({ cookie: data })
     const { expires } = setTokenByCookie(data.cookie)
-    console.log(expires.getTime(), expires + "")
+
     setUser(
       {
         avatar: data.avatar,

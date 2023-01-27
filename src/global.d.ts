@@ -7,7 +7,7 @@ interface PostOptions {
   url: string
   headers?: Record<string, string>
   responseType?: "arraybuffer"
-  data?: Record<string, unknown>
+  data?: Record<string, unknown> | string
 }
 
 interface HttpResponse<ResponseType extends "arraybuffer" | undefined> {
