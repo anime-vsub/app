@@ -3,9 +3,9 @@
 </template>
 
 <script setup lang="ts">
-  // import eruda from 'eruda2'
+// import eruda from 'eruda2'
 
-  // eruda.init()
+// eruda.init()
 
 import MainLayout from "layouts/MainLayout.vue"
 </script>
