@@ -17,7 +17,7 @@ specifiers:
   '@firebase/firestore': ^3.8.1
   '@hugotomazi/capacitor-navigation-bar': ^2.0.0
   '@iconify/vue': ^4.0.2
-  '@intlify/vite-plugin-vue-i18n': ^7.0.0
+  '@intlify/vite-plugin-vue-i18n': ^6.0.3
   '@ionic/vue': ^6.5.1
   '@ionic/vue-router': ^6.5.1
   '@quasar/app-vite': ^1.2.0
@@ -155,7 +155,7 @@ devDependencies:
   '@capacitor/share': 4.1.0_@capacitor+core@4.6.2
   '@capacitor/status-bar': 4.1.1_@capacitor+core@4.6.2
   '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.6.2
-  '@intlify/vite-plugin-vue-i18n': 7.0.0_vue-i18n@9.2.2
+  '@intlify/vite-plugin-vue-i18n': 6.0.3_vue-i18n@9.2.2
   '@quasar/app-vite': 1.2.0_woj5meqgkcekjniz3illbipx5m
   '@quasar/cli': 2.0.0
   '@quasar/icongenie': 2.5.4
@@ -827,10 +827,9 @@ packages:
     engines: {node: '>= 14'}
     dev: true
 
-  /@intlify/vite-plugin-vue-i18n/7.0.0_vue-i18n@9.2.2:
-    resolution: {integrity: sha512-2TbDOQ8XD+vkc0s5OFmr+IY/k4mYMC7pzvx0xGQn+cU/ev314+yi7Z7N7rWcBgiYk1WOUalbGSo3d4nJDxOOyw==}
+  /@intlify/vite-plugin-vue-i18n/6.0.3_vue-i18n@9.2.2:
+    resolution: {integrity: sha512-6SgNzPAOCR90wvt368lKzi7f/5ZEWJn22UCGvhFsP3XvKqlF3cVzojahgQ6o+LTdCkExeM6wPgd+haFf28E9VQ==}
     engines: {node: '>= 14.6'}
-    deprecated: This plugin support until Vite 3. If you would like to use on Vite 4, please use @intlify/unplugin-vue-i18n
     peerDependencies:
       petite-vue-i18n: '*'
       vite: ^2.9.0 || ^3.0.0
