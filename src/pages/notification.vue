@@ -114,7 +114,7 @@ const router = useRouter()
 const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
 
-async function onDelete(item: typeof notificationStore.items[0]) {
+async function onDelete(item: (typeof notificationStore.items)[0]) {
   notificationStore.items.splice(notificationStore.items.indexOf(item) >>> 0, 1)
   await notificationStore.remove(item.id)
   // reset()

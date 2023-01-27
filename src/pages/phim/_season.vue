@@ -612,34 +612,34 @@ const { data, run, error, loading } = useRequest(
       PhimId(id).then(async (data) => {
         if (result) Object.assign(result.value, data)
         else result = ref(data)
-        try {
         // eslint-disable-next-line promise/always-return
-        switch (
-          await fsCache
-            .lstat("/phim")
-            // eslint-disable-next-line promise/no-nesting
-            .then((res) => res.isDirectory())
-            // eslint-disable-next-line promise/no-nesting
-            .catch(() => null)
-        ) {
-          case false:
-            await fsCache.unlink("/phim")
-            await fsCache.mkdir("/phim")
-            break
-          case null:
-            await fsCache.mkdir("/phim")
-        }
-        // eslint-disable-next-line promise/catch-or-return
-        fsCache
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .writeFile(`/phim/${id}.json`, data as unknown as any)
-          // eslint-disable-next-line promise/always-return, promise/no-nesting
-          .then(() => {
-            console.log("[fs]: save cache to fs %s", id)
-          })
-          }catch (err) {
-            console.warn("[fs]: save cache fail: ", err)
+        try {
+          switch (
+            await fsCache
+              .lstat("/phim")
+              // eslint-disable-next-line promise/no-nesting
+              .then((res) => res.isDirectory())
+              // eslint-disable-next-line promise/no-nesting
+              .catch(() => null)
+          ) {
+            case false:
+              await fsCache.unlink("/phim")
+              await fsCache.mkdir("/phim")
+              break
+            case null:
+              await fsCache.mkdir("/phim")
           }
+          // eslint-disable-next-line promise/catch-or-return
+          fsCache
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .writeFile(`/phim/${id}.json`, data as unknown as any)
+            // eslint-disable-next-line promise/always-return, promise/no-nesting
+            .then(() => {
+              console.log("[fs]: save cache to fs %s", id)
+            })
+        } catch (err) {
+          console.warn("[fs]: save cache fail: ", err)
+        }
       }),
     ])
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
