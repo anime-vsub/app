@@ -18,7 +18,7 @@
       :current-chap="currentChap"
       :name-current-chap="currentMetaChap?.name"
       :next-chap="nextChap"
-      :name="data.name"
+      :name="data.name ?? ''"
       :poster="currentDataSeason?.poster ?? data.poster"
       :seasons="seasons"
       :_cache-data-seasons="_cacheDataSeasons"
@@ -299,7 +299,7 @@
     </q-tabs>
 
     <div class="px-1 mx-[-8px]">
-      <GridCard v-if="data" v-show="!loading" :items="data.toPut" />
+      <GridCard v-if="data" v-show="!loading" :items="data.toPut ?? []" />
     </div>
 
     <!-- comment embed -->
@@ -609,9 +609,10 @@ const { data, run, error, loading } = useRequest(
         if (result) Object.assign(result.value, text)
         else result = ref(text as unknown as Awaited<ReturnType<typeof PhimId>>)
       }),
-      PhimId(realIdCurrentSeason.value).then(async (data) => {
+      PhimId(id).then(async (data) => {
         if (result) Object.assign(result.value, data)
         else result = ref(data)
+        try {
         // eslint-disable-next-line promise/always-return
         switch (
           await fsCache
@@ -636,6 +637,9 @@ const { data, run, error, loading } = useRequest(
           .then(() => {
             console.log("[fs]: save cache to fs %s", id)
           })
+          }catch (err) {
+            console.warn("[fs]: save cache fail: ", err)
+          }
       }),
     ])
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -651,6 +655,7 @@ const { data, run, error, loading } = useRequest(
   }
 )
 watch(error, (error) => {
+  console.error(PhimId, realIdCurrentSeason.value)
   if (error)
     router.push({
       name: "not_found",
