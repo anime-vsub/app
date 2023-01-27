@@ -3,9 +3,9 @@
 </template>
 
 <script setup lang="ts">
-// import eruda from 'eruda2'
-
-// eruda.init()
+if (process.env.MODE !== "spa") {
+  import('eruda2').then(eruda2 => eruda2.default.init())
+}
 
 import MainLayout from "layouts/MainLayout.vue"
 </script>
