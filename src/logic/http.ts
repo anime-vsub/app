@@ -7,7 +7,7 @@ export async function get<
 >(url: string | GetOptions<ResponseType>, headers?: Record<string, string>) {
   console.log("get: ", url)
 
-  await installedAsync()
+  await installedAsync
 
   if (!window.Http)
     // eslint-disable-next-line functional/no-throw-statement
@@ -75,7 +75,7 @@ export async function post(
     },
   })
 
-  await installedAsync()
+  await installedAsync
 
   if (!window.Http)
     // eslint-disable-next-line functional/no-throw-statement
