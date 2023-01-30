@@ -972,7 +972,10 @@
 
     <q-page-container>
       <q-page :style-fn="route.meta?.styleFn">
-        <router-view v-if="extensionHelperInstalled" v-slot="{ Component }">
+        <router-view
+          v-if="extensionHelperInstalled !== false"
+          v-slot="{ Component }"
+        >
           <component :is="Component" />
         </router-view>
         <NotExistsExtension v-else />
@@ -1072,7 +1075,7 @@ import "@fontsource/caveat"
 
 // =========== suth
 
-import { useEventListener, useIntervalFn } from "@vueuse/core"
+import { useEventListener } from "@vueuse/core"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
@@ -1088,6 +1091,7 @@ import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseMdBasic } from "src/logic/parseMdBasic"
 import { parseTime } from "src/logic/parseTime"
+import { installed as extensionHelperInstalled } from "src/refs/installed-extension"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { useNotificationStore } from "stores/notification"
@@ -1099,6 +1103,7 @@ import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
+
 
 // key bind
 
@@ -1179,26 +1184,6 @@ const settingsStore = useSettingsStore()
 const playlistStore = usePlaylistStore()
 const historyStore = useHistoryStore()
 const analytics = getAnalytics()
-
-const extensionHelperInstalled = ref(typeof window.Http !== "undefined")
-// eslint-disable-next-line functional/no-let
-let createdChecker = false
-watch(
-  extensionHelperInstalled,
-  (installed) => {
-    if (!installed && !createdChecker) {
-      createdChecker = true
-      const { pause: pauseInterval } = useIntervalFn(() => {
-        extensionHelperInstalled.value = typeof window.Http !== "undefined"
-        if (extensionHelperInstalled.value) {
-          pauseInterval()
-          createdChecker = false
-        }
-      }, 1000)
-    }
-  },
-  { immediate: true }
-)
 
 const query = ref("")
 const {

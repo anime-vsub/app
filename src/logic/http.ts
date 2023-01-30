@@ -1,10 +1,13 @@
 import { i18n } from "src/boot/i18n"
 import { C_URL } from "src/constants"
+import { installedAsync } from "src/refs/installed-extension"
 
 export async function get<
   ResponseType extends "arraybuffer" | undefined = undefined
 >(url: string | GetOptions<ResponseType>, headers?: Record<string, string>) {
   console.log("get: ", url)
+
+  await installedAsync()
 
   if (!window.Http)
     // eslint-disable-next-line functional/no-throw-statement
@@ -71,6 +74,8 @@ export async function post(
       ...headers,
     },
   })
+
+  await installedAsync()
 
   if (!window.Http)
     // eslint-disable-next-line functional/no-throw-statement
