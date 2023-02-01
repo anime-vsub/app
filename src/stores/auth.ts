@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
-import cookie from "js-cookie"
 import { defineStore } from "pinia"
 import { parse } from "set-cookie-parser"
 import sha256 from "sha256"
@@ -18,9 +17,9 @@ interface User {
 }
 
 export const useAuthStore = defineStore("auth", () => {
-  const user_data = ref(parseJSON(cookie.get("user_data")) as null | User)
-  const token_name = ref((cookie.get("token_name") ?? null) as null | string)
-  const token_value = ref((cookie.get("token_value") ?? null) as null | string)
+  const user_data = ref<User | null>(null)
+  const token_name = ref<string | null>(null)
+  const token_value = ref<string | null>(null)
 
   const user = computed(() => {
     return user_data.value
@@ -35,35 +34,17 @@ export const useAuthStore = defineStore("auth", () => {
 
   function setUser(value: User, expires: Date) {
     user_data.value = value
-    cookie.set("user_data", JSON.stringify(value), {
-      expires,
-      sameSite: "None",
-      secure: true,
-    })
   }
   function setToken(name: string, value: string, expires: Date) {
     token_name.value = name
     token_value.value = value
-    cookie.set("token_name", name, {
-      expires,
-      sameSite: "None",
-      secure: true,
-    })
-    cookie.set("token_value", value, {
-      expires,
-      sameSite: "None",
-      secure: true,
-    })
   }
   function deleteUser() {
     user_data.value = null
-    cookie.set("user_data", "", { expires: -1 })
   }
   function deleteToken() {
     token_name.value = null
     token_value.value = null
-    cookie.set("token_name", "", { expires: -1 })
-    cookie.set("token_value", "", { expires: -1 })
   }
   function setTokenByCookie(cookie: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -168,6 +149,8 @@ export const useAuthStore = defineStore("auth", () => {
     logout,
     changePassword,
   }
+}, {
+  persist: true
 })
 
 function parseJSON(value?: string) {
