@@ -5,7 +5,7 @@ import scrollSnap from "windicss/plugin/scroll-snap"
 
 export default defineConfig({
   plugins: [lineClamp, scrollSnap, forms],
-  safelist: "children:!px-0",
+  safelist: ["children:!px-0", "!shadow-2"],
 })
 
 // !bg-[rgba(0,194,52,.15)]
