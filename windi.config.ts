@@ -10,6 +10,7 @@ export default defineConfig({
     "!py-[6px]",
     "children:!flex",
     "bg-[rgba(28,28,30,0.9)]",
+    "!shadow-8",
   ],
   theme: {
     screens: {
