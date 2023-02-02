@@ -14,7 +14,7 @@
       <q-tabs
         indicator-color="transparent"
         exact-active-color="white"
-        class="bg-transparent text-grey-5 shadow-2 text-[12px] tabs-main"
+        class="bg-transparent text-grey-5 !shadow-2 text-[12px] tabs-main"
         no-caps
       >
         <q-route-tab
