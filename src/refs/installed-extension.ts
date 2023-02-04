@@ -10,8 +10,9 @@ const installedAsync = new Promise<void>((resolve, reject) => {
     // eslint-disable-next-line functional/no-let
     let counter = 0
     const interval = setInterval(() => {
-      installed.value = typeof window.Http !== "undefined"
-      if (installed.value) {
+      const is = typeof window.Http !== "undefined"
+      if (is) {
+        installed.value = true
         clearInterval(interval)
         resolve()
         return
@@ -20,6 +21,7 @@ const installedAsync = new Promise<void>((resolve, reject) => {
       counter++
 
       if (counter >= 60 * 10 /* 10 minutes */) {
+        installed.value = is
         clearInterval(interval)
         reject(
           i18n.global.t(
