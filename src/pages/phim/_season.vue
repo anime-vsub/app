@@ -343,6 +343,7 @@
       </div>
       <EmbedFbCmt
         v-if="settingsStore.ui.commentAnime"
+        :key="seasonId"
         :href="`http://animevietsub.tv/phim/-${seasonId}/`"
         :lang="locale?.replace('-', '_')"
         no_socket
