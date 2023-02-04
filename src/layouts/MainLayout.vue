@@ -1104,7 +1104,6 @@ import { useRoute, useRouter } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
 
-
 // key bind
 
 const { t } = useI18n()
