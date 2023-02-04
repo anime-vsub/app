@@ -1418,14 +1418,16 @@ const saveCurTimeToPer = throttle(
         name: nameCurrentChap,
       })
       .catch((err) => console.warn("save viewing progress failed: ", err))
-      .finally(() => (processingSaveCurTimeIn = null))
+      .finally(() => {
+        emit("cur-update", {
+          cur,
+          dur,
+          id: currentChap,
+        })
+        console.log("save viewing progress")
 
-    emit("cur-update", {
-      cur,
-      dur,
-      id: currentChap,
-    })
-    console.log("save viewing progress")
+        processingSaveCurTimeIn = null
+      })
   },
   DELAY_SAVE_VIEWING_PROGRESS
 )
