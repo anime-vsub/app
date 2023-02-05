@@ -1048,7 +1048,7 @@ const follows = ref(0)
 const $q = useQuasar()
 
 const seasonId = computed(
-  () => (route.params.season as string | undefined)?.match(/\d+$/)?.[0]
+  () => realIdCurrentSeason.value?.match(/\d+$/)?.[0]
 )
 watch(
   seasonId,
