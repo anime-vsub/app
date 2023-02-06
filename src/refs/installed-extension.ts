@@ -20,7 +20,7 @@ const installedAsync = new Promise<void>((resolve, reject) => {
 
       counter++
 
-      if (counter >= 60 * 10 /* 10 minutes */) {
+      if (counter >= 2 /* 3 seconds */) {
         installed.value = is
         clearInterval(interval)
         reject(
