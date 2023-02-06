@@ -1514,6 +1514,11 @@ watch(documentVisibility, (visibility) => {
   // eslint-disable-next-line functional/no-let
   let pause: (() => void) | null = null
   const resumeDelay = debounce(() => resume?.(), 1_000)
+  onBeforeUnmount(() => pause?.())
+  watch(artPlaying, playing => {
+    if (!playing) pause?.()
+    else resumeDelay()
+  })
   watch(
     () => settingsStore.player.enableRemindStop,
     (enabled) => {
@@ -1523,6 +1528,7 @@ watch(documentVisibility, (visibility) => {
           const interval = useIntervalFn(() => {
             if (!artPlaying.value) return
 
+            pause?.()
             setArtPlaying(false)
 
             $q.dialog({
@@ -1534,9 +1540,11 @@ watch(documentVisibility, (visibility) => {
             })
               .onOk(() => {
                 setArtPlaying(true)
+                resumeDelay?.()
               })
               .onDismiss(() => {
                 setArtPlaying(true)
+                resumeDelay?.()
               })
               .onCancel(() => {
                 console.warn("cancel continue play")
