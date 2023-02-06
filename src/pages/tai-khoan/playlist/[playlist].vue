@@ -281,7 +281,7 @@
             </div>
           </div>
 
-          <div class="items-center invisible flex group-hover:!visible md:pr-6">
+          <div class="items-center flex md:pr-6">
             <q-btn flat round @click.prevent>
               <Icon
                 icon="fluent:more-vertical-24-regular"
