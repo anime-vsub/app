@@ -272,7 +272,12 @@
             </div>
           </div>
 
-          <div class="items-center invisible flex group-hover:!visible md:pr-6">
+          <div
+            class="items-center invisible flex group-hover:visible md:pr-6"
+            :class="{
+              visible: storeStateMenu.get(item),
+            }"
+          >
             <q-btn flat round @click.prevent>
               <Icon
                 icon="fluent:more-vertical-24-regular"
@@ -280,7 +285,10 @@
                 height="25"
               />
 
-              <q-menu class="rounded-xl bg-dark-menu">
+              <q-menu
+                class="rounded-xl bg-dark-menu"
+                @update:model-value="(value) => storeStateMenu.set(item, value)"
+              >
                 <q-card class="transparent">
                   <q-list class="transparent">
                     <q-item
@@ -359,7 +367,7 @@ import dayjs from "src/logic/dayjs"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseChapName } from "src/logic/parseChapName"
 import { usePlaylistStore } from "stores/playlist"
-import { computed, ref, watch } from "vue"
+import { computed, ref, shallowReactive, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
@@ -609,6 +617,14 @@ async function removeAnimePlaylist(
     })
   }
 }
+
+// =========== ui action anime item ============
+const storeStateMenu = shallowReactive(
+  new WeakMap<
+    Awaited<ReturnType<typeof playlistStore.getAnimesFromPlaylist>>[0],
+    boolean
+  >()
+)
 </script>
 
 <style lang="scss" scoped>

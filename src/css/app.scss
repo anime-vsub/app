@@ -92,3 +92,12 @@ body {
 .q-card.rounded-xl {
   border-radius: 0.75rem !important;
 }
+
+/// patch for WindiCSS
+.group:hover .group-hover\:visible,
+.visible {
+  &,
+  & * {
+    visibility: visible !important;
+  }
+}
