@@ -1515,10 +1515,6 @@ watch(documentVisibility, (visibility) => {
   let pause: (() => void) | null = null
   const resumeDelay = debounce(() => resume?.(), 1_000)
   onBeforeUnmount(() => pause?.())
-  watch(artPlaying, playing => {
-    if (!playing) pause?.()
-    else resumeDelay()
-  })
   watch(
     () => settingsStore.player.enableRemindStop,
     (enabled) => {
