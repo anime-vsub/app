@@ -166,6 +166,7 @@
   "tap": "Practice",
   "tap-_chap": "Episode {0}",
   "tap-_chap-_name-_othername": "Set {0} {1} {2}",
+  "_name-_othername": "{0} {1}",
   "tap-moi-chieu-vao-_time-_day": "New episode airs on {0} {1} {2}",
   "tat-tieng-m": "Mute (m)",
   "ten": "Name",

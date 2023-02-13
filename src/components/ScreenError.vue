@@ -11,6 +11,7 @@
 </template>
 
 <script lang="ts" setup>
+import NotExistsExtension from "src/layouts/NotExistsExtension.vue"
 import { computed } from "vue"
 
 import ErrorCloudflare from "./errors/cloudflare.vue"
@@ -30,6 +31,7 @@ const componentErrors = {
   cloudflare: ErrorCloudflare,
   "domain-strange": ErrorDomainStrange,
   unknown: ErrorUnknown,
+  "extension-not-exists": NotExistsExtension,
 }
 
 const typeError = computed(() => {
@@ -43,6 +45,7 @@ const typeError = computed(() => {
     )
   )
     return "domain-strange"
+  if (props.error?.extesionNotExists) return "extension-not-exists"
 
   return null
 })

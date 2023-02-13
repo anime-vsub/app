@@ -809,13 +809,15 @@ watchEffect(() => {
 })
 useHead(
   computed(() => {
-    if (!data.value || !currentMetaChap.value) return {}
+    if (!data.value) return {}
 
-    const title = t("tap-_chap-_name-_othername", [
-      currentMetaChap.value.name,
-      data.value.name,
-      data.value.othername,
-    ])
+    const title = currentMetaChap.value
+      ? t("tap-_chap-_name-_othername", [
+          currentMetaChap.value.name,
+          data.value.name,
+          data.value.othername,
+        ])
+      : t("_name-_othername", [data.value.name, data.value.othername])
     const description = data.value.description
 
     return {
@@ -1047,9 +1049,7 @@ const follows = ref(0)
 
 const $q = useQuasar()
 
-const seasonId = computed(
-  () => realIdCurrentSeason.value?.match(/\d+$/)?.[0]
-)
+const seasonId = computed(() => realIdCurrentSeason.value?.match(/\d+$/)?.[0])
 watch(
   seasonId,
   async (seasonId) => {

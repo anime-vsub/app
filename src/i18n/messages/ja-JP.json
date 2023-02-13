@@ -166,6 +166,7 @@
   "tap": "練習",
   "tap-_chap": "エピソード {0}",
   "tap-_chap-_name-_othername": "{0} {1} {2} を設定",
+  "_name-_othername": "{0} {1}",
   "tap-moi-chieu-vao-_time-_day": "新しいエピソードは {0} {1} {2} に放映されます",
   "tat-tieng-m": "ミュート (m)",
   "ten": "名前",

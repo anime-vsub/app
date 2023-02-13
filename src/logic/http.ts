@@ -1,20 +1,23 @@
+import { installedAsync } from "boot/installed-extension"
 import { i18n } from "src/boot/i18n"
 import { C_URL } from "src/constants"
-import { installedAsync } from "src/refs/installed-extension"
 
 export async function get<
   ResponseType extends "arraybuffer" | undefined = undefined
 >(url: string | GetOptions<ResponseType>, headers?: Record<string, string>) {
   console.log("get: ", url)
 
-  await installedAsync
+  await installedAsync.value
 
   if (!window.Http)
     // eslint-disable-next-line functional/no-throw-statement
-    throw new Error(
-      i18n.global.t(
-        "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
-      )
+    throw Object.assign(
+      new Error(
+        i18n.global.t(
+          "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
+        )
+      ),
+      { extesionNotExists: true }
     )
 
   const response = (await window.Http.get(
@@ -75,14 +78,17 @@ export async function post(
     },
   })
 
-  await installedAsync
+  await installedAsync.value
 
   if (!window.Http)
     // eslint-disable-next-line functional/no-throw-statement
-    throw new Error(
-      i18n.global.t(
-        "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
-      )
+    throw Object.assign(
+      new Error(
+        i18n.global.t(
+          "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
+        )
+      ),
+      { extesionNotExists: true }
     )
 
   const response = (await window.Http.post({

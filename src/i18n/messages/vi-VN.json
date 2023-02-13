@@ -166,6 +166,7 @@
   "tap": "tập",
   "tap-_chap": "Tập {0}",
   "tap-_chap-_name-_othername": "Tập {0} {1} {2}",
+  "_name-_othername": "{0} {1}",
   "tap-moi-chieu-vao-_time-_day": "Tập mới chiếu vào {0} {1} {2}",
   "tat-tieng-m": "Tắt tiếng (m)",
   "ten": "Tên",
