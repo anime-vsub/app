@@ -411,6 +411,7 @@ import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import { EmbedFbCmt } from "embed-fbcmt-client/vue"
+import { get, set } from "idb-keyval"
 import {
   QBtn,
   QCard,
@@ -434,7 +435,6 @@ import type { Source } from "src/components/sources"
 import { C_URL, labelToQuality } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
-import { fs } from "src/logic/fs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { post } from "src/logic/http"
 import { parseChapName } from "src/logic/parseChapName"
@@ -478,7 +478,6 @@ const realIdCurrentSeason = computed(() => {
 
   return getRealSeasonId(currentSeason.value)
 })
-
 const { data, run, error, loading } = useRequest(
   async () => {
     // const { }
@@ -490,37 +489,26 @@ const { data, run, error, loading } = useRequest(
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
 
     await Promise.any([
-      fs.readFile(`/phim/${id}.json`).then((text) => {
+      get(`data-${id}`).then((text: string) => {
+        // eslint-disable-next-line functional/no-throw-statement
+        if (!text) throw new Error("not_found")
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
-        if (result) Object.assign(result.value, text)
-        else result = ref(text as unknown as Awaited<ReturnType<typeof PhimId>>)
+        if (result) Object.assign(result.value, JSON.parse(text))
+        else result = ref(JSON.parse(text))
       }),
       PhimId(realIdCurrentSeason.value).then(async (data) => {
+        // eslint-disable-next-line promise/always-return
         if (result) Object.assign(result.value, data)
         else result = ref(data)
 
-        // eslint-disable-next-line promise/always-return
-        switch (
-          await fs
-            .lstat("/phim")
-            // eslint-disable-next-line promise/no-nesting
-            .then((res) => res.isDirectory())
-            // eslint-disable-next-line promise/no-nesting
-            .catch(() => null)
-        ) {
-          case false:
-            await fs.unlink("/phim")
-            await fs.mkdir("/phim")
-            break
-          case null:
-            await fs.mkdir("/phim")
-        }
-
-        // eslint-disable-next-line promise/catch-or-return, promise/no-nesting, @typescript-eslint/no-explicit-any, promise/always-return
-        fs.writeFile(`/phim/${id}.json`, data as unknown as any).then(() => {
-          console.log("[fs]: save cache to fs %s", id)
-        })
+        set(`data-${id}`, JSON.stringify(data))
+          // eslint-disable-next-line promise/no-nesting
+          .then(() => {
+            return console.log("[fs]: save cache to fs %s", id)
+          })
+          // eslint-disable-next-line promise/no-nesting, @typescript-eslint/no-empty-function
+          .catch(() => {})
       }),
     ]).catch((err) => {
       console.error(err)
