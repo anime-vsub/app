@@ -16,149 +16,139 @@ interface User {
   username: string
 }
 
-export const useAuthStore = defineStore("auth", () => {
-  const user_data = ref<User | null>(null)
-  const token_name = ref<string | null>(null)
-  const token_value = ref<string | null>(null)
+export const useAuthStore = defineStore(
+  "auth",
+  () => {
+    const user_data = ref<User | null>(null)
+    const token_name = ref<string | null>(null)
+    const token_value = ref<string | null>(null)
 
-  const user = computed(() => {
-    return user_data.value
-  })
-  const uid = computed(() => {
-    if (!user_data.value) return null
-    return sha256(user_data.value.email + user_data.value.name)
-  })
-  const isLogged = computed(() => {
-    return !!token_name.value && !!token_value.value && !!user_data.value
-  })
-
-  function setUser(value: User, expires: Date) {
-    user_data.value = value
-  }
-  function setToken(name: string, value: string, expires: Date) {
-    token_name.value = name
-    token_value.value = value
-  }
-  function deleteUser() {
-    user_data.value = null
-  }
-  function deleteToken() {
-    token_name.value = null
-    token_value.value = null
-  }
-  function setTokenByCookie(cookie: string) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const token = parse(cookie).find((item) => item.name.startsWith("token"))!
-    // set token
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    setToken(token.name, token.value, token.expires!)
-    return token
-  }
-  // ** actions **
-  async function login(email: string, password: string) {
-    const data = await DangNhap(email, password)
-    const { expires } = setTokenByCookie(data.cookie)
-
-    setUser(
-      {
-        avatar: data.avatar,
-        email: data.email,
-        name: data.name,
-        sex: data.sex,
-        username: data.username,
-      },
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expires!
-    )
-
-    FirebaseAnalytics.logEvent({ name: "login", params: {} })
-
-    return data
-  }
-  async function logout() {
-    deleteToken()
-    deleteUser()
-
-    FirebaseAnalytics.logEvent({ name: "logout", params: {} })
-  }
-  async function changePassword(newPassword: string) {
-    if (!user_data.value)
-      // eslint-disable-next-line functional/no-throw-statement
-      throw new Error(
-        i18n.global.t("errors.require_login_to", [
-          i18n.global.t("thay-doi-mat-khau"),
-        ])
-      )
-
-    const { headers } = await post(
-      "/account/info/",
-      {
-        "User[hoten]": user_data.value.username,
-        "User[gender]": user_data.value.sex,
-        "User[password]": newPassword,
-        submit: "Cập nhật",
-      },
-      {
-        cookie: `${token_name.value}=${token_value.value}`,
-      }
-    ).catch((res) => {
-      // eslint-disable-next-line promise/no-return-wrap
-      if (res.status === 302 && res.data) return Promise.resolve(res)
-
-      // eslint-disable-next-line promise/no-return-wrap
-      return Promise.reject(res)
+    const user = computed(() => {
+      return user_data.value
+    })
+    const uid = computed(() => {
+      if (!user_data.value) return null
+      return sha256(user_data.value.email + user_data.value.name)
+    })
+    const isLogged = computed(() => {
+      return !!token_name.value && !!token_value.value && !!user_data.value
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const cookie = new Headers(headers).get("set-cookie")!
-    setTokenByCookie(cookie)
+    function setUser(value: User) {
+      user_data.value = value
+    }
+    function setToken(name: string, value: string) {
+      token_name.value = name
+      token_value.value = value
+    }
+    function deleteUser() {
+      user_data.value = null
+    }
+    function deleteToken() {
+      token_name.value = null
+      token_value.value = null
+    }
+    function setTokenByCookie(cookie: string) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const token = parse(cookie).find((item) => item.name.startsWith("token"))!
+      // set token
+      setToken(token.name, token.value)
+      return token
+    }
+    // ** actions **
+    async function login(email: string, password: string) {
+      const data = await DangNhap(email, password)
+
+      setUser(
+        {
+          avatar: data.avatar,
+          email: data.email,
+          name: data.name,
+          sex: data.sex,
+          username: data.username,
+        }
+      )
+
+      FirebaseAnalytics.logEvent({ name: "login", params: {} })
+
+      return data
+    }
+    async function logout() {
+      deleteToken()
+      deleteUser()
+
+      FirebaseAnalytics.logEvent({ name: "logout", params: {} })
+    }
+    async function changePassword(newPassword: string) {
+      if (!user_data.value)
+        // eslint-disable-next-line functional/no-throw-statement
+        throw new Error(
+          i18n.global.t("errors.require_login_to", [
+            i18n.global.t("thay-doi-mat-khau"),
+          ])
+        )
+
+      const { headers } = await post(
+        "/account/info/",
+        {
+          "User[hoten]": user_data.value.username,
+          "User[gender]": user_data.value.sex,
+          "User[password]": newPassword,
+          submit: "Cập nhật",
+        },
+        {
+          cookie: `${token_name.value}=${token_value.value}`,
+        }
+      ).catch((res) => {
+        // eslint-disable-next-line promise/no-return-wrap
+        if (res.status === 302 && res.data) return Promise.resolve(res)
+
+        // eslint-disable-next-line promise/no-return-wrap
+        return Promise.reject(res)
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const cookie = new Headers(headers).get("set-cookie")!
+      setTokenByCookie(cookie)
+    }
+
+    // Analytics
+    watch(
+      user_data,
+      (user_data) =>
+        FirebaseAnalytics.setUserProperty({
+          name: "sex",
+          value: user_data?.sex ?? "unknown",
+        }),
+      { immediate: true }
+    )
+    watch(
+      uid,
+      (uid) =>
+        FirebaseAnalytics.setUserId({
+          userId: uid ?? (null as unknown as string),
+        }),
+      { immediate: true }
+    )
+
+    return {
+      user_data,
+      token_name,
+      token_value,
+      user,
+      uid,
+      isLogged,
+      setUser,
+      setToken,
+      deleteUser,
+      deleteToken,
+      setTokenByCookie,
+      login,
+      logout,
+      changePassword,
+    }
+  },
+  {
+    persist: true,
   }
-
-  // Analytics
-  watch(
-    user_data,
-    (user_data) =>
-      FirebaseAnalytics.setUserProperty({
-        name: "sex",
-        value: user_data?.sex ?? "unknown",
-      }),
-    { immediate: true }
-  )
-  watch(
-    uid,
-    (uid) =>
-      FirebaseAnalytics.setUserId({
-        userId: uid ?? (null as unknown as string),
-      }),
-    { immediate: true }
-  )
-
-  return {
-    user_data,
-    token_name,
-    token_value,
-    user,
-    uid,
-    isLogged,
-    setUser,
-    setToken,
-    deleteUser,
-    deleteToken,
-    setTokenByCookie,
-    login,
-    logout,
-    changePassword,
-  }
-}, {
-  persist: true
-})
-
-function parseJSON(value?: string) {
-  if (!value) return null
-
-  try {
-    return JSON.parse(value) ?? null
-  } catch {
-    return null
-  }
-}
+)

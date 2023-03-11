@@ -1080,9 +1080,7 @@ const follows = ref(0)
 
 const $q = useQuasar()
 
-const seasonId = computed(
-  () => realIdCurrentSeason.value?.match(/\d+$/)?.[0]
-)
+const seasonId = computed(() => realIdCurrentSeason.value?.match(/\d+$/)?.[0])
 watch(
   seasonId,
   async (seasonId) => {
