@@ -34,7 +34,7 @@ export const DELAY_SAVE_VIEWING_PROGRESS = 20_000 // x4 6s
 export const REGEXP_OLD_HOST_CURL = /animevietsub\.(?:tv|cc|me)/i
 
 export const HOST_CURL = [
-  97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46, 112, 114, 111,
+  97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46, 105, 110
 ]
   .map((val) => String.fromCharCode(val))
   .join("")
