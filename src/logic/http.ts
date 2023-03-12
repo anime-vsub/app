@@ -58,17 +58,15 @@ export async function post(
 ) {
   const response = await (isSpa ? window.Http : CapacitorHttp).post({
     url: C_URL + url,
-    headers: {
-      "user-agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-      ...(isSpa
-        ? {}
-        : {
-            "content-type": "application/x-www-form-urlencoded",
-          }),
-      ...headers,
-    },
-    data: new URLSearchParams(data).toString(),
+    headers: isSpa
+      ? {}
+      : {
+          "user-agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+          "content-type": "application/x-www-form-urlencoded",
+          ...headers,
+        },
+    data: isSpa ? data : new URLSearchParams(data).toString(),
   })
 
   // eslint-disable-next-line functional/no-throw-statement
