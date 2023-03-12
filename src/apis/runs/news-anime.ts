@@ -36,7 +36,7 @@ export async function NewsAnime(page: number) {
     fetchFromMgn(page).then((html) => {
       return PostWorker<typeof MgnParser>(Worker, html)
     }),
-    fetchFromTinAnime(page),
+    fetchFromTinAnime(page).catch(() => []),
   ])
 
   return sort([...mgn, ...tinanime], {
