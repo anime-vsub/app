@@ -34,7 +34,7 @@ export async function History(lastValue?: ItemData[]): Promise<ItemData[]> {
   const authStore = useAuthStore()
 
   // eslint-disable-next-line camelcase
-  const user_data = authStore.user_data
+  const user_data = authStore.user
 
   // eslint-disable-next-line camelcase, functional/no-throw-statement
   if (!user_data) throw new Error("LOGIN_REQUIRED")

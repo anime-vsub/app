@@ -997,7 +997,7 @@ const sources = computed<Source[] | undefined>(() =>
 const authStore = useAuthStore()
 
 watch(
-  [progressWatchStore, () => authStore.user_data],
+  [progressWatchStore, () => authStore.user],
   // eslint-disable-next-line camelcase
   ([progressWatchStore, user_data]) => {
     // eslint-disable-next-line camelcase
