@@ -59,17 +59,17 @@ export const useAuthStore = defineStore(
     async function login(email: string, password: string) {
       const data = await DangNhap(email, password)
 
-      setUser(
-        {
-          avatar: data.avatar,
-          email: data.email,
-          name: data.name,
-          sex: data.sex,
-          username: data.username,
-        }
-      )
+      setUser({
+        avatar: data.avatar,
+        email: data.email,
+        name: data.name,
+        sex: data.sex,
+        username: data.username,
+      })
 
       FirebaseAnalytics.logEvent({ name: "login", params: {} })
+
+      setTokenByCookie(data.cookie)
 
       return data
     }
