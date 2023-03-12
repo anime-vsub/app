@@ -210,6 +210,14 @@
     </q-list>
 
     <q-list class="mt-4">
+      <q-item clickable v-ripple href="https://anime-vsub.github.io/about/sponsors">
+        <q-item-section avatar>
+          <Icon icon="octicon:sponsor-tiers-24" width="25" height="25" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>Ủng hộ</q-item-label>
+        </q-item-section>
+      </q-item>
       <q-item clickable v-ripple to="/tai-khoan/settings">
         <q-item-section avatar>
           <Icon icon="fluent:settings-24-regular" width="25" height="25" />
