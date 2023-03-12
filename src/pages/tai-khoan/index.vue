@@ -210,7 +210,11 @@
     </q-list>
 
     <q-list class="mt-4">
-      <q-item clickable v-ripple href="https://anime-vsub.github.io/about/sponsors">
+      <q-item
+        clickable
+        v-ripple
+        href="https://anime-vsub.github.io/about/sponsors"
+      >
         <q-item-section avatar>
           <Icon icon="octicon:sponsor-tiers-24" width="25" height="25" />
         </q-item-section>
@@ -424,7 +428,7 @@ watchEffect(() => {
     JSON.stringify({
       token_name: authStore.token_name,
       token_value: authStore.token_value,
-      user_data: authStore.user_data,
+      user_data: authStore.user,
     })
   )
     .then((url) => (qrcodeUrl.value = url))
@@ -499,7 +503,7 @@ watch(qrRef, (qrRef) => {
           JSON.stringify({
             token_name: authStore.token_name,
             token_value: authStore.token_value,
-            user_data: authStore.user_data,
+            user_data: authStore.user,
           })
         )
     )

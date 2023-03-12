@@ -938,7 +938,7 @@ function onVideoCanPlay() {
 let seasonReady = false
 watch(
   [
-    () => authStore.user_data,
+    () => authStore.user,
     () => props.currentSeason,
     () => props.nameCurrentSeason,
     () => props.poster,

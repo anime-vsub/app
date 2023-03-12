@@ -24,6 +24,8 @@ export const useAuthStore = defineStore(
     const token_value = ref<string | null>(null)
 
     const user = computed(() => {
+      if (!token_name.value || !token_value.value) return null
+
       return user_data.value
     })
     const uid = computed(() => {
