@@ -16,6 +16,7 @@ import { computed } from "vue"
 
 import ErrorCloudflare from "./errors/cloudflare.vue"
 import ErrorDomainStrange from "./errors/domain-strange.vue"
+import RequireUpdateExt from "./errors/require-update-ext.vue"
 import ErrorUnknown from "./errors/unknown.vue"
 
 const props = defineProps<{
@@ -32,6 +33,7 @@ const componentErrors = {
   "domain-strange": ErrorDomainStrange,
   unknown: ErrorUnknown,
   "extension-not-exists": NotExistsExtension,
+  "require-update-ext": RequireUpdateExt
 }
 
 const typeError = computed(() => {
@@ -46,6 +48,7 @@ const typeError = computed(() => {
   )
     return "domain-strange"
   if (props.error?.extesionNotExists) return "extension-not-exists"
+  if (props.error?.requireUpdate) return "require-update-ext"
 
   return null
 })

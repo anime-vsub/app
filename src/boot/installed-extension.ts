@@ -23,25 +23,58 @@ Object.defineProperty(window, "Http", {
 const installedAsync = {
   get value() {
     return new Promise<void>((resolve, reject) => {
-      if (installed.value) return resolve()
+      if (installed.value) {
+        if (!Http.version || Http.version < "0.0.21")
+          reject(
+            Object.assign(
+              new Error(
+                i18n.global.t(
+                  "phien-ban-extension-cua-ban-da-qua-cu-hay-cap-nhat-no-de-tiep-tuc"
+                )
+              ),
+              { requireUpdate: true }
+            )
+          )
+        else resolve()
+
+        return
+      }
       if (installed.value === false)
         return reject(
-          new Error(
-            i18n.global.t(
-              "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
-            )
+          Object.assign(
+            new Error(
+              i18n.global.t(
+                "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
+              )
+            ),
+            { extesionNotExists: true }
           )
         )
 
       const watcher = watch(installed, (installed) => {
         watcher()
-        if (installed) resolve()
-        else
-          reject(
-            new Error(
-              i18n.global.t(
-                "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
+        if (installed) {
+          if (!Http.version || Http.version < "0.0.21")
+            reject(
+              Object.assign(
+                new Error(
+                  i18n.global.t(
+                    "phien-ban-extension-cua-ban-da-qua-cu-hay-cap-nhat-no-de-tiep-tuc"
+                  )
+                ),
+                { requireUpdate: true }
               )
+            )
+          else resolve()
+        } else
+          reject(
+            Object.assign(
+              new Error(
+                i18n.global.t(
+                  "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
+                )
+              ),
+              { extesionNotExists: true }
             )
           )
       })

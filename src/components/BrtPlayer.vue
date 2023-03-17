@@ -1664,7 +1664,7 @@ function remount(resetCurrentTime?: boolean) {
               config.timeout
             )
 
-            fetchJava(context.url, {
+            fetchJava(context.url + "#animevsub-vsub", {
               headers,
               signal: controller.signal,
             })
