@@ -58,7 +58,7 @@
   </header>
 
   <q-pull-to-refresh @refresh="refresh" class="pt-[72px]">
-    <div class="mt-4">
+    <div v-if="authStore.user" class="mt-4">
       <router-link
         class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
         to="/tai-khoan/history"
@@ -140,7 +140,7 @@
       />
     </div>
 
-    <div class="mt-4">
+    <div v-if="authStore.user" class="mt-4">
       <router-link
         class="text-subtitle1 text-weight-normal px-4 py-1 relative flex items-center justify-between"
         to="/tai-khoan/follow"
@@ -184,8 +184,10 @@
       />
     </div>
 
-    <div class="text-subtitle1 mx-3 mt-4">Danh sách phát</div>
-    <q-list class="mt-4">
+    <div v-if="authStore.user" class="text-subtitle1 mx-3 mt-4">
+      Danh sách phát
+    </div>
+    <q-list v-if="authStore.user" class="mt-4">
       <q-item
         v-for="item in playlistStore.playlists"
         :key="item.id"
