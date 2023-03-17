@@ -430,11 +430,11 @@
               :src="forceHttp2(currentDataSeason?.image ?? data.image!)"
               no-spinner
               :ratio="280 / 400"
-              width="110px"
+              width="220px"
               class="rounded-lg"
             />
 
-            <div class="pl-2 py-3">
+            <div class="pl-2 py-3 min-w-0">
               <div class="text-[16px] line-clamp-2 text-[#eee] leading-snug">
                 {{ data.name }}
               </div>
