@@ -1162,9 +1162,15 @@ function remount(resetCurrentTime?: boolean) {
             )
 
             headers.set("referer", C_URL)
-              headers,
-              signal: controller.signal,
-            })
+
+            fetchJava(
+              context.url +
+                (process.env.MODE === "spa" ? "#animevsub-vsub" : ""),
+              {
+                headers,
+                signal: controller.signal,
+              }
+            )
               .then(async (res) => {
                 // eslint-disable-next-line functional/no-let
                 let byteLength: number

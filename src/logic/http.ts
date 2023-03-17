@@ -13,7 +13,9 @@ export async function get(
       typeof url === "object"
         ? url
         : {
-            url: url.includes("://") ? url : C_URL + url,
+            url: url.includes("://")
+              ? url
+              : C_URL + url + (isSpa ? "#animevsub-vsub" : ""),
             headers: {
               accept:
                 "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -33,6 +35,11 @@ export async function get(
               "upgrade-insecure-requests": "1",
               "user-agent":
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+              ...(isSpa && !url.includes("://")
+                ? {}
+                : {
+                    referer: C_URL,
+                  }),
               ...headers,
             },
           }
@@ -57,13 +64,18 @@ export async function post(
   headers?: Record<string, string>
 ) {
   const response = await (isSpa ? window.Http : CapacitorHttp).post({
-    url: C_URL + url,
+    url: C_URL + url + (isSpa ? "#animevsub-vsub" : ""),
     headers: isSpa
       ? {}
       : {
           "user-agent":
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
           "content-type": "application/x-www-form-urlencoded",
+          ...(isSpa
+            ? {}
+            : {
+                referer: C_URL,
+              }),
           ...headers,
         },
     data: isSpa ? data : new URLSearchParams(data).toString(),
