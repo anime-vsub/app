@@ -509,7 +509,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Directory } from "@capacitor/filesystem"
+import { Directory, Encoding, Filesystem } from "@capacitor/filesystem"
 import { Share } from "@capacitor/share"
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Icon } from "@iconify/vue"
@@ -549,7 +549,6 @@ import { C_URL, labelToQuality } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
-import { useFs } from "src/logic/fs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
@@ -583,7 +582,6 @@ const historyStore = useHistoryStore()
 const settingsStore = useSettingsStore()
 const playlistStore = usePlaylistStore()
 const { t, locale } = useI18n()
-const fsCache = useFs(Directory.Cache)
 
 const currentSeason = computed(() => route.params.season as string)
 const currentMetaSeason = computed(() => {
@@ -603,43 +601,36 @@ const { data, run, error, loading } = useRequest(
     // eslint-disable-next-line functional/no-let
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
     await Promise.any([
-      fsCache.readFile(`/phim/${id}.json`).then((text) => {
+      Filesystem.readFile({
+        path: `phim-${id}.json`,
+        directory: Directory.Cache,
+        encoding: Encoding.UTF8,
+      }).then(({ data }) => {
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
-        if (result) Object.assign(result.value, text)
-        else result = ref(text as unknown as Awaited<ReturnType<typeof PhimId>>)
+        if (result) Object.assign(result.value, JSON.parse(data))
+        else result = ref(JSON.parse(data))
       }),
+
       PhimId(id).then(async (data) => {
+        // eslint-disable-next-line promise/always-return
         if (result) Object.assign(result.value, data)
         else result = ref(data)
-        // eslint-disable-next-line promise/always-return
-        try {
-          switch (
-            await fsCache
-              .lstat("/phim")
-              // eslint-disable-next-line promise/no-nesting
-              .then((res) => res.isDirectory())
-              // eslint-disable-next-line promise/no-nesting
-              .catch(() => null)
-          ) {
-            case false:
-              await fsCache.unlink("/phim")
-              await fsCache.mkdir("/phim")
-              break
-            case null:
-              await fsCache.mkdir("/phim")
-          }
-          // eslint-disable-next-line promise/catch-or-return
-          fsCache
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .writeFile(`/phim/${id}.json`, data as unknown as any)
-            // eslint-disable-next-line promise/always-return, promise/no-nesting
-            .then(() => {
-              console.log("[fs]: save cache to fs %s", id)
-            })
-        } catch (err) {
-          console.warn("[fs]: save cache fail: ", err)
-        }
+
+        Filesystem.writeFile({
+          path: `phim-${id}.json`,
+          directory: Directory.Cache,
+          encoding: Encoding.UTF8,
+          data: JSON.stringify(data),
+        })
+          // eslint-disable-next-line promise/always-return, promise/no-nesting
+          .then(() => {
+            console.log("[fs]: save cache to fs %s", id)
+          })
+          // eslint-disable-next-line promise/no-nesting
+          .catch((err) => {
+            console.warn("[fs]: save cache fail: ", err)
+          })
       }),
     ])
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

@@ -34,7 +34,6 @@
     "@vueuse/shared": "^9.11.1",
     "artplayer": "^4.6.2",
     "axios": "^1.2.5",
-    "capacitor-fs": "0.0.41-b5",
     "cheerio": "1.0.0-rc.12",
     "dayjs": "^1.11.7",
     "embed-fbcmt-client": "^0.1.32",
