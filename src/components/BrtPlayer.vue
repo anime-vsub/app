@@ -677,7 +677,11 @@ import {
   useQuasar,
 } from "quasar"
 import { useMemoControl } from "src/composibles/memo-control"
-import { DELAY_SAVE_VIEWING_PROGRESS, playbackRates } from "src/constants"
+import {
+  C_URL,
+  DELAY_SAVE_VIEWING_PROGRESS,
+  playbackRates,
+} from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
 import { parseTime } from "src/logic/parseTime"
@@ -1157,7 +1161,7 @@ function remount(resetCurrentTime?: boolean) {
               config.timeout
             )
 
-            fetchJava(context.url, {
+            headers.set("referer", C_URL)
               headers,
               signal: controller.signal,
             })
