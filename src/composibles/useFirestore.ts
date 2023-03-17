@@ -9,7 +9,7 @@ import { onSnapshot } from "@firebase/firestore"
 import type { MaybeRef } from "@vueuse/shared"
 import { isDef, tryOnScopeDispose } from "@vueuse/shared"
 import type { Ref } from "vue"
-import { computed, isRef, ref } from "vue"
+import { computed, isRef, ref, watch } from "vue"
 
 // eslint-disable-next-line functional/no-mixed-type
 export interface UseFirestoreOptions {
@@ -105,6 +105,8 @@ export function useFirestore<T extends DocumentData>(
     }
   }
 
+  watch(refOfDocRef, run, { immediate: true })
+
   // watch(refOfDocRef, run)
 
   if (autoDispose) {
@@ -113,17 +115,5 @@ export function useFirestore<T extends DocumentData>(
     })
   }
 
-  // eslint-disable-next-line functional/no-let
-  let setuped = false
-  return [
-    computed(() => {
-      if (!setuped) {
-        setuped = true
-        run(refOfDocRef.value)
-      }
-
-      return data.value
-    }),
-    () => run(refOfDocRef.value),
-  ]
+  return [data, () => run(refOfDocRef.value)]
 }
