@@ -6,6 +6,7 @@
         :src="forceHttp2(data.image)"
         :ratio="280 / 400"
         :initial-ratio="744 / 530"
+        referrerpolicy="no-referrer"
         class="!rounded-[4px]"
       >
         <BottomBlur class="update-info-layer">

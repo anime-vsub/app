@@ -44,6 +44,7 @@
             <q-img
               no-spinner
               :src="forceHttp2(item.poster)"
+              referrerpolicy="no-referrer"
               :ratio="1920 / 1080"
               class="!rounded-[4px] w-[min(210px,40%)]"
             >

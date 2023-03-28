@@ -24,6 +24,7 @@
                 v-if="metaPlaylist.poster"
                 class="h-auto w-full"
                 :src="forceHttp2(metaPlaylist.poster)"
+                referrerpolicy="no-referrer"
               />
             </div>
             <div
@@ -44,6 +45,7 @@
               v-if="metaPlaylist.poster"
               class="rounded-xl"
               :src="forceHttp2(metaPlaylist.poster)"
+              referrerpolicy="no-referrer"
             />
             <div>
               <div
@@ -262,6 +264,7 @@
             <q-img
               no-spinner
               :src="forceHttp2(item.poster)"
+              referrerpolicy="no-referrer"
               :ratio="1920 / 1080"
               class="!rounded-xl w-[150px]"
             />
