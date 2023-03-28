@@ -10,9 +10,7 @@
 
 <img alt="GitHub Package.json Version" src="https://img.shields.io/github/package-json/v/anime-vsub/desktop-web/main?label=development" /> <img src="https://img.shields.io/github/package-json/v/anime-vsub/desktop-web/release?label=release&color=b" />
 
-
 **✨Note for maintainers:** If you need to fix `cross-domain` from `cdn` remove commit changes https://github.com/anime-vsub/desktop-web/commit/63918f9b8c6f28078c8fbaf181cf5be5e1e26184 as they are relative fix changes and are not needed to use method to fake headers `Referrer` with extension [AnimeVsub Helper](https://github.com/anime-vsub/extension-animevsub-helper)
-
 
 > The web version of this application is bridge based so you must install the extension [AnimeVsub Helper](https://github.com/anime-vsub/extension-animevsub-helper) for the site to work
 
