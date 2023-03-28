@@ -89,6 +89,7 @@
           no-spinner
           :ratio="aspectRatio"
           :src="forceHttp2(item.image!)"
+          referrerpolicy="no-referrer"
           class="poster"
         />
         <div class="drop-left"></div>

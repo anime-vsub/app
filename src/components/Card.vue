@@ -9,6 +9,7 @@
       <q-img
         no-spinner
         :src="forceHttp2(data.image)"
+        referrerpolicy="no-referrer"
         :ratio="280 / 400"
         :initial-ratio="744 / 530"
         class="!rounded-[4px]"

@@ -111,6 +111,7 @@
                     <q-img
                       :ratio="267 / 400"
                       :src="forceHttp2(item.image)"
+                      referrerpolicy="no-referrer"
                       width="90px"
                       class="rounded"
                     />
@@ -409,6 +410,7 @@
                         <q-img
                           no-spinner
                           :src="forceHttp2(item.poster)"
+                          referrerpolicy="no-referrer"
                           :ratio="1920 / 1080"
                           class="!rounded-[4px]"
                         >
@@ -554,6 +556,7 @@
                           <q-img
                             no-spinner
                             :src="forceHttp2(item.image!)"
+                            referrerpolicy="no-referrer"
                             width="128px"
                             :ratio="120 / 81"
                             class="rounded-sm"
@@ -593,6 +596,7 @@
             <img
               v-if="authStore.user_data?.avatar"
               :src="forceHttp2(authStore.user_data.avatar)"
+              referrerpolicy="no-referrer"
             />
             <Icon
               v-else
@@ -621,6 +625,7 @@
                         <img
                           v-if="authStore.user_data?.avatar"
                           :src="forceHttp2(authStore.user_data.avatar)"
+                          referrerpolicy="no-referrer"
                         />
                         <Icon
                           v-else

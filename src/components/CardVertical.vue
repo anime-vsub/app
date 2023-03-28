@@ -4,6 +4,7 @@
       <q-img
         no-spinner
         :src="forceHttp2(data.image)"
+        referrerpolicy="no-referrer"
         :ratio="280 / 400"
         width="110px"
         class="rounded-lg"

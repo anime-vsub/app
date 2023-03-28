@@ -48,6 +48,7 @@
                 <q-img
                   no-spinner
                   :src="forceHttp2(item.image!)"
+                  referrerpolicy="no-referrer"
                   width="120px"
                   :ratio="120 / 81"
                   class="rounded-sm"

@@ -322,6 +322,7 @@
             width="152px"
             class="rounded-xl"
             :src="forceHttp2(data.image)"
+            referrerpolicy="no-referrer"
           />
         </div>
         <div class="flex-1 ml-4">

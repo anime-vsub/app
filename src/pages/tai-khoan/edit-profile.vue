@@ -9,6 +9,7 @@
         <img
           v-if="authStore.user?.avatar"
           :src="forceHttp2(authStore.user.avatar)"
+          referrerpolicy="no-referrer"
         />
         <Icon
           v-else

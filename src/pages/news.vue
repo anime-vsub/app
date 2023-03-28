@@ -108,7 +108,12 @@
       @click="open(item.href)"
     >
       <div>
-        <q-img no-spinner :src="forceHttp2(item.image)" class="image" />
+        <q-img
+          no-spinner
+          :src="forceHttp2(item.image)"
+          referrerpolicy="no-referrer"
+          class="image"
+        />
       </div>
 
       <div class="content">
