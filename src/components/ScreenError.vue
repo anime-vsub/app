@@ -33,7 +33,7 @@ const componentErrors = {
   "domain-strange": ErrorDomainStrange,
   unknown: ErrorUnknown,
   "extension-not-exists": NotExistsExtension,
-  "require-update-ext": RequireUpdateExt
+  "require-update-ext": RequireUpdateExt,
 }
 
 const typeError = computed(() => {
