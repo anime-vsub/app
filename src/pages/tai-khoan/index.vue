@@ -6,7 +6,7 @@
     >
       <q-item-section avatar>
         <q-avatar size="55px">
-          <img
+          <q-img
             v-if="authStore.user?.avatar"
             :src="forceHttp2(authStore.user.avatar)"
           />

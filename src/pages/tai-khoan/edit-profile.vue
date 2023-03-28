@@ -15,7 +15,7 @@
   <template v-if="authStore.isLogged">
     <div class="py-15 text-center pt-[47px]">
       <q-avatar size="80px">
-        <img
+        <q-img
           v-if="authStore.user?.avatar"
           :src="forceHttp2(authStore.user.avatar)"
         />

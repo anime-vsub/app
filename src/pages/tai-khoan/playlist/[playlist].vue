@@ -20,7 +20,7 @@
             <div
               class="w-[200%] opacity-[0.7] transform translate-x-[-25%] filter blur-[30px]"
             >
-              <img
+              <q-img
                 v-if="metaPlaylist.poster"
                 class="h-auto w-full"
                 :src="forceHttp2(metaPlaylist.poster)"
