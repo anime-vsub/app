@@ -9,6 +9,7 @@
           <q-img
             v-if="authStore.user?.avatar"
             :src="forceHttp2(authStore.user.avatar)"
+            referrerpolicy="no-referrer"
           />
           <Icon
             v-else
@@ -105,6 +106,7 @@
           <q-img
             no-spinner
             :src="forceHttp2(item.poster)"
+            referrerpolicy="no-referrer"
             :ratio="1920 / 1080"
             class="!rounded-[4px]"
           >

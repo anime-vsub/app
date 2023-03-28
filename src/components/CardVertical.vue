@@ -7,6 +7,7 @@
         :ratio="280 / 400"
         width="110px"
         class="rounded-lg"
+        referrerpolicy="no-referrer"
       >
         <slot name="img-content" />
       </q-img>

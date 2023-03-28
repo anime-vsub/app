@@ -109,7 +109,12 @@
         @click="open(item.href, item.title)"
       >
         <div>
-          <q-img no-spinner :src="forceHttp2(item.image)" class="image" />
+          <q-img
+            no-spinner
+            :src="forceHttp2(item.image)"
+            referrerpolicy="no-referrer"
+            class="image"
+          />
         </div>
 
         <div class="content">
@@ -123,8 +128,9 @@
             <span class="text-caption text-grey">
               <q-img
                 :src="forceHttp2(item.by.icon)"
-                width="18"
-                height="18"
+                referrerpolicy="no-referrer"
+                width="18px"
+                height="18px"
                 class="inline-block mr-[5px]"
               />{{ item.by.name }} &bull;
               {{ dayjs(item.time).locale("vi").fromNow() }}

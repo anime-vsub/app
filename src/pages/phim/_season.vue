@@ -428,6 +428,7 @@
           <div class="flex flex-nowrap">
             <q-img
               :src="forceHttp2(currentDataSeason?.image ?? data.image!)"
+              referrerpolicy="no-referrer"
               no-spinner
               :ratio="280 / 400"
               width="220px"
