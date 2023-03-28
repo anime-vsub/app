@@ -121,7 +121,7 @@
           </q-card-section>
           <q-card-section class="pt-0">
             <span class="text-caption text-grey">
-              <img
+              <q-img
                 :src="forceHttp2(item.by.icon)"
                 width="18"
                 height="18"
