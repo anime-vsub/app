@@ -1,7 +1,6 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@awesome-cordova-plugins/http': ^6.3.0
   '@capacitor-community/barcode-scanner': ^3.0.1
   '@capacitor-community/firebase-analytics': ^4.0.0
   '@capacitor-community/http': ^1.4.1
@@ -21,7 +20,7 @@ specifiers:
   '@intlify/vite-plugin-vue-i18n': ^6.0.3
   '@ionic/vue': ^6.5.1
   '@ionic/vue-router': ^6.5.1
-  '@quasar/app-vite': ^1.2.0
+  '@quasar/app-vite': ^1.2.1
   '@quasar/cli': ^2.0.0
   '@quasar/extras': ^1.15.10
   '@quasar/icongenie': ^2.5.4
@@ -142,7 +141,6 @@ dependencies:
   vue-router: 4.1.6_vue@3.2.45
 
 devDependencies:
-  '@awesome-cordova-plugins/http': 6.3.0
   '@capacitor-community/barcode-scanner': 3.0.1_@capacitor+core@4.6.2
   '@capacitor-community/firebase-analytics': 4.0.0
   '@capacitor-community/http': 1.4.1
@@ -157,7 +155,7 @@ devDependencies:
   '@capacitor/status-bar': 4.1.1_@capacitor+core@4.6.2
   '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.6.2
   '@intlify/vite-plugin-vue-i18n': 6.0.3_vue-i18n@9.2.2
-  '@quasar/app-vite': 1.2.0_tf2lgpo3q5gyiw7jjjxerv3wju
+  '@quasar/app-vite': 1.2.1_tf2lgpo3q5gyiw7jjjxerv3wju
   '@quasar/cli': 2.0.0
   '@quasar/icongenie': 2.5.4
   '@tachibana-shin/eslint-config': 1.0.7_7uibuqfxkfaozanbtbziikiqje
@@ -198,15 +196,6 @@ packages:
 
   /@antfu/utils/0.7.2:
     resolution: {integrity: sha512-vy9fM3pIxZmX07dL+VX1aZe7ynZ+YyB0jY+jE6r3hOK6GNY2t6W8rzpFC4tgpbXUYABkFQwgJq2XYXlxbXAI0g==}
-    dev: true
-
-  /@awesome-cordova-plugins/http/6.3.0:
-    resolution: {integrity: sha512-RmQaMZ/8aw5q0uQWm6ojfzKO3mjJOxM0IUm63Rxj/khrS6Acq/mKo4UMhgDmBB9Uai0Hj6/VJVe0YvbmKueaVw==}
-    peerDependencies:
-      '@awesome-cordova-plugins/core': ^6.0.1
-      rxjs: ^5.5.0 || ^6.5.0 || ^7.3.0
-    dependencies:
-      '@types/cordova': 11.0.0
     dev: true
 
   /@babel/helper-string-parser/7.19.4:
@@ -1354,8 +1343,8 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@quasar/app-vite/1.2.0_tf2lgpo3q5gyiw7jjjxerv3wju:
-    resolution: {integrity: sha512-MlscKt3XbNAxmyVDtVSp7WlVOnr9TWIVDLP4D8EWu1c+xsLIWIj/H1qL6l8SrCrs208uaVqWofJK2w5x9V4EmQ==}
+  /@quasar/app-vite/1.2.1_tf2lgpo3q5gyiw7jjjxerv3wju:
+    resolution: {integrity: sha512-iKvpucrnt5pQuuQxqkLLWuI7Wm9Xx9fcBK1miMHWBgdcbHOXhc/OrlxeLvRwxm7GMd91cp3nhslo5j3a+zMCOg==}
     engines: {node: ^24 || ^22 || ^20 || ^18 || ^16 || ^14.19, npm: '>= 6.14.12', yarn: '>= 1.17.3'}
     hasBin: true
     peerDependencies:
@@ -1621,10 +1610,6 @@ packages:
 
   /@types/cordova/0.0.34:
     resolution: {integrity: sha512-rkiiTuf/z2wTd4RxFOb+clE7PF4AEJU0hsczbUdkHHBtkUmpWQpEddynNfJYKYtZFJKbq4F+brfekt1kx85IZA==}
-    dev: true
-
-  /@types/cordova/11.0.0:
-    resolution: {integrity: sha512-AtBm1IAqqXsXszJe6XxuA2iXLhraNCj25p/FHRyikPeW0Z3YfgM6qzWb+VJglJTmZc5lqRNy84cYM/sQI5v6Vw==}
     dev: true
 
   /@types/express-serve-static-core/4.17.33:
