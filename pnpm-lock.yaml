@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@awesome-cordova-plugins/http': ^6.3.0
   '@capacitor-community/barcode-scanner': ^3.0.1
   '@capacitor-community/firebase-analytics': ^4.0.0
   '@capacitor-community/http': ^1.4.1
@@ -47,6 +48,7 @@ specifiers:
   axios: ^1.2.5
   chalk: ^5.2.0
   cheerio: 1.0.0-rc.12
+  cordova-plugin-advanced-http: ^3.3.1
   dayjs: ^1.11.7
   embed-fbcmt-client: ^0.1.32
   eruda2: 0.0.2-b8
@@ -72,7 +74,7 @@ specifiers:
   prompts: ^2.4.2
   qr-scanner: ^1.4.2
   qrcode: ^1.5.1
-  quasar: ^2.11.5
+  quasar: ^2.11.9
   rss-parser: ^3.12.0
   sass: 1.32.11
   semver: ^7.3.8
@@ -125,7 +127,7 @@ dependencies:
   pinia-plugin-persistedstate-2: 2.0.10_pinia@2.0.29
   qr-scanner: 1.4.2
   qrcode: 1.5.1
-  quasar: 2.11.5
+  quasar: 2.11.9
   rss-parser: 3.12.0
   set-cookie-parser: 2.5.1
   sha256: 0.2.0
@@ -140,6 +142,7 @@ dependencies:
   vue-router: 4.1.6_vue@3.2.45
 
 devDependencies:
+  '@awesome-cordova-plugins/http': 6.3.0
   '@capacitor-community/barcode-scanner': 3.0.1_@capacitor+core@4.6.2
   '@capacitor-community/firebase-analytics': 4.0.0
   '@capacitor-community/http': 1.4.1
@@ -154,7 +157,7 @@ devDependencies:
   '@capacitor/status-bar': 4.1.1_@capacitor+core@4.6.2
   '@hugotomazi/capacitor-navigation-bar': 2.0.0_@capacitor+core@4.6.2
   '@intlify/vite-plugin-vue-i18n': 6.0.3_vue-i18n@9.2.2
-  '@quasar/app-vite': 1.2.0_woj5meqgkcekjniz3illbipx5m
+  '@quasar/app-vite': 1.2.0_tf2lgpo3q5gyiw7jjjxerv3wju
   '@quasar/cli': 2.0.0
   '@quasar/icongenie': 2.5.4
   '@tachibana-shin/eslint-config': 1.0.7_7uibuqfxkfaozanbtbziikiqje
@@ -174,6 +177,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.49.0_7uibuqfxkfaozanbtbziikiqje
   autoprefixer: 10.4.13
   chalk: 5.2.0
+  cordova-plugin-advanced-http: 3.3.1
   eslint: 8.32.0
   eslint-config-prettier: 8.6.0_eslint@8.32.0
   eslint-plugin-vue: 9.9.0_eslint@8.32.0
@@ -194,6 +198,15 @@ packages:
 
   /@antfu/utils/0.7.2:
     resolution: {integrity: sha512-vy9fM3pIxZmX07dL+VX1aZe7ynZ+YyB0jY+jE6r3hOK6GNY2t6W8rzpFC4tgpbXUYABkFQwgJq2XYXlxbXAI0g==}
+    dev: true
+
+  /@awesome-cordova-plugins/http/6.3.0:
+    resolution: {integrity: sha512-RmQaMZ/8aw5q0uQWm6ojfzKO3mjJOxM0IUm63Rxj/khrS6Acq/mKo4UMhgDmBB9Uai0Hj6/VJVe0YvbmKueaVw==}
+    peerDependencies:
+      '@awesome-cordova-plugins/core': ^6.0.1
+      rxjs: ^5.5.0 || ^6.5.0 || ^7.3.0
+    dependencies:
+      '@types/cordova': 11.0.0
     dev: true
 
   /@babel/helper-string-parser/7.19.4:
@@ -778,8 +791,8 @@ packages:
       vue-i18n:
         optional: true
     dependencies:
-      '@intlify/message-compiler': 9.3.0-beta.16
-      '@intlify/shared': 9.3.0-beta.16
+      '@intlify/message-compiler': 9.3.0-beta.17
+      '@intlify/shared': 9.3.0-beta.17
       jsonc-eslint-parser: 1.4.1
       source-map: 0.6.1
       vue-i18n: 9.2.2_vue@3.2.45
@@ -808,11 +821,11 @@ packages:
       '@intlify/shared': 9.2.2
       source-map: 0.6.1
 
-  /@intlify/message-compiler/9.3.0-beta.16:
-    resolution: {integrity: sha512-CGQI3xRcs1ET75eDQ0DUy3MRYOqTauRIIgaMoISKiF83gqRWg93FqN8lGMKcpBqaF4tI0JhsfosCaGiBL9+dnw==}
+  /@intlify/message-compiler/9.3.0-beta.17:
+    resolution: {integrity: sha512-i7hvVIRk1Ax2uKa9xLRJCT57to08OhFMhFXXjWN07rmx5pWQYQ23MfX1xgggv9drnWTNhqEiD+u4EJeHoS5+Ww==}
     engines: {node: '>= 14'}
     dependencies:
-      '@intlify/shared': 9.3.0-beta.16
+      '@intlify/shared': 9.3.0-beta.17
       source-map: 0.6.1
     dev: true
 
@@ -820,8 +833,8 @@ packages:
     resolution: {integrity: sha512-wRwTpsslgZS5HNyM7uDQYZtxnbI12aGiBZURX3BTR9RFIKKRWpllTsgzHWvj3HKm3Y2Sh5LPC1r0PDCKEhVn9Q==}
     engines: {node: '>= 14'}
 
-  /@intlify/shared/9.3.0-beta.16:
-    resolution: {integrity: sha512-kXbm4svALe3lX+EjdJxfnabOphqS4yQ1Ge/iIlR8tvUiYRCoNz3hig1M4336iY++Dfx5ytEQJPNjIcknNIuvig==}
+  /@intlify/shared/9.3.0-beta.17:
+    resolution: {integrity: sha512-mscf7RQsUTOil35jTij4KGW1RC9SWQjYScwLxP53Ns6g24iEd5HN7ksbt9O6FvTmlQuX77u+MXpBdfJsGqizLQ==}
     engines: {node: '>= 14'}
     dev: true
 
@@ -841,7 +854,7 @@ packages:
         optional: true
     dependencies:
       '@intlify/bundle-utils': 3.4.0_vue-i18n@9.2.2
-      '@intlify/shared': 9.3.0-beta.16
+      '@intlify/shared': 9.3.0-beta.17
       '@rollup/pluginutils': 4.2.1
       debug: 4.3.4
       fast-glob: 3.2.12
@@ -1341,7 +1354,7 @@ packages:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
     dev: false
 
-  /@quasar/app-vite/1.2.0_woj5meqgkcekjniz3illbipx5m:
+  /@quasar/app-vite/1.2.0_tf2lgpo3q5gyiw7jjjxerv3wju:
     resolution: {integrity: sha512-MlscKt3XbNAxmyVDtVSp7WlVOnr9TWIVDLP4D8EWu1c+xsLIWIj/H1qL6l8SrCrs208uaVqWofJK2w5x9V4EmQ==}
     engines: {node: ^24 || ^22 || ^20 || ^18 || ^16 || ^14.19, npm: '>= 6.14.12', yarn: '>= 1.17.3'}
     hasBin: true
@@ -1370,7 +1383,7 @@ packages:
         optional: true
     dependencies:
       '@quasar/fastclick': 1.1.5
-      '@quasar/vite-plugin': 1.3.0_rhifuqgbpd42y3gh7texinc7pi
+      '@quasar/vite-plugin': 1.3.0_swuaddycalfykzsfikt4xyrjua
       '@rollup/pluginutils': 4.2.1
       '@types/chrome': 0.0.208
       '@types/compression': 1.7.2
@@ -1398,7 +1411,7 @@ packages:
       open: 8.4.0
       ouch: 2.0.1
       pinia: 2.0.29_prq2uz4lho2pwp6irk4cfkrxwu
-      quasar: 2.11.5
+      quasar: 2.11.9
       register-service-worker: 1.7.2
       rollup-plugin-visualizer: 5.9.0
       sass: 1.32.12
@@ -1472,7 +1485,7 @@ packages:
       update-notifier: 5.1.0
     dev: true
 
-  /@quasar/vite-plugin/1.3.0_rhifuqgbpd42y3gh7texinc7pi:
+  /@quasar/vite-plugin/1.3.0_swuaddycalfykzsfikt4xyrjua:
     resolution: {integrity: sha512-wd7b/QrKu/WB53l+vxo6GLbkoEwh5FFKLtLl3fM8TXrDDRB1qsKKkRa/vwTU4dpuyBaOZDjycmYuAsOlTdNp8w==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -1482,7 +1495,7 @@ packages:
       vue: ^3.0.0
     dependencies:
       '@vitejs/plugin-vue': 2.3.4_vite@2.9.15+vue@3.2.45
-      quasar: 2.11.5
+      quasar: 2.11.9
       vite: 2.9.15_sass@1.32.12
       vue: 3.2.45
     dev: true
@@ -1608,6 +1621,10 @@ packages:
 
   /@types/cordova/0.0.34:
     resolution: {integrity: sha512-rkiiTuf/z2wTd4RxFOb+clE7PF4AEJU0hsczbUdkHHBtkUmpWQpEddynNfJYKYtZFJKbq4F+brfekt1kx85IZA==}
+    dev: true
+
+  /@types/cordova/11.0.0:
+    resolution: {integrity: sha512-AtBm1IAqqXsXszJe6XxuA2iXLhraNCj25p/FHRyikPeW0Z3YfgM6qzWb+VJglJTmZc5lqRNy84cYM/sQI5v6Vw==}
     dev: true
 
   /@types/express-serve-static-core/4.17.33:
@@ -3026,6 +3043,11 @@ packages:
   /cookie/0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
+    dev: true
+
+  /cordova-plugin-advanced-http/3.3.1:
+    resolution: {integrity: sha512-hESuB3mxIHCUrzb5lm7juda6PSNcC5N8Invizj5wGV2rSldCapiNxMTEpzKR1UVPDDP2XOtBzO0SAYS+3+g/ig==}
+    engines: {'0': {name: cordova, version: '>=4.0.0'}}
     dev: true
 
   /core-util-is/1.0.3:
@@ -7124,8 +7146,8 @@ packages:
       side-channel: 1.0.4
     dev: true
 
-  /quasar/2.11.5:
-    resolution: {integrity: sha512-rX4Rwp9wlCeB9A6RQUxEx/q84LMBVVm6WTECkoq8r/+NBgl9aHVexzZQBnRn2i61D0BJpdX5VcnMxAnJkTx/kA==}
+  /quasar/2.11.9:
+    resolution: {integrity: sha512-ZHSZRQJk/zN6whhvihh0EyRpAs3IYBZZ+1O5/RSe7nXyOXOVi6RwPBzleab5HoTxtHL5Yuk3/bKgb3CywAyBQQ==}
     engines: {node: '>= 10.18.1', npm: '>= 6.13.4', yarn: '>= 1.21.1'}
 
   /query-string/5.1.1:
