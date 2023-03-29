@@ -41,24 +41,24 @@ export const useAuthStore = defineStore("auth", () => {
     return !!token_name.value && !!token_value.value && !!user_data.value
   })
 
-  function setUser(value: User, expires: Date) {
+  function setUser(value: User) {
     user_data.value = value
     cookie.set("user_data", JSON.stringify(value), {
-      expires,
+      expires: 30,
       sameSite: "None",
       secure: true,
     })
   }
-  function setToken(name: string, value: string, expires: Date) {
+  function setToken(name: string, value: string) {
     token_name.value = name
     token_value.value = value
     cookie.set("token_name", name, {
-      expires,
+      expires: 30,
       sameSite: "None",
       secure: true,
     })
     cookie.set("token_value", value, {
-      expires,
+      expires: 30,
       sameSite: "None",
       secure: true,
     })
@@ -81,26 +81,21 @@ export const useAuthStore = defineStore("auth", () => {
       .flat(1)
       .find((item) => item.name.startsWith("token"))!
     // set token
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    setToken(token.name, token.value, token.expires!)
+    setToken(token.name, token.value)
     return token
   }
   // ** actions **
   async function login(email: string, password: string) {
     const data = await DangNhap(email, password)
 
-    const { expires } = setTokenByCookie(data.cookie)
-    setUser(
-      {
-        avatar: data.avatar,
-        email: data.email,
-        name: data.name,
-        sex: data.sex,
-        username: data.username,
-      },
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      expires!
-    )
+    setUser({
+      avatar: data.avatar,
+      email: data.email,
+      name: data.name,
+      sex: data.sex,
+      username: data.username,
+    })
+    setTokenByCookie(data.cookie)
 
     logEvent(analytics, "login")
 
