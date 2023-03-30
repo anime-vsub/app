@@ -1355,36 +1355,33 @@ function onVideoCanPlay() {
   activeTime = Date.now()
 }
 
-// eslint-disable-next-line functional/no-let
-let seasonReady = false
-watch(
-  [
-    () => authStore.user_data,
-    () => props.currentSeason,
-    () => props.nameCurrentSeason,
-    () => props.poster,
-  ],
+const seasonMetaCreated = new Set<string>()
   // eslint-disable-next-line camelcase
-  async ([user_data, currentSeason, seasonName, poster]) => {
-    seasonReady = false
+  async function createSeason (): Promise<boolean>  {
+    const { user_data } = authStore
+    const { currentSeason, nameCurrentChap: seasonName, poster } = props
+    const visibility = documentVisibility.value === "visible"
+
+    if (seasonMetaCreated.has(currentSeason)) return true
+
     if (
       // eslint-disable-next-line camelcase
       !user_data ||
       !currentSeason ||
       typeof seasonName !== "string" ||
-      !poster
+      !poster ||
+      !visibility
     )
-      return
+      return false
     console.log("set new season poster %s", poster)
     await historyStore.createSeason(currentSeason, {
       poster,
       seasonName,
       name: props.name,
     })
-    seasonReady = true
-  },
-  { immediate: true }
-)
+    seasonMetaCreated.add(currentSeason)
+  return true
+  }
 
 const emit = defineEmits<{
   (
@@ -1406,6 +1403,8 @@ const saveCurTimeToPer = throttle(
     dur: number,
     nameCurrentChap: string
   ) => {
+    if (!(await createSeason())) return
+
     const uid = `${currentSeason}/${currentChap}` // 255 byte
 
     if (processingSaveCurTimeIn === uid) return // in progressing save this
@@ -1448,7 +1447,6 @@ function onVideoTimeUpdate() {
   }
 
   if (!progressRestored) return
-  if (!seasonReady) return
   if (!props.currentChap) return
   if (typeof props.nameCurrentChap !== "string") return
 
