@@ -1356,32 +1356,33 @@ function onVideoCanPlay() {
 }
 
 const seasonMetaCreated = new Set<string>()
+
+async function createSeason(): Promise<boolean> {
   // eslint-disable-next-line camelcase
-  async function createSeason (): Promise<boolean>  {
-    const { user_data } = authStore
-    const { currentSeason, nameCurrentChap: seasonName, poster } = props
-    const visibility = documentVisibility.value === "visible"
+  const { user_data } = authStore
+  const { currentSeason, nameCurrentChap: seasonName, poster } = props
+  const visibility = documentVisibility.value === "visible"
 
-    if (seasonMetaCreated.has(currentSeason)) return true
+  if (seasonMetaCreated.has(currentSeason)) return true
 
-    if (
-      // eslint-disable-next-line camelcase
-      !user_data ||
-      !currentSeason ||
-      typeof seasonName !== "string" ||
-      !poster ||
-      !visibility
-    )
-      return false
-    console.log("set new season poster %s", poster)
-    await historyStore.createSeason(currentSeason, {
-      poster,
-      seasonName,
-      name: props.name,
-    })
-    seasonMetaCreated.add(currentSeason)
+  if (
+    // eslint-disable-next-line camelcase
+    !user_data ||
+    !currentSeason ||
+    typeof seasonName !== "string" ||
+    !poster ||
+    !visibility
+  )
+    return false
+  console.log("set new season poster %s", poster)
+  await historyStore.createSeason(currentSeason, {
+    poster,
+    seasonName,
+    name: props.name,
+  })
+  seasonMetaCreated.add(currentSeason)
   return true
-  }
+}
 
 const emit = defineEmits<{
   (
