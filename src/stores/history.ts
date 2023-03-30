@@ -24,6 +24,7 @@ import dayjs from "dayjs"
 import { defineStore } from "pinia"
 import { app } from "src/boot/firebase"
 import { useFirestore } from "src/composibles/useFirestore"
+import dayjs from "src/logic/dayjs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
 import { computed, ref } from "vue"
@@ -36,6 +37,12 @@ const generateUUID = isCryptoReady
   : () => {
       return parseInt(Math.random().toString().replace(".", "")).toString(34)
     }
+
+function isToday(date?: Date) {
+  if (!date) return false
+
+  return dayjs(date).isToday()
+}
 
 export const useHistoryStore = defineStore("history", () => {
   const db = getFirestore(app)
@@ -249,10 +256,9 @@ export const useHistoryStore = defineStore("history", () => {
           // eslint-disable-next-line promise/always-return
           if (
             size !== 0 &&
-            (docs[0].id !== realSeason ||
-              docs[0].data().timestamp?.toDate().getDate() !==
-                new Date().getDate()) &&
-            !docs[0].id.endsWith(`#${realSeason}`)
+            ((docs[0].id !== realSeason &&
+              !docs[0].id.endsWith(`#${realSeason}`)) ||
+              !isToday(docs[0].data().timestamp?.toDate()))
           ) {
             oldData = await getDoc(seasonRef)
           }
