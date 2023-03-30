@@ -3,7 +3,8 @@ import type {
   DocumentReference,
   DocumentSnapshot,
   QueryDocumentSnapshot,
-  Timestamp} from "@firebase/firestore";
+  Timestamp,
+} from "@firebase/firestore"
 import {
   collection,
   doc,
@@ -158,7 +159,8 @@ export const useHistoryStore = defineStore("history", () => {
       getRealSeasonId(seasonId)
     ) as DocumentReference<HistoryItem>
 
-    if (!(await getDoc(seasonRef)).exists())
+    const snap = await getDoc(seasonRef)
+    if (!snap.exists() || snap.data().season !== seasonId)
       await setDoc(seasonRef, {
         season: seasonId,
         ...info,
