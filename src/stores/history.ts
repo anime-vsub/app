@@ -281,8 +281,7 @@ export const useHistoryStore = defineStore("history", () => {
             new Promise<void>((resolve, reject) => {
               if (!oldData || !oldData.exists()) return resolve()
               // clone now
-              const { poster, name, season, seasonName, last, timestamp } =
-                oldData.data()
+              const data = oldData.data()
               // save by buff diff
 
               const seasonRefOldData = doc(
@@ -293,12 +292,8 @@ export const useHistoryStore = defineStore("history", () => {
               setDoc(
                 seasonRefOldData,
                 {
-                  poster: removeHostUrlImage(poster),
-                  name,
-                  season,
-                  seasonName,
-                  last,
-                  timestamp,
+                  ...data,
+                  poster: removeHostUrlImage(data.poster),
                 },
                 { merge: true }
               )
