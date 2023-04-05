@@ -1,13 +1,13 @@
 import type AccountInfoParser from "src/apis/parser/account/info"
 import Worker from "src/apis/workers/account/info?worker"
 import { i18n } from "src/boot/i18n"
-import { C_URL } from "src/constants"
-import { post } from "src/logic/http"
-import { Md5 } from "ts-md5"
+import { get } from "src/logic/http"
 
 import { PostWorker } from "../wrap-worker"
 
+// eslint-disable-next-line camelcase
 export async function GetUser(token_name: string, token_value: string) {
+   // eslint-disable-next-line camelcase
    if (!token_name || !token_value)
      // eslint-disable-next-line functional/no-throw-statement
      throw new Error(
@@ -15,11 +15,12 @@ export async function GetUser(token_name: string, token_value: string) {
          i18n.global.t("xem-anime-da-theo-doi"),
        ])
      )
- 
-   const { data: html } = await get(`/account/info`, {
+
+   const { data: html, headers } = await get("/account/info", {
+     // eslint-disable-next-line camelcase
      cookie: `${token_name}=${token_value}`,
    })
- 
+
 
   if (html.includes("user-name-text")) {
     // login success

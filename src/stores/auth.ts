@@ -11,6 +11,7 @@ import { defineStore } from "pinia"
 import { parse } from "set-cookie-parser"
 import sha256 from "sha256"
 import { DangNhap } from "src/apis/runs/dang-nhap"
+import { GetUser } from "src/apis/runs/get-user"
 import { i18n } from "src/boot/i18n"
 import { post } from "src/logic/http"
 import { computed, ref, watch } from "vue"
@@ -42,6 +43,7 @@ export const useAuthStore = defineStore("auth", () => {
   })
 
   if (token_name.value && token_value.value)
+    // eslint-disable-next-line promise/catch-or-return, promise/always-return
     GetUser(token_name.value, token_value.value).then((data) => {
       setUser({
         avatar: data.avatar,
