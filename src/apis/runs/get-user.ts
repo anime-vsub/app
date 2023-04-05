@@ -7,20 +7,19 @@ import { PostWorker } from "../wrap-worker"
 
 // eslint-disable-next-line camelcase
 export async function GetUser(token_name: string, token_value: string) {
-   // eslint-disable-next-line camelcase
-   if (!token_name || !token_value)
-     // eslint-disable-next-line functional/no-throw-statement
-     throw new Error(
-       i18n.global.t("errors.require_login_to", [
-         i18n.global.t("xem-anime-da-theo-doi"),
-       ])
-     )
+  // eslint-disable-next-line camelcase
+  if (!token_name || !token_value)
+    // eslint-disable-next-line functional/no-throw-statement
+    throw new Error(
+      i18n.global.t("errors.require_login_to", [
+        i18n.global.t("xem-anime-da-theo-doi"),
+      ])
+    )
 
-   const { data: html, headers } = await get("/account/info", {
-     // eslint-disable-next-line camelcase
-     cookie: `${token_name}=${token_value}`,
-   })
-
+  const { data: html, headers } = await get("/account/info", {
+    // eslint-disable-next-line camelcase
+    cookie: `${token_name}=${token_value}`,
+  })
 
   if (html.includes("user-name-text")) {
     // login success
