@@ -41,6 +41,18 @@ export const useAuthStore = defineStore("auth", () => {
     return !!token_name.value && !!token_value.value && !!user_data.value
   })
 
+  if (token_name.value && token_value.value)
+    GetUser(token_name.value, token_value.value).then((data) => {
+      setUser({
+        avatar: data.avatar,
+        email: data.email,
+        name: data.name,
+        sex: data.sex,
+        username: data.username,
+      })
+      setTokenByCookie(data.cookie)
+    })
+
   function setUser(value: User) {
     user_data.value = value
     cookie.set("user_data", JSON.stringify(value), {
