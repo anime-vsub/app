@@ -14,7 +14,8 @@ import { DangNhap } from "src/apis/runs/dang-nhap"
 import { GetUser } from "src/apis/runs/get-user"
 import { i18n } from "src/boot/i18n"
 import { post } from "src/logic/http"
-import { computed, ref, watch } from "vue"
+import type { Ref } from "vue"
+import { computed, nextTick, ref, toRaw, watch } from "vue"
 
 interface User {
   avatar?: string
@@ -24,12 +25,49 @@ interface User {
   username: string
 }
 
+// eslint-disable-next-line functional/no-let
+let syncCookie: ((ref: Ref<unknown>, name: string) => void) | null = null
+if (typeof BroadcastChannel !== "undefined") {
+  const broad = new BroadcastChannel("sync_cookie")
+
+  const cbs: Set<
+    (event: MessageEvent<{ name: string; value: unknown }>) => void
+  > = new Set()
+  broad.onmessage = (event) => cbs.forEach((cb) => cb(event))
+
+  syncCookie = function syncCookie(ref: Ref<unknown>, name: string) {
+    // eslint-disable-next-line functional/no-let
+    let paused = false
+    cbs.add(async (event) => {
+      if (event.data.name === name) {
+        paused = true
+        ref.value = event.data.value
+        await nextTick()
+        paused = false
+      }
+    })
+
+    watch(ref, (ref) => {
+      if (!paused)
+        broad.postMessage({
+          name,
+          value: toRaw(ref),
+        })
+      else console.info("[cookie sync]: bypass emit")
+    })
+  }
+}
+
 export const useAuthStore = defineStore("auth", () => {
   const analytics = getAnalytics()
 
   const user_data = ref(parseJSON(cookie.get("user_data")) as null | User)
   const token_name = ref((cookie.get("token_name") ?? null) as null | string)
   const token_value = ref((cookie.get("token_value") ?? null) as null | string)
+
+  syncCookie?.(user_data, "user_data")
+  syncCookie?.(token_name, "token_name")
+  syncCookie?.(token_value, "token_value")
 
   const user = computed(() => {
     return user_data.value
