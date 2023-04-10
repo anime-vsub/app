@@ -24,7 +24,6 @@
         @canplay=";(artLoading = false), onVideoCanPlay()"
         @canplaythrough="artLoading = false"
         @waiting="artLoading = true"
-        @error="onVideoError"
         @ended="onVideoEnded"
       />
 
@@ -1036,33 +1035,33 @@ function onVideoTimeUpdate() {
     props.nameCurrentChap
   )
 }
-function onVideoError(event: Event) {
-  console.log("video error ", event)
+// function onVideoError(event: Event) {
+//   console.log("video error ", event)
 
-  $q.notify({
-    message: "Đã gặp sự cố khi phát lại",
-    position: "bottom-right",
-    timeout: 0,
-    actions: [
-      {
-        label: "Thử lại",
-        color: "white",
-        handler() {
-          console.log("retry force")
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          video.value!.load()
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          video.value!.play()
-        },
-      },
-      {
-        label: "Remount",
-        color: "white",
-        handler: remount,
-      },
-    ],
-  })
-}
+//   $q.notify({
+//     message: "Đã gặp sự cố khi phát lại",
+//     position: "bottom-right",
+//     timeout: 0,
+//     actions: [
+//       {
+//         label: "Thử lại",
+//         color: "white",
+//         handler() {
+//           console.log("retry force")
+//           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//           video.value!.load()
+//           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//           video.value!.play()
+//         },
+//       },
+//       {
+//         label: "Remount",
+//         color: "white",
+//         handler: remount,
+//       },
+//     ],
+//   })
+// }
 function onVideoEnded() {
   artEnded = true
   if (props.nextChap && settingsStore.player.autoNext) {
@@ -1237,52 +1236,17 @@ function remount(resetCurrentTime?: boolean) {
               })
               break
             }
-            case Hls.ErrorTypes.MEDIA_ERROR: {
-              $q.notify({
-                message: t("loi-trinh-phat-khong-xac-dinh"),
-                position: "bottom-right",
-                timeout: 0,
-                actions: [
-                  {
-                    label: t("thu-lai"),
-                    color: "yellow",
-                    noCaps: true,
-                    handler: () => hls.recoverMediaError(),
-                  },
-                  {
-                    icon: "close",
-                    round: true,
-                  },
-                ],
-              })
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log('fatal media error encountered, try to recover');
+              hls.recoverMediaError();
               break
-            }
-            default: {
-              $q.notify({
-                message: t("da-gap-su-co-khi-phat-lai"),
-                position: "bottom-right",
-                timeout: 0,
-                actions: [
-                  {
-                    label: t("thu-lai"),
-                    color: "white",
-                    handler() {
-                      console.log("retry force")
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      video.value!.load()
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      video.value!.play()
-                    },
-                  },
-                  {
-                    label: t("remount"),
-                    color: "white",
-                    handler: remount,
-                  },
-                ],
-              })
+            default:
+              console.log("retry force")
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              video.value!.load()
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              video.value!.play()
               break
-            }
           }
         } else {
           console.warn("Player error: ", data)
