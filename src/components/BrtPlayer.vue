@@ -1732,26 +1732,10 @@ function remount(resetCurrentTime?: boolean) {
               })
               break
             }
-            case Hls.ErrorTypes.MEDIA_ERROR: {
-              $q.notify({
-                message: t("loi-trinh-phat-khong-xac-dinh"),
-                position: "bottom-right",
-                timeout: 0,
-                actions: [
-                  {
-                    label: t("thu-lai"),
-                    color: "yellow",
-                    noCaps: true,
-                    handler: () => hls.recoverMediaError(),
-                  },
-                  {
-                    icon: "close",
-                    round: true,
-                  },
-                ],
-              })
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log('fatal media error encountered, try to recover');
+              hls.recoverMediaError();
               break
-            }
             default: {
               $q.notify({
                 message: t("da-gap-su-co-khi-phat-lai"),
