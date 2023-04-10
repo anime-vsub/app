@@ -18,12 +18,13 @@ import {
   setDoc,
   startAfter,
   where,
+  writeBatch,
 } from "@firebase/firestore"
 import { i18n } from "boot/i18n"
-import dayjs from "dayjs"
 import { defineStore } from "pinia"
 import { app } from "src/boot/firebase"
 import { useFirestore } from "src/composibles/useFirestore"
+import dayjs from "src/logic/dayjs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
 import { computed, ref } from "vue"
@@ -36,6 +37,12 @@ const generateUUID = isCryptoReady
   : () => {
       return parseInt(Math.random().toString().replace(".", "")).toString(34)
     }
+
+function isToday(date?: Date) {
+  if (!date) return false
+
+  return dayjs(date).isToday()
+}
 
 export const useHistoryStore = defineStore("history", () => {
   const db = getFirestore(app)
@@ -152,7 +159,8 @@ export const useHistoryStore = defineStore("history", () => {
       getRealSeasonId(seasonId)
     ) as DocumentReference<HistoryItem>
 
-    if (!(await getDoc(seasonRef)).exists())
+    const snap = await getDoc(seasonRef)
+    if (!snap.exists() || snap.data().season !== seasonId)
       await setDoc(seasonRef, {
         season: seasonId,
         ...info,
@@ -246,68 +254,53 @@ export const useHistoryStore = defineStore("history", () => {
           // this is old data. not conflict data with save in previous then
           // eslint-disable-next-line functional/no-let
           let oldData: DocumentSnapshot<Required<HistoryItem>> | null = null
-          // eslint-disable-next-line promise/always-return
+
           if (
             size !== 0 &&
-            (docs[0].id !== realSeason ||
-              docs[0].data().timestamp?.toDate().getDate() !==
-                new Date().getDate()) &&
-            !docs[0].id.endsWith(`#${realSeason}`)
+            ((docs[0].id !== realSeason &&
+              !docs[0].id.endsWith(`#${realSeason}`)) ||
+              !isToday(docs[0].data().timestamp?.toDate()))
           ) {
             oldData = await getDoc(seasonRef)
           }
           // update to pre-read on history (indexed faster)
-          await Promise.allSettled([
-            setDoc(
-              seasonRef,
+
+          const batch = writeBatch(db)
+          batch.set(
+            seasonRef,
+            {
+              timestamp: serverTimestamp(),
+              season,
+              last: {
+                chap,
+                ...info,
+              },
+            },
+            { merge: true }
+          )
+
+          // create fake data replace fix #70
+          if (oldData?.exists()) {
+            // clone now
+            const data = oldData.data()
+            // save by buff diff
+
+            const seasonRefOldData = doc(
+              seasonRef.parent,
+              `${generateUUID()}#${realSeason}`
+            )
+
+            batch.set(
+              seasonRefOldData,
               {
-                timestamp: serverTimestamp(),
-                season,
-                last: {
-                  chap,
-                  ...info,
-                },
+                ...data,
+                poster: removeHostUrlImage(data.poster),
               },
               { merge: true }
-              // eslint-disable-next-line promise/no-nesting
-            ).catch((err) => console.error("update time error", err)),
-            // create fake data replace fix #70
-            new Promise<void>((resolve, reject) => {
-              if (!oldData || !oldData.exists()) return resolve()
-              // clone now
-              const { poster, name, season, seasonName, last, timestamp } =
-                oldData.data()
-              // save by buff diff
+            )
+          }
 
-              const seasonRefOldData = doc(
-                seasonRef.parent,
-                `${generateUUID()}#${realSeason}`
-              )
-
-              setDoc(
-                seasonRefOldData,
-                {
-                  poster: removeHostUrlImage(poster),
-                  name,
-                  season,
-                  seasonName,
-                  last,
-                  timestamp,
-                },
-                { merge: true }
-              )
-                // eslint-disable-next-line promise/no-nesting
-                .then(resolve)
-                .catch((err) => {
-                  reject(err)
-                  console.error(
-                    "create fake data history failed!",
-                    oldData?.data(),
-                    err
-                  )
-                })
-            }),
-          ])
+          return batch.commit()
         })
 
         .catch((err) => {
