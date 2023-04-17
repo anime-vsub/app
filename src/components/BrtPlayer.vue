@@ -1191,6 +1191,7 @@ const setArtPlaying = (playing: boolean) => {
     console.log("video element not ready")
     return
   }
+  artPlaying.value = playing
   if (playing) {
     // video.value.load();
     if (video.value.paused) video.value.play()
@@ -1713,30 +1714,8 @@ function remount(resetCurrentTime?: boolean) {
       // eslint-disable-next-line no-case-declarations, functional/no-let, no-undef
       let timeoutUnneedSwapCodec: NodeJS.Timeout | number | null = null
       hls.on(Hls.Events.ERROR, (event, data) => {
-        if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-          if (timeoutUnneedSwapCodec) {
-            clearTimeout(timeoutUnneedSwapCodec)
-            timeoutUnneedSwapCodec = null
-          }
-          console.log("fatal media error encountered, try to recover")
-          if (needSwapCodec) {
-            hls.swapAudioCodec()
-            needSwapCodec = false
-            if (timeoutUnneedSwapCodec) {
-              clearTimeout(timeoutUnneedSwapCodec)
-              timeoutUnneedSwapCodec = null
-            }
-          } else {
-            needSwapCodec = true
-            timeoutUnneedSwapCodec = setTimeout(() => {
-              needSwapCodec = false
-              timeoutUnneedSwapCodec = null
-            }, 1_000)
-          }
-          hls.recoverMediaError()
-          return
-        }
         if (data.fatal) {
+          console.warn("Player fatal: ", data)
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR: {
               // try to recover network error
@@ -1757,6 +1736,29 @@ function remount(resetCurrentTime?: boolean) {
                   },
                 ],
               })
+              break
+            }
+            case Hls.ErrorTypes.MEDIA_ERROR: {
+              if (timeoutUnneedSwapCodec) {
+                clearTimeout(timeoutUnneedSwapCodec)
+                timeoutUnneedSwapCodec = null
+              }
+              console.warn("fatal media error encountered, try to recover")
+              if (needSwapCodec) {
+                hls.swapAudioCodec()
+                needSwapCodec = false
+                if (timeoutUnneedSwapCodec) {
+                  clearTimeout(timeoutUnneedSwapCodec)
+                  timeoutUnneedSwapCodec = null
+                }
+              } else {
+                needSwapCodec = true
+                timeoutUnneedSwapCodec = setTimeout(() => {
+                  needSwapCodec = false
+                  timeoutUnneedSwapCodec = null
+                }, 1_000)
+              }
+              hls.recoverMediaError()
               break
             }
             default: {
