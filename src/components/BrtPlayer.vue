@@ -1708,7 +1708,34 @@ function remount(resetCurrentTime?: boolean) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (playing) video.value!.play()
       })
+      // eslint-disable-next-line no-case-declarations, functional/no-let
+      let needSwapCodec = false
+      // eslint-disable-next-line no-case-declarations, functional/no-let, no-undef
+      let timeoutUnneedSwapCodec: NodeJS.Timeout | number | null = null
       hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+          if (timeoutUnneedSwapCodec) {
+            clearTimeout(timeoutUnneedSwapCodec)
+            timeoutUnneedSwapCodec = null
+          }
+          console.log("fatal media error encountered, try to recover")
+          if (needSwapCodec) {
+            hls.swapAudioCodec()
+            needSwapCodec = false
+            if (timeoutUnneedSwapCodec) {
+              clearTimeout(timeoutUnneedSwapCodec)
+              timeoutUnneedSwapCodec = null
+            }
+          } else {
+            needSwapCodec = true
+            timeoutUnneedSwapCodec = setTimeout(() => {
+              needSwapCodec = false
+              timeoutUnneedSwapCodec = null
+            }, 1_000)
+          }
+          hls.recoverMediaError()
+          return
+        }
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR: {
@@ -1732,10 +1759,6 @@ function remount(resetCurrentTime?: boolean) {
               })
               break
             }
-            case Hls.ErrorTypes.MEDIA_ERROR:
-              console.log('fatal media error encountered, try to recover');
-              hls.recoverMediaError();
-              break
             default: {
               $q.notify({
                 message: t("da-gap-su-co-khi-phat-lai"),
