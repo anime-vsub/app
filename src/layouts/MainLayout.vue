@@ -214,6 +214,24 @@
                   clickable
                   v-ripple
                   class="rounded-xl"
+                  target="_blank"
+                  href="https://anime-vsub.github.io/about/sponsors"
+                >
+                  <q-item-section avatar class="min-w-0">
+                    <Icon
+                      icon="octicon:sponsor-tiers-24"
+                      width="20"
+                      height="20"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{ t('tai-tro-ung-ho') }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  v-ripple
+                  class="rounded-xl"
                   @click="checkForUpdate"
                 >
                   <q-item-section avatar class="min-w-0">
