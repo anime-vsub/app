@@ -1242,6 +1242,7 @@ function remount(resetCurrentTime?: boolean) {
               break
             }
             case Hls.ErrorTypes.MEDIA_ERROR: {
+              const playing = artPlaying.value
               if (timeoutUnneedSwapCodec) {
                 clearTimeout(timeoutUnneedSwapCodec)
                 timeoutUnneedSwapCodec = null
@@ -1262,6 +1263,9 @@ function remount(resetCurrentTime?: boolean) {
                 }, 1_000)
               }
               hls.recoverMediaError()
+              if (playing)
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                video.value!.play()
               break
             }
             default:
