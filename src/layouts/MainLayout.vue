@@ -225,7 +225,7 @@
                     />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>{{ t('tai-tro-ung-ho') }}</q-item-label>
+                    <q-item-label>{{ t("tai-tro-ung-ho") }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item

@@ -1002,7 +1002,11 @@ import {
   useQuasar,
 } from "quasar"
 import { useMemoControl } from "src/composibles/memo-control"
-import { CONFIRMATION_TIME_IS_ACTUALLY_WATCHING, DELAY_SAVE_VIEWING_PROGRESS, playbackRates } from "src/constants"
+import {
+  CONFIRMATION_TIME_IS_ACTUALLY_WATCHING,
+  DELAY_SAVE_VIEWING_PROGRESS,
+  playbackRates,
+} from "src/constants"
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
