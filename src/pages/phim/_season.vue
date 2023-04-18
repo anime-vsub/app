@@ -607,6 +607,7 @@ import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
+import { useStateStorageStore } from "stores/state"
 import type { Ref } from "vue"
 import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
@@ -620,7 +621,6 @@ import type {
   Season,
 } from "./_season.interface"
 import { ResponseDataSeasonSuccess } from "./_season.interface"
-import { useStateStorageStore } from "stores/state"
 
 // ================ follow ================
 // =======================================================

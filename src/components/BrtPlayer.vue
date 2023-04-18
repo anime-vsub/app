@@ -694,6 +694,7 @@ import type {
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { useSettingsStore } from "stores/settings"
+import { useStateStorageStore } from "stores/state"
 import {
   computed,
   onBeforeUnmount,
@@ -706,7 +707,6 @@ import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
 import type { Source } from "./sources"
-import { useStateStorageStore } from "stores/state"
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
@@ -828,7 +828,7 @@ watch(
 
       try {
         if (stateStorageStore.disableAutoRestoration) {
-          addNotice(t('bo-qua-khoi-phuc-tien-trinh-xem'))
+          addNotice(t("bo-qua-khoi-phuc-tien-trinh-xem"))
           // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")
         }
