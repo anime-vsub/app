@@ -677,8 +677,8 @@ import {
 } from "quasar"
 import { useMemoControl } from "src/composibles/memo-control"
 import {
-  CONFIRMATION_TIME_IS_ACTUALLY_WATCHING,
   C_URL,
+  CONFIRMATION_TIME_IS_ACTUALLY_WATCHING,
   DELAY_SAVE_VIEWING_PROGRESS,
   playbackRates,
 } from "src/constants"
@@ -942,37 +942,6 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
-
-// eslint-disable-next-line functional/no-let
-let seasonReady = false
-watch(
-  [
-    () => authStore.user,
-    () => props.currentSeason,
-    () => props.nameCurrentSeason,
-    () => props.poster,
-  ],
-  // eslint-disable-next-line camelcase
-  async ([user_data, currentSeason, seasonName, poster]) => {
-    seasonReady = false
-    if (
-      // eslint-disable-next-line camelcase
-      !user_data ||
-      !currentSeason ||
-      typeof seasonName !== "string" ||
-      !poster
-    )
-      return
-    console.log("set new season poster %s", poster)
-    await historyStore.createSeason(currentSeason, {
-      poster,
-      seasonName,
-      name: props.name,
-    })
-    seasonReady = true
-  },
-  { immediate: true }
-)
 
 const seasonMetaCreated = new Set<string>()
 
