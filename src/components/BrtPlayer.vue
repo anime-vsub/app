@@ -678,6 +678,7 @@ import {
 import { useMemoControl } from "src/composibles/memo-control"
 import {
   C_URL,
+  CONFIRMATION_TIME_IS_ACTUALLY_WATCHING,
   DELAY_SAVE_VIEWING_PROGRESS,
   playbackRates,
 } from "src/constants"
@@ -739,6 +740,11 @@ const props = defineProps<{
   fetchSeason: (season: string) => Promise<void>
   progressWatchStore: ProgressWatchStore
 }>()
+const uidChap = computed(() => {
+  const uid = `${props.currentSeason}/${props.currentChap ?? ""}` // 255 byte
+
+  return uid
+})
 
 // ===== setup effect =====
 
@@ -849,7 +855,7 @@ watch(
         if ((err as Error)?.message !== "NOT_RESET") console.error(err)
       }
 
-      progressRestored = `${currentSeason}/${currentChap}`
+      progressRestored = uidChap.value
     }
   },
   { immediate: true }
@@ -944,36 +950,32 @@ function onVideoCanPlay() {
   activeTime = Date.now()
 }
 
-// eslint-disable-next-line functional/no-let
-let seasonReady = false
-watch(
-  [
-    () => authStore.user,
-    () => props.currentSeason,
-    () => props.nameCurrentSeason,
-    () => props.poster,
-  ],
+const seasonMetaCreated = new Set<string>()
+
+async function createSeason(): Promise<boolean> {
   // eslint-disable-next-line camelcase
-  async ([user_data, currentSeason, seasonName, poster]) => {
-    seasonReady = false
-    if (
-      // eslint-disable-next-line camelcase
-      !user_data ||
-      !currentSeason ||
-      typeof seasonName !== "string" ||
-      !poster
-    )
-      return
-    console.log("set new season poster %s", poster)
-    await historyStore.createSeason(currentSeason, {
-      poster,
-      seasonName,
-      name: props.name,
-    })
-    seasonReady = true
-  },
-  { immediate: true }
-)
+  const { user_data } = authStore
+  const { currentSeason, nameCurrentChap: seasonName, poster } = props
+
+  if (seasonMetaCreated.has(currentSeason)) return true
+
+  if (
+    // eslint-disable-next-line camelcase
+    !user_data ||
+    !currentSeason ||
+    typeof seasonName !== "string" ||
+    !poster
+  )
+    return false
+  console.log("set new season poster %s", poster)
+  await historyStore.createSeason(currentSeason, {
+    poster,
+    seasonName,
+    name: props.name,
+  })
+  seasonMetaCreated.add(currentSeason)
+  return true
+}
 
 const emit = defineEmits<{
   (
@@ -985,6 +987,38 @@ const emit = defineEmits<{
     }
   ): void
 }>()
+
+const storeFirstSaving = new Set<string>()
+{
+  // eslint-disable-next-line functional/no-let, no-undef
+  let timeout: NodeJS.Timeout | number | null = null
+  // eslint-disable-next-line functional/no-let
+  let uidChapTimeout: string | null = null
+  onBeforeUnmount(() => {
+    if (timeout) clearTimeout(timeout)
+  })
+  const watcher = watch(artPlaying, (artPlaying) => {
+    if (artPlaying) {
+      if (timeout) {
+        if (uidChapTimeout === uidChap.value) return
+        console.log("stop timeout add first saving because change chap")
+        clearTimeout(timeout)
+      }
+      timeout = setTimeout(() => {
+        console.log("allow first saving")
+        storeFirstSaving.add(uidChap.value)
+      }, CONFIRMATION_TIME_IS_ACTUALLY_WATCHING)
+      uidChapTimeout = uidChap.value
+    } else {
+      if (timeout) {
+        console.log("stop timeout add first saving")
+        clearTimeout(timeout)
+        uidChapTimeout = null
+        watcher()
+      }
+    }
+  })
+}
 // eslint-disable-next-line functional/no-let
 let processingSaveCurTimeIn: string | null = null
 const saveCurTimeToPer = throttle(
@@ -995,7 +1029,8 @@ const saveCurTimeToPer = throttle(
     dur: number,
     nameCurrentChap: string
   ) => {
-    const uid = `${currentSeason}/${currentChap}` // 255 byte
+    const uid = uidChap.value // 255 byte
+    if (!(await createSeason())) return
 
     if (processingSaveCurTimeIn === uid) return // in progressing save this
     processingSaveCurTimeIn = uid
@@ -1006,19 +1041,28 @@ const saveCurTimeToPer = throttle(
         dur,
         name: nameCurrentChap,
       })
-      .finally(() => (processingSaveCurTimeIn = null))
-      .catch(() => console.warn("save viewing progress failed"))
+      .catch((err) => console.warn("save viewing progress failed: ", err))
+      .finally(() => {
+        emit("cur-update", {
+          cur,
+          dur,
+          id: currentChap,
+        })
+        console.log("save viewing progress")
 
-    emit("cur-update", {
-      cur,
-      dur,
-      id: currentChap,
-    })
-    console.log("save viewing progress")
+        processingSaveCurTimeIn = null
+      })
   },
   DELAY_SAVE_VIEWING_PROGRESS
 )
-
+const throttleEmitCurUpdate = throttle(() => {
+  if (props.currentChap)
+    emit("cur-update", {
+      cur: artCurrentTime.value,
+      dur: artDuration.value,
+      id: props.currentChap,
+    })
+}, DELAY_SAVE_VIEWING_PROGRESS)
 function onVideoTimeUpdate() {
   if (
     artPlaying.value &&
@@ -1030,10 +1074,13 @@ function onVideoTimeUpdate() {
   }
 
   if (!progressRestored) return
-  if (!seasonReady) return
   if (!props.currentChap) return
   if (typeof props.nameCurrentChap !== "string") return
 
+  if (!storeFirstSaving.has(uidChap.value)) {
+    throttleEmitCurUpdate()
+    return console.log("bypass because not first saving")
+  }
   saveCurTimeToPer(
     props.currentSeason,
     props.currentChap,
@@ -1299,7 +1346,7 @@ function remount(resetCurrentTime?: boolean) {
   if (
     resetCurrentTime
       ? props.currentChap &&
-        progressRestored === `${props.currentSeason}/${props.currentChap}`
+        progressRestored === uidChap.value
       : true
   )
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
