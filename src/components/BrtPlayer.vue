@@ -694,6 +694,7 @@ import type {
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { useSettingsStore } from "stores/settings"
+import { useStateStorageStore } from "stores/state"
 import {
   computed,
   onBeforeUnmount,
@@ -710,6 +711,7 @@ import type { Source } from "./sources"
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
 const historyStore = useHistoryStore()
+const stateStorageStore = useStateStorageStore()
 
 const router = useRouter()
 const $q = useQuasar()
@@ -825,6 +827,11 @@ watch(
       }
 
       try {
+        if (stateStorageStore.disableAutoRestoration) {
+          addNotice(t("bo-qua-khoi-phuc-tien-trinh-xem"))
+          // eslint-disable-next-line functional/no-throw-statement
+          throw new Error("NOT_RESET")
+        }
         console.log(":restore progress")
         const cur = (
           await historyStore.getProgressChap(currentSeason, currentChap)

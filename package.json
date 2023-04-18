@@ -54,7 +54,7 @@
     "qr-scanner": "^1.4.2",
     "qrcode": "^1.5.1",
     "quasar": "^2.11.9",
-    "rss-parser": "^3.12.0",
+    "rss-parser": "^3.13.0",
     "set-cookie-parser": "^2.5.1",
     "sha256": "^0.2.0",
     "sort-array": "^4.1.5",
