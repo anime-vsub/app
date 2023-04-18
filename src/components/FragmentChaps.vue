@@ -37,11 +37,11 @@
           class="text-14px max-w-150px"
           :delay="1000"
           >{{
-            stateStorageStore.disableAutoRestoration
-              ? t("kich-hoat-lai-khoi-phuc-tien-trinh-xem")
-              : t(
-                  "vo-hieu-hoa-tam-thoi-khoi-phuc-tien-trinh-xem-truoc-tam-thoi"
-                )
+            [
+              t("kich-hoat-lai-khoi-phuc-tien-trinh-xem"),
+              t("vo-hieu-hoa-tam-thoi-khoi-phuc-tien-trinh-xem-truoc"),
+              t("vo-hieu-hoa-ca-2-chieu-dong-bo-tien-trinh-xem"),
+            ][stateStorageStore.disableAutoRestoration]
           }}</q-tooltip
         >
       </q-btn>
