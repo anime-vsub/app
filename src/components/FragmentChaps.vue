@@ -2,17 +2,54 @@
   <div class="py-1 px-4 text-subtitle1 flex items-center justify-between">
     {{ gridModeTabsSeasons ? t("chon-season") : t("chon-tap") }}
 
-    <q-btn dense round @click="gridModeTabsSeasons = !gridModeTabsSeasons">
-      <Icon
-        :icon="
-          gridModeTabsSeasons
-            ? 'fluent:grid-kanban-20-regular'
-            : 'fluent:apps-list-24-regular'
+    <div>
+      <q-btn
+        dense
+        round
+        @click="
+          stateStorageStore.disableAutoRestoration =
+            !stateStorageStore.disableAutoRestoration
         "
-        width="20"
-        height="20"
-      />
-    </q-btn>
+        :class="
+          stateStorageStore.disableAutoRestoration ? 'text-deep-orange-13' : ''
+        "
+      >
+        <Icon
+          :icon="
+            stateStorageStore.disableAutoRestoration
+              ? 'fluent:arrow-sync-off-20-regular'
+              : 'fluent:arrow-sync-24-regular'
+          "
+          width="20"
+          height="20"
+        />
+
+        <q-tooltip
+          anchor="bottom middle"
+          self="top middle"
+          class="text-14px max-w-150px"
+          :delay="1000"
+          >{{
+            stateStorageStore.disableAutoRestoration
+              ? t("kich-hoat-lai-khoi-phuc-tien-trinh-xem")
+              : t(
+                  "vo-hieu-hoa-tam-thoi-khoi-phuc-tien-trinh-xem-truoc-tam-thoi"
+                )
+          }}</q-tooltip
+        >
+      </q-btn>
+      <q-btn dense round @click="gridModeTabsSeasons = !gridModeTabsSeasons">
+        <Icon
+          :icon="
+            gridModeTabsSeasons
+              ? 'fluent:grid-kanban-20-regular'
+              : 'fluent:apps-list-24-regular'
+          "
+          width="20"
+          height="20"
+        />
+      </q-btn>
+    </div>
   </div>
 
   <div v-if="!seasons" class="flex-1 flex items-center justify-center">
@@ -107,6 +144,7 @@ import type {
   ProgressWatchStore,
   Season,
 } from "src/pages/phim/_season.interface"
+import { useStateStorageStore } from "src/stores/state-storage"
 import { ref, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 
@@ -130,6 +168,8 @@ const props = defineProps<{
   progressWatchStore: ProgressWatchStore
 }>()
 const { t } = useI18n()
+
+const stateStorageStore = useStateStorageStore()
 
 const seasonActive = ref<string>()
 // sync data by active route
