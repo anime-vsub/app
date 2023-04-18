@@ -706,10 +706,12 @@ import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
 import type { Source } from "./sources"
+import { useStateStorageStore } from "stores/state"
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
 const historyStore = useHistoryStore()
+const stateStorageStore = useStateStorageStore()
 
 const router = useRouter()
 const $q = useQuasar()
@@ -825,6 +827,11 @@ watch(
       }
 
       try {
+        if (stateStorageStore.disableAutoRestoration) {
+          addNotice(t('bo-qua-khoi-phuc-tien-trinh-xem'))
+          // eslint-disable-next-line functional/no-throw-statement
+          throw new Error("NOT_RESET")
+        }
         console.log(":restore progress")
         const cur = (
           await historyStore.getProgressChap(currentSeason, currentChap)

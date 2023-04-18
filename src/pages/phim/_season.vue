@@ -222,9 +222,34 @@
       <div class="flex items-center justify-between text-subtitle2 w-full">
         Tập
 
-        <span class="flex items-center text-gray-300 font-weight-normal">
-          Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
-        </span>
+        <div class="flex no-wrap justify-end">
+          <q-btn
+            dense
+            round
+            @click.stop="
+              stateStorageStore.disableAutoRestoration =
+                !stateStorageStore.disableAutoRestoration
+            "
+            :class="
+              stateStorageStore.disableAutoRestoration
+                ? 'text-deep-orange-13'
+                : ''
+            "
+          >
+            <Icon
+              :icon="
+                stateStorageStore.disableAutoRestoration
+                  ? 'fluent:arrow-sync-off-20-regular'
+                  : 'fluent:arrow-sync-24-regular'
+              "
+              width="20"
+              height="20"
+            />
+          </q-btn>
+          <span class="flex items-center text-gray-300 font-weight-normal">
+            Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
+          </span>
+        </div>
       </div>
     </div>
 
@@ -333,7 +358,32 @@
     >
       <div class="flex items-center justify-between text-subtitle1 py-2">
         Season
-        <q-btn dense flat round icon="close" v-close-popup />
+        <div>
+          <q-btn
+            dense
+            round
+            @click="
+              stateStorageStore.disableAutoRestoration =
+                !stateStorageStore.disableAutoRestoration
+            "
+            :class="
+              stateStorageStore.disableAutoRestoration
+                ? 'text-deep-orange-13'
+                : ''
+            "
+          >
+            <Icon
+              :icon="
+                stateStorageStore.disableAutoRestoration
+                  ? 'fluent:arrow-sync-off-20-regular'
+                  : 'fluent:arrow-sync-24-regular'
+              "
+              width="20"
+              height="20"
+            />
+          </q-btn>
+          <q-btn dense flat round icon="close" v-close-popup />
+        </div>
       </div>
       <div class="relative flex-1 min-h-0 mx-[-24px]">
         <q-tabs
@@ -570,6 +620,7 @@ import type {
   Season,
 } from "./_season.interface"
 import { ResponseDataSeasonSuccess } from "./_season.interface"
+import { useStateStorageStore } from "stores/state"
 
 // ================ follow ================
 // =======================================================
@@ -582,6 +633,7 @@ const router = useRouter()
 const historyStore = useHistoryStore()
 const settingsStore = useSettingsStore()
 const playlistStore = usePlaylistStore()
+const stateStorageStore = useStateStorageStore()
 const { t, locale } = useI18n()
 
 const currentSeason = computed(() => route.params.season as string)
