@@ -1456,6 +1456,8 @@ const saveCurTimeToPer = throttle(
     const uid = uidChap.value // 255 byte
     if (!(await createSeason())) return
 
+    if (stateStorageStore.disableAutoRestoration === 2) return
+
     if (processingSaveCurTimeIn === uid) return // in progressing save this
     processingSaveCurTimeIn = uid
 
