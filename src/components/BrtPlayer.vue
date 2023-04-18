@@ -1345,8 +1345,7 @@ function remount(resetCurrentTime?: boolean) {
 
   if (
     resetCurrentTime
-      ? props.currentChap &&
-        progressRestored === uidChap.value
+      ? props.currentChap && progressRestored === uidChap.value
       : true
   )
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
