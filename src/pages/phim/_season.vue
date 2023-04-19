@@ -401,6 +401,7 @@
 <script lang="ts" setup>
 import { getAnalytics, logEvent } from "@firebase/analytics"
 import { Icon } from "@iconify/vue"
+import { computedAsync } from "@vueuse/core"
 import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -433,7 +434,11 @@ import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { Source } from "src/components/sources"
-import { C_URL, labelToQuality } from "src/constants"
+import {
+  C_URL,
+  labelToQuality,
+  TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE,
+} from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
@@ -445,7 +450,15 @@ import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
 import type { Ref } from "vue"
-import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
+import {
+  computed,
+  onBeforeUnmount,
+  reactive,
+  ref,
+  shallowRef,
+  watch,
+  watchEffect,
+} from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
@@ -512,6 +525,7 @@ const { data, run, error, loading } = useRequest(
           .catch(() => {})
       }),
     ]).catch((err) => {
+      error.value = err
       console.error(err)
       // eslint-disable-next-line promise/no-return-wrap
       return Promise.reject(err)
@@ -752,12 +766,55 @@ const currentProgresWatch = computed(() => {
 
   return undefined
 })
-const currentChap = computed(() => {
+// eslint-disable-next-line functional/no-let, no-undef
+let timeoutResolveCurrentChap: NodeJS.Timeout | number | undefined
+// eslint-disable-next-line functional/no-let
+let resolveDefaultCurrentChap: ((epId: string | null) => void) | undefined
+const resetPromiseDefCurrentChap = () => {
+  clearTimeout(timeoutResolveCurrentChap)
+  timeoutResolveCurrentChap = undefined
+  resolveDefaultCurrentChap?.(null)
+  resolveDefaultCurrentChap = undefined
+}
+onBeforeUnmount(resetPromiseDefCurrentChap)
+/** @type - currentChap is episode id */
+const currentChap = computedAsync(async () => {
+  resetPromiseDefCurrentChap()
+
   if (route.params.chap) return route.params.chap as string
+  // if this does not exist make sure the status has not finished loading, this function call also useless
 
-  // get first chap in season
+  // if not login -> return first episode in season
+  if (!authStore.uid) return currentDataSeason.value?.chaps[0].id
 
-  return currentDataSeason.value?.chaps[0].id
+  const episodeId = await Promise.race([
+    // if logged -> get last episode viewing in season
+    historyStore
+      .getLastEpOfSeason(currentSeason.value)
+      .catch((err) => {
+        console.warn(err)
+        return null
+      })
+      .then((res) => {
+        console.log("usage last ep of season", res)
+        return res
+      }),
+    new Promise<string | null>((resolve) => {
+      resolveDefaultCurrentChap = resolve
+      timeoutResolveCurrentChap = setTimeout(
+        () => resolve(currentDataSeason.value?.chaps[0].id ?? null),
+        TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE
+      )
+    }),
+  ])
+
+  resetPromiseDefCurrentChap()
+  // if not exists -> return first episode in season
+  if (episodeId === null) {
+    return currentDataSeason.value?.chaps[0].id
+  }
+
+  return episodeId
 })
 const currentMetaChap = computed(() => {
   if (!currentChap.value) return
@@ -765,8 +822,31 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
+// replace router if last episode viewing exists
 watchEffect(() => {
-  if (currentDataSeason.value && currentChap.value !== undefined && !currentMetaChap.value) {
+  const episodeIdFirst = currentDataSeason.value?.chaps[0].id
+
+  if (
+    currentChap.value &&
+    currentChap.value !== episodeIdFirst &&
+    currentMetaChap.value
+  ) {
+    const correctChapName = parseChapName(currentMetaChap.value.name)
+
+    router.replace({
+      path: `/phim/${route.params.season}/${correctChapName}-${currentChap.value}`,
+      query: route.query,
+      hash: route.hash,
+    })
+  }
+})
+watchEffect(() => {
+  // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
+  if (
+    currentDataSeason.value &&
+    currentChap.value !== undefined &&
+    !currentMetaChap.value
+  ) {
     router.replace({
       name: "not_found",
       params: {
