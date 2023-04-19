@@ -760,9 +760,22 @@ const currentChap = computed(() => {
   return currentDataSeason.value?.chaps[0].id
 })
 const currentMetaChap = computed(() => {
+  if (!currentChap.value) return
   return currentDataSeason.value?.chaps.find(
     (item) => item.id === currentChap.value
   )
+})
+watchEffect(() => {
+  if (currentDataSeason.value && currentChap.value !== undefined && !currentMetaChap.value) {
+    router.push({
+      name: "not_found",
+      params: {
+        catchAll: route.path.split("/").slice(1),
+      },
+      query: route.query,
+      hash: route.hash,
+    })
+  }
 })
 // TOOD: check chapName in url is chapName
 watchEffect(() => {
