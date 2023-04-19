@@ -412,7 +412,7 @@ watch(errorMetaPlaylist, (err) => {
     $q.notify({
       message: t("danh-sach-phat-khong-ton-tai"),
     })
-    router.push({
+    router.replace({
       name: "not_found",
       params: {
         catchAll: route.path.split("/").slice(1),

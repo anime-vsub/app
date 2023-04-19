@@ -767,7 +767,7 @@ const currentMetaChap = computed(() => {
 })
 watchEffect(() => {
   if (currentDataSeason.value && currentChap.value !== undefined && !currentMetaChap.value) {
-    router.push({
+    router.replace({
       name: "not_found",
       params: {
         catchAll: route.path.split("/").slice(1),
