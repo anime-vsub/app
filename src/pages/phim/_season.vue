@@ -771,12 +771,12 @@ const currentProgresWatch = computed(() => {
 // eslint-disable-next-line functional/no-let, no-undef
 let timeoutResolveCurrentChap: NodeJS.Timeout | number | undefined
 // eslint-disable-next-line functional/no-let
-let resolveDefaultCurrentChap: ((epId: string | null) => void) | undefined
+let rejectDefaultCurrentChap: ((epId: null) => void) | undefined
 const resetPromiseDefCurrentChap = () => {
   clearTimeout(timeoutResolveCurrentChap)
   timeoutResolveCurrentChap = undefined
-  resolveDefaultCurrentChap?.(null)
-  resolveDefaultCurrentChap = undefined
+  rejectDefaultCurrentChap?.(null)
+  rejectDefaultCurrentChap = undefined
 }
 onBeforeUnmount(resetPromiseDefCurrentChap)
 /** @type - currentChap is episode id */
@@ -796,7 +796,8 @@ watchEffect(async (): Promise<void> => {
     currentChap.value = currentDataSeason.value?.chaps[0].id
     return
   }
-
+  // eslint-disable-next-line no-unused-expressions
+  currentDataSeason.value?.chaps[0].id
   const episodeId = await Promise.race([
     // if logged -> get last episode viewing in season
     historyStore
@@ -809,10 +810,10 @@ watchEffect(async (): Promise<void> => {
         console.log("usage last ep of season", res)
         return res
       }),
-    new Promise<string | null>((resolve) => {
-      resolveDefaultCurrentChap = resolve
+    new Promise<null>((resolve, reject) => {
+      rejectDefaultCurrentChap = reject
       timeoutResolveCurrentChap = setTimeout(
-        () => resolve(currentDataSeason.value?.chaps[0].id ?? null),
+        () => resolve(null),
         TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE
       )
     }),
