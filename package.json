@@ -1,6 +1,6 @@
 {
   "name": "git.shin.animevsub",
-  "version": "0.0.129",
+  "version": "0.0.130",
   "description": "Watch Anime without advertising, free, private.",
   "productName": "AnimeVsub",
   "author": "Tachibana Shin <45375496+tachibana-shin@users.noreply.github.com>",
@@ -42,6 +42,7 @@
     "js-cookie": "^3.0.1",
     "lz-string": "^1.4.4",
     "message-port-api": "^0.0.5",
+    "minisearch": "^6.0.1",
     "pinia": "^2.0.29",
     "pinia-plugin-persistedstate": "^3.0.2",
     "pinia-plugin-persistedstate-2": "^2.0.10",
