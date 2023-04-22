@@ -42,10 +42,13 @@
           })
         "
       />
-      <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
+      <div
+        v-else
+        class="w-full overflow-hidden bg-[#000] focus-visible:outline-none select-none"
+      >
         <q-img
           no-spinner
-          v-if="sources?.[0]?.url"
+          v-if="!sources?.[0]?.url"
           :ratio="841 / 483"
           class="max-h-[calc(100vh-169px)] max-w-[100px]"
           src="~assets/ic_question_result_error.png"
@@ -670,7 +673,7 @@ async function fetchSeason(season: string) {
       console.warn("chaps not found")
       response.chaps = [
         {
-          id: "#youtube",
+          id: "0",
           play: "1",
 
           hash:
@@ -851,8 +854,8 @@ watchEffect(() => {
 watchEffect(() => {
   // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
   if (
-    currentDataSeason.value &&
-    currentChap.value !== undefined &&
+    currentDataSeason.value?.chaps &&
+    currentChap.value &&
     !currentMetaChap.value
   ) {
     router.replace({
@@ -1041,7 +1044,7 @@ watch(
 
     configPlayer.value = undefined
 
-    if (currentMetaChap.id === "#youtube") {
+    if (currentMetaChap.id === "0") {
       configPlayer.value = {
         link: [
           {
