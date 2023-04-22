@@ -401,7 +401,6 @@
 <script lang="ts" setup>
 import { getAnalytics, logEvent } from "@firebase/analytics"
 import { Icon } from "@iconify/vue"
-import { computedAsync } from "@vueuse/core"
 import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -778,14 +777,22 @@ const resetPromiseDefCurrentChap = () => {
 }
 onBeforeUnmount(resetPromiseDefCurrentChap)
 /** @type - currentChap is episode id */
-const currentChap = computedAsync(async () => {
+const currentChap = ref<string>()
+watchEffect(async (): Promise<void> => {
   resetPromiseDefCurrentChap()
 
-  if (route.params.chap) return route.params.chap as string
+  if (route.params.chap) {
+    currentChap.value = route.params.chap as string
+    return
+  }
+  currentChap.value = undefined
   // if this does not exist make sure the status has not finished loading, this function call also useless
 
   // if not login -> return first episode in season
-  if (!authStore.uid) return currentDataSeason.value?.chaps[0].id
+  if (!authStore.uid) {
+    currentChap.value = currentDataSeason.value?.chaps[0].id
+    return
+  }
 
   const episodeId = await Promise.race([
     // if logged -> get last episode viewing in season
@@ -811,10 +818,11 @@ const currentChap = computedAsync(async () => {
   resetPromiseDefCurrentChap()
   // if not exists -> return first episode in season
   if (episodeId === null) {
-    return currentDataSeason.value?.chaps[0].id
+    currentChap.value = currentDataSeason.value?.chaps[0].id
+    return
   }
 
-  return episodeId
+  currentChap.value = episodeId
 })
 const currentMetaChap = computed(() => {
   if (!currentChap.value) return
