@@ -672,24 +672,22 @@ import {
   QTabPanels,
   QTabs,
   QToggle,
-  throttle,
   useQuasar,
 } from "quasar"
 import { useMemoControl } from "src/composibles/memo-control"
 import {
   C_URL,
-  CONFIRMATION_TIME_IS_ACTUALLY_WATCHING,
   DELAY_SAVE_VIEWING_PROGRESS,
   playbackRates,
 } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
 import { parseTime } from "src/logic/parseTime"
-import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface"
 import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
   Season,
 } from "src/pages/phim/_season.interface"
 import { useAuthStore } from "stores/auth"
@@ -1070,12 +1068,6 @@ function onVideoTimeUpdate() {
     artPlaying.value &&
     !currentingTime.value &&
     artControlShow.value &&
-    !showMenuQuality.value &&
-    !showMenuPlaybackRate.value &&
-    !showMenuSettings.value &&
-    !showMenuSelectChap.value &&
-    artVolumeOutside.value &&
-    !artControlProgressHoving.value &&
     Date.now() - activeTime >= 3e3
   ) {
     artControlShow.value = false
