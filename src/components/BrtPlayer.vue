@@ -1411,8 +1411,6 @@ const firstSaveStore = new Set<string>()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttle<T extends (...args: any[]) => void>(
   fn: T
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
 ): T & {
   cancel: () => void
 } {
@@ -1439,6 +1437,8 @@ function throttle<T extends (...args: any[]) => void>(
   } as any
 
   cb.cancel = () => clearTimeout(timeout)
+
+  return cb
 }
 
 // eslint-disable-next-line functional/no-let
