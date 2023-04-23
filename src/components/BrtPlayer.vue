@@ -1059,8 +1059,7 @@ const saveCurTimeToPer = throttle(
     console.log("save viewing progress")
 
     processingSaveCurTimeIn = null
-  },
-  DELAY_SAVE_VIEWING_PROGRESS
+  }
 )
 watch(uidChap, saveCurTimeToPer.cancel)
 function onVideoTimeUpdate() {
