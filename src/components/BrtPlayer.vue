@@ -1407,21 +1407,38 @@ const emit = defineEmits<{
   ): void
 }>()
 
+const firstSaveStore = new Set<string>()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function throttle<T extends (...args: any[]) => void>(fn: T, limit = 250): T {
+function throttle<T extends (...args: any[]) => void>(
+  fn: T
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+): T & {
+  cancel: () => void
+} {
   // eslint-disable-next-line functional/no-let
   let wait = false
-
+  // eslint-disable-next-line functional/no-let, no-undef
+  let timeout: NodeJS.Timeout | number | undefined
   // eslint-disable-next-line functional/functional-parameters, @typescript-eslint/no-explicit-any
-  return function (...args: any[]) {
+  const cb = function (...args: any[]) {
     if (wait === false) {
       wait = true
-      setTimeout(() => {
-        fn(...args)
-        wait = false
-      }, limit)
+      timeout = setTimeout(
+        () => {
+          firstSaveStore.add(uidChap.value)
+          fn(...args)
+          wait = false
+        },
+        firstSaveStore.has(uidChap.value)
+          ? DELAY_SAVE_VIEWING_PROGRESS
+          : DELAY_SAVE_VIEWING_PROGRESS / 2
+      )
     }
-  } as T
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any
+
+  cb.cancel = () => clearTimeout(timeout)
 }
 
 // eslint-disable-next-line functional/no-let
@@ -1463,9 +1480,9 @@ const saveCurTimeToPer = throttle(
     console.log("save viewing progress")
 
     processingSaveCurTimeIn = null
-  },
-  DELAY_SAVE_VIEWING_PROGRESS
+  }
 )
+watch(uidChap, saveCurTimeToPer.cancel)
 function onVideoTimeUpdate() {
   if (
     artPlaying.value &&
