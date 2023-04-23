@@ -988,37 +988,40 @@ const emit = defineEmits<{
   ): void
 }>()
 
-const storeFirstSaving = new Set<string>()
-{
-  // eslint-disable-next-line functional/no-let, no-undef
-  let timeout: NodeJS.Timeout | number | null = null
+const firstSaveStore = new Set<string>()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function throttle<T extends (...args: any[]) => void>(
+  fn: T
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+): T & {
+  cancel: () => void
+} {
   // eslint-disable-next-line functional/no-let
-  let uidChapTimeout: string | null = null
-  onBeforeUnmount(() => {
-    if (timeout) clearTimeout(timeout)
-  })
-  const watcher = watch(artPlaying, (artPlaying) => {
-    if (artPlaying) {
-      if (timeout) {
-        if (uidChapTimeout === uidChap.value) return
-        console.log("stop timeout add first saving because change chap")
-        clearTimeout(timeout)
-      }
-      timeout = setTimeout(() => {
-        console.log("allow first saving")
-        storeFirstSaving.add(uidChap.value)
-      }, CONFIRMATION_TIME_IS_ACTUALLY_WATCHING)
-      uidChapTimeout = uidChap.value
-    } else {
-      if (timeout) {
-        console.log("stop timeout add first saving")
-        clearTimeout(timeout)
-        uidChapTimeout = null
-        watcher()
-      }
+  let wait = false
+  // eslint-disable-next-line functional/no-let, no-undef
+  let timeout: NodeJS.Timeout | number | undefined
+  // eslint-disable-next-line functional/functional-parameters, @typescript-eslint/no-explicit-any
+  const cb = function (...args: any[]) {
+    if (wait === false) {
+      wait = true
+      timeout = setTimeout(
+        () => {
+          firstSaveStore.add(uidChap.value)
+          fn(...args)
+          wait = false
+        },
+        firstSaveStore.has(uidChap.value)
+          ? DELAY_SAVE_VIEWING_PROGRESS
+          : DELAY_SAVE_VIEWING_PROGRESS / 2
+      )
     }
-  })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any
+
+  cb.cancel = () => clearTimeout(timeout)
 }
+
 // eslint-disable-next-line functional/no-let
 let processingSaveCurTimeIn: string | null = null
 const saveCurTimeToPer = throttle(
@@ -1029,58 +1032,60 @@ const saveCurTimeToPer = throttle(
     dur: number,
     nameCurrentChap: string
   ) => {
-    const uid = uidChap.value // 255 byte
-    if (!(await createSeason())) return
+    emit("cur-update", {
+      cur,
+      dur,
+      id: currentChap,
+    })
 
+    console.log("call main fn cur time")
+    const uid = uidChap.value // 255 byte
+    console.log({ uid, processingSaveCurTimeIn })
     if (processingSaveCurTimeIn === uid) return // in progressing save this
     processingSaveCurTimeIn = uid
+    if (!(await createSeason())) return
 
-    await historyStore
-      .setProgressChap(currentSeason, currentChap, {
-        cur,
-        dur,
-        name: nameCurrentChap,
-      })
-      .catch((err) => console.warn("save viewing progress failed: ", err))
-      .finally(() => {
-        emit("cur-update", {
+    if (stateStorageStore.disableAutoRestoration === 2) return
+
+    console.log("%ccall sav curTime", "color: green")
+    try {
+      await historyStore
+        .setProgressChap(currentSeason, currentChap, {
           cur,
           dur,
-          id: currentChap,
+          name: nameCurrentChap,
         })
-        console.log("save viewing progress")
+        .catch((err) => console.warn("save viewing progress failed: ", err))
+    } catch {}
 
-        processingSaveCurTimeIn = null
-      })
+    console.log("save viewing progress")
+
+    processingSaveCurTimeIn = null
   },
   DELAY_SAVE_VIEWING_PROGRESS
 )
-const throttleEmitCurUpdate = throttle(() => {
-  if (props.currentChap)
-    emit("cur-update", {
-      cur: artCurrentTime.value,
-      dur: artDuration.value,
-      id: props.currentChap,
-    })
-}, DELAY_SAVE_VIEWING_PROGRESS)
+watch(uidChap, saveCurTimeToPer.cancel)
 function onVideoTimeUpdate() {
   if (
     artPlaying.value &&
     !currentingTime.value &&
     artControlShow.value &&
+    !showMenuQuality.value &&
+    !showMenuPlaybackRate.value &&
+    !showMenuSettings.value &&
+    !showMenuSelectChap.value &&
+    artVolumeOutside.value &&
+    !artControlProgressHoving.value &&
     Date.now() - activeTime >= 3e3
   ) {
     artControlShow.value = false
   }
 
-  if (!progressRestored) return
+  if (progressRestored !== uidChap.value) return
   if (!props.currentChap) return
   if (typeof props.nameCurrentChap !== "string") return
 
-  if (!storeFirstSaving.has(uidChap.value)) {
-    throttleEmitCurUpdate()
-    return console.log("bypass because not first saving")
-  }
+  console.log("call throw emit")
   saveCurTimeToPer(
     props.currentSeason,
     props.currentChap,
