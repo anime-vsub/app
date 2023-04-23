@@ -781,7 +781,7 @@ const resetPromiseDefCurrentChap = () => {
 onBeforeUnmount(resetPromiseDefCurrentChap)
 /** @type - currentChap is episode id */
 const currentChap = ref<string>()
-watchEffect(async (): Promise<void> => {
+watchEffect(async (onCleanup): Promise<void> => {
   resetPromiseDefCurrentChap()
 
   if (route.params.chap) {
@@ -798,6 +798,9 @@ watchEffect(async (): Promise<void> => {
   }
   // eslint-disable-next-line no-unused-expressions
   currentDataSeason.value?.chaps[0].id
+  // eslint-disable-next-line functional/no-let
+  let allowSet = true
+  onCleanup(() => (allowSet = true))
   const episodeId = await Promise.race([
     // if logged -> get last episode viewing in season
     historyStore
@@ -808,6 +811,7 @@ watchEffect(async (): Promise<void> => {
       })
       .then((res) => {
         console.log("usage last ep of season", res)
+        resetPromiseDefCurrentChap()
         return res
       }),
     new Promise<null>((resolve, reject) => {
@@ -818,6 +822,8 @@ watchEffect(async (): Promise<void> => {
       )
     }),
   ])
+
+  if (!allowSet) return
 
   resetPromiseDefCurrentChap()
   // if not exists -> return first episode in season
