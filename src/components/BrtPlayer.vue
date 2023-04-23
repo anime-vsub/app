@@ -831,7 +831,7 @@ watch(
       }
 
       try {
-        if (stateStorageStore.disableAutoRestoration) {
+        if (stateStorageStore.disableAutoRestoration > 0) {
           addNotice(t("bo-qua-khoi-phuc-tien-trinh-xem"))
           // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")

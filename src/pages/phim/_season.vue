@@ -226,21 +226,26 @@
           <q-btn
             dense
             round
-            @click.stop="
-              stateStorageStore.disableAutoRestoration =
-                !stateStorageStore.disableAutoRestoration
+            @click="
+              () => {
+                if (stateStorageStore.disableAutoRestoration >= 2)
+                  stateStorageStore.disableAutoRestoration = 0
+                else stateStorageStore.disableAutoRestoration++
+              }
             "
             :class="
-              stateStorageStore.disableAutoRestoration
-                ? 'text-deep-orange-13'
-                : ''
+              ['', 'text-orange-12', 'text-orange-14'][
+                stateStorageStore.disableAutoRestoration
+              ]
             "
           >
             <Icon
               :icon="
-                stateStorageStore.disableAutoRestoration
-                  ? 'fluent:arrow-sync-off-20-regular'
-                  : 'fluent:arrow-sync-24-regular'
+                [
+                  'iconoir:cloud-sync',
+                  'iconoir:cloud-upload',
+                  'iconoir:cloud-error',
+                ][stateStorageStore.disableAutoRestoration]
               "
               width="20"
               height="20"
