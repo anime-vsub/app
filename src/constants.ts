@@ -30,8 +30,6 @@ export const playbackRates = [
 ]
 
 export const DELAY_SAVE_VIEWING_PROGRESS = 20_000 // x4 6s
-export const CONFIRMATION_TIME_IS_ACTUALLY_WATCHING =
-  DELAY_SAVE_VIEWING_PROGRESS / 4
 
 export const REGEXP_OLD_HOST_CURL = /animevietsub\.(?:\w+)/i
 
