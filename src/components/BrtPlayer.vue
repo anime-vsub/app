@@ -1436,7 +1436,10 @@ function throttle<T extends (...args: any[]) => void>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any
 
-  cb.cancel = () => clearTimeout(timeout)
+  cb.cancel = () => {
+    clearTimeout(timeout)
+    wait = false
+  }
 
   return cb
 }
