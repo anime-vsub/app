@@ -460,6 +460,7 @@ import {
   shallowRef,
   watch,
   watchEffect,
+  watchPostEffect,
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -768,27 +769,17 @@ const currentProgresWatch = computed(() => {
 
   return undefined
 })
-// eslint-disable-next-line functional/no-let, no-undef
-let timeoutResolveCurrentChap: NodeJS.Timeout | number | undefined
 // eslint-disable-next-line functional/no-let
-let rejectDefaultCurrentChap: ((epId: null) => void) | undefined
-const resetPromiseDefCurrentChap = () => {
-  clearTimeout(timeoutResolveCurrentChap)
-  timeoutResolveCurrentChap = undefined
-  rejectDefaultCurrentChap?.(null)
-  rejectDefaultCurrentChap = undefined
-}
-onBeforeUnmount(resetPromiseDefCurrentChap)
+let watcherChangeIdFirstEp: (() => void) | null = null
+onBeforeUnmount(() => watcherChangeIdFirstEp?.())
 /** @type - currentChap is episode id */
 const currentChap = ref<string>()
-watchEffect(async (onCleanup): Promise<void> => {
-  resetPromiseDefCurrentChap()
-
+watchPostEffect(async (onCleanup): Promise<void> => {
+  watcherChangeIdFirstEp?.()
   if (route.params.chap) {
     currentChap.value = route.params.chap as string
     return
   }
-  currentChap.value = undefined
   // if this does not exist make sure the status has not finished loading, this function call also useless
 
   // if not login -> return first episode in season
@@ -796,11 +787,7 @@ watchEffect(async (onCleanup): Promise<void> => {
     currentChap.value = currentDataSeason.value?.chaps[0].id
     return
   }
-  // eslint-disable-next-line no-unused-expressions
-  currentDataSeason.value?.chaps[0].id
-  // eslint-disable-next-line functional/no-let
-  let allowSet = true
-  onCleanup(() => (allowSet = true))
+  currentChap.value = undefined
   const episodeId = await Promise.race([
     // if logged -> get last episode viewing in season
     historyStore
@@ -811,28 +798,41 @@ watchEffect(async (onCleanup): Promise<void> => {
       })
       .then((res) => {
         console.log("usage last ep of season", res)
-        resetPromiseDefCurrentChap()
         return res
       }),
-    new Promise<null>((resolve, reject) => {
-      rejectDefaultCurrentChap = reject
-      timeoutResolveCurrentChap = setTimeout(
+    new Promise<null | undefined>((resolve) => {
+      const timeout = setTimeout(
         () => resolve(null),
         TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE
       )
+
+      onCleanup(() => {
+        resolve(undefined)
+        clearTimeout(timeout)
+      })
     }),
   ])
 
-  if (!allowSet) return
-
-  resetPromiseDefCurrentChap()
-  // if not exists -> return first episode in season
-  if (episodeId === null) {
-    currentChap.value = currentDataSeason.value?.chaps[0].id
-    return
+  if (episodeId !== undefined) {
+    if (episodeId) {
+      const watcher = watchPostEffect(() => {
+        if (
+          currentDataSeason.value?.chaps.some((item) => item.id === episodeId)
+        ) {
+          currentChap.value = episodeId
+          watcher()
+        }
+      })
+    } else {
+      watcherChangeIdFirstEp = watch(
+        () => currentDataSeason.value?.chaps[0].id,
+        (idFirstEp) => {
+          currentChap.value = idFirstEp
+        },
+        { immediate: true }
+      )
+    }
   }
-
-  currentChap.value = episodeId
 })
 const currentMetaChap = computed(() => {
   if (!currentChap.value) return
