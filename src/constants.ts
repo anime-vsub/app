@@ -31,6 +31,8 @@ export const playbackRates = [
 
 export const DELAY_SAVE_VIEWING_PROGRESS = 20_000 // x4 6s
 
+export const TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE = 5_000 // 5s
+
 export const REGEXP_OLD_HOST_CURL = /animevietsub\.(?:\w+)/i
 
 export const HOST_CURL = [

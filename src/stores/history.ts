@@ -55,6 +55,7 @@ export const useHistoryStore = defineStore("history", () => {
     seasonName: string
 
     last?: {
+      /** @type : is a id chap. (e.g: 1132, 12345) */
       chap: string
       cur: number
       dur: number
@@ -313,6 +314,28 @@ export const useHistoryStore = defineStore("history", () => {
     ])
   }
 
+  async function getLastEpOfSeason(season: string): Promise<null | string> {
+    if (!authStore.uid)
+      // eslint-disable-next-line functional/no-throw-statement
+      throw new Error(
+        i18n.global.t("errors.require_login_to", [
+          i18n.global.t("xem-lich-su-gan-day"),
+        ])
+      )
+
+    const data = await getDoc(
+      doc(
+        db,
+        "users",
+        authStore.uid,
+        "history",
+        getRealSeasonId(season)
+      ) as DocumentReference<HistoryItem>
+    ).then((res) => res.data())
+
+    return data?.last?.chap ?? null
+  }
+
   return {
     last30Item,
     last30ItemError,
@@ -324,5 +347,7 @@ export const useHistoryStore = defineStore("history", () => {
     getProgressChaps,
     getProgressChap,
     setProgressChap,
+
+    getLastEpOfSeason,
   }
 })
