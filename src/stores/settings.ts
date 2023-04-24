@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import type { servers } from "src/constants"
 import { getNavigatorLanguage } from "src/i18n"
 
 export const useSettingsStore = defineStore("settings", {
@@ -7,11 +8,12 @@ export const useSettingsStore = defineStore("settings", {
       autoNext: true,
       enableRemindStop: true,
       volume: 1,
+      server: <keyof typeof servers>"DU"
     },
     ui: {
       modeMovie: false,
       newPlayer: true,
-      shortcutsQAP: false,
+      shortcutsQAP: true,
       menuTransparency: true,
       commentAnime: true,
     },

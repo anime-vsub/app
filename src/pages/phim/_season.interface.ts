@@ -26,3 +26,29 @@ export type ProgressWatchStore = Map<
       status: "queue"
     }
 >
+
+export interface ConfigPlayer {
+  readonly link: {
+    readonly file: string
+    readonly label?: "HD" | "FHD" | `${720 | 360 | 340}p`
+    readonly preload?: string
+    readonly type:
+      | "hls"
+      | "aac"
+      | "f4a"
+      | "mp4"
+      | "f4v"
+      | "m3u"
+      | "m4v"
+      | "mov"
+      | "mp3"
+      | "mpeg"
+      | "oga"
+      | "ogg"
+      | "ogv"
+      | "vorbis"
+      | "webm"
+      | "youtube"
+  }[]
+  readonly playTech: "api" | "trailer"
+}

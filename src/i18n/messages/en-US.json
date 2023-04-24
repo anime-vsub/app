@@ -245,5 +245,6 @@
   "xoa-danh-sach-phat": "delete playlist",
   "xoa-khoi-danh-sach-phat": "Remove from playlist",
   "yeu-cau-dang-nhap-lai": "Requires re-login",
-  "yeu-thich": "Favourite"
+  "yeu-thich": "Favourite",
+  "may-chu-phat": "Broadcast server"
 }

@@ -12,7 +12,7 @@ interface PostOptions {
 
 interface HttpResponse<ResponseType extends "arraybuffer" | undefined> {
   headers: Record<string, string>
-  data: ResponseType extends "arraybuffer" ? ArrayBuffer : string
+  data: string
   url: string
   status: number
 }
