@@ -1325,10 +1325,10 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
               let byteLength: number
               if (context.responseType === "arraybuffer") {
                 xhr.response = await res.arrayBuffer()
-                byteLength = xhr.response.byteLength
+                byteLength = xhr.response!.byteLength
               } else {
                 xhr.responseText = await res.text()
-                byteLength = xhr.responseText.length
+                byteLength = xhr.responseText!.length
               }
 
               xhr.readyState = 4
