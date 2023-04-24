@@ -60,7 +60,7 @@ export async function get(
 
 export async function post(
   url: string,
-  data: Record<string, string | number>,
+  data: Record<string, string>,
   headers?: Record<string, string>
 ) {
   const response = await (isSpa ? window.Http : CapacitorHttp).post({
