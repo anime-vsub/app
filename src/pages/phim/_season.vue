@@ -34,7 +34,7 @@
     <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
       <q-img
         no-spinner
-        v-if="sources?.[0]?.file"
+        v-if="!sources?.[0]?.url"
         :ratio="16 / 9"
         src="~assets/ic_question_result_error.png"
         width="100"
@@ -608,7 +608,7 @@ import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { servers } from "src/constants"
-import { C_URL } from "src/constants"
+import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
@@ -620,8 +620,8 @@ import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
 import { useStateStorageStore } from "stores/state"
-import type { Ref } from "vue"
-import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue"
+import type { Ref} from "vue";
+import { computed, onBeforeUnmount, reactive, ref, shallowRef, watch, watchEffect, watchPostEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
@@ -630,7 +630,7 @@ import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
-  Season,
+  Season
 } from "./_season.interface"
 import { ResponseDataSeasonSuccess } from "./_season.interface"
 
@@ -909,14 +909,74 @@ const currentProgresWatch = computed(() => {
 
   return undefined
 })
-const currentChap = computed(() => {
-  if (route.params.chap) return route.params.chap as string
 
-  // get first chap in season
+// eslint-disable-next-line functional/no-let
+let watcherChangeIdFirstEp: (() => void) | null = null
+onBeforeUnmount(() => watcherChangeIdFirstEp?.())
+/** @type - currentChap is episode id */
+const currentChap = ref<string>()
+watchPostEffect(async (onCleanup): Promise<void> => {
+  watcherChangeIdFirstEp?.()
+  if (route.params.chap) {
+    currentChap.value = route.params.chap as string
+    return
+  }
+  // if this does not exist make sure the status has not finished loading, this function call also useless
 
-  return currentDataSeason.value?.chaps[0].id
+  // if not login -> return first episode in season
+  if (!authStore.uid) {
+    currentChap.value = currentDataSeason.value?.chaps[0].id
+    return
+  }
+  currentChap.value = undefined
+  const episodeId = await Promise.race([
+    // if logged -> get last episode viewing in season
+    historyStore
+      .getLastEpOfSeason(currentSeason.value)
+      .catch((err) => {
+        console.warn(err)
+        return null
+      })
+      .then((res) => {
+        console.log("usage last ep of season", res)
+        return res
+      }),
+    new Promise<null | undefined>((resolve) => {
+      const timeout = setTimeout(
+        () => resolve(null),
+        TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE
+      )
+
+      onCleanup(() => {
+        resolve(undefined)
+        clearTimeout(timeout)
+      })
+    }),
+  ])
+
+  if (episodeId !== undefined) {
+    if (episodeId) {
+      const watcher = watchPostEffect(() => {
+        if (
+          currentDataSeason.value?.chaps.some((item) => item.id === episodeId)
+        ) {
+          currentChap.value = episodeId
+          watcher()
+        }
+      })
+    } else {
+      watcherChangeIdFirstEp = watch(
+        () => currentDataSeason.value?.chaps[0].id,
+        (idFirstEp) => {
+          currentChap.value = idFirstEp
+        },
+        { immediate: true }
+      )
+    }
+  }
 })
 const currentMetaChap = computed(() => {
+  if (!currentChap.value) return
   return currentDataSeason.value?.chaps.find(
     (item) => item.id === currentChap.value
   )
