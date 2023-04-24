@@ -34,7 +34,7 @@
     <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
       <q-img
         no-spinner
-        v-if="sources?.[0]?.url"
+        v-if="!sources?.[0]?.url"
         :ratio="16 / 9"
         src="~assets/ic_question_result_error.png"
         width="100"
