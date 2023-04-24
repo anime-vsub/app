@@ -973,6 +973,7 @@ watchPostEffect(async (onCleanup): Promise<void> => {
   }
 })
 const currentMetaChap = computed(() => {
+  if (!currentChap.value) return
   return currentDataSeason.value?.chaps.find(
     (item) => item.id === currentChap.value
   )
