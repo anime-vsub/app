@@ -239,5 +239,12 @@
   "xoa-danh-sach-phat": "删除播放列表",
   "xoa-khoi-danh-sach-phat": "从播放列表中删除",
   "yeu-cau-dang-nhap-lai": "需要重新登录",
-  "yeu-thich": "最喜欢的"
+  "yeu-thich": "最喜欢的",
+  "errors": {
+    "danh-sach-phat-khong-ton-tai": "",
+    "loi-khong-xac-dinh-khi": "",
+    "require_login_to": "",
+    "xoa-thong-bao-that-bai": ""
+  },
+  "may-chu-phat": "广播服务器"
 }

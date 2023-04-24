@@ -34,13 +34,13 @@
     <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
       <q-img
         no-spinner
-        v-if="sources?.[0]?.url"
+        v-if="sources?.[0]?.file"
         :ratio="16 / 9"
         src="~assets/ic_question_result_error.png"
         width="100"
         class="max-w-[100px]"
       />
-      <q-video v-else :ratio="16 / 9" :src="sources![0]!.url" />
+      <q-video v-else :ratio="16 / 9" :src="sources![0]!.file" />
     </div>
   </template>
 
@@ -602,16 +602,18 @@ import {
   useQuasar,
 } from "quasar"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
+import { PlayerFB } from "src/apis/runs/ajax/player-fb"
+import { PlayerLink } from "src/apis/runs/ajax/player-link"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
-import type { Source } from "src/components/sources"
-import { C_URL, labelToQuality } from "src/constants"
+import type { servers } from "src/constants"
+import { C_URL } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
+import { getQualityByLabel } from "src/logic/get-quality-by-label"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
-import { post } from "src/logic/http"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
@@ -969,28 +971,19 @@ const nextChap = computed<
   console.info("[[===THE END===]]")
 })
 
-const configPlayer = shallowRef<{
-  link: {
-    file: string
-    label: string
-    preload: string
-    type: "hls" | "youtube"
-  }[]
-  playTech: "api" | "trailer"
-}>()
+const configPlayer = shallowRef<Awaited<ReturnType<typeof PlayerLink>>>()
 watch(
   currentMetaChap,
-  async (currentMetaChap) => {
+  (currentMetaChap, _, onCleanup) => {
     if (!currentMetaChap) return
 
-    configPlayer.value = undefined
-
-    if (currentMetaChap.id === "#youtube") {
+    if (currentMetaChap.id === "0") {
       configPlayer.value = {
         link: [
           {
             file: currentMetaChap.hash,
             label: "HD",
+            qualityCode: getQualityByLabel("HD"),
             preload: "auto",
             type: "youtube",
           },
@@ -1001,57 +994,68 @@ watch(
       return
     }
 
-    try {
-      configPlayer.value = JSON.parse(
-        (
-          await post("/ajax/player?v=2019a", {
-            link: currentMetaChap.hash,
-            play: currentMetaChap.play,
-            id: currentMetaChap.id,
-            backuplinks: "1",
+    configPlayer.value = undefined
+
+    // eslint-disable-next-line functional/no-let
+    let typeCurrentConfig: keyof typeof servers | null = null
+    // setup watcher it
+    const watcher = watch(
+      () => settingsStore.player.server,
+      async (server) => {
+        try {
+          if (server === "DU") {
+            if (typeCurrentConfig !== "DU")
+              // eslint-disable-next-line promise/catch-or-return
+              PlayerLink(currentMetaChap).then((conf) => {
+                // eslint-disable-next-line promise/always-return
+                if (settingsStore.player.server === "DU") {
+                  configPlayer.value = conf
+                  typeCurrentConfig = "DU"
+                }
+              })
+          }
+          if (server === "FB") {
+            // PlayerFB は常に PlayerLink よりも遅いため、DU を使用して高速プリロード戦術を使用する必要があります。
+            if (typeCurrentConfig !== "DU")
+              // eslint-disable-next-line promise/catch-or-return
+              PlayerLink(currentMetaChap).then((conf) => {
+                // eslint-disable-next-line promise/always-return
+                if (settingsStore.player.server === "DU") {
+                  configPlayer.value = conf
+                  typeCurrentConfig = "DU"
+                }
+              })
+            // eslint-disable-next-line promise/catch-or-return
+            PlayerFB(currentMetaChap.id).then((conf) => {
+              // eslint-disable-next-line promise/always-return
+              if (settingsStore.player.server === "FB") {
+                configPlayer.value = conf
+                typeCurrentConfig = "FB"
+              }
+            })
+          }
+        } catch (err) {
+          $q.notify({
+            position: "bottom-right",
+            message: (err as Error).message,
           })
-        ).data
-      )
-    } catch (err) {
-      console.log({
-        err,
-      })
-    }
+          console.error(err)
+        }
+      },
+      { immediate: true }
+    )
+    onCleanup(watcher)
   },
   {
     immediate: true,
   }
 )
-const sources = computed<Source[] | undefined>(() =>
-  configPlayer.value?.link.map((item): Source => {
-    return {
-      html: labelToQuality[item.label] ?? item.label,
-      url: item.file.startsWith("http") ? item.file : `https:${item.file}`,
-      type: item.type as
-        | "aac"
-        | "f4a"
-        | "mp4"
-        | "f4v"
-        | "hls"
-        | "m3u"
-        | "m4v"
-        | "mov"
-        | "mp3"
-        | "mpeg"
-        | "oga"
-        | "ogg"
-        | "ogv"
-        | "vorbis"
-        | "webm"
-        | "youtube",
-    }
-  })
-)
+const sources = computed(() => configPlayer.value?.link)
 
 const authStore = useAuthStore()
 
 watch(
-  [progressWatchStore, () => authStore.user],
+  [progressWatchStore, () => authStore.user_data],
   // eslint-disable-next-line camelcase
   ([progressWatchStore, user_data]) => {
     // eslint-disable-next-line camelcase
