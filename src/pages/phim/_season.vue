@@ -877,11 +877,16 @@ watchEffect(() => {
 })
 // TOOD: check chapName in url is chapName
 watchEffect(() => {
-  if (!currentMetaChap.value) return
+  const chaps = currentDataSeason.value?.chaps
+  if (!chaps) return
 
-  if (!route.params.chap) return // this first chap not need
+  const { chap: epId } = route.params
+  
+  const metaEp = epId ? chaps.find((item) => item.id === epId) : chaps[0]
+  if (!metaEp) return
 
-  const correctChapName = parseChapName(currentMetaChap.value.name)
+
+  const correctChapName = parseChapName(metaEp.name)
   const urlChapName = route.params.chapName
 
   if (urlChapName) {
@@ -892,7 +897,7 @@ watchEffect(() => {
       `chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
     )
     router.replace({
-      path: `/phim/${route.params.season}/${correctChapName}-${route.params.chap}`,
+      path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
       query: route.query,
       hash: route.hash,
     })
@@ -901,7 +906,7 @@ watchEffect(() => {
     // replace
     console.info("this url old type redirect to new type url")
     router.replace({
-      path: `/phim/${route.params.season}/${correctChapName}-${route.params.chap}`,
+      path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
       query: route.query,
       hash: route.hash,
     })
