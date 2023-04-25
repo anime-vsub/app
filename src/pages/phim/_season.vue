@@ -865,6 +865,8 @@ watchEffect(() => {
 
   const { chap: epId } = route.params
 
+  if (!epId) return
+
   if (!chaps.some((item) => item.id === epId)) {
     if (import.meta.env.DEV) console.warn("Redirect to not_found")
     router.replace({
