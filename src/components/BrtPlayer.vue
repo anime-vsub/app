@@ -782,6 +782,7 @@ import {
 import type { PlayerLink } from "src/apis/runs/ajax/player-link"
 import { useMemoControl } from "src/composibles/memo-control"
 import {
+  C_URL,
   DELAY_SAVE_VIEWING_PROGRESS,
   playbackRates,
   servers,
@@ -1352,7 +1353,11 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
             config.timeout
           )
 
-          fetchJava(context.url + "#animevsub-vsub", {
+          // set header because this version always cors not fix by extension liek desktop-web
+          headers.set("referer", C_URL)
+
+          fetchJava(context.url +
+                (process.env.MODE === "spa" ? "#animevsub-vsub" : ""), {
             headers,
             signal: controller.signal,
           })
