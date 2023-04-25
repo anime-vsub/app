@@ -1154,7 +1154,7 @@ const props = defineProps<{
   nameCurrentChap?: string
   nextChap?: SiblingChap
   prevChap?: SiblingChap
-  name: string
+  name?: string
   poster?: string
   seasons?: {
     value: string
@@ -1481,7 +1481,7 @@ const seasonMetaCreated = new Set<string>()
 async function createSeason(): Promise<boolean> {
   // eslint-disable-next-line camelcase
   const { user_data } = authStore
-  const { currentSeason, nameCurrentChap: seasonName, poster } = props
+  const { currentSeason, nameCurrentChap: seasonName, poster, name } = props
   const visibility = documentVisibility.value === "visible"
 
   if (seasonMetaCreated.has(currentSeason)) return true
@@ -1492,14 +1492,15 @@ async function createSeason(): Promise<boolean> {
     !currentSeason ||
     typeof seasonName !== "string" ||
     !poster ||
-    !visibility
+    !visibility ||
+    !name
   )
     return false
   console.log("set new season poster %s", poster)
   await historyStore.createSeason(currentSeason, {
     poster,
     seasonName,
-    name: props.name,
+    name
   })
   seasonMetaCreated.add(currentSeason)
   return true
