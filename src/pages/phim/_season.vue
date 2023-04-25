@@ -18,7 +18,7 @@
       :current-chap="currentChap"
       :name-current-chap="currentMetaChap?.name"
       :next-chap="nextChap"
-      :name="data.name ?? ''"
+      :name="data?.name"
       :poster="currentDataSeason?.poster ?? data.poster"
       :seasons="seasons"
       :_cache-data-seasons="_cacheDataSeasons"
@@ -771,11 +771,17 @@ const _cacheDataSeasons = reactive<
 >(new Map())
 const progressWatchStore = reactive<ProgressWatchStore>(new Map())
 
+
+// eslint-disable-next-line functional/no-let
+let watcherSeasons: (() => void) | undefined
+onBeforeUnmount(() => watcherSeasons?.())
 async function fetchSeason(season: string) {
-  if (!seasons.value) {
-    console.warn("seasons not ready")
-    return
-  }
+  // if (!seasons.value) {
+  //   console.warn("seasons not ready")
+  //   return
+  // }
+  watcherSeasons?.()
+  watcherSeasons = undefined
 
   if (!progressWatchStore.has(season))
     progressWatchStore.set(season, { status: "queue" })
@@ -802,7 +808,7 @@ async function fetchSeason(season: string) {
       console.warn("chaps not found")
       response.chaps = [
         {
-          id: "#youtube",
+          id: "0",
           play: "1",
 
           hash:
@@ -814,55 +820,74 @@ async function fetchSeason(season: string) {
       console.log("large chap. spliting...")
       const { chaps } = response
 
-      // eslint-disable-next-line functional/no-let
-      let indexMetaSeason = seasons.value.findIndex(
-        (item) => item.value === season
-      )
+      // eslint-disable-next-line no-inner-declarations
+      function watchHandler() {
+        if (!seasons.value) return
 
-      if (indexMetaSeason === -1)
-        indexMetaSeason = seasons.value.findIndex(
-          (item) => item.value === realIdSeason
+        // eslint-disable-next-line functional/no-let
+        let indexMetaSeason = seasons.value.findIndex(
+          (item) => item.value === season
         )
 
-      console.log("index %s = %i", season, indexMetaSeason)
+        if (indexMetaSeason === -1)
+          indexMetaSeason = seasons.value.findIndex(
+            (item) => item.value === realIdSeason
+          )
 
-      const nameSeason = seasons.value[indexMetaSeason].name
+        console.log("index %s = %i", season, indexMetaSeason)
 
-      const newSeasons = [
-        ...seasons.value.slice(0, indexMetaSeason),
-        ...unflat(chaps, 50).map((chaps, index) => {
-          const value = index === 0 ? realIdSeason : `${realIdSeason}$${index}`
-          const name = `${nameSeason} (${chaps[0].name} - ${
-            chaps[chaps.length - 1].name
-          })`
+        const nameSeason = seasons.value[indexMetaSeason].name
 
-          console.log("set %s by %s", value, chaps[0].id)
+        const newSeasons = [
+          ...seasons.value.slice(0, indexMetaSeason),
+          ...unflat(chaps, 50).map((chaps, index) => {
+            const value =
+              index === 0 ? realIdSeason : `${realIdSeason}$${index}`
+            const name = `${nameSeason} (${chaps[0].name} - ${
+              chaps[chaps.length - 1].name
+            })`
 
-          const dataOnCache = _cacheDataSeasons.get(value)
-          const newData: ResponseDataSeasonSuccess = {
-            status: "success",
-            response: {
-              ...response,
-              chaps,
-            },
-          }
-          if (dataOnCache) {
-            Object.assign(dataOnCache, newData)
-          } else {
-            _cacheDataSeasons.set(value, newData)
-          }
+            console.log("set %s by %s", value, chaps[0].id)
 
-          return {
-            name,
-            value,
-          }
-        }),
-        ...seasons.value.slice(indexMetaSeason + 1),
-      ]
-      console.log("current seasons: ", seasons.value)
-      seasons.value = newSeasons
-      console.log("new seasons: ", newSeasons)
-      console.log("set seasons: ", seasons.value)
+            const dataOnCache = _cacheDataSeasons.get(value)
+            const newData: ResponseDataSeasonSuccess = {
+              status: "success",
+              response: {
+                ...response,
+                chaps,
+              },
+            }
+            if (dataOnCache) {
+              Object.assign(dataOnCache, newData)
+            } else {
+              _cacheDataSeasons.set(value, newData)
+            }
+
+            return {
+              name,
+              value,
+            }
+          }),
+          ...seasons.value.slice(indexMetaSeason + 1),
+        ]
+        console.log("current seasons: ", seasons.value)
+        seasons.value = newSeasons
+        console.log("new seasons: ", newSeasons)
+        console.log("set seasons: ", seasons.value)
+      }
+
+      if (seasons.value) watchHandler()
+      else {
+        watcherSeasons = watch(
+          seasons,
+          () => {
+            watcherSeasons?.()
+            watcherSeasons = undefined
+            watchHandler()
+          },
+          { immediate: true }
+        )
+      }
       return
     }
 
