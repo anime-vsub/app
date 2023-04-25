@@ -437,7 +437,7 @@ import { AjaxRate } from "src/apis/runs/ajax/rate"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
-import type { servers } from "src/constants";
+import type { servers } from "src/constants"
 import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
@@ -849,6 +849,8 @@ watchEffect(() => {
   ) {
     const correctChapName = parseChapName(currentMetaChap.value.name)
 
+    if (import.meta.env.DEV)
+      console.log("%c Redirect to suspend path", "color: green")
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${currentChap.value}`,
       query: route.query,
@@ -858,11 +860,13 @@ watchEffect(() => {
 })
 watchEffect(() => {
   // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
-  if (
-    currentDataSeason.value?.chaps &&
-    currentChap.value &&
-    !currentMetaChap.value
-  ) {
+  const chaps = currentDataSeason.value?.chaps
+  if (!chaps) return
+
+  const { chap: epId } = route.params
+
+  if (!chaps.some((item) => item.id === epId)) {
+    if (import.meta.env.DEV) console.warn("Redirect to not_found")
     router.replace({
       name: "not_found",
       params: {
@@ -879,7 +883,7 @@ watchEffect(() => {
   if (!chaps) return
 
   const { chap: epId } = route.params
-  
+
   const metaEp = epId ? chaps.find((item) => item.id === epId) : chaps[0]
   if (!metaEp) return
 
