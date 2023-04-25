@@ -886,7 +886,7 @@ watchEffect(() => {
 
   const { chap: epId } = route.params
 
-  const metaEp = epId ? chaps.find((item) => item.id === epId) : chaps[0]
+  const metaEp = epId ? chaps.find((item) => item.id === epId) : undefined
   if (!metaEp) return
 
   const correctChapName = parseChapName(metaEp.name)
