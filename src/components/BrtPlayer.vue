@@ -381,13 +381,30 @@
         title="Xem thêm"
         fit
       >
-        <div class="text-zinc-500 text-[12px] mb-2">Chất lượng</div>
+        <div class="text-zinc-500 text-[12px] mb-2">Máy chủ phát</div>
         <div>
           <q-btn
             dense
             flat
             no-caps
-            class="px-0 flex-1 text-weight-norrmal text-[13px] py-2 c--main"
+            class="px-2 flex-1 text-weight-norrmal py-2 rounded-xl"
+            v-for="(label, id) in servers"
+            :class="{
+              'c--main': settingsStore.player.server === id,
+            }"
+            :key="label"
+            @click="settingsStore.player.server = id"
+            >{{ label }}</q-btn
+          >
+        </div>
+
+        <div class="text-zinc-500 text-[12px] mt-4 mb-2">Chất lượng</div>
+        <div>
+          <q-btn
+            dense
+            flat
+            no-caps
+            class="px-2 flex-1 text-weight-norrmal py-2 rounded-xl"
             v-for="{ label, qualityCode } in sources"
             :class="{
               'c--main': qualityCode === artQuality,
@@ -404,10 +421,12 @@
             dense
             flat
             no-caps
-            class="flex-1 text-weight-norrmal text-[13px] py-2 c--main"
+            class="flex-1 text-weight-norrmal text-[13px] py-2"
             v-for="{ name, value } in playbackRates"
             :key="name"
-            :class="artPlaybackRate === value ? 'c--main' : 'text-stone-200'"
+            :class="{
+              'c--main': artPlaybackRate === value,
+            }"
             @click="setArtPlaybackRate(value)"
             >{{ name }}</q-btn
           >
@@ -549,7 +568,7 @@
       <ArtDialog
         :model-value="artFullscreen && showDialogServer"
         @update:model-value="showDialogServer = $event"
-        title="Chất lượng"
+        title="Máy chủ phát"
       >
         <ul>
           <li
@@ -613,7 +632,12 @@
           </q-item-section>
 
           <q-item-section>
-            <q-item-label> Máy chủ phát </q-item-label>
+            <q-item-label>
+              Máy chủ phát
+              <span class="text-gray-200 mx-2">&bull;</span>
+
+              {{ settingsStore.player.server }}
+            </q-item-label>
           </q-item-section>
         </q-item>
 
@@ -623,7 +647,12 @@
           </q-item-section>
 
           <q-item-section>
-            <q-item-label> Chất lượng </q-item-label>
+            <q-item-label>
+              Chất lượng
+              <span class="text-gray-200 mx-2">&bull;</span>
+
+              {{ artQuality }}
+            </q-item-label>
           </q-item-section>
         </q-item>
 
@@ -676,7 +705,13 @@
   >
     <q-card flat class="w-full text-[16px]">
       <q-list>
-        <q-item v-for="(label, id) in servers" :key="label" clickable v-ripple>
+        <q-item
+          v-for="(label, id) in servers"
+          :key="label"
+          clickable
+          v-ripple
+          @click="settingsStore.player.server = id"
+        >
           <q-item-section avatar>
             <q-icon v-if="settingsStore.player.server === id" name="check" />
           </q-item-section>
@@ -861,12 +896,13 @@ if (import.meta.env.DEV)
 
 const video = ref<HTMLVideoElement>()
 // value control get play
-const artPlaying = ref(true)
+const artPlaying = ref(false)
 const setArtPlaying = (playing: boolean) => {
   if (!video.value) {
     console.log("video element not ready")
     return
   }
+  artPlaying.value = playing
   if (playing) {
     // video.value.load();
     if (video.value.paused) video.value.play()
