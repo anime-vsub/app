@@ -239,5 +239,12 @@
   "xoa-danh-sach-phat": "プレイリストを削除",
   "xoa-khoi-danh-sach-phat": "プレイリストから削除",
   "yeu-cau-dang-nhap-lai": "再ログインが必要",
-  "yeu-thich": "お気に入り"
+  "yeu-thich": "お気に入り",
+  "errors": {
+    "danh-sach-phat-khong-ton-tai": "",
+    "loi-khong-xac-dinh-khi": "",
+    "require_login_to": "",
+    "xoa-thong-bao-that-bai": ""
+  },
+  "may-chu-phat": "ブロードキャスト サーバー"
 }

@@ -18,7 +18,7 @@ export default function PhimIdChap(html: string) {
         hash: $item.attr("data-hash")!,
 
         name: $item.text().trim(),
-      }
+      } as const
     })
     .toArray()
   const [day, hour, minus] =
@@ -32,7 +32,7 @@ export default function PhimIdChap(html: string) {
   const poster = $(".TPostBg img").attr("src")!
 
   return {
-    chaps,
+    chaps: chaps as Readonly<typeof chaps>,
     update: !day
       ? null
       : ([dayTextToNum(day.toLowerCase()), +hour, +minus] as [

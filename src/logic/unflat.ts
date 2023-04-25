@@ -1,4 +1,4 @@
-export function unflat<T>(array: T[], size: number): T[][] {
+export function unflat<T>(array: readonly T[], size: number): T[][] {
   const { length } = array
   const max = ~~(length / size)
 

@@ -2,6 +2,10 @@ export const labelToQuality: Record<string, string> = {
   HD: "720p",
   SD: "480p",
 }
+export const servers = {
+  DU: "High",
+  FB: "Low",
+} as const
 export const playbackRates = [
   {
     name: "0.5x",
