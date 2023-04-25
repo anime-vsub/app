@@ -2003,6 +2003,9 @@ const watcherVideoTagReady = watch(video, (video) => {
   // eslint-disable-next-line promise/catch-or-return
   Promise.resolve().then(watcherVideoTagReady) // fix this not ready value
 
+  // pre set volume to default
+  setArtVolume(artVolume.value)
+
   // eslint-disable-next-line functional/no-let
   let currentEpStream: null | string = null
   watch(
