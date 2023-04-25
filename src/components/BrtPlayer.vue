@@ -831,7 +831,7 @@ const props = defineProps<{
     season: string
     chap?: string
   }
-  name: string
+  name?: string
   poster?: string
   seasons?: Season[]
   _cacheDataSeasons: Map<
@@ -1078,7 +1078,7 @@ const seasonMetaCreated = new Set<string>()
 async function createSeason(): Promise<boolean> {
   // eslint-disable-next-line camelcase
   const { user_data } = authStore
-  const { currentSeason, nameCurrentChap: seasonName, poster } = props
+  const { currentSeason, nameCurrentChap: seasonName, poster, name } = props
 
   if (seasonMetaCreated.has(currentSeason)) return true
 
@@ -1087,14 +1087,15 @@ async function createSeason(): Promise<boolean> {
     !user_data ||
     !currentSeason ||
     typeof seasonName !== "string" ||
-    !poster
+    !poster ||
+    !name
   )
     return false
   console.log("set new season poster %s", poster)
   await historyStore.createSeason(currentSeason, {
     poster,
     seasonName,
-    name: props.name,
+    name,
   })
   seasonMetaCreated.add(currentSeason)
   return true
