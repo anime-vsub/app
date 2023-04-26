@@ -640,6 +640,9 @@ import { ResponseDataSeasonSuccess } from "./_season.interface"
 
 // ============================================
 
+// eslint-disable-next-line functional/no-let
+let watcherSeasons: (() => void) | undefined
+
 const route = useRoute()
 const router = useRouter()
 const historyStore = useHistoryStore()
@@ -771,9 +774,6 @@ const _cacheDataSeasons = reactive<
 >(new Map())
 const progressWatchStore = reactive<ProgressWatchStore>(new Map())
 
-
-// eslint-disable-next-line functional/no-let
-let watcherSeasons: (() => void) | undefined
 onBeforeUnmount(() => watcherSeasons?.())
 async function fetchSeason(season: string) {
   // if (!seasons.value) {
@@ -881,6 +881,7 @@ async function fetchSeason(season: string) {
         watcherSeasons = watch(
           seasons,
           () => {
+            if (!seasons.value) return
             watcherSeasons?.()
             watcherSeasons = undefined
             watchHandler()
