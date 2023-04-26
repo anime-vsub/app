@@ -476,6 +476,9 @@ import type {
 
 // ============================================
 
+// eslint-disable-next-line functional/no-let
+let watcherSeasons: (() => void) | undefined
+
 const route = useRoute()
 const router = useRouter()
 const { t, locale } = useI18n()
@@ -641,8 +644,6 @@ watch(
   }
 )
 
-// eslint-disable-next-line functional/no-let
-let watcherSeasons: (() => void) | undefined
 onBeforeUnmount(() => watcherSeasons?.())
 async function fetchSeason(season: string) {
   // if (!seasons.value) {
@@ -750,6 +751,7 @@ async function fetchSeason(season: string) {
         watcherSeasons = watch(
           seasons,
           () => {
+            if (!seasons.value) return
             watcherSeasons?.()
             watcherSeasons = undefined
             watchHandler()
