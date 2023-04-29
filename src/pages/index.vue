@@ -138,8 +138,8 @@
       <swiper
         :slides-per-view="6"
         :navigation="{
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+          nextEl: '.swiper-button-next-1',
+          prevEl: '.swiper-button-prev-1',
         }"
         :modules="[Navigation]"
         :breakpoints="{
@@ -160,8 +160,8 @@
         </swiper-slide>
       </swiper>
 
-      <div class="nav-btn swiper-button-next" />
-      <div class="nav-btn swiper-button-prev" />
+      <div class="nav-btn swiper-button-next swiper-button-next-1" />
+      <div class="nav-btn swiper-button-next swiper-button-prev-1" />
     </div>
 
     <div class="px-4 mt-4 md:px-14">
@@ -200,8 +200,8 @@
         <swiper
           :slides-per-view="6"
           :navigation="{
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: '.swiper-button-next-2',
+            prevEl: '.swiper-button-prev-2',
           }"
           :modules="[Navigation]"
           :breakpoints="{
@@ -222,8 +222,8 @@
           </swiper-slide>
         </swiper>
 
-        <div class="nav-btn swiper-button-next" />
-        <div class="nav-btn swiper-button-prev" />
+        <div class="nav-btn swiper-button-next swiper-button-next-2" />
+        <div class="nav-btn swiper-button-next swiper-button-prev-2" />
       </div>
     </div>
 
@@ -246,8 +246,8 @@
         <swiper
           :slides-per-view="6"
           :navigation="{
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: '.swiper-button-next-3',
+            prevEl: '.swiper-button-prev-3',
           }"
           :modules="[Navigation]"
           :breakpoints="{
@@ -312,8 +312,8 @@
           </swiper-slide>
         </swiper>
 
-        <div class="nav-btn swiper-button-next" />
-        <div class="nav-btn swiper-button-prev" />
+        <div class="nav-btn swiper-button-next swiper-button-next-3" />
+        <div class="nav-btn swiper-button-next swiper-button-prev-3" />
       </div>
     </div>
 
