@@ -864,28 +864,35 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
-// replace router if last episode viewing exists
-const watcherRestoreLastEp = watchPostEffect(() => {
-  const episodeIdFirst = currentDataSeason.value?.chaps[0].id
+watch(
+  currentSeason,
+  (season, _, onCleanup) => {
+    // replace router if last episode viewing exists
+    const watcherRestoreLastEp = watchPostEffect(() => {
+      const episodeIdFirst = currentDataSeason.value?.chaps[0].id
 
-  if (
-    !route.params.chap &&
-    currentChap.value &&
-    currentChap.value !== episodeIdFirst &&
-    currentMetaChap.value
-  ) {
-    const correctChapName = parseChapName(currentMetaChap.value.name)
+      if (
+        !route.params.chap &&
+        currentChap.value &&
+        currentChap.value !== episodeIdFirst &&
+        currentMetaChap.value
+      ) {
+        const correctChapName = parseChapName(currentMetaChap.value.name)
 
-    if (import.meta.env.DEV)
-      console.log("%c Redirect to suspend path", "color: green")
-    router.replace({
-      path: `/phim/${route.params.season}/${correctChapName}-${currentChap.value}`,
-      query: route.query,
-      hash: route.hash,
+        if (import.meta.env.DEV)
+          console.log("%c Redirect to suspend path", "color: green")
+        router.replace({
+          path: `/phim/${season}/${correctChapName}-${currentChap.value}`,
+          query: route.query,
+          hash: route.hash,
+        })
+        watcherRestoreLastEp()
+      }
     })
-    watcherRestoreLastEp()
-  }
-})
+    onCleanup(watcherRestoreLastEp)
+  },
+  { immediate: true }
+)
 watchEffect(() => {
   // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
   const chaps = currentDataSeason.value?.chaps
