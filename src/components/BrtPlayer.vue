@@ -1283,7 +1283,9 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
       // cancel
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       video.value!.oncanplay = function () {
+        const { src } = this
         currentHls?.destroy()
+        if (this.src !== src) this.src = src
         this.oncanplay = null
       }
     }
