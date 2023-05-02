@@ -16,8 +16,7 @@ export async function PlayerFB(episodeId: string) {
   // eslint-disable-next-line functional/no-throw-statement
   if (!data.success) throw new Error("Failed load player facebook")
 
-  const config =  await PostWorker<typeof AjaxPlayerFBParser>(Worker, data.html)
-
+  const config = await PostWorker<typeof AjaxPlayerFBParser>(Worker, data.html)
 
   return await PlayerLink(config)
 }
