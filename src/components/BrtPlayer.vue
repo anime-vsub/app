@@ -1370,7 +1370,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
           // set header because this version always cors not fix by extension liek desktop-web
           headers.set("referer", C_URL)
-          
+
           fetchJava(context.url + (process.env.MODE === "spa" ? "#animevsub-vsub" : ""), {
             headers,
             signal: controller.signal,
@@ -1380,7 +1380,8 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
               let byteLength: number
               if (context.responseType !== "text") {
                 xhr.response = await res.arrayBuffer()
-                byteLength = xhr.response.byteLength
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                byteLength = xhr.response!.byteLength
               } else {
                 xhr.responseText = await res.text()
                 byteLength = xhr.responseText.length
