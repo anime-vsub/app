@@ -865,10 +865,11 @@ const currentMetaChap = computed(() => {
   )
 })
 // replace router if last episode viewing exists
-watchEffect(() => {
+const watcherRestoreLastEp = watchPostEffect(() => {
   const episodeIdFirst = currentDataSeason.value?.chaps[0].id
 
   if (
+    !route.params.chap &&
     currentChap.value &&
     currentChap.value !== episodeIdFirst &&
     currentMetaChap.value
@@ -882,6 +883,7 @@ watchEffect(() => {
       query: route.query,
       hash: route.hash,
     })
+    watcherRestoreLastEp()
   }
 })
 watchEffect(() => {
