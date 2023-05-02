@@ -1826,6 +1826,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           const xhr = (this.loader = {
             readyState: 0,
             status: 0,
+            responseType: context.responseType,
             abort() {
               controller.abort()
             },
