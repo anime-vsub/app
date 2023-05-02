@@ -1097,6 +1097,7 @@ import {
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
+import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
 import type { ProgressWatchStore } from "src/pages/phim/_season.interface"
@@ -1442,7 +1443,7 @@ const artQuality = computed({
     return props.sources?.[0]?.qualityCode
   },
   set(value) {
-_artQuality.value = value
+    _artQuality.value = value
   },
 })
 const setArtQuality = (value: Exclude<typeof artQuality.value, undefined>) => {
@@ -1802,6 +1803,11 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     const hls = new Hls({
       debug: import.meta.env.isDev,
       progressive: true,
+      fetchSetup(context, initParams) {
+        context.url += "#animevsub-vsub"
+
+        return new Request(context.url, initParams)
+      },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       pLoader: class CustomLoader extends (Hls.DefaultConfig.loader as any) {
         loadInternal(): void {
@@ -1884,6 +1890,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
         }
       } as unknown as PlaylistLoaderConstructor,
     })
+    if (window.Http?.version && window.Http.version < "0.0.24") patcher(hls)
     currentHls = hls
     // customLoader(hls.config)
     hls.loadSource(file)
