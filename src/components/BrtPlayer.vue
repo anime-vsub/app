@@ -760,6 +760,7 @@ import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import type { PlaylistLoaderConstructor } from "hls.js"
 import Hls from "hls.js"
+import workerHls from "hls.js/dist/hls.worker?url"
 import {
   QBtn,
   QCard,
@@ -789,6 +790,7 @@ import {
 } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
+import { patcher } from "src/logic/hls-patcher"
 import { parseTime } from "src/logic/parseTime"
 import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface"
 import type {
@@ -1307,7 +1309,13 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
   ) {
     const hls = new Hls({
       debug: import.meta.env.isDev,
+      workerPath: workerHls,
       progressive: true,
+      fetchSetup(context, initParams) {
+        context.url += (process.env.MODE === "spa" ? "#animevsub-vsub" : "")
+
+        return new Request(context.url, initParams)
+      },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       pLoader: class CustomLoader extends (Hls.DefaultConfig.loader as any) {
         loadInternal(): void {
@@ -1324,6 +1332,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           const xhr = (this.loader = {
             readyState: 0,
             status: 0,
+            responseType: context.responseType,
             abort() {
               controller.abort()
             },
@@ -1338,6 +1347,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           if (this.context.headers)
             for (const [key, val] of Object.entries(this.context.headers))
               headers.set(key, val as string)
+          const { maxTimeToFirstByteMs, maxLoadTimeMs } = config.loadPolicy
 
           if (context.rangeEnd) {
             headers.set(
@@ -1349,6 +1359,10 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           xhr.onreadystatechange = this.readystatechange.bind(this)
           xhr.onprogress = this.loadprogress.bind(this)
           self.clearTimeout(this.requestTimeout)
+          config.timeout =
+            maxTimeToFirstByteMs && Number.isFinite(maxTimeToFirstByteMs)
+              ? maxTimeToFirstByteMs
+              : maxLoadTimeMs
           this.requestTimeout = self.setTimeout(
             this.loadtimeout.bind(this),
             config.timeout
@@ -1356,25 +1370,25 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
           // set header because this version always cors not fix by extension liek desktop-web
           headers.set("referer", C_URL)
-
-          fetchJava(context.url +
-                (process.env.MODE === "spa" ? "#animevsub-vsub" : ""), {
+          
+          fetchJava(context.url + (process.env.MODE === "spa" ? "#animevsub-vsub" : ""), {
             headers,
             signal: controller.signal,
           })
             .then(async (res) => {
               // eslint-disable-next-line functional/no-let
               let byteLength: number
-              if (context.responseType === "arraybuffer") {
+              if (context.responseType !== "text") {
                 xhr.response = await res.arrayBuffer()
-                byteLength = xhr.response!.byteLength
+                byteLength = xhr.response.byteLength
               } else {
                 xhr.responseText = await res.text()
-                byteLength = xhr.responseText!.length
+                byteLength = xhr.responseText.length
               }
 
               xhr.readyState = 4
               xhr.status = 200
+              xhr.responseType = context.responseType
 
               xhr.onprogress?.({
                 loaded: byteLength,
@@ -1394,6 +1408,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
         }
       } as unknown as PlaylistLoaderConstructor,
     })
+    patcher(hls)
     currentHls = hls
     // customLoader(hls.config)
     hls.loadSource(file)
