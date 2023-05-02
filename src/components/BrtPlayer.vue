@@ -601,7 +601,7 @@
                       <div
                         class="bg-[rgba(45,45,45,0.9)] py-2 px-4 flex items-center justify-between relative"
                       >
-                        {{ t('may-chu-phat') }}
+                        {{ t("may-chu-phat") }}
 
                         <q-btn
                           dense
@@ -641,7 +641,7 @@
                       transition-show="jump-up"
                       transition-hide="jump-down"
                     >
-                      {{ t('may-chu-phat') }}
+                      {{ t("may-chu-phat") }}
                     </q-tooltip>
                   </q-btn>
                   <q-btn
@@ -690,12 +690,11 @@
                         <BottomBlurRelative>
                           <ul class="mx-[-16px]">
                             <li
-                              v-for="({ label, qualityCode }) in sources"
+                              v-for="{ label, qualityCode } in sources"
                               :key="label"
                               class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
                               :class="{
-                                'c--main':
-                                  qualityCode === artQuality,
+                                'c--main': qualityCode === artQuality,
                               }"
                               @click="setArtQuality(qualityCode)"
                             >
@@ -833,7 +832,7 @@
                         class="bg-[rgba(28,28,30,0.9)] !min-h-0 px-4 relative py-3 overflow-y-auto scrollbar-custom"
                       >
                         <div class="text-zinc-500 text-[12px] mb-2">
-                          {{ t('may-chu-phat') }}
+                          {{ t("may-chu-phat") }}
                         </div>
                         <div>
                           <q-btn
@@ -860,10 +859,9 @@
                             flat
                             no-caps
                             class="px-2 flex-1 text-weight-norrmal py-2 rounded-xl"
-                            v-for="({ label, qualityCode }) in sources"
+                            v-for="{ label, qualityCode } in sources"
                             :class="{
-                              'c--main':
-                                qualityCode === artQuality,
+                              'c--main': qualityCode === artQuality,
                             }"
                             :key="label"
                             @click="setArtQuality(qualityCode)"
@@ -1434,16 +1432,18 @@ watch(
   () => tooltipModeMovieRef.value?.hide()
 )
 
-const _artQuality = ref<Awaited<ReturnType<typeof PlayerLink>>["link"][0]['qualityCode']>()
+const _artQuality =
+  ref<Awaited<ReturnType<typeof PlayerLink>>["link"][0]["qualityCode"]>()
 const artQuality = computed({
   get() {
-    if (props.sources?.find((item) => item.qualityCode === _artQuality.value)) return _artQuality.value
+    if (props.sources?.find((item) => item.qualityCode === _artQuality.value))
+      return _artQuality.value
 
     return props.sources?.[0]?.qualityCode
   },
   set(value) {
 _artQuality.value = value
-  }
+  },
 })
 const setArtQuality = (value: Exclude<typeof artQuality.value, undefined>) => {
   artQuality.value = value
@@ -1500,7 +1500,7 @@ async function createSeason(): Promise<boolean> {
   await historyStore.createSeason(currentSeason, {
     poster,
     seasonName,
-    name
+    name,
   })
   seasonMetaCreated.add(currentSeason)
   return true
