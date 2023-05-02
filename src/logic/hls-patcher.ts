@@ -3,10 +3,13 @@ import type {
   LoaderConfiguration,
   LoaderContext,
   LoaderOnProgress,
+  LoaderResponse,
 } from "hls.js"
 import type Hls from "hls.js"
 
 import { fetchJava } from "./fetchJava"
+
+const BYTERANGE = /(\d+)-(\d+)\/(\d+)/
 
 function getRequestParameters(
   context: LoaderContext,
@@ -69,6 +72,7 @@ export function patcher(hls: Hls) {
     this.callbacks = callbacks
     this.request = this.fetchSetup(context, initParams)
     self.clearTimeout(this.requestTimeout)
+    config.timeout = config.loadPolicy.maxTimeToFirstByteMs
     this.requestTimeout = self.setTimeout(() => {
       this.abortInternal()
       callbacks.onTimeout(stats, context, this.response)
@@ -88,6 +92,15 @@ export function patcher(hls: Hls) {
       .then((response: Response): Promise<string | ArrayBuffer> => {
         this.response = this.loader = response
 
+        const first = Math.max(self.performance.now(), stats.loading.start)
+
+        self.clearTimeout(this.requestTimeout)
+        config.timeout = config.loadPolicy.maxLoadTimeMs
+        this.requestTimeout = self.setTimeout(() => {
+          this.abortInternal()
+          callbacks.onTimeout(stats, context, this.response)
+        }, config.loadPolicy.maxLoadTimeMs - (first - stats.loading.start))
+
         if (!response.ok) {
           const { status, statusText } = response
           // eslint-disable-next-line functional/no-throw-statement
@@ -97,11 +110,9 @@ export function patcher(hls: Hls) {
             response
           )
         }
-        stats.loading.first = Math.max(
-          self.performance.now(),
-          stats.loading.start
-        )
-        stats.total = parseInt(response.headers.get("Content-Length") || "0")
+        stats.loading.first = first
+
+        stats.total = getContentLength(response.headers) || stats.total
 
         if (onProgress && Number.isFinite(config.highWaterMark)) {
           return this.loadProgressively(
@@ -115,6 +126,9 @@ export function patcher(hls: Hls) {
 
         if (isArrayBuffer) {
           return response.arrayBuffer()
+        }
+        if (context.responseType === "json") {
+          return response.json()
         }
         return response.text()
       })
@@ -130,9 +144,10 @@ export function patcher(hls: Hls) {
           stats.loaded = stats.total = total
         }
 
-        const loaderResponse = {
+        const loaderResponse: LoaderResponse = {
           url: response.url,
           data: responseData,
+          code: response.status,
         }
 
         // eslint-disable-next-line promise/always-return
@@ -151,7 +166,33 @@ export function patcher(hls: Hls) {
         // when destroying, 'error' itself can be undefined
         const code: number = !error ? 0 : error.code || 0
         const text: string = !error ? null : error.message
-        callbacks.onError({ code, text }, context, error ? error.details : null)
+        callbacks.onError(
+          { code, text },
+          context,
+          error ? error.details : null,
+          stats
+        )
       })
+  }
+}
+
+function getByteRangeLength(byteRangeHeader: string): number | undefined {
+  const result = BYTERANGE.exec(byteRangeHeader)
+  if (result) {
+    return parseInt(result[2]) - parseInt(result[1]) + 1
+  }
+}
+
+function getContentLength(headers: Headers): number | undefined {
+  const contentRange = headers.get("Content-Range")
+  if (contentRange) {
+    const byteRangeLength = getByteRangeLength(contentRange)
+    if (Number.isFinite(byteRangeLength)) {
+      return byteRangeLength
+    }
+  }
+  const contentLength = headers.get("Content-Length")
+  if (contentLength) {
+    return parseInt(contentLength)
   }
 }

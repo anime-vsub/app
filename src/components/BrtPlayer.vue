@@ -1072,6 +1072,7 @@ import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import type { PlaylistLoaderConstructor } from "hls.js"
 import Hls from "hls.js"
+import workerHls from "hls.js/dist/hls.worker?url"
 import {
   debounce,
   QBtn,
@@ -1802,6 +1803,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
   ) {
     const hls = new Hls({
       debug: import.meta.env.isDev,
+      workerPath: workerHls,
       progressive: true,
       fetchSetup(context, initParams) {
         context.url += "#animevsub-vsub"
@@ -1838,6 +1840,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           if (this.context.headers)
             for (const [key, val] of Object.entries(this.context.headers))
               headers.set(key, val as string)
+          const { maxTimeToFirstByteMs, maxLoadTimeMs } = config.loadPolicy
 
           if (context.rangeEnd) {
             headers.set(
@@ -1849,6 +1852,10 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           xhr.onreadystatechange = this.readystatechange.bind(this)
           xhr.onprogress = this.loadprogress.bind(this)
           self.clearTimeout(this.requestTimeout)
+          config.timeout =
+            maxTimeToFirstByteMs && Number.isFinite(maxTimeToFirstByteMs)
+              ? maxTimeToFirstByteMs
+              : maxLoadTimeMs
           this.requestTimeout = self.setTimeout(
             this.loadtimeout.bind(this),
             config.timeout
@@ -1861,7 +1868,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
             .then(async (res) => {
               // eslint-disable-next-line functional/no-let
               let byteLength: number
-              if (context.responseType === "arraybuffer") {
+              if (context.responseType !== "text") {
                 xhr.response = await res.arrayBuffer()
                 byteLength = xhr.response.byteLength
               } else {
@@ -1871,6 +1878,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
               xhr.readyState = 4
               xhr.status = 200
+              xhr.responseType = context.responseType
 
               xhr.onprogress?.({
                 loaded: byteLength,
