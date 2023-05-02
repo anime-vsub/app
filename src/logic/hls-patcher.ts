@@ -8,7 +8,10 @@ import type Hls from "hls.js"
 
 import { fetchJava } from "./fetchJava"
 
-function getRequestParameters(context: LoaderContext, signal): RequestInit {
+function getRequestParameters(
+  context: LoaderContext,
+  signal: AbortSignal
+): RequestInit {
   const initParams = {
     method: "GET",
     mode: "cors",
@@ -122,7 +125,7 @@ export function patcher(hls: Hls) {
           self.performance.now(),
           stats.loading.first
         )
-        const total = responseData[LENGTH]
+        const total = (responseData as string)[LENGTH as "length"]
         if (total) {
           stats.loaded = stats.total = total
         }
