@@ -620,8 +620,17 @@ import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
 import { useStateStorageStore } from "stores/state"
-import type { Ref} from "vue";
-import { computed, onBeforeUnmount, reactive, ref, shallowRef, watch, watchEffect, watchPostEffect } from "vue"
+import type { Ref } from "vue"
+import {
+  computed,
+  onBeforeUnmount,
+  reactive,
+  ref,
+  shallowRef,
+  watch,
+  watchEffect,
+  watchPostEffect,
+} from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { RouterLink, useRoute, useRouter } from "vue-router"
@@ -630,7 +639,7 @@ import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
-  Season
+  Season,
 } from "./_season.interface"
 import { ResponseDataSeasonSuccess } from "./_season.interface"
 
