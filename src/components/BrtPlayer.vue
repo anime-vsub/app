@@ -1480,10 +1480,14 @@ function onVideoCanPlay() {
 
 const seasonMetaCreated = new Set<string>()
 
-async function createSeason(): Promise<boolean> {
+async function createSeason(
+  currentSeason: string,
+  seasonName: string,
+  poster: string,
+  name: string
+): Promise<boolean> {
   // eslint-disable-next-line camelcase
   const { user_data } = authStore
-  const { currentSeason, nameCurrentChap: seasonName, poster, name } = props
   const visibility = documentVisibility.value === "visible"
 
   if (seasonMetaCreated.has(currentSeason)) return true
@@ -1491,11 +1495,7 @@ async function createSeason(): Promise<boolean> {
   if (
     // eslint-disable-next-line camelcase
     !user_data ||
-    !currentSeason ||
-    typeof seasonName !== "string" ||
-    !poster ||
-    !visibility ||
-    !name
+    !visibility
   )
     return false
   console.log("set new season poster %s", poster)
@@ -1528,6 +1528,7 @@ function throttle<T extends (...args: any[]) => void>(
 } {
   // eslint-disable-next-line functional/no-let
   let wait = false
+
   // eslint-disable-next-line functional/no-let, no-undef
   let timeout: NodeJS.Timeout | number | undefined
   // eslint-disable-next-line functional/functional-parameters, @typescript-eslint/no-explicit-any
@@ -1556,45 +1557,67 @@ function throttle<T extends (...args: any[]) => void>(
   return cb
 }
 
-// eslint-disable-next-line functional/no-let
-let processingSaveCurTimeIn: string | null = null
+const savingTimeEpStore = new Set<string>()
 const saveCurTimeToPer = throttle(
   async (
     currentSeason: string,
     currentChap: string,
-    cur: number,
-    dur: number,
-    nameCurrentChap: string
+    nameCurrentChap: string,
+    poster: string,
+    name: string
   ) => {
+    console.log("call main fn cur time")
+    const uidTask = uidChap.value
+
+    if (savingTimeEpStore.has(uidTask)) {
+      if (import.meta.env.DEV) console.warn("Task saving %s exists", uidTask)
+
+      return
+    }
+
+    savingTimeEpStore.add(uidTask)
+
+    // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
+    let cur = artCurrentTime.value
+    let dur = artDuration.value
+
+    if (!dur) {
+      console.warn("[saveCurTime]: artDuration is %s", dur)
+      return
+    }
+
+    if (!(await createSeason(currentSeason, nameCurrentChap, poster, name)))
+      return
+
+    // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
+    if (uidTask === uidChap.value) {
+      // update value now
+      cur = artCurrentTime.value
+      dur = artDuration.value
+    } else {
+      // because changed ep -> use old data not change
+    }
+
+    if (stateStorageStore.disableAutoRestoration === 2) return
+
+    console.log("%ccall sav curTime", "color: green")
+
     emit("cur-update", {
       cur,
       dur,
       id: currentChap,
     })
-
-    console.log("call main fn cur time")
-    const uid = uidChap.value // 255 byte
-    console.log({ uid, processingSaveCurTimeIn })
-    if (processingSaveCurTimeIn === uid) return // in progressing save this
-    processingSaveCurTimeIn = uid
-    if (!(await createSeason())) return
-
-    if (stateStorageStore.disableAutoRestoration === 2) return
-
-    console.log("%ccall sav curTime", "color: green")
-    try {
-      await historyStore
-        .setProgressChap(currentSeason, currentChap, {
-          cur,
-          dur,
-          name: nameCurrentChap,
-        })
-        .catch((err) => console.warn("save viewing progress failed: ", err))
-    } catch {}
+    await historyStore
+      .setProgressChap(currentSeason, currentChap, {
+        cur,
+        dur,
+        name: nameCurrentChap,
+      })
+      .catch((err) => console.warn("save viewing progress failed: ", err))
 
     console.log("save viewing progress")
 
-    processingSaveCurTimeIn = null
+    savingTimeEpStore.delete(uidTask)
   }
 )
 watch(uidChap, saveCurTimeToPer.cancel)
@@ -1623,9 +1646,9 @@ function onVideoTimeUpdate() {
   saveCurTimeToPer(
     props.currentSeason,
     props.currentChap,
-    artCurrentTime.value,
-    artDuration.value,
-    props.nameCurrentChap
+    props.nameCurrentChap,
+    props.poster!,
+    props.name!
   )
 }
 // function onVideoError(event: Event) {
