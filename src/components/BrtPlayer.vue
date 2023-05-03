@@ -1314,7 +1314,10 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
       workerPath: workerHls,
       progressive: true,
       fetchSetup(context, initParams) {
-        context.url += (process.env.MODE === "spa" ? "#animevsub-vsub" : "")
+        context.url += process.env.MODE === "spa" ? "#animevsub-vsub" : ""
+
+        // set header because this version always cors not fix by extension liek desktop-web
+        initParams.headers.set("x-referer", C_URL)
 
         return new Request(context.url, initParams)
       },
@@ -1373,10 +1376,13 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           // set header because this version always cors not fix by extension liek desktop-web
           headers.set("referer", C_URL)
 
-          fetchJava(context.url + (process.env.MODE === "spa" ? "#animevsub-vsub" : ""), {
-            headers,
-            signal: controller.signal,
-          })
+          fetchJava(
+            context.url + (process.env.MODE === "spa" ? "#animevsub-vsub" : ""),
+            {
+              headers,
+              signal: controller.signal,
+            }
+          )
             .then(async (res) => {
               // eslint-disable-next-line functional/no-let
               let byteLength: number
