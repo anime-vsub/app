@@ -79,6 +79,7 @@ export function patcher(hls: Hls) {
     }, config.timeout)
 
     const headers = new Headers(this.request.headers)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     headers.set("referer", headers.get("x-referer")!)
     headers.delete("x-referer")
 
