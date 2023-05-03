@@ -78,8 +78,12 @@ export function patcher(hls: Hls) {
       callbacks.onTimeout(stats, context, this.response)
     }, config.timeout)
 
+    const headers = new Headers(this.request.headers)
+    headers.set("referer", headers.get("x-referer"))
+    headers.delete("x-referer")
+
     fetchJava(this.request.url, {
-      headers: this.request.headers,
+      headers,
       signal: this.request.signal,
     })
       .then(
