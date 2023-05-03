@@ -1282,11 +1282,12 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
       console.warn("can't play HLS stream")
       // cancel
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      video.value!.oncanplay = function () {
-        const { src } = this
+      const currentVideo = video.value!
+      currentVideo.oncanplay = function () {
+        const { src } = currentVideo
         currentHls?.destroy()
-        if (this.src !== src) this.src = src
-        this.oncanplay = null
+        if (currentVideo.src !== src) currentVideo.src = src
+        currentVideo.oncanplay = null
       }
     }
   }
