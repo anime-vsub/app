@@ -1578,7 +1578,9 @@ const saveCurTimeToPer = throttle(
     savingTimeEpStore.add(uidTask)
 
     // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
+    // eslint-disable-next-line functional/no-let
     let cur = artCurrentTime.value
+    // eslint-disable-next-line functional/no-let
     let dur = artDuration.value
 
     if (!dur) {
@@ -1647,7 +1649,9 @@ function onVideoTimeUpdate() {
     props.currentSeason,
     props.currentChap,
     props.nameCurrentChap,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     props.poster!,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     props.name!
   )
 }
