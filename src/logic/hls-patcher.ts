@@ -79,7 +79,7 @@ export function patcher(hls: Hls) {
     }, config.timeout)
 
     const headers = new Headers(this.request.headers)
-    headers.set("referer", headers.get("x-referer"))
+    headers.set("referer", headers.get("x-referer")!)
     headers.delete("x-referer")
 
     fetchJava(this.request.url, {
