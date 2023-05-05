@@ -15,7 +15,13 @@
 >
 > And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `loading...`, enjoy the best quality Anime episodes and no `loading...`
 
-[![Build APK](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml) [![Test](https://github.com/anime-vsub/app/actions/workflows/test.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/test.yml) <img src="https://img.shields.io/github/v/release/anime-vsub/app?color=green&display_name=tag&label=APK"> [![GitHub license](https://img.shields.io/github/license/anime-vsub/app)](https://github.com/anime-vsub/app/blob/main/LICENSE) [![CodeQL](https://github.com/anime-vsub/app/actions/workflows/codeql.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/codeql.yml) [![ESLint](https://github.com/anime-vsub/app/actions/workflows/eslint.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/eslint.yml)
+[![Build APK](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml)
+[![Test](https://github.com/anime-vsub/app/actions/workflows/test.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/test.yml) <!-- <img src="https://img.shields.io/github/v/release/anime-vsub/app?color=green&display_name=tag&label=APK"> -->
+[![GitHub license](https://img.shields.io/github/license/anime-vsub/app)](https://github.com/anime-vsub/app/blob/main/LICENSE)
+[![CodeQL](https://github.com/anime-vsub/app/actions/workflows/codeql.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/codeql.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4c89bd638854ef088ad6933c582e455)](https://app.codacy.com/gh/anime-vsub/app/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
+[![ESLint](https://github.com/anime-vsub/app/actions/workflows/eslint.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/eslint.yml)
 [![Hits-of-Code](https://hitsofcode.com/github/anime-vsub/desktop-web?branch=main)](https://hitsofcode.com/github/anime-vsub/app/view?branch=main)
 [![Prettier](https://github.com/anime-vsub/app/actions/workflows/pretter.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/pretter.yml)
 [![TypeScript Checker Declaration](https://github.com/anime-vsub/app/actions/workflows/typing.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/typing.yml)
