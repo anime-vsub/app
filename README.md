@@ -1,6 +1,10 @@
 # AnimeVsub App version Web for Desktop Browser
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/8d283f4d-ec6c-4fdd-af55-472118515914/deploy-status)](https://app.netlify.com/sites/animevsub/deploys) [![GitHub license](https://img.shields.io/github/license/anime-vsub/desktop-web)](https://github.com/anime-vsub/desktop-web/blob/main/LICENSE) <img alt="GitHub Issues" src="https://img.shields.io/github/issues/anime-vsub/desktop-web" /> <img alt="Code Score" src="https://api.codiga.io/project/35013/score/svg" /> <img alt="Code Score" src="https://api.codiga.io/project/35013/status/svg" />
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8d283f4d-ec6c-4fdd-af55-472118515914/deploy-status)](https://app.netlify.com/sites/animevsub/deploys)
+[![GitHub license](https://img.shields.io/github/license/anime-vsub/desktop-web)](https://github.com/anime-vsub/desktop-web/blob/main/LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/anime-vsub/desktop-web)](https://github.com/anime-vsub/desktop-web/issues)<!-- <img alt="Code Score" src="https://api.codiga.io/project/35013/score/svg" />
+<img alt="Code Score" src="https://api.codiga.io/project/35013/status/svg" /> -->
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1eb3fbd3729d49ad9653a77ef921e767)](https://app.codacy.com/gh/anime-vsub/desktop-web/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Hits-of-Code](https://hitsofcode.com/github/anime-vsub/desktop-web?branch=main)](https://hitsofcode.com/github/anime-vsub/desktop-web/view?branch=main)
 
 [![Test](https://github.com/anime-vsub/desktop-web/actions/workflows/test.yml/badge.svg)](https://github.com/anime-vsub/desktop-web/actions/workflows/test.yml)
