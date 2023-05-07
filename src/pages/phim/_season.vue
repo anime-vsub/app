@@ -1018,6 +1018,51 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
+watchEffect(() => {
+  // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
+  if (!currentDataSeason.value) return
+
+  if (!currentMetaChap.value) {
+    const epId = currentChap.value
+
+    // search on all season siblings (season splited with `$`)
+    const seasonAccuracy = currentDataSeason.value.ssSibs?.find((season) => {
+      const cache = _cacheDataSeasons.get(season.value)
+
+      if (cache?.status !== "success") return false
+
+      if (cache.response.chaps.some((item) => item.id === epId)) {
+        return true
+      }
+
+      return false
+    })
+
+    if (seasonAccuracy) {
+      if (import.meta.env.DEV)
+        console.log("Redirect to season %s", seasonAccuracy.value)
+      router.replace({
+        name: "watch-anime",
+        params: {
+          ...route.params,
+          season: seasonAccuracy.value,
+        },
+        query: route.query,
+        hash: route.hash,
+      })
+    } else {
+      if (import.meta.env.DEV) console.warn("Redirect to not_found")
+      router.replace({
+        name: "not_found",
+        params: {
+          catchAll: route.path.split("/").slice(1),
+        },
+        query: route.query,
+        hash: route.hash,
+      })
+    }
+  }
+})
 
 const nextChap = computed<
   | {
