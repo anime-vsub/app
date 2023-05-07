@@ -1016,6 +1016,33 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
+watch(
+  currentSeason,
+  (_, __, onCleanup) => {
+    // replace router if last episode viewing exists
+    const watcherRestoreLastEp = watchPostEffect(() => {
+      const episodeIdFirst = currentDataSeason.value?.chaps[0].id
+
+      if (
+        !route.params.chap &&
+        currentChap.value &&
+        currentChap.value !== episodeIdFirst &&
+        currentMetaChap.value
+      ) {
+        if (import.meta.env.DEV)
+          console.log("%c Redirect to suspend path", "color: green")
+        router.replace({
+          path: `/phim/${route.params.season}/${currentChap.value}`,
+          query: route.query,
+          hash: route.hash,
+        })
+        watcherRestoreLastEp()
+      }
+    })
+    onCleanup(watcherRestoreLastEp)
+  },
+  { immediate: true }
+)
 
 const nextChap = computed<
   | {
