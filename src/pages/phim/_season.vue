@@ -847,23 +847,22 @@ async function fetchSeason(season: string) {
 
         const nameSeason = seasons.value[indexMetaSeason].name
 
-        const newSeasons = [
-          ...seasons.value.slice(0, indexMetaSeason),
-          ...unflat(chaps, 50).map((chaps, index) => {
-            const value =
-              index === 0 ? realIdSeason : `${realIdSeason}$${index}`
-            const name = `${nameSeason} (${chaps[0].name} - ${
-              chaps[chaps.length - 1].name
+        const seasonsSplited: Season[] = []
+        unflat(chaps, 50).forEach((chapsSplited, index) => {
+          const value = index === 0 ? realIdSeason : `${realIdSeason}$${index}`
+          const name = `${nameSeason} (${chapsSplited[0].name} - ${
+            chapsSplited[chapsSplited.length - 1].name
             })`
 
-            console.log("set %s by %s", value, chaps[0].id)
+          console.log("set %s by %s", value, chapsSplited[0].id)
 
             const dataOnCache = _cacheDataSeasons.get(value)
             const newData: ResponseDataSeasonSuccess = {
               status: "success",
               response: {
                 ...response,
-                chaps,
+              chaps: chapsSplited,
+              ssSibs: seasonsSplited,
               },
             }
             if (dataOnCache) {
@@ -872,11 +871,14 @@ async function fetchSeason(season: string) {
               _cacheDataSeasons.set(value, newData)
             }
 
-            return {
+          seasonsSplited.push({
               name,
               value,
-            }
-          }),
+          })
+        })
+        const newSeasons = [
+          ...seasons.value.slice(0, indexMetaSeason),
+          ...seasonsSplited,
           ...seasons.value.slice(indexMetaSeason + 1),
         ]
         console.log("current seasons: ", seasons.value)
@@ -1016,6 +1018,7 @@ const currentMetaChap = computed(() => {
     (item) => item.id === currentChap.value
   )
 })
+
 watch(
   currentSeason,
   (_, __, onCleanup) => {
@@ -1043,6 +1046,51 @@ watch(
   },
   { immediate: true }
 )
+watchEffect(() => {
+  // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
+  if (!currentDataSeason.value) return
+
+  if (!currentMetaChap.value) {
+    const epId = currentChap.value
+
+    // search on all season siblings (season splited with `$`)
+    const seasonAccuracy = currentDataSeason.value.ssSibs?.find((season) => {
+      const cache = _cacheDataSeasons.get(season.value)
+
+      if (cache?.status !== "success") return false
+
+      if (cache.response.chaps.some((item) => item.id === epId)) {
+        return true
+      }
+
+      return false
+    })
+
+    if (seasonAccuracy) {
+      if (import.meta.env.DEV)
+        console.log("Redirect to season %s", seasonAccuracy.value)
+      router.replace({
+        name: "watch-anime",
+        params: {
+          ...route.params,
+          season: seasonAccuracy.value,
+        },
+        query: route.query,
+        hash: route.hash,
+      })
+    } else {
+      if (import.meta.env.DEV) console.warn("Redirect to not_found")
+      router.replace({
+        name: "not_found",
+        params: {
+          catchAll: route.path.split("/").slice(1),
+        },
+        query: route.query,
+        hash: route.hash,
+      })
+    }
+  }
+})
 
 const nextChap = computed<
   | {
