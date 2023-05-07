@@ -34,7 +34,9 @@ export interface ResponseDataSeasonPending {
 }
 export interface ResponseDataSeasonSuccess {
   status: "success"
-  response: Awaited<ReturnType<typeof PhimIdChap>>
+  response: Awaited<ReturnType<typeof PhimIdChap>> & {
+    ssSibs?: Season[]
+  }
 }
 export interface ResponseDataSeasonError {
   status: "error"
