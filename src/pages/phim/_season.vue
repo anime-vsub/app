@@ -916,14 +916,10 @@ watchEffect(() => {
 })
 // TOOD: check chapName in url is chapName
 watchEffect(() => {
-  const chaps = currentDataSeason.value?.chaps
-  if (!chaps) return
-
-  const { chap: epId } = route.params
-
-  const metaEp = epId ? chaps.find((item) => item.id === epId) : undefined
+  const metaEp = currentMetaChap.value ?? undefined
   if (!metaEp) return
 
+  const epId = metaEp.id
   const correctChapName = parseChapName(metaEp.name)
   const urlChapName = route.params.chapName
 
