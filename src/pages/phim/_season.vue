@@ -1049,6 +1049,7 @@ watch(
 watchEffect(() => {
   // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
   if (!currentDataSeason.value) return
+  if (!currentChap.value) return
 
   if (!currentMetaChap.value) {
     const epId = currentChap.value
@@ -1065,7 +1066,7 @@ watchEffect(() => {
 
       return false
     })
-
+    
     if (seasonAccuracy) {
       if (import.meta.env.DEV)
         console.log("Redirect to season %s", seasonAccuracy.value)
