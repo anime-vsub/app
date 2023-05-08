@@ -898,6 +898,7 @@ watch(
 watchEffect(() => {
   // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
   if (!currentDataSeason.value) return
+  if (!currentChap.value) return
 
   if (!currentMetaChap.value) {
     const epId = currentChap.value
