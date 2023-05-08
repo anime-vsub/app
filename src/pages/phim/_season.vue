@@ -943,10 +943,11 @@ watchEffect(() => {
 })
 // TOOD: check chapName in url is chapName
 watchEffect(() => {
-  const metaEp = currentMetaChap.value ?? undefined
+  const metaEp = currentMetaChap.value
   if (!metaEp) return
 
   const epId = metaEp.id
+  if (route.params.chap !== epId) return
   const correctChapName = parseChapName(metaEp.name)
   const urlChapName = route.params.chapName
 
