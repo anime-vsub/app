@@ -800,7 +800,7 @@ let watcherChangeIdFirstEp: (() => void) | null = null
 onBeforeUnmount(() => watcherChangeIdFirstEp?.())
 /** @type - currentChap is episode id */
 const currentChap = ref<string>()
-watchPostEffect(async (onCleanup): Promise<void> => {
+watchEffect(async (onCleanup): Promise<void> => {
   watcherChangeIdFirstEp?.()
   if (route.params.chap) {
     currentChap.value = route.params.chap as string
@@ -841,7 +841,7 @@ watchPostEffect(async (onCleanup): Promise<void> => {
 
   if (episodeId !== undefined) {
     if (episodeId) {
-      const watcher = watchPostEffect(() => {
+      const watcher = watchEffect(() => {
         if (
           currentDataSeason.value?.chaps.some((item) => item.id === episodeId)
         ) {
