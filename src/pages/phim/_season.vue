@@ -458,7 +458,6 @@ import {
   shallowRef,
   watch,
   watchEffect,
-  watchPostEffect,
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -870,7 +869,7 @@ watch(
   currentSeason,
   (_, __, onCleanup) => {
     // replace router if last episode viewing exists
-    const watcherRestoreLastEp = watchPostEffect(() => {
+    const watcherRestoreLastEp = watchEffect(() => {
       const episodeIdFirst = currentDataSeason.value?.chaps[0].id
 
       if (
