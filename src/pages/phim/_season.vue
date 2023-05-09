@@ -956,7 +956,7 @@ watchEffect(() => {
     if (correctChapName === urlChapName) return
 
     console.warn(
-      `chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
+      `Redirect chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
     )
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
@@ -966,7 +966,7 @@ watchEffect(() => {
   } else {
     // old type url /phim/:season/:chap
     // replace
-    console.info("this url old type redirect to new type url")
+    console.info("Redirect this url old type redirect to new type url")
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
       query: route.query,
