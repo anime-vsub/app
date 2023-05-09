@@ -629,7 +629,6 @@ import {
   shallowRef,
   watch,
   watchEffect,
-  watchPostEffect,
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -952,7 +951,7 @@ let watcherChangeIdFirstEp: (() => void) | null = null
 onBeforeUnmount(() => watcherChangeIdFirstEp?.())
 /** @type - currentChap is episode id */
 const currentChap = ref<string>()
-watchPostEffect(async (onCleanup): Promise<void> => {
+watchEffect(async (onCleanup): Promise<void> => {
   watcherChangeIdFirstEp?.()
   if (route.params.chap) {
     currentChap.value = route.params.chap as string
@@ -993,7 +992,7 @@ watchPostEffect(async (onCleanup): Promise<void> => {
 
   if (episodeId !== undefined) {
     if (episodeId) {
-      const watcher = watchPostEffect(() => {
+      const watcher = watchEffect(() => {
         if (
           currentDataSeason.value?.chaps.some((item) => item.id === episodeId)
         ) {
@@ -1023,7 +1022,7 @@ watch(
   currentSeason,
   (_, __, onCleanup) => {
     // replace router if last episode viewing exists
-    const watcherRestoreLastEp = watchPostEffect(() => {
+    const watcherRestoreLastEp = watchEffect(() => {
       const episodeIdFirst = currentDataSeason.value?.chaps[0].id
 
       if (
@@ -1066,7 +1065,7 @@ watchEffect(() => {
 
       return false
     })
-    
+
     if (seasonAccuracy) {
       if (import.meta.env.DEV)
         console.log("Redirect to season %s", seasonAccuracy.value)
