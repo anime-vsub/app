@@ -1344,6 +1344,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
       debug: import.meta.env.isDev,
       workerPath: workerHls,
       progressive: true,
+      fragLoadingRetryDelay: 10000,
       fetchSetup(context, initParams) {
         context.url += process.env.MODE === "spa" ? "#animevsub-vsub" : ""
 
