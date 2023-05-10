@@ -657,6 +657,9 @@ const historyStore = useHistoryStore()
 const settingsStore = useSettingsStore()
 const playlistStore = usePlaylistStore()
 const stateStorageStore = useStateStorageStore()
+const authStore = useAuthStore()
+const $q = useQuasar()
+
 const { t, locale } = useI18n()
 
 const currentSeason = computed(() => route.params.season as string)
@@ -1222,8 +1225,6 @@ watch(
 )
 const sources = computed(() => configPlayer.value?.link)
 
-const authStore = useAuthStore()
-
 watch(
   [progressWatchStore, () => authStore.user_data],
   // eslint-disable-next-line camelcase
@@ -1306,7 +1307,6 @@ watchEffect(() => {
 const followed = ref(false)
 const follows = ref(0)
 
-const $q = useQuasar()
 
 const seasonId = computed(() => realIdCurrentSeason.value?.match(/\d+$/)?.[0])
 watch(
