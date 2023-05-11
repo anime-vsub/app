@@ -1,9 +1,6 @@
 lockfileVersion: '6.0'
 
 dependencies:
-  '@capacitor-community/barcode-scanner':
-    specifier: ^3.0.3
-    version: 3.0.3(@capacitor/core@5.0.2)
   '@capacitor-community/firebase-analytics':
     specifier: ^4.0.0
     version: 4.0.0
@@ -53,16 +50,6 @@ devDependencies:
     version: 0.0.11
 
 packages:
-
-  /@capacitor-community/barcode-scanner@3.0.3(@capacitor/core@5.0.2):
-    resolution: {integrity: sha512-XXxiumONhaIgCwzzoZazmNIybsBq0KFvgQZxtv4TWH2zakmr6dOAvj7DYp6KZOapHS/zg3s6czF8MCpFTjbQWQ==}
-    peerDependencies:
-      '@capacitor/core': ^4.5.0
-    dependencies:
-      '@capacitor/core': 5.0.2
-      '@zxing/browser': 0.1.3(@zxing/library@0.19.3)
-      '@zxing/library': 0.19.3
-    dev: false
 
   /@capacitor-community/firebase-analytics@4.0.0:
     resolution: {integrity: sha512-TwsIz504IrpVajdv5Fv01SYRJqo85oPz2j99xG+NGPCpn110jSRxC6EeHwRLCur8QpGokKlp4y1hd5utUvVUYw==}
@@ -323,31 +310,6 @@ packages:
 
   /@types/slice-ansi@4.0.0:
     resolution: {integrity: sha512-+OpjSaq85gvlZAYINyzKpLeiFkSC4EsC6IIiT6v6TLSU5k5U83fHGj9Lel8oKEXM0HqgrMVCjXPDPVICtxF7EQ==}
-
-  /@zxing/browser@0.1.3(@zxing/library@0.19.3):
-    resolution: {integrity: sha512-PauJzwg5SqZBI2fGmEeRWJHj/1CZd6L2waPaAVQgdTCTlS7h0NrTH/XXEQIjYYg2gFpFALtH2MtLNlUEIGZShg==}
-    peerDependencies:
-      '@zxing/library': ^0.20.0
-    dependencies:
-      '@zxing/library': 0.19.3
-    optionalDependencies:
-      '@zxing/text-encoding': 0.9.0
-    dev: false
-
-  /@zxing/library@0.19.3:
-    resolution: {integrity: sha512-RUv5svewpDoD0ymXleOP8yVTO5BLkR0zn5coGC/Vs1671u0OBJ4xdtR8WVWf08OcvrieEMHdSfQY3ZKtqII/hg==}
-    engines: {node: '>= 10.4.0'}
-    dependencies:
-      ts-custom-error: 3.3.1
-    optionalDependencies:
-      '@zxing/text-encoding': 0.9.0
-    dev: false
-
-  /@zxing/text-encoding@0.9.0:
-    resolution: {integrity: sha512-U/4aVJ2mxI0aDNI8Uq0wEhMgY+u4CNtEb0om3+y3+niDAsoTCOB33UF0sxpzqzdqXLqmvc+vZyAt4O8pPdfkwA==}
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -842,11 +804,6 @@ packages:
   /tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
     hasBin: true
-
-  /ts-custom-error@3.3.1:
-    resolution: {integrity: sha512-5OX1tzOjxWEgsr/YEUWSuPrQ00deKLh6D7OTWcvNHm12/7QPyRh8SYpyWvA4IZv8H/+GQWQEh/kwo95Q9OVW1A==}
-    engines: {node: '>=14.0.0'}
-    dev: false
 
   /tslib@2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
