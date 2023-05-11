@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { HttpOptions } from "@capacitor-community/http"
+import type { HttpOptions } from "@capacitor/core";
 import { get } from "src/logic/http"
 
 import { base64ToArrayBuffer } from "./base64ToArrayBuffer"
