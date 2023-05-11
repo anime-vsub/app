@@ -30,7 +30,7 @@ jobs:
           run_install: false
 
       - name: Install depends
-        run: pnpm i  --no-frozen-lockfile
+        run: pnpm i
 
       - name: Build
         run: pnpm build:android --ide
