@@ -9,7 +9,6 @@
     "cap:sync": "cap sync"
   },
   "dependencies": {
-    "@capacitor-community/barcode-scanner": "^3.0.3",
     "@capacitor-community/firebase-analytics": "^4.0.0",
     "@capacitor/android": "^5.0.0",
     "@capacitor/app": "^5.0.2",

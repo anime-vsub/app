@@ -31,7 +31,7 @@ jobs:
           run_install: false
 
       - name: Install depends
-        run: npm i
+        run: npm i --legacy-peer-deps
 
       - name: Typing
         run: pnpm typing
