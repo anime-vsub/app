@@ -4,6 +4,9 @@
 	"plugins": {
 		"CapacitorCookies": {
 			"enabled": true
+		},
+		"CapacitorHttp": {
+			"enabled": true
 		}
 	},
 	"bundledWebRuntime": false,
