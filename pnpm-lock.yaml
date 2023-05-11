@@ -132,45 +132,42 @@ dependencies:
     version: 4.1.6(vue@3.2.45)
 
 devDependencies:
-  '@capacitor-community/barcode-scanner':
-    specifier: ^3.0.1
-    version: 3.0.1(@capacitor/core@5.0.0)
   '@capacitor-community/firebase-analytics':
     specifier: ^4.0.0
     version: 4.0.0
   '@capacitor/app':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.0)
+    version: 5.0.2(@capacitor/core@5.0.3)
   '@capacitor/browser':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.0)
+    version: 5.0.2(@capacitor/core@5.0.3)
   '@capacitor/cli':
     specifier: ^5.0.0
     version: 5.0.0
   '@capacitor/core':
-    specifier: ^5.0.0
-    version: 5.0.0
+    specifier: ^5.0.3
+    version: 5.0.3
   '@capacitor/device':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.0)
+    version: 5.0.2(@capacitor/core@5.0.3)
   '@capacitor/filesystem':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.0)
+    version: 5.0.2(@capacitor/core@5.0.3)
   '@capacitor/haptics':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.0)
+    version: 5.0.2(@capacitor/core@5.0.3)
   '@capacitor/preferences':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.0)
+    version: 5.0.2(@capacitor/core@5.0.3)
   '@capacitor/share':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.0)
+    version: 5.0.2(@capacitor/core@5.0.3)
   '@capacitor/status-bar':
     specifier: ^5.0.2
-    version: 5.0.2(@capacitor/core@5.0.0)
+    version: 5.0.2(@capacitor/core@5.0.3)
   '@hugotomazi/capacitor-navigation-bar':
     specifier: ^2.0.1
-    version: 2.0.1(@capacitor/core@5.0.0)
+    version: 2.0.1(@capacitor/core@5.0.3)
   '@intlify/vite-plugin-vue-i18n':
     specifier: ^6.0.3
     version: 6.0.3(vite@4.0.4)(vue-i18n@9.2.2)
@@ -319,34 +316,26 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@capacitor-community/barcode-scanner@3.0.1(@capacitor/core@5.0.0):
-    resolution: {integrity: sha512-3R6LXQ3kikuc71Pvffkul9pLvHK8v85VcvBw6E0rjAWgWJbCLf0ssBmycrqMa8/aMZjdw1XNn3nJTXijkfCifQ==}
-    peerDependencies:
-      '@capacitor/core': ^4.5.0
-    dependencies:
-      '@capacitor/core': 5.0.0
-    dev: true
-
   /@capacitor-community/firebase-analytics@4.0.0:
     resolution: {integrity: sha512-TwsIz504IrpVajdv5Fv01SYRJqo85oPz2j99xG+NGPCpn110jSRxC6EeHwRLCur8QpGokKlp4y1hd5utUvVUYw==}
     dependencies:
       '@capacitor/core': 4.8.0
     dev: true
 
-  /@capacitor/app@5.0.2(@capacitor/core@5.0.0):
+  /@capacitor/app@5.0.2(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-TRs5Iu94+IfUJ4iiljWC0tuVsHXBOD4asADggpUH6DnwlQo3cVuRnFK+A0jJnWW9GvlFy9uTsXxytzzXP/V0vQ==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
-  /@capacitor/browser@5.0.2(@capacitor/core@5.0.0):
+  /@capacitor/browser@5.0.2(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-chupqeXz3RopPpT+Uhcz+z81uc2HZqIFbcAy9mlrdJj10iCE53JRjeZDVlMmcL5OxqfGPl9NKTRNhGQvD6sIQQ==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
   /@capacitor/cli@5.0.0:
@@ -381,58 +370,58 @@ packages:
       tslib: 2.5.0
     dev: true
 
-  /@capacitor/core@5.0.0:
-    resolution: {integrity: sha512-Fm8jNUPpCBPQVKLEwMt7D+w/7sh1AGiLVpL+D6Xc7iRdrPU/3NI9bgzca3uzDA1SOV8O+tVxk7bjZGXPbiTRAA==}
+  /@capacitor/core@5.0.3:
+    resolution: {integrity: sha512-VxzSoFvoiGDmvlKQMbg7ZZh+w3Z223630kZINDOsbs7UZr5gZws7+m26Y9Oc8n2miI737hE6qOf2VU4H/8Tytg==}
     dependencies:
       tslib: 2.5.0
     dev: true
 
-  /@capacitor/device@5.0.2(@capacitor/core@5.0.0):
+  /@capacitor/device@5.0.2(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-RpFNxtxWoqi32Q984UMv8Uca8yirPuUCfJQNhp9zyXYA3x0Ks59xgimyBXsJiQXwAgA75W7PAttTalF5bulJIQ==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
-  /@capacitor/filesystem@5.0.2(@capacitor/core@5.0.0):
+  /@capacitor/filesystem@5.0.2(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-seAyASEPhHzpJRap+zZRzvcY+R4LSgMgiKCzen8aReGM5+l6ZFENnzCIeHL4ib5HEMMI4s/sbPGpcwpMndfDdA==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
-  /@capacitor/haptics@5.0.2(@capacitor/core@5.0.0):
+  /@capacitor/haptics@5.0.2(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-HGkvL3a8yW26YVR7pfgMpkJrspD0+9sUrBB77SWR/GqQV+m32FTx9ECGlw+sHhwLnv0XtFx4PocIL5SlU1m3Vw==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
-  /@capacitor/preferences@5.0.2(@capacitor/core@5.0.0):
+  /@capacitor/preferences@5.0.2(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-NOBA4TFC9sq0UU13dKHCDqNsD3X5TGPFgtGvRcJorBvbllUwMMBAbkjF5iCVsoenAN55d77Qh9wXufewdMpXjg==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
-  /@capacitor/share@5.0.2(@capacitor/core@5.0.0):
+  /@capacitor/share@5.0.2(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-oiiWHD4xXh0GgQ0QsGtZcfXnC5WdcGPe1D2ObP3uF/CojawE2PRQVD2RKdbRLXiqWvNqGJoiZunKWiCf/4E66g==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
-  /@capacitor/status-bar@5.0.2(@capacitor/core@5.0.0):
+  /@capacitor/status-bar@5.0.2(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-5emXUQzx9WnQHnxzapghrqm8P80z7IPLM83PTsfN+NOkm3uw3ZOxB4T7qy9NBV2Zp+GCEpr1UrNBowxV7Ami3Q==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
   /@esbuild-kit/cjs-loader@2.4.1:
@@ -811,12 +800,12 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: true
 
-  /@hugotomazi/capacitor-navigation-bar@2.0.1(@capacitor/core@5.0.0):
+  /@hugotomazi/capacitor-navigation-bar@2.0.1(@capacitor/core@5.0.3):
     resolution: {integrity: sha512-Gq6vmAyOZLLHie/8wgGEs/V/aItJMXgivAcNItUDEfTpfXVAVbUdb0juOsXEqYgRCysksAmgHAEOg1WXE+L//Q==}
     peerDependencies:
       '@capacitor/core': ^4.0.1
     dependencies:
-      '@capacitor/core': 5.0.0
+      '@capacitor/core': 5.0.3
     dev: true
 
   /@humanwhocodes/config-array@0.11.8:

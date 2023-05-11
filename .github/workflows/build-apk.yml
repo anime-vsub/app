@@ -47,23 +47,23 @@ jobs:
           run_install: false
       - name: Install and Build Capacitor 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
-          pnpm i
+          pnpm i  --no-frozen-lockfile
           pnpm build:android --ide
 
       - name: Build Android App
         uses: anime-vsub/android-build-action@1.2.1
         with:
-            project-path: src-capacitor/android
-            output-path: apk-release.apk
-            gradle-task: assembleRelease
-            # build-type: bundle
-            # package-name: git.shin.animevsub
-            # keystore-content:  ${{ secrets.KEYSTORE_CONTENT }}
-            # keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
-            # keystore-alias:  ${{ secrets.KEYSTORE_ALIAS }}
-            # browserstack-upload: true
-            # browserstack-username: ${{ secrets.BROWSERSTACK_USERNAME }}
-            # browserstack-access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          project-path: src-capacitor/android
+          output-path: apk-release.apk
+          gradle-task: assembleRelease
+          # build-type: bundle
+          # package-name: git.shin.animevsub
+          # keystore-content:  ${{ secrets.KEYSTORE_CONTENT }}
+          # keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
+          # keystore-alias:  ${{ secrets.KEYSTORE_ALIAS }}
+          # browserstack-upload: true
+          # browserstack-username: ${{ secrets.BROWSERSTACK_USERNAME }}
+          # browserstack-access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
         # ID used to access action output

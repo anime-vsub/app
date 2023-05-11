@@ -31,7 +31,7 @@ jobs:
           run_install: false
 
       - name: Install depends
-        run: pnpm i
+        run: pnpm i  --no-frozen-lockfile
 
       - name: Fretit
         run: pnpm pretit

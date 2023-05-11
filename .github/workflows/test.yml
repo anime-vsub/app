@@ -20,5 +20,5 @@ jobs:
           run_install: false
       - name: Test
         run: |
-          pnpm i
+          pnpm i  --no-frozen-lockfile
           pnpm test

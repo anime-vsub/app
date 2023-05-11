@@ -1,14 +1,13 @@
-
 name: Try build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
-    - cron: '15 10 * * 5'
+    - cron: "15 10 * * 5"
 
 jobs:
   build:
@@ -31,7 +30,7 @@ jobs:
           run_install: false
 
       - name: Install depends
-        run: pnpm i
+        run: pnpm i  --no-frozen-lockfile
 
       - name: Build
         run: pnpm build:android --ide
