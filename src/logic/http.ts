@@ -1,5 +1,5 @@
+import type { HttpOptions } from "@capacitor/core";
 import { CapacitorHttp } from "@capacitor/core"
-import type { HttpOptions } from "@capacitor-community/http"
 import { C_URL } from "src/constants"
 
 const isSpa = process.env.MODE === "spa"
