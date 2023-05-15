@@ -13,7 +13,7 @@
     </div>
 
     <q-btn
-      class="q-mt-md"
+      class="q-mt-md px-2"
       dense
       no-caps
       outline
