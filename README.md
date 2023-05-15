@@ -5,8 +5,6 @@
    <h1 style="font-size: 16px">AnimeVsub</h1>
 </div>
 
-**✨Note for maintainers:** If you need to fix `cross-domain` from `cdn` remove commit changes https://github.com/anime-vsub/app/commit/8f71967de7e05fb754b7f7abf45b0b2ced8cf237 and https://github.com/anime-vsub/app/commit/7fd1d925e56e9fe6274987c5039040e24132c7a9 as they are relative fix changes and are not needed to use method to fake `server.url`
-
 **Download the app by downloading the latest [release version](https://github.com/anime-vsub/app/releases) or visit https://app.animevsub.ga to download it**
 
 > **The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.ga**
