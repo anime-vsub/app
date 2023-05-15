@@ -1,7 +1,7 @@
 <template>
   <router-link :to="data.path" v-ripple class="relative flex flex-nowrap">
     <div>
-      <q-img
+      <q-img-custom
         no-spinner
         :src="forceHttp2(data.image)"
         :ratio="280 / 400"
@@ -10,7 +10,7 @@
         referrerpolicy="no-referrer"
       >
         <slot name="img-content" />
-      </q-img>
+      </q-img-custom>
     </div>
 
     <div class="flex-1 h-full overflow-hidden pl-3 py-[3px] text-[#9a9a9a]">
@@ -48,6 +48,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import QImgCustom from "components/QImgCustom"
 import { forceHttp2 } from "src/logic/forceHttp2"
 
 defineProps<{

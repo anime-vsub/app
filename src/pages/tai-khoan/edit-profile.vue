@@ -15,7 +15,7 @@
   <template v-if="authStore.isLogged">
     <div class="py-15 text-center pt-[47px]">
       <q-avatar size="80px">
-        <q-img
+        <q-img-custom
           v-if="authStore.user?.avatar"
           :src="forceHttp2(authStore.user.avatar)"
           referrerpolicy="no-referrer"
@@ -152,6 +152,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import QImgCustom from "components/QImgCustom"
 import { useQuasar } from "quasar"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { useAuthStore } from "stores/auth"

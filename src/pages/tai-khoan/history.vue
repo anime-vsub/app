@@ -41,7 +41,7 @@
             style="white-space: initial"
             @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
           >
-            <q-img
+            <q-img-custom
               no-spinner
               :src="forceHttp2(item.poster)"
               referrerpolicy="no-referrer"
@@ -64,7 +64,7 @@
                 class="absolute text-white z-10 text-[12px] bottom-2 right-2"
                 >{{ parseTime(item.last.cur) }}</span
               >
-            </q-img>
+            </q-img-custom>
 
             <div class="pl-2">
               <span class="line-clamp-3 mt-1">{{ item.name }}</span>
@@ -102,6 +102,7 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
+import QImgCustom from "components/QImgCustom"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"

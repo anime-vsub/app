@@ -6,7 +6,7 @@
     >
       <q-item-section avatar>
         <q-avatar size="55px">
-          <q-img
+          <q-img-custom
             v-if="authStore.user?.avatar"
             :src="forceHttp2(authStore.user.avatar)"
             referrerpolicy="no-referrer"
@@ -103,7 +103,7 @@
           style="white-space: initial"
           @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
         >
-          <q-img
+          <q-img-custom
             no-spinner
             :src="forceHttp2(item.poster)"
             referrerpolicy="no-referrer"
@@ -126,7 +126,7 @@
               class="absolute text-white z-10 text-[12px] bottom-2 right-2"
               >{{ parseTime(item.last.cur) }}</span
             >
-          </q-img>
+          </q-img-custom>
 
           <span class="line-clamp-2 min-h-10 mt-1">{{ item.name }}</span>
           <div class="text-grey">
@@ -363,6 +363,7 @@
 import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
 import Card from "components/Card.vue"
+import QImgCustom from "components/QImgCustom"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import { compressToBase64 } from "lz-string"
@@ -377,6 +378,7 @@ import { usePlaylistStore } from "stores/playlist"
 import { ref, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
+
 // import QrScanner from "qr-scanner"
 
 const showDialogLogin = ref(false)

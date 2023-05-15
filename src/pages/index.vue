@@ -109,7 +109,7 @@
         v-ripple
         @click="router.push(item.path)"
       >
-        <q-img
+        <q-img-custom
           no-spinner
           :ratio="aspectRatio"
           :src="forceHttp2(item.image!)"
@@ -330,6 +330,7 @@ import "dayjs/locale/vi"
 import { Icon } from "@iconify/vue"
 import Card from "components/Card.vue"
 import GridCard from "components/GridCard.vue"
+import QImgCustom from "components/QImgCustom"
 import Quality from "components/Quality.vue"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"

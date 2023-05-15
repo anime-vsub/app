@@ -1,7 +1,7 @@
 <template>
   <router-link :to="data.path">
     <q-card flat dense class="bg-transparent">
-      <q-img
+      <q-img-custom
         no-spinner
         :src="forceHttp2(data.image)"
         :ratio="280 / 400"
@@ -31,7 +31,7 @@
           >{{ data.quality }}</Quality
         >
         <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
-      </q-img>
+      </q-img-custom>
       <span v-if="!trending" class="a line-clamp-2 min-h-10 mt-1">{{
         data.name
       }}</span>
@@ -46,6 +46,7 @@
 
 <script lang="ts" setup>
 import BottomBlur from "components/BottomBlur.vue"
+import QImgCustom from "components/QImgCustom"
 import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import ranks from "src/logic/ranks"

@@ -32,7 +32,7 @@
       "
     />
     <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
-      <q-img
+      <q-img-custom
         no-spinner
         v-if="!sources?.[0]?.file"
         :ratio="16 / 9"
@@ -486,7 +486,7 @@
       >
         <div>
           <div class="flex flex-nowrap">
-            <q-img
+            <q-img-custom
               :src="forceHttp2(currentDataSeason?.image ?? data.image!)"
               referrerpolicy="no-referrer"
               no-spinner
@@ -578,6 +578,7 @@ import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import GridCard from "components/GridCard.vue"
+import QImgCustom from "components/QImgCustom"
 import Quality from "components/Quality.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"

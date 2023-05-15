@@ -109,7 +109,7 @@
         @click="open(item.href, item.title)"
       >
         <div>
-          <q-img
+          <q-img-custom
             no-spinner
             :src="forceHttp2(item.image)"
             referrerpolicy="no-referrer"
@@ -126,7 +126,7 @@
           </q-card-section>
           <q-card-section class="pt-0">
             <span class="text-caption text-grey">
-              <q-img
+              <q-img-custom
                 :src="forceHttp2(item.by.icon)"
                 referrerpolicy="no-referrer"
                 width="18px"
@@ -152,6 +152,7 @@
 import "dayjs/locale/vi"
 import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
+import QImgCustom from "components/QImgCustom"
 import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"

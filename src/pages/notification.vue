@@ -47,7 +47,7 @@
                 <q-item-label class="text-grey">{{ item.time }}</q-item-label>
               </q-item-section>
               <q-item-section side>
-                <q-img
+                <q-img-custom
                   no-spinner
                   :src="forceHttp2(item.image!)"
                   referrerpolicy="no-referrer"
@@ -101,6 +101,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import QImgCustom from "components/QImgCustom"
 import ScreenLoading from "src/components/ScreenLoading.vue"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import { forceHttp2 } from "src/logic/forceHttp2"
