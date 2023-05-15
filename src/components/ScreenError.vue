@@ -39,7 +39,12 @@ const componentErrors = {
 const typeError = computed(() => {
   if (!props.error) return null
 
-  if (props.error.data?.includes("<title>Just a moment...</title>"))
+  if (
+    !(props.error instanceof Error) &&
+    props.error.data?.includes("<title>Just a moment...</title>") &&
+    props.error.data?.includes("window._cf_chl_opt=") &&
+    props.error.status === 403
+  )
     return "cloudflare"
   if (
     props.error.message?.includes(
