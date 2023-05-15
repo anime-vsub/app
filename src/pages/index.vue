@@ -311,7 +311,12 @@
       <GridCard :items="data.lastUpdate" />
     </div>
   </q-pull-to-refresh>
-  <ScreenError v-else class="absolute" />
+  <ScreenError
+    v-else
+    class="absolute"
+    @click:retry="refreshAsync"
+    :error="error"
+  />
 </template>
 
 <script setup lang="ts">
@@ -348,7 +353,7 @@ const router = useRouter()
 
 const aspectRatio = 622 / 350
 
-const { data, loading, refreshAsync } = useRequest(() => Index())
+const { data, loading, refreshAsync, error } = useRequest(() => Index())
 async function refresh(done: () => void) {
   await refreshAsync()
   done()

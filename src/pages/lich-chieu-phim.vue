@@ -152,7 +152,12 @@
     </swiper>
   </div>
 
-  <ScreenError v-else class="absolute mt-[47px]" />
+  <ScreenError
+    v-else
+    class="absolute mt-[47px]"
+    @click:retry="refreshAsync"
+    :error="error"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -176,7 +181,7 @@ import { useRouter } from "vue-router"
 
 const router = useRouter()
 
-const { loading, data, refreshAsync } = useRequest(() => LichChieuPhim())
+const { loading, data, refreshAsync, error } = useRequest(() => LichChieuPhim())
 // eslint-disable-next-line promise/no-callback-in-promise
 const refresh = (done: () => void) => refreshAsync().then(done)
 

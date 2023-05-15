@@ -91,7 +91,12 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run" class="absolute mt-[47px]" />
+  <ScreenError
+    v-else
+    @click:retry="run"
+    class="absolute mt-[47px]"
+    :error="error"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -116,6 +121,7 @@ const {
   data: histories,
   run,
   refreshAsync,
+  error,
 } = useRequest(() => History())
 const refresh = (done: () => void) =>
   refreshAsync()

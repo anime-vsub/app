@@ -101,7 +101,7 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run" class="pt-[125px]" />
+  <ScreenError v-else @click:retry="run" class="pt-[125px]" :error="error" />
 
   <template v-if="data?.filter">
     <!-- gener -->
@@ -610,7 +610,7 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   )
 }
 
-const { data, run, loading, refreshAsync } = useRequest(() =>
+const { data, run, loading, refreshAsync, error } = useRequest(() =>
   fetchTypeNormalValue(1, false)
 )
 const refresh = (done: () => void) =>

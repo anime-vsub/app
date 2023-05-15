@@ -76,7 +76,11 @@
             </template>
           </CardVertical>
         </q-pull-to-refresh>
-        <ScreenError v-else @click:retry="fetchRankType(type)" />
+        <ScreenError
+          v-else
+          @click:retry="fetchRankType(type)"
+          :error="dataStore.get(type)?.response as Error | undefined"
+        />
       </swiper-slide>
     </swiper>
   </div>

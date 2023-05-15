@@ -141,7 +141,7 @@
             </template>
           </CardVertical>
         </q-pull-to-refresh>
-        <ScreenError v-else @click:retry="runSearch" />
+        <ScreenError v-else @click:retry="runSearch" :error="errorSearch" />
       </swiper-slide>
     </Swiper>
   </div>
@@ -178,7 +178,12 @@
         </q-infinite-scroll>
       </q-pull-to-refresh>
     </template>
-    <ScreenError v-else @click:retry="run" class="absolute pt-[100px]" />
+    <ScreenError
+      v-else
+      @click:retry="run"
+      class="absolute pt-[100px]"
+      :error="error"
+    />
   </template>
 </template>
 
@@ -235,7 +240,7 @@ const query = ref("")
 
 const historySearchStore = useHistorySearchStore()
 
-const { data, run } = useRequest(
+const { data, run, error } = useRequest(
   async () => [
     ...[...new Set(historySearchStore.items)].filter((item) =>
       item.includes(query.value)
@@ -316,6 +321,7 @@ const {
   data: resultSearch,
   run: runSearch,
   refreshAsync: refreshAsyncSearch,
+  error: errorSearch,
 } = useRequest(() => TypeNormalValue("tim-kiem", keyword.value, 1, true))
 // eslint-disable-next-line promise/no-callback-in-promise
 const refresh = (done: () => void) => refreshAsyncSearch().then(done)

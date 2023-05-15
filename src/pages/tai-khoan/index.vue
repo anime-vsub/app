@@ -139,6 +139,7 @@
         no-image
         class="h-[146px] px-4"
         @click:retry="runHistories"
+        :error="undefined"
       />
     </div>
 
@@ -183,6 +184,7 @@
         no-image
         class="h-[203px] px-4"
         @click:retry="runFavorites"
+        :error="undefined"
       />
     </div>
 
