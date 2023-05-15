@@ -1,4 +1,4 @@
-import type { HttpOptions } from "@capacitor/core"
+import type { HttpOptions, HttpResponse } from "@capacitor/core"
 import { CapacitorHttp } from "@capacitor/core"
 import { C_URL } from "src/constants"
 
@@ -55,7 +55,7 @@ export async function get(
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
-  return response
+  return response as HttpResponse
 }
 
 export async function post(
