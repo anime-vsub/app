@@ -8,7 +8,9 @@
     />
     <div class="text-h4 mt-4">Bạn là Robot?</div>
 
-    <div class="text-h6 text-[16px] px-2 leading-normal text-gray-200 text-weight-regular mt-4">
+    <div
+      class="text-h6 text-[16px] px-2 leading-normal text-gray-200 text-weight-regular mt-4"
+    >
       Yêu cầu gửi tới máy chủ bị nghi ngờ là robot vui lòng xác thực bạn là con
       người và thử lại.
       <div class="mt-2">
@@ -16,7 +18,9 @@
           >Mở AnimeVietsub để xác thực</q-btn
         >
       </div>
-      <small class="mt-3 text-[12px] text-gray-400">Sau khi xác thực hãy nhấn vào nút bên dưới</small>
+      <small class="mt-3 text-[12px] text-gray-400"
+        >Sau khi xác thực hãy nhấn vào nút bên dưới</small
+      >
     </div>
 
     <q-btn

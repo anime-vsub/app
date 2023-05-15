@@ -1,4 +1,4 @@
-import type { HttpOptions , HttpResponse } from "@capacitor/core"
+import type { HttpOptions, HttpResponse } from "@capacitor/core"
 import { CapacitorHttp } from "@capacitor/core"
 import { C_URL } from "src/constants"
 
