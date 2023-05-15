@@ -21,6 +21,8 @@
       <small class="mt-3 text-[12px] text-gray-400"
         >Sau khi xác thực hãy nhấn vào nút bên dưới</small
       >
+      <br>
+      <small class="mt-3 text-[12px] text-gray-400">Nếu sự cố vẫn tiếp diễn bạn có thể cần một VPN trỏ tới Việt Nam</small>
     </div>
 
     <q-btn
