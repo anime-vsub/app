@@ -9,29 +9,27 @@
     <div class="text-h4 mt-4">Error</div>
 
     <div class="text-h6 text-weight-regular mt-4" style="opacity: 0.4">
-      {{ t("da-xay-ra-loi") }}
+      Đã xảy ra lỗi
     </div>
 
     <q-btn
       class="q-mt-md"
+      dense
       no-caps
       outline
       rounded
       @click="retry"
       style="color: #00be06"
-      >{{ t("thu-lai") }}</q-btn
+      >Thử lại</q-btn
     >
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from "vue-i18n"
 defineProps<{
   noImage?: boolean
   retry: () => void
 }>()
-
-const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped></style>
