@@ -6,7 +6,7 @@
       class="bg-transparent"
       @mousemove="data.description ? (eventMouseoverCard = $event) : undefined"
     >
-      <q-img
+      <q-img-custom
         no-spinner
         :src="forceHttp2(data.image)"
         referrerpolicy="no-referrer"
@@ -37,7 +37,7 @@
           >{{ data.quality }}</Quality
         >
         <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
-      </q-img>
+      </q-img-custom>
       <span v-if="!trending" class="a line-clamp-2 min-h-10 mt-1">{{
         data.name
       }}</span>
@@ -118,7 +118,9 @@
 import type { MaybeComputedRef } from "@vueuse/core"
 import { useElementHover } from "@vueuse/core"
 import BottomBlur from "components/BottomBlur.vue"
-import { debounce, QCard, QCardSection, QImg, QMenu } from "quasar"
+import QImgCustom from "components/QImgCustom"
+import type { QImg } from "quasar"
+import { debounce, QCard, QCardSection, QMenu } from "quasar"
 import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import dayjs from "src/logic/dayjs"
 import { forceHttp2 } from "src/logic/forceHttp2"

@@ -108,7 +108,7 @@
             )
           "
         >
-          <q-img
+          <q-img-custom
             no-spinner
             :src="forceHttp2(item.poster)"
             referrerpolicy="no-referrer"
@@ -131,7 +131,7 @@
               class="absolute text-white z-10 text-[12px] bottom-2 right-2"
               >{{ parseTime(item.last.cur) }}</span
             >
-          </q-img>
+          </q-img-custom>
 
           <span class="line-clamp-2 min-h-10 mt-1">{{ item.name }}</span>
           <div class="text-grey">
@@ -329,6 +329,7 @@
 import { Icon } from "@iconify/vue"
 import BottomBlur from "components/BottomBlur.vue"
 import Card from "components/Card.vue"
+import QImgCustom from "components/QImgCustom"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import { compressToBase64 } from "lz-string"

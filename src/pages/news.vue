@@ -108,7 +108,7 @@
       @click="open(item.href)"
     >
       <div>
-        <q-img
+        <q-img-custom
           no-spinner
           :src="forceHttp2(item.image)"
           referrerpolicy="no-referrer"
@@ -148,6 +148,7 @@
 <script lang="ts" setup>
 import "dayjs/locale/vi"
 import { Icon } from "@iconify/vue"
+import QImgCustom from "components/QImgCustom"
 import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import dayjs from "src/logic/dayjs"

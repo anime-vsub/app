@@ -46,7 +46,7 @@
         v-else
         class="w-full overflow-hidden bg-[#000] focus-visible:outline-none select-none"
       >
-        <q-img
+        <q-img-custom
           no-spinner
           v-if="!sources?.[0]?.file"
           :ratio="841 / 483"
@@ -320,7 +320,7 @@
       <div class="mt-5 text-[#eee] text-[16px]">{{ t("gioi-thieu") }}</div>
       <div class="flex mt-3">
         <div>
-          <q-img
+          <q-img-custom
             v-if="data?.image"
             width="152px"
             class="rounded-xl"
@@ -409,6 +409,7 @@ import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import CardVertical from "components/CardVertical.vue"
 import FragmentChaps from "components/FragmentChaps.vue"
+import QImgCustom from "components/QImgCustom"
 import Quality from "components/Quality.vue"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"

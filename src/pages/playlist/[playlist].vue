@@ -30,7 +30,7 @@
           </div>
 
           <div class="relative z-2">
-            <q-img
+            <q-img-custom
               v-if="metaPlaylist.poster"
               class="rounded-xl"
               :src="forceHttp2(metaPlaylist.poster)"
@@ -252,7 +252,7 @@
           }`"
         >
           <div>
-            <q-img
+            <q-img-custom
               no-spinner
               :src="forceHttp2(item.poster)"
               referrerpolicy="no-referrer"
@@ -365,6 +365,7 @@
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
+import QImgCustom from "components/QImgCustom"
 import { QInfiniteScroll, useQuasar } from "quasar"
 import dayjs from "src/logic/dayjs"
 import { forceHttp2 } from "src/logic/forceHttp2"

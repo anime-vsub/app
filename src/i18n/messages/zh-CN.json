@@ -246,5 +246,10 @@
   "xoa-khoi-danh-sach-phat": "从播放列表中删除",
   "yeu-cau-dang-nhap-lai": "需要重新登录",
   "yeu-thich": "最喜欢的",
-  "may-chu-phat": "广播服务器"
+  "may-chu-phat": "广播服务器",
+  "ban-la-robot": "你是机器人吗？",
+  "mo-animevietsub-de-xac-thuc": "打开 AnimeVietsub 进行身份验证",
+  "sau-khi-xac-thuc-hay-nhan-vao-nut-ben-duoi": "确认无误后请点击下方按钮",
+  "t-yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "{0}",
+  "yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "请求发送到怀疑是机器人的服务器，请确认您是人类并重试。"
 }

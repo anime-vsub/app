@@ -85,7 +85,7 @@
         v-ripple
         @click="router.push(item.path)"
       >
-        <q-img
+        <q-img-custom
           no-spinner
           :ratio="aspectRatio"
           :src="forceHttp2(item.image!)"
@@ -342,12 +342,11 @@
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
 import Card from "components/Card.vue"
-// eslint-disable-next-line import/order
-import { useRequest } from "vue-request"
+import GridCard from "components/GridCard.vue"
+import QImgCustom from "components/QImgCustom"
+import Quality from "components/Quality.vue"
 // eslint-disable-next-line import/order
 import Star from "components/Star.vue"
-import GridCard from "components/GridCard.vue"
-import Quality from "components/Quality.vue"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
@@ -359,6 +358,7 @@ import { Autoplay, Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 // Import Swiper styles
 import "swiper/css"

@@ -51,5 +51,7 @@
   "i18n-ally.extract.ignored": [
     "&bull;\n              {{\n                t(\"tap-moi-chieu-vao-_time-_day\", [\n                  dayjs(\n                    new Date(\n                      `${currentDataSeason.update[1]}:${currentDataSeason.update[2]} 1/1/0`\n                    )\n                  ).format(\"HH:MM\"),\n                  currentDataSeason.update[0] === 0\n                    ? \"chủ nhật\"\n                    : `thứ ${currentDataSeason.update[0]}`,\n                  currentDataSeason.update[0] > new Date().getDay() + 1\n                    ? \"tuần sau\"\n                    : \"tuần này\",\n                ])\n              }}\n            ",
     "Urban VPN"
-  ]
+  ],
+  "editor.tabCompletion": "on",
+  "diffEditor.codeLens": true
 }

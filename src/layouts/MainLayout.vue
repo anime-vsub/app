@@ -108,7 +108,7 @@
                   @click="saveAnalytics"
                 >
                   <div>
-                    <q-img
+                    <q-img-custom
                       :ratio="267 / 400"
                       :src="forceHttp2(item.image)"
                       referrerpolicy="no-referrer"
@@ -425,7 +425,7 @@
                       )}-${item.last.chap}`"
                     >
                       <div class="w-[149px]">
-                        <q-img
+                        <q-img-custom
                           no-spinner
                           :src="forceHttp2(item.poster)"
                           referrerpolicy="no-referrer"
@@ -448,7 +448,7 @@
                             class="absolute text-white z-10 text-[12px] bottom-2 right-2"
                             >{{ parseTime(item.last.cur) }}</span
                           >
-                        </q-img>
+                        </q-img-custom>
                       </div>
 
                       <div class="pl-2 flex-1">
@@ -571,7 +571,7 @@
                       </q-item-section>
                       <q-item-section side>
                         <div class="flex flex-nowrap">
-                          <q-img
+                          <q-img-custom
                             no-spinner
                             :src="forceHttp2(item.image!)"
                             referrerpolicy="no-referrer"
@@ -1102,6 +1102,7 @@ import { useEventListener } from "@vueuse/core"
 import { installed as extensionHelperInstalled } from "boot/installed-extension"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
+import QImgCustom from "components/QImgCustom"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import { debounce, QInput, useQuasar } from "quasar"
 import semverGt from "semver/functions/gt"
