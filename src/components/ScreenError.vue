@@ -9,15 +9,14 @@
 </template>
 
 <script lang="ts" setup>
+import type { HttpResponse } from "@capacitor/core"
 import { computed } from "vue"
 
 import ErrorCloudflare from "./errors/cloudflare.vue"
 import ErrorUnknown from "./errors/unknown.vue"
-import { HttpResponse } from "@capacitor/core"
 
 const props = defineProps<{
   noImage?: boolean
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: Error | HttpResponse | undefined
 }>()
 const emit = defineEmits<{
