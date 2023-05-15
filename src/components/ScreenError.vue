@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full flex items-center text-center">
+  <div class="h-full w-full flex items-center text-center children:w-full">
     <component
       :is="componentErrors[typeError ?? 'unknown'] ?? componentErrors.unknown"
       :no-image="noImage"
