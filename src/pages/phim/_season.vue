@@ -854,28 +854,28 @@ async function fetchSeason(season: string) {
           const value = index === 0 ? realIdSeason : `${realIdSeason}$${index}`
           const name = `${nameSeason} (${chapsSplited[0].name} - ${
             chapsSplited[chapsSplited.length - 1].name
-            })`
+          })`
 
           console.log("set %s by %s", value, chapsSplited[0].id)
 
-            const dataOnCache = _cacheDataSeasons.get(value)
-            const newData: ResponseDataSeasonSuccess = {
-              status: "success",
-              response: {
-                ...response,
+          const dataOnCache = _cacheDataSeasons.get(value)
+          const newData: ResponseDataSeasonSuccess = {
+            status: "success",
+            response: {
+              ...response,
               chaps: chapsSplited,
               ssSibs: seasonsSplited,
-              },
-            }
-            if (dataOnCache) {
-              Object.assign(dataOnCache, newData)
-            } else {
-              _cacheDataSeasons.set(value, newData)
-            }
+            },
+          }
+          if (dataOnCache) {
+            Object.assign(dataOnCache, newData)
+          } else {
+            _cacheDataSeasons.set(value, newData)
+          }
 
           seasonsSplited.push({
-              name,
-              value,
+            name,
+            value,
           })
         })
         const newSeasons = [
@@ -1306,7 +1306,6 @@ watchEffect(() => {
 })
 const followed = ref(false)
 const follows = ref(0)
-
 
 const seasonId = computed(() => realIdCurrentSeason.value?.match(/\d+$/)?.[0])
 watch(

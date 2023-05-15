@@ -1,32 +1,45 @@
 <template>
-  <div class="h-full w-full flex items-center">
-    <div class="text-center w-full">
-      <img
-        v-if="!noImage"
-        src="~assets/ic_22_cry.png"
-        width="240"
-        class="mx-auto"
-      />
-      <div class="my-1">Đã xảy ra lỗi</div>
-      <q-btn
-        dense
-        no-caps
-        outline
-        class="px-2"
-        @click="emit('click:retry')"
-        style="color: #00be06"
-        rounded
-        >Thử lại</q-btn
-      >
-    </div>
+  <div class="h-full w-full flex items-center text-center">
+    <component
+      :is="componentErrors[typeError ?? 'unknown'] ?? componentErrors.unknown"
+      :no-image="noImage"
+      :retry="() => emit('click:retry')"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-defineProps<{
+import { computed } from "vue"
+
+import ErrorCloudflare from "./errors/cloudflare.vue"
+import ErrorUnknown from "./errors/unknown.vue"
+import { HttpResponse } from "@capacitor/core"
+
+const props = defineProps<{
   noImage?: boolean
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: Error | HttpResponse | undefined
 }>()
 const emit = defineEmits<{
   (name: "click:retry"): void
 }>()
+
+const componentErrors = {
+  cloudflare: ErrorCloudflare,
+  unknown: ErrorUnknown,
+}
+
+const typeError = computed(() => {
+  if (!props.error) return null
+
+  if (
+    !(props.error instanceof Error) &&
+    props.error.data?.includes("<title>Just a moment...</title>") &&
+    props.error.data?.includes("window._cf_chl_opt=") &&
+    props.error.status === 403
+  )
+    return "cloudflare"
+
+  return null
+})
 </script>

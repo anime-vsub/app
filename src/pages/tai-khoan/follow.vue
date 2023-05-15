@@ -30,7 +30,7 @@
       </q-infinite-scroll>
     </q-pull-to-refresh>
   </template>
-  <ScreenError v-else @click:retry="run" class="pt-[47px]" />
+  <ScreenError v-else @click:retry="run" class="pt-[47px]" :error="error" />
 </template>
 
 <script lang="ts" setup>
@@ -48,7 +48,7 @@ import { useRouter } from "vue-router"
 const router = useRouter()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
-const { data, loading, run, refreshAsync } = useRequest(() => TuPhim(1))
+const { data, loading, run, refreshAsync, error } = useRequest(() => TuPhim(1))
 const refresh = (done: () => void) =>
   refreshAsync()
     .then(() => infiniteScrollRef.value?.reset())
