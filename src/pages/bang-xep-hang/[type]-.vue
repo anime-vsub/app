@@ -79,7 +79,7 @@
         <ScreenError
           v-else
           @click:retry="fetchRankType(type)"
-          :error="dataStore.get(type)?.response as Error | undefined"
+          :error="(dataStore.get(type)?.response as Error | undefined)"
         />
       </swiper-slide>
     </swiper>
