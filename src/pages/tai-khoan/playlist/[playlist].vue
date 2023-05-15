@@ -20,7 +20,7 @@
             <div
               class="w-[200%] opacity-[0.7] transform translate-x-[-25%] filter blur-[30px]"
             >
-              <q-img
+              <q-img-custom
                 v-if="metaPlaylist.poster"
                 class="h-auto w-full"
                 :src="forceHttp2(metaPlaylist.poster)"
@@ -41,7 +41,7 @@
           </div>
 
           <div class="<md:mt-[47px] relative z-2">
-            <q-img
+            <q-img-custom
               v-if="metaPlaylist.poster"
               class="rounded-xl"
               :src="forceHttp2(metaPlaylist.poster)"
@@ -261,7 +261,7 @@
           :to="`/phim/${item.season}/${item.chap}`"
         >
           <div>
-            <q-img
+            <q-img-custom
               no-spinner
               :src="forceHttp2(item.poster)"
               referrerpolicy="no-referrer"
@@ -365,6 +365,7 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import AddToPlaylist from "components/AddToPlaylist.vue"
+import QImgCustom from "components/QImgCustom"
 import { QInfiniteScroll, useQuasar } from "quasar"
 import dayjs from "src/logic/dayjs"
 import { forceHttp2 } from "src/logic/forceHttp2"
