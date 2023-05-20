@@ -2410,6 +2410,26 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       break
   }
 })
+if (typeof MediaMetadata !== "undefined" && navigator.mediaSession)
+  watchEffect(() => {
+    if (!props.nameCurrentChap || !props.name || !props.poster) return
+
+    const title = t("tap-_chap-_name-_othername", [
+      props.nameCurrentChap,
+      props.name,
+      "",
+    ])
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title,
+      artist: props.name,
+      artwork: [
+        {
+          src: props.poster,
+        },
+      ],
+    })
+  })
 // keybind for headphone control
 navigator.mediaSession?.setActionHandler("pause", () => {
   const playing = artPlaying.value
