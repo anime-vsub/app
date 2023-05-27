@@ -22,6 +22,7 @@ Offcial Website:
 
 - https://animevsub.ga
 - https://animevsub.netlify.app
+- https://animevsub.eu.org
 
 ## Sponsor ☕
 
