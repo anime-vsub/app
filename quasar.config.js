@@ -104,7 +104,7 @@ module.exports = configure(function (/* ctx */) {
       // viteVuePluginOptions: {},
 
       vitePlugins: [
-        ["vite-plugin-windicss"],
+        ["vite-plugin-windicss", {}],
         [
           "@intlify/vite-plugin-vue-i18n",
           {
@@ -115,8 +115,8 @@ module.exports = configure(function (/* ctx */) {
             include: path.resolve(__dirname, "./src/i18n/**"),
           },
         ],
-        ["vite-plugin-rewrite-all"],
-        ["vite-plugin-remove-console"],
+        ["vite-plugin-rewrite-all", {}],
+        ["vite-plugin-remove-console", {}],
       ],
     },
 

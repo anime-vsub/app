@@ -23,8 +23,8 @@
     "ci": "pnpm format && pnpm lint --fix && pnpm typing"
   },
   "dependencies": {
-    "@firebase/app": "^0.9.1",
-    "@firebase/firestore": "^3.8.1",
+    "@firebase/app": "^0.9.11",
+    "@firebase/firestore": "^3.12.1",
     "@iconify/vue": "^4.0.2",
     "@ionic/vue": "^6.5.1",
     "@ionic/vue-router": "^6.5.1",
@@ -82,7 +82,7 @@
     "@capacitor/status-bar": "^4.1.1",
     "@hugotomazi/capacitor-navigation-bar": "^2.0.0",
     "@intlify/vite-plugin-vue-i18n": "^6.0.3",
-    "@quasar/app-vite": "^1.2.1",
+    "@quasar/app-vite": "^1.4.3",
     "@quasar/cli": "^2.0.0",
     "@quasar/icongenie": "^2.5.4",
     "@tachibana-shin/eslint-config": "^1.0.7",
@@ -113,7 +113,7 @@
     "sass": "1.32.11",
     "semver": "^7.3.8",
     "tsx": "^3.12.2",
-    "typescript": "^4.9.4",
+    "typescript": "^5.0.4",
     "vite-plugin-windicss": "^1.8.10",
     "vitest": "^0.28.2",
     "vue-tsc": "^1.0.24",
