@@ -590,7 +590,6 @@ import {
   QCardSection,
   QDialog,
   QIcon,
-  QImg,
   QResponsive,
   QSkeleton,
   QSpinner,
