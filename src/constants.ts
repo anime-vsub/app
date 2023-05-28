@@ -33,7 +33,8 @@ export const playbackRates = [
   },
 ]
 
-export const DELAY_SAVE_VIEWING_PROGRESS = 15_000 // x4 6s
+export const DELAY_SAVE_VIEWING_PROGRESS = 30_000 // x4 6s. old is 15s
+export const DELAY_SAVE_HISTORY = 7_500 // 7.5s
 
 export const TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE = 5_000 // 5s
 
