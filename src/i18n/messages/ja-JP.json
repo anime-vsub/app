@@ -251,5 +251,7 @@
   "mo-animevietsub-de-xac-thuc": "AnimeVietsub を開いて認証します",
   "sau-khi-xac-thuc-hay-nhan-vao-nut-ben-duoi": "ご確認の上、下のボタンをクリックしてください",
   "t-yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "{0}",
-  "yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "ロボットであると思われるサーバーにリクエストが送信されました。人間であることを確認して、もう一度お試しください。"
+  "yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "ロボットであると思われるサーバーにリクエストが送信されました。人間であることを確認して、もう一度お試しください。",
+  "full-season": "フルシーズン",
+  "movie": "映画"
 }

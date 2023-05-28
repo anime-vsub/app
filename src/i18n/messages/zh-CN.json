@@ -94,10 +94,10 @@
   "email": "电子邮件",
   "enter": "进入",
   "ep-_chap": "专辑{0}",
-  "errors.danh-sach-phat-khong-ton-tai": "",
-  "errors.loi-khong-xac-dinh-khi": "",
-  "errors.require_login_to": "",
-  "errors.xoa-thong-bao-that-bai": "",
+  "errors.danh-sach-phat-khong-ton-tai": "播放列表不存在",
+  "errors.loi-khong-xac-dinh-khi": "未知错误时",
+  "errors.require_login_to": "您必须登录到 {0}",
+  "errors.xoa-thong-bao-that-bai": "清除失败信息",
   "extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu": "Extension AnimeVsub Helper是应用程序向服务器发送请求的重要桥梁。",
   "formatview-data-views-luot-xem": "{0} 次观看",
   "giao-dien-moi": "新界面",
@@ -251,5 +251,7 @@
   "mo-animevietsub-de-xac-thuc": "打开 AnimeVietsub 进行身份验证",
   "sau-khi-xac-thuc-hay-nhan-vao-nut-ben-duoi": "确认无误后请点击下方按钮",
   "t-yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "{0}",
-  "yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "请求发送到怀疑是机器人的服务器，请确认您是人类并重试。"
+  "yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "请求发送到怀疑是机器人的服务器，请确认您是人类并重试。",
+  "full-season": "全季",
+  "movie": "电影"
 }
