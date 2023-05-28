@@ -1833,7 +1833,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     Hls.isSupported()
   ) {
     const hls = new Hls({
-      debug: import.meta.env.isDev,
+      debug: import.meta.env.DEV,
       workerPath: workerHls,
       progressive: true,
       fetchSetup(context, initParams) {
