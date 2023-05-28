@@ -253,6 +253,7 @@ export const useHistoryStore = defineStore("history", () => {
           // eslint-disable-next-line functional/no-let
           let oldData: DocumentSnapshot<Required<HistoryItem>> | null = null
 
+          // eslint-disable-next-line promise/always-return
           if (
             size !== 0 &&
             ((docs[0].id !== realSeason &&

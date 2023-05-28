@@ -11,7 +11,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   increment,
   limit,
   orderBy,
