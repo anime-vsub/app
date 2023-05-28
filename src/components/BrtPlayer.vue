@@ -1091,6 +1091,7 @@ import {
 import type { PlayerLink } from "src/apis/runs/ajax/player-link"
 import { useMemoControl } from "src/composibles/memo-control"
 import {
+DELAY_SAVE_HISTORY,
   DELAY_SAVE_VIEWING_PROGRESS,
   playbackRates,
   servers,
@@ -1543,7 +1544,7 @@ function throttle<T extends (...args: any[]) => void>(
         },
         firstSaveStore.has(uidChap.value)
           ? DELAY_SAVE_VIEWING_PROGRESS
-          : DELAY_SAVE_VIEWING_PROGRESS / 2
+          : DELAY_SAVE_HISTORY
       )
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
