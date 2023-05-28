@@ -18,16 +18,15 @@
           </template>
 
           <span v-if="!data.chap">
-            <template v-if="data.process[0] === data.process[1]">
-              {{ data.process[0] }} tập
-            </template>
-            <template v-else> Tập {{ data.process }} </template>
+            <template v-if="data.process"> Tập {{ data.process }} </template>
+            <template v-else-if="data.quality">Movie</template>
           </span>
+          <span v-else-if="data.chap === 'Full_Season'">Full Season</span>
           <span v-else>Tập {{ data.chap }}</span>
         </BottomBlur>
         <Quality
           v-if="data.quality"
-          :class="trending ? 'right-0 absolute' : undefined"
+          :class="trending ? 'right-0 top-2 absolute' : undefined"
           >{{ data.quality }}</Quality
         >
         <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />

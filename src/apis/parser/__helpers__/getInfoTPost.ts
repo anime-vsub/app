@@ -14,7 +14,7 @@ export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
   const name = cheerio.find(".Title:eq(0)").text()
 
   const _chap = cheerio.find(".mli-eps > i:eq(0)").text()
-  const chap = _chap === "TẤT" ? "Full" : _chap
+  const chap = _chap === "TẤT" ? "Full_Season" : _chap
   const rate = parseFloat(
     cheerio.find(".anime-avg-user-rating:eq(0)").text().trim() ||
       cheerio.find(".AAIco-star:eq(0)").text().trim()
@@ -28,7 +28,7 @@ export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
   )
 
   // =============== more =====================
-  const quality = cheerio.find(".Qlty:eq(0)").text()
+  const quality = cheerio.find(".Qlty:eq(0)").text() || cheerio.find(".mli-quality:eq(0)").text()
 
   const process = cheerio.find(".AAIco-access_time:eq(0)").text()
 
