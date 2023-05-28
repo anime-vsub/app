@@ -172,6 +172,7 @@
             :key="item.name"
             class="card-wrap"
             :data="item"
+            quality-float-right
           />
         </div>
       </div>
