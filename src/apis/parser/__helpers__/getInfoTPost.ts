@@ -28,7 +28,9 @@ export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
   )
 
   // =============== more =====================
-  const quality = cheerio.find(".Qlty:eq(0)").text() || cheerio.find(".mli-quality:eq(0)").text()
+  const quality =
+    cheerio.find(".Qlty:eq(0)").text() ||
+    cheerio.find(".mli-quality:eq(0)").text()
 
   const process = cheerio.find(".AAIco-access_time:eq(0)").text()
 
@@ -63,7 +65,7 @@ export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
     time_release:
       timeschedule.length > 0
         ? (countdown === undefined
-        ? undefined
+            ? undefined
             : Math.round(now / 1e3 + countdown) * 1e3) ?? null
         : undefined,
   }
