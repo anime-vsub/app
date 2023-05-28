@@ -996,12 +996,16 @@ watchEffect(async (onCleanup): Promise<void> => {
 
   if (episodeId !== undefined) {
     if (episodeId) {
-      const watcher = watchEffect(() => {
+      // eslint-disable-next-line functional/no-let
+      let watcher: () => void
+      // eslint-disable-next-line prefer-const
+      watcher = watchEffect(() => {
         if (
           currentDataSeason.value?.chaps.some((item) => item.id === episodeId)
         ) {
           currentChap.value = episodeId
-          watcher()
+         if (typeof watcher === "undefined") setTimeout(watcher)
+         else watcher()
         }
       })
     } else {
