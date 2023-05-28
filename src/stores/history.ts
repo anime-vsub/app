@@ -10,7 +10,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   limit,
   orderBy,
   query,
@@ -21,7 +20,7 @@ import {
 } from "@firebase/firestore"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
-import { app } from "src/boot/firebase"
+import { db } from "src/boot/firebase"
 import { useFirestore } from "src/composibles/useFirestore"
 import dayjs from "src/logic/dayjs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
@@ -44,7 +43,6 @@ function isToday(date?: Date) {
 }
 
 export const useHistoryStore = defineStore("history", () => {
-  const db = getFirestore(app)
   const authStore = useAuthStore()
 
   interface HistoryItem {
@@ -268,38 +266,38 @@ export const useHistoryStore = defineStore("history", () => {
           // const batch = writeBatch(db)
           await Promise.all([
             setDoc(
-            seasonRef,
-            {
-              timestamp: serverTimestamp(),
-              season,
-              last: {
-                chap,
-                ...info,
-              },
-            },
-            { merge: true }
-            ),
-            (async () => {
-          // create fake data replace fix #70
-          if (oldData?.exists()) {
-            // clone now
-            const data = oldData.data()
-            // save by buff diff
-
-            const seasonRefOldData = doc(
-              seasonRef.parent,
-              `${generateUUID()}#${realSeason}`
-            )
-
-                return setDoc(
-              seasonRefOldData,
+              seasonRef,
               {
-                ...data,
-                poster: removeHostUrlImage(data.poster),
+                timestamp: serverTimestamp(),
+                season,
+                last: {
+                  chap,
+                  ...info,
+                },
               },
               { merge: true }
-            )
-          }
+            ),
+            (async () => {
+              // create fake data replace fix #70
+              if (oldData?.exists()) {
+                // clone now
+                const data = oldData.data()
+                // save by buff diff
+
+                const seasonRefOldData = doc(
+                  seasonRef.parent,
+                  `${generateUUID()}#${realSeason}`
+                )
+
+                return setDoc(
+                  seasonRefOldData,
+                  {
+                    ...data,
+                    poster: removeHostUrlImage(data.poster),
+                  },
+                  { merge: true }
+                )
+              }
             })(),
           ])
         })

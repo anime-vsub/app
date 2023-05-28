@@ -23,7 +23,7 @@ import {
 } from "@firebase/firestore"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
-import { app } from "src/boot/firebase"
+import { db } from "src/boot/firebase"
 import { useFirestore } from "src/composibles/useFirestore"
 import dayjs from "src/logic/dayjs"
 import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
@@ -32,7 +32,6 @@ import { computed, ref } from "vue"
 import { useAuthStore } from "./auth"
 
 export const usePlaylistStore = defineStore("playlist", () => {
-  const db = getFirestore(app)
   const authStore = useAuthStore()
 
   const playlistsError = ref<Error | null>(null)
