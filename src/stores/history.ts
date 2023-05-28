@@ -18,7 +18,6 @@ import {
   setDoc,
   startAfter,
   where,
-  writeBatch,
 } from "@firebase/firestore"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
@@ -266,8 +265,9 @@ export const useHistoryStore = defineStore("history", () => {
           }
           // update to pre-read on history (indexed faster)
 
-          const batch = writeBatch(db)
-          batch.set(
+          // const batch = writeBatch(db)
+          await Promise.all([
+            setDoc(
             seasonRef,
             {
               timestamp: serverTimestamp(),
@@ -278,8 +278,8 @@ export const useHistoryStore = defineStore("history", () => {
               },
             },
             { merge: true }
-          )
-
+            ),
+            (async () => {
           // create fake data replace fix #70
           if (oldData?.exists()) {
             // clone now
@@ -291,7 +291,7 @@ export const useHistoryStore = defineStore("history", () => {
               `${generateUUID()}#${realSeason}`
             )
 
-            batch.set(
+                return setDoc(
               seasonRefOldData,
               {
                 ...data,
@@ -300,8 +300,8 @@ export const useHistoryStore = defineStore("history", () => {
               { merge: true }
             )
           }
-
-          return batch.commit()
+            })(),
+          ])
         })
 
         .catch((err) => {
