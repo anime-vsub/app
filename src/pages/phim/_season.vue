@@ -381,7 +381,25 @@
         class="mt-3"
         three-line
         show-star
-      />
+      >
+        <template v-slot:img-content>
+          <BottomBlur class="update-info-layer">
+            <span v-if="!item.chap">
+              <template v-if="item.process">{{
+                t("tap-_chap", [item.process])
+              }}</template>
+              <template v-else-if="item.quality">{{ t("movie") }}</template>
+            </span>
+            <span v-else-if="item.chap === 'Full_Season'">{{
+              t("full-season")
+            }}</span>
+            <span v-else>{{ t("tap-_chap", [item.chap]) }}</span>
+          </BottomBlur>
+          <Quality v-if="item.quality" class="right-0 top-2 absolute">{{
+            data.quality
+          }}</Quality>
+        </template>
+      </CardVertical>
     </div>
   </div>
 
@@ -406,6 +424,7 @@ import { getAnalytics, logEvent } from "@firebase/analytics"
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
+import BottomBlur from "components/BottomBlur.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import CardVertical from "components/CardVertical.vue"
 import FragmentChaps from "components/FragmentChaps.vue"
