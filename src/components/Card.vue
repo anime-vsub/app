@@ -24,16 +24,19 @@
           </template>
 
           <span v-if="!data.chap">
-            <template v-if="data.process[0] === data.process[1]">
-              {{ t("_chap-tap", [data.process[0]]) }}
-            </template>
-            <template v-else> {{ t("tap-_chap", [data.process]) }} </template>
+            <template v-if="data.process">{{
+              t("tap-_chap", data.process)
+            }}</template>
+            <template v-else-if="data.quality">{{ t("movie") }}</template>
           </span>
-          <span v-else>{{ t("tap-_chap", [data.chap]) }}</span>
+          <span v-else-if="data.chap === 'Full_Season'">{{
+            t("full-season")
+          }}</span>
+          <span v-else>{{ t("tap-_chap", data.chap) }}</span>
         </BottomBlur>
         <Quality
           v-if="data.quality"
-          :class="trending ? 'right-0 absolute' : undefined"
+          :class="trending ? 'right-0 top-2 absolute' : undefined"
           >{{ data.quality }}</Quality
         >
         <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
