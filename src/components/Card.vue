@@ -25,14 +25,14 @@
 
           <span v-if="!data.chap">
             <template v-if="data.process">{{
-              t("tap-_chap", data.process)
+              t("tap-_chap", [data.process])
             }}</template>
             <template v-else-if="data.quality">{{ t("movie") }}</template>
           </span>
           <span v-else-if="data.chap === 'Full_Season'">{{
             t("full-season")
           }}</span>
-          <span v-else>{{ t("tap-_chap", data.chap) }}</span>
+          <span v-else>{{ t("tap-_chap", [data.chap]) }}</span>
         </BottomBlur>
         <Quality
           v-if="data.quality"

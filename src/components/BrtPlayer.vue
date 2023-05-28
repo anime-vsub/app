@@ -809,7 +809,7 @@
                       anchor="top middle"
                       self="bottom middle"
                       :offset="[-25, 20]"
-                      class="rounded-xl shadow-xl min-w-[200px] flex column flex-nowrap overflow-visible"
+                      class="rounded-xl shadow-xl min-w-[200px] flex column flex-nowrap overflow-hidden"
                       :class="{
                         'm-transparency': settingsStore.ui.menuTransparency,
                       }"
