@@ -1003,8 +1003,8 @@ watchEffect(async (onCleanup): Promise<void> => {
           currentDataSeason.value?.chaps.some((item) => item.id === episodeId)
         ) {
           currentChap.value = episodeId
-         if (typeof watcher === "undefined") setTimeout(watcher)
-         else watcher()
+          if (typeof watcher === "undefined") setTimeout(watcher)
+          else watcher()
         }
       })
     } else {
