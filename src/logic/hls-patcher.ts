@@ -89,8 +89,8 @@ export function patcher(hls: Hls) {
       .then(
         async (res) =>
           new Response(await res.arrayBuffer(), {
-              status: 200,
-              headers: res.headers,
+            status: 200,
+            headers: res.headers,
           })
       )
       .then((response: Response): Promise<string | ArrayBuffer> => {

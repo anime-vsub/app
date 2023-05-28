@@ -1091,7 +1091,7 @@ import {
 import type { PlayerLink } from "src/apis/runs/ajax/player-link"
 import { useMemoControl } from "src/composibles/memo-control"
 import {
-DELAY_SAVE_HISTORY,
+  DELAY_SAVE_HISTORY,
   DELAY_SAVE_VIEWING_PROGRESS,
   playbackRates,
   servers,

@@ -10,7 +10,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   limit,
   orderBy,
   query,
@@ -18,11 +17,10 @@ import {
   setDoc,
   startAfter,
   where,
-  writeBatch,
 } from "@firebase/firestore"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
-import { app } from "src/boot/firebase"
+import { db } from "src/boot/firebase"
 import { useFirestore } from "src/composibles/useFirestore"
 import dayjs from "src/logic/dayjs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
@@ -45,7 +43,6 @@ function isToday(date?: Date) {
 }
 
 export const useHistoryStore = defineStore("history", () => {
-  const db = getFirestore(app)
   const authStore = useAuthStore()
 
   interface HistoryItem {
@@ -256,6 +253,7 @@ export const useHistoryStore = defineStore("history", () => {
           // eslint-disable-next-line functional/no-let
           let oldData: DocumentSnapshot<Required<HistoryItem>> | null = null
 
+          // eslint-disable-next-line promise/always-return
           if (
             size !== 0 &&
             ((docs[0].id !== realSeason &&
@@ -266,42 +264,43 @@ export const useHistoryStore = defineStore("history", () => {
           }
           // update to pre-read on history (indexed faster)
 
-          const batch = writeBatch(db)
-          batch.set(
-            seasonRef,
-            {
-              timestamp: serverTimestamp(),
-              season,
-              last: {
-                chap,
-                ...info,
-              },
-            },
-            { merge: true }
-          )
-
-          // create fake data replace fix #70
-          if (oldData?.exists()) {
-            // clone now
-            const data = oldData.data()
-            // save by buff diff
-
-            const seasonRefOldData = doc(
-              seasonRef.parent,
-              `${generateUUID()}#${realSeason}`
-            )
-
-            batch.set(
-              seasonRefOldData,
+          // const batch = writeBatch(db)
+          await Promise.all([
+            setDoc(
+              seasonRef,
               {
-                ...data,
-                poster: removeHostUrlImage(data.poster),
+                timestamp: serverTimestamp(),
+                season,
+                last: {
+                  chap,
+                  ...info,
+                },
               },
               { merge: true }
-            )
-          }
+            ),
+            (async () => {
+              // create fake data replace fix #70
+              if (oldData?.exists()) {
+                // clone now
+                const data = oldData.data()
+                // save by buff diff
 
-          return batch.commit()
+                const seasonRefOldData = doc(
+                  seasonRef.parent,
+                  `${generateUUID()}#${realSeason}`
+                )
+
+                return setDoc(
+                  seasonRefOldData,
+                  {
+                    ...data,
+                    poster: removeHostUrlImage(data.poster),
+                  },
+                  { merge: true }
+                )
+              }
+            })(),
+          ])
         })
 
         .catch((err) => {
