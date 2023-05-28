@@ -156,7 +156,7 @@
           :key="item.name"
           class="card-wrap"
         >
-          <Card :data="item" />
+          <Card :data="item" quality-float-right />
         </swiper-slide>
       </swiper>
 

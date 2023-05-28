@@ -36,7 +36,8 @@
         </BottomBlur>
         <Quality
           v-if="data.quality"
-          :class="trending ? 'right-0 top-2 absolute' : undefined"
+          class="top-2"
+          :class="trending || qualityFloatRight ? 'right-0 absolute' : undefined"
           >{{ data.quality }}</Quality
         >
         <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
@@ -141,6 +142,7 @@ const { t } = useI18n()
 const props = defineProps<{
   data: TPost
   trending?: number
+  qualityFloatRight?: boolean
 }>()
 
 const menuRef = ref<QMenu>()
