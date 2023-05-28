@@ -1,17 +1,17 @@
 {
-	"appId": "git.shin.animevsub",
-	"appName": "AnimeVsub",
-	"plugins": {
-		"CapacitorCookies": {
-			"enabled": true
-		},
-		"CapacitorHttp": {
-			"enabled": true
-		}
-	},
-	"bundledWebRuntime": false,
-	"webDir": "www",
-	"server": {
-		"url": "http://192.168.0.129:9500"
-	}
+  "appId": "git.shin.animevsub",
+  "appName": "AnimeVsub",
+  "plugins": {
+    "CapacitorCookies": {
+      "enabled": true
+    },
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  },
+  "bundledWebRuntime": false,
+  "webDir": "www",
+  "server": {
+    "url": "http://192.168.0.129:9500"
+  }
 }
