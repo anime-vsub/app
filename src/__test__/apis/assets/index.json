@@ -40,7 +40,7 @@
       "path": "/phim/bastard-ankoku-no-hakaishin-a4633/",
       "image": "http://cdn.animevietsub.cc/data/poster/2022/07/02/animevsub-pvXNmGAaot.jpg",
       "name": "Bastard!! Ankoku no Hakaishin",
-      "chap": "Full",
+      "chap": "Full_Season",
       "rate": 9.5,
       "quality": "",
       "process": "",
@@ -54,7 +54,7 @@
       "name": "Bảy Viên Ngọc Rồng Siêu Cấp: Siêu Anh Hùng",
       "chap": "",
       "rate": 8.4,
-      "quality": "",
+      "quality": "HD",
       "process": "",
       "year": null,
       "description": "",
@@ -66,7 +66,7 @@
       "name": "Jujutsu Kaisen 0: Chú Thuật Hồi Chiến",
       "chap": "",
       "rate": 9.4,
-      "quality": "",
+      "quality": "HD",
       "process": "",
       "year": null,
       "description": "",
@@ -124,7 +124,7 @@
       "path": "/phim/cyberpunk-edgerunners-a4739/",
       "image": "http://cdn.animevietsub.cc/data/poster/2022/09/13/animevsub-MDDmZRx6oE.jpg",
       "name": "Cyberpunk: Edgerunners",
-      "chap": "Full",
+      "chap": "Full_Season",
       "rate": 8.3,
       "quality": "",
       "process": "",
@@ -148,7 +148,7 @@
       "path": "/phim/tensei-kenja-no-isekai-life-dai-2-no-shokugyou-wo-ete-sekai-saikyou-ni-narimashita-a4319/",
       "image": "http://cdn.animevietsub.cc/data/poster/2022/03/14/animevsub-i96NUvinf7.jpg",
       "name": "Cuộc Sống Tại Dị Giới Của Hiền Giả Tái Sinh - Tôi Nhận Được Chức Nghiệp Thứ Hai, Và Đã Trở Thành Người Mạnh Nhất Thế Giới",
-      "chap": "Full",
+      "chap": "Full_Season",
       "rate": 7.6,
       "quality": "",
       "process": "",
@@ -571,7 +571,7 @@
         { "path": "/the-loai/mystery/", "name": "Mystery" },
         { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ],
-      "time_release": 1668475088134
+      "time_release": 1689920369000
     },
     {
       "path": "/phim/spy-x-family-part-2-a4697/",
@@ -588,7 +588,8 @@
       "genre": [
         { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
         { "path": "/the-loai/hanh-dong/", "name": "Action" }
-      ]
+      ],
+      "time_release": null
     },
     {
       "path": "/phim/tensei-shitara-ken-deshita-a4703/",
@@ -605,7 +606,8 @@
       "genre": [
         { "path": "/the-loai/phep-thuat/", "name": "Fantasy" },
         { "path": "/the-loai/hanh-dong/", "name": "Action" }
-      ]
+      ],
+      "time_release": null
     },
     {
       "path": "/phim/tantei-wa-mou-shindeiru-2nd-season-a4659/",
@@ -624,7 +626,8 @@
         { "path": "/the-loai/drama/", "name": "Drama" },
         { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
         { "path": "/the-loai/mystery/", "name": "Mystery" }
-      ]
+      ],
+      "time_release": null
     },
     {
       "path": "/phim/kubo-san-wa-mob-wo-yurusanai-a4738/",
@@ -641,7 +644,8 @@
       "genre": [
         { "path": "/the-loai/tinh-cam/", "name": "Romance" },
         { "path": "/the-loai/hai-huoc/", "name": "Comedy" }
-      ]
+      ],
+      "time_release": null
     },
     {
       "path": "/phim/berserk-ougon-jidai-hen-memorial-edition-a4737/",
@@ -664,7 +668,7 @@
         { "path": "/the-loai/mystery/", "name": "Mystery" },
         { "path": "/the-loai/hanh-dong/", "name": "Action" }
       ],
-      "time_release": 1665105488137
+      "time_release": 1686550769000
     },
     {
       "path": "/phim/akiba-maid-sensou-a4736/",
@@ -678,7 +682,8 @@
       "year": 2022,
       "description": "Anime sẽ có sự tham gia của Reina Kondo trong vai Nagomi Kazuhira, một phụ nữ chuyển đến Tokyo và mơ ước trở thành...",
       "studio": "P.A. Works",
-      "genre": [{ "path": "/the-loai/doi-thuong/", "name": "Slice of Life" }]
+      "genre": [{ "path": "/the-loai/doi-thuong/", "name": "Slice of Life" }],
+      "time_release": null
     },
     {
       "path": "/phim/cool-doji-danshi-a4735/",
@@ -696,7 +701,7 @@
         { "path": "/the-loai/doi-thuong/", "name": "Slice of Life" },
         { "path": "/the-loai/hai-huoc/", "name": "Comedy" }
       ],
-      "time_release": 1665969488139
+      "time_release": 1687414769000
     },
     {
       "path": "/phim/uchi-no-shishou-wa-shippo-ga-nai-a4734/",
@@ -714,7 +719,8 @@
         { "path": "/the-loai/seinen/", "name": "Seinen" },
         { "path": "/the-loai/sieu-nhien/", "name": "Supernatural" },
         { "path": "/the-loai/lich-su/", "name": "Historical" }
-      ]
+      ],
+      "time_release": null
     },
     {
       "path": "/phim/yama-no-susume-next-summit-a4733/",
@@ -733,7 +739,7 @@
         { "path": "/the-loai/hai-huoc/", "name": "Comedy" },
         { "path": "/the-loai/phieu-luu/", "name": "Adventure" }
       ],
-      "time_release": 1665451088140
+      "time_release": 1686896369000
     }
   ],
   "nominate": [
@@ -822,7 +828,7 @@
       "path": "/phim/the-gioi-phep-thuat-a474/",
       "image": "http://cdn.animevietsub.cc/data/poster/2020/10/17/animevsub-IoEzyCjdCJ.jpg",
       "name": "Black Clover (TV)",
-      "chap": "Full",
+      "chap": "Full_Season",
       "rate": 9.5,
       "views": 33594876,
       "quality": "HD",
@@ -878,7 +884,7 @@
       "path": "/phim/bastard-ankoku-no-hakaishin-a4633/",
       "image": "http://cdn.animevietsub.cc/data/poster/2022/07/02/animevsub-pvXNmGAaot.jpg",
       "name": "Bastard!! Ankoku no Hakaishin",
-      "chap": "Full",
+      "chap": "Full_Season",
       "rate": 9.5,
       "views": 126613,
       "quality": "HD",
