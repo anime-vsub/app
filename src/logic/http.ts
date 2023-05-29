@@ -2,6 +2,8 @@ import type { HttpOptions, HttpResponse } from "@capacitor/core"
 import { CapacitorHttp } from "@capacitor/core"
 import { C_URL } from "src/constants"
 
+import { base64ToArrayBuffer } from "./base64ToArrayBuffer"
+
 const isSpa = process.env.MODE === "spa"
 
 export async function get(
@@ -55,6 +57,11 @@ export async function get(
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
+  if (typeof url !== "string" && url.responseType === "arraybuffer")
+    response.data =
+      typeof response.data === "object"
+        ? response.data
+        : base64ToArrayBuffer(response.data)
   return response as HttpResponse
 }
 

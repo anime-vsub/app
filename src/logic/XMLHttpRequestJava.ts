@@ -2,8 +2,6 @@
 import type { HttpOptions } from "@capacitor/core"
 import { get } from "src/logic/http"
 
-import { base64ToArrayBuffer } from "./base64ToArrayBuffer"
-
 export class XMLHttpRequestJava {
   currentTarget = this
   private readonly headers = new Headers()
@@ -62,13 +60,6 @@ export class XMLHttpRequestJava {
         responseType: this.responseType,
         headers: Object.fromEntries((this.headers as unknown as any).entries()),
       })
-
-      res.data =
-        this.responseType === "arraybuffer"
-          ? typeof res.data === "object"
-            ? res.data
-            : base64ToArrayBuffer(res.data)
-          : res.data
 
       if (this.aborted) return
       this.resHeaders = new Headers(res.headers)
