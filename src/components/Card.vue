@@ -37,7 +37,9 @@
         <Quality
           v-if="data.quality"
           class="top-2"
-          :class="trending || qualityFloatRight ? 'right-0 absolute' : undefined"
+          :class="
+            trending || qualityFloatRight ? 'right-0 absolute' : undefined
+          "
           >{{ data.quality }}</Quality
         >
         <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
