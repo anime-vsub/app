@@ -1,7 +1,5 @@
 import { get } from "src/logic/http"
 
-import { base64ToArrayBuffer } from "./base64ToArrayBuffer"
-
 export async function fetchJava(
   url: string,
   options?: {
@@ -24,9 +22,7 @@ export async function fetchJava(
 
   return {
     async arrayBuffer() {
-      return typeof res.data === "object"
-        ? res.data
-        : base64ToArrayBuffer(res.data)
+      return res.data as ArrayBuffer
     },
     async text() {
       return new TextDecoder().decode(await this.arrayBuffer())
