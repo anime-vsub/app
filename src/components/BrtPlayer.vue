@@ -1102,6 +1102,7 @@ import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
+import { resolveAfter } from "src/logic/resolveAfter"
 import type { ProgressWatchStore } from "src/pages/phim/_season.interface"
 import type {
   ResponseDataSeasonError,
@@ -1500,11 +1501,14 @@ async function createSeason(
   )
     return false
   console.log("set new season poster %s", poster)
-  await historyStore.createSeason(currentSeason, {
-    poster,
-    seasonName,
-    name,
-  })
+  await Promise.race([
+    historyStore.createSeason(currentSeason, {
+      poster,
+      seasonName,
+      name,
+    }),
+    resolveAfter(1_200),
+  ])
   seasonMetaCreated.add(currentSeason)
   return true
 }
@@ -1605,18 +1609,26 @@ const saveCurTimeToPer = throttle(
 
     console.log("%ccall sav curTime", "color: green")
 
+    if (!dur) {
+      console.warn("[saveCurTime]: artDuration is %s", dur)
+      return
+    }
+
     emit("cur-update", {
       cur,
       dur,
       id: currentChap,
     })
-    await historyStore
-      .setProgressChap(currentSeason, currentChap, {
-        cur,
-        dur,
-        name: nameCurrentChap,
-      })
-      .catch((err) => console.warn("save viewing progress failed: ", err))
+    await Promise.race([
+      historyStore
+        .setProgressChap(currentSeason, currentChap, {
+          cur,
+          dur,
+          name: nameCurrentChap,
+        })
+        .catch((err) => console.warn("save viewing progress failed: ", err)),
+      resolveAfter(1_200),
+    ])
 
     console.log("save viewing progress")
 
