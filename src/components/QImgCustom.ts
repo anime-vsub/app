@@ -51,6 +51,8 @@ function addSrcNeedXHR(src: string) {
   storeHostnameXHR.add(hostname)
 }
 function checkSrcNeedXHR(src: string) {
+  if (src.startsWith("blob:")) return false
+
   const { hostname } = new URL(src)
 
   return storeHostnameXHR.has(hostname)
@@ -261,15 +263,15 @@ export default defineComponent({
       try {
         const img = err.target as HTMLImageElement
 
-        const res = await get({
-          url: img.currentSrc || img.src,
-          responseType: "arraybuffer",
-        })
-        // eslint-disable-next-line functional/no-throw-statement
-        if (res.status > 299) throw res
+        const source = img.currentSrc || img.src
+        if (source.startsWith("blob:")) {
+          URL.revokeObjectURL(source)
+          // eslint-disable-next-line functional/no-throw-statement
+          throw new Error("blob: url not re-try fetch")
+        }
 
-        addSrcNeedXHR(img.currentSrc || img.src)
-        addImage(await getImageWithXHR(img.currentSrc || img.src))
+        addSrcNeedXHR(source)
+        addImage(await getImageWithXHR(source))
       } catch {
         if (loadTimer !== null) {
           clearTimeout(loadTimer)
