@@ -1099,6 +1099,7 @@ import {
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
+import { getHashHelper } from "src/logic/getHashHelper.js"
 import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
@@ -1802,7 +1803,7 @@ function runRemount() {
 // eslint-disable-next-line functional/no-let
 let currentHls: Hls
 onBeforeUnmount(() => currentHls?.destroy())
-function remount(resetCurrentTime?: boolean, noDestroy = false) {
+async function remount(resetCurrentTime?: boolean, noDestroy = false) {
   if (!noDestroy) currentHls?.destroy()
   else {
     const type = currentStream.value?.type
@@ -1844,12 +1845,16 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     (type === "hls" || type === "m3u" || type === "m3u8") &&
     Hls.isSupported()
   ) {
+    const hash =
+      window.Http?.version && window.Http.version < "0.0.25"
+        ? ""
+        : (await getHashHelper()) ?? ""
     const hls = new Hls({
       debug: import.meta.env.DEV,
       workerPath: workerHls,
       progressive: true,
       fetchSetup(context, initParams) {
-        context.url += "#animevsub-vsub"
+        context.url += "#animevsub-vsub" + hash
 
         return new Request(context.url, initParams)
       },
@@ -1942,7 +1947,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
         }
       } as unknown as PlaylistLoaderConstructor,
     })
-    if (window.Http?.version && window.Http.version < "0.0.24") patcher(hls)
+    if (!hash) patcher(hls)
     currentHls = hls
     // customLoader(hls.config)
     hls.loadSource(file)

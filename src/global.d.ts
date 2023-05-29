@@ -21,6 +21,7 @@ interface Http {
   version?: string
   get: (options: GetOptions) => Promise<HttpResponse>
   post: (options: PostOptions) => Promise<HttpResponse>
+  getHash?: () => Promise<string>
 }
 
 interface Window {
