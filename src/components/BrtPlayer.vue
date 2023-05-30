@@ -1102,7 +1102,6 @@ import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
-import { resolveAfter } from "src/logic/resolveAfter"
 import type { ProgressWatchStore } from "src/pages/phim/_season.interface"
 import type {
   ResponseDataSeasonError,
@@ -1496,19 +1495,17 @@ async function createSeason(
 
   if (
     // eslint-disable-next-line camelcase
-    !user_data ||
+  !user_data ||
     !visibility
   )
     return false
   console.log("set new season poster %s", poster)
-  await Promise.race([
-    historyStore.createSeason(currentSeason, {
-      poster,
-      seasonName,
-      name,
-    }),
-    resolveAfter(1_200),
-  ])
+  await historyStore.createSeason(currentSeason, {
+    poster,
+    seasonName,
+    name,
+  })
+
   seasonMetaCreated.add(currentSeason)
   return true
 }
@@ -1541,9 +1538,10 @@ function throttle<T extends (...args: any[]) => void>(
     if (wait === false) {
       wait = true
       timeout = setTimeout(
-        () => {
+        async () => {
           firstSaveStore.add(uidChap.value)
-          fn(...args)
+          // eslint-disable-next-line no-void
+          await fn(...args).catch(() => void 0)
           wait = false
         },
         firstSaveStore.has(uidChap.value)
@@ -1619,16 +1617,23 @@ const saveCurTimeToPer = throttle(
       dur,
       id: currentChap,
     })
-    await Promise.race([
-      historyStore
-        .setProgressChap(currentSeason, currentChap, {
+
+    historyStore
+      .setProgressChap(
+        currentSeason,
+        currentChap,
+        {
           cur,
           dur,
           name: nameCurrentChap,
-        })
-        .catch((err) => console.warn("save viewing progress failed: ", err)),
-      resolveAfter(1_200),
-    ])
+        },
+        {
+          poster,
+          seasonName: nameCurrentChap,
+          name,
+        }
+      )
+      .catch((err) => console.warn("save viewing progress failed: ", err))
 
     console.log("save viewing progress")
 
