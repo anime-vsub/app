@@ -1118,7 +1118,7 @@ const emit = defineEmits<{
 const firstSaveStore = new Set<string>()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttle<T extends (...args: any[]) => void>(
-  fn: T
+  fn: Promise<T>
 ): T & {
   cancel: () => void
 } {
