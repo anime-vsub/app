@@ -101,7 +101,7 @@ export const useHistoryStore = defineStore("history", () => {
     })
   )
 
-  function loadMoreAfter(
+  async function loadMoreAfter(
     lastDoc?: QueryDocumentSnapshot<Required<HistoryItem>>
   ) {
     if (!authStore.uid)
@@ -112,7 +112,13 @@ export const useHistoryStore = defineStore("history", () => {
         ])
       )
 
-    return getDocs(
+    const result: (Omit<Required<HistoryItem>, "timestamp"> & {
+      id: string
+      timestamp: dayjs.Dayjs
+      $doc: QueryDocumentSnapshot<Required<HistoryItem>>
+    })[] = []
+
+    const { docs } = await getDocs(
       query(
         collection(
           db,
@@ -125,24 +131,27 @@ export const useHistoryStore = defineStore("history", () => {
         ...(lastDoc ? [startAfter(lastDoc)] : []),
         limit(30)
       )
-    ).then(({ docs }) =>
-      docs.map((doc) => {
-        const data = doc.data()
-        return {
+    )
+    docs.forEach((doc) => {
+      const data = doc.data()
+
+      if (data.name)
+        result.push({
           id: doc.id,
           ...data,
           poster: addHostUrlImage(data.poster),
           timestamp: dayjs(data.timestamp?.toDate()),
           $doc: doc,
-        }
-      })
-    )
+        })
+    })
+
+    return result
   }
 
   async function createSeason(
     seasonId: string,
     info: Omit<HistoryItem, "timestamp" | "season">
-  ) {
+  ): Promise<void> {
     if (!authStore.uid)
       // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
@@ -211,7 +220,8 @@ export const useHistoryStore = defineStore("history", () => {
   function setProgressChap(
     season: string,
     chap: string,
-    info: HistoryItem_ChapItem
+    info: HistoryItem_ChapItem,
+    infoSeason: Omit<HistoryItem, "timestamp" | "season">
   ) {
     if (!authStore.uid)
       // eslint-disable-next-line functional/no-throw-statement
@@ -266,11 +276,13 @@ export const useHistoryStore = defineStore("history", () => {
 
           // const batch = writeBatch(db)
           await Promise.all([
-            setDoc(
+            setDoc<HistoryItem>(
               seasonRef,
               {
                 timestamp: serverTimestamp(),
                 season,
+                ...infoSeason,
+                poster: removeHostUrlImage(infoSeason.poster),
                 last: {
                   chap,
                   ...info,
