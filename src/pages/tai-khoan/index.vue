@@ -139,7 +139,7 @@
         no-image
         class="h-[146px] px-4"
         @click:retry="
-          last30ItemGet.value = true
+          last30ItemGet = true;
           refreshHistories()
         "
         :error="undefined"
@@ -458,9 +458,10 @@ watchEffect(() => {
 const {
   last30Item: histories,
   last30ItemError: errorHistories,
-  refreshLast30Item: refreshHistories,
   last30ItemGet,
 } = storeToRefs(historyStore)
+const {
+  refreshLast30Item: refreshHistories, } = historyStore
 
 // ========== favorite =========
 const {
@@ -478,9 +479,8 @@ watch(
       last30ItemGet.value = true
       runFavorites()
     } else {
-      histories.value = undefined
       last30ItemGet.value = false
-      errorHistories.value = undefined
+      errorHistories.value = null
 
       favorites.value = undefined
       loadingFavorites.value = false
