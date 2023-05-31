@@ -956,6 +956,7 @@ onBeforeUnmount(() => watcherChangeIdFirstEp?.())
 const currentChap = ref<string>()
 watchEffect(async (onCleanup): Promise<void> => {
   watcherChangeIdFirstEp?.()
+  if (!currentSeason.value) return
   if (route.params.chap) {
     currentChap.value = route.params.chap as string
     return
