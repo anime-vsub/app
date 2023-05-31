@@ -94,12 +94,22 @@ export const useHistoryStore = defineStore("history", () => {
       },
     }
   )
-  const last30Item = computed(() =>
-    _last30Item.value?.map((item) => {
+  const last30ItemGet = ref(false)
+  const last30Item = computed(() => {
+    if (!last30ItemGet.value) return null
+
+    if (!_last30Item.value) return
+
+    const items: Exclude<typeof _last30Item.value, undefined> = []
+    _last30Item.value.forEach((item) => {
+      if (!item.last || !item.name) return
       item.poster = addHostUrlImage(item.poster)
-      return item
+
+      items.push(item)
     })
-  )
+
+    return items
+  })
 
   async function loadMoreAfter(
     lastDoc?: QueryDocumentSnapshot<Required<HistoryItem>>
@@ -135,7 +145,7 @@ export const useHistoryStore = defineStore("history", () => {
     docs.forEach((doc) => {
       const data = doc.data()
 
-      if (data.name)
+      if (data.name && data.last)
         result.push({
           id: doc.id,
           ...data,
@@ -172,6 +182,7 @@ export const useHistoryStore = defineStore("history", () => {
         season: seasonId,
         ...info,
         poster: removeHostUrlImage(info.poster),
+        timestamp: serverTimestamp(),
       })
   }
 
@@ -351,6 +362,7 @@ export const useHistoryStore = defineStore("history", () => {
     last30Item,
     last30ItemError,
     refreshLast30Item,
+    last30ItemGet,
     loadMoreAfter,
 
     createSeason,
