@@ -532,25 +532,27 @@ const { data, run, error, loading } = useRequest(
         if (result) Object.assign(result.value, JSON.parse(text))
         else result = ref(JSON.parse(text))
       }),
-      PhimId(realIdCurrentSeason.value).then(async (data) => {
-        // eslint-disable-next-line promise/always-return
-        if (result) Object.assign(result.value, data)
-        else result = ref(data)
+      PhimId(realIdCurrentSeason.value)
+        .then(async (data) => {
+          // eslint-disable-next-line promise/always-return
+          if (result) Object.assign(result.value, data)
+          else result = ref(data)
 
-        set(`data-${id}`, JSON.stringify(data))
-          // eslint-disable-next-line promise/no-nesting
-          .then(() => {
-            return console.log("[fs]: save cache to fs %s", id)
-          })
-          // eslint-disable-next-line promise/no-nesting, @typescript-eslint/no-empty-function
-          .catch(() => {})
-      }),
-    ]).catch((err) => {
-      error.value = err
-      console.error(err)
-      // eslint-disable-next-line promise/no-return-wrap
-      return Promise.reject(err)
-    })
+          set(`data-${id}`, JSON.stringify(data))
+            // eslint-disable-next-line promise/no-nesting
+            .then(() => {
+              return console.log("[fs]: save cache to fs %s", id)
+            })
+            // eslint-disable-next-line promise/no-nesting, @typescript-eslint/no-empty-function
+            .catch(() => {})
+        })
+        .catch((err) => {
+          error.value = err as Error
+          console.error(err)
+          // eslint-disable-next-line functional/no-throw-statement
+          throw err
+        }),
+    ])
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return result!.value
@@ -789,6 +791,7 @@ async function fetchSeason(season: string) {
     console.log(_cacheDataSeasons)
   } catch (err) {
     console.warn(err)
+    error.value = err as Error
     Object.assign(currentDataSeason, {
       status: "error",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

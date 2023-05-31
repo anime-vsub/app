@@ -41,7 +41,6 @@ const typeError = computed(() => {
 
   if (
     !(props.error instanceof Error) &&
-    props.error.data?.includes("<title>Just a moment...</title>") &&
     props.error.data?.includes("window._cf_chl_opt=") &&
     props.error.status === 403
   )
