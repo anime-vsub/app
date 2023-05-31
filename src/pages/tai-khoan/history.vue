@@ -34,33 +34,35 @@
               item.last.name
             )}-${item.last.chap}`"
           >
-            <q-img-custom
-              no-spinner
-              :src="forceHttp2(item.poster)"
-              referrerpolicy="no-referrer"
-              :ratio="1920 / 1080"
-              class="!rounded-[4px] w-[min(210px,40%)]"
-            >
-              <BottomBlur class="px-0 h-[40%]">
-                <div
-                  class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
-                >
-                  <q-linear-progress
-                    :value="item.last.cur / item.last.dur"
-                    rounded
-                    color="main"
-                    class="!h-[3px]"
-                  />
-                </div>
-              </BottomBlur>
-              <span
-                class="absolute text-white z-10 text-[12px] bottom-2 right-2"
-                >{{ parseTime(item.last.cur) }}</span
+            <div class="w-[149px]">
+              <q-img-custom
+                no-spinner
+                :src="forceHttp2(item.poster)"
+                referrerpolicy="no-referrer"
+                :ratio="1920 / 1080"
+                class="!rounded-[4px]"
               >
-            </q-img-custom>
+                <BottomBlur class="px-0 h-[40%]">
+                  <div
+                    class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
+                  >
+                    <q-linear-progress
+                      :value="item.last.cur / item.last.dur"
+                      rounded
+                      color="main"
+                      class="!h-[3px]"
+                    />
+                  </div>
+                </BottomBlur>
+                <span
+                  class="absolute text-white z-10 text-[12px] bottom-2 right-2"
+                  >{{ parseTime(item.last.cur) }}</span
+                >
+              </q-img-custom>
+            </div>
 
-            <div class="pl-2">
-              <span class="line-clamp-3 mt-1">{{ item.name }}</span>
+            <div class="flex-1 pl-2 min-w-0">
+              <span class="line-clamp-3">{{ item.name }}</span>
               <div class="text-grey mt-1">
                 <template v-if="item.seasonName"
                   >{{ item.seasonName }} tập
