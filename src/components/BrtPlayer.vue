@@ -1075,7 +1075,8 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
-
+const resolveAfter = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms))
 const seasonMetaCreated = new Set<string>()
 
 async function createSeason(
@@ -1095,11 +1096,14 @@ async function createSeason(
   )
     return false
   console.log("set new season poster %s", poster)
-  await historyStore.createSeason(currentSeason, {
-    poster,
-    seasonName,
-    name,
-  })
+  await Promise.race([
+    historyStore.createSeason(currentSeason, {
+      poster,
+      seasonName,
+      name,
+    }),
+    resolveAfter(1_000),
+  ])
   seasonMetaCreated.add(currentSeason)
   return true
 }
@@ -1205,29 +1209,33 @@ const saveCurTimeToPer = throttle(
       console.warn("[saveCurTime]: artDuration is %s", dur)
       return
     }
-    
+
     emit("cur-update", {
       cur,
       dur,
       id: currentChap,
     })
-   
-    historyStore
-      .setProgressChap(
-        currentSeason,
-        currentChap,
-        {
-          cur,
-          dur,
-          name: nameCurrentChap,
-        },
-        {
-          poster,
-          seasonName: nameCurrentChap,
-          name,
-        }
-      )
-      .catch((err) => console.warn("save viewing progress failed: ", err))
+
+    await Promise.race([
+      historyStore
+        .setProgressChap(
+          currentSeason,
+          currentChap,
+          {
+            cur,
+            dur,
+            name: nameCurrentChap,
+          },
+          {
+            poster,
+            seasonName: nameCurrentChap,
+            name,
+          }
+        )
+        .catch((err) => console.warn("save viewing progress failed: ", err)),
+
+      resolveAfter(1_000),
+    ])
 
     console.log("save viewing progress")
 
