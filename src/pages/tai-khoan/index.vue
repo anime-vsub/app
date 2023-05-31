@@ -138,7 +138,10 @@
         v-else
         no-image
         class="h-[146px] px-4"
-        @click:retry="runHistories"
+        @click:retry="
+          last30ItemGet.value = true
+          refreshHistories()
+        "
         :error="undefined"
       />
     </div>
@@ -452,8 +455,12 @@ watchEffect(() => {
 })
 
 // ============ fetch history =============
-const { last30Item: histories, last30ItemError: errorHistories,
-refreshLast30Item: refreshHistories , last30ItemGet} = storeToRefs(historyStore)
+const {
+  last30Item: histories,
+  last30ItemError: errorHistories,
+  refreshLast30Item: refreshHistories,
+  last30ItemGet,
+} = storeToRefs(historyStore)
 
 // ========== favorite =========
 const {
@@ -468,11 +475,11 @@ watch(
   () => authStore.isLogged,
   (isLogged) => {
     if (isLogged) {
-    last30ItemGet.value = true
+      last30ItemGet.value = true
       runFavorites()
     } else {
       histories.value = undefined
-    last30ItemGet.value = false
+      last30ItemGet.value = false
       errorHistories.value = undefined
 
       favorites.value = undefined
@@ -482,7 +489,7 @@ watch(
   }
 )
 if (authStore.isLogged) {
-    last30ItemGet.value = true
+  last30ItemGet.value = true
   runFavorites()
 }
 
