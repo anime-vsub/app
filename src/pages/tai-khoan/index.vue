@@ -74,7 +74,7 @@
         />
       </router-link>
       <div
-        v-if="loadingHistories"
+        v-if="histories === undefined"
         class="h-[146px] mx-4 overflow-x-hidden whitespace-nowrap"
       >
         <q-card
@@ -367,13 +367,14 @@ import QImgCustom from "components/QImgCustom"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import { compressToBase64 } from "lz-string"
+import { storeToRefs } from "pinia"
 import QRCode from "qrcode"
 import { useQuasar } from "quasar"
-import { History } from "src/apis/runs/history"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
+import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { ref, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
@@ -392,6 +393,7 @@ const password = ref("")
 const $q = useQuasar()
 const authStore = useAuthStore()
 const playlistStore = usePlaylistStore()
+const historyStore = useHistoryStore()
 
 async function login() {
   const loader = $q.loading.show({
@@ -450,13 +452,8 @@ watchEffect(() => {
 })
 
 // ============ fetch history =============
-const {
-  data: histories,
-  loading: loadingHistories,
-  run: runHistories,
-  error: errorHistories,
-  refreshAsync: refreshHistories,
-} = useRequest(() => History(), { manual: true })
+const { last30Item: histories, last30ItemError: errorHistories,
+refreshLast30Item: refreshHistories , last30ItemGet} = storeToRefs(historyStore)
 
 // ========== favorite =========
 const {
@@ -471,11 +468,11 @@ watch(
   () => authStore.isLogged,
   (isLogged) => {
     if (isLogged) {
-      runHistories()
+    last30ItemGet.value = true
       runFavorites()
     } else {
       histories.value = undefined
-      loadingHistories.value = false
+    last30ItemGet.value = false
       errorHistories.value = undefined
 
       favorites.value = undefined
@@ -485,7 +482,7 @@ watch(
   }
 )
 if (authStore.isLogged) {
-  runHistories()
+    last30ItemGet.value = true
   runFavorites()
 }
 

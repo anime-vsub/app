@@ -107,14 +107,15 @@ import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import { QInfiniteScroll } from "quasar"
-import { History } from "src/apis/runs/history"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseTime } from "src/logic/parseTime"
+import { useHistoryStore } from "stores/history"
 import { ref } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
+const historyStore = useHistoryStore()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const {
@@ -123,15 +124,28 @@ const {
   run,
   refreshAsync,
   error,
-} = useRequest(() => History())
+} = useRequest(
+  (
+    lastDoc: typeof historyStore.loadMoreAfter extends (
+      LastDoc: infer R
+    ) => void
+      ? R
+      : unknown
+  ) => {
+    return historyStore.loadMoreAfter(lastDoc)
+  }
+)
 const refresh = (done: () => void) =>
   refreshAsync()
     .then(() => infiniteScrollRef.value?.reset())
     // eslint-disable-next-line promise/no-callback-in-promise
     .then(done)
 
+
 async function onLoad(page: number, done: (end: boolean) => void) {
-  const items = await History(histories.value)
+  const items = await historyStore.loadMoreAfter(
+    histories.value?.[histories.value.length - 1]?.$doc
+  )
 
   histories.value = [...(histories.value ?? []), ...items]
   done(items.length === 0)
