@@ -1,0 +1,2299 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+	<title>Vui Ghê Anime Vietsub Online</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="_token" id="token" value="">
+    <meta name="_socket" id="socket" value="6001">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta name="robots" content="index, follow" />
+	<meta name="language" content="Vietnamese, English" />
+
+
+
+	<link rel="shortcut icon" href="https://vuigher.com/favicon.ico" type="image/x-icon" />
+
+	<meta name="description" content="Xem anime Vietsub online miễn phí chất lượng cao với đường truyền nhanh, các anime HOT luôn được cập nhật sớm nhất Việt Nam" />
+	<meta name="keywords" content="anime vietsub, xem anime, vui ghe, naruto, vua hai tac, one piece, hoi phap su, fairy tail, bleach, dragon ball, dao hai tac" />
+
+	<!-- Facebook Metadata /-->
+	<meta property="fb:app_id" content="196545913738468" />
+	<meta property="og:image" content="https://s199.imacdn.com/web-thumbnail.png" />
+	<meta property="og:url" content="http://vuigher.com" />
+	<meta property="og:description" content="Xem anime Vietsub online miễn phí chất lượng cao với đường truyền nhanh, các anime HOT luôn được cập nhật sớm nhất Việt Nam" />
+	<meta property="og:title" content="Vui Ghê Anime Vietsub Online" />
+	<meta property="og:site_name" content="VuiGhe" />
+	<meta property="og:type" content="video.movie" />
+
+	<!-- Google+ Metadata /-->
+	<meta itemprop="name" content="Vui Ghê Anime Vietsub Online" />
+	<meta itemprop="description" content="Xem anime Vietsub online miễn phí chất lượng cao với đường truyền nhanh, các anime HOT luôn được cập nhật sớm nhất Việt Nam" />
+	<meta itemprop="image" content="https://s199.imacdn.com/web-thumbnail.png" />
+
+			<!-- Google webmaster tools verification -->
+		<meta name="google-site-verification" content="X6wTJolQe36XUJJeyIxqPMs9YJ0dqJXfDdy1yksGNhA" />
+		<!-- Bing verification -->
+		<meta name="msvalidate.01" content="C21FDE84CE65ABA807746F89A0D2964C" />
+
+        <link rel="stylesheet" href="/css/2023/home.css?id=6b7389335cec7ac3e13734624feadc3d">
+
+
+</head>
+<body class="font-sans dark:bg-slate-800 dark:text-gray-400 pt-[60px]">
+
+    <header>
+	<nav class="fixed top-0 left-0 right-0 bg-white shadow dark:shadow-slate-700 bg-white dark:bg-slate-800 dark:shadow-slate-700  z-1000">
+		<div class="container px-[10px] s1024:px-0 mx-auto h-[60px] flex s375:gap-3 items-center">
+			<div class="navbar-brand h-[50px] w-[200px] s768:w-[180px] flex justify-between shrink-0 s1280:mr-2 s1366:mr-3 z-50">
+				<a class="" href="/">
+					<img class="h-full" src="/assets/img/logo_v8.png" alt="VuiGhe.Net">
+				</a>
+				<div class="navbar-toggle h-[50px] p-[10px] flex items-center s768:hidden">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+					</svg>
+				</div>
+			</div>
+			<div class="navbar-left fixed overflow-hidden h-full s768:left-0 s768:h-[50px] shadow s768:relative w-[300px] s768:w-auto s768:h-auto s768:flex top-0 -left-[300px] bottom-0 bg-white s768:bg-transparent dark:s768:bg-transparent dark:bg-slate-800/90 dark:shadow-slate-700 s768:shadow-none s768:grow s768:overflow-visible pl-[10px] pr-0 pt-[60px] s768:p-0 z-40 transition-all duration-300">
+				<div class="navbar-close absolute top-4 right-4 hidden">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</div>
+				<div class="relative mt-[20px] pr-[10px] s768:mt-0 s768:pr-0 flex flex-col s768:flex-row s768:grow s768:items-center gap-4 s768:gap-2 s1280:gap-3">
+					<div class="group/search navbar-search relative top-0 right-0 s768:order-last s768:ml-auto s1024:w-[300px] s1280:w-[320px]">
+						<div class="search-box">
+							<input class="rounded-full w-full h-[30px] text-[14px] font-extralight border-red-200 focus:ring-red-300 focus:border-red-200 s768:border-gray-200 s768:focus:ring-red-300 s768:focus:border-red-200 bg-transparent dark:bg-transparent dark:border-teal-500 s768:dark:border-gray-700 dark:focus:border-teal-500 dark:focus:ring-teal-500" id="search-box" type="text" name="search" autocomplete="off">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 absolute top-[2px] right-[2px] text-gray-200 group-hover/search:text-red-300 dark:text-slate-700 dark:group-hover/search:text-teal-500">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+							</svg>
+						</div>
+						<div class="search-result bg-transparent min-h-[80px] pt-2 s768:bg-white s768:pl-2 s768:mt-[15px] dark:s768:bg-slate-800/90 s768:shadow s768:rounded-b-lg hidden" id="search-result">
+							<div class="result-body relative scrollbar-hide h-auto max-h-none s768:max-h-[400px]"></div>
+							<div class="result-noitem hidden font-extralight text-center"></div>
+							<div class="loading animate-spin hidden"></div>
+						</div>
+					</div>
+					<div class="navbar-item s768:h-[30px] dark:s768:border-gray-700 s768:border s768:rounded-full s768:hover:text-red-600 dark:s768:hover:text-teal-500 s768:order-1">
+						<a class="h-full flex gap-4 uppercase s768:normal-case items-center text-[14px]" href="/anime">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="shrink-0 w-5 h-5 s768:hidden">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-3.75 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 7.746 6 7.125v-1.5M4.875 8.25C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 7.125v-1.5m1.125 2.625c-.621 0-1.125.504-1.125 1.125v1.5m2.625-2.625c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125M18 5.625v5.25M7.125 12h9.75m-9.75 0A1.125 1.125 0 016 10.875M7.125 12C6.504 12 6 12.504 6 13.125m0-2.25C6 11.496 5.496 12 4.875 12M18 10.875c0 .621-.504 1.125-1.125 1.125M18 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m-12 5.25v-5.25m0 5.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125m-12 0v-1.5c0-.621-.504-1.125-1.125-1.125M18 18.375v-5.25m0 5.25v-1.5c0-.621.504-1.125 1.125-1.125M18 13.125v1.5c0 .621.504 1.125 1.125 1.125M18 13.125c0-.621.504-1.125 1.125-1.125M6 13.125v1.5c0 .621-.504 1.125-1.125 1.125M6 13.125C6 12.504 5.496 12 4.875 12m-1.5 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M19.125 12h1.5m0 0c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h1.5m14.25 0h1.5" />
+							</svg>
+							<span class="s768:px-3 s1024:px-2 s1280:px-3 s1366:px-4 s768:text-[14px]">Anime</span>
+						</a>
+					</div>
+					<div class="navbar-item s768:h-[30px] dark:s768:border-gray-700 s768:border s768:rounded-full s768:hover:text-red-600 dark:s768:hover:text-teal-500 s768:order-2">
+						<a class="h-full flex gap-4 uppercase s768:normal-case items-center text-[14px]" href="/movie">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="shrink-0 w-5 h-5 s768:hidden">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+							</svg>
+							<span class="s768:px-3 s1024:px-2 s1280:px-3 s1366:px-4 s768:text-[14px]">Movie</span>
+						</a>
+					</div>
+
+					<div class="navbar-item s768:h-[30px] dark:s768:border-gray-700 s768:border s768:rounded-full s768:hover:text-red-600 dark:s768:hover:text-teal-500 s768:order-5">
+						<a class="h-full flex gap-4 uppercase s768:normal-case items-center text-[14px]" href="/bang-xep-hang">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="shrink-0 w-5 h-5 s768:hidden">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+							  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+							</svg>
+							<span class="s768:px-3 s1024:px-2 s1280:px-3 s1366:px-4 s768:text-[14px]">BXH</span>
+						</a>
+					</div>
+					<div class="navbar-item s768:h-[30px] dark:s768:border-gray-700 s768:border s768:rounded-full s768:hover:text-red-600 dark:s768:hover:text-teal-500 s768:order-5">
+						<a class="h-full flex gap-4 uppercase s768:normal-case items-center text-[14px]" href="/shop">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="shrink-0 w-5 h-5 s768:hidden">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+							</svg>
+							<span class="s768:px-3 s1024:px-2 s1280:px-3 s1366:px-4 s768:text-[14px]">Shop</span>
+						</a>
+					</div>
+					<div class="navbar-item s768:h-[30px] dark:s768:border-gray-700 s768:border s768:rounded-full s768:hover:text-red-600 dark:s768:hover:text-teal-500 s768:order-4">
+						<a class="h-full flex gap-4 uppercase s768:normal-case items-center text-[14px]" href="/truyen-tranh">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="shrink-0 w-5 h-5 s768:hidden">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+							</svg>
+							<span class="s768:px-3 s1024:px-2 s1280:px-3 s1366:px-4 s768:text-[14px]">Truyện</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="navbar-user relative shrink-0 h-[40px] s1024:w-[145px] s1280:w-[294px] s1366:w-[320px] ml-auto flex justify-end gap-2">
+				<div class="overflow-hidden w-[40px] h-[40px] rounded-full bg-gray-100 dark:bg-slate-700">
+					<a class="block w-full h-full p-[10px] flex items-center justify-center" href="https://facebook.com/vuigher" target="_blank">
+						<svg class="w-full h-full fill-blue-600 dark:fill-blue-500 dark:stroke-white" viewBox="0 0 512 512">
+						<path d="M134.941,272.691h56.123v231.051c0,4.562,3.696,8.258,8.258,8.258h95.159
+							c4.562,0,8.258-3.696,8.258-8.258V273.78h64.519c4.195,0,7.725-3.148,8.204-7.315l9.799-85.061c0.269-2.34-0.472-4.684-2.038-6.44
+							c-1.567-1.757-3.81-2.763-6.164-2.763h-74.316V118.88c0-16.073,8.654-24.224,25.726-24.224c2.433,0,48.59,0,48.59,0
+							c4.562,0,8.258-3.698,8.258-8.258V8.319c0-4.562-3.696-8.258-8.258-8.258h-66.965C309.622,0.038,308.573,0,307.027,0
+							c-11.619,0-52.006,2.281-83.909,31.63c-35.348,32.524-30.434,71.465-29.26,78.217v62.352h-58.918c-4.562,0-8.258,3.696-8.258,8.258
+							v83.975C126.683,268.993,130.379,272.691,134.941,272.691z"/>
+						</svg>
+					</a>
+				</div>
+				<div class="overflow-hidden w-[40px] h-[40px] p-[10px] rounded-full bg-gray-100 dark:bg-slate-700 user-theme hidden s360:block" id="user-theme">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full fill-slate-800 dark:fill-none dark:stroke-white">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+					</svg>
+				</div>
+								<div class="navbar-avatar overflow-hidden w-[40px] h-[40px] rounded-full bg-gray-100 dark:bg-slate-700 flex justify-center items-center text-center">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+					</svg>
+				</div>
+							</div>
+			<div class="navbar-right fixed overflow-hidden h-full shadow w-[300px] top-0 -right-[300px] bottom-0 bg-white dark:bg-slate-800/90 dark:shadow-slate-700 z-50 transition-all duration-300">
+				<div class="navbar-close absolute top-2 left-2 w-8 h-8 opacity-60">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</div>
+					    			<div class="navbar-user navbar-user-header px-3 pt-[55px] bg-white dark:bg-transparent">
+    <div class="user-avatar big-avatar absolute top-3 right-3 w-20 h-20 flex items-center justify-center bg-gray-600 text-white rounded-full overflow-hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 inline-block self-center">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+        </svg>
+    </div>
+    <div class="navbar-user-welcome mb-4">
+        <span class="w-[165px] line-clamp-1 text-[14px]">Chào khách!</span>
+    </div>
+    <div class="navbar-user-tab flex gap-4 h-6 mb-2 uppercase text-[13px] font-medium">
+        <div class="navbar-user-tab-item navbar-tab-login activated border-b-2 border-red-500 h-full cursor-pointer" data-tab="login">Đăng nhập</div>
+        <div class="navbar-user-tab-item navbar-tab-signup border-red-500 h-full cursor-pointer" data-tab="signup">Đăng ký</div>
+    </div>
+</div>
+
+<div class="navbar-user-body tab-login px-3">
+    <div class="navbar-form-group relative mb-3">
+        <label class="mb-1 block text-[14px]">Tên đăng nhập</label>
+        <input class="text-[14px] font-extralight w-full h-8 pl-6 bg-transparent rounded" type="text" name="username">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 absolute left-1 bottom-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+        </svg>
+        <span class="tip absolute top-1 right-0 text-[10px] text-red-500"></span>
+    </div>
+    <div class="navbar-form-group relative mb-3">
+        <label class="mb-1 block text-[14px]">Mật khẩu</label>
+        <input class="text-[14px] font-extralight w-full h-8 pl-6 bg-transparent rounded" type="password" name="password">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 absolute left-1 bottom-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+        <span class="tip absolute top-1 right-0 text-[10px] text-red-500"></span>
+    </div>
+    <div class="navbar-form-group relative mb-3 flex justify-between text-[14px] font-light">
+        <label class="navbar-form-checkbox flex items-center gap-2">
+            <input class="rounded text-teal-600 border-gray-400 focus:ring-0 focus:ring-offset-0 focus:border-gray-400 dark:bg-transparent dark:border-teal-600 dark:focus:border-teal-500 dark:focus:ring-0 dark:focus:ring-offset-0 bg-transparent" type="checkbox" name="remember" checked>
+            <span>Ghi nhớ</span>
+        </label>
+        <a href="/quen-mat-khau" class="forgot-password">Quên mật khẩu</a>
+    </div>
+    <div class="navbar-form-group relative mb-3 hidden">
+        <ul id="form-login-warning"></ul>
+    </div>
+    <div class="navbar-form-group relative mb-3 h-8 rounded bg-red-600/90 text-center text-white text-[14px] font-light submit">
+        <input class="vuighe w-full h-full rounded cursor-pointer" id="login" type="button" name="submit" value="Đăng nhập">
+    </div>
+    <hr class="mb-3 border-gray-300 dark:border-slate-600">
+    <div class="navbar-form-group relative mb-3 h-8 rounded bg-orange-600/90 text-center text-white text-[14px] font-light">
+        <a class="social-login" href="https://vuigher.com/dang-nhap-google">
+            <input type="button" class="google w-full h-full rounded cursor-pointer" value="Đăng nhập với Google">
+        </a>
+    </div>
+    <div class="navbar-form-group relative mb-3 h-8 rounded bg-blue-600/90 text-center text-white text-[14px] font-light">
+        <a class="social-login" href="https://vuigher.com/dang-nhap-facebook">
+            <input type="button" class="facebook w-full h-full rounded cursor-pointer" value="Đăng nhập với Facebook">
+        </a>
+    </div>
+</div>
+
+<div class="navbar-user-body tab-signup px-3 hidden">
+    <div class="navbar-form-group relative mb-3">
+        <label class="mb-1 block text-[14px]">Tên đăng nhập</label>
+        <input class="text-[14px] font-extralight w-full h-8 pl-6 bg-transparent rounded" type="text" name="username">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 absolute left-1 bottom-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+        </svg>
+        <span class="tip absolute top-1 right-0 text-[10px] text-red-500"></span>
+    </div>
+    <div class="navbar-form-group relative mb-3">
+        <label class="mb-1 block text-[14px]">Mật khẩu</label>
+        <input class="text-[14px] font-extralight w-full h-8 pl-6 bg-transparent rounded" type="password" name="password">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 absolute left-1 bottom-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+        <span class="tip absolute top-1 right-0 text-[10px] text-red-500"></span>
+    </div>
+    <div class="navbar-form-group relative mb-3">
+        <label class="mb-1 block text-[14px]">Nhập lại mật khẩu</label>
+        <input class="text-[14px] font-extralight w-full h-8 pl-6 bg-transparent rounded" type="password" name="password_confirm">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 absolute left-1 bottom-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+        <span class="tip absolute top-1 right-0 text-[10px] text-red-500"></span>
+    </div>
+    <div class="navbar-form-group relative mb-3">
+        <label class="mb-1 block text-[14px]">Tên hiển thị</label>
+        <input class="text-[14px] font-extralight w-full h-8 pl-6 bg-transparent rounded" type="text" name="full_name">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 absolute left-1 bottom-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+        </svg>
+        <span class="tip absolute top-1 right-0 text-[10px] text-red-500"></span>
+    </div>
+    <div class="navbar-form-group relative mb-3">
+        <label class="mb-1 block text-[14px]">Email</label>
+        <input class="text-[14px] font-extralight w-full h-8 pl-6 bg-transparent rounded" type="text" name="email">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 absolute left-1 bottom-2">
+          <path stroke-linecap="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
+        </svg>
+        <span class="tip absolute top-1 right-0 text-[10px] text-red-500"></span>
+    </div>
+    <div class="navbar-form-group relative mb-3">
+        <label class="mb-1 block text-[14px]">Giới tính</label>
+        <div class="flex items-center gap-5 text-[14px] font-light">
+            <label class="navbar-form-radio flex items-center gap-2">
+                <input class="rounded-full text-teal-600 border-gray-400 focus:ring-0 focus:ring-offset-0 focus:border-gray-400 dark:bg-transparent dark:border-teal-600 dark:focus:border-teal-500 dark:focus:ring-0 dark:focus:ring-offset-0 bg-transparent" type="radio" name="gender" value="1">
+                <span>Nam</span>
+            </label>
+            <label class="navbar-form-radio flex items-center gap-2">
+                <input class="rounded-full text-teal-600 border-gray-400 focus:ring-0 focus:ring-offset-0 focus:border-gray-400 dark:bg-transparent dark:border-teal-600 dark:focus:border-teal-500 dark:focus:ring-0 dark:focus:ring-offset-0 bg-transparent" type="radio" name="gender" value="-1">
+                <span>Nữ</span>
+            </label>
+            <label class="navbar-form-radio flex items-center gap-2">
+                <input class="rounded-full text-teal-600 border-gray-400 focus:ring-0 focus:ring-offset-0 focus:border-gray-400 dark:bg-transparent dark:border-teal-600 dark:focus:border-teal-500 dark:focus:ring-0 dark:focus:ring-offset-0 bg-transparent" type="radio" name="gender" value="0" checked>
+                <span>Không nói</span>
+            </label>
+        </div>
+    </div>
+    <div class="navbar-form-group relative birthday hidden mb-3">
+        <div class="navbar-form-select day">
+            <label class="mb-1 block text-[14px]">Ngày sinh</label>
+            <input type="number" name="birthday" min="1" max="31">
+        </div>
+        <div class="navbar-form-select month">
+        <label class="mb-1 block text-[14px]">Tháng sinh</label>
+            <input type="number" name="birthmonth" min="1" max="12">
+        </div>
+        <div class="navbar-form-select year">
+        <label class="mb-1 block text-[14px]">Năm sinh</label>
+            <input type="number" name="birthyear" min="1970" max="2010">
+        </div>
+        <span class="tip absolute top-1 right-0 text-[10px] text-red-500"></span>
+    </div>
+    <div class="navbar-form-group relative hidden mb-3">
+        <ul id="form-signup-warning"></ul>
+    </div>
+    <div class="navbar-form-group relative mb-3 h-8 rounded bg-red-600/90 text-center text-white text-[14px] font-light submit">
+        <input class="vuighe w-full h-full rounded" id="signup" type="button" name="submit" value="Đăng ký">
+    </div>
+</div>
+<div class="loading hidden"></div>
+
+	    						<div class="loading animate-spin hidden"></div>
+			</div>
+		</div>
+	</nav>
+</header>
+
+
+    <div class="container">
+
+
+
+        <section class="mt-[20px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+    <div class="grid grid-cols-2 grid-rows-3 s640:grid-cols-4 s768:grid-cols-4 gap-2 s1024:gap-3">
+        <div id="slider-container" class="group/slider relative overflow-hidden col-span-2 row-span-3 s640:col-span-4 s768:col-span-3 bg-cyan-500
+        h-[89px] s360:h-[101px] s375:h-[105px] s412:h-[116px] s480:h-[137px] s640:h-[175px] s768:h-[165px] s800:h-[172px] s1024:h-[224px] s1280:h-[275px] s1366:h-[290px]
+        ">
+            <div class="w-full h-full">
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform  absolute z-10 ">
+                    <a
+                                        href="/kimi-wa-houkago-insomnia/tap-8-cum-sao-tu-hop"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/14/45c8164f1e513315_9d95482d006771e6_40483216814780007118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">64,437 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Kimi wa Houkago Insomnia</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/jigokuraku/tap-8-hoc-tro-va-su-phu"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/22/5ac99d54b8b1a534_b8ee883e17b4ebf1_10276216846906655118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">819,607 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Jigokuraku</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/skip-to-loafer/tap-9"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/05/d30f36dae1db8df6_9694af22c814b11f_27195616806807046118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">229,929 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Skip to Loafer</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/ousama-ranking/tap-30"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/03/24/5351d52dc8694127_d2e86e20f98c3356_39892916796344887118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">2,000,854 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Ousama Ranking</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/tonikaku-kawaii/tap-20"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/05/726b1bdf5e6f5dc0_a5bebfe22bf6063f_10564916806783672118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">2,616,818 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Tonikaku Kawaii</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/kimetsu-no-yaiba/tap-52-chu-vo-trong-vo-nhat-lang"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/03/24/11d6c2939b03259f_050606c8104b4829_59602016796344471118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">12,390,864 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Kimetsu no Yaiba</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/megami-no-cafe-terrace/tap-8-tiem-ca-phe-tren-bai-bien"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/08/4a7a191490c54fe5_206cc02db82c292d_51764916809661542118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">91,751 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Megami no Café Terrace</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/yamada-kun-to-lv999-no-koi-wo-suru/tap-9"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/16/99faf785288e0d74_b87928a3bfa2846f_40608016816262462118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">410,393 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Yamada-kun to Lv999 no Koi wo Suru</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/isekai-wa-smartphone-to-tomo-ni/tap-21"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/03/24/22724783fa43fe22_d2dc2d23e03a25d0_36977016796345904118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">2,333,976 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Isekai wa Smartphone to Tomo ni.</div>
+                        </div>
+                    </a>
+                </div>
+                                                                <div class="slider-item inset-0 w-full h-full transition ease-in-out duration-300 transform ">
+                    <a
+                                        href="/mashle/tap-7-mash-burnedead-va-bac-thay-dieu-khien-roi"
+                                        >
+                        <img class="object-cover h-full s640:w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/11/24/fca8120309bfea7b_f8267129988ae630_11397616692764385118684.jpg">
+                        <div class="absolute bottom-0 grid content-end
+                        w-full h-[50px]
+                        text-white bg-gradient-to-b from-transparent to-[#000000bf]
+                        p-2 s480:pl-4 s1024:p-4
+                        s768:grid s1024:h-[100px]">
+                            <span class="text-[12px] font-extralight hidden s1024:block">987,309 lượt xem</span>
+                            <div class="text-ellipsis whitespace-nowrap overflow-hidden w-[40%] hidden s1024:block s1024:text-[16px] s1280:text-[18px]">Mashle</div>
+                        </div>
+                    </a>
+                </div>
+                                            </div>
+            <div class="slider-thumbs absolute w-[140px] h-[10px] bottom-[15px] left-0 right-0 mx-auto text-center z-20">
+                <ul class="list-none m-0 p-0">
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="0"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="1"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="2"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="3"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="4"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="5"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="6"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="7"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="8"></li>
+                                        <li class="w-[10px] h-[3px] s1280:rounded-full inline-flex bg-gray-400" data-item="9"></li>
+                                    </ul>
+            </div>
+            <div class="slider-left absolute z-20 left-0 top-[50%] mt-[-25px] p-[10px] rounded-r-full text-center text-gray-100 cursor-pointer align-middle w-[50px] h-[50px] bg-black/50 s1024:hidden s1024:group-hover/slider:block">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
+                </svg>
+            </div>
+            <div class="slider-right absolute z-20 right-0 top-[50%] mt-[-25px] p-[10px] rounded-l-full text-center text-gray-100 cursor-pointer align-middle w-[50px] h-[50px] bg-black/50 s1024:hidden s1024:group-hover/slider:block">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                </svg>
+            </div>
+            <div class="absolute bottom-0 z-20 w-full h-[1px]">
+                <div class="slider-progress bg-red-500 h-full"></div>
+            </div>
+        </div>
+        <div class="relative overflow-hidden
+        min-h-[40px] s768:min-h-0
+        bg-gradient-to-r from-cyan-500 to-blue-500
+        p-3 s768:py-2 s1024:py-2 s1280:py-4 s1366:pt-4
+        col-span-2 s768:col-span-1
+        s640:line-clamp-1 s768:line-clamp-none
+        align-middle">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-white/25 absolute right-0 top-0 w-[40px] s768:w-[50px] s1280:top-[10px] s1280:right-[10px]">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+            </svg>
+            <a href="/uu-dai">
+                <span class="align-middle text-white s1024:text-[20px] s1280:text-[20px] s1280:font-[500]">Ưu Đãi</span>
+                <span class="align-middle text-white s768:hidden s1024:block s1024:text-[12px] s1280:text-[14px] s1024:font-extralight">Dành Riêng Cho Thành Viên</span>
+            </a>
+        </div>
+        <div class="relative overflow-hidden
+        bg-gradient-to-r from-sky-500 to-indigo-500
+        p-3 s768:py-2 s1024:py-2 s1280:py-4 s1366:pt-4
+        min-h-[40px] s768:min-h-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-white/25 absolute right-0 top-0 w-[40px] s768:w-[50px] s1280:top-[10px] s1280:right-[10px]">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
+            </svg>
+
+            <a href="/bang-xep-hang">
+                <span class="align-middle text-white s1024:text-[20px] s1280:text-[20px] s1280:font-[500]">Bảng Xếp Hạng</span>
+                <span class="align-middle text-white hidden s1024:block s1024:text-[12px] s1280:text-[14px] s1024:font-extralight">Anime Được Xem Nhiều Nhất</span>
+            </a>
+        </div>
+        <div class="relative overflow-hidden
+        bg-gradient-to-r from-violet-500 to-fuchsia-500
+        p-3 s768:py-2 s1024:py-2 s1280:py-4 s1366:pt-4
+        min-h-[40px] s768:min-h-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-white/25 absolute right-0 top-0 w-[40px] s768:w-[50px] s1280:top-[10px] s1280:right-[10px]">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
+            <a href="/shop">
+                <span class="align-middle text-white s1024:text-[20px] s1280:text-[20px] s1280:font-[500]">VuiGhe Shop</span>
+                <span class="align-middle text-white hidden s1024:block s1024:text-[12px] s1280:text-[14px] s1024:font-extralight">Mua Hàng Online Trên VuiGhe</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+        <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="relative flex snap-x snap-mandatory overflow-x-auto s1280:grid s1280:grid-cols-12 gap-2 s1280:gap-3 scrollbar-hide">
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/441">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/21/acc7ed38b944b387_abb4eb9fe9f6a69e_12138168465877233.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">189,000đ</span>
+                        </div>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/410">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/16/707c123077e4bb3d_edd3a2d59d8df662_26687168422823123.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">1,000đ</span>
+                        </div>
+                                                <span class="absolute top-1 right-1 w-10 h-10 rounded-full bg-red-600/80 flex items-center justify-center text-[14px] text-white
+                        s1024:top-0.5 s1024:right-0.5 s1024:text-[12px]
+
+
+                        ">
+                            -50%
+                        </span>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/440">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/21/4fe9201ef1ecb502_f62ad9292f276d7d_16194168465855283.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">209,000đ</span>
+                        </div>
+                                                <span class="absolute top-1 right-1 w-10 h-10 rounded-full bg-red-600/80 flex items-center justify-center text-[14px] text-white
+                        s1024:top-0.5 s1024:right-0.5 s1024:text-[12px]
+
+
+                        ">
+                            -16%
+                        </span>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/439">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/21/9fcc03aa8e5cbb0a_8e27c0175e6f9cbc_17860168465827443.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">209,000đ</span>
+                        </div>
+                                                <span class="absolute top-1 right-1 w-10 h-10 rounded-full bg-red-600/80 flex items-center justify-center text-[14px] text-white
+                        s1024:top-0.5 s1024:right-0.5 s1024:text-[12px]
+
+
+                        ">
+                            -16%
+                        </span>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/462">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/23/0c09ed1791cd554c_4f1f8116cd5c9963_44047168483264883.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">280,000đ</span>
+                        </div>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/473">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/25/0ee161122f50b7bf_1a93a0d5f7001bcd_25340168500611953.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">140,000đ</span>
+                        </div>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/397">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/13/1b07f3758c1c304d_0a87fb0f84239bf7_26722168396882453.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">479,000đ</span>
+                        </div>
+                                                <span class="absolute top-1 right-1 w-10 h-10 rounded-full bg-red-600/80 flex items-center justify-center text-[14px] text-white
+                        s1024:top-0.5 s1024:right-0.5 s1024:text-[12px]
+
+
+                        ">
+                            -4%
+                        </span>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/525">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/28/a75ffb0391c4357e_d00cfc98fd88e4fd_30315168528666823.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">279,000đ</span>
+                        </div>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/388">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/13/c27634ee69a6a097_d212e8c504014a07_45421168392424233.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">99,000đ</span>
+                        </div>
+                                                <span class="absolute top-1 right-1 w-10 h-10 rounded-full bg-red-600/80 flex items-center justify-center text-[14px] text-white
+                        s1024:top-0.5 s1024:right-0.5 s1024:text-[12px]
+
+
+                        ">
+                            -12%
+                        </span>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/527">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/28/0df85c7000057225_f789778b550f3f84_15793168528819383.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">41,000đ</span>
+                        </div>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/506">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/27/8885cad8e17bcdbf_7da49d3fdcf8beba_27618168519884883.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">59,000đ</span>
+                        </div>
+                                            </a>
+                </div>
+                                <div class="group/product relative snap-start shrink-0 overflow-hidden
+                w-[100px] s412:w-[120px] s480:w-[155px] s640:w-[168px] s768:w-[120px] s1024:w-[115.5px] s1280:w-auto">
+                    <a class="block rounded-xl overflow-hidden border border-red-600 dark:border-none" href="/shop/san-pham/407">
+                        <img class="rounded-xl" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/15/f98e747f87c54ebd_277c76bd363c4fe5_21914168414527593.jpg">
+
+                        <div class="
+
+                        py-1 dark:text-white text-center">
+                            <span class="block text-[12px] s1024:text-[10px] s1280:text-[12px] font-semibold">149,000đ</span>
+                        </div>
+                                            </a>
+                </div>
+                            </div>
+        </section>
+
+
+
+        <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="mb-2">
+                <a href="/tap-moi-nhat" class="relative inline-flex">
+                    <h1 class="text-[25px] text-red-700 uppercase">Tập Mới Nhất</h1>
+                </a>
+            </div>
+            <div class="grid grid-cols-2 gap-2 s1024:gap-3 text-white s768:grid-cols-4">
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/mahoutsukai-no-yome/tap-33">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/03/08/1661c6e6de720740_d22c8e28f5facf91_3613416782627773118684.jpg" alt="Mahoutsukai no Yome Tập 33">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Mahoutsukai no Yome</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 33</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">257 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/niehime-to-kemono-no-ou/tap-7-chang-trai-chim-dam-trong-tinh-yeu-va-thu-han">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/06/01/249148706ff538a5_10d505dbc00e076a_11041716856155918118684.jpg" alt="Niehime to Kemono no Ou Tập 7 - Chàng trai chìm đắm trong tình yêu và thù hận">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Niehime to Kemono no Ou</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 7 - Chàng trai chìm đắm trong tình yêu và thù hận</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">1,644 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/kizuna-no-allele/tap-9-tran-ultimate-khong-ngo-toi">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/06/01/c2ce38fd69503f3a_65066adcd2032ddb_14036916856059731118684.jpg" alt="Kizuna no Allele Tập 9 - Trận Ultimate không ngờ tới">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Kizuna no Allele</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 9 - Trận Ultimate không ngờ tới</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">267 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/kaminaki-sekai-no-kamisama-katsudou/tap-8">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/20/03a2141e6c5d6f4b_d037d046be2d7557_5461416820046498118684.jpg" alt="Kaminaki Sekai no Kamisama Katsudou Tập 8">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Kaminaki Sekai no Kamisama Katsudou</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 8</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">3,895 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/kono-subarashii-sekai-ni-bakuen-wo/tap-9">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/03/30/43d16c4598de9a2f_016527041e320fd1_48160168014439923.jpg" alt="Kono Subarashii Sekai ni Bakuen wo! Tập 9">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Kono Subarashii Sekai ni Bakuen wo!</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 9</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">2,611 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/tousouchuu-great-mission/tap-8-bat-dau-mot-san-khau-moi-nguoi-dan-ong-deo-mat-na">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/31/133ad3f4b49b23c2_c048a0b0145cf33c_16697316855434476118684.jpg" alt="Tousouchuu: Great Mission Tập 8 - Bắt đầu một sân khấu mới! Người đàn ông đeo mặt nạ">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Tousouchuu: Great Mission</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 8 - Bắt đầu một sân khấu mới! Người đàn ông đeo mặt nạ</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">426 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/majutsushi-orphen-hagure-tabi/tap-44-ket-gioi-el-manka">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/31/549e57a91a786ee3_328fd84c806890a3_16995816855397361118684.jpg" alt="Majutsushi Orphen Hagure Tabi Tập 44 - Kết giới El Manka">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Majutsushi Orphen Hagure Tabi</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 44 - Kết giới El Manka</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">1,110 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/the-marginal-service/tap-8-zombie-thich-trung-tam-mua-sam">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/31/23ccbe99e9ac6028_ce7474e379f7fd3a_12364116855397652118684.jpg" alt="The Marginal Service Tập 8 - Zombie thích trung tâm mua sắm?">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">The Marginal Service</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 8 - Zombie thích trung tâm mua sắm?</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">742 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/skip-to-loafer/tap-9">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/31/7ac4869bdb8a3f24_197605582996cde1_9872216855168085118684.jpg" alt="Skip to Loafer Tập 9 - Uể oải và bồng bềnh">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Skip to Loafer</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 9 - Uể oải và bồng bềnh</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">3,754 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/kubo-san-wa-mob-wo-yurusanai/tap-9">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/31/bbed6fc511618b27_9745cedf7658576e_12409416855381743118684.jpg" alt="Kubo-san wa Mob wo Yurusanai Tập 9 - Học kỳ mới và xếp lớp">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Kubo-san wa Mob wo Yurusanai</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 9 - Học kỳ mới và xếp lớp</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">4,916 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/vinland-saga/tap-45">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/30/2e0d0f50fced833d_67e8d62d36789590_13328816854564238118684.jpg" alt="Vinland Saga Tập 45 - Dũng khí">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Vinland Saga</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 45 - Dũng khí</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">4,510 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/episode aspect-w-16 aspect-h-9 relative overflow-hidden" data-has-preview="0">
+        <a href="/kimi-wa-houkago-insomnia/tap-8-cum-sao-tu-hop">
+            <img class="w-full h-full s1024:group-hover/episode:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/30/7001ca896305ece6_083ffc69fa838ac2_10822916854320061118684.jpg" alt="Kimi wa Houkago Insomnia Tập 8 - Cụm sao tụ họp">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/episode:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Kimi wa Houkago Insomnia</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[45%] s480:max-w-[50%] s768:max-w-[40%] s1024:max-w-[50%] line-clamp-1">Tập 8 - Cụm sao tụ họp</span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px]">1,686 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                            </div>
+        </section>
+
+        <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="mb-2">
+                <a href="/truyen-tranh" class="relative inline-flex">
+                    <h1 class="text-[25px] text-red-700 uppercase">Truyện Tranh</h1>
+                </a>
+            </div>
+            <div class="relative flex snap-x snap-mandatory overflow-x-auto gap-2 s1024:gap-3 text-white s768:grid s768:grid-cols-6 s768:overflow-hidden scrollbar-hide">
+                                <div class="group/manga relative snap-always snap-start shrink-0 overflow-hidden w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto rounded-[10px] bg-pink-800">
+    <a href="https://truyennhanh1.com/tho-san-quy/chap-131" target="_blank">
+        <img class="w-full h-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/tt24/2020/04/16/bcdba194e82a42fe_2616e65d7e3159e0_545061586997547945957.jpg">
+        <div class="absolute bottom-0 grid content-end w-full
+        h-[90px] s1024:h-[150px] line-height-[25px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/manga:to-pink-800
+        p-1.5 s480:p-3 s768:p-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-3 text-[14px] s1024:text-[16px]">Thợ Săn Quỷ</div>
+        </div>
+        <div class="absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3 s768:top-1.5 s768:left-1.5 s1024:top-3 s1024:left-3
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white bg-black/50 s1024:group-hover/manga:bg-pink-800
+        px-3 py-1
+        rounded text-white transition-all">Chap 131</div>
+    </a>
+</div>                                <div class="group/manga relative snap-always snap-start shrink-0 overflow-hidden w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto rounded-[10px] bg-pink-800">
+    <a href="https://truyennhanh1.com/mashle/chap-157" target="_blank">
+        <img class="w-full h-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/25/5fd159bdfb7924b1_904ea858a102ff13_38281168243238093.jpg">
+        <div class="absolute bottom-0 grid content-end w-full
+        h-[90px] s1024:h-[150px] line-height-[25px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/manga:to-pink-800
+        p-1.5 s480:p-3 s768:p-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-3 text-[14px] s1024:text-[16px]">Mashle: Magic And Muscles</div>
+        </div>
+        <div class="absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3 s768:top-1.5 s768:left-1.5 s1024:top-3 s1024:left-3
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white bg-black/50 s1024:group-hover/manga:bg-pink-800
+        px-3 py-1
+        rounded text-white transition-all">Chap 157</div>
+    </a>
+</div>                                <div class="group/manga relative snap-always snap-start shrink-0 overflow-hidden w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto rounded-[10px] bg-pink-800">
+    <a href="https://truyennhanh1.com/nu-thanh-ceclilia-va-muc-su-lawrence/chap-50" target="_blank">
+        <img class="w-full h-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/tt24/2023/05/30/76a357c9bdff6433_1c66163b29106e40_3443116854284397185710.jpg">
+        <div class="absolute bottom-0 grid content-end w-full
+        h-[90px] s1024:h-[150px] line-height-[25px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/manga:to-pink-800
+        p-1.5 s480:p-3 s768:p-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-3 text-[14px] s1024:text-[16px]">Nữ Thánh Ceclilia Và Mục-Sư Lawrence</div>
+        </div>
+        <div class="absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3 s768:top-1.5 s768:left-1.5 s1024:top-3 s1024:left-3
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white bg-black/50 s1024:group-hover/manga:bg-pink-800
+        px-3 py-1
+        rounded text-white transition-all">Chap 50</div>
+    </a>
+</div>                                <div class="group/manga relative snap-always snap-start shrink-0 overflow-hidden w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto rounded-[10px] bg-pink-800">
+    <a href="https://truyennhanh1.com/uchi-no-kaisha-no-chiisai-senpai-no-hanashi/chap-62" target="_blank">
+        <img class="w-full h-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/tt24/2023/05/30/1815f3d2c888569f_2c2be6efba5cf804_3366616854311228185710.jpg">
+        <div class="absolute bottom-0 grid content-end w-full
+        h-[90px] s1024:h-[150px] line-height-[25px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/manga:to-pink-800
+        p-1.5 s480:p-3 s768:p-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-3 text-[14px] s1024:text-[16px]">Uchi no Kaisha no Chiisai Senpai no Hanashi</div>
+        </div>
+        <div class="absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3 s768:top-1.5 s768:left-1.5 s1024:top-3 s1024:left-3
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white bg-black/50 s1024:group-hover/manga:bg-pink-800
+        px-3 py-1
+        rounded text-white transition-all">Chap 62</div>
+    </a>
+</div>                                <div class="group/manga relative snap-always snap-start shrink-0 overflow-hidden w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto rounded-[10px] bg-pink-800">
+    <a href="https://truyennhanh1.com/ima-made-ichido-mo-onna-atsukaisareta-koto-ga-nai-jokishi-wo-onna-atsukai-suru/chap-76" target="_blank">
+        <img class="w-full h-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/tt24/2020/06/16/c2bd2c4446793547_64da19dffc302ba4_404681592309045745957.jpg">
+        <div class="absolute bottom-0 grid content-end w-full
+        h-[90px] s1024:h-[150px] line-height-[25px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/manga:to-pink-800
+        p-1.5 s480:p-3 s768:p-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-3 text-[14px] s1024:text-[16px]">Ima Made Ichido Mo Onna Atsukaisareta Koto Ga Nai Jokishi Wo Onna Atsukai Suru</div>
+        </div>
+        <div class="absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3 s768:top-1.5 s768:left-1.5 s1024:top-3 s1024:left-3
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white bg-black/50 s1024:group-hover/manga:bg-pink-800
+        px-3 py-1
+        rounded text-white transition-all">Chap 76</div>
+    </a>
+</div>                                <div class="group/manga relative snap-always snap-start shrink-0 overflow-hidden w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto rounded-[10px] bg-pink-800">
+    <a href="https://truyennhanh1.com/amagami-san-chi-no-enmusubi/chap-93" target="_blank">
+        <img class="w-full h-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/21/04df2da70088693c_20dddb2e8c59f462_40646168205124663.jpg">
+        <div class="absolute bottom-0 grid content-end w-full
+        h-[90px] s1024:h-[150px] line-height-[25px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/manga:to-pink-800
+        p-1.5 s480:p-3 s768:p-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-3 text-[14px] s1024:text-[16px]">Amagami-San Chi No Enmusubi!</div>
+        </div>
+        <div class="absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3 s768:top-1.5 s768:left-1.5 s1024:top-3 s1024:left-3
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white bg-black/50 s1024:group-hover/manga:bg-pink-800
+        px-3 py-1
+        rounded text-white transition-all">Chap 93</div>
+    </a>
+</div>                            </div>
+        </section>
+
+                <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="mb-2">
+                <a href="https://mehoathinh1.com" target="_blank" class="relative inline-flex">
+                    <h1 class="text-[25px] text-red-700 uppercase">Hoạt Hình</h1>
+                </a>
+            </div>
+            <div class="relative flex snap-x snap-mandatory overflow-x-auto gap-2 s1024:gap-3 text-white s768:grid s768:grid-cols-6 s768:overflow-hidden scrollbar-hide">
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/mulligan" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/05/12/a25a716129173ace_7c9d30da3d314d27_1961331683877901816068.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Mulligan</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/dau-la-dai-luc" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/04/16/e0fa2fb286c1abe5_fb6accfd92255261_70338168165546123.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Đấu La Đại Lục</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/the-gioi-hoan-my" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2021/04/23/b65d2e892b145f29_10366fa0feee9190_552751619157263616068.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Thế Giới Hoàn Mỹ</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/nguoi-nhen-vu-tru-moi-2" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/06/01/81ae8b52c40560b8_a0c85bc45d166fcf_2930151685618451816068.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Người Nhện 2: Du Hành Vũ Trụ Nhện</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/dau-pha-thuong-khung-phan-5" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2022/08/14/04200dd730cfe684_a596bcaad44e966b_2632071660469313916068.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Đấu Phá Thương Khung (Phần 5)</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/o-re-2023" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/03/30/61a0b77042446da6_329027effee5338e_45173168015052013.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Ở Rể</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/xac-uop-cuoc-phieu-luu-den-london" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/03/27/c6b817998cc3ff19_81edeafe2fcf3ee2_2357341679908771416068.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Xác Ướp: Cuộc Phiêu Lưu Đến London</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/nang-ta-khong-lam-nu-chinh-lau-roi" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/03/30/b54b87ac08816a0b_b486fe220c2bdc7b_71072168015036063.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Nàng Ta Không Làm Nữ Chính Lâu Rồi</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/super-mario-bros-2022" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/04/05/b35d6345031de8d1_4c904930cb6f7b21_79159168068183333.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Anh Em Super Mario</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/kitti-katz" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/05/18/30fcb0736262c550_fe25e8bfc9fcfd66_2207771684406015616068.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Kitti Katz</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/gia-dinh-au-trung" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/05/05/b2643f2e187e296e_f1c5ae9d957d0105_803161683265365816068.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Gia Đình Ấu Trùng</div>
+                    </a>
+                </div>
+                                <div class="group/cartoon relative snap-always snap-start shrink-0 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+                    <a href="https://mehoathinh1.com/ban-gai-than-bi-cua-toi" target="_blank">
+                        <img class="w-full" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s198.imacdn.com/ff/2023/05/18/39e96ddea7ed4078_301a560c27ccc6d9_37264168437497873.jpg">
+                        <div class="pt-1 pb-0.5 px-2 bg-gray-800 dark:bg-gray-900 line-clamp-1 text-[14px]
+                        s1024:absolute s1024:w-full s1024:bottom-0 s1024:hidden s1024:group-hover/cartoon:block s1024:whitespace-nowrap s1024:text-[16px]">Bạn Gái Thần Bí Của Tôi</div>
+                    </a>
+                </div>
+                            </div>
+        </section>
+
+        <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="mb-2">
+                <a href="/bo-suu-tap" class="relative inline-flex">
+                    <h1 class="text-[25px] text-red-700 uppercase">Bộ Sưu Tập</h1>
+                </a>
+            </div>
+            <div class="relative flex snap-x snap-mandatory overflow-x-auto s768:grid s768:grid-rows-2 s768:grid-cols-6 gap-2 s1024:gap-3 scrollbar-hide">
+                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+     s768:row-span-2 s768:col-span-2     w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-xuan-2023">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/03/02/d66102b20c0df87d_9d5a343f6acdf971_10896816777495647185710.jpg">
+    </a>
+</div>                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-dong-2023">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/01/30/68fa82b22b9d4965_d66e4431ce224ac7_2698216750634546118684.jpg">
+    </a>
+</div>                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-thu-2022">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/09/02/a17fad944d3cecc5_5ab5fdd64a7f94fd_30967166205716499674.jpg">
+    </a>
+</div>                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-he-2022">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/06/10/09dd799dff4a355b_a6b32d115628ac50_40892165484315239674.jpg">
+    </a>
+</div>                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-xuan-2022">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/03/05/803583cba5d569c2_3c4ab828e8e763bd_117964164647297779674.jpg">
+    </a>
+</div>                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-dong-2022">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2021/12/27/447d92824ddb9779_f3207425776138e9_98651164059040319674.jpg">
+    </a>
+</div>                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-thu-2021">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2021/09/29/819d6a79cd97836d_6bc30ef29cbd18e5_173292163292978929674.jpg">
+    </a>
+</div>                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-he-2021">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2021/06/22/ba2d1585b27d5133_34047b8f19e96ceb_3441016243409554118684.jpg">
+    </a>
+</div>                                <div class="group/collection relative snap-always snap-start shrink-0 overflow-hidden
+        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+    ">
+    <a href="/bo-suu-tap/anime-mua-xuan-2021">
+        <img class="w-full h-full s1024:group-hover/collection:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2021/03/11/c844ebf7859817dc_b52043c81540fbde_121512161546266181.jpg">
+    </a>
+</div>                            </div>
+        </section>
+
+        <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="mb-2">
+                <a href="/bang-xep-hang" class="relative inline-flex">
+                    <h1 class="text-[25px] text-red-700 uppercase">Bảng Xếp Hạng</h1>
+                </a>
+            </div>
+            <div class="relative flex snap-x snap-mandatory overflow-x-auto s768:grid s768:grid-rows-2 s768:grid-cols-6 gap-2 s1024:gap-3 scrollbar-hide">
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                     s768:row-span-2 s768:col-span-2                     w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/kimetsu-no-yaiba">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2023/01/04/79da5d863e1debb1_2664f0fd144088ca_21669816728156208118684.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">1</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">Kimetsu no Yaiba</span>
+                    </a>
+                </div>
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                                        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/hunter-x-hunter">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2023/03/03/590900f3070d4397_507f399bf1fc722a_59396167778091263.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                s768:text-[30px] s1280:text-[35px]
+
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">2</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">Hunter X Hunter</span>
+                    </a>
+                </div>
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                                        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/mashle">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2023/03/18/7dd5efe5955b3505_9a3023a582e64d79_4917916791407473118684.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                s768:text-[30px] s1280:text-[35px]
+
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">3</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">Mashle</span>
+                    </a>
+                </div>
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                                        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/conan-the-movie">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2022/11/12/4f8b983d59624b4c_59d3ba3d43a7c686_6524616682526474118684.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                s768:text-[30px] s1280:text-[35px]
+
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">4</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">Conan The Movie</span>
+                    </a>
+                </div>
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                                        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/jigokuraku">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2023/04/16/82ce97c97134fac8_769aa87ccba0c075_3689716816195086118684.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                s768:text-[30px] s1280:text-[35px]
+
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">5</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">Jigokuraku</span>
+                    </a>
+                </div>
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                                        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/oshi-no-ko">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2023/04/03/372e48575b21994c_79c786569a8b0280_55325168051292443.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                s768:text-[30px] s1280:text-[35px]
+
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">6</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">&quot;Oshi no Ko&quot;</span>
+                    </a>
+                </div>
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                                        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/kaminaki-sekai-no-kamisama-katsudou">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2023/04/20/03a2141e6c5d6f4b_d037d046be2d7557_5461416820046498118684.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                s768:text-[30px] s1280:text-[35px]
+
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">7</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">Kaminaki Sekai no Kamisama Katsudou</span>
+                    </a>
+                </div>
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                                        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/long-tieng-kimetsu-no-yaiba">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2019/11/28/b228f37ad34e99c3_c17388e0cbc7703d_15778215749473975185710.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                s768:text-[30px] s1280:text-[35px]
+
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">8</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">[Lồng Tiếng] Kimetsu no Yaiba</span>
+                    </a>
+                </div>
+                                <div class="group/rank relative snap-start shrink-0 overflow-hidden bg-black/80
+                                        w-[200px] s480:w-[225px] s640:w-[257px] s768:w-auto
+                    ">
+                    <a href="/isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-kaeta">
+                        <div class="absolute w-full h-full bg-gradient-to-tl from-transparent to-black/50 s1024:group-hover/rank:to-black/50"></div>
+                        <img class="w-full s480:h-full duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        data-src="https://s199.imacdn.com/vg/2023/03/08/348f00875e00d909_3eda4e90e53e55ae_15976116782632118118684.jpg"
+                        >
+                        <span class="block absolute
+                        top-1.5 left-1.5
+                        s480:top-3 s480:left-3
+                        s768:top-1.5 s768:left-1.5
+                        s1024:top-3 s1024:left-3
+
+                        text-[50px] s480:text-[60px]
+                                                s768:text-[30px] s1280:text-[35px]
+
+                                                leading-none text-white bg-clip-text text-transparent bg-gradient-to-b from-amber-500 to-red-500 s1024:group-hover/rank:-translate-y-2">9</span>
+                        <span class="mt-1 mb-0.5 px-1 bottom-0.5 left-1.5
+                        s480:bottom-1 s480:left-3
+                        s768:absolute s768:mt-0 s768:mb-0 s768:px-0 s768:bottom-0.5 s768:left-1.5
+                        s1024:hidden s1024:group-hover/rank:block s1024:bottom-1 s1024:left-3
+                        text-white line-clamp-1
+                        s768:w-full s768:pr-1 s768:text-ellipsis s768:whitespace-nowrap
+                        text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+
+
+
+                        ">Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta</span>
+                    </a>
+                </div>
+                            </div>
+        </section>
+
+        <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="mb-2">
+                <a href="/movie" class="relative inline-flex">
+                    <h1 class="text-[25px] text-red-700 uppercase">Anime Movie</h1>
+                </a>
+            </div>
+            <div class="relative flex snap-x snap-mandatory overflow-x-auto s768:grid s768:grid-cols-6 gap-2 s1024:gap-3 scrollbar-hide">
+                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/hula-fulla-dance">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/22/3d6abbc91ddf6666_8ec0bc147fc886ee_46704168472158733.jpg" alt="Hula Fulla Dance">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-orange-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Hula Fulla Dance</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">1,438 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/kagami-no-kojou">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/13/bc9afc290e43dcc8_5eb06b7c01f7f21a_44896168398824383.jpg" alt="Kagami no Kojou">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-orange-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Kagami no Kojou</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">8,173 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/yuru-camp-movie">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/21/23f78891b505e9d0_e7777a8bfd963982_27879168206189493.jpg" alt="Yuru Camp△ Movie">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-orange-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Yuru Camp△ Movie</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">6,648 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/watashi-ni-tenshi-ga-maiorita-precious-friends">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/19/6dc1e218360eefcc_d0a4dd8656a87ebd_38153168189786493.jpg" alt="Watashi ni Tenshi ga Maiorita! Precious Friends">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-orange-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Watashi ni Tenshi ga Maiorita! Precious Friends</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">8,490 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/fatekaleid-liner-prismaillya-movie-licht-namae-no-nai-shoujo">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/21/27eed4a8d6dffee4_01f3b4f098505343_32739168206248073.jpg" alt="Fate/kaleid liner Prisma☆Illya Movie: Licht - Namae no Nai Shoujo">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-orange-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Fate/kaleid liner Prisma☆Illya Movie: Licht - Namae no Nai Shoujo</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">9,774 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/bungou-stray-dogs-dead-apple">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/11/d3dcceb1c1d34426_41fc93ce91a0fca8_44896168121757433.jpg" alt="Bungou Stray Dogs: Dead Apple">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-orange-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Bungou Stray Dogs: Dead Apple</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">20,668 lượt xem</span>
+            </div>
+        </div>
+            </a>
+</div>
+                            </div>
+        </section>
+
+        <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="mb-2">
+                <a href="/hom-nay-xem-gi" class="relative inline-flex">
+                    <h1 class="text-[25px] text-red-700 uppercase">Hôm Nay Xem Gì</h1>
+                </a>
+            </div>
+            <div class="relative flex snap-x snap-mandatory overflow-x-auto s768:grid s768:grid-cols-6 gap-2 s1024:gap-3 scrollbar-hide">
+                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/relife">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/04/08/9b02677b52349e2a_a71c86a5e30a531d_39991168094017643.jpg" alt="ReLIFE">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-teal-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">ReLIFE</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">750,476 lượt xem</span>
+            </div>
+        </div>
+    </a>
+</div>                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/gugure-kokkuri-san">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/12/05/96b996500c23ad90_6e58a947394ed7d3_32810167023587813.jpg" alt="Gugure! Kokkuri-san">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-teal-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Gugure! Kokkuri-san</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">153,108 lượt xem</span>
+            </div>
+        </div>
+    </a>
+</div>                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/red-data-girl">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/12/05/442e8b22cc278014_094b1acf189585ea_33854167022416683.jpg" alt="Red Data Girl">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-teal-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Red Data Girl</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">312,697 lượt xem</span>
+            </div>
+        </div>
+    </a>
+</div>                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/uchi-no-ko-no-tame-naraba-ore-wa-moshikashitara-maou-mo-taoseru-kamo-shirenai">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/12/07/a1840c8efe2a67c6_8f8e6a4c4d4d2c82_31051167040355433.jpg" alt="Uchi no Ko no Tame naraba, Ore wa Moshikashitara Maou mo Taoseru kamo Shirenai.">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-teal-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Uchi no Ko no Tame naraba, Ore wa Moshikashitara Maou mo Taoseru kamo Shirenai.</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">427,393 lượt xem</span>
+            </div>
+        </div>
+    </a>
+</div>                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/urasekai-picnic">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/12/08/134b43aaf8fb1c4f_f2e4532207b47838_29909167043517633.jpg" alt="Urasekai Picnic">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-teal-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Urasekai Picnic</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">85,141 lượt xem</span>
+            </div>
+        </div>
+    </a>
+</div>                                <div class="group/movie relative snap-always snap-start shrink-0 overflow-hidden bg-cyan-400 w-[150px] s480:w-[155px] s640:w-[168px] s768:w-auto">
+    <a href="/touch-movie">
+        <img class="w-full h-full s1024:group-hover/movie:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2022/12/06/8421a006461b963f_0d972ef5e7925f36_28618167030766783.jpg" alt="Touch Movie">
+        <div class="absolute bottom-0
+        w-full h-[100px] s1024:h-[150px]
+        text-white bg-gradient-to-b from-transparent to-black
+        s1024:group-hover/movie:to-teal-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        transition-all">
+            <div class="line-clamp-2 s480:line-clamp-1
+            mb-1 s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-5">Touch Movie</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3">
+                <span class="font-extralight text-[10px] s480:text-[12px]">11,921 lượt xem</span>
+            </div>
+        </div>
+    </a>
+</div>                            </div>
+        </section>
+
+        <section class="mt-[30px] pl-[10px] pr-[10px] s1024:p-0 clear-both">
+            <div class="mb-2">
+                <a href="/anime" class="relative inline-flex">
+                    <h1 class="text-[25px] text-red-700 uppercase">Tất Cả Anime</h1>
+                </a>
+            </div>
+            <div class="grid grid-cols-2 gap-2 s1024:gap-3 text-white s768:grid-cols-4">
+                                <div class="group/film relative overflow-hidden">
+    <a href="/co-gai-lau-duoi">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/31/569780689791ded4_e4cd9977fbb39a0c_18470216855169986118684.jpg" alt="Cô Gái Lầu Dưới">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Cô Gái Lầu Dưới</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                6 / 22 tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">19,956 lượt xem</span>
+            </div>
+        </div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/level-1-dakedo-unique-skill-de-saikyou-desu">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/22/b79d8cfd1b0d8d17_08227438784b7cbc_38118168476082963.jpg" alt="Level 1 dakedo Unique Skill de Saikyou desu">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Level 1 dakedo Unique Skill de Saikyou desu</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                0 / ??? tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">1,220 lượt xem</span>
+            </div>
+        </div>
+                <div class="flex items-center justify-center
+        absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3
+        s768:top-1.5 s768:left-1.5
+        s1024:top-3 s1024:left-3
+        py-0.5 px-2 s480:py-1 s480:px-3 s768:px-1 s768:py-0.5 s1024:py-1 s1024:px-3
+        bg-red-600/50 rounded-xl
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white text-center">SẮP CHIẾU</div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/hula-fulla-dance">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/22/f76a8f081d20c218_1d0ff49b569a3e85_33671168472184463.jpg" alt="Hula Fulla Dance">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Hula Fulla Dance</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                108 phút
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">1,441 lượt xem</span>
+            </div>
+        </div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/yakitori">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/18/1b92930d53af80ac_ac9410681968f771_22617016844042482118684.jpg" alt="Yakitori">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Yakitori</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                6 / 6 tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">2,735 lượt xem</span>
+            </div>
+        </div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/uchi-no-kaisha-no-chiisai-senpai-no-hanashi">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/18/b000f43cac57c516_320ff1abea0cb0ef_38487168434260853.jpg" alt="Uchi no Kaisha no Chiisai Senpai no Hanashi">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Uchi no Kaisha no Chiisai Senpai no Hanashi</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                0 / ??? tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">1,603 lượt xem</span>
+            </div>
+        </div>
+                <div class="flex items-center justify-center
+        absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3
+        s768:top-1.5 s768:left-1.5
+        s1024:top-3 s1024:left-3
+        py-0.5 px-2 s480:py-1 s480:px-3 s768:px-1 s768:py-0.5 s1024:py-1 s1024:px-3
+        bg-red-600/50 rounded-xl
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white text-center">SẮP CHIẾU</div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/shiro-seijo-to-kuro-bokushi">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/17/7ef6847fc5fa1bc6_b0bcefc1d31fdacd_50705168434230173.jpg" alt="Shiro Seijo to Kuro Bokushi">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Shiro Seijo to Kuro Bokushi</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                0 / ??? tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">1,134 lượt xem</span>
+            </div>
+        </div>
+                <div class="flex items-center justify-center
+        absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3
+        s768:top-1.5 s768:left-1.5
+        s1024:top-3 s1024:left-3
+        py-0.5 px-2 s480:py-1 s480:px-3 s768:px-1 s768:py-0.5 s1024:py-1 s1024:px-3
+        bg-red-600/50 rounded-xl
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white text-center">SẮP CHIẾU</div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/eiyuu-kyoushitsu">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/17/9320f3cdf81177c2_a35fd3432e476379_35313168434175743.jpg" alt="Eiyuu Kyoushitsu">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Eiyuu Kyoushitsu</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                0 / ??? tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">1,135 lượt xem</span>
+            </div>
+        </div>
+                <div class="flex items-center justify-center
+        absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3
+        s768:top-1.5 s768:left-1.5
+        s1024:top-3 s1024:left-3
+        py-0.5 px-2 s480:py-1 s480:px-3 s768:px-1 s768:py-0.5 s1024:py-1 s1024:px-3
+        bg-red-600/50 rounded-xl
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white text-center">SẮP CHIẾU</div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/nanatsu-no-maken-ga-shihai-suru">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/17/2602d4fda59a1a5b_6c02d657d02748fd_59814168434134053.jpg" alt="Nanatsu no Maken ga Shihai suru">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Nanatsu no Maken ga Shihai suru</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                0 / ??? tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">2,963 lượt xem</span>
+            </div>
+        </div>
+                <div class="flex items-center justify-center
+        absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3
+        s768:top-1.5 s768:left-1.5
+        s1024:top-3 s1024:left-3
+        py-0.5 px-2 s480:py-1 s480:px-3 s768:px-1 s768:py-0.5 s1024:py-1 s1024:px-3
+        bg-red-600/50 rounded-xl
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white text-center">SẮP CHIẾU</div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/chiba-pedal-yowamushi-pedal-to-manabu-jitensha-koutsuu-anzen">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/17/81acb625d53e8deb_e459863f53f77e37_56340168433062823.jpg" alt="Chiba Pedal: Yowamushi Pedal to Manabu Jitensha Koutsuu Anzen">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Chiba Pedal: Yowamushi Pedal to Manabu Jitensha Koutsuu Anzen</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                6 / 6 tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">3,788 lượt xem</span>
+            </div>
+        </div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/kagami-no-kojou">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/13/53f1e8a1a21d4327_602a21846abec99f_16605516839877044118684.jpg" alt="Kagami no Kojou">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Kagami no Kojou</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                116 phút
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">8,177 lượt xem</span>
+            </div>
+        </div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/rurouni-kenshin-meiji-kenkaku-romantan-2023">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/08/fcb0894c0e863827_6ba550a4c562bfee_32258168356297193.jpg" alt="Rurouni Kenshin: Meiji Kenkaku Romantan (2023)">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Rurouni Kenshin: Meiji Kenkaku Romantan (2023)</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                0 / ??? tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">1,472 lượt xem</span>
+            </div>
+        </div>
+                <div class="flex items-center justify-center
+        absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3
+        s768:top-1.5 s768:left-1.5
+        s1024:top-3 s1024:left-3
+        py-0.5 px-2 s480:py-1 s480:px-3 s768:px-1 s768:py-0.5 s1024:py-1 s1024:px-3
+        bg-red-600/50 rounded-xl
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white text-center">SẮP CHIẾU</div>
+                    </a>
+</div>
+                                <div class="group/film relative overflow-hidden">
+    <a href="/watashi-no-shiawase-na-kekkon">
+        <img class="w-full h-full s1024:group-hover/film:scale-110 duration-300 transition-all" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://s199.imacdn.com/vg/2023/05/08/af6f98e3ca401805_7b050834b7ed187a_46978168356213243.jpg" alt="Watashi no Shiawase na Kekkon">
+        <div class="absolute bottom-0 w-full h-[100px] text-white
+        bg-gradient-to-b from-transparent to-gray-900
+        s1024:group-hover/film:to-cyan-900
+        py-1 px-1.5 s480:p-3 s768:py-1 s768:px-1.5 s1024:p-3
+        pt-24
+        transition-all">
+            <div class="line-clamp-1
+            s480:mb-2 s768:mb-1 s1024:mb-3
+            text-[14px] s480:text-[16px] s768:text-[14px] s1024:text-[16px]
+            absolute bottom-4">Watashi no Shiawase na Kekkon</div>
+            <div class="absolute bottom-1 left-1.5 right-1.5
+            s480:bottom-2 s480:left-3 s480:right-3
+            s768:left-1.5 s768:right-1.5 s768:bottom-1
+            s1024:bottom-2 s1024:left-3 s1024:right-3
+            flex justify-between">
+                <span class="font-extralight text-[10px] s480:text-[12px] max-w-[38%] s480:max-w-[40%] s640:max-w-[50%] s768:max-w-[40%] s1024:max-w-none whitespace-nowrap overflow-hidden">
+                                0 / ??? tập
+                                </span>
+                <span class="shrink-0 font-extralight text-[10px] s480:text-[12px] text-ellipsis max-w-[55%] s768:max-w-[50%] s1024:max-w-none line-clamp-1">1,765 lượt xem</span>
+            </div>
+        </div>
+                <div class="flex items-center justify-center
+        absolute top-1.5 left-1.5
+        s480:top-3 s480:left-3
+        s768:top-1.5 s768:left-1.5
+        s1024:top-3 s1024:left-3
+        py-0.5 px-2 s480:py-1 s480:px-3 s768:px-1 s768:py-0.5 s1024:py-1 s1024:px-3
+        bg-red-600/50 rounded-xl
+        text-[12px] s640:text-[14px] s768:text-[12px] s1024:text-[14px]
+        text-white text-center">SẮP CHIẾU</div>
+                    </a>
+</div>
+                            </div>
+        </section>
+
+        <input type="hidden" name="load-ajax" id="load-ajax" value="true">
+
+
+
+    </div> <!-- /container -->
+
+
+
+    <div
+	class="floating-action fixed bottom-0 right-0 z-1000 h-[60px] w-[60px] rounded-tl-full text-[20px] text-white transition-all duration-300 s768:hidden"
+>
+	<div
+		class="action-item action-toggle opacity-1 absolute bottom-[10px] right-[10px] z-10 h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full bg-red-600 text-center leading-[48px] transition-all duration-300"
+	>
+		<i class="icon-assistive"></i>
+	</div>
+	<div
+		class="action-item action-home absolute bottom-[10px] right-[10px] h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full bg-red-600 text-center leading-[48px] opacity-0 transition-all duration-300"
+	>
+		<i class="icon-home"></i>
+	</div>
+	<div
+		class="action-item action-menu absolute bottom-[10px] right-[10px] h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full bg-green-600 text-center leading-[48px] opacity-0 transition-all duration-300"
+	>
+		<i class="icon-menu"></i>
+	</div>
+	<div
+		class="action-item action-user absolute bottom-[10px] right-[10px] h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full bg-yellow-600 text-center leading-[48px] opacity-0 transition-all duration-300"
+	>
+		<i class="icon-person"></i>
+	</div>
+	<div
+		class="action-item action-top absolute bottom-[10px] right-[10px] h-[50px] w-[50px] cursor-pointer overflow-hidden rounded-full bg-blue-600 text-center leading-[48px] opacity-0 transition-all duration-300"
+	>
+		<i class="icon-up"></i>
+	</div>
+</div>
+    <footer class="h-24">
+
+</footer>
+    <div class="notification-fixed"></div>
+        <input type="hidden" name="mangaurl" value="https://truyennhanh1.com" id="manga-url">
+
+
+    <script type="text/javascript" src="/js/bhome.js?id=1aa74d60b6b2f41c247d894497999afb"></script>
+
+
+
+    		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-81129102-1"></script>
+		<script>
+		  	window.dataLayer = window.dataLayer || [];
+		  	function gtag(){dataLayer.push(arguments);}
+		  	gtag('js', new Date());
+		  	gtag('config', 'UA-81129102-1');
+		</script>
+
+																											<div id="balloon">
+							<script type="text/javascript">
+	var _avlVar = _avlVar || [];	_avlVar.push(["ddcc370bbe6643298ebaa569b245d513","[yo_page_url]","[width]","[height]"]);
+</script>
+<script type="text/javascript" src="//ss.yomedia.vn/js/yomedia-sdk.js?v=3" id="s-ddcc370bbe6643298ebaa569b245d513"></script>
+						</div>
+
+</body>
+</html>

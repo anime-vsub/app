@@ -41,6 +41,10 @@
 
         <Star class="inline" />
       </div>
+
+      <Quality v-if="data.isTrailer" class="right-0 top-2 absolute bg-red"
+        >Trailer</Quality
+      >
     </q-card>
   </router-link>
 </template>
@@ -52,11 +56,12 @@ import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import ranks from "src/logic/ranks"
 
+import type { CardData } from "./Card.types"
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
 
 defineProps<{
-  data: TPost
+  data: CardData
   trending?: number
   qualityFloatRight?: boolean
 }>()

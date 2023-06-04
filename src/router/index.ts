@@ -40,10 +40,11 @@ export default route(function (/* { store, ssrContext } */) {
 
     const { name, override } = to.meta.screen
 
-    FirebaseAnalytics.setScreenName({
-      screenName: name,
-      nameOverride: typeof override === "string" ? override : override?.(to),
-    })
+    if (import.meta.env.MODE !== "spa")
+      FirebaseAnalytics.setScreenName({
+        screenName: name,
+        nameOverride: typeof override === "string" ? override : override?.(to),
+      })
   })
 
   return Router

@@ -69,7 +69,8 @@ export const useAuthStore = defineStore(
         username: data.username,
       })
 
-      FirebaseAnalytics.logEvent({ name: "login", params: {} })
+      if (import.meta.env.MODE !== "spa")
+        FirebaseAnalytics.logEvent({ name: "login", params: {} })
 
       setTokenByCookie(data.cookie)
 
@@ -79,7 +80,8 @@ export const useAuthStore = defineStore(
       deleteToken()
       deleteUser()
 
-      FirebaseAnalytics.logEvent({ name: "logout", params: {} })
+      if (import.meta.env.MODE !== "spa")
+        FirebaseAnalytics.logEvent({ name: "logout", params: {} })
     }
     async function changePassword(newPassword: string) {
       if (!user_data.value)
@@ -117,19 +119,23 @@ export const useAuthStore = defineStore(
     // Analytics
     watch(
       user_data,
-      (user_data) =>
-        FirebaseAnalytics.setUserProperty({
-          name: "sex",
-          value: user_data?.sex ?? "unknown",
-        }),
+      (user_data) => {
+        if (import.meta.env.MODE !== "spa")
+          FirebaseAnalytics.setUserProperty({
+            name: "sex",
+            value: user_data?.sex ?? "unknown",
+          })
+      },
       { immediate: true }
     )
     watch(
       uid,
-      (uid) =>
-        FirebaseAnalytics.setUserId({
-          userId: uid ?? (null as unknown as string),
-        }),
+      (uid) => {
+        if (import.meta.env.MODE !== "spa")
+          FirebaseAnalytics.setUserId({
+            userId: uid ?? (null as unknown as string),
+          })
+      },
       { immediate: true }
     )
 

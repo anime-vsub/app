@@ -1,0 +1,38 @@
+
+$offset: 0.1;
+.wpa-grid {
+  //  display: flex;
+  overflow-x: scroll;
+  position: relative;
+  .ctnr {
+    display: flex;
+    width: fit-content;
+    .card-wrap {
+      vertical-align: bottom;
+      // class="col-4 col-lg-3 col-xl-2 px-[5px] py-2"
+      max-width: calc((100vw - 16px) / #{3 + $offset});
+    }
+  }
+}
+.card-wrap {
+  display: inline-block;
+  white-space: initial;
+
+  width: 280px;
+  // class="col-4 col-lg-3 col-xl-2 px-[5px] py-2"
+  max-width: calc((100% - 16px) / #{3 + $offset});
+  margin-right: 8px;
+
+  @media (min-width: $breakpoint-lg-min) {
+    max-width: calc((100% - 48px) / #{4 + $offset});
+    margin-right: 24px;
+  }
+  @media (min-width: $breakpoint-xl-min) {
+    max-width: calc((100% - 80px) / #{6 + $offset});
+    margin-right: 40px;
+  }
+}
+
+.loader .wpa-grid {
+  overflow-x: hidden;
+}

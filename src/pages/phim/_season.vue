@@ -111,20 +111,24 @@
     </div>
 
     <div class="text-gray-400">
-      Tác giả
-      <template v-for="(item, index) in data.authors" :key="item.name">
-        <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
-          item.name
-        }}</router-link
-        ><template v-if="index < data.authors.length - 1">, </template>
+      <template v-if="data.authors">
+        Tác giả
+        <template v-for="(item, index) in data.authors" :key="item.name">
+          <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
+            item.name
+          }}</router-link
+          ><template v-if="index < data.authors.length - 1">, </template>
+        </template>
+        <div class="divider"></div>
       </template>
-      <div class="divider"></div>
       sản xuất bởi {{ data.studio }}
     </div>
 
     <div class="text-[rgb(230,230,230)] mt-3">
-      <Quality>{{ data.quality }}</Quality>
-      <div class="divider"></div>
+      <template v-if="data.quality">
+        <Quality>{{ data.quality }}</Quality>
+        <div class="divider"></div>
+      </template>
       {{ data.yearOf }}
       <div class="divider"></div>
       Cập nhật tới tập {{ data.duration }}
@@ -147,10 +151,12 @@
         </div>
         <Star />
       </div>
-      <div class="divider"></div>
-      <span class="text-gray-400">
-        {{ formatView(data.count_rate) }} người đánh giá
-      </span>
+      <template v-if="data.count_rate">
+        <div class="divider"></div>
+        <span class="text-gray-400">
+          {{ formatView(data.count_rate) }} người đánh giá
+        </span>
+      </template>
       <div class="divider"></div>
       <!-- <span class="text-gray-400">
           {{ formatView(data.follows) }} người theo dõi
@@ -502,7 +508,7 @@
               <div class="mt-4">
                 {{ data.language }}
                 <span class="mx-1">|</span>
-                {{ data.contries[0]?.name ?? "unknown" }}
+                {{ data.contries?.[0]?.name ?? "unknown" }}
               </div>
 
               <div class="mt-2">Phát hành năm {{ data.yearOf }}</div>
@@ -601,11 +607,11 @@ import {
   QVideo,
   useQuasar,
 } from "quasar"
+import { PhimId } from "src/apis/animetvn.in/runs/phim/[id]"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import { PlayerFB } from "src/apis/runs/ajax/player-fb"
 import { PlayerLink } from "src/apis/runs/ajax/player-link"
-import { PhimId } from "src/apis/runs/phim/[id]"
-import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
+import { PhimIdChap } from "src/apis/animetvn.in/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { servers } from "src/constants"
 import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
@@ -638,9 +644,9 @@ import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
   Season,
 } from "./_season.interface"
-import { ResponseDataSeasonSuccess } from "./_season.interface"
 
 // ================ follow ================
 // =======================================================
@@ -1340,12 +1346,13 @@ watch(
     if (!currentMetaChap) return
     if (!name) return
 
-    FirebaseAnalytics.logEvent({
-      name: "watching",
-      params: {
-        value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
-      },
-    })
+    if (import.meta.env.MODE !== "spa")
+      FirebaseAnalytics.logEvent({
+        name: "watching",
+        params: {
+          value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
+        },
+      })
   },
   { immediate: true }
 )

@@ -11,11 +11,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
-
+import type { CardData } from "./Card.types";
 import Card from "./Card.vue"
 
 defineProps<{
-  items: TPost[]
+  items: CardData[]
 }>()
 </script>

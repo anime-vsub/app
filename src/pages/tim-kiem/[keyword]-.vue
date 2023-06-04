@@ -256,12 +256,13 @@ watch(
   debounce(() => {
     run()
 
-    FirebaseAnalytics.logEvent({
-      name: "search",
-      params: {
-        search_term: query.value,
-      },
-    })
+    if (import.meta.env.MODE !== "spa")
+      FirebaseAnalytics.logEvent({
+        name: "search",
+        params: {
+          search_term: query.value,
+        },
+      })
   }, 100)
 )
 
@@ -277,12 +278,13 @@ function onEnter(event: Event) {
 
   keyword.value = query.value
 
-  FirebaseAnalytics.logEvent({
-    name: "search",
-    params: {
-      search_term: query.value,
-    },
-  })
+  if (import.meta.env.MODE !== "spa")
+    FirebaseAnalytics.logEvent({
+      name: "search",
+      params: {
+        search_term: query.value,
+      },
+    })
 
   searching.value = false
   ;(event.target as HTMLInputElement)?.blur()

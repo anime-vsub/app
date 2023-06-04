@@ -74,3 +74,14 @@ If you find this project useful please support me through:
 - [x] tai-khoan/history
 - [x] tai-khoan/follow
 - [x] pull to refresh
+
+
+### Source to be on
+- [ ] https://vuighe.net/
+- [ ] https://animehay.fan/
+- ~~[ ] https://s1.boctem.com/ - working~~ FAVOC data
+- [ ] https://anime47.com/
+- ~~[ ] https://hhpanda.net/ manga of~~ this is anime fake of china
+- [ ] http://anivn.top/
+- [ ] https://ani4u.org
+- [ ] https://animetvn.in/ - current

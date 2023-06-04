@@ -206,7 +206,12 @@ const routes: RouteRecordRaw[] = [
   {
     name: "watch-anime",
     path: "/phim/:season/:chapName(?:(.*\\))?-:chap(\\d+)", // [feature or defect]
-    alias: ["/phim/:season/:chapName(\\0)?:chap(\\d+)", "/phim/:season"],
+    alias: [
+      "/phim/:season/:chapName(\\0)?:chap(\\d+)",
+      "/phim/:season",
+      "/phim/:season/:chapName(?:(.*\\))?-:chap(\\d+)",
+      "/thong-tin-phim/:season",
+    ],
     component: () => import("pages/phim/_season.vue"),
     meta: {
       screen: {
