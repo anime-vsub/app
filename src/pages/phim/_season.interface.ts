@@ -1,5 +1,3 @@
-import type PhimIdChap from "src/apis/parser/phim/[id]/[chap]"
-
 export interface Season {
   name: string
   value: string
@@ -32,9 +30,9 @@ export type ProgressWatchStore = Map<
 export interface ResponseDataSeasonPending {
   status: "pending"
 }
-export interface ResponseDataSeasonSuccess {
+export interface ResponseDataSeasonSuccess<PhimIdChapReturns> {
   status: "success"
-  response: Awaited<ReturnType<typeof PhimIdChap>> & {
+  response:PhimIdChapReturns & {
     ssSibs?: Season[]
   }
 }

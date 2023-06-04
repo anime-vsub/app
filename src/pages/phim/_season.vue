@@ -299,9 +299,9 @@
         </div>
         <ChapsGridQBtn
           v-else
-          :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+          :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess<Awaited<ReturnType<typeof PhimIdChap>>> | undefined)?.response.chaps"
           :season="value"
-          :find="(item) => value === currentSeason && item.id === currentChap"
+          :find="(item) => value === currentSeason && item.path === currentChap"
           :progressChaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
                                 "
@@ -455,10 +455,10 @@
             <ChapsGridQBtn
               v-else
               grid
-              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess<Awaited<ReturnType<typeof PhimIdChap>>> | undefined)?.response.chaps"
               :season="value"
               :find="
-                (item) => value === currentSeason && item.id === currentChap
+                (item) => value === currentSeason && item.path === currentChap
               "
               :progressChaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
@@ -608,12 +608,11 @@ import {
   useQuasar,
 } from "quasar"
 import { PhimId } from "src/apis/animetvn.in/runs/phim/[id]"
+import PhimIdChap from "src/apis/animetvn.in/runs/phim/[id]/[chap]"
+import getListServers from "src/apis/animetvn.in/runs/phim/[id]/get-list-servers"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
-import { PlayerFB } from "src/apis/runs/ajax/player-fb"
-import { PlayerLink } from "src/apis/runs/ajax/player-link"
-import { PhimIdChap } from "src/apis/animetvn.in/runs/phim/[id]/[chap]"
+import type { PlayerLink } from "src/apis/runs/ajax/player-link"
 // import BottomSheet from "src/components/BottomSheet.vue"
-import type { servers } from "src/constants"
 import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
@@ -785,7 +784,7 @@ const _cacheDataSeasons = reactive<
   Map<
     string,
     | ResponseDataSeasonPending
-    | ResponseDataSeasonSuccess
+    | ResponseDataSeasonSuccess<Awaited<ReturnType<typeof PhimIdChap>>>
     | ResponseDataSeasonError
   >
 >(new Map())
@@ -823,16 +822,6 @@ async function fetchSeason(season: string) {
 
     if (response.chaps.length === 0) {
       console.warn("chaps not found")
-      response.chaps = [
-        {
-          id: "0",
-          play: "1",
-
-          hash:
-            data.value?.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
-          name: t("trailer"),
-        },
-      ]
     } else if (response.chaps.length > 50) {
       console.log("large chap. spliting...")
       const { chaps } = response
@@ -862,10 +851,12 @@ async function fetchSeason(season: string) {
             chapsSplited[chapsSplited.length - 1].name
           })`
 
-          console.log("set %s by %s", value, chapsSplited[0].id)
+          console.log("set %s by %s", value, chapsSplited[0])
 
           const dataOnCache = _cacheDataSeasons.get(value)
-          const newData: ResponseDataSeasonSuccess = {
+          const newData: ResponseDataSeasonSuccess<
+            Awaited<ReturnType<typeof PhimIdChap>>
+          > = {
             status: "success",
             response: {
               ...response,
@@ -971,7 +962,7 @@ watchEffect(async (onCleanup): Promise<void> => {
 
   // if not login -> return first episode in season
   if (!authStore.uid) {
-    currentChap.value = currentDataSeason.value?.chaps[0].id
+    currentChap.value = currentDataSeason.value?.chaps[0].path
     return
   }
   currentChap.value = undefined
@@ -1007,7 +998,7 @@ watchEffect(async (onCleanup): Promise<void> => {
       // eslint-disable-next-line prefer-const
       watcher = watchEffect(() => {
         if (
-          currentDataSeason.value?.chaps.some((item) => item.id === episodeId)
+          currentDataSeason.value?.chaps.some((item) => item.path === episodeId)
         ) {
           currentChap.value = episodeId
           if (typeof watcher === "undefined") setTimeout(watcher)
@@ -1016,7 +1007,7 @@ watchEffect(async (onCleanup): Promise<void> => {
       })
     } else {
       watcherChangeIdFirstEp = watch(
-        () => currentDataSeason.value?.chaps[0].id,
+        () => currentDataSeason.value?.chaps[0].path,
         (idFirstEp) => {
           currentChap.value = idFirstEp
         },
@@ -1028,7 +1019,7 @@ watchEffect(async (onCleanup): Promise<void> => {
 const currentMetaChap = computed(() => {
   if (!currentChap.value) return
   return currentDataSeason.value?.chaps.find(
-    (item) => item.id === currentChap.value
+    (item) => item.path === currentChap.value
   )
 })
 
@@ -1037,7 +1028,7 @@ watch(
   (_, __, onCleanup) => {
     // replace router if last episode viewing exists
     const watcherRestoreLastEp = watchEffect(() => {
-      const episodeIdFirst = currentDataSeason.value?.chaps[0].id
+      const episodeIdFirst = currentDataSeason.value?.chaps[0].path
 
       if (
         !route.params.chap &&
@@ -1073,7 +1064,7 @@ watchEffect(() => {
 
       if (cache?.status !== "success") return false
 
-      if (cache.response.chaps.some((item) => item.id === epId)) {
+      if (cache.response.chaps.some((item) => item.path === epId)) {
         return true
       }
 
@@ -1129,7 +1120,7 @@ const nextChap = computed<
   if (!isLastChapOfSeason) {
     return {
       season: currentSeason.value,
-      chap: currentDataSeason.value.chaps[indexCurrentChap + 1].id,
+      chap: currentDataSeason.value.chaps[indexCurrentChap + 1].path,
     }
   }
 
@@ -1158,14 +1149,14 @@ const nextChap = computed<
 const configPlayer = shallowRef<Awaited<ReturnType<typeof PlayerLink>>>()
 watch(
   currentMetaChap,
-  (currentMetaChap, _, onCleanup) => {
+  async (currentMetaChap) => {
     if (!currentMetaChap) return
 
-    if (currentMetaChap.id === "0") {
+    if (currentMetaChap.path === "0") {
       configPlayer.value = {
         link: [
           {
-            file: currentMetaChap.hash,
+            file: currentMetaChap.path,
             label: "HD",
             qualityCode: getQualityByLabel("HD"),
             preload: "auto",
@@ -1178,57 +1169,11 @@ watch(
       return
     }
 
-    configPlayer.value = undefined
-
-    // eslint-disable-next-line functional/no-let
-    let typeCurrentConfig: keyof typeof servers | null = null
-    // setup watcher it
-    const watcher = watch(
-      () => settingsStore.player.server,
-      async (server) => {
-        try {
-          if (server === "DU") {
-            if (typeCurrentConfig !== "DU")
-              // eslint-disable-next-line promise/catch-or-return
-              PlayerLink(currentMetaChap).then((conf) => {
-                // eslint-disable-next-line promise/always-return
-                if (settingsStore.player.server === "DU") {
-                  configPlayer.value = conf
-                  typeCurrentConfig = "DU"
-                }
-              })
-          }
-          if (server === "FB") {
-            // PlayerFB は常に PlayerLink よりも遅いため、DU を使用して高速プリロード戦術を使用する必要があります。
-            if (typeCurrentConfig !== "DU")
-              // eslint-disable-next-line promise/catch-or-return
-              PlayerLink(currentMetaChap).then((conf) => {
-                // eslint-disable-next-line promise/always-return
-                if (settingsStore.player.server === "DU") {
-                  configPlayer.value = conf
-                  typeCurrentConfig = "DU"
-                }
-              })
-            // eslint-disable-next-line promise/catch-or-return
-            PlayerFB(currentMetaChap.id).then((conf) => {
-              // eslint-disable-next-line promise/always-return
-              if (settingsStore.player.server === "FB") {
-                configPlayer.value = conf
-                typeCurrentConfig = "FB"
-              }
-            })
-          }
-        } catch (err) {
-          $q.notify({
-            position: "bottom-right",
-            message: (err as Error).message,
-          })
-          console.error(err)
-        }
-      },
-      { immediate: true }
+    const servers = await getListServers(
+      parseInt((route.params.chap as string).slice(1)) + ""
     )
-    onCleanup(watcher)
+
+    console.log(servers)
   },
   {
     immediate: true,
@@ -1341,7 +1286,7 @@ watch(
 // Analytics
 watch(
   [seasonId, currentMetaSeason, currentMetaChap, () => data.value?.name],
-  async ([seasonId, currentMetaSeason, currentMetaChap, name]) => {
+  async ([, currentMetaSeason, currentMetaChap, name]) => {
     if (!currentMetaSeason) return
     if (!currentMetaChap) return
     if (!name) return
@@ -1350,7 +1295,7 @@ watch(
       FirebaseAnalytics.logEvent({
         name: "watching",
         params: {
-          value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
+          value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${currentMetaChap.path})`,
         },
       })
   },
@@ -1418,7 +1363,7 @@ async function addAnimePlaylist(idPlaylist: string) {
   try {
     await playlistStore.addAnimeToPlaylist(idPlaylist, currentSeason.value, {
       name: data.value.name,
-      poster: currentDataSeason.value?.poster ?? data.value.poster,
+      poster: currentDataSeason.value?.poster ?? data.value.poster ?? data.value.image,
       nameSeason: metaSeason.name,
       chap: currentChap.value,
       nameChap: currentMetaChap.value.name,

@@ -5,7 +5,7 @@
       no-caps
       :ripple="false"
       v-for="item in chaps"
-      :key="item.id"
+      :key="item.path"
       outline
       class="px-4 py-[10px] mx-2 rounded-md before:text-[#3a3a3a] overflow-hidden item"
       :class="[
@@ -17,12 +17,12 @@
         },
       ]"
       replace
-      :to="`/phim/${season}/${item.id}`"
+      :to="item.path"
       :ref="(el: QBtn) =>void( find(item) && (activeRef = el as QBtn))"
     >
       {{ item.name }}
       <q-linear-progress
-        v-if="(tmp = progressChaps?.get(item.id))"
+        v-if="(tmp = progressChaps?.get(item.path))"
         :value="tmp.cur / tmp.dur"
         rounded
         color="main"
@@ -34,13 +34,13 @@
 
 <script lang="ts" setup>
 import { QBtn } from "quasar"
-import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
+import type { PhimIdChapReturns } from "src/apis/types/phim/[id]/[chap]"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import { ref, watchEffect } from "vue"
 
 const props = defineProps<{
-  find: (value: Awaited<ReturnType<typeof PhimIdChap>>["chaps"][0]) => boolean
-  chaps?: Awaited<ReturnType<typeof PhimIdChap>>["chaps"]
+  find: (value: PhimIdChapReturns<unknown>["chaps"][0]) => boolean
+  chaps?:PhimIdChapReturns<unknown>["chaps"]
   season: string
   classItem?: string
   classActive?: string

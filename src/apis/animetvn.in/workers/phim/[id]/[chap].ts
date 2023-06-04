@@ -1,4 +1,5 @@
-import PhimIdChap from "src/apis/parser/phim/[id]/[chap]"
 import { WrapWorker } from "src/apis/wrap-worker"
 
-WrapWorker(PhimIdChap)
+import Parse from "../../../parsers/phim/[id]/[chap]"
+
+WrapWorker(Parse)
