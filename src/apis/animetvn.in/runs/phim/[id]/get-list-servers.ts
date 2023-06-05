@@ -1,19 +1,27 @@
+import type { PropsGetListServers } from "src/apis/animetvn.in/parsers/phim/[id]/[chap]"
+import type { PhimIdChapReturns } from "src/apis/types/phim/[id]/[chap]"
 import type { GetListServersReturns } from "src/apis/types/phim/[id]/get-list-servers"
 import { post } from "src/logic/http"
 
 export interface PropsServer {
   readonly link: string
   readonly id: string
+  readonly csrf: string
 }
 
 export default async function (
-  epId: string
+  ep: PhimIdChapReturns<PropsGetListServers>["chaps"][0]
 ): Promise<GetListServersReturns<PropsServer>> {
-  fetch("https://animetvn.in/ajax/getExtraLinks", {})
-
-  const { data } = await post("https://animetvn.in/ajax/getExtraLinks", {
-    epid: epId,
-  })
+  const { data } = await post(
+    "https://animetvn.in/ajax/getExtraLinks",
+    {
+      epid: ep.epId,
+    },
+    {
+      "x-csrf-token": ep.props.csrf,
+      "x-requested-with": "XMLHttpRequest",
+    }
+  )
 
   const { links } = JSON.parse(data)
 
@@ -24,6 +32,7 @@ export default async function (
         props: {
           id: item.id,
           link: item.link,
+          csrf: ep.props.csrf
         },
       }
     }

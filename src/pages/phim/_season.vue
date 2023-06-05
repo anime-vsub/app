@@ -34,13 +34,13 @@
     <div v-else class="w-full overflow-hidden fixed top-0 left-0 z-200">
       <q-img-custom
         no-spinner
-        v-if="!sources?.[0]?.file"
+        v-if="!sources?.servers?.[0]?.props"
         :ratio="16 / 9"
         src="~assets/ic_question_result_error.png"
         width="100"
         class="max-w-[100px]"
       />
-      <q-video v-else :ratio="16 / 9" :src="sources![0]!.file" />
+      <q-video v-else :ratio="16 / 9" :src="(sources.servers![0]!.props as string)" />
     </div>
   </template>
 
@@ -299,9 +299,9 @@
         </div>
         <ChapsGridQBtn
           v-else
-          :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess<Awaited<ReturnType<typeof PhimIdChap>>> | undefined)?.response.chaps"
+          :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess<unknown> | undefined)?.response.chaps"
           :season="value"
-          :find="(item) => value === currentSeason && item.path === currentChap"
+          :find="(item) => value === currentSeason && item.epId === currentChap"
           :progressChaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
                                 "
@@ -455,10 +455,10 @@
             <ChapsGridQBtn
               v-else
               grid
-              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess<Awaited<ReturnType<typeof PhimIdChap>>> | undefined)?.response.chaps"
+              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess<unknown> | undefined)?.response.chaps"
               :season="value"
               :find="
-                (item) => value === currentSeason && item.path === currentChap
+                (item) => value === currentSeason && item.epId === currentChap
               "
               :progressChaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
@@ -613,11 +613,11 @@ import getListServers from "src/apis/animetvn.in/runs/phim/[id]/get-list-servers
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import type { PlayerLink } from "src/apis/runs/ajax/player-link"
 // import BottomSheet from "src/components/BottomSheet.vue"
+import type { GetListServersReturns } from "src/apis/types/phim/[id]/get-list-servers"
 import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
-import { getQualityByLabel } from "src/logic/get-quality-by-label"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
@@ -784,7 +784,7 @@ const _cacheDataSeasons = reactive<
   Map<
     string,
     | ResponseDataSeasonPending
-    | ResponseDataSeasonSuccess<Awaited<ReturnType<typeof PhimIdChap>>>
+    | ResponseDataSeasonSuccess<unknown>
     | ResponseDataSeasonError
   >
 >(new Map())
@@ -854,9 +854,7 @@ async function fetchSeason(season: string) {
           console.log("set %s by %s", value, chapsSplited[0])
 
           const dataOnCache = _cacheDataSeasons.get(value)
-          const newData: ResponseDataSeasonSuccess<
-            Awaited<ReturnType<typeof PhimIdChap>>
-          > = {
+          const newData: ResponseDataSeasonSuccess<unknown> = {
             status: "success",
             response: {
               ...response,
@@ -962,7 +960,7 @@ watchEffect(async (onCleanup): Promise<void> => {
 
   // if not login -> return first episode in season
   if (!authStore.uid) {
-    currentChap.value = currentDataSeason.value?.chaps[0].path
+    currentChap.value = currentDataSeason.value?.chaps[0].epId
     return
   }
   currentChap.value = undefined
@@ -998,7 +996,7 @@ watchEffect(async (onCleanup): Promise<void> => {
       // eslint-disable-next-line prefer-const
       watcher = watchEffect(() => {
         if (
-          currentDataSeason.value?.chaps.some((item) => item.path === episodeId)
+          currentDataSeason.value?.chaps.some((item) => item.epId === episodeId)
         ) {
           currentChap.value = episodeId
           if (typeof watcher === "undefined") setTimeout(watcher)
@@ -1007,7 +1005,7 @@ watchEffect(async (onCleanup): Promise<void> => {
       })
     } else {
       watcherChangeIdFirstEp = watch(
-        () => currentDataSeason.value?.chaps[0].path,
+        () => currentDataSeason.value?.chaps[0].epId,
         (idFirstEp) => {
           currentChap.value = idFirstEp
         },
@@ -1019,7 +1017,7 @@ watchEffect(async (onCleanup): Promise<void> => {
 const currentMetaChap = computed(() => {
   if (!currentChap.value) return
   return currentDataSeason.value?.chaps.find(
-    (item) => item.path === currentChap.value
+    (item) => item.epId === currentChap.value
   )
 })
 
@@ -1028,7 +1026,7 @@ watch(
   (_, __, onCleanup) => {
     // replace router if last episode viewing exists
     const watcherRestoreLastEp = watchEffect(() => {
-      const episodeIdFirst = currentDataSeason.value?.chaps[0].path
+      const episodeIdFirst = currentDataSeason.value?.chaps[0].epId
 
       if (
         !route.params.chap &&
@@ -1064,7 +1062,7 @@ watchEffect(() => {
 
       if (cache?.status !== "success") return false
 
-      if (cache.response.chaps.some((item) => item.path === epId)) {
+      if (cache.response.chaps.some((item) => item.epId === epId)) {
         return true
       }
 
@@ -1120,7 +1118,7 @@ const nextChap = computed<
   if (!isLastChapOfSeason) {
     return {
       season: currentSeason.value,
-      chap: currentDataSeason.value.chaps[indexCurrentChap + 1].path,
+      chap: currentDataSeason.value.chaps[indexCurrentChap + 1].epId,
     }
   }
 
@@ -1147,39 +1145,23 @@ const nextChap = computed<
 })
 
 const configPlayer = shallowRef<Awaited<ReturnType<typeof PlayerLink>>>()
+const sources = shallowRef<GetListServersReturns<unknown>>()
+
 watch(
   currentMetaChap,
   async (currentMetaChap) => {
+    sources.value = undefined
+
     if (!currentMetaChap) return
 
-    if (currentMetaChap.path === "0") {
-      configPlayer.value = {
-        link: [
-          {
-            file: currentMetaChap.path,
-            label: "HD",
-            qualityCode: getQualityByLabel("HD"),
-            preload: "auto",
-            type: "youtube",
-          },
-        ],
-        playTech: "trailer",
-      }
+    const servers = await getListServers(currentMetaChap)
 
-      return
-    }
-
-    const servers = await getListServers(
-      parseInt((route.params.chap as string).slice(1)) + ""
-    )
-
-    console.log(servers)
+    sources.value = servers
   },
   {
     immediate: true,
   }
 )
-const sources = computed(() => configPlayer.value?.link)
 
 watch(
   [progressWatchStore, () => authStore.user_data],
@@ -1295,7 +1277,7 @@ watch(
       FirebaseAnalytics.logEvent({
         name: "watching",
         params: {
-          value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${currentMetaChap.path})`,
+          value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${currentMetaChap.epId})`,
         },
       })
   },
@@ -1363,7 +1345,10 @@ async function addAnimePlaylist(idPlaylist: string) {
   try {
     await playlistStore.addAnimeToPlaylist(idPlaylist, currentSeason.value, {
       name: data.value.name,
-      poster: currentDataSeason.value?.poster ?? data.value.poster ?? data.value.image,
+      poster:
+        currentDataSeason.value?.poster ??
+        data.value.poster ??
+        data.value.image,
       nameSeason: metaSeason.name,
       chap: currentChap.value,
       nameChap: currentMetaChap.value.name,

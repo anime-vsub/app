@@ -5,7 +5,7 @@
       no-caps
       :ripple="false"
       v-for="item in chaps"
-      :key="item.path"
+      :key="item.epId"
       outline
       class="px-4 py-[10px] mx-2 rounded-md before:text-[#3a3a3a] overflow-hidden item"
       :class="[
@@ -17,12 +17,12 @@
         },
       ]"
       replace
-      :to="item.path"
+      :to="`/phim/${season}/${item.epId}`"
       :ref="(el: QBtn) =>void( find(item) && (activeRef = el as QBtn))"
     >
       {{ item.name }}
       <q-linear-progress
-        v-if="(tmp = progressChaps?.get(item.path))"
+        v-if="(tmp = progressChaps?.get(item.epId))"
         :value="tmp.cur / tmp.dur"
         rounded
         color="main"
@@ -40,7 +40,7 @@ import { ref, watchEffect } from "vue"
 
 const props = defineProps<{
   find: (value: PhimIdChapReturns<unknown>["chaps"][0]) => boolean
-  chaps?:PhimIdChapReturns<unknown>["chaps"]
+  chaps?: PhimIdChapReturns<unknown>["chaps"]
   season: string
   classItem?: string
   classActive?: string

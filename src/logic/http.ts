@@ -71,8 +71,10 @@ export async function post(
   headers?: Record<string, string>
 ) {
   const response = await (isSpa ? window.Http : CapacitorHttp).post({
-    url: C_URL + url + (isSpa ? "#animevsub-vsub" : ""),
-    headers: isSpa
+    url: url.startsWith("https://")
+      ? url
+      : C_URL + url + (isSpa ? "#animevsub-vsub" : ""),
+    headers: {...isSpa
       ? {}
       : {
           "user-agent":
@@ -83,8 +85,9 @@ export async function post(
             : {
                 referer: C_URL,
               }),
-          ...headers,
         },
+          ...headers,
+      },
     data: isSpa ? data : new URLSearchParams(data).toString(),
   })
 

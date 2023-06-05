@@ -1,7 +1,7 @@
 export interface PhimIdChapReturns<PropsGetStreams> {
   chaps: {
     name: string
-    path: string
+    epId: string
     props: PropsGetStreams
   }[]
   poster?: string

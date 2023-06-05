@@ -388,13 +388,13 @@
             flat
             no-caps
             class="px-2 flex-1 text-weight-norrmal py-2 rounded-xl"
-            v-for="(label, id) in servers"
+            v-for="server in sources?.servers"
             :class="{
-              'c--main': settingsStore.player.server === id,
+              'c--main': server.name === currentServer,
             }"
-            :key="label"
-            @click="settingsStore.player.server = id"
-            >{{ label }}</q-btn
+            :key="server.name"
+            @click="currentServer = server.name"
+            >{{ server.name }}</q-btn
           >
         </div>
 
@@ -405,13 +405,13 @@
             flat
             no-caps
             class="px-2 flex-1 text-weight-norrmal py-2 rounded-xl"
-            v-for="{ label, qualityCode } in sources"
+            v-for="{ name } in qualities"
             :class="{
-              'c--main': qualityCode === artQuality,
+              'c--main': name === artQuality,
             }"
-            :key="label"
-            @click="setArtQuality(qualityCode)"
-            >{{ label }}</q-btn
+            :key="name"
+            @click="setArtQuality(name)"
+            >{{ name }}</q-btn
           >
         </div>
 
@@ -514,10 +514,10 @@
                 class-item="!px-3 !py-2 !mx-1"
                 class-active="!bg-[rgba(0,194,52,.15)]"
                 grid
-                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess<unknown> | undefined)?.response.chaps"
                 :season="value"
                 :find="
-                  (item) => value === currentSeason && item.id === currentChap
+                  (item) => value === currentSeason && item.epId === currentChap
                 "
                 :progress-chaps="
                                   (progressWatchStore.get(value) as unknown as any)?.response
@@ -553,15 +553,15 @@
       >
         <ul>
           <li
-            v-for="{ label, qualityCode } in sources"
-            :key="label"
+            v-for="{ name } in qualities"
+            :key="name"
             class="py-2 text-center px-15"
             :class="{
-              'c--main': qualityCode === artQuality,
+              'c--main': name === artQuality,
             }"
-            @click="setArtQuality(qualityCode)"
+            @click="setArtQuality(name)"
           >
-            {{ label }}
+            {{ name }}
           </li>
         </ul>
       </ArtDialog>
@@ -572,15 +572,15 @@
       >
         <ul>
           <li
-            v-for="(label, id) in servers"
-            :key="label"
+            v-for="({ name }) in sources?.servers"
+            :key="name"
             class="py-2 text-center px-15"
             :class="{
-              'c--main': settingsStore.player.server === id,
+              'c--main': currentServer === name,
             }"
-            @click="settingsStore.player.server = id"
+            @click="currentServer = name"
           >
-            {{ label }}
+            {{ name }}
           </li>
         </ul>
       </ArtDialog>
@@ -680,16 +680,16 @@
     <q-card flat class="w-full text-[16px]">
       <q-list>
         <q-item
-          v-for="{ label, qualityCode } in sources"
-          :key="label"
+          v-for="{name } in qualities"
+          :key="name"
           clickable
           v-ripple
         >
           <q-item-section avatar>
-            <q-icon v-if="artQuality === qualityCode" name="check" />
+            <q-icon v-if="artQuality === name" name="check" />
           </q-item-section>
           <q-item-section>
-            {{ label }}
+            {{ name }}
           </q-item-section>
         </q-item>
       </q-list>
@@ -706,17 +706,17 @@
     <q-card flat class="w-full text-[16px]">
       <q-list>
         <q-item
-          v-for="(label, id) in servers"
-          :key="label"
+          v-for="({ name }) in sources?.servers"
+          :key="name"
           clickable
           v-ripple
-          @click="settingsStore.player.server = id"
+          @click="currentServer = name"
         >
           <q-item-section avatar>
-            <q-icon v-if="settingsStore.player.server === id" name="check" />
+            <q-icon v-if="currentServer === name" name="check" />
           </q-item-section>
           <q-item-section>
-            {{ label }}
+            {{ name }}
           </q-item-section>
         </q-item>
       </q-list>
@@ -781,23 +781,23 @@ import {
   useQuasar,
 } from "quasar"
 import type { PlayerLink } from "src/apis/runs/ajax/player-link"
+import type { GetListServersReturns } from "src/apis/types/phim/[id]/get-list-servers"
 import { useMemoControl } from "src/composibles/memo-control"
 import {
   C_URL,
   DELAY_SAVE_HISTORY,
   DELAY_SAVE_VIEWING_PROGRESS,
   playbackRates,
-  servers,
 } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
 import { parseTime } from "src/logic/parseTime"
-import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface"
 import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
   Season,
 } from "src/pages/phim/_season.interface"
 import { useAuthStore } from "stores/auth"
@@ -809,6 +809,7 @@ import {
   onBeforeUnmount,
   ref,
   shallowReactive,
+  shallowRef,
   watch,
   watchEffect,
 } from "vue"
@@ -825,7 +826,7 @@ const $q = useQuasar()
 const { t } = useI18n()
 
 const props = defineProps<{
-  sources?: Awaited<ReturnType<typeof PlayerLink>>["link"]
+  sources?: GetListServersReturns<unknown>
   currentSeason: string
   nameCurrentSeason?: string
   currentChap?: string
@@ -840,7 +841,7 @@ const props = defineProps<{
   _cacheDataSeasons: Map<
     string,
     | ResponseDataSeasonPending
-    | ResponseDataSeasonSuccess
+    | ResponseDataSeasonSuccess<unknown>
     | ResponseDataSeasonError
   >
   fetchSeason: (season: string) => Promise<void>
@@ -888,13 +889,13 @@ watchEffect(() => {
 // =========================== huuuu player API。馬鹿馬鹿しい ====================================
 
 const currentStream = computed(() => {
-  return props.sources?.find((item) => item.qualityCode === artQuality.value)
+  return props.sources?.servers?.find((item) => item.name === artQuality.value)
 })
 if (import.meta.env.DEV)
   watch(
     () => props.sources,
     (sources) => {
-      console.log("sources changed: ", sources)
+      console.log("yhnd: ", sources)
     }
   )
 
@@ -949,7 +950,6 @@ watch(
       try {
         if (stateStorageStore.disableAutoRestoration > 0) {
           addNotice(t("bo-qua-khoi-phuc-tien-trinh-xem"))
-          // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")
         }
         console.log(":restore progress")
@@ -961,7 +961,6 @@ watch(
           setArtCurrentTime(cur)
           addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
         } else {
-          // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")
         }
       } catch (err) {
@@ -1032,20 +1031,30 @@ onBeforeRouteLeave(() => {
   return true
 })
 
-const _artQuality =
-  ref<Awaited<ReturnType<typeof PlayerLink>>["link"][0]["qualityCode"]>()
-const artQuality = computed({
+const currentServer = ref<string>()
+
+const qualities = shallowRef<{ url: string; name: string }[]>()
+watch([() => props.sources?.servers, currentServer], async (servers, currentServer = servers?.[0].name) => {
+  qualities.value = undefined
+  if (!servers) return
+
+  qualities.value = await getList
+
+}, { immediate: true })
+
+const _artQuality = ref<string>()
+const artQuality = computed<string|undefined>({
   get() {
-    if (props.sources?.find((item) => item.qualityCode === _artQuality.value))
+    if (qualities.value?.find((item) => item.name === _artQuality.value))
       return _artQuality.value
 
-    return props.sources?.[0]?.qualityCode
+    return qualities.value?.[0].name
   },
   set(value) {
     _artQuality.value = value
   },
 })
-const setArtQuality = (value: Exclude<typeof artQuality.value, undefined>) => {
+const setArtQuality = (value: string) => {
   artQuality.value = value
   addNotice(t("chat-luong-da-chuyen-sang-_value", [value]))
 }
@@ -1058,6 +1067,7 @@ function onVideoProgress(event: Event) {
   const time = target.currentTime
 
   try {
+    // eslint-disable-next-line functional/no-loop-statements
     while (!(bf.start(range) <= time && time <= bf.end(range))) {
       range += 1
     }
@@ -1378,7 +1388,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
         return new Request(context.url, initParams)
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-classes
       pLoader: class CustomLoader extends (Hls.DefaultConfig.loader as any) {
         loadInternal(): void {
           const { config, context } = this
@@ -1407,6 +1417,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           })
           const headers = new Headers()
           if (this.context.headers)
+            // eslint-disable-next-line functional/no-loop-statements
             for (const [key, val] of Object.entries(this.context.headers))
               headers.set(key, val as string)
           const { maxTimeToFirstByteMs, maxLoadTimeMs } = config.loadPolicy
@@ -1626,10 +1637,10 @@ const watcherVideoTagReady = watch(video, (video) => {
 watch(
   () => props.sources,
   (sources) => {
-    if (!sources || sources.length === 0) return
+    if (!sources || sources.servers.length === 0) return
     // not ready quality on this
     if (!artQuality.value || !currentStream.value) {
-      artQuality.value = sources[0].qualityCode // not use setArtQuality because skip notify
+      artQuality.value = sources.servers[0].name // not use setArtQuality because skip notify
     }
   },
   { immediate: true }

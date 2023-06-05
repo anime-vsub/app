@@ -19,12 +19,13 @@ export default function (html: string): PhimReturns {
   const name = $(".name-vi:eq(0)").text()
   const othername = $(".name-eng:eq(0)").text()
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const image = $(".small_img img").attr("src")!
   const poster = $(".big_img").attr("src")
-  // const pathToView = $(".play-now")
-//   ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  //     getPathName($(".play-now").attr("href")!)
-  //   : null
+  const pathToView = $(".play-now").length > 0
+  ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      getPathName($(".play-now").attr("href")!)
+    : null
   const description = $("#tab-film-content:eq(0)").text().trim()
   const rate = parseFloat($("#rating-text:eq(0)").text())
   // eslint-disable-next-line camelcase
@@ -35,10 +36,10 @@ export default function (html: string): PhimReturns {
   const yearOf$ = findInfo($, hasColor$, " Năm phát sóng: ")
     .text()
     .split(":", 2)[1]
-  const yearOf = yearOf$ && {
+  const yearOf = yearOf$ ? {
     path: `/tim-kiem/${yearOf$.replace(" ", "_")}.html`,
     name: yearOf$,
-  }
+  }:undefined
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const views = int(
     findInfo($, hasColor$, " Lượt xem: ")
@@ -98,7 +99,7 @@ export default function (html: string): PhimReturns {
     othername,
     image,
     poster,
-    // pathToView,
+    pathToView,
     description,
     rate,
     // eslint-disable-next-line camelcase
@@ -110,7 +111,7 @@ export default function (html: string): PhimReturns {
     genre,
     // quality,
     // status,
-    authors: null,
+    authors: [],
     // contries,
     follows,
     // language,

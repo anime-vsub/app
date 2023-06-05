@@ -9,11 +9,12 @@ export interface PhimReturns {
   othername: string
   image: string
   poster?: string
+  pathToView: string|null
   description: string
   rate?: number
   count_rate?: number
   duration: string
-  yearOf: Link
+  yearOf?: Link
   views: number
   season: Link[]
   genre: Link[]
@@ -24,7 +25,7 @@ export interface PhimReturns {
   follows: number
   language?: string
   studio?: string | Link
-  seasonOf: Link
+  seasonOf?: Link
   trailer?: string
   toPut: CardData[]
 }
