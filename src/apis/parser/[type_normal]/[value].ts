@@ -32,18 +32,23 @@ export default function TypeNormalValue(
     .join(" ")
     .replace(/:/g, "")
     .replace(/^Danh sách /i, "")
-
+    
   const filter = {
     sorter: $("#filter")
-      .find(".fc-main-list > li > a")
-      .map((_i, anchor) => {
-        const text = $(anchor).text()
+      .find(".fc-main-list label")
+      .map((_i, item) => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = new URL(
-          $(anchor).attr("href") ?? "",
-          "https://example.com"
-        ).searchParams.get("sort")!
-        return { text, value }
+        const value = $(item).find("input").attr("value")!
+
+        // eslint-disable-next-line array-callback-return
+        if (value === "all") return
+
+        const text = $(item).text()
+
+        return {
+          text,
+          value,
+        }
       })
       .toArray(),
     typer: $("#filter")

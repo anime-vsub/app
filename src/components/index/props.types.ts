@@ -1,4 +1,4 @@
-import type { CardData } from "../Card.types"
+import type { CardData, Link } from "../Card.types"
 
 export interface CarouselTopProps {
   hoz?: boolean
@@ -10,16 +10,13 @@ export interface CarouselTopProps {
 
     quality?: string
 
-    year?: string
-    rate?: string
+    year?: Link
+    rate?: number
     process?: string
 
     isTrailer?: boolean
 
-    genre?: {
-      name: string
-      path: string
-    }[]
+    genre?:Link[]
 
     description?: string
     originName?: string
@@ -43,11 +40,8 @@ export interface ListProps {
   name?: string
 }
 
-interface CardDataC extends CardData {
-  time_release: string
-}
 export interface ListReleaseProps {
-  items: CardDataC[]
+  items: CardData[]
 
   to: string
   name: string

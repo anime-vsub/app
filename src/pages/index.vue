@@ -125,7 +125,7 @@
 
 <script setup lang="ts">
 // eslint-disable-next-line import/order
-import { Index } from "src/apis/animetvn.in/runs/index"
+import { Index } from "src/apis/runs/index"
 // eslint-disable-next-line import/order
 import { useRequest } from "vue-request"
 

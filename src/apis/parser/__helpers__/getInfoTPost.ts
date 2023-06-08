@@ -1,4 +1,5 @@
 import type { Cheerio, Element } from "cheerio"
+import type { CardData } from "src/components/Card.types"
 
 import { getInfoAnchor } from "./getInfoAnchor"
 import { getPathName } from "./getPathName"
@@ -6,35 +7,48 @@ import { int } from "./int"
 
 export type TPost = ReturnType<typeof getInfoTPost>
 
-export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
+export function getInfoTPost(
+  cheerio: Cheerio<Element>,
+  now: number,
+  titleIsTime = false,
+  qltyIsView = false
+): CardData {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const path = getPathName(cheerio.find("a").attr("href")!)
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const image = cheerio.find("img").attr("src")!
-  const name = cheerio.find(".Title:eq(0)").text()
+  const name = titleIsTime
+    ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      cheerio.find("img").attr("title")!
+    : cheerio.find(".Title:eq(0)").text()
 
   const _chap = cheerio.find(".mli-eps > i:eq(0)").text()
   const chap = _chap === "TẤT" ? "Full_Season" : _chap
   const rate = parseFloat(
     cheerio.find(".anime-avg-user-rating:eq(0)").text().trim() ||
-      cheerio.find(".AAIco-star:eq(0)").text().trim()
+      cheerio.find(".AAIco-star:eq(0)").text().trim() ||
+      cheerio.find(".rate-point:eq(0)").text().trim()
   )
   const views = int(
     cheerio
-      .find(".Year:eq(0)")
+      .find(".Year:eq(0)" + (qltyIsView ? ", .Qlty:eq(0)" : ""))
       .text()
-      .match(/[\d,]+/)?.[0]
+      .match(/^[\d,]+/)?.[0]
       ?.replace(/,/g, "")
   )
 
   // =============== more =====================
   const quality =
-    cheerio.find(".Qlty:eq(0)").text() ||
+    (qltyIsView ? undefined : cheerio.find(".Qlty:eq(0)").text()) ||
     cheerio.find(".mli-quality:eq(0)").text()
 
   const process = cheerio.find(".AAIco-access_time:eq(0)").text()
 
-  const year = parseInt(cheerio.find(".AAIco-date_range:eq(0)").text())
+  const year$ = parseInt(cheerio.find(".AAIco-date_range:eq(0)").text())
+  const year = {
+    name: year$ + "",
+    path: `/danh-sach/phim-nam-${year$}.html`,
+  }
 
   const description = cheerio.find(".Description > p:eq(0)").text()
 

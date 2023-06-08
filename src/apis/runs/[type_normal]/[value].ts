@@ -51,7 +51,9 @@ export async function TypeNormalValue(
       }/trang-${page}.html` + (options?.sorter ? "?sort=" + options.sorter : "")
 
   return await useCache(url, async () => {
-    const { data: html } = await get(url)
+    const { data: html } = await get(
+      "https://animet.net" + url.replace("/all", "/phim-moi")
+    )
 
     const now = Date.now()
 

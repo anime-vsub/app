@@ -607,11 +607,10 @@ import {
   QVideo,
   useQuasar,
 } from "quasar"
-import { PhimId } from "src/apis/animetvn.in/runs/phim/[id]"
-import PhimIdChap from "src/apis/animetvn.in/runs/phim/[id]/[chap]"
-import getListServers from "src/apis/animetvn.in/runs/phim/[id]/get-list-servers"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import type { PlayerLink } from "src/apis/runs/ajax/player-link"
+import { PhimId } from "src/apis/runs/phim/[id]"
+import {PhimIdChap} from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { GetListServersReturns } from "src/apis/types/phim/[id]/get-list-servers"
 import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"

@@ -211,6 +211,7 @@ const routes: RouteRecordRaw[] = [
       "/phim/:season",
       "/phim/:season/:chapName(?:(.*\\))?-:chap(\\d+)",
       "/thong-tin-phim/:season",
+      "/phim-:season"
     ],
     component: () => import("pages/phim/_season.vue"),
     meta: {

@@ -16,6 +16,9 @@
               {{ data.name }}
             </div>
           </template>
+          <span v-if="data.rate" class="absolute right-1">
+            {{ data.rate }} <Star class="inline" />
+          </span>
 
           <span v-if="!data.chap">
             <template v-if="data.process"> Tập {{ data.process }} </template>
@@ -31,16 +34,19 @@
           "
           >{{ data.quality }}</Quality
         >
+        <Quality v-else-if=data.views class='right-0 top-2 absolute'>
+          {{ formatView(data.views )}}
+        </Quality>
         <img v-if="trending" :src="ranks[trending - 1]" class="h-[1.5rem]" />
       </q-img-custom>
       <span v-if="!trending" class="a line-clamp-2 min-h-10 mt-1">{{
         data.name
       }}</span>
-      <div v-else class="flex items-center text-weight-medium">
+      <!-- <div v-else class="flex items-center text-weight-medium">
         {{ data.rate }}
 
         <Star class="inline" />
-      </div>
+      </div> -->
 
       <Quality v-if="data.isTrailer" class="right-0 top-2 absolute bg-red"
         >Trailer</Quality
@@ -52,8 +58,8 @@
 <script lang="ts" setup>
 import BottomBlur from "components/BottomBlur.vue"
 import QImgCustom from "components/QImgCustom"
-import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import { forceHttp2 } from "src/logic/forceHttp2"
+import { formatView  } from "src/logic/formatView"
 import ranks from "src/logic/ranks"
 
 import type { CardData } from "./Card.types"

@@ -46,7 +46,7 @@
             <Star />
             {{ item.rate }}
           </span>
-          <span class="focus-item-year">{{ item.year }}</span>
+          <span class="focus-item-year">{{ item.year?.name }}</span>
           <span class="focus-item-update">
             {{ item.process }}
           </span>
@@ -104,6 +104,7 @@ const props = defineProps<CarouselTopProps>()
 
 const router = useRouter()
 
+// eslint-disable-next-line vue/no-setup-props-destructure
 const aspectRatio =props.aspectRatio
 </script>
 

@@ -6,8 +6,8 @@ import type IndexParser from "../parser"
 import { PostWorker } from "../wrap-worker"
 
 export async function Index() {
-  return await useCache("/", async () => {
-    const { data: html } = await get("/")
+  return await useCache("https://animet.net/", async () => {
+    const { data: html } = await get("https://animet.net/")
 
     return PostWorker<typeof IndexParser>(Worker, html)
   })
