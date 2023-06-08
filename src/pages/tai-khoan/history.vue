@@ -36,10 +36,12 @@
                   (item.timestamp.get("month") + 1)
             }}
           </div>
-          <div
-            class="bg-transparent flex flex-nowrap mt-1 mb-4"
+          <router-link
+            class="bg-transparent flex mt-1 mb-4"
             style="white-space: initial"
-            @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
+            :to="`/phim/${item.season ?? item.id}/${parseChapName(
+              item.last.name
+            )}-${item.last.chap}`"
           >
             <div class="w-[149px]">
               <q-img-custom
@@ -82,7 +84,7 @@
                 }}
               </div>
             </div>
-          </div>
+          </router-link>
         </template>
 
         <template v-slot:loading>
@@ -103,22 +105,50 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import BottomBlur from "components/BottomBlur.vue"
 import QImgCustom from "components/QImgCustom"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import { QInfiniteScroll } from "quasar"
+import { isNative } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
+import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
 import { useHistoryStore } from "stores/history"
-import { ref } from "vue"
+import { computed, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
 const historyStore = useHistoryStore()
 const infiniteScrollRef = ref<QInfiniteScroll>()
+
+const { t } = useI18n()
+if (!isNative)
+useHead(
+  computed(() => {
+    const title = t("lich-su-xem-anime")
+    const description = title
+
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url" },
+      ],
+      link: [
+        {
+          rel: "canonical",
+        },
+      ],
+    }
+  })
+)
 
 const {
   loading,

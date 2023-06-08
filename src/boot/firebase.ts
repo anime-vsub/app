@@ -1,4 +1,12 @@
 // Import the functions you need from the SDKs you need
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
+import type { CustomParams, Item } from "@firebase/analytics"
+import {
+  getAnalytics,
+  logEvent as logPWA,
+  setUserId as setUserIdPWA,
+  setUserProperties as setUserPropertiesPWA,
+} from "@firebase/analytics"
 import { initializeApp } from "@firebase/app"
 import {
   CACHE_SIZE_UNLIMITED,
@@ -6,6 +14,7 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager,
 } from "@firebase/firestore"
+import { isNative } from "src/constants"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -30,3 +39,38 @@ const db = initializeFirestore(app, {
 })
 
 export { app, db }
+
+const analytics = isNative ? null : getAnalytics()
+
+export const logEvent = isNative
+  ? (name: string, params: object = {}) =>
+      FirebaseAnalytics.logEvent({ name, params })
+  : (
+      name: string,
+      params?: {
+        [key: string]: any
+        coupon?: string | undefined
+        currency?: string | undefined
+        items?: Item[] | undefined
+        payment_type?: string | undefined
+        value?: number | undefined
+      }
+    ) => {
+      if (analytics) {
+        logPWA(analytics, name, params)
+      }
+    }
+
+export const setScreenName = isNative
+  ? FirebaseAnalytics.setScreenName
+  : () => {}
+export const setUserProperty = isNative
+  ? FirebaseAnalytics.setUserProperty
+  : (options: CustomParams) => {
+      setUserPropertiesPWA(analytics!, options)
+    }
+export const setUserId = isNative
+  ? FirebaseAnalytics.setUserId
+  : (id: string | null) => {
+      setUserIdPWA(analytics!, id)
+    }

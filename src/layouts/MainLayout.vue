@@ -2,11 +2,13 @@
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
       <q-page>
-        <router-view v-slot="{ Component }">
+        <router-view
+          v-if="isNative || extensionHelperInstalled !== false" v-slot="{ Component }">
           <keep-alive exclude="_season">
             <component :is="Component" />
           </keep-alive>
         </router-view>
+        <NotExistsExtension v-else />
       </q-page>
     </q-page-container>
 
@@ -170,12 +172,18 @@
 <script lang="ts" setup>
 import { App } from "@capacitor/app"
 import { Icon } from "@iconify/vue"
+import { version } from "app/package.json"
+import { installed as extensionHelperInstalled } from "boot/installed-extension"
 import semverEq from "semver/functions/eq"
 import semverGt from "semver/functions/gt"
+import { isNative } from "src/constants"
 import { parseMdBasic } from "src/logic/parseMdBasic"
 import { useNotificationStore } from "stores/notification"
 import { shallowRef } from "vue"
 import { useRoute } from "vue-router"
+
+import NotExistsExtension from "./NotExistsExtension.vue"
+
 
 const route = useRoute()
 const notificationStore = useNotificationStore()
@@ -188,7 +196,7 @@ Promise.all([
     res.json()
   ),
 
-  App.getInfo(),
+ !isNative ? { version } : App.getInfo(),
 ])
   .then((results) => {
     const ignoreUpdateVersion = localStorage.getItem("ignore-update-version")

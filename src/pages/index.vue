@@ -3,7 +3,9 @@
     v-if="loading"
     class="absolute w-full h-[calc(100%+50px)] overflow-hidden loader"
   >
-    <div class="swiper-hot">
+    <div class="swiper-hot" :style="{
+      '--aspectRatio': aspectRatio
+    }">
       <q-responsive :ratio="aspectRatio" class="poster">
         <q-skeleton type="rect" width="100%" height="100%" />
       </q-responsive>
@@ -329,6 +331,7 @@ import { useRequest } from "vue-request"
 import Star from "components/Star.vue"
 import "dayjs/locale/vi"
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import Card from "components/Card.vue"
 import GridCard from "components/GridCard.vue"
 import QImgCustom from "components/QImgCustom"
@@ -337,10 +340,13 @@ import ScreenError from "components/ScreenError.vue"
 import SkeletonCard from "components/SkeletonCard.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+import { isNative } from "src/constants"
 import dayjs from "src/logic/dayjs"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
+import { computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 // Import Swiper styles
@@ -351,9 +357,41 @@ import "swiper/css/grid"
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
 
-const router = useRouter()
-
 const aspectRatio = 622 / 350
+
+const { t } = useI18n()
+if (!isNative)
+useHead(
+  computed(() => {
+    const title = "AnimeVsub"
+
+    const description = t(
+      "xem-anime-vietsub-online-xem-tren-dien-thoai-di-dong-va-may-tinh-nhanh-nhat"
+    )
+
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:image", content: process.env.APP_URL + 'app_icon.svg' },
+        {
+          property: "og:url",
+          content: process.env.APP_URL,
+        },
+      ],
+      link: [
+        {
+          rel: "canonical",
+          href: process.env.APP_URL,
+        },
+      ],
+    }
+  })
+)
+
+const router = useRouter()
 
 const { data, loading, refreshAsync, error } = useRequest(() => Index())
 async function refresh(done: () => void) {
@@ -381,7 +419,7 @@ let isTodayF = false
     height: auto;
 
     .poster {
-      height: max(calc(100vw / v-bind("aspectRatio")), 40vh, 56vw);
+      height: max(calc(100vw / var("--aspectRatio")), 40vh, 56vw);
     }
   }
   @media screen and (max-width: 1023px) and (min-width: 768px) {

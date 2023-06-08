@@ -1,5 +1,6 @@
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
+
 import { route } from "quasar/wrappers"
+import { setScreenName } from "src/boot/firebase"
 import {
   createMemoryHistory,
   createRouter,
@@ -40,7 +41,7 @@ export default route(function (/* { store, ssrContext } */) {
 
     const { name, override } = to.meta.screen
 
-    FirebaseAnalytics.setScreenName({
+    setScreenName({
       screenName: name,
       nameOverride: typeof override === "string" ? override : override?.(to),
     })

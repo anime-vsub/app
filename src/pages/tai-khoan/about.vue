@@ -44,7 +44,9 @@
 import { App } from "@capacitor/app"
 import { Device } from "@capacitor/device"
 import { Icon } from "@iconify/vue"
+import { version } from "app/package.json"
 import { useQuasar } from "quasar"
+import { isNative } from "src/constants"
 import { shallowRef } from "vue"
 import { useRouter } from "vue-router"
 
@@ -55,7 +57,10 @@ const infoApp = shallowRef()
 const infoDev = shallowRef()
 
 Promise.all([
-  App.getInfo().then((data) => (infoApp.value = data)),
+  (!isNative
+    ? Promise.resolve({ version })
+    : App.getInfo()
+  ).then((data) => (infoApp.value = data)),
   Device.getInfo().then((data) => (infoDev.value = data)),
 ]).catch(() => {
   $q.notify({

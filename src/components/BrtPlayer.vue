@@ -756,12 +756,14 @@ import { Haptics } from "@capacitor/haptics"
 import { StatusBar } from "@capacitor/status-bar"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
+import { useDocumentVisibility, useEventListener, useIntervalFn } from "@vueuse/core"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import type { PlaylistLoaderConstructor } from "hls.js"
 import Hls from "hls.js"
 import workerHls from "hls.js/dist/hls.worker?url"
 import {
+  debounce,
   QBtn,
   QCard,
   QDialog,
@@ -792,12 +794,13 @@ import {
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
+import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
-import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface"
 import type {
-  ProgressWatchStore,
+  ProgressWatchStore ,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
   Season,
 } from "src/pages/phim/_season.interface"
 import { useAuthStore } from "stores/auth"
@@ -824,16 +827,30 @@ const router = useRouter()
 const $q = useQuasar()
 const { t } = useI18n()
 
+const playerWrapRef = ref<HTMLDivElement>()
+const documentVisibility = useDocumentVisibility()
+
+
+interface SiblingChap {
+  season: {
+    name: string
+    value: string
+  }
+  chap?: {
+    name: string
+    id: string
+  }
+}
+
+
 const props = defineProps<{
   sources?: Awaited<ReturnType<typeof PlayerLink>>["link"]
   currentSeason: string
   nameCurrentSeason?: string
   currentChap?: string
   nameCurrentChap?: string
-  nextChap?: {
-    season: string
-    chap?: string
-  }
+  nextChap?: SiblingChap
+  prevChap?: SiblingChap
   name?: string
   poster?: string
   seasons?: Season[]
@@ -899,6 +916,16 @@ if (import.meta.env.DEV)
   )
 
 const video = ref<HTMLVideoElement>()
+watch(
+  video,
+  (video) => {
+    if (video && documentVisibility.value === "visible")
+      try {
+        video.play()
+      } catch {}
+  },
+  { immediate: true }
+)
 // value control get play
 const artPlaying = ref(false)
 const setArtPlaying = (playing: boolean) => {
@@ -916,8 +943,9 @@ const setArtPlaying = (playing: boolean) => {
 }
 watch(
   () => props.currentChap,
-  () => setArtPlaying(true),
-  { immediate: true }
+  (newVal, oldVal) => {
+    if (newVal && oldVal) setArtPlaying(true)
+  }
 )
 // eslint-disable-next-line functional/no-let
 let artEnded = false
@@ -1298,19 +1326,97 @@ function onVideoTimeUpdate() {
 function onVideoEnded() {
   artEnded = true
   if (props.nextChap && settingsStore.player.autoNext) {
-    addNotice(
-      props.currentSeason !== props.nextChap.season
-        ? `Đang phát ${props.nextChap.season}`
-        : "Đang phát tập tiếp theo"
-    )
-
-    router.push({
-      name: "watch-anime",
-      params: props.nextChap,
-    })
+    emitNextChap()
   }
 }
 
+
+// eslint-disable-next-line functional/no-let
+let artPlayingOfBeforeDocumentHide: boolean
+watch(documentVisibility, (visibility) => {
+  console.log("document %s", visibility)
+  if (visibility === "visible") {
+    if (!artPlaying.value && (artPlayingOfBeforeDocumentHide ?? true))
+      setArtPlaying(true)
+  } else {
+    artPlayingOfBeforeDocumentHide = artPlaying.value
+  }
+})
+
+{
+  // eslint-disable-next-line functional/no-let
+  let resume: (() => void) | null = null
+  // eslint-disable-next-line functional/no-let
+  let pause: (() => void) | null = null
+  const resumeDelay = debounce(() => resume?.(), 1_000)
+  onBeforeUnmount(() => pause?.())
+  watch(
+    () => settingsStore.player.enableRemindStop,
+    (enabled) => {
+      if (enabled) {
+        if (resume) resumeDelay()
+        else {
+          const interval = useIntervalFn(() => {
+            if (!artPlaying.value) return
+
+            pause?.()
+            setArtPlaying(false)
+
+            $q.dialog({
+              title: t("xac-nhan"),
+              message: t("ban-van-dang-xem-chu"),
+              cancel: { rounded: true, flat: true },
+              ok: { rounded: true, flat: true },
+              persistent: false,
+            })
+              .onOk(() => {
+                setArtPlaying(true)
+                resumeDelay?.()
+              })
+              .onDismiss(() => {
+                setArtPlaying(true)
+                resumeDelay?.()
+              })
+              .onCancel(() => {
+                console.warn("cancel continue play")
+              })
+          }, 1 /* hours */ * 3600_000)
+          resume = interval.resume
+          pause = interval.pause
+        }
+      } else {
+        resumeDelay.cancel()
+        pause?.()
+      }
+    },
+    { immediate: true }
+  )
+
+  watch(
+    artPlaying,
+    (playing) => {
+      if (playing) {
+        resumeDelay()
+      } else {
+        pause?.()
+      }
+    },
+    { immediate: true }
+  )
+  ;[
+    "mousedown",
+    "mouseup",
+    "mousemove",
+    "keydown",
+    "touchstart",
+    "touchmove",
+    "touchend",
+    "scroll",
+  ].forEach((name) => {
+    useEventListener(window, name, resumeDelay)
+  })
+  watch(documentVisibility, resumeDelay)
+}
 function runRemount() {
   $q.dialog({
     title: "Relay change",
@@ -1635,8 +1741,6 @@ watch(
   { immediate: true }
 )
 
-const playerWrapRef = ref<HTMLDivElement>()
-
 const currentingTime = ref(false)
 const progressInnerRef = ref<HTMLDivElement>()
 function onIndicatorMove(
@@ -1858,6 +1962,90 @@ function addNotice(text: string) {
     notices.splice(notices.findIndex((item) => item.id === uuid) >>> 0, 1)
   }, 5000)
 }
+
+function emitNextChap(noNotice?: boolean) {
+  if (!props.nextChap) return
+
+  if (!noNotice)
+    addNotice(
+      props.currentSeason !== props.nextChap.season.value
+        ? `Đang phát season ${props.nextChap.season.name} sau`
+        : `Đang phát tập ${props.nextChap.chap?.name ?? ""} tiếp theo`
+    )
+
+  router.push(
+    `/phim/${props.nextChap.season.value}/${
+      props.nextChap.chap
+        ? parseChapName(props.nextChap.chap.name) +
+          "-" +
+          props.nextChap.chap?.id
+        : ""
+    }`
+  )
+}
+function emitPrevChap(noNotice?: boolean) {
+  if (!props.prevChap) return
+
+  if (!noNotice)
+    addNotice(
+      props.currentSeason !== props.prevChap.season.value
+        ? `Đang phát season ${props.prevChap.season.name} trước`
+        : `Đang phát tập ${props.prevChap.chap?.name ?? ""} trước`
+    )
+
+  router.push(
+    `/phim/${props.prevChap.season.value}/${
+      props.prevChap.chap
+        ? parseChapName(props.prevChap.chap.name) +
+          "-" +
+          props.prevChap.chap?.id
+        : ""
+    }`
+  )
+}
+
+if (typeof MediaMetadata !== "undefined" && navigator.mediaSession)
+  watchEffect(() => {
+    if (!props.nameCurrentChap || !props.name || !props.poster) return
+
+    const title = t("tap-_chap-_name-_othername", [
+      props.nameCurrentChap,
+      props.name,
+      "",
+    ])
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title,
+      artist: props.name,
+      artwork: [
+        {
+          src: props.poster,
+        },
+      ],
+    })
+  })
+// keybind for headphone control
+navigator.mediaSession?.setActionHandler("pause", () => {
+  const playing = artPlaying.value
+  setArtPlaying(false)
+  if (playing) setArtControlShow(true)
+})
+navigator.mediaSession?.setActionHandler("play", () => {
+  setArtPlaying(true)
+})
+navigator.mediaSession?.setActionHandler("previoustrack", () => {
+  emitPrevChap()
+})
+navigator.mediaSession?.setActionHandler("nexttrack", () => {
+  emitNextChap()
+})
+onBeforeUnmount(() => {
+  navigator.mediaSession?.setActionHandler("pause", null)
+  navigator.mediaSession?.setActionHandler("play", null)
+  navigator.mediaSession?.setActionHandler("previoustrack", null)
+  navigator.mediaSession?.setActionHandler("nexttrack", null)
+})
+
 
 const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)

@@ -481,12 +481,14 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import GridCard from "components/GridCard.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenNotFound from "components/ScreenNotFound.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
+import { isNative } from "src/constants"
 import { computed, reactive, ref, watch } from "vue"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
@@ -627,6 +629,35 @@ const watcherData = watch(data, (data) => {
   title.value = data.title!
   watcherData()
 })
+
+if (!isNative)
+useHead(
+  computed(() => {
+    if (!title.value) return {}
+
+    const description = title.value
+
+    return {
+      title: title.value,
+      description,
+      meta: [
+        { property: "og:title", content: title.value },
+        { property: "og:description", content: description },
+        {
+          property: "og:url",
+          content: process.env.APP_URL + route.fullPath.slice(1),
+        },
+      ],
+      link: [
+        {
+          rel: "canonical",
+          href: process.env.APP_URL + route.fullPath.slice(1),
+        },
+      ],
+    }
+  })
+)
+
 watch(
   [genres, seaser, sorter, typer, year, defaultsOptions],
   () => {

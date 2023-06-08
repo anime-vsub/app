@@ -101,7 +101,13 @@
           flat
           class="bg-transparent inline-block history-item mr-2"
           style="white-space: initial"
-          @click="router.push(`/phim/${item.id}/${item.last.chap}`)"
+          @click="
+            router.push(
+              `/phim/${item.season ?? item.id}/${parseChapName(
+                item.last.name
+              )}-${item.last.chap}`
+            )
+          "
         >
           <q-img-custom
             no-spinner
@@ -364,6 +370,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import BottomBlur from "components/BottomBlur.vue"
 import Card from "components/Card.vue"
 import QImgCustom from "components/QImgCustom"
@@ -374,12 +381,14 @@ import { storeToRefs } from "pinia"
 import QRCode from "qrcode"
 import { useQuasar } from "quasar"
 import { TuPhim } from "src/apis/runs/tu-phim"
+import { isNative } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
+import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
-import { ref, watch, watchEffect } from "vue"
+import { computed, ref, watch, watchEffect } from "vue"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
@@ -397,6 +406,29 @@ const $q = useQuasar()
 const authStore = useAuthStore()
 const playlistStore = usePlaylistStore()
 const historyStore = useHistoryStore()
+
+if (!isNative)
+useHead(
+  computed(() => {
+    const title = "Tài khoản"
+    const description = title
+
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url" },
+      ],
+      link: [
+        {
+          rel: "canonical",
+        },
+      ],
+    }
+  })
+)
 
 async function login() {
   const loader = $q.loading.show({
@@ -460,8 +492,7 @@ const {
   last30ItemError: errorHistories,
   last30ItemGet,
 } = storeToRefs(historyStore)
-const {
-  refreshLast30Item: refreshHistories, } = historyStore
+const { refreshLast30Item: refreshHistories } = historyStore
 
 // ========== favorite =========
 const {

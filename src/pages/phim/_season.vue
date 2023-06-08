@@ -18,6 +18,7 @@
       :current-chap="currentChap"
       :name-current-chap="currentMetaChap?.name"
       :next-chap="nextChap"
+      :prev-chap="prevChap"
       :name="data?.name"
       :poster="currentDataSeason?.poster ?? data.poster"
       :seasons="seasons"
@@ -203,7 +204,7 @@
         stack
         no-caps
         class="mr-4 text-weight-normal"
-        @click="showDialogAddToPlaylist = true"
+        @click="clickShowPlaylist"
       >
         <Icon
           icon="fluent:add-square-multiple-16-regular"
@@ -572,8 +573,8 @@
 <script lang="ts" setup>
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem"
 import { Share } from "@capacitor/share"
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
@@ -607,13 +608,15 @@ import { PlayerLink } from "src/apis/runs/ajax/player-link"
 import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
-import type { servers } from "src/constants"
+import { logEvent } from "src/boot/firebase"
+import { isNative, servers } from "src/constants"
 import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
 import { getQualityByLabel } from "src/logic/get-quality-by-label"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
+import { parseChapName } from "src/logic/parseChapName"
 import { unflat } from "src/logic/unflat"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
@@ -638,9 +641,9 @@ import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
   Season,
 } from "./_season.interface"
-import { ResponseDataSeasonSuccess } from "./_season.interface"
 
 // ================ follow ================
 // =======================================================
@@ -1039,10 +1042,12 @@ watch(
         currentChap.value !== episodeIdFirst &&
         currentMetaChap.value
       ) {
+        const correctChapName = parseChapName(currentMetaChap.value.name)
+
         if (import.meta.env.DEV)
           console.log("%c Redirect to suspend path", "color: green")
         router.replace({
-          path: `/phim/${route.params.season}/${currentChap.value}`,
+          path: `/phim/${route.params.season}/${correctChapName}-${currentChap.value}`,
           query: route.query,
           hash: route.hash,
         })
@@ -1099,15 +1104,84 @@ watchEffect(() => {
     }
   }
 })
+// TOOD: check chapName in url is chapName
+watchEffect(() => {
+  const metaEp = currentMetaChap.value
+  if (!metaEp) return
 
-const nextChap = computed<
-  | {
-      season: string
-      chap?: string
+  const epId = metaEp.id
+  if (route.params.chap !== epId) return
+  const correctChapName = parseChapName(metaEp.name)
+  const urlChapName = route.params.chapName
+
+  if (urlChapName) {
+    // check is valid if not valid redirect
+    if (correctChapName === urlChapName) return
+
+    console.warn(
+      `Redirect chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
+    )
+    router.replace({
+      path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
+      query: route.query,
+      hash: route.hash,
+    })
+  } else {
+    // old type url /phim/:season/:chap
+    // replace
+    console.info("Redirect this url old type redirect to new type url")
+    router.replace({
+      path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
+      query: route.query,
+      hash: route.hash,
+    })
+  }
+})
+if (!isNative)
+useHead(
+  computed(() => {
+    if (!data.value) return {}
+
+    const title = currentMetaChap.value
+      ? t("tap-_chap-_name-_othername", [
+          currentMetaChap.value.name,
+          data.value.name,
+          data.value.othername,
+        ])
+      : t("_name-_othername", [data.value.name, data.value.othername])
+    const description = data.value.description
+
+    return {
+      title,
+      description,
+      meta: [
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        {
+          property: "og:image",
+          content: currentDataSeason.value?.poster ?? data.value.poster,
+        },
+        {
+          property: "og:url",
+          content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
+        },
+      ],
+      link: [
+        {
+          rel: "canonical",
+          href: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
+        },
+      ],
     }
-  | undefined
-  // eslint-disable-next-line vue/return-in-computed-property
->(() => {
+  })
+)
+
+interface SiblingChap {
+  season: Exclude<typeof seasons.value, undefined>[0]
+  chap?: Exclude<typeof currentDataSeason.value, undefined>["chaps"][0]
+}
+// eslint-disable-next-line vue/return-in-computed-property
+const nextChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap
   const indexCurrentChap = !currentMetaChap.value
@@ -1121,9 +1195,10 @@ const nextChap = computed<
   const isLastChapOfSeason =
     indexCurrentChap === currentDataSeason.value.chaps.length - 1
   if (!isLastChapOfSeason) {
+    if (!currentMetaSeason.value) return
     return {
-      season: currentSeason.value,
-      chap: currentDataSeason.value.chaps[indexCurrentChap + 1].id,
+      season: currentMetaSeason.value,
+      chap: currentDataSeason.value.chaps[indexCurrentChap + 1],
     }
   }
 
@@ -1142,7 +1217,49 @@ const nextChap = computed<
   if (!isLastSeason) {
     // first chap of next season
     return {
-      season: seasons.value[indexSeason + 1].value,
+      season: seasons.value[indexSeason + 1],
+    }
+  }
+
+  console.info("[[===THE END===]]")
+})
+// eslint-disable-next-line vue/return-in-computed-property
+const prevChap = computed((): SiblingChap | undefined => {
+  if (!currentDataSeason.value) return
+  // get index currentChap
+  const indexCurrentChap = !currentMetaChap.value
+    ? -1
+    : currentDataSeason.value.chaps.indexOf(currentMetaChap.value)
+  if (indexCurrentChap === -1) {
+    console.warn("current index not found %i", indexCurrentChap)
+    return
+  }
+
+  const isFirstChapOfSeason = indexCurrentChap === 0
+  if (!isFirstChapOfSeason) {
+    if (!currentMetaSeason.value) return
+    return {
+      season: currentMetaSeason.value,
+      chap: currentDataSeason.value.chaps[indexCurrentChap - 1],
+    }
+  }
+
+  if (!seasons.value) return
+  // if current last chap of season
+  // check season of last
+  const indexSeason = !currentMetaSeason.value
+    ? -1
+    : seasons.value.indexOf(currentMetaSeason.value)
+  if (indexSeason === -1) {
+    console.warn("current index not found %i", indexSeason)
+    return
+  }
+
+  const isFirstSeason = indexSeason === 0
+  if (!isFirstSeason) {
+    // first chap of next season
+    return {
+      season: seasons.value[indexSeason - 1],
     }
   }
 
@@ -1340,11 +1457,8 @@ watch(
     if (!currentMetaChap) return
     if (!name) return
 
-    FirebaseAnalytics.logEvent({
-      name: "watching",
-      params: {
-        value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
-      },
+    logEvent("watching", {
+      value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
     })
   },
   { immediate: true }
@@ -1401,6 +1515,17 @@ const showDialogInforma = ref(false)
 
 // =========== playlist ===========
 const showDialogAddToPlaylist = ref(false)
+function clickShowPlaylist() {
+  if (!authStore.isLogged) {
+    $q.notify({
+      position: "bottom-right",
+      message: "Hãy đăng nhập trước để sử dụng danh sách phát",
+    })
+    return
+  }
+
+  showDialogAddToPlaylist.value = true
+}
 async function addAnimePlaylist(idPlaylist: string) {
   const { value: metaSeason } = currentMetaSeason
   if (!metaSeason) return

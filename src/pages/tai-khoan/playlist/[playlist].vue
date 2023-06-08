@@ -258,7 +258,9 @@
           :key="item.season"
           class="bg-transparent flex flex-nowrap mb-5 group"
           style="white-space: initial"
-          :to="`/phim/${item.season}/${item.chap}`"
+          :to="`/phim/${item.season}/${parseChapName(
+              item.name
+            )}-${item.chap}`"
         >
           <div>
             <q-img-custom
@@ -364,13 +366,16 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import QImgCustom from "components/QImgCustom"
 import { QInfiniteScroll, useQuasar } from "quasar"
+import { isNative } from "src/constants"
 import dayjs from "src/logic/dayjs"
 import { forceHttp2 } from "src/logic/forceHttp2"
+import { parseChapName } from "src/logic/parseChapName"
 import { usePlaylistStore } from "stores/playlist"
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
@@ -442,6 +447,42 @@ const { data: movies, run: runGetMovies } = useRequest(
       runGetMovies()
     },
   }
+)
+
+if (!isNative)
+useHead(
+  computed(() => {
+    if (!metaPlaylist.value) return {}
+
+    const title = `(${metaPlaylist.value.size}) ${metaPlaylist.value.name}`
+
+    const description = metaPlaylist.value.description ?? title
+
+    return {
+      title,
+      description,
+      meta: [
+        {
+          property: "og:title",
+          content: title,
+        },
+        {
+          property: "og:description",
+          content: description,
+        },
+        {
+          property: "og:url",
+          content: process.env.APP_URL + `playlist/${route.params.playlist}`,
+        },
+      ],
+      link: [
+        {
+          rel: "canonical",
+          href: process.env.APP_URL + `playlist/${route.params.playlist}`,
+        },
+      ],
+    }
+  })
 )
 
 async function onLoad(index: number, done: (end: boolean) => void) {
