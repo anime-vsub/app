@@ -788,7 +788,7 @@ import {
   C_URL,
   DELAY_SAVE_HISTORY,
   DELAY_SAVE_VIEWING_PROGRESS,
-  playbackRates,
+  isNative,playbackRates,
   servers,
 } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
@@ -796,11 +796,12 @@ import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
+import {
+  ResponseDataSeasonSuccess} from "src/pages/phim/_season.interface";
 import type {
   ProgressWatchStore ,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
-  ResponseDataSeasonSuccess,
   Season,
 } from "src/pages/phim/_season.interface"
 import { useAuthStore } from "stores/auth"
@@ -1542,7 +1543,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           headers.set("referer", C_URL)
 
           fetchJava(
-            context.url + (process.env.MODE === "spa" ? "#animevsub-vsub" : ""),
+            context.url + (!isNative ? "#animevsub-vsub" : ""),
             {
               headers,
               signal: controller.signal,

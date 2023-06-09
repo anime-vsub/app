@@ -1,4 +1,3 @@
-/* eslint-disable functional/prefer-immutable-types */
 import type { HttpOptions, HttpResponse } from "@capacitor/core"
 import { CapacitorHttp } from "@capacitor/core"
 import { installedAsync } from "boot/installed-extension"
@@ -7,20 +6,18 @@ import { C_URL, isNative } from "src/constants"
 
 import { base64ToArrayBuffer } from "./base64ToArrayBuffer"
 
-const isSpa = process.env.MODE === "spa"
-
 async function getNative(
   url: string | HttpOptions,
   headers?: Record<string, string>
 ) {
-  const response = await (isSpa ? window.Http : CapacitorHttp)
+  const response = await (!isNative ? window.Http : CapacitorHttp)
     .get(
       typeof url === "object"
         ? url
         : {
             url: url.includes("://")
               ? url
-              : C_URL + url + (isSpa ? "#animevsub-vsub" : ""),
+              : C_URL + url + (!isNative ? "#animevsub-vsub" : ""),
             headers: {
               accept:
                 "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -182,7 +179,7 @@ async function getNative(
                 51,
                 54
               ),
-              ...(isSpa && !url.includes("://")
+              ...(!isNative && !url.includes("://")
                 ? {}
                 : {
                     referer: C_URL,
@@ -215,9 +212,9 @@ async function postNative(
   data: Record<string, string>,
   headers?: Record<string, string>
 ) {
-  const response = await (isSpa ? window.Http : CapacitorHttp).post({
-    url: C_URL + url + (isSpa ? "#animevsub-vsub" : ""),
-    headers: isSpa
+  const response = await (!isNative ? window.Http : CapacitorHttp).post({
+    url: C_URL + url + (!isNative ? "#animevsub-vsub" : ""),
+    headers: !isNative
       ? {}
       : {
           [String.fromCharCode(117, 115, 101, 114, 45, 97, 103, 101, 110, 116)]:
@@ -335,14 +332,14 @@ async function postNative(
               54
             ),
           "content-type": "application/x-www-form-urlencoded",
-          ...(isSpa
+          ...(!isNative
             ? {}
             : {
                 referer: C_URL,
               }),
           ...headers,
         },
-    data: isSpa ? data : new URLSearchParams(data).toString(),
+    data: !isNative ? data : new URLSearchParams(data).toString(),
   })
 
   // eslint-disable-next-line functional/no-throw-statement
