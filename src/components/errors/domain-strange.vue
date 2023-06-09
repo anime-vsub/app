@@ -31,7 +31,7 @@
           >{{ t("tien-ich-animevsub-helper") }}</a
         >
         {{ t("chua-duoc-cap-nhat-hoac-trang-web-nay-dang-gia-mao") }}
-        <a href="https://animevsub.ga" class="text-blue-500">AnimeVsub</a>.
+        <a href="https://animevsub.eu.org" class="text-blue-500">AnimeVsub</a>.
       </p>
 
       <p class="mt-3 text-gray-400 text-weight-medium">
