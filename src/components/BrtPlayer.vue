@@ -1471,16 +1471,18 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     (type === "hls" || type === "m3u" || type === "m3u8") &&
     Hls.isSupported()
   ) {
+    const offEnds =
+      window.Http?.version && window.Http.version < "0.0.26" ? "" : "_extra"
     const hls = new Hls({
       debug: import.meta.env.isDev,
       workerPath: workerHls,
       progressive: true,
       fragLoadingRetryDelay: 10000,
       fetchSetup(context, initParams) {
-        context.url += process.env.MODE === "spa" ? "#animevsub-vsub" : ""
+        context.url += "#animevsub-vsub" + offEnds
 
         // set header because this version always cors not fix by extension liek desktop-web
-        initParams.headers.set("x-referer", C_URL)
+        isNative && initParams.headers.set("x-referer", C_URL)
 
         return new Request(context.url, initParams)
       },
@@ -1580,7 +1582,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
         }
       } as unknown as PlaylistLoaderConstructor,
     })
-    patcher(hls)
+    if (!offEnds) patcher(hls)
     currentHls = hls
     // customLoader(hls.config)
     hls.loadSource(file)
