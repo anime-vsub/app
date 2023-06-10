@@ -1338,6 +1338,8 @@ watch(
         return
       }
 
+      const currentUid =  uidChap.value
+
       try {
         console.log(":restore progress")
         if (stateStorageStore.disableAutoRestoration) {
@@ -1364,7 +1366,7 @@ watch(
         if ((err as Error)?.message !== "NOT_RESET") console.error(err)
       }
 
-      progressRestored = uidChap.value
+      progressRestored = currentUid
     }
   },
   { immediate: true }
