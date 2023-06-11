@@ -1338,7 +1338,7 @@ watch(
         return
       }
 
-      const currentUid =  uidChap.value
+      const currentUid = uidChap.value
 
       try {
         console.log(":restore progress")

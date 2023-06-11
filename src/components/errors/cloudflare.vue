@@ -21,9 +21,10 @@
           t("mo-animevietsub-de-xac-thuc")
         }}</q-btn>
       </div>
-      <small class="block mt-4 mb-1 text-[18px] text-weight-medium text-green-400">{{
-        t("sau-khi-xac-thuc-hay-nhan-vao-nut-ben-duoi")
-      }}</small>
+      <small
+        class="block mt-4 mb-1 text-[18px] text-weight-medium text-green-400"
+        >{{ t("sau-khi-xac-thuc-hay-nhan-vao-nut-ben-duoi") }}</small
+      >
     </div>
 
     <q-btn
