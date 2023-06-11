@@ -467,13 +467,15 @@ import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
-import type { Ref } from "vue"
+import type { Ref, ShallowRef } from "vue"
 import {
   computed,
+  getCurrentInstance,
   onBeforeUnmount,
   reactive,
   ref,
   shallowRef,
+  toRaw,
   watch,
   watchEffect,
 } from "vue"
@@ -493,11 +495,9 @@ import type {
 
 // ============================================
 
-// eslint-disable-next-line functional/no-let
-let watcherSeasons: (() => void) | undefined
-
 const route = useRoute()
 const router = useRouter()
+const instance = getCurrentInstance()
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
 const playlistStore = usePlaylistStore()
@@ -663,14 +663,14 @@ watch(
   }
 )
 
-onBeforeUnmount(() => watcherSeasons?.())
+const responseOnlineStore = new WeakSet<
+  ShallowRef<Awaited<ReturnType<typeof PhimIdChap>> | undefined>
+>()
 async function fetchSeason(season: string) {
   // if (!seasons.value) {
   //   console.warn("seasons not ready")
   //   return
   // }
-  watcherSeasons?.()
-  watcherSeasons = undefined
 
   if (!progressWatchStore.has(season))
     progressWatchStore.set(season, { status: "queue" })
@@ -691,11 +691,53 @@ async function fetchSeason(season: string) {
 
     const realIdSeason = getRealSeasonId(season)
 
-    const response = await PhimIdChap(realIdSeason)
+    const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
+    await Promise.any([
+      PhimIdChap(realIdSeason).then((data) => {
+        // mergeListEp(response.value, data)
+        // eslint-disable-next-line promise/always-return
+        if (
+          !response.value ||
+          response.value.chaps.length !== data.chaps.length ||
+          JSON.stringify(data) !== JSON.stringify(toRaw(response.value))
+        ) {
+          console.info("cache wrong")
 
-    if (response.chaps.length === 0) {
+          const task = set(`season_data ${realIdSeason}`, JSON.stringify(data))
+
+          if (import.meta.env.DEV)
+            task
+              // eslint-disable-next-line promise/no-nesting
+              .then(() =>
+                console.log("[fs]: save cache season %s", realIdSeason)
+              )
+              // eslint-disable-next-line promise/no-nesting
+              .catch((err) =>
+                console.warn(
+                  "[fs]: failure save cache season %s",
+                  realIdSeason,
+                  err
+                )
+              )
+          console.log("[online]: use data from internet")
+          response.value = data
+          console.log("data from internet is ", data)
+        }
+        responseOnlineStore.add(response)
+      }),
+      get(`season_data ${realIdSeason}`).then((json?: string) => {
+        // eslint-disable-next-line promise/always-return, functional/no-throw-statement
+        if (!json) throw new Error("not_found")
+        console.log("[fs]: use cache %s", realIdSeason)
+        response.value = JSON.parse(json)
+      }),
+    ])
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (response.value!.chaps.length === 0) {
       console.warn("chaps not found")
-      response.chaps = [
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      response.value!.chaps = [
         {
           id: "0",
           play: "1",
@@ -705,13 +747,12 @@ async function fetchSeason(season: string) {
           name: t("trailer"),
         },
       ]
-    } else if (response.chaps.length > 50) {
+    } else if (response.value && response.value.chaps.length > 50) {
       console.log("large chap. spliting...")
-      const { chaps } = response
 
       // eslint-disable-next-line no-inner-declarations
       function watchHandler() {
-        if (!seasons.value) return
+        if (!seasons.value || !response.value) return
 
         // eslint-disable-next-line functional/no-let
         let indexMetaSeason = seasons.value.findIndex(
@@ -728,6 +769,7 @@ async function fetchSeason(season: string) {
         const nameSeason = seasons.value[indexMetaSeason].name
 
         const seasonsSplited: Season[] = []
+        const { chaps } = response.value
         unflat(chaps, 50).forEach((chapsSplited, index) => {
           const value = index === 0 ? realIdSeason : `${realIdSeason}$${index}`
           const name = `${nameSeason} (${chapsSplited[0].name} - ${
@@ -740,7 +782,8 @@ async function fetchSeason(season: string) {
           const newData: ResponseDataSeasonSuccess = {
             status: "success",
             response: {
-              ...response,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              ...response.value!,
               chaps: chapsSplited,
               ssSibs: seasonsSplited,
             },
@@ -765,21 +808,48 @@ async function fetchSeason(season: string) {
         seasons.value = newSeasons
         console.log("new seasons: ", newSeasons)
         console.log("set seasons: ", seasons.value)
+
+        return responseOnlineStore.has(response)
       }
 
-      if (seasons.value) watchHandler()
-      else {
-        watcherSeasons = watch(
-          seasons,
-          () => {
-            if (!seasons.value) return
-            watcherSeasons?.()
-            watcherSeasons = undefined
-            watchHandler()
-          },
-          { immediate: true }
-        )
-      }
+      // eslint-disable-next-line functional/no-let
+      let watcherResponse: (() => void) | undefined = watch(response, () => {
+        const doneAll = watchHandler()
+        if (doneAll) {
+          watcherResponse?.()
+          watcherResponse = undefined
+        }
+      })
+      // eslint-disable-next-line functional/no-let
+      let watcherSeasons: (() => void) | undefined
+      watcherSeasons = watch(
+        () => typeof seasons.value !== "undefined",
+        (seasonsExists) => {
+          if (!seasonsExists) return
+
+          const doneAll = watchHandler()
+          if (doneAll) {
+            watcherResponse?.()
+            watcherResponse = undefined
+          }
+
+          if (watcherSeasons) watcherSeasons()
+          else {
+            // eslint-disable-next-line promise/catch-or-return
+            Promise.resolve().then(() => {
+              // eslint-disable-next-line promise/always-return
+              watcherSeasons?.()
+              watcherSeasons = undefined
+            })
+          }
+        },
+        { immediate: true }
+      )
+
+      onBeforeUnmount(() => {
+        watcherSeasons?.()
+        watcherResponse?.()
+      }, instance)
       return
     }
 
