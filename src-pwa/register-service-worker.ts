@@ -1,8 +1,7 @@
 import { i18n } from "boot/i18n"
 import { Notify } from "quasar"
 import { register } from "register-service-worker"
-import {
-  installedSW.value = true, updatingCache } from "src/logic/state-sw"
+import { installedSW, updatingCache } from "src/logic/state-sw"
 // The ready(), registered(), cached(), updatefound() and updated()
 // events passes a ServiceWorkerRegistration instance in their arguments.
 // ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
