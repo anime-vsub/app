@@ -24,6 +24,7 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   cached(/* registration */) {
     console.log("Content has been cached for offline use.")
+    updatingCache.value = false
   },
 
   updatefound(/* registration */) {
