@@ -707,10 +707,10 @@ async function fetchSeason(season: string) {
 
           if (import.meta.env.DEV)
             task
-              // eslint-disable-next-line promise/no-nesting
-              .then(() =>
+              // eslint-disable-next-line promise/no-nesting, promise/always-return
+              .then(() => {
                 console.log("[fs]: save cache season %s", realIdSeason)
-              )
+              })
               // eslint-disable-next-line promise/no-nesting
               .catch((err) =>
                 console.warn(
