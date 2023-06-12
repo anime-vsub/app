@@ -1,0 +1,62 @@
+import { Notify } from "quasar"
+import { register } from "register-service-worker"
+import { updatingCache } from "src/logic/state-sw"
+// The ready(), registered(), cached(), updatefound() and updated()
+// events passes a ServiceWorkerRegistration instance in their arguments.
+// ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
+
+register(process.env.SERVICE_WORKER_FILE, {
+  // The registrationOptions object will be passed as the second argument
+  // to ServiceWorkerContainer.register()
+  // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register#Parameter
+
+  // registrationOptions: { scope: './' },
+
+  ready(/* registration */) {
+    // console.log('Service worker is active.')
+  },
+
+  registered(/* registration */) {
+    // console.log('Service worker has been registered.')
+  },
+
+  cached(/* registration */) {
+    console.log("Content has been cached for offline use.")
+  },
+
+  updatefound(/* registration */) {
+    console.log("New content is downloading.")
+    updatingCache.value = true
+  },
+
+  updated(/* registration */) {
+    console.log("New content is available; please refresh.")
+    updatingCache.value = false
+    Notify.create({
+      message: "Ứng dụng đã được cập nhật",
+      position: "bottom-right",
+      timeout: 0,
+      actions: [
+        {
+          label: "Làm mới ngay",
+          color: "main",
+          noCaps: true,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          handler: () => (location as unknown as any).reload(),
+        },
+        {
+          label: "Để sau",
+          round: true,
+        },
+      ],
+    })
+  },
+
+  offline() {
+    // console.log('No internet connection found. App is running in offline mode.')
+  },
+
+  error(err) {
+    console.error("Error during service worker registration:", err)
+  },
+})

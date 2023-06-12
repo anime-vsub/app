@@ -1,5 +1,5 @@
 
-name: Try build 
+name: Try build
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    name: Try build 
+    name: Try build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -35,3 +35,6 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Build PWA
+        run: pnpm build:pwa

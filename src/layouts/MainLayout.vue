@@ -135,7 +135,17 @@
         <q-space />
 
         <q-btn round unelevated class="mr-2">
-          <Icon icon="codicon:github-inverted" width="24" height="24" />
+          <q-circular-progress
+            v-if="updatingCache"
+            indeterminate
+            rounded
+            show-value
+            size="35px"
+            color="main"
+          >
+            <Icon icon="codicon:github-inverted" width="24" height="24" />
+          </q-circular-progress>
+          <Icon v-else icon="codicon:github-inverted" width="24" height="24" />
 
           <q-menu
             anchor="bottom right"
@@ -1116,6 +1126,7 @@ import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseMdBasic } from "src/logic/parseMdBasic"
 import { parseTime } from "src/logic/parseTime"
+import { updatingCache } from "src/logic/state-sw"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { useNotificationStore } from "stores/notification"
