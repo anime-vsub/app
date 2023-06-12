@@ -29,7 +29,7 @@ if (process.env.MODE !== "ssr" || process.env.PROD) {
   registerRoute(
     new NavigationRoute(
       createHandlerBoundToURL(process.env.PWA_FALLBACK_HTML),
-      { denylist: [/sw\.js$/, /workbox-(.)*\.js$/, /^\/google7b3e7893e059da35\.html$/, /^\/_redirects$/] }
+      { denylist: [/sw\.js$/, /workbox-(.)*\.js$/] }
     )
   )
 }
