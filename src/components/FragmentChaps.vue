@@ -38,9 +38,9 @@
           :delay="1000"
           >{{
             [
-              t("kich-hoat-lai-khoi-phuc-tien-trinh-xem"),
               t("vo-hieu-hoa-tam-thoi-khoi-phuc-tien-trinh-xem-truoc"),
               t("vo-hieu-hoa-ca-2-chieu-dong-bo-tien-trinh-xem"),
+              t("kich-hoat-lai-khoi-phuc-tien-trinh-xem"),
             ][stateStorageStore.disableAutoRestoration]
           }}</q-tooltip
         >

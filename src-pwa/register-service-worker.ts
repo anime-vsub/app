@@ -1,3 +1,4 @@
+import { i18n } from "boot/i18n"
 import { Notify } from "quasar"
 import { register } from "register-service-worker"
 import { updatingCache } from "src/logic/state-sw"
@@ -33,19 +34,19 @@ register(process.env.SERVICE_WORKER_FILE, {
     console.log("New content is available; please refresh.")
     updatingCache.value = false
     Notify.create({
-      message: "Ứng dụng đã được cập nhật",
+      message: i18n.global.t("ung-dung-da-duoc-cap-nhat"),
       position: "bottom-right",
       timeout: 0,
       actions: [
         {
-          label: "Làm mới ngay",
+          label: i18n.global.t("lam-moi-ngay"),
           color: "main",
           noCaps: true,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           handler: () => (location as unknown as any).reload(),
         },
         {
-          label: "Để sau",
+          label: i18n.global.t("de-sau"),
           round: true,
         },
       ],
