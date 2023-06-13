@@ -756,7 +756,11 @@ import { Haptics } from "@capacitor/haptics"
 import { StatusBar } from "@capacitor/status-bar"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
-import { useDocumentVisibility, useEventListener, useIntervalFn } from "@vueuse/core"
+import {
+  useDocumentVisibility,
+  useEventListener,
+  useIntervalFn,
+} from "@vueuse/core"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
 import type { PlaylistLoaderConstructor } from "hls.js"
@@ -788,7 +792,8 @@ import {
   C_URL,
   DELAY_SAVE_HISTORY,
   DELAY_SAVE_VIEWING_PROGRESS,
-  isNative,playbackRates,
+  isNative,
+  playbackRates,
   servers,
 } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
@@ -796,10 +801,9 @@ import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
-import {
-  ResponseDataSeasonSuccess} from "src/pages/phim/_season.interface";
+import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface"
 import type {
-  ProgressWatchStore ,
+  ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
   Season,
@@ -831,7 +835,6 @@ const { t } = useI18n()
 const playerWrapRef = ref<HTMLDivElement>()
 const documentVisibility = useDocumentVisibility()
 
-
 interface SiblingChap {
   season: {
     name: string
@@ -842,7 +845,6 @@ interface SiblingChap {
     id: string
   }
 }
-
 
 const props = defineProps<{
   sources?: Awaited<ReturnType<typeof PlayerLink>>["link"]
@@ -1331,7 +1333,6 @@ function onVideoEnded() {
   }
 }
 
-
 // eslint-disable-next-line functional/no-let
 let artPlayingOfBeforeDocumentHide: boolean
 watch(documentVisibility, (visibility) => {
@@ -1480,7 +1481,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
       progressive: true,
       fragLoadingRetryDelay: 10000,
       fetchSetup(context, initParams) {
-        context.url += "#animevsub-vsub" + offEnds
+        context.url += `#animevsub-vsub${offEnds}_uafirefox`
 
         // set header because this version always cors not fix by extension liek desktop-web
         isNative && initParams.headers.set("x-referer", C_URL)
@@ -1542,13 +1543,10 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           // set header because this version always cors not fix by extension liek desktop-web
           headers.set("referer", C_URL)
 
-          fetchJava(
-            context.url + (!isNative ? "#animevsub-vsub" : ""),
-            {
-              headers,
-              signal: controller.signal,
-            }
-          )
+          fetchJava(context.url + (!isNative ? "#animevsub-vsub_uafirefox" : ""), {
+            headers,
+            signal: controller.signal,
+          })
             .then(async (res) => {
               // eslint-disable-next-line functional/no-let
               let byteLength: number
@@ -2048,7 +2046,6 @@ onBeforeUnmount(() => {
   navigator.mediaSession?.setActionHandler("previoustrack", null)
   navigator.mediaSession?.setActionHandler("nexttrack", null)
 })
-
 
 const showDialogSetting = ref(false)
 const showDialogChapter = ref(false)
