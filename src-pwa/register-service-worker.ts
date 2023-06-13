@@ -38,7 +38,7 @@ register(process.env.SERVICE_WORKER_FILE, {
     Notify.create({
       message: i18n.global.t("ung-dung-da-duoc-cap-nhat"),
       position: "bottom-right",
-      timeout: 0,
+      timeout: 1500,
       actions: [
         {
           label: i18n.global.t("lam-moi-ngay"),
@@ -49,7 +49,7 @@ register(process.env.SERVICE_WORKER_FILE, {
         },
         {
           label: i18n.global.t("de-sau"),
-          round: true,
+          noCaps: true,
         },
       ],
     })
