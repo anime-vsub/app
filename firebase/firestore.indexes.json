@@ -1,4 +1,33 @@
 {
-  "indexes": [],
-  "fieldOverrides": []
+  "indexes": [
+    {
+      "collectionGroup": "history",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "playlist",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "created", "order": "DESCENDING" }
+      ]
+    },
+
+    {
+      "collectionGroup": "movies",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "add_at", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "movies",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "add_at", "order": "DESCENDING" }
+      ]
+    }
+  ]
 }
