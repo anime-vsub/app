@@ -624,6 +624,7 @@
             <q-img-custom
               v-if="authStore.user_data?.avatar"
               :src="forceHttp2(authStore.user_data.avatar)"
+              no-spinner
               referrerpolicy="no-referrer"
             />
             <Icon
