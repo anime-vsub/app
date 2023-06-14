@@ -144,10 +144,10 @@
         v-else
         no-image
         class="h-[146px] px-4"
-        @click:retry="
-          last30ItemGet = true
+        @click:retry="() => {
+          last30ItemGet = true;
           refreshHistories()
-        "
+        }"
         :error="undefined"
       />
     </div>
