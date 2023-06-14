@@ -405,7 +405,7 @@ const activeIndex = ref(0)
 watch(
   activeIndex,
   (activeIndex) => {
-    fetchRankType(types[activeIndex][1])
+    fetchRankType(types.value[activeIndex][1])
   },
   { immediate: true }
 )

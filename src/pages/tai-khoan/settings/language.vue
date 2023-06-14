@@ -37,6 +37,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { languages } from "src/i18n"
 import { useSettingsStore } from "stores/settings"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
