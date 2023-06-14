@@ -1,9 +1,9 @@
 <template>
   <header class="fixed z-1000 bg-dark-page w-full">
     <q-toolbar>
-      <q-toolbar-title class="text-center absolute w-full"
-        >Tin tức</q-toolbar-title
-      >
+      <q-toolbar-title class="text-center absolute w-full">{{
+        t("tin-tuc")
+      }}</q-toolbar-title>
       <q-space />
 
       <div

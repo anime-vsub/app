@@ -7,7 +7,7 @@
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
       >
-        Anime đã xem</q-toolbar-title
+        {{ t("anime-da-xem") }}</q-toolbar-title
       >
     </q-toolbar>
   </header>
@@ -74,11 +74,12 @@
                 {{ item.seasonName }} tập {{ item.last.name }}
               </div>
               <div class="text-grey mt-2">
-                Xem lúc
                 {{
-                  item.timestamp.format(
-                    item.timestamp.isToday() ? "HH:mm" : "DD/MM/YYYY"
-                  )
+                  t("xem-luc-_value", [
+                    item.timestamp.format(
+                      item.timestamp.isToday() ? "HH:mm" : "DD/MM/YYYY"
+                    ),
+                  ])
                 }}
               </div>
             </div>
@@ -113,10 +114,12 @@ import { forceHttp2 } from "src/logic/forceHttp2"
 import { parseTime } from "src/logic/parseTime"
 import { useHistoryStore } from "stores/history"
 import { ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
+const { t } = useI18n()
 const historyStore = useHistoryStore()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 

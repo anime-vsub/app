@@ -6,25 +6,28 @@
       width="240"
       class="mx-auto"
     />
-    <div class="text-h4 mt-4">Bạn là Robot?</div>
+    <div class="text-h4 mt-4">{{ t("ban-la-robot") }}</div>
 
     <div
       class="text-h6 text-[16px] px-2 leading-normal text-gray-200 text-weight-regular mt-4"
     >
-      Yêu cầu gửi tới máy chủ bị nghi ngờ là robot vui lòng xác thực bạn là con
-      người và thử lại.
+      {{
+        t(
+          "yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai"
+        )
+      }}
       <div class="mt-2">
-        <q-btn rounded outline no-caps color="blue" @click="openAnimeVietsub"
-          >Mở AnimeVietsub để xác thực</q-btn
-        >
+        <q-btn rounded outline no-caps color="blue" @click="openAnimeVietsub">{{
+          t("mo-animevietsub-de-xac-thuc")
+        }}</q-btn>
       </div>
-      <small class="mt-3 text-[12px] text-gray-400"
-        >Sau khi xác thực hãy nhấn vào nút bên dưới</small
-      >
+      <small class="mt-3 text-[12px] text-gray-400">{{
+        t("sau-khi-xac-thuc-hay-nhan-vao-nut-ben-duoi")
+      }}</small>
       <br />
-      <small class="mt-3 text-[12px] text-gray-400"
-        >Nếu sự cố vẫn tiếp diễn bạn có thể cần một VPN trỏ tới Việt Nam</small
-      >
+      <small class="mt-3 text-[12px] text-gray-400">{{
+        t("neu-su-co-van-tiep-dien-ban-co-the-can-mot-vpn-tro-toi-viet-nam")
+      }}</small>
     </div>
 
     <q-btn

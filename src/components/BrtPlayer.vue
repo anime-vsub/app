@@ -946,7 +946,7 @@ watch(
         return
       }
 
-      const currentUid =  uidChap.value
+      const currentUid = uidChap.value
 
       try {
         if (stateStorageStore.disableAutoRestoration > 0) {

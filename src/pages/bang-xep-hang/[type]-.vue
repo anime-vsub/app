@@ -6,7 +6,7 @@
       </q-btn>
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
-        >Bảng xếp hạng</q-toolbar-title
+        >{{ t("bang-xep-hang") }}</q-toolbar-title
       >
     </q-toolbar>
     <q-toolbar>
@@ -97,21 +97,23 @@ import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import ranks from "src/logic/ranks"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
-import { ref, shallowReactive, watch, watchEffect } from "vue"
+import { computed, ref, shallowReactive, watch, watchEffect } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 import "swiper/css"
 
 const router = useRouter()
+const { t } = useI18n()
 
-const types = [
-  ["Mặc định", ""],
-  ["Ngày", "day"],
-  ["Tháng", "month"],
-  ["Năm", "year"],
-  ["Đánh giá", "voted"],
-  ["Mùa", "season"],
-]
+const types = computed(() => [
+  [t("mac-dinh"), ""],
+  [t("ngay"), "day"],
+  [t("thang"), "month"],
+  [t("nam"), "year"],
+  [t("danh-gia"), "voted"],
+  [t("mua"), "season"],
+])
 
 const dataStore = shallowReactive<
   Map<
@@ -194,4 +196,3 @@ function onSlideChange(swiper: TSwiper) {
   activeIndex.value = swiper.activeIndex
 }
 </script>
-=

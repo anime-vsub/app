@@ -91,7 +91,7 @@
             {{ data.name }}
           </h1>
           <h5 class="text-gray-400 text-weight-normal">
-            {{ formatView(data.views) }} lượt xem
+            {{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}
 
             <span v-if="currentDataSeason?.update">
               &bull;
@@ -111,7 +111,7 @@
     </div>
 
     <div class="text-gray-400">
-      Tác giả
+      {{ t("tac-gia") }}
       <template v-for="(item, index) in data.authors" :key="item.name">
         <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
           item.name
@@ -119,7 +119,7 @@
         ><template v-if="index < data.authors.length - 1">, </template>
       </template>
       <div class="divider"></div>
-      sản xuất bởi {{ data.studio }}
+      {{ t("san-xuat-boi-_studio", [data.studio]) }}
     </div>
 
     <div class="text-[rgb(230,230,230)] mt-3">
@@ -127,7 +127,7 @@
       <div class="divider"></div>
       {{ data.yearOf }}
       <div class="divider"></div>
-      Cập nhật tới tập {{ data.duration }}
+      {{ t("cap-nhat-toi-tap-_duration", [data.duration]) }}
       <div class="divider"></div>
       <router-link
         v-for="item in data.contries"
@@ -149,7 +149,7 @@
       </div>
       <div class="divider"></div>
       <span class="text-gray-400">
-        {{ formatView(data.count_rate) }} người đánh giá
+        {{ t("_rate-nguoi-danh-gia", [formatView(data.count_rate)]) }}
       </span>
       <div class="divider"></div>
       <!-- <span class="text-gray-400">
@@ -168,7 +168,7 @@
         :to="item.path"
         class="text-[rgb(28,199,73)]"
       >
-        #{{ item.name.replace(/ /, "_") }}
+        {{ t("tag-_val", [item.name.replace(/ /, "_")]) }}
       </router-link>
     </div>
 
@@ -197,7 +197,7 @@
       </q-btn>
       <q-btn stack no-caps class="mr-4 text-weight-normal" @click="share">
         <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
-        <span class="text-[12px] mt-1">Chia sẻ</span>
+        <span class="text-[12px] mt-1">{{ t("chia-se") }}</span>
       </q-btn>
       <q-btn
         stack
@@ -220,7 +220,7 @@
       @click="showDialogChapter = true"
     >
       <div class="flex items-center justify-between text-subtitle2 w-full">
-        Tập
+        {{ t("Tap") }}
 
         <div class="flex no-wrap justify-end">
           <q-btn
@@ -252,7 +252,8 @@
             />
           </q-btn>
           <span class="flex items-center text-gray-300 font-weight-normal">
-            Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
+            {{ t("tron-bo") }}
+            <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
           </span>
         </div>
       </div>
@@ -280,7 +281,7 @@
           v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
           class="text-center"
         >
-          Lỗi khi lấy dữ liệu
+          {{ t("loi-khi-lay-du-lieu") }}
           <br />
           <q-btn
             dense
@@ -288,7 +289,7 @@
             style="color: #00be06"
             @click="fetchSeason(value)"
             rounded
-            >Thử lại</q-btn
+            >{{ t("thu-lai") }}</q-btn
           >
         </div>
         <ChapsGridQBtn
@@ -334,7 +335,7 @@
 
     <!-- comment embed -->
     <div class="mt-5 flex items-center justify-between flex-nowrap">
-      <span class="text-subtitle1 text-[#eee]">Bình luận</span>
+      <span class="text-subtitle1 text-[#eee]">{{ t("binh-luan") }}</span>
       <q-toggle
         v-model="settingsStore.ui.commentAnime"
         color="main"
@@ -364,7 +365,7 @@
       class="!overflow-visible flex column flex-nowrap py-0 px-4"
     >
       <div class="flex items-center justify-between text-subtitle1 py-2">
-        Season
+        {{ t("season") }}
         <div>
           <q-btn
             dense
@@ -436,7 +437,7 @@
               v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
               class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
             >
-              Lỗi khi lấy dữ liệu
+              {{ t("loi-khi-lay-du-lieu") }}
               <br />
               <q-btn
                 rounded
@@ -444,7 +445,7 @@
                 no-caps
                 style="color: #00be06"
                 @click="fetchSeason(value)"
-                >Thử lại</q-btn
+                >{{ t("thu-lai") }}</q-btn
               >
             </div>
 
@@ -480,7 +481,7 @@
       class="!overflow-visible flex column flex-nowrap py-0"
     >
       <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
-        Chi tiết
+        {{ t("chi-tiet") }}
         <q-btn dense flat round icon="close" v-close-popup />
       </div>
       <q-card-section
@@ -507,22 +508,26 @@
                 {{ data.contries[0]?.name ?? "unknown" }}
               </div>
 
-              <div class="mt-2">Phát hành năm {{ data.yearOf }}</div>
+              <div class="mt-2">
+                {{ t("phat-hanh-nam-data-yearof", [data.yearOf]) }}
+              </div>
 
-              <div class="mt-2">Tập {{ data.duration }} đã cập nhật</div>
+              <div class="mt-2">
+                {{ t("tap-data-duration-da-cap-nhat", [data.duration]) }}
+              </div>
             </div>
           </div>
 
           <ul class="mt-8">
             <li>
-              <span>Tên khác: </span>
+              <span>{{ t("ten-khac") }} </span>
 
               <span class="text-[#eee] leading-relaxed">{{
                 data.othername
               }}</span>
             </li>
             <li class="mt-3">
-              <span>Loại: </span>
+              <span>{{ t("loai") }} </span>
 
               <span class="text-[#eee]">
                 <q-btn
@@ -540,14 +545,14 @@
             </li>
           </ul>
 
-          <div class="mt-5 text-[#eee] text-[16px]">Giới thiệu</div>
+          <div class="mt-5 text-[#eee] text-[16px]">{{ t("gioi-thieu") }}</div>
           <p
             class="mt-3 leading-loose whitespace-pre-wrap"
             v-html="data.description"
           />
 
           <template v-if="data.trailer">
-            <div class="mt-5 text-[#eee] text-[16px]">Trailer</div>
+            <div class="mt-5 text-[#eee] text-[16px]">{{ t("trailer") }}</div>
             <q-video class="mt-3" :src="data.trailer!" :ratio="16 / 9" />
           </template>
         </div>
@@ -585,6 +590,7 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import { EmbedFbCmt } from "embed-fbcmt-client/vue"
+import { get, set } from "idb-keyval"
 import {
   QBtn,
   QCard,
@@ -1249,41 +1255,44 @@ watch(
         try {
           if (server === "DU") {
             if (typeCurrentConfig !== "DU")
-              PlayerLink(currentMetaChap).then((conf) => {
-                // eslint-disable-next-line promise/always-return
-                if (settingsStore.player.server === "DU") {
-                  configPlayer.value = conf
-                  typeCurrentConfig = "DU"
-                }
-              })
-              .catch(err => {
-                error.value =err
-              })
+              PlayerLink(currentMetaChap)
+                .then((conf) => {
+                  // eslint-disable-next-line promise/always-return
+                  if (settingsStore.player.server === "DU") {
+                    configPlayer.value = conf
+                    typeCurrentConfig = "DU"
+                  }
+                })
+                .catch((err) => {
+                  error.value = err
+                })
           }
           if (server === "FB") {
             // PlayerFB は常に PlayerLink よりも遅いため、DU を使用して高速プリロード戦術を使用する必要があります。
             if (typeCurrentConfig !== "DU")
-              PlayerLink(currentMetaChap).then((conf) => {
+              PlayerLink(currentMetaChap)
+                .then((conf) => {
+                  // eslint-disable-next-line promise/always-return
+                  if (!loadedServerFB && settingsStore.player.server === "DU") {
+                    configPlayer.value = conf
+                    typeCurrentConfig = "DU"
+                  }
+                })
+                .catch((err) => {
+                  error.value = err
+                })
+            PlayerFB(currentMetaChap.id)
+              .then((conf) => {
                 // eslint-disable-next-line promise/always-return
-                if (!loadedServerFB && settingsStore.player.server === "DU") {
+                if (settingsStore.player.server === "FB") {
                   configPlayer.value = conf
-                  typeCurrentConfig = "DU"
+                  typeCurrentConfig = "FB"
                 }
+                loadedServerFB = true
               })
-              .catch(err => {
-                error.value =err
+              .catch((err) => {
+                error.value = err
               })
-            PlayerFB(currentMetaChap.id).then((conf) => {
-              // eslint-disable-next-line promise/always-return
-              if (settingsStore.player.server === "FB") {
-                configPlayer.value = conf
-                typeCurrentConfig = "FB"
-              }
-              loadedServerFB = true
-            })
-            .catch(err => {
-              error.value =err
-            })
           }
         } catch (err) {
           $q.notify({
@@ -1437,7 +1446,7 @@ async function toggleFollow() {
   if (!authStore.isLogged) {
     $q.notify({
       position: "bottom-right",
-      message: "Hãy đăng nhập trước để theo dõi",
+      message: t("hay-dang-nhap-truoc-de-theo-doi"),
     })
     return
   }
@@ -1450,8 +1459,8 @@ async function toggleFollow() {
   $q.notify({
     position: "bottom-right",
     message: followed.value
-      ? "Đã thêm vào danh sách theo dõi"
-      : "Đã xóa khỏi danh sách theo dõi",
+      ? t("da-them-vao-danh-sach-theo-doi")
+      : t("da-xoa-khoi-danh-sach-theo-doi"),
   })
 }
 
@@ -1465,7 +1474,7 @@ function share() {
     title: `Xem ${data.value.name} series ${currentMetaSeason.value.name}`,
     text: `Xem ${data.value.name} tập ${currentMetaChap.value.name}`,
     url: C_URL + route.path,
-    dialogTitle: `Chia sẻ ${data.value.name}`,
+    dialogTitle: t("chia-se") + " " + data.value.name,
   })
 }
 // ================ status ================
