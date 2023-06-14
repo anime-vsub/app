@@ -5,8 +5,7 @@ export default function Index(html: string) {
   const $ = parserDom(html)
   const now = Date.now()
 
-  const thisSeason = $(".MovieListTopCn:eq(0)")
-    .find(".TPostMv")
+  const thisSeason = $(".MovieListTopCn .TPostMv")
     .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
   const carousel = $(".MovieListSldCn .TPostMv")

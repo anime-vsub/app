@@ -1,4 +1,12 @@
 // Import the functions you need from the SDKs you need
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
+import type { CustomParams, Item } from "@firebase/analytics"
+import {
+  getAnalytics,
+  logEvent as logPWA,
+  setUserId as setUserIdPWA,
+  setUserProperties as setUserPropertiesPWA,
+} from "@firebase/analytics"
 import { initializeApp } from "@firebase/app"
 import type { Index } from "@firebase/firestore"
 import {
@@ -9,6 +17,7 @@ import {
   setIndexConfiguration,
 } from "@firebase/firestore"
 import configure from "app/firebase/firestore.indexes.json"
+import { isNative } from "src/constants"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -46,3 +55,43 @@ setIndexConfiguration(
   })
 
 export { app, db }
+
+const analytics = isNative ? null : getAnalytics()
+
+export const logEvent = isNative
+  ? (name: string, params: object = {}) =>
+      FirebaseAnalytics.logEvent({ name, params })
+  : (
+      name: string,
+      params?: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [key: string]: any
+        coupon?: string | undefined
+        currency?: string | undefined
+        items?: Item[] | undefined
+        payment_type?: string | undefined
+        value?: string | undefined
+      }
+    ) => {
+      if (analytics) {
+        logPWA(analytics, name, params)
+      }
+    }
+
+export const setScreenName = isNative
+  ? FirebaseAnalytics.setScreenName
+  : // eslint-disable-next-line @typescript-eslint/no-empty-function
+    () => {}
+export const setUserProperty = isNative
+  ? FirebaseAnalytics.setUserProperty
+  : (options: CustomParams) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      setUserPropertiesPWA(analytics!, options)
+    }
+export const setUserId = isNative
+  ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    (id: string | null) => FirebaseAnalytics.setUserId({ userId: id! })
+  : (id: string | null) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      setUserIdPWA(analytics!, id)
+    }

@@ -9,8 +9,9 @@ export type TPost = ReturnType<typeof getInfoTPost>
 export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const path = getPathName(cheerio.find("a").attr("href")!)
+  const img$ = cheerio.find("img")
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const image = cheerio.find("img").attr("src")!
+  const image = img$.attr("data-cfsrc") ?? img$.attr("src")!
   const name = cheerio.find(".Title:eq(0)").text()
 
   const _chap = cheerio.find(".mli-eps > i:eq(0)").text()

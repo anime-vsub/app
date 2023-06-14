@@ -105,12 +105,15 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import QImgCustom from "components/QImgCustom"
 import ScreenLoading from "src/components/ScreenLoading.vue"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+import { isNative } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
+import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
@@ -119,6 +122,31 @@ useAliveScrollBehavior()
 
 const router = useRouter()
 const { t } = useI18n()
+
+if (!isNative)
+  useHead(
+    computed(() => {
+      const title = t('thong-bao')
+
+      const description = title
+
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
+
 const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
 

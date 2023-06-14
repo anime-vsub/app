@@ -6,6 +6,10 @@ export const servers = {
   DU: "High",
   FB: "Low",
 } as const
+export const isNative =
+  process.env.MODE === "android" ||
+  process.env.MODE === "ios" ||
+  process.env.MODE === "capacitor"
 export const playbackRates = [
   {
     name: "0.5x",
@@ -41,7 +45,7 @@ export const TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE = 5_000 // 5s
 export const REGEXP_OLD_HOST_CURL = /animevietsub\.(?:\w+)/i
 
 export const HOST_CURL = [
-  97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46,  109, 111, 101,
+  97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46, 109, 111, 101,
 ]
   .map((val) => String.fromCharCode(val))
   .join("")

@@ -11,7 +11,5 @@
   },
   "bundledWebRuntime": false,
   "webDir": "www",
-  "server": {
-    "url": "http://192.168.0.129:9500"
-  }
+  "server": {}
 }

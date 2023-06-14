@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { defineStore } from "pinia"
 import { parse } from "set-cookie-parser"
 import sha256 from "sha256"
 import { DangNhap } from "src/apis/runs/dang-nhap"
+import { logEvent, setUserId, setUserProperty } from "src/boot/firebase"
 import { i18n } from "src/boot/i18n"
 import { post } from "src/logic/http"
 import { computed, ref, watch } from "vue"
@@ -69,7 +69,7 @@ export const useAuthStore = defineStore(
         username: data.username,
       })
 
-      FirebaseAnalytics.logEvent({ name: "login", params: {} })
+      logEvent("login")
 
       setTokenByCookie(data.cookie)
 
@@ -79,7 +79,7 @@ export const useAuthStore = defineStore(
       deleteToken()
       deleteUser()
 
-      FirebaseAnalytics.logEvent({ name: "logout", params: {} })
+      logEvent("logout")
     }
     async function changePassword(newPassword: string) {
       if (!user_data.value)
@@ -118,20 +118,15 @@ export const useAuthStore = defineStore(
     watch(
       user_data,
       (user_data) =>
-        FirebaseAnalytics.setUserProperty({
+        setUserProperty({
           name: "sex",
           value: user_data?.sex ?? "unknown",
         }),
       { immediate: true }
     )
-    watch(
-      uid,
-      (uid) =>
-        FirebaseAnalytics.setUserId({
-          userId: uid ?? (null as unknown as string),
-        }),
-      { immediate: true }
-    )
+    watch(uid, (uid) => setUserId(uid ?? (null as unknown as string)), {
+      immediate: true,
+    })
 
     return {
       user_data,

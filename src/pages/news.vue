@@ -152,13 +152,15 @@
 import "dayjs/locale/vi"
 import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import QImgCustom from "components/QImgCustom"
 import { QInfiniteScroll } from "quasar"
 import { NewsAnime } from "src/apis/runs/news-anime"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+import { isNative } from "src/constants"
 import dayjs from "src/logic/dayjs"
 import { forceHttp2 } from "src/logic/forceHttp2"
-import { ref, shallowReactive } from "vue"
+import { computed, ref, shallowReactive } from "vue"
 import { useI18n } from "vue-i18n"
 
 // Import Swiper Vue.js components
@@ -166,6 +168,31 @@ useAliveScrollBehavior()
 // https://tinanime.com/api/news/?p=3
 
 const { t } = useI18n()
+
+if (!isNative)
+  useHead(
+    computed(() => {
+      const title = t("tin-tuc-otaku")
+
+      const description = title
+
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
+
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const viewMode = ref<1 | 2>(1)

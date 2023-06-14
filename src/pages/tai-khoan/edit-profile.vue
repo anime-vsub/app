@@ -162,17 +162,43 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
+import { useHead } from "@vueuse/head"
 import QImgCustom from "components/QImgCustom"
 import { useQuasar } from "quasar"
+import { isNative } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { useAuthStore } from "stores/auth"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
+const { t } = useI18n()
+
+if (!isNative)
+  useHead(
+    computed(() => {
+      const title = t("thong-tin-tai-khoan")
+      const description = title
+
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
+
 const $q = useQuasar()
 const router = useRouter()
-const { t } = useI18n()
 
 const authStore = useAuthStore()
 
