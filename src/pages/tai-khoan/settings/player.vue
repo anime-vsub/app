@@ -43,8 +43,10 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useSettingsStore } from "stores/settings"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
+const { t } = useI18n()
 const settingsStore = useSettingsStore()
 </script>

@@ -177,9 +177,11 @@ import semverGt from "semver/functions/gt"
 import { parseMdBasic } from "src/logic/parseMdBasic"
 import { useNotificationStore } from "stores/notification"
 import { shallowRef } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 
 const route = useRoute()
+const { t } = useI18n()
 const notificationStore = useNotificationStore()
 
 const newVersion = shallowRef()

@@ -176,10 +176,12 @@ import dayjs from "src/logic/dayjs"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { ref, watchEffect } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
+const { t } = useI18n()
 
 const { loading, data, refreshAsync, error } = useRequest(() => LichChieuPhim())
 // eslint-disable-next-line promise/no-callback-in-promise

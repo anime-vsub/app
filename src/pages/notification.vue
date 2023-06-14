@@ -111,12 +111,14 @@ import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { useAuthStore } from "stores/auth"
 import { useNotificationStore } from "stores/notification"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
 
 const router = useRouter()
+const { t } = useI18n()
 const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
 

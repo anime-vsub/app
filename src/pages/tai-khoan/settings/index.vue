@@ -77,9 +77,11 @@
 <script lang="ts" setup>
 import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
+const { t } = useI18n()
 
 function open(url: string) {
   Browser.open({ url })
