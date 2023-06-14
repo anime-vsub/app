@@ -647,9 +647,9 @@ import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
   Season,
 } from "./_season.interface"
-import { ResponseDataSeasonSuccess } from "./_season.interface"
 
 // ================ follow ================
 // =======================================================

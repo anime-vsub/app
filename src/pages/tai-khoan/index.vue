@@ -139,7 +139,7 @@
         no-image
         class="h-[146px] px-4"
         @click:retry="
-          last30ItemGet = true
+          last30ItemGet = true;
           refreshHistories()
         "
         :error="undefined"
