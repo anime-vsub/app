@@ -1,9 +1,15 @@
 <template>
   <div class="w-full text-center">
     <div class="loader w-full" />
-    <div>Đang lấy dữ liệu...</div>
+    <div>{{ t("dang-lay-du-lieu") }}</div>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
+</script>
 
 <style lang="scss" scoped>
 .loader {

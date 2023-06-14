@@ -6,7 +6,7 @@
       </q-btn>
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
-        >Lịch chiếu</q-toolbar-title
+        >{{ t("lich-chieu") }}</q-toolbar-title
       >
     </q-toolbar>
 
@@ -102,9 +102,9 @@
             <div
               class="w-full my-7 flex relative items-center justify-center before:content-DEFAULT before:absolute before:w-full before:h-[1px] before:bg-[rgba(200,200,200,0.5)] text-[14px]"
             >
-              <span class="px-2 bg-dark-page z-2 text-grey"
-                >Bây giờ:{{ dayjs().format("HH:mm") }}</span
-              >
+              <span class="px-2 bg-dark-page z-2 text-grey">{{
+                t("bay-gio-hh-mm", [dayjs().format("HH:mm")])
+              }}</span>
             </div>
 
             <!-- next on today -->
@@ -211,6 +211,7 @@ useHead(
 )
 
 const router = useRouter()
+const { t } = useI18n()
 
 const { loading, data, refreshAsync, error } = useRequest(() => LichChieuPhim())
 // eslint-disable-next-line promise/no-callback-in-promise

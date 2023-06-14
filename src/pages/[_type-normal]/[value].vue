@@ -43,7 +43,7 @@
             class="bg-dark-700 px-4 text-zinc-400 py-1 h-[45px] flex items-center justify-between"
             @click="showDialogGener = true"
           >
-            Thể loại
+            {{ t("the-loai") }}
             <Icon icon="fluent:chevron-down-24-regular" />
           </div>
         </div>
@@ -52,7 +52,7 @@
             class="bg-dark-700 px-4 text-zinc-400 py-1 h-[45px] flex items-center justify-between"
             @click="showDialogSeaser = true"
           >
-            Mùa
+            {{ t("mua") }}
             <Icon icon="fluent:chevron-down-24-regular" />
           </div>
         </div>
@@ -61,7 +61,7 @@
             class="bg-dark-700 px-4 text-zinc-400 py-1 h-[45px] flex items-center justify-between"
             @click="showDialogTyper = true"
           >
-            Loại
+            {{ t("loai") }}
             <Icon icon="fluent:chevron-down-24-regular" />
           </div>
         </div>
@@ -70,15 +70,14 @@
             class="bg-dark-700 px-4 text-zinc-400 py-1 h-[45px] flex items-center justify-between"
             @click="showDialogSorter = true"
           >
-            Sắp xếp
+            {{ t("sap-xep") }}
             <Icon icon="fluent:chevron-down-24-regular" />
           </div>
         </div>
       </div>
 
       <div v-if="textFilter" class="text-center text-gray-500 mb-1">
-        Đã chọn:
-        {{ textFilter }}
+        {{ t("da-chon-textfilter", [textFilter]) }}
       </div>
     </template>
   </header>
@@ -114,7 +113,7 @@
     >
       <q-card flat class="w-full pt-3 !max-h-[60vh]">
         <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Loại</div>
+          <div class="text-subtitle1 mx-1">{{ t("loai") }}</div>
 
           <q-btn
             dense
@@ -122,7 +121,7 @@
             no-caps
             class="text-weight-normal"
             @click="genres.splice(0)"
-            >Đặt lại</q-btn
+            >{{ t("dat-lai") }}</q-btn
           >
         </q-card-section>
 
@@ -150,7 +149,9 @@
           <!-- -->
         </q-card-section>
 
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>{{
+          t("huy")
+        }}</q-btn>
       </q-card>
     </q-dialog>
 
@@ -164,7 +165,7 @@
     >
       <q-card flat class="w-full pt-3">
         <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Mùa</div>
+          <div class="text-subtitle1 mx-1">{{ t("mua") }}</div>
 
           <q-btn
             dense
@@ -172,7 +173,7 @@
             no-caps
             class="text-weight-normal"
             @click="seaser = null"
-            >Đặt lại</q-btn
+            >{{ t("dat-lai") }}</q-btn
           >
         </q-card-section>
 
@@ -200,7 +201,9 @@
           <!-- -->
         </q-card-section>
 
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>{{
+          t("huy")
+        }}</q-btn>
       </q-card>
     </q-dialog>
 
@@ -214,7 +217,7 @@
     >
       <q-card flat class="w-full pt-3">
         <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Loại</div>
+          <div class="text-subtitle1 mx-1">{{ t("loai") }}</div>
 
           <q-btn
             dense
@@ -222,7 +225,7 @@
             no-caps
             class="text-weight-normal"
             @click="typer = null"
-            >Đặt lại</q-btn
+            >{{ t("dat-lai") }}</q-btn
           >
         </q-card-section>
 
@@ -249,7 +252,9 @@
           <!-- -->
         </q-card-section>
 
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>{{
+          t("huy")
+        }}</q-btn>
       </q-card>
     </q-dialog>
 
@@ -263,7 +268,7 @@
     >
       <q-card flat class="w-full pt-3">
         <q-card-section class="py-0 flex items-center justify-between">
-          <div class="text-subtitle1 mx-1">Sắp xếp</div>
+          <div class="text-subtitle1 mx-1">{{ t("sap-xep") }}</div>
 
           <q-btn
             dense
@@ -271,7 +276,7 @@
             no-caps
             class="text-weight-normal"
             @click="sorter = null"
-            >Đặt lại</q-btn
+            >{{ t("dat-lai") }}</q-btn
           >
         </q-card-section>
 
@@ -296,7 +301,9 @@
           <!-- -->
         </q-card-section>
 
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>{{
+          t("huy")
+        }}</q-btn>
       </q-card>
     </q-dialog>
 
@@ -311,7 +318,7 @@
         <div class="relative">
           <!-- sorter -->
           <q-card-section class="py-0 flex items-center justify-between">
-            <div class="text-subtitle1 mx-1">Sắp xếp theo</div>
+            <div class="text-subtitle1 mx-1">{{ t("sap-xep-theo") }}</div>
 
             <q-btn
               dense
@@ -319,7 +326,7 @@
               no-caps
               class="text-weight-normal"
               @click="resetFilter"
-              >Đặt lại</q-btn
+              >{{ t("dat-lai") }}</q-btn
             >
           </q-card-section>
 
@@ -346,7 +353,7 @@
 
           <!-- gener -->
           <q-card-section class="py-0">
-            <div class="text-subtitle1 mx-1">Thể loại</div>
+            <div class="text-subtitle1 mx-1">{{ t("the-loai") }}</div>
           </q-card-section>
 
           <q-card-section class="row">
@@ -391,7 +398,7 @@
 
           <!-- typer -->
           <q-card-section class="py-0">
-            <div class="text-subtitle1 mx-1">Loại</div>
+            <div class="text-subtitle1 mx-1">{{ t("loai") }}</div>
           </q-card-section>
 
           <q-card-section class="row">
@@ -419,7 +426,7 @@
 
           <!-- seaser -->
           <q-card-section class="py-0">
-            <div class="text-subtitle1 mx-1">Mùa</div>
+            <div class="text-subtitle1 mx-1">{{ t("mua") }}</div>
           </q-card-section>
 
           <q-card-section class="row">
@@ -447,7 +454,7 @@
 
           <!-- year -->
           <q-card-section class="py-0">
-            <div class="text-subtitle1 mx-1">Năm</div>
+            <div class="text-subtitle1 mx-1">{{ t("nam") }}</div>
           </q-card-section>
 
           <q-card-section class="row">
@@ -473,7 +480,9 @@
           </q-card-section>
         </div>
 
-        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>Hủy</q-btn>
+        <q-btn flat no-caps class="w-full py-2 mb-2" v-close-popup>{{
+          t("huy")
+        }}</q-btn>
       </q-card>
     </q-dialog>
   </template>
@@ -490,11 +499,13 @@ import { QInfiniteScroll } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { isNative } from "src/constants"
 import { computed, reactive, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const showDialogGener = ref(false)

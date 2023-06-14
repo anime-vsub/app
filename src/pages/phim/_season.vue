@@ -46,7 +46,7 @@
   </template>
 
   <div
-    v-if="loading && !data"
+    v-if="!error && loading && !data"
     class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px]"
   >
     <q-responsive :ratio="16 / 9" />
@@ -80,7 +80,7 @@
     <SkeletonGridCard class="mt-3" :count="12" />
   </div>
 
-  <div v-else-if="data" class="mx-4">
+  <div v-else-if="!error && data" class="mx-4">
     <q-responsive :ratio="16 / 9" />
 
     <div v-ripple @click="showDialogInforma = true" class="relative mt-6">
@@ -92,7 +92,7 @@
             {{ data.name }}
           </h1>
           <h5 class="text-gray-400 text-weight-normal">
-            {{ formatView(data.views) }} lượt xem
+            {{ t("formatview-data-views-luot-xem", [formatView(data.views)]) }}
 
             <span v-if="currentDataSeason?.update">
               &bull;
@@ -112,7 +112,7 @@
     </div>
 
     <div class="text-gray-400">
-      Tác giả
+      {{ t("tac-gia") }}
       <template v-for="(item, index) in data.authors" :key="item.name">
         <router-link :to="item.path" class="text-[rgb(28,199,73)]">{{
           item.name
@@ -120,7 +120,7 @@
         ><template v-if="index < data.authors.length - 1">, </template>
       </template>
       <div class="divider"></div>
-      sản xuất bởi {{ data.studio }}
+      {{ t("san-xuat-boi-_studio", [data.studio]) }}
     </div>
 
     <div class="text-[rgb(230,230,230)] mt-3">
@@ -128,7 +128,7 @@
       <div class="divider"></div>
       {{ data.yearOf }}
       <div class="divider"></div>
-      Cập nhật tới tập {{ data.duration }}
+      {{ t("cap-nhat-toi-tap-_duration", [data.duration]) }}
       <div class="divider"></div>
       <router-link
         v-for="item in data.contries"
@@ -150,7 +150,7 @@
       </div>
       <div class="divider"></div>
       <span class="text-gray-400">
-        {{ formatView(data.count_rate) }} người đánh giá
+        {{ t("_rate-nguoi-danh-gia", [formatView(data.count_rate)]) }}
       </span>
       <div class="divider"></div>
       <!-- <span class="text-gray-400">
@@ -169,7 +169,7 @@
         :to="item.path"
         class="text-[rgb(28,199,73)]"
       >
-        #{{ item.name.replace(/ /, "_") }}
+        {{ t("tag-_val", [item.name.replace(/ /, "_")]) }}
       </router-link>
     </div>
 
@@ -198,7 +198,7 @@
       </q-btn>
       <q-btn stack no-caps class="mr-4 text-weight-normal" @click="share">
         <Icon icon="fluent:share-ios-24-regular" width="28" height="28" />
-        <span class="text-[12px] mt-1">Chia sẻ</span>
+        <span class="text-[12px] mt-1">{{ t("chia-se") }}</span>
       </q-btn>
       <q-btn
         stack
@@ -221,7 +221,7 @@
       @click="showDialogChapter = true"
     >
       <div class="flex items-center justify-between text-subtitle2 w-full">
-        Tập
+        {{ t("Tap") }}
 
         <div class="flex no-wrap justify-end">
           <q-btn
@@ -253,7 +253,8 @@
             />
           </q-btn>
           <span class="flex items-center text-gray-300 font-weight-normal">
-            Trọn bộ <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
+            {{ t("tron-bo") }}
+            <q-icon name="chevron_right" class="mr-[-8px]"></q-icon>
           </span>
         </div>
       </div>
@@ -281,7 +282,7 @@
           v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
           class="text-center"
         >
-          Lỗi khi lấy dữ liệu
+          {{ t("loi-khi-lay-du-lieu") }}
           <br />
           <q-btn
             dense
@@ -289,7 +290,7 @@
             style="color: #00be06"
             @click="fetchSeason(value)"
             rounded
-            >Thử lại</q-btn
+            >{{ t("thu-lai") }}</q-btn
           >
         </div>
         <ChapsGridQBtn
@@ -335,7 +336,7 @@
 
     <!-- comment embed -->
     <div class="mt-5 flex items-center justify-between flex-nowrap">
-      <span class="text-subtitle1 text-[#eee]">Bình luận</span>
+      <span class="text-subtitle1 text-[#eee]">{{ t("binh-luan") }}</span>
       <q-toggle
         v-model="settingsStore.ui.commentAnime"
         color="main"
@@ -350,6 +351,8 @@
     />
   </div>
 
+  <ScreenError v-else :error="error" @click:retry="resetErrorAndRun()" />
+
   <!-- bottom sheet -->
   <q-dialog
     v-if="data"
@@ -363,7 +366,7 @@
       class="!overflow-visible flex column flex-nowrap py-0 px-4"
     >
       <div class="flex items-center justify-between text-subtitle1 py-2">
-        Season
+        {{ t("season") }}
         <div>
           <q-btn
             dense
@@ -435,7 +438,7 @@
               v-else-if="_cacheDataSeasons.get(value)?.status === 'error'"
               class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
             >
-              Lỗi khi lấy dữ liệu
+              {{ t("loi-khi-lay-du-lieu") }}
               <br />
               <q-btn
                 rounded
@@ -443,7 +446,7 @@
                 no-caps
                 style="color: #00be06"
                 @click="fetchSeason(value)"
-                >Thử lại</q-btn
+                >{{ t("thu-lai") }}</q-btn
               >
             </div>
 
@@ -479,7 +482,7 @@
       class="!overflow-visible flex column flex-nowrap py-0"
     >
       <div class="flex items-center justify-between text-subtitle1 px-2 py-2">
-        Chi tiết
+        {{ t("chi-tiet") }}
         <q-btn dense flat round icon="close" v-close-popup />
       </div>
       <q-card-section
@@ -506,22 +509,26 @@
                 {{ data.contries[0]?.name ?? "unknown" }}
               </div>
 
-              <div class="mt-2">Phát hành năm {{ data.yearOf }}</div>
+              <div class="mt-2">
+                {{ t("phat-hanh-nam-data-yearof", [data.yearOf]) }}
+              </div>
 
-              <div class="mt-2">Tập {{ data.duration }} đã cập nhật</div>
+              <div class="mt-2">
+                {{ t("tap-data-duration-da-cap-nhat", [data.duration]) }}
+              </div>
             </div>
           </div>
 
           <ul class="mt-8">
             <li>
-              <span>Tên khác: </span>
+              <span>{{ t("ten-khac") }} </span>
 
               <span class="text-[#eee] leading-relaxed">{{
                 data.othername
               }}</span>
             </li>
             <li class="mt-3">
-              <span>Loại: </span>
+              <span>{{ t("loai") }} </span>
 
               <span class="text-[#eee]">
                 <q-btn
@@ -539,14 +546,14 @@
             </li>
           </ul>
 
-          <div class="mt-5 text-[#eee] text-[16px]">Giới thiệu</div>
+          <div class="mt-5 text-[#eee] text-[16px]">{{ t("gioi-thieu") }}</div>
           <p
             class="mt-3 leading-loose whitespace-pre-wrap"
             v-html="data.description"
           />
 
           <template v-if="data.trailer">
-            <div class="mt-5 text-[#eee] text-[16px]">Trailer</div>
+            <div class="mt-5 text-[#eee] text-[16px]">{{ t("trailer") }}</div>
             <q-video class="mt-3" :src="data.trailer!" :ratio="16 / 9" />
           </template>
         </div>
@@ -571,7 +578,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Directory, Encoding, Filesystem } from "@capacitor/filesystem"
 import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
@@ -585,6 +591,7 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import { EmbedFbCmt } from "embed-fbcmt-client/vue"
+import { get, set } from "idb-keyval"
 import {
   QBtn,
   QCard,
@@ -623,13 +630,15 @@ import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
 import { useStateStorageStore } from "stores/state"
-import type { Ref } from "vue"
+import type { Ref, ShallowRef } from "vue"
 import {
   computed,
+  getCurrentInstance,
   onBeforeUnmount,
   reactive,
   ref,
   shallowRef,
+  toRaw,
   watch,
   watchEffect,
 } from "vue"
@@ -651,11 +660,9 @@ import type {
 
 // ============================================
 
-// eslint-disable-next-line functional/no-let
-let watcherSeasons: (() => void) | undefined
-
 const route = useRoute()
 const router = useRouter()
+const instance = getCurrentInstance()
 const historyStore = useHistoryStore()
 const settingsStore = useSettingsStore()
 const playlistStore = usePlaylistStore()
@@ -679,42 +686,43 @@ const { data, run, error, loading } = useRequest(
   async () => {
     // const { }
     const id = realIdCurrentSeason.value
+
     if (!id) return Promise.reject()
+
     // eslint-disable-next-line functional/no-let
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
+
     await Promise.any([
-      Filesystem.readFile({
-        path: `phim-${id}.json`,
-        directory: Directory.Cache,
-        encoding: Encoding.UTF8,
-      }).then(({ data }) => {
+      get(`data-${id}`).then((text: string) => {
+        // eslint-disable-next-line functional/no-throw-statement
+        if (!text) throw new Error("not_found")
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
-        if (result) Object.assign(result.value, JSON.parse(data))
-        else result = ref(JSON.parse(data))
+        if (result) Object.assign(result.value, JSON.parse(text))
+        else result = ref(JSON.parse(text))
       }),
+      PhimId(realIdCurrentSeason.value)
+        .then(async (data) => {
+          // eslint-disable-next-line promise/always-return
+          if (result) Object.assign(result.value, data)
+          else result = ref(data)
 
-      PhimId(id).then(async (data) => {
-        // eslint-disable-next-line promise/always-return
-        if (result) Object.assign(result.value, data)
-        else result = ref(data)
-
-        Filesystem.writeFile({
-          path: `phim-${id}.json`,
-          directory: Directory.Cache,
-          encoding: Encoding.UTF8,
-          data: JSON.stringify(data),
+          set(`data-${id}`, JSON.stringify(data))
+            // eslint-disable-next-line promise/no-nesting
+            .then(() => {
+              return console.log("[fs]: save cache to fs %s", id)
+            })
+            // eslint-disable-next-line promise/no-nesting, @typescript-eslint/no-empty-function
+            .catch(() => {})
         })
-          // eslint-disable-next-line promise/always-return, promise/no-nesting
-          .then(() => {
-            console.log("[fs]: save cache to fs %s", id)
-          })
-          // eslint-disable-next-line promise/no-nesting
-          .catch((err) => {
-            console.warn("[fs]: save cache fail: ", err)
-          })
-      }),
+        .catch((err) => {
+          error.value = err as Error
+          console.error(err)
+          // eslint-disable-next-line functional/no-throw-statement
+          throw err
+        }),
     ])
+
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return result!.value
   },
@@ -727,20 +735,10 @@ const { data, run, error, loading } = useRequest(
     },
   }
 )
-watch(error, (error) => {
-  console.error(PhimId, realIdCurrentSeason.value)
-  if (error)
-    router.push({
-      name: "not_found",
-      params: {
-        pathMatch: route.path,
-      },
-      query: {
-        message: error.message,
-        cause: error.cause + "",
-      },
-    })
-})
+function resetErrorAndRun() {
+  error.value = undefined
+  run()
+}
 
 const seasons = shallowRef<Season[]>()
 watch(
@@ -788,14 +786,14 @@ const _cacheDataSeasons = reactive<
 >(new Map())
 const progressWatchStore = reactive<ProgressWatchStore>(new Map())
 
-onBeforeUnmount(() => watcherSeasons?.())
+const responseOnlineStore = new WeakSet<
+  ShallowRef<Awaited<ReturnType<typeof PhimIdChap>> | undefined>
+>()
 async function fetchSeason(season: string) {
   // if (!seasons.value) {
   //   console.warn("seasons not ready")
   //   return
   // }
-  watcherSeasons?.()
-  watcherSeasons = undefined
 
   if (!progressWatchStore.has(season))
     progressWatchStore.set(season, { status: "queue" })
@@ -816,11 +814,53 @@ async function fetchSeason(season: string) {
 
     const realIdSeason = getRealSeasonId(season)
 
-    const response = await PhimIdChap(realIdSeason)
+    const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
+    await Promise.any([
+      PhimIdChap(realIdSeason).then((data) => {
+        // mergeListEp(response.value, data)
+        // eslint-disable-next-line promise/always-return
+        if (
+          !response.value ||
+          response.value.chaps.length !== data.chaps.length ||
+          JSON.stringify(data) !== JSON.stringify(toRaw(response.value))
+        ) {
+          console.info("cache wrong")
 
-    if (response.chaps.length === 0) {
+          const task = set(`season_data ${realIdSeason}`, JSON.stringify(data))
+
+          if (import.meta.env.DEV)
+            task
+              // eslint-disable-next-line promise/no-nesting, promise/always-return
+              .then(() => {
+                console.log("[fs]: save cache season %s", realIdSeason)
+              })
+              // eslint-disable-next-line promise/no-nesting
+              .catch((err) =>
+                console.warn(
+                  "[fs]: failure save cache season %s",
+                  realIdSeason,
+                  err
+                )
+              )
+          console.log("[online]: use data from internet")
+          response.value = data
+          console.log("data from internet is ", data)
+        }
+        responseOnlineStore.add(response)
+      }),
+      get(`season_data ${realIdSeason}`).then((json?: string) => {
+        // eslint-disable-next-line promise/always-return, functional/no-throw-statement
+        if (!json) throw new Error("not_found")
+        console.log("[fs]: use cache %s", realIdSeason)
+        response.value = JSON.parse(json)
+      }),
+    ])
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (response.value!.chaps.length === 0) {
       console.warn("chaps not found")
-      response.chaps = [
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      response.value!.chaps = [
         {
           id: "0",
           play: "1",
@@ -830,13 +870,12 @@ async function fetchSeason(season: string) {
           name: t("trailer"),
         },
       ]
-    } else if (response.chaps.length > 50) {
+    } else if (response.value && response.value.chaps.length > 50) {
       console.log("large chap. spliting...")
-      const { chaps } = response
 
       // eslint-disable-next-line no-inner-declarations
       function watchHandler() {
-        if (!seasons.value) return
+        if (!seasons.value || !response.value) return
 
         // eslint-disable-next-line functional/no-let
         let indexMetaSeason = seasons.value.findIndex(
@@ -853,6 +892,7 @@ async function fetchSeason(season: string) {
         const nameSeason = seasons.value[indexMetaSeason].name
 
         const seasonsSplited: Season[] = []
+        const { chaps } = response.value
         unflat(chaps, 50).forEach((chapsSplited, index) => {
           const value = index === 0 ? realIdSeason : `${realIdSeason}$${index}`
           const name = `${nameSeason} (${chapsSplited[0].name} - ${
@@ -865,7 +905,8 @@ async function fetchSeason(season: string) {
           const newData: ResponseDataSeasonSuccess = {
             status: "success",
             response: {
-              ...response,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              ...response.value!,
               chaps: chapsSplited,
               ssSibs: seasonsSplited,
             },
@@ -890,21 +931,48 @@ async function fetchSeason(season: string) {
         seasons.value = newSeasons
         console.log("new seasons: ", newSeasons)
         console.log("set seasons: ", seasons.value)
+
+        return responseOnlineStore.has(response)
       }
 
-      if (seasons.value) watchHandler()
-      else {
-        watcherSeasons = watch(
-          seasons,
-          () => {
-            if (!seasons.value) return
-            watcherSeasons?.()
-            watcherSeasons = undefined
-            watchHandler()
-          },
-          { immediate: true }
-        )
-      }
+      // eslint-disable-next-line functional/no-let
+      let watcherResponse: (() => void) | undefined = watch(response, () => {
+        const doneAll = watchHandler()
+        if (doneAll) {
+          watcherResponse?.()
+          watcherResponse = undefined
+        }
+      })
+      // eslint-disable-next-line functional/no-let
+      let watcherSeasons: (() => void) | undefined
+      watcherSeasons = watch(
+        () => typeof seasons.value !== "undefined",
+        (seasonsExists) => {
+          if (!seasonsExists) return
+
+          const doneAll = watchHandler()
+          if (doneAll) {
+            watcherResponse?.()
+            watcherResponse = undefined
+          }
+
+          if (watcherSeasons) watcherSeasons()
+          else {
+            // eslint-disable-next-line promise/catch-or-return
+            Promise.resolve().then(() => {
+              // eslint-disable-next-line promise/always-return
+              watcherSeasons?.()
+              watcherSeasons = undefined
+            })
+          }
+        },
+        { immediate: true }
+      )
+
+      onBeforeUnmount(() => {
+        watcherSeasons?.()
+        watcherResponse?.()
+      }, instance)
       return
     }
 
@@ -916,6 +984,7 @@ async function fetchSeason(season: string) {
     console.log(_cacheDataSeasons)
   } catch (err) {
     console.warn(err)
+    error.value = err as Error
     Object.assign(currentDataSeason, {
       status: "error",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1293,41 +1362,54 @@ watch(
 
     // eslint-disable-next-line functional/no-let
     let typeCurrentConfig: keyof typeof servers | null = null
+    // eslint-disable-next-line functional/no-let
+    let loadedServerFB = false
     // setup watcher it
     const watcher = watch(
       () => settingsStore.player.server,
       async (server) => {
+        loadedServerFB = false
         try {
           if (server === "DU") {
             if (typeCurrentConfig !== "DU")
-              // eslint-disable-next-line promise/catch-or-return
-              PlayerLink(currentMetaChap).then((conf) => {
-                // eslint-disable-next-line promise/always-return
-                if (settingsStore.player.server === "DU") {
-                  configPlayer.value = conf
-                  typeCurrentConfig = "DU"
-                }
-              })
+              PlayerLink(currentMetaChap)
+                .then((conf) => {
+                  // eslint-disable-next-line promise/always-return
+                  if (settingsStore.player.server === "DU") {
+                    configPlayer.value = conf
+                    typeCurrentConfig = "DU"
+                  }
+                })
+                .catch((err) => {
+                  error.value = err
+                })
           }
           if (server === "FB") {
             // PlayerFB は常に PlayerLink よりも遅いため、DU を使用して高速プリロード戦術を使用する必要があります。
             if (typeCurrentConfig !== "DU")
-              // eslint-disable-next-line promise/catch-or-return
-              PlayerLink(currentMetaChap).then((conf) => {
+              PlayerLink(currentMetaChap)
+                .then((conf) => {
+                  // eslint-disable-next-line promise/always-return
+                  if (!loadedServerFB && settingsStore.player.server === "DU") {
+                    configPlayer.value = conf
+                    typeCurrentConfig = "DU"
+                  }
+                })
+                .catch((err) => {
+                  error.value = err
+                })
+            PlayerFB(currentMetaChap.id)
+              .then((conf) => {
                 // eslint-disable-next-line promise/always-return
-                if (settingsStore.player.server === "DU") {
+                if (settingsStore.player.server === "FB") {
                   configPlayer.value = conf
-                  typeCurrentConfig = "DU"
+                  typeCurrentConfig = "FB"
                 }
+                loadedServerFB = true
               })
-            // eslint-disable-next-line promise/catch-or-return
-            PlayerFB(currentMetaChap.id).then((conf) => {
-              // eslint-disable-next-line promise/always-return
-              if (settingsStore.player.server === "FB") {
-                configPlayer.value = conf
-                typeCurrentConfig = "FB"
-              }
-            })
+              .catch((err) => {
+                error.value = err
+              })
           }
         } catch (err) {
           $q.notify({
@@ -1478,7 +1560,7 @@ async function toggleFollow() {
   if (!authStore.isLogged) {
     $q.notify({
       position: "bottom-right",
-      message: "Hãy đăng nhập trước để theo dõi",
+      message: t("hay-dang-nhap-truoc-de-theo-doi"),
     })
     return
   }
@@ -1491,8 +1573,8 @@ async function toggleFollow() {
   $q.notify({
     position: "bottom-right",
     message: followed.value
-      ? "Đã thêm vào danh sách theo dõi"
-      : "Đã xóa khỏi danh sách theo dõi",
+      ? t("da-them-vao-danh-sach-theo-doi")
+      : t("da-xoa-khoi-danh-sach-theo-doi"),
   })
 }
 
@@ -1506,7 +1588,7 @@ function share() {
     title: `Xem ${data.value.name} series ${currentMetaSeason.value.name}`,
     text: `Xem ${data.value.name} tập ${currentMetaChap.value.name}`,
     url: C_URL + route.path,
-    dialogTitle: `Chia sẻ ${data.value.name}`,
+    dialogTitle: t("chia-se") + " " + data.value.name,
   })
 }
 // ================ status ================

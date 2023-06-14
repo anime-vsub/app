@@ -8,13 +8,16 @@ import {
   setUserProperties as setUserPropertiesPWA,
 } from "@firebase/analytics"
 import { initializeApp } from "@firebase/app"
+import type { Index } from "@firebase/firestore"
 import {
   CACHE_SIZE_UNLIMITED,
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
+  setIndexConfiguration,
 } from "@firebase/firestore"
 import { isNative } from "src/constants"
+import configure from "app/firebase/firestore.indexes.json"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,6 +40,19 @@ const db = initializeFirestore(app, {
     tabManager: persistentMultipleTabManager(),
   }),
 })
+setIndexConfiguration(
+  db,
+  configure as {
+    indexes: Index[]
+  }
+)
+  // eslint-disable-next-line promise/always-return
+  .then(() => {
+    console.log("[Install indexes]: Installed indexes")
+  })
+  .catch((err) => {
+    console.error("[Install indexes]: failure ", err)
+  })
 
 export { app, db }
 

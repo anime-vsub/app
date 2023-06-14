@@ -1,9 +1,9 @@
 <template>
   <header class="fixed z-1000 bg-dark-page w-full">
     <q-toolbar>
-      <q-toolbar-title class="text-center absolute w-full"
-        >Tin tức</q-toolbar-title
-      >
+      <q-toolbar-title class="text-center absolute w-full">{{
+        t("tin-tuc")
+      }}</q-toolbar-title>
       <q-space />
 
       <div
@@ -159,11 +159,13 @@ import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
 import dayjs from "src/logic/dayjs"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { ref, shallowReactive } from "vue"
+import { useI18n } from "vue-i18n"
 
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
 // https://tinanime.com/api/news/?p=3
 
+const { t } = useI18n()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const viewMode = ref<1 | 2>(1)

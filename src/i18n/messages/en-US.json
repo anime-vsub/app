@@ -253,5 +253,8 @@
   "t-yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "{0}",
   "yeu-cau-gui-toi-may-chu-bi-nghi-ngo-la-robot-vui-long-xac-thuc-ban-la-con-nguoi-va-thu-lai": "Request sent to server suspected to be robot, please verify you are human and try again.",
   "full-season": "Full Season",
-  "movie": "Movie"
+  "movie": "Movie",
+  "de-sau": "Later",
+  "lam-moi-ngay": "Refresh now",
+  "ung-dung-da-duoc-cap-nhat": "The app has been updated"
 }

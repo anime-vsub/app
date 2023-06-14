@@ -801,11 +801,11 @@ import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
-import { ResponseDataSeasonSuccess } from "src/pages/phim/_season.interface"
 import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
+  ResponseDataSeasonSuccess,
   Season,
 } from "src/pages/phim/_season.interface"
 import { useAuthStore } from "stores/auth"
@@ -977,6 +977,8 @@ watch(
         return
       }
 
+      const currentUid = uidChap.value
+
       try {
         if (stateStorageStore.disableAutoRestoration > 0) {
           addNotice(t("bo-qua-khoi-phuc-tien-trinh-xem"))
@@ -1000,7 +1002,7 @@ watch(
         if ((err as Error)?.message !== "NOT_RESET") console.error(err)
       }
 
-      progressRestored = uidChap.value
+      progressRestored = currentUid
     }
   },
   { immediate: true }

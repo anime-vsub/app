@@ -7,7 +7,7 @@
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
       >
-        Giới thiệu về AnimeVsub
+        {{ t("gioi-thieu-ve-animevsub") }}
       </q-toolbar-title>
     </q-toolbar>
   </header>
@@ -15,7 +15,7 @@
   <q-list v-if="infoApp && infoDev" class="pt-[47px]">
     <q-item clickable v-ripple>
       <q-item-section>
-        <q-item-label>Phiên bản ứng dụng</q-item-label>
+        <q-item-label>{{ t("phien-ban-ung-dung") }}</q-item-label>
         <q-item-label caption
           >{{ infoApp.name }} {{ infoApp.version }} build
           {{ infoApp.build }}</q-item-label
@@ -24,7 +24,7 @@
     </q-item>
     <q-item clickable v-ripple>
       <q-item-section>
-        <q-item-label>Hệ điều hành</q-item-label>
+        <q-item-label>{{ t("he-dieu-hanh") }}</q-item-label>
         <q-item-label caption
           >{{ infoDev.operatingSystem }} {{ infoDev.osVersion }};
           {{ infoDev.name }}</q-item-label
@@ -48,10 +48,12 @@ import { version } from "app/package.json"
 import { useQuasar } from "quasar"
 import { isNative } from "src/constants"
 import { shallowRef } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
 const $q = useQuasar()
+const { t } = useI18n()
 
 const infoApp = shallowRef()
 const infoDev = shallowRef()
@@ -65,7 +67,7 @@ Promise.all([
 ]).catch(() => {
   $q.notify({
     position: "bottom-right",
-    message: "Không thể lấy dữ liệu",
+    message: t("khong-the-lay-du-lieu"),
   })
 })
 </script>

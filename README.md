@@ -1,6 +1,7 @@
 # AnimeVsub Application!
 
 ## Working Wait... ⚠
+
 **Versions up to `1.7.90` do not currently work. I agree to the objection from [`https://animevietsub.im`](https://animevietsub.im) and also because there are hundreds of apps on `Google Play` that insert ads into this app and upload it in violation of the license [GNU GPL v3](./LICENSE) I decided to add code against piracy.**
 
 **This will also open the door to support for `multiple source` and `multiple language`**
@@ -10,9 +11,9 @@
    <h1 style="font-size: 16px">AnimeVsub</h1>
 </div>
 
-**Download the app by downloading the latest [release version](https://github.com/anime-vsub/app/releases) or visit https://app.animevsub.ga to download it**
+**Download the app by downloading the latest [release version](https://github.com/anime-vsub/app/releases) or visit https://app.animevsub.eu.org to download it**
 
-> **The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.ga**
+> **The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.eu.org**
 
 > ~~The goal of this application is to allow users to interact intuitively and explore new Anime sets in place of the outdated web interface of [animevietsub](https://animevietsub.pro).~~
 >

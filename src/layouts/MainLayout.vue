@@ -37,7 +37,7 @@
             height="24"
             class="mb-1 filled"
           />
-          Trang chủ
+          {{ t("trang-chu") }}
         </q-route-tab>
         <q-route-tab
           replace
@@ -57,7 +57,7 @@
             height="24"
             class="mb-1 filled"
           />
-          Tìm kiếm
+          {{ t("tim-kiem") }}
         </q-route-tab>
         <q-route-tab
           replace
@@ -77,7 +77,7 @@
             height="24"
             class="mb-1 filled"
           />
-          Tin tức
+          {{ t("tin-tuc") }}
         </q-route-tab>
         <q-route-tab
           replace
@@ -97,7 +97,7 @@
             height="24"
             class="mb-1 filled"
           />
-          Thông báo
+          {{ t("thong-bao") }}
           <q-badge v-if="notificationStore.max" color="red" floating>{{
             notificationStore.max
           }}</q-badge>
@@ -120,7 +120,7 @@
             height="24"
             class="mb-1 filled"
           />
-          Tôi
+          {{ t("toi") }}
         </q-route-tab>
       </q-tabs>
     </q-footer>
@@ -134,7 +134,9 @@
   >
     <q-card class="">
       <q-card-section>
-        <div class="text-subtitle1 text-weight-medium">Có bản cập nhật mới</div>
+        <div class="text-subtitle1 text-weight-medium">
+          {{ t("da-co-ban-cap-nhat-moi") }}
+        </div>
 
         <div class="text-grey">
           {{ newVersion.tag_name }} (current: {{ appInfos.version }})
@@ -153,14 +155,14 @@
           flat
           no-caps
           color="grey"
-          label="Bỏ qua"
+          :label="t('bo-qua')"
           @click="ignoreUpdateVersion(newVersion.tag_name)"
         />
         <q-btn
           flat
           no-caps
           color="main"
-          label="Cập nhật"
+          :label="t('cap-nhat')"
           target="_blank"
           href="https://anime-vsub.github.io/changelog"
         />
@@ -180,12 +182,14 @@ import { isNative } from "src/constants"
 import { parseMdBasic } from "src/logic/parseMdBasic"
 import { useNotificationStore } from "stores/notification"
 import { shallowRef } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
 
 
 const route = useRoute()
+const { t } = useI18n()
 const notificationStore = useNotificationStore()
 
 const newVersion = shallowRef()

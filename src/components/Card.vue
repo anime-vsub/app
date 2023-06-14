@@ -18,11 +18,15 @@
           </template>
 
           <span v-if="!data.chap">
-            <template v-if="data.process"> Tập {{ data.process }} </template>
-            <template v-else-if="data.quality">Movie</template>
+            <template v-if="data.process">
+              {{ t("tap-_chap", [data.process]) }}
+            </template>
+            <template v-else-if="data.quality">{{ t("movie") }}</template>
           </span>
-          <span v-else-if="data.chap === 'Full_Season'">Full Season</span>
-          <span v-else>Tập {{ data.chap }}</span>
+          <span v-else-if="data.chap === 'Full_Season'">{{
+            t("full-season")
+          }}</span>
+          <span v-else>{{ t("tap-_chap", [data.chap]) }}</span>
         </BottomBlur>
         <Quality
           v-if="data.quality"
@@ -51,9 +55,12 @@ import QImgCustom from "components/QImgCustom"
 import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import ranks from "src/logic/ranks"
+import { useI18n } from "vue-i18n"
 
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
+
+const { t } = useI18n()
 
 defineProps<{
   data: TPost

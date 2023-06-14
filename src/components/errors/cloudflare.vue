@@ -24,6 +24,10 @@
       <small class="mt-3 text-[12px] text-gray-400">{{
         t("sau-khi-xac-thuc-hay-nhan-vao-nut-ben-duoi")
       }}</small>
+      <br />
+      <small class="mt-3 text-[12px] text-gray-400">{{
+        t("neu-su-co-van-tiep-dien-ban-co-the-can-mot-vpn-tro-toi-viet-nam")
+      }}</small>
     </div>
 
     <q-btn
@@ -31,7 +35,7 @@
       no-caps
       outline
       rounded
-      @click="retry"
+      @click="reload"
       style="color: #00be06"
       >{{ t("thu-lai") }}</q-btn
     >
@@ -53,6 +57,7 @@ const { t } = useI18n()
 function openAnimeVietsub() {
   Browser.open({ url: C_URL })
 }
+const reload = () => location.reload()
 </script>
 
 <style></style>

@@ -7,7 +7,7 @@
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
       >
-        Cài đặt chung
+        {{ t("cai-dat-chung") }}
       </q-toolbar-title>
     </q-toolbar>
   </header>
@@ -15,7 +15,7 @@
   <q-list class="pt-[47px]">
     <q-item clickable v-ripple to="/tai-khoan/settings/player">
       <q-item-section>
-        <q-item-label>Cài đặt phát</q-item-label>
+        <q-item-label>{{ t("cai-dat-phat") }}</q-item-label>
       </q-item-section>
     </q-item>
     <q-item
@@ -24,12 +24,22 @@
       href="mailto:ogmo2r3q@duck.com?subject=Phản hồi ứng dụng git.shin.animevsub"
     >
       <q-item-section>
-        <q-item-label>Phản hồi</q-item-label>
+        <q-item-label>{{ t("phan-hoi") }}</q-item-label>
+      </q-item-section>
+    </q-item>
+    <q-item clickable v-ripple to="/tai-khoan/settings/player">
+      <q-item-section>
+        <q-item-label>{{ t("cai-dat-phat") }}</q-item-label>
+      </q-item-section>
+    </q-item>
+    <q-item clickable v-ripple to="/tai-khoan/settings/language">
+      <q-item-section>
+        <q-item-label>{{ t("ngon-ngu") }}</q-item-label>
       </q-item-section>
     </q-item>
     <q-item clickable v-ripple to="/tai-khoan/settings/about">
       <q-item-section>
-        <q-item-label>Về AnimeVsub</q-item-label>
+        <q-item-label>{{ t("ve-animevsub") }}</q-item-label>
       </q-item-section>
     </q-item>
     <q-item
@@ -38,7 +48,7 @@
       @click="open('https://anime-vsub.github.io/about/tems-of-use?embed=true')"
     >
       <q-item-section>
-        <q-item-label>Điều khoản sử dụng</q-item-label>
+        <q-item-label>{{ t("dieu-khoan-su-dung") }}</q-item-label>
       </q-item-section>
     </q-item>
     <q-item
@@ -49,7 +59,7 @@
       "
     >
       <q-item-section>
-        <q-item-label>Chính sách riêng tư</q-item-label>
+        <q-item-label>{{ t("chinh-sach-rieng-tu") }}</q-item-label>
       </q-item-section>
     </q-item>
     <q-item
@@ -58,7 +68,7 @@
       @click="open('https://anime-vsub.github.io/about/disclaimer?embed=true')"
     >
       <q-item-section>
-        <q-item-label>Tuyên bố từ chối trách nhiệm</q-item-label>
+        <q-item-label>{{ t("tuyen-bo-tu-choi-trach-nhiem") }}</q-item-label>
       </q-item-section>
     </q-item>
   </q-list>
@@ -67,9 +77,11 @@
 <script lang="ts" setup>
 import { Browser } from "@capacitor/browser"
 import { Icon } from "@iconify/vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
+const { t } = useI18n()
 
 function open(url: string) {
   Browser.open({ url })

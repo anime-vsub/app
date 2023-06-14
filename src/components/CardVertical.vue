@@ -20,9 +20,9 @@
 
       <div class="mt-2">
         <template v-if="data.year"
-          >{{ data.year }} <span class="mx-1">|</span> </template
-        >Tập
-        {{ data.process }}
+          >{{ data.year }} <span class="mx-1">|</span>
+        </template>
+        {{ t("tap-_chap", [data.process]) }}
       </div>
 
       <p v-if="data.description" class="text-grey mt-2 line-clamp-2">
@@ -40,7 +40,7 @@
         <Icon icon="bi:bookmark-plus" />
         <!-- <Icon icon="bi:bookmark-check" /> -->
 
-        Yêu thích
+        {{ t("yeu-thich") }}
       </q-btn>
     </div>
   </router-link>
@@ -50,6 +50,9 @@
 import { Icon } from "@iconify/vue"
 import QImgCustom from "components/QImgCustom"
 import { forceHttp2 } from "src/logic/forceHttp2"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 defineProps<{
   data: {

@@ -7,7 +7,7 @@
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
       >
-        Anime đã theo dõi</q-toolbar-title
+        {{ t("anime-da-theo-doi") }}</q-toolbar-title
       >
     </q-toolbar>
   </header>
@@ -81,6 +81,7 @@ useHead(
     }
   })
 )
+
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const { data, loading, run, refreshAsync, error } = useRequest(() => TuPhim(1))
