@@ -45,7 +45,7 @@
   </template>
 
   <div
-    v-if="loading && !data"
+    v-if="!error && loading && !data"
     class="absolute w-full h-full overflow-hidden px-4 pt-6 text-[28px]"
   >
     <q-responsive :ratio="16 / 9" />
@@ -79,7 +79,7 @@
     <SkeletonGridCard class="mt-3" :count="12" />
   </div>
 
-  <div v-else-if="data" class="mx-4">
+  <div v-else-if="!error && data" class="mx-4">
     <q-responsive :ratio="16 / 9" />
 
     <div v-ripple @click="showDialogInforma = true" class="relative mt-6">
@@ -348,6 +348,8 @@
       class="bg-gray-400 rounded-xl mt-3 overflow-hidden"
     />
   </div>
+
+  <ScreenError v-else :error="error" @click:retry="resetErrorAndRun()" />
 
   <!-- bottom sheet -->
   <q-dialog
@@ -724,20 +726,10 @@ const { data, run, error, loading } = useRequest(
     },
   }
 )
-watch(error, (error) => {
-  console.error(PhimId, realIdCurrentSeason.value)
-  if (error)
-    router.push({
-      name: "not_found",
-      params: {
-        pathMatch: route.path,
-      },
-      query: {
-        message: error.message,
-        cause: error.cause + "",
-      },
-    })
-})
+function resetErrorAndRun() {
+  error.value = undefined
+  run()
+}
 
 const seasons = shallowRef<Season[]>()
 watch(
@@ -1247,40 +1239,50 @@ watch(
 
     // eslint-disable-next-line functional/no-let
     let typeCurrentConfig: keyof typeof servers | null = null
+    // eslint-disable-next-line functional/no-let
+    let loadedServerFB = false
     // setup watcher it
     const watcher = watch(
       () => settingsStore.player.server,
       async (server) => {
+        loadedServerFB = false
         try {
           if (server === "DU") {
             if (typeCurrentConfig !== "DU")
-              // eslint-disable-next-line promise/catch-or-return
               PlayerLink(currentMetaChap).then((conf) => {
                 // eslint-disable-next-line promise/always-return
                 if (settingsStore.player.server === "DU") {
                   configPlayer.value = conf
                   typeCurrentConfig = "DU"
                 }
+              })
+              .catch(err => {
+                error.value =err
               })
           }
           if (server === "FB") {
             // PlayerFB は常に PlayerLink よりも遅いため、DU を使用して高速プリロード戦術を使用する必要があります。
             if (typeCurrentConfig !== "DU")
-              // eslint-disable-next-line promise/catch-or-return
               PlayerLink(currentMetaChap).then((conf) => {
                 // eslint-disable-next-line promise/always-return
-                if (settingsStore.player.server === "DU") {
+                if (!loadedServerFB && settingsStore.player.server === "DU") {
                   configPlayer.value = conf
                   typeCurrentConfig = "DU"
                 }
               })
-            // eslint-disable-next-line promise/catch-or-return
+              .catch(err => {
+                error.value =err
+              })
             PlayerFB(currentMetaChap.id).then((conf) => {
               // eslint-disable-next-line promise/always-return
               if (settingsStore.player.server === "FB") {
                 configPlayer.value = conf
                 typeCurrentConfig = "FB"
               }
+              loadedServerFB = true
+            })
+            .catch(err => {
+              error.value =err
             })
           }
         } catch (err) {
