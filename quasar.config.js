@@ -30,7 +30,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ["windi", "firebase", "i18n"],
+    boot: ["windi", "firebase", "head", "i18n"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -122,7 +122,7 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      https: false,
+      https: true,
       open: false, // opens browser window automatically
     },
 
@@ -188,13 +188,16 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
-      workboxMode: "generateSW", // or 'injectManifest'
+      workboxMode: "injectManifest", // or 'generateSW'
       injectPwaMetaTags: true,
       swFilename: "sw.js",
       manifestFilename: "manifest.json",
       useCredentialsForManifestTag: false,
       // extendGenerateSWOptions (cfg) {}
-      // extendInjectManifestOptions (cfg) {},
+      extendInjectManifestOptions (cfg) {
+        cfg.globIgnores ??= []
+        cfg.globIgnores.push("_redirects", "google7b3e7893e059da35.html")
+      }
       // extendManifestJson (json) {}
       // extendPWACustomSWConf (esbuildConf) {}
     },
