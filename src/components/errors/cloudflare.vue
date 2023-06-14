@@ -32,7 +32,7 @@
       no-caps
       outline
       rounded
-      @click="retry"
+      @click="reload"
       style="color: #00be06"
       >{{ t("thu-lai") }}</q-btn
     >
@@ -54,6 +54,7 @@ const { t } = useI18n()
 function openAnimeVietsub() {
   Browser.open({ url: C_URL })
 }
+const reload = () => location.reload()
 </script>
 
 <style></style>
