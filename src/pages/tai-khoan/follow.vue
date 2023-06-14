@@ -7,7 +7,7 @@
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
       >
-        Anime đã theo dõi</q-toolbar-title
+        {{ t("anime-da-theo-doi") }}</q-toolbar-title
       >
     </q-toolbar>
   </header>
@@ -42,10 +42,12 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
+const { t } = useI18n()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const { data, loading, run, refreshAsync, error } = useRequest(() => TuPhim(1))

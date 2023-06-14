@@ -1,7 +1,7 @@
 <template>
   <div class="w-full text-center">
     <div class="loader w-full" />
-    <div>Đang lấy dữ liệu...</div>
+    <div>{{ t("dang-lay-du-lieu") }}</div>
   </div>
 </template>
 

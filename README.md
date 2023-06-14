@@ -1,6 +1,7 @@
 # AnimeVsub Application!
 
 ## Working Wait... ⚠
+
 **Versions up to `1.7.90` do not currently work. I agree to the objection from [`https://animevietsub.im`](https://animevietsub.im) and also because there are hundreds of apps on `Google Play` that insert ads into this app and upload it in violation of the license [GNU GPL v3](./LICENSE) I decided to add code against piracy.**
 
 **This will also open the door to support for `multiple source` and `multiple language`**

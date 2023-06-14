@@ -7,7 +7,7 @@
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
       >
-        Tài khoản
+        {{ t("tai-khoan") }}
       </q-toolbar-title>
     </q-toolbar>
   </header>
@@ -40,7 +40,7 @@
     <q-list class="text-[15px]">
       <q-item>
         <q-item-section>
-          <q-item-label>Tên</q-item-label>
+          <q-item-label>{{ t("ten") }}</q-item-label>
         </q-item-section>
         <q-item-section side>
           <div class="flex items-center flex-nowrap">
@@ -51,7 +51,7 @@
 
       <q-item>
         <q-item-section>
-          <q-item-label>Email</q-item-label>
+          <q-item-label>{{ t("email") }}</q-item-label>
         </q-item-section>
         <q-item-section side>
           <div class="flex items-center flex-nowrap">
@@ -61,7 +61,7 @@
       </q-item>
       <q-item clickable v-ripple @click="showDialogChangePassword = true">
         <q-item-section>
-          <q-item-label>Đổi mật khẩu</q-item-label>
+          <q-item-label>{{ t("doi-mat-khau") }}</q-item-label>
         </q-item-section>
         <q-item-section side>
           <div class="flex items-center flex-nowrap">
@@ -77,8 +77,13 @@
     </q-list>
 
     <div class="mx-3">
-      <q-btn outline rounded color="red-5" class="w-full mt-10" @click="logout"
-        >Đăng xuất</q-btn
+      <q-btn
+        outline
+        rounded
+        color="red-5"
+        class="w-full mt-10"
+        @click="logout"
+        >{{ t("dang-xuat") }}</q-btn
       >
     </div>
 
@@ -94,7 +99,9 @@
           <div class="flex justify-between">
             <q-btn dense round />
 
-            <div class="flex-1 text-center text-subtitle1">Đổi mật khẩu</div>
+            <div class="flex-1 text-center text-subtitle1">
+              {{ t("doi-mat-khau") }}
+            </div>
 
             <q-btn dense round icon="close" v-close-popup />
           </div>
@@ -111,7 +118,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 name="new_password"
                 class="input"
-                placeholder="Mật khẩu mới"
+                placeholder="{{ t('mat-khau-moi') }}"
               />
               <q-btn
                 dense
@@ -130,8 +137,11 @@
             </div>
 
             <div class="text-grey py-1">
-              Quan trọng! Hãy nhớ mật khẩu bạn thay đổi vì nó khó có thể khôi
-              phục lại được nếu bị mất.
+              {{
+                t(
+                  "quan-trong-hay-nho-mat-khau-ban-thay-doi-vi-no-kho-co-the-khoi-phuc-lai-duoc-neu-bi-mat"
+                )
+              }}
             </div>
 
             <q-btn
@@ -141,7 +151,7 @@
               class="text-main w-full"
               outline
               :disable="!new_password"
-              >Đổi mật khẩu</q-btn
+              >{{ t("doi-mat-khau") }}</q-btn
             >
           </form>
         </q-card-section>
@@ -157,10 +167,12 @@ import { useQuasar } from "quasar"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { useAuthStore } from "stores/auth"
 import { ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
 const $q = useQuasar()
 const router = useRouter()
+const { t } = useI18n()
 
 const authStore = useAuthStore()
 
@@ -173,7 +185,7 @@ const new_password = ref("")
 
 async function changePassword() {
   const loader = $q.loading.show({
-    message: "Đang xác thực. Vui lòng đợi...",
+    message: t("dang-xac-thuc-vui-long-doi"),
     boxClass: "bg-dark text-light-9",
     spinnerColor: "main",
     delay: Infinity,
@@ -186,7 +198,7 @@ async function changePassword() {
     showDialogChangePassword.value = false
     $q.notify({
       position: "bottom-right",
-      message: "Đã đổi mật khẩu",
+      message: t("da-doi-mat-khau"),
     })
     // eslint-disable-next-line camelcase
     new_password.value = ""
@@ -195,7 +207,7 @@ async function changePassword() {
     console.error(err)
     $q.notify({
       position: "bottom-right",
-      message: "Đổi mật khẩu thất bại",
+      message: t("doi-mat-khau-that-bai"),
       caption: err.message,
     })
   } finally {
@@ -209,7 +221,7 @@ async function logout() {
 
   $q.notify({
     position: "bottom-right",
-    message: "Đã đăng xuất",
+    message: t("da-dang-xuat"),
   })
 }
 </script>

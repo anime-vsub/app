@@ -152,15 +152,15 @@
     <div class="row text-grey text-[12px] mx-4 text-center mb-4">
       <router-link to="/muc-luc" class="col-4 relative py-2" v-ripple>
         <img src="~assets/icon_tool_alp.png" width="30" class="mx-auto mb-2" />
-        <span class="mt-2">Mục lục</span>
+        <span class="mt-2">{{ t("muc-luc") }}</span>
       </router-link>
       <router-link to="/lich-chieu-phim" class="col-4 relative py-2" v-ripple>
         <img src="~assets/icon_tool_calc.png" width="30" class="mx-auto mb-2" />
-        <span>Lịch chiếu</span>
+        <span>{{ t("lich-chieu") }}</span>
       </router-link>
       <router-link to="/bang-xep-hang" class="col-4 relative py-2" v-ripple>
         <img src="~assets/icon_tool_rank.png" width="30" class="mx-auto mb-2" />
-        <span>Bảng xếp hạng</span>
+        <span>{{ t("bang-xep-hang") }}</span>
       </router-link>
     </div>
 
@@ -183,7 +183,7 @@
         to="/bang-xep-hang/day"
         class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between"
       >
-        Đề xuất
+        {{ t("de-xuat") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"
@@ -201,7 +201,7 @@
         to="/bang-xep-hang/day"
         class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between"
       >
-        Top
+        {{ t("top") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"
@@ -229,7 +229,7 @@
         to="/anime-sap-chieu"
         class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between"
       >
-        Sắp chiếu
+        {{ t("sap-chieu") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"
@@ -263,8 +263,8 @@
                       {{ tmp.format("HH:mm") }}
                     </div>
                     <div class="coming_soon-text-day">
-                      <template v-if="isTodayF"> Hôm nay </template>
-                      <template v-else> Ngày mai </template>
+                      <template v-if="isTodayF">{{ t("hom-nay") }}</template>
+                      <template v-else>{{ t("ngay-mai") }}</template>
                     </div>
                   </template>
                   <template v-else>
@@ -284,7 +284,9 @@
 
                   <!-- <template v-else>{{ tmp.format("DD/MM") }}</template> -->
                 </div>
-                <span v-else class="coming_soon-text-unknown">Sắp chiếu</span>
+                <span v-else class="coming_soon-text-unknown">{{
+                  t("sap-chieu")
+                }}</span>
               </div>
             </div>
 
@@ -299,7 +301,7 @@
         to="/anime-moi"
         class="text-subtitle1 text-weight-normal mx-2 flex items-center justify-between"
       >
-        Mới cập nhật
+        {{ t("moi-cap-nhat") }}
 
         <Icon
           icon="fluent:chevron-right-24-regular"

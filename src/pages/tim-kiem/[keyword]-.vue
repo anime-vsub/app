@@ -14,7 +14,7 @@
       <div class="relative w-full">
         <input
           class="w-full bg-[#2a2a2a] placeholder-[#818181] h-[39px] rounded-[30px] focus-visible:outline-none pl-6"
-          placeholder="Tìm kiếm"
+          :placeholder="t('tim-kiem')"
           v-model="query"
           @keyup="query = ($event.target as HTMLInputElement).value"
           @focus="searching = true"
@@ -73,7 +73,7 @@
     <q-toolbar v-if="!keyword && !searching">
       <div class="flex items-center mx-3">
         <div>
-          <div class="title">Thịnh hành</div>
+          <div class="title">{{ t("thinh-hanh") }}</div>
           <span
             class="ml-3 mr-1 h-[1rem] w-[1px] bg-gray-500 inline-block top-0 transform translate-x-[-50%]"
           />
@@ -95,7 +95,8 @@
     </q-toolbar>
     <q-toolbar v-else-if="!searching && query">
       <div class="text-subtitle2 text-weight-regular mx-2">
-        <span class="text-grey">Kết quả tìm kiếm cho: </span>{{ query }}
+        <span class="text-grey">{{ t("ket-qua-tim-kiem-cho") }} </span
+        >{{ query }}
       </div>
     </q-toolbar>
   </header>
@@ -218,21 +219,23 @@ import ranks from "src/logic/ranks"
 import { useHistorySearchStore } from "stores/history-search"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
-import { ref, shallowReactive, watch, watchEffect } from "vue"
+import { computed, ref, shallowReactive, watch, watchEffect } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
 // ================= unknown ===============
 
-const types = [
-  ["Tuần", "top-bo-week"],
-  ["Ngày", "hot-viewed-today"],
-  ["Tháng", "hot-top-voted"],
-  ["Movie", "top-le-week"],
-]
-
 const router = useRouter()
+const { t } = useI18n()
+
+const types = computed(() => [
+  [t("tuan"), "top-bo-week"],
+  [t("ngay"), "hot-viewed-today"],
+  [t("thang"), "hot-top-voted"],
+  [t("movie"), "top-le-week"],
+])
 
 const searching = ref(false)
 const keyword = ref("")

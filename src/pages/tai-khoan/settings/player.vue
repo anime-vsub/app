@@ -7,7 +7,7 @@
       <q-toolbar-title
         class="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] text-[16px] max-w-[calc(100%-34px*2)] line-clamp-1"
       >
-        Cài đặt phát
+        {{ t("cai-dat-phat") }}
       </q-toolbar-title>
     </q-toolbar>
   </header>
@@ -15,7 +15,7 @@
   <q-list class="pt-[47px]">
     <q-item clickable v-ripple>
       <q-item-section>
-        <q-item-label>Tự động phát</q-item-label>
+        <q-item-label>{{ t("tu-dong-phat") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-toggle
@@ -27,7 +27,7 @@
     </q-item>
     <q-item clickable v-ripple>
       <q-item-section>
-        <q-item-label>Nhắc tôi tạm dừng xem</q-item-label>
+        <q-item-label>{{ t("nhac-toi-tam-dung-xem") }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-toggle
