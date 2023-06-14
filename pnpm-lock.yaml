@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -235,6 +235,9 @@ devDependencies:
   '@types/semver':
     specifier: ^7.3.13
     version: 7.3.13
+  '@types/serviceworker':
+    specifier: ^0.0.67
+    version: 0.0.67
   '@types/set-cookie-parser':
     specifier: ^2.4.2
     version: 2.4.2
@@ -3356,6 +3359,10 @@ packages:
     dependencies:
       '@types/mime': 3.0.1
       '@types/node': 18.8.0
+    dev: true
+
+  /@types/serviceworker@0.0.67:
+    resolution: {integrity: sha512-7TCH7iNsCSNb+aUD9M/36TekrWFSLCjNK8zw/3n5kOtRjbLtDfGYMXTrDnGhSfqXNwpqmt9Vd90w5C/ad1tX6Q==}
     dev: true
 
   /@types/set-cookie-parser@2.4.2:

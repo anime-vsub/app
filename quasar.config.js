@@ -194,7 +194,10 @@ module.exports = configure(function (/* ctx */) {
       manifestFilename: "manifest.json",
       useCredentialsForManifestTag: false,
       // extendGenerateSWOptions (cfg) {}
-      // extendInjectManifestOptions (cfg) {},
+      extendInjectManifestOptions (cfg) {
+        cfg.globIgnores ??= []
+        cfg.globIgnores.push("_redirects", "google7b3e7893e059da35.html")
+      }
       // extendManifestJson (json) {}
       // extendPWACustomSWConf (esbuildConf) {}
     },
