@@ -170,18 +170,46 @@ import groupArray from "group-array"
 import { LichChieuPhim } from "src/apis/runs/lich-chieu-phim"
 // Import Swiper styles
 import "swiper/css"
+import { isNative } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { dayTextToNum } from "src/logic/dayTextToNum"
 import dayjs from "src/logic/dayjs"
 import type { Swiper as TSwiper } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
-import { ref, watchEffect } from "vue"
+import { computed, ref, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRouter } from "vue-router"
+// eslint-disable-next-line import/order
+import { useHead } from "@vueuse/head"
+
+const { t } = useI18n()
+
+if (!isNative)
+  useHead(
+    computed(() => {
+      const title = t("lich-chieu")
+
+      const description = title
+
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
 
 const router = useRouter()
-const { t } = useI18n()
 
 const { loading, data, refreshAsync, error } = useRequest(() => LichChieuPhim())
 // eslint-disable-next-line promise/no-callback-in-promise

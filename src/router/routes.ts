@@ -2,6 +2,14 @@ import type { RouteRecordRaw } from "vue-router"
 
 const routes: RouteRecordRaw[] = [
   {
+    path: "/:mainPath(.*)*/trang-:page(\\d+)",
+    redirect(to) {
+      return `/${(to.params.mainPath as string[]).join("/")}?page=${
+        to.params.page
+      }`
+    },
+  },
+  {
     path: "/",
     component: () => import("pages/index_outlet.vue"),
     meta: {
@@ -209,7 +217,7 @@ const routes: RouteRecordRaw[] = [
 
   {
     name: "watch-anime",
-    path: "/phim/:season/:chapName(?:(.*\\))?-:chap(\\d+)", // [feature or defect]
+    path: "/phim/:season/:chapName(.+)?-:chap(\\d+)", // [feature or defect]
     alias: ["/phim/:season/:chapName(\\0)?:chap(\\d+)", "/phim/:season"],
     component: () => import("pages/phim/_season.vue"),
     meta: {

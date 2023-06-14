@@ -190,11 +190,9 @@
 
 <script lang="ts" setup>
 import "swiper/css"
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics"
 import { Icon } from "@iconify/vue"
-// eslint-disable-next-line import/order
+import { useHead } from "@vueuse/head"
 import BottomBlur from "components/BottomBlur.vue"
-
 import CardVertical from "components/CardVertical.vue"
 import ScreenError from "components/ScreenError.vue"
 import ScreenLoading from "components/ScreenLoading.vue"
@@ -214,7 +212,9 @@ import {
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { AjaxItem } from "src/apis/runs/ajax/item"
 import { PreSearch } from "src/apis/runs/pre-search"
+import { logEvent } from "src/boot/firebase"
 import { useAliveScrollBehavior } from "src/composibles/useAliveScrollBehavior"
+import { isNative } from "src/constants"
 import ranks from "src/logic/ranks"
 import { useHistorySearchStore } from "stores/history-search"
 import type { Swiper as TSwiper } from "swiper"
@@ -222,12 +222,14 @@ import { Swiper, SwiperSlide } from "swiper/vue"
 import { computed, ref, shallowReactive, watch, watchEffect } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
+
 // Import Swiper Vue.js components
 useAliveScrollBehavior()
 // ================= unknown ===============
 
 const router = useRouter()
+const route = useRoute()
 const { t } = useI18n()
 
 const types = computed(() => [
@@ -242,6 +244,29 @@ const keyword = ref("")
 const query = ref("")
 
 const historySearchStore = useHistorySearchStore()
+
+if (!isNative)
+  useHead(
+    computed(() => {
+      const title = t("tim-kiem-_keyword", [route.params.keyword])
+      const description = title
+
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
 
 const { data, run, error } = useRequest(
   async () => [
@@ -259,11 +284,8 @@ watch(
   debounce(() => {
     run()
 
-    FirebaseAnalytics.logEvent({
-      name: "search",
-      params: {
-        search_term: query.value,
-      },
+    logEvent("search", {
+      search_term: query.value,
     })
   }, 100)
 )
@@ -280,11 +302,8 @@ function onEnter(event: Event) {
 
   keyword.value = query.value
 
-  FirebaseAnalytics.logEvent({
-    name: "search",
-    params: {
-      search_term: query.value,
-    },
+  logEvent("search", {
+    search_term: query.value,
   })
 
   searching.value = false
