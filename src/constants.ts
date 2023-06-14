@@ -6,7 +6,10 @@ export const servers = {
   DU: "High",
   FB: "Low",
 } as const
-export const isNative = process.env.MODE === "android" || process.env.MODE === "ios" || process.env.MODE === "capacitor"
+export const isNative =
+  process.env.MODE === "android" ||
+  process.env.MODE === "ios" ||
+  process.env.MODE === "capacitor"
 export const playbackRates = [
   {
     name: "0.5x",

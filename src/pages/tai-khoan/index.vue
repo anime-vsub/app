@@ -145,7 +145,7 @@
         no-image
         class="h-[146px] px-4"
         @click:retry="
-          last30ItemGet = true;
+          last30ItemGet = true
           refreshHistories()
         "
         :error="undefined"
@@ -412,27 +412,27 @@ const historyStore = useHistoryStore()
 const { t } = useI18n()
 
 if (!isNative)
-useHead(
-  computed(() => {
-    const title = "Tài khoản"
-    const description = title
+  useHead(
+    computed(() => {
+      const title = "Tài khoản"
+      const description = title
 
-    return {
-      title,
-      description,
-      meta: [
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url" },
-      ],
-      link: [
-        {
-          rel: "canonical",
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
 
 async function login() {
   const loader = $q.loading.show({

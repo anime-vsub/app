@@ -3,9 +3,12 @@
     v-if="loading"
     class="absolute w-full h-[calc(100%+50px)] overflow-hidden loader"
   >
-    <div class="swiper-hot" :style="{
-      '--aspectRatio': aspectRatio
-    }">
+    <div
+      class="swiper-hot"
+      :style="{
+        '--aspectRatio': aspectRatio,
+      }"
+    >
       <q-responsive :ratio="aspectRatio" class="poster">
         <q-skeleton type="rect" width="100%" height="100%" />
       </q-responsive>
@@ -348,7 +351,6 @@ import { forceHttp2 } from "src/logic/forceHttp2"
 import { Autoplay } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { computed } from "vue"
-
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 
@@ -365,39 +367,39 @@ const { t } = useI18n()
 
 const aspectRatio = 622 / 350
 
-const { t } = useI18n()
 if (!isNative)
-useHead(
-  computed(() => {
-    const title = "AnimeVsub"
+  useHead(
+    computed(() => {
+      const title = "AnimeVsub"
 
-    const description = t(
-      "xem-anime-vietsub-online-xem-tren-dien-thoai-di-dong-va-may-tinh-nhanh-nhat"
-    )
+      const description = t(
+        "xem-anime-vietsub-online-xem-tren-dien-thoai-di-dong-va-may-tinh-nhanh-nhat"
+      )
 
-    return {
-      title,
-      description,
-      meta: [
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:image", content: process.env.APP_URL + 'app_icon.svg' },
-        {
-          property: "og:url",
-          content: process.env.APP_URL,
-        },
-      ],
-      link: [
-        {
-          rel: "canonical",
-          href: process.env.APP_URL,
-        },
-      ],
-    }
-  })
-)
-
-const router = useRouter()
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          {
+            property: "og:image",
+            content: process.env.APP_URL + "app_icon.svg",
+          },
+          {
+            property: "og:url",
+            content: process.env.APP_URL,
+          },
+        ],
+        link: [
+          {
+            rel: "canonical",
+            href: process.env.APP_URL,
+          },
+        ],
+      }
+    })
+  )
 
 const { data, loading, refreshAsync, error } = useRequest(() => Index())
 async function refresh(done: () => void) {

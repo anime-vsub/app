@@ -183,35 +183,33 @@ import { useRouter } from "vue-router"
 // eslint-disable-next-line import/order
 import { useHead } from "@vueuse/head"
 
-
 const { t } = useI18n()
 
 if (!isNative)
-useHead(
-  computed(() => {
-    const title = t("lich-chieu")
+  useHead(
+    computed(() => {
+      const title = t("lich-chieu")
 
-    const description = title
+      const description = title
 
-    return {
-      title,
-      description,
-      meta: [
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url" },
-      ],
-      link: [
-        {
-          rel: "canonical",
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
 
 const router = useRouter()
-const { t } = useI18n()
 
 const { loading, data, refreshAsync, error } = useRequest(() => LichChieuPhim())
 // eslint-disable-next-line promise/no-callback-in-promise

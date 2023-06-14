@@ -1,4 +1,3 @@
-
 import { route } from "quasar/wrappers"
 import { setScreenName } from "src/boot/firebase"
 import {

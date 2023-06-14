@@ -3,7 +3,9 @@
     <q-page-container>
       <q-page>
         <router-view
-          v-if="isNative || extensionHelperInstalled !== false" v-slot="{ Component }">
+          v-if="isNative || extensionHelperInstalled !== false"
+          v-slot="{ Component }"
+        >
           <keep-alive exclude="_season">
             <component :is="Component" />
           </keep-alive>
@@ -187,7 +189,6 @@ import { useRoute } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
 
-
 const route = useRoute()
 const { t } = useI18n()
 const notificationStore = useNotificationStore()
@@ -200,7 +201,7 @@ Promise.all([
     res.json()
   ),
 
- !isNative ? { version } : App.getInfo(),
+  !isNative ? { version } : App.getInfo(),
 ])
   .then((results) => {
     const ignoreUpdateVersion = localStorage.getItem("ignore-update-version")

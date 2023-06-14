@@ -1545,10 +1545,13 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           // set header because this version always cors not fix by extension liek desktop-web
           headers.set("referer", C_URL)
 
-          fetchJava(context.url + (!isNative ? "#animevsub-vsub_uafirefox" : ""), {
-            headers,
-            signal: controller.signal,
-          })
+          fetchJava(
+            context.url + (!isNative ? "#animevsub-vsub_uafirefox" : ""),
+            {
+              headers,
+              signal: controller.signal,
+            }
+          )
             .then(async (res) => {
               // eslint-disable-next-line functional/no-let
               let byteLength: number

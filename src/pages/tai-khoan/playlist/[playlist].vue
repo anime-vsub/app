@@ -258,9 +258,7 @@
           :key="item.season"
           class="bg-transparent flex flex-nowrap mb-5 group"
           style="white-space: initial"
-          :to="`/phim/${item.season}/${parseChapName(
-              item.name
-            )}-${item.chap}`"
+          :to="`/phim/${item.season}/${parseChapName(item.name)}-${item.chap}`"
         >
           <div>
             <q-img-custom
@@ -450,40 +448,40 @@ const { data: movies, run: runGetMovies } = useRequest(
 )
 
 if (!isNative)
-useHead(
-  computed(() => {
-    if (!metaPlaylist.value) return {}
+  useHead(
+    computed(() => {
+      if (!metaPlaylist.value) return {}
 
-    const title = `(${metaPlaylist.value.size}) ${metaPlaylist.value.name}`
+      const title = `(${metaPlaylist.value.size}) ${metaPlaylist.value.name}`
 
-    const description = metaPlaylist.value.description ?? title
+      const description = metaPlaylist.value.description ?? title
 
-    return {
-      title,
-      description,
-      meta: [
-        {
-          property: "og:title",
-          content: title,
-        },
-        {
-          property: "og:description",
-          content: description,
-        },
-        {
-          property: "og:url",
-          content: process.env.APP_URL + `playlist/${route.params.playlist}`,
-        },
-      ],
-      link: [
-        {
-          rel: "canonical",
-          href: process.env.APP_URL + `playlist/${route.params.playlist}`,
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          {
+            property: "og:title",
+            content: title,
+          },
+          {
+            property: "og:description",
+            content: description,
+          },
+          {
+            property: "og:url",
+            content: process.env.APP_URL + `playlist/${route.params.playlist}`,
+          },
+        ],
+        link: [
+          {
+            rel: "canonical",
+            href: process.env.APP_URL + `playlist/${route.params.playlist}`,
+          },
+        ],
+      }
+    })
+  )
 
 async function onLoad(index: number, done: (end: boolean) => void) {
   const { playlists } = playlistStore

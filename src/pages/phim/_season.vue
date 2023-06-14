@@ -616,8 +616,8 @@ import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import { logEvent } from "src/boot/firebase"
-import { isNative, servers } from "src/constants"
-import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
+import type { servers } from "src/constants"
+import { C_URL, isNative, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
@@ -1207,43 +1207,43 @@ watchEffect(() => {
   }
 })
 if (!isNative)
-useHead(
-  computed(() => {
-    if (!data.value) return {}
+  useHead(
+    computed(() => {
+      if (!data.value) return {}
 
-    const title = currentMetaChap.value
-      ? t("tap-_chap-_name-_othername", [
-          currentMetaChap.value.name,
-          data.value.name,
-          data.value.othername,
-        ])
-      : t("_name-_othername", [data.value.name, data.value.othername])
-    const description = data.value.description
+      const title = currentMetaChap.value
+        ? t("tap-_chap-_name-_othername", [
+            currentMetaChap.value.name,
+            data.value.name,
+            data.value.othername,
+          ])
+        : t("_name-_othername", [data.value.name, data.value.othername])
+      const description = data.value.description
 
-    return {
-      title,
-      description,
-      meta: [
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        {
-          property: "og:image",
-          content: currentDataSeason.value?.poster ?? data.value.poster,
-        },
-        {
-          property: "og:url",
-          content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
-        },
-      ],
-      link: [
-        {
-          rel: "canonical",
-          href: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          {
+            property: "og:image",
+            content: currentDataSeason.value?.poster ?? data.value.poster,
+          },
+          {
+            property: "og:url",
+            content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
+          },
+        ],
+        link: [
+          {
+            rel: "canonical",
+            href: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
+          },
+        ],
+      }
+    })
+  )
 
 interface SiblingChap {
   season: Exclude<typeof seasons.value, undefined>[0]

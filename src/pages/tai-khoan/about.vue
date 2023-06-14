@@ -59,10 +59,9 @@ const infoApp = shallowRef()
 const infoDev = shallowRef()
 
 Promise.all([
-  (!isNative
-    ? Promise.resolve({ version })
-    : App.getInfo()
-  ).then((data) => (infoApp.value = data)),
+  (!isNative ? Promise.resolve({ version }) : App.getInfo()).then(
+    (data) => (infoApp.value = data)
+  ),
   Device.getInfo().then((data) => (infoDev.value = data)),
 ]).catch(() => {
   $q.notify({

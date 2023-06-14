@@ -69,7 +69,7 @@ export const useAuthStore = defineStore(
         username: data.username,
       })
 
-      logEvent( "login",)
+      logEvent("login")
 
       setTokenByCookie(data.cookie)
 
@@ -79,7 +79,7 @@ export const useAuthStore = defineStore(
       deleteToken()
       deleteUser()
 
-      logEvent( "logout")
+      logEvent("logout")
     }
     async function changePassword(newPassword: string) {
       if (!user_data.value)
@@ -124,13 +124,9 @@ export const useAuthStore = defineStore(
         }),
       { immediate: true }
     )
-    watch(
-      uid,
-      (uid) =>
-        setUserId( uid ?? (null as unknown as string),
-        ),
-      { immediate: true }
-    )
+    watch(uid, (uid) => setUserId(uid ?? (null as unknown as string)), {
+      immediate: true,
+    })
 
     return {
       user_data,

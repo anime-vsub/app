@@ -128,29 +128,28 @@ const { t } = useI18n()
 const historyStore = useHistoryStore()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
-const { t } = useI18n()
 if (!isNative)
-useHead(
-  computed(() => {
-    const title = t("lich-su-xem-anime")
-    const description = title
+  useHead(
+    computed(() => {
+      const title = t("lich-su-xem-anime")
+      const description = title
 
-    return {
-      title,
-      description,
-      meta: [
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url" },
-      ],
-      link: [
-        {
-          rel: "canonical",
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
 
 const {
   loading,

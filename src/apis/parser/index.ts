@@ -23,7 +23,7 @@ export default function Index(html: string) {
   const hotUpdate = $("#showTopPhim .TPost")
     .map((_i, item) => getInfoTPost($(item), now))
     .toArray()
-    
+
   return {
     thisSeason,
     carousel,

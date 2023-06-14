@@ -118,34 +118,34 @@ const types = [
   ["Mùa", "season"],
 ]
 if (!isNative)
-useHead(
-computed(() => {
-    const title = t("bang-xep-hang-anime-theo-_type", [
-      (types.find((item) => item[1] === route.params.type) ?? types[0])[0],
-    ])
+  useHead(
+    computed(() => {
+      const title = t("bang-xep-hang-anime-theo-_type", [
+        (types.find((item) => item[1] === route.params.type) ?? types[0])[0],
+      ])
 
-    const description = title
+      const description = title
 
-    return {
-      title,
-      description,
-      meta: [
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        {
-          property: "og:url",
-          content: process.env.APP_URL + `bang-xep-hang/${route.params.type}`,
-        },
-      ],
-      link: [
-        {
-          rel: "canonical",
-          href: process.env.APP_URL + `bang-xep-hang/${route.params.type}`,
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          {
+            property: "og:url",
+            content: process.env.APP_URL + `bang-xep-hang/${route.params.type}`,
+          },
+        ],
+        link: [
+          {
+            rel: "canonical",
+            href: process.env.APP_URL + `bang-xep-hang/${route.params.type}`,
+          },
+        ],
+      }
+    })
+  )
 
 const dataStore = shallowReactive<
   Map<

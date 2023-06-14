@@ -43,7 +43,6 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TuPhim } from "src/apis/runs/tu-phim"
 import { isNative } from "src/constants"
-import { t } from "vitest/dist/types-0373403c"
 import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -52,35 +51,35 @@ import { useRouter } from "vue-router"
 const router = useRouter()
 const { t } = useI18n()
 if (!isNative)
-useHead(
-  computed(() => {
-    const title = t("anime-dang-theo-doi")
-    const description = title
+  useHead(
+    computed(() => {
+      const title = t("anime-dang-theo-doi")
+      const description = title
 
-    return {
-      title,
-      description,
-      meta: [
-        {
-          property: "og:title",
-          content: title,
-        },
-        {
-          property: "og:description",
-          content: description,
-        },
-        {
-          property: "og:url",
-        },
-      ],
-      link: [
-        {
-          rel: "canonical",
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          {
+            property: "og:title",
+            content: title,
+          },
+          {
+            property: "og:description",
+            content: description,
+          },
+          {
+            property: "og:url",
+          },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
 
 const infiniteScrollRef = ref<QInfiniteScroll>()
 

@@ -16,8 +16,8 @@ import {
   persistentMultipleTabManager,
   setIndexConfiguration,
 } from "@firebase/firestore"
-import { isNative } from "src/constants"
 import configure from "app/firebase/firestore.indexes.json"
+import { isNative } from "src/constants"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -64,6 +64,7 @@ export const logEvent = isNative
   : (
       name: string,
       params?: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key: string]: any
         coupon?: string | undefined
         currency?: string | undefined
@@ -79,14 +80,17 @@ export const logEvent = isNative
 
 export const setScreenName = isNative
   ? FirebaseAnalytics.setScreenName
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   : () => {}
 export const setUserProperty = isNative
   ? FirebaseAnalytics.setUserProperty
   : (options: CustomParams) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       setUserPropertiesPWA(analytics!, options)
     }
 export const setUserId = isNative
   ? FirebaseAnalytics.setUserId
   : (id: string | null) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       setUserIdPWA(analytics!, id)
     }

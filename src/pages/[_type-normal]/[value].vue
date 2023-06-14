@@ -642,32 +642,32 @@ const watcherData = watch(data, (data) => {
 })
 
 if (!isNative)
-useHead(
-  computed(() => {
-    if (!title.value) return {}
+  useHead(
+    computed(() => {
+      if (!title.value) return {}
 
-    const description = title.value
+      const description = title.value
 
-    return {
-      title: title.value,
-      description,
-      meta: [
-        { property: "og:title", content: title.value },
-        { property: "og:description", content: description },
-        {
-          property: "og:url",
-          content: process.env.APP_URL + route.fullPath.slice(1),
-        },
-      ],
-      link: [
-        {
-          rel: "canonical",
-          href: process.env.APP_URL + route.fullPath.slice(1),
-        },
-      ],
-    }
-  })
-)
+      return {
+        title: title.value,
+        description,
+        meta: [
+          { property: "og:title", content: title.value },
+          { property: "og:description", content: description },
+          {
+            property: "og:url",
+            content: process.env.APP_URL + route.fullPath.slice(1),
+          },
+        ],
+        link: [
+          {
+            rel: "canonical",
+            href: process.env.APP_URL + route.fullPath.slice(1),
+          },
+        ],
+      }
+    })
+  )
 
 watch(
   [genres, seaser, sorter, typer, year, defaultsOptions],

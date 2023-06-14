@@ -245,29 +245,28 @@ const query = ref("")
 
 const historySearchStore = useHistorySearchStore()
 
-
 if (!isNative)
-useHead(
-  computed(() => {
-    const title = t("tim-kiem-_keyword", [route.params.keyword])
-    const description = title
+  useHead(
+    computed(() => {
+      const title = t("tim-kiem-_keyword", [route.params.keyword])
+      const description = title
 
-    return {
-      title,
-      description,
-      meta: [
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url" },
-      ],
-      link: [
-        {
-          rel: "canonical",
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
 
 const { data, run, error } = useRequest(
   async () => [
@@ -285,8 +284,8 @@ watch(
   debounce(() => {
     run()
 
-    logEvent("search",{
-        search_term: query.value,
+    logEvent("search", {
+      search_term: query.value,
     })
   }, 100)
 )
@@ -303,8 +302,8 @@ function onEnter(event: Event) {
 
   keyword.value = query.value
 
-  logEvent("search",{
-      search_term: query.value,
+  logEvent("search", {
+    search_term: query.value,
   })
 
   searching.value = false

@@ -175,31 +175,30 @@ import { useRouter } from "vue-router"
 const { t } = useI18n()
 
 if (!isNative)
-useHead(
-  computed(() => {
-    const title = t("thong-tin-tai-khoan")
-    const description = title
+  useHead(
+    computed(() => {
+      const title = t("thong-tin-tai-khoan")
+      const description = title
 
-    return {
-      title,
-      description,
-      meta: [
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url" },
-      ],
-      link: [
-        {
-          rel: "canonical",
-        },
-      ],
-    }
-  })
-)
+      return {
+        title,
+        description,
+        meta: [
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url" },
+        ],
+        link: [
+          {
+            rel: "canonical",
+          },
+        ],
+      }
+    })
+  )
 
 const $q = useQuasar()
 const router = useRouter()
-const { t } = useI18n()
 
 const authStore = useAuthStore()
 
