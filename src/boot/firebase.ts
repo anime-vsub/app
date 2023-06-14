@@ -70,7 +70,7 @@ export const logEvent = isNative
         currency?: string | undefined
         items?: Item[] | undefined
         payment_type?: string | undefined
-        value?: number | undefined
+        value?: string | undefined
       }
     ) => {
       if (analytics) {
@@ -89,7 +89,8 @@ export const setUserProperty = isNative
       setUserPropertiesPWA(analytics!, options)
     }
 export const setUserId = isNative
-  ? FirebaseAnalytics.setUserId
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  ? (id: string | null) => FirebaseAnalytics.setUserId({ userId : id! })
   : (id: string | null) => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       setUserIdPWA(analytics!, id)

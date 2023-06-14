@@ -1,7 +1,7 @@
-interface GetOptions<ResponseType extends "arraybuffer" | undefined> {
+interface GetOptions{
   url: string
   headers?: Record<string, string>
-  responseType?: ResponseType
+  responseType?: string
 }
 interface PostOptions {
   url: string
@@ -10,9 +10,9 @@ interface PostOptions {
   data?: Record<string, unknown> | string
 }
 
-interface HttpResponse<ResponseType extends "arraybuffer" | undefined> {
+interface HttpResponse {
   headers: Record<string, string>
-  data: ResponseType extends "arraybuffer" ? ArrayBuffer : string
+  data: any
   url: string
   status: number
 }

@@ -348,9 +348,7 @@ async function postNative(
   return response
 }
 
-async function getPWA<
-  ResponseType extends "arraybuffer" | undefined = undefined
->(url: string | GetOptions<ResponseType>, headers?: Record<string, string>) {
+async function getPWA(url: string | GetOptions, headers?: Record<string, string>) {
   console.log("get: ", url)
 
   await installedAsync.value
