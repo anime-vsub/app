@@ -176,7 +176,7 @@ const pagItemActiveRef = ref<HTMLDivElement>()
 watch(
   activeIndex,
   (activeIndex) => {
-    fetchRankType(types[activeIndex][1])
+    fetchRankType(types.value[activeIndex][1])
   },
   { immediate: true }
 )
