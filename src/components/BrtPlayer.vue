@@ -946,6 +946,8 @@ watch(
         return
       }
 
+      const currentUid =  uidChap.value
+
       try {
         if (stateStorageStore.disableAutoRestoration > 0) {
           addNotice(t("bo-qua-khoi-phuc-tien-trinh-xem"))
@@ -969,7 +971,7 @@ watch(
         if ((err as Error)?.message !== "NOT_RESET") console.error(err)
       }
 
-      progressRestored = uidChap.value
+      progressRestored = currentUid
     }
   },
   { immediate: true }
