@@ -56,8 +56,12 @@ import type { TPost } from "src/apis/parser/__helpers__/getInfoTPost"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import ranks from "src/logic/ranks"
 
+import { useI18n } from "vue-i18n"
+
 import Quality from "./Quality.vue"
 import Star from "./Star.vue"
+
+const { t } = useI18n()
 
 defineProps<{
   data: TPost

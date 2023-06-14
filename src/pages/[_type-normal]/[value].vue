@@ -497,11 +497,13 @@ import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import { QInfiniteScroll } from "quasar"
 import { TypeNormalValue } from "src/apis/runs/[type_normal]/[value]"
 import { computed, reactive, ref, watch } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const showDialogGener = ref(false)

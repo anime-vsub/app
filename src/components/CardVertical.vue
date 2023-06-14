@@ -50,6 +50,9 @@
 import { Icon } from "@iconify/vue"
 import QImgCustom from "components/QImgCustom"
 import { forceHttp2 } from "src/logic/forceHttp2"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 defineProps<{
   data: {
