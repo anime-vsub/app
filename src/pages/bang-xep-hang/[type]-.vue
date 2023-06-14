@@ -109,14 +109,15 @@ const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
 
-const types = [
-  ["Mặc định", ""],
-  ["Ngày", "day"],
-  ["Tháng", "month"],
-  ["Năm", "year"],
-  ["Đánh giá", "voted"],
-  ["Mùa", "season"],
-]
+const types = computed(() => [
+  [t("mac-dinh"), ""],
+  [t("ngay"), "day"],
+  [t("thang"), "month"],
+  [t("nam"), "year"],
+  [t("danh-gia"), "voted"],
+  [t("mua"), "season"],
+])
+
 if (!isNative)
   useHead(
     computed(() => {
