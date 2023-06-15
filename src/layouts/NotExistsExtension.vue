@@ -23,7 +23,15 @@
             "extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu"
           )
         }}
-        <br />
+        <span class="text-blue-400 mt-2 mx-4 block leading-normal text-[16px]"
+          >Ứng dụng hiện tại yêu cầu extension <b>v1.0.1</b> trở lên, nếu bạn đã
+          cài đặt extension vui lòng cập nhật nó tới phiên bản <b>v1.0.1</b> trở
+          lên.</span
+        >
+        <span v-if="currentBrowser.text === 'Edge'" class="text-orange-400 mt-2 mx-4 block leading-normal text-[16px]"
+          >Microsoft Edge có thể cập nhật chậm hơn GitHub khi đó bạn cần cập
+          nhật thủ công</span
+        >
         <q-btn
           no-caps
           color="main"

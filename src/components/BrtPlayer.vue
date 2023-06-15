@@ -1859,8 +1859,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     (type === "hls" || type === "m3u" || type === "m3u8") &&
     Hls.isSupported()
   ) {
-    const offEnds =
-      window.Http?.version && window.Http.version < "0.0.26" ? "" : "_extra"
+    const offEnds = "_extra"
     const hls = new Hls({
       debug: import.meta.env.DEV,
       workerPath: workerHls,

@@ -1,17 +1,11 @@
-import { installedAsync } from "boot/installed-extension"
+import type { GetOption } from "client-ext-animevsub-helper"
+import { Http } from "client-ext-animevsub-helper"
 import { i18n } from "src/boot/i18n"
 import { C_URL } from "src/constants"
 
-export async function get<
-  ResponseType extends "arraybuffer" | undefined = undefined
->(url: string | GetOptions<ResponseType>, headers?: Record<string, string>) {
-  console.log("get: ", url)
-
-  await installedAsync.value
-
-  if (!window.Http)
-    // eslint-disable-next-line functional/no-throw-statement
-    throw Object.assign(
+const noExt = () =>
+  Promise.reject(
+    Object.assign(
       new Error(
         i18n.global.t(
           "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
@@ -19,8 +13,15 @@ export async function get<
       ),
       { extesionNotExists: true }
     )
+  )
 
-  const response = (await window.Http.get(
+async function httpGet(
+  url: string | GetOption,
+  headers?: Record<string, string>
+) {
+  console.log("get: ", url)
+
+  const response = await Http.get(
     typeof url === "object"
       ? url
       : {
@@ -42,8 +43,6 @@ export async function get<
             "sec-fetch-user": "?1",
             "sec-gpc": "1",
             "upgrade-insecure-requests": "1",
-            "user-agent":
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
             ...headers,
           },
         }
@@ -53,16 +52,16 @@ export async function get<
     }
 
     return response
-  })) as HttpResponse<ResponseType>
+  })
 
   console.log("get-result: ", response)
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
-  return response
+  return response as Omit<typeof response, "data"> & { data: string }
 }
 
-export async function post(
+async function httpPost(
   url: string,
   data: Record<string, number | string | boolean>,
   headers?: Record<string, string>
@@ -70,41 +69,21 @@ export async function post(
   console.log("post: ", {
     url: C_URL + url,
     data,
-    headers: {
-      "user-agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-      // "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-      ...headers,
-    },
+    headers,
   })
 
-  await installedAsync.value
-
-  if (!window.Http)
-    // eslint-disable-next-line functional/no-throw-statement
-    throw Object.assign(
-      new Error(
-        i18n.global.t(
-          "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
-        )
-      ),
-      { extesionNotExists: true }
-    )
-
-  const response = (await window.Http.post({
+  const response = await Http.post({
     url: C_URL + url + "#animevsub-vsub",
-    headers: {
-      "user-agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-      // "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-      ...headers,
-    },
+    headers,
     data,
-  })) as HttpResponse<undefined>
+  })
 
   console.log("post-result: ", response)
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
-  return response
+  return response as Omit<typeof response, "data"> & { data: string }
 }
+
+export const get = Http.version ? httpGet : noExt
+export const post = Http.version ? httpPost : noExt

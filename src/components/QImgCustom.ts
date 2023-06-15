@@ -1,6 +1,7 @@
 /* eslint-disable no-void */
 /* eslint-disable functional/no-let */
 import { QSpinner } from "quasar"
+import { base64ToArrayBuffer } from "src/logic/base64ToArrayBuffer"
 import { get } from "src/logic/http"
 import type { Ref } from "vue"
 import {
@@ -68,7 +69,7 @@ async function getImageWithXHR(url: string) {
   // eslint-disable-next-line functional/no-throw-statement
   if (res.status > 299) throw res
 
-  const src = URL.createObjectURL(new Blob([res.data as ArrayBuffer]))
+  const src = URL.createObjectURL(new Blob([typeof res.data === "object" ? res.data : base64ToArrayBuffer(res.data)]))
 
   return { src }
 }

@@ -1007,7 +1007,7 @@
     <q-page-container>
       <q-page :style-fn="route.meta?.styleFn">
         <router-view
-          v-if="extensionHelperInstalled !== false"
+          v-if="Http.version"
           v-slot="{ Component }"
         >
           <component :is="Component" />
@@ -1110,7 +1110,7 @@ import "@fontsource/caveat"
 // =========== suth
 
 import { useEventListener } from "@vueuse/core"
-import { installed as extensionHelperInstalled } from "boot/installed-extension"
+import { Http } from 'client-ext-animevsub-helper'
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import QImgCustom from "components/QImgCustom"

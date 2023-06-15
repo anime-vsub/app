@@ -51,7 +51,7 @@
         <span class="text-weight-medium text-gray-500"
           >{{ t("phien-ban-extension") }}
         </span>
-        {{ extensionVersion ?? "<=0.0.15" }}
+        {{ Http.version }}
       </div>
     </div>
 
@@ -70,6 +70,7 @@
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
 import { useIntervalFn } from "@vueuse/core"
+import { Http } from "client-ext-animevsub-helper"
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 
@@ -84,7 +85,5 @@ const rand = ref(Math.round(Math.random() * 2))
 useIntervalFn(() => {
   rand.value = Math.round(Math.random() * 3)
 }, 3_000)
-
-const extensionVersion = window.Http?.version
 const hostName = location.hostname
 </script>
