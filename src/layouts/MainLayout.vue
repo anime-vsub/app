@@ -107,6 +107,42 @@
           class="pt-1"
           to="/tai-khoan"
         >
+          <q-circular-progress
+            v-if="updatingCache && installedSW"
+            indeterminate
+            rounded
+            show-value
+            size="35px"
+            color="main"
+          >
+            <Icon
+              icon="fluent:person-24-regular"
+              width="24"
+              height="24"
+              class="mb-1 regular"
+            />
+            <Icon
+              icon="fluent:person-24-filled"
+              width="24"
+              height="24"
+              class="mb-1 filled"
+            />
+          </q-circular-progress>
+          <template v-else>
+            <Icon
+              icon="fluent:person-24-regular"
+              width="24"
+              height="24"
+              class="mb-1 regular"
+            />
+            <Icon
+              icon="fluent:person-24-filled"
+              width="24"
+              height="24"
+              class="mb-1 filled"
+            />
+          </template>
+
           <Icon
             icon="fluent:person-24-regular"
             width="24"
@@ -179,6 +215,7 @@ import semverEq from "semver/functions/eq"
 import semverGt from "semver/functions/gt"
 import { isNative } from "src/constants"
 import { parseMdBasic } from "src/logic/parseMdBasic"
+import { installedSW, updatingCache } from "src/logic/state-sw"
 import { useNotificationStore } from "stores/notification"
 import { shallowRef } from "vue"
 import { useI18n } from "vue-i18n"
@@ -193,29 +230,35 @@ const notificationStore = useNotificationStore()
 const newVersion = shallowRef()
 const appInfos = shallowRef()
 
-Promise.all([
-  fetch("https://api.github.com/repos/anime-vsub/app/releases").then((res) =>
-    res.json()
-  ),
+if (isNative)
+  Promise.all([
+    fetch("https://api.github.com/repos/anime-vsub/app/releases").then((res) =>
+      res.json()
+    ),
 
-  !isNative ? { version } : App.getInfo(),
-])
-  .then((results) => {
-    const ignoreUpdateVersion = localStorage.getItem("ignore-update-version")
+    !isNative ? { version } : App.getInfo(),
+  ])
+    .then((results) => {
+      const ignoreUpdateVersion = localStorage.getItem("ignore-update-version")
 
-    if (ignoreUpdateVersion) {
-      if (semverEq(ignoreUpdateVersion, results[0][0].tag_name)) {
-        return
+      if (ignoreUpdateVersion) {
+        if (
+          semverEq(
+            ignoreUpdateVersion,
+            results.find((item) => item.tag_name.startsWith("v")).tag_name
+          )
+        ) {
+          return
+        }
       }
-    }
 
-    // eslint-disable-next-line promise/always-return
-    if (!semverGt(results[0][0].tag_name.slice(1), results[1].version)) return
-    ;[newVersion.value, appInfos.value] = [results[0][0], results[1]]
-  })
-  .catch((err) => {
-    console.error(err)
-  })
+      // eslint-disable-next-line promise/always-return
+      if (!semverGt(results[0][0].tag_name.slice(1), results[1].version)) return
+      ;[newVersion.value, appInfos.value] = [results[0][0], results[1]]
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 
 function ignoreUpdateVersion(version: string) {
   localStorage.setItem("ignore-update-version", version)
