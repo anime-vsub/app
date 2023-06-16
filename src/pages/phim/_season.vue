@@ -162,7 +162,7 @@
       </router-link>
     </div>
 
-    <div class="tags mt-1">
+    <div class="tags mt-1 break-words">
       <router-link
         v-for="item in data.genre"
         :key="item.name"
