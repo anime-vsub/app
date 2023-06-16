@@ -126,7 +126,7 @@ const { t } = useI18n()
 if (!isNative)
   useHead(
     computed(() => {
-      const title = t('thong-bao')
+      const title = t("thong-bao")
 
       const description = title
 
