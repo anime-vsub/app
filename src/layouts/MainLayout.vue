@@ -3,7 +3,7 @@
     <q-page-container>
       <q-page>
         <router-view
-          v-if="isNative || extensionHelperInstalled !== false"
+          v-if="isNative || Http.version"
           v-slot="{ Component }"
         >
           <keep-alive exclude="_season">
@@ -177,7 +177,7 @@
 import { App } from "@capacitor/app"
 import { Icon } from "@iconify/vue"
 import { version } from "app/package.json"
-import { installed as extensionHelperInstalled } from "boot/installed-extension"
+import { Http } from 'client-ext-animevsub-helper'
 import semverEq from "semver/functions/eq"
 import semverGt from "semver/functions/gt"
 import { isNative } from "src/constants"

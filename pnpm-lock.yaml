@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@capacitor-community/barcode-scanner':
     specifier: ^3.0.1
@@ -88,6 +92,9 @@ dependencies:
   cheerio:
     specifier: 1.0.0-rc.12
     version: 1.0.0-rc.12
+  client-ext-animevsub-helper:
+    specifier: ^1.0.4
+    version: 1.0.4
   cordova-plugin-screen-orientation:
     specifier: ^3.0.2
     version: 3.0.2
@@ -4730,6 +4737,11 @@ packages:
     resolution: {integrity: sha512-FxqpkPPwu1HjuN93Omfm4h8uIanXofW0RxVEW3k5RKx+mJJYSthzNhp32Kzxxy3YAEZ/Dc/EWN1vZRY0+kOhbw==}
     engines: {node: '>= 10'}
     dev: true
+
+  /client-ext-animevsub-helper@1.0.4:
+    resolution: {integrity: sha512-gv7Ctbg6AcfESlvXpGVIdvw9ApQMZb3o0lpFGbboZcyhJ6YclhYiwxTEvyM4UV+f1zLU1V7VG2Fv6WEgwVCI5A==}
+    engines: {node: '>=10'}
+    dev: false
 
   /cliui@6.0.0:
     resolution: {integrity: sha512-t6wbgtoCXvAzst7QgXxJYqPt0usEfbgQdftEPbLL/cvv6HPE5VgvqCuAIDR0NgU52ds6rFwqrgakNLrHEjCbrQ==}

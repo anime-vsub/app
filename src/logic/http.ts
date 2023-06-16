@@ -1,16 +1,17 @@
-import type { HttpOptions, HttpResponse } from "@capacitor/core"
+import type { HttpResponse } from "@capacitor/core"
 import { CapacitorHttp } from "@capacitor/core"
-import { installedAsync } from "boot/installed-extension"
+import type { GetOption } from "client-ext-animevsub-helper"
+import { Http } from "client-ext-animevsub-helper"
 import { i18n } from "src/boot/i18n"
 import { C_URL, isNative } from "src/constants"
 
 import { base64ToArrayBuffer } from "./base64ToArrayBuffer"
 
 async function getNative(
-  url: string | HttpOptions,
+  url: string | GetOption,
   headers?: Record<string, string>
 ) {
-  const response = await (!isNative ? window.Http : CapacitorHttp)
+  const response = await (!isNative ? Http : CapacitorHttp)
     .get(
       typeof url === "object"
         ? url
@@ -212,10 +213,10 @@ async function postNative(
   data: Record<string, string>,
   headers?: Record<string, string>
 ) {
-  const response = await (!isNative ? window.Http : CapacitorHttp).post({
-    url: C_URL + url + (!isNative ? "#animevsub-vsub_uafirefox" : ""),
+  const response = await (!isNative ? Http : CapacitorHttp).post({
+    url: C_URL + url + (!isNative ? "#animevsub-vsub_uachrome" : ""),
     headers: !isNative
-      ? {}
+      ? undefined
       : {
           [String.fromCharCode(117, 115, 101, 114, 45, 97, 103, 101, 110, 116)]:
             String.fromCharCode(
@@ -348,14 +349,9 @@ async function postNative(
   return response
 }
 
-async function getPWA(url: string | GetOptions, headers?: Record<string, string>) {
-  console.log("get: ", url)
-
-  await installedAsync.value
-
-  if (!window.Http)
-    // eslint-disable-next-line functional/no-throw-statement
-    throw Object.assign(
+const noExt = () =>
+  Promise.reject(
+    Object.assign(
       new Error(
         i18n.global.t(
           "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
@@ -363,34 +359,22 @@ async function getPWA(url: string | GetOptions, headers?: Record<string, string>
       ),
       { extesionNotExists: true }
     )
+  )
 
-  const response = (await window.Http.get(
+async function httpGet(
+  url: string | GetOption,
+  headers?: Record<string, string>
+) {
+  console.log("get: ", url)
+
+  const response = await Http.get(
     typeof url === "object"
       ? url
       : {
           url: url.includes("://")
             ? url
-            : C_URL + url + "#animevsub-vsub_uafirefox",
-          headers: {
-            accept:
-              "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-            // "accept-encoding": "deflate, br",F
-            "accept-language": "vi-VN,vi;q=0.9,en;q=0.8,ja;q=0.7",
-            "cache-control": "max-age=0",
-            dnt: "1",
-            "sec-ch-ua":
-              '"Google Chrome";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "Windows",
-            "sec-fetch-dest": "document",
-            "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "none",
-            "sec-fetch-user": "?1",
-            "sec-gpc": "1",
-            "upgrade-insecure-requests": "1",
-
-            ...headers,
-          },
+            : C_URL + url + "#animevsub-vsub_uachrome",
+          headers,
         }
   ).then((response) => {
     if (response.status === 403 || response.status === 520) {
@@ -398,53 +382,40 @@ async function getPWA(url: string | GetOptions, headers?: Record<string, string>
     }
 
     return response
-  })) as HttpResponse
+  })
 
   console.log("get-result: ", response)
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
-  return response
+  return response as Omit<typeof response, "data"> & { data: string }
 }
 
-async function postPWA(
+async function httpPost(
   url: string,
   data: Record<string, number | string | boolean>,
   headers?: Record<string, string>
 ) {
   console.log("post: ", {
-    url: C_URL + url,
+    url: C_URL + url + "#animevsub-vsub_uachrome",
     data,
     headers,
   })
 
-  await installedAsync.value
-
-  if (!window.Http)
-    // eslint-disable-next-line functional/no-throw-statement
-    throw Object.assign(
-      new Error(
-        i18n.global.t(
-          "trang-web-can-extension-animevsub-helper-de-hoat-dong-binh-thuong"
-        )
-      ),
-      { extesionNotExists: true }
-    )
-
-  const response = (await window.Http.post({
-    url: C_URL + url + "#animevsub-vsub_uafirefox",
+  const response = await Http.post({
+    url: C_URL + url + "#animevsub-vsub_uachrome",
     headers,
     data,
-  })) as HttpResponse
+  })
 
   console.log("post-result: ", response)
   // eslint-disable-next-line functional/no-throw-statement
   if (response.status !== 200 && response.status !== 201) throw response
 
-  return response
+  return response as Omit<typeof response, "data"> & { data: string }
 }
 
-const get = !isNative ? getPWA : getNative
-const post = !isNative ? postPWA : postNative
+const get = !isNative ? (Http.version ? httpGet : noExt) : getNative
+const post = !isNative ? (Http.version ? httpPost : noExt) : postNative
 
 export { get, post }

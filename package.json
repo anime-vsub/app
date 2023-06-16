@@ -54,6 +54,7 @@
     "artplayer": "^4.6.2",
     "axios": "^1.2.5",
     "cheerio": "1.0.0-rc.12",
+    "client-ext-animevsub-helper": "^1.0.4",
     "cordova-plugin-screen-orientation": "^3.0.2",
     "dayjs": "^1.11.7",
     "embed-fbcmt-client": "^0.1.32",

@@ -1475,18 +1475,16 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     (type === "hls" || type === "m3u" || type === "m3u8") &&
     Hls.isSupported()
   ) {
-    const offEnds =
-      window.Http?.version && window.Http.version < "0.0.26" ? "" : "_extra"
+    const offEnds = "_extra"
     const hls = new Hls({
       debug: import.meta.env.isDev,
       workerPath: workerHls,
       progressive: true,
       fragLoadingRetryDelay: 10000,
       fetchSetup(context, initParams) {
-        context.url += `#animevsub-vsub${offEnds}_uafirefox`
-
-        // set header because this version always cors not fix by extension liek desktop-web
-        isNative && initParams.headers.set("x-referer", C_URL)
+        // set header because this version always cors not fix by extension like desktop-web
+        if (isNative)  initParams.headers.set("x-referer", C_URL)
+        else context.url += `#animevsub-vsub${offEnds}_uachrome`
 
         return new Request(context.url, initParams)
       },
@@ -1546,7 +1544,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           headers.set("referer", C_URL)
 
           fetchJava(
-            context.url + (!isNative ? "#animevsub-vsub_uafirefox" : ""),
+            context.url + (!isNative ? "#animevsub-vsub_uachrome" : ""),
             {
               headers,
               signal: controller.signal,
