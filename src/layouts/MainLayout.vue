@@ -2,7 +2,10 @@
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
       <q-page>
-        <router-view v-if="isNative || Http.version" v-slot="{ Component }">
+        <router-view
+          v-if="isNative || Http.version"
+          v-slot="{ Component }"
+        >
           <keep-alive exclude="_season">
             <component :is="Component" />
           </keep-alive>
