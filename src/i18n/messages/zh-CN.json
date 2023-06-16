@@ -256,5 +256,9 @@
   "movie": "电影",
   "de-sau": "之后",
   "lam-moi-ngay": "立即刷新",
-  "ung-dung-da-duoc-cap-nhat": "该应用程序已更新"
+  "ung-dung-da-duoc-cap-nhat": "该应用程序已更新",
+  "microsoft-edge-co-the-cap-nhat-cham-hon-github-khi-do-ban-can-cap-nhat-thu-cong": "当您需要手动更新 Microsoft Edge 时，它​​的更新速度可能比 GitHub 慢",
+  "tro-len": "多于。",
+  "tro-len-neu-ban-da-cai-dat-extension-vui-long-cap-nhat-no-toi-phien-ban": "或更高版本，如果您已经安装了扩展程序，请将其更新到版本",
+  "ung-dung-hien-tai-yeu-cau-extension": "当前应用需要扩展"
 }

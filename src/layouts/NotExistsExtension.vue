@@ -24,13 +24,10 @@
           )
         }}
         <span class="text-blue-400 mt-2 mx-4 block leading-normal text-[16px]"
-          >Ứng dụng hiện tại yêu cầu extension <b>v1.0.1</b> trở lên, nếu bạn đã
-          cài đặt extension vui lòng cập nhật nó tới phiên bản <b>v1.0.1</b> trở
-          lên.</span
+          >{{ t('ung-dung-hien-tai-yeu-cau-extension') }} <b>v1.0.1</b> {{ t('tro-len-neu-ban-da-cai-dat-extension-vui-long-cap-nhat-no-toi-phien-ban') }} <b>v1.0.1</b> {{ t('tro-len') }}</span
         >
         <span v-if="currentBrowser.text === 'Edge'" class="text-orange-400 mt-2 mx-4 block leading-normal text-[16px]"
-          >Microsoft Edge có thể cập nhật chậm hơn GitHub khi đó bạn cần cập
-          nhật thủ công</span
+          >{{ t('microsoft-edge-co-the-cap-nhat-cham-hon-github-khi-do-ban-can-cap-nhat-thu-cong') }}</span
         >
         <q-btn
           no-caps

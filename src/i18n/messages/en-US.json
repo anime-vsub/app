@@ -256,5 +256,15 @@
   "movie": "Movie",
   "de-sau": "Later",
   "lam-moi-ngay": "Refresh now",
-  "ung-dung-da-duoc-cap-nhat": "The app has been updated"
+  "ung-dung-da-duoc-cap-nhat": "The app has been updated",
+  "errors": {
+    "danh-sach-phat-khong-ton-tai": "Playlist does not exist",
+    "loi-khong-xac-dinh-khi": "Unknown error when",
+    "require_login_to": "You must be logged in to {0}",
+    "xoa-thong-bao-that-bai": "Clear failure message"
+  },
+  "microsoft-edge-co-the-cap-nhat-cham-hon-github-khi-do-ban-can-cap-nhat-thu-cong": "Microsoft Edge may update slower than GitHub when you need to update it manually",
+  "tro-len": "above.",
+  "tro-len-neu-ban-da-cai-dat-extension-vui-long-cap-nhat-no-toi-phien-ban": "or higher, if you have installed the extension please update it to version",
+  "ung-dung-hien-tai-yeu-cau-extension": "Current app requires extension"
 }

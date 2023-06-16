@@ -256,5 +256,9 @@
   "movie": "映画",
   "de-sau": "後で",
   "lam-moi-ngay": "今すぐ更新してください",
-  "ung-dung-da-duoc-cap-nhat": "アプリが更新されました"
+  "ung-dung-da-duoc-cap-nhat": "アプリが更新されました",
+  "microsoft-edge-co-the-cap-nhat-cham-hon-github-khi-do-ban-can-cap-nhat-thu-cong": "Microsoft Edge を手動で更新する必要がある場合、GitHub よりも更新が遅くなる場合があります",
+  "tro-len": "その上。",
+  "tro-len-neu-ban-da-cai-dat-extension-vui-long-cap-nhat-no-toi-phien-ban": "以降の拡張機能をインストールしている場合は、次のバージョンに更新してください",
+  "ung-dung-hien-tai-yeu-cau-extension": "現在のアプリには拡張機能が必要です"
 }
