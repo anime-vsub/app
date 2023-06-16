@@ -126,7 +126,7 @@
     "semver": "^7.3.8",
     "tsx": "^3.12.2",
     "typescript": "^5.0.4",
-    "vite": "2.9.16",
+    "vite": "2.9.14",
     "vite-plugin-windicss": "^1.8.10",
     "vitest": "^0.28.2",
     "vue-tsc": "^1.0.24",
