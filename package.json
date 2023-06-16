@@ -22,6 +22,7 @@
     "icongenie": "icongenie generate -m pwa -i meta/app_icon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim",
     "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts",
     "release": "tsx scripts/release.ts",
+    "release:pwa": "bumpp package.json --commit \"(chore): release PWA %s\" --tag \"pwa-v%s\" --push",
     "ci": "pnpm format && pnpm lint --fix && pnpm typing"
   },
   "dependencies": {
@@ -114,6 +115,7 @@
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
     "autoprefixer": "^10.4.13",
+    "bumpp": "^9.1.1",
     "chalk": "^5.2.0",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
