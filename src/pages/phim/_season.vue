@@ -618,7 +618,11 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import { logEvent } from "src/boot/firebase"
 import type { servers } from "src/constants"
-import { C_URL, isNative, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
+import {
+  C_URL,
+  isNative,
+  TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE,
+} from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"

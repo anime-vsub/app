@@ -72,7 +72,7 @@ import { Icon } from "@iconify/vue"
 import { useIntervalFn } from "@vueuse/core"
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { Http } from 'client-ext-animevsub-helper'
+import { Http } from "client-ext-animevsub-helper"
 
 defineProps<{
   noImage?: boolean

@@ -1483,7 +1483,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
       fragLoadingRetryDelay: 10000,
       fetchSetup(context, initParams) {
         // set header because this version always cors not fix by extension like desktop-web
-        if (isNative)  initParams.headers.set("x-referer", C_URL)
+        if (isNative) initParams.headers.set("x-referer", C_URL)
         else context.url += `#animevsub-vsub${offEnds}_uachrome`
 
         return new Request(context.url, initParams)

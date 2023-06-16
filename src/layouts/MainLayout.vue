@@ -2,10 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
       <q-page>
-        <router-view
-          v-if="isNative || Http.version"
-          v-slot="{ Component }"
-        >
+        <router-view v-if="isNative || Http.version" v-slot="{ Component }">
           <keep-alive exclude="_season">
             <component :is="Component" />
           </keep-alive>
@@ -177,7 +174,7 @@
 import { App } from "@capacitor/app"
 import { Icon } from "@iconify/vue"
 import { version } from "app/package.json"
-import { Http } from 'client-ext-animevsub-helper'
+import { Http } from "client-ext-animevsub-helper"
 import semverEq from "semver/functions/eq"
 import semverGt from "semver/functions/gt"
 import { isNative } from "src/constants"
