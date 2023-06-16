@@ -122,7 +122,8 @@ if (!isNative)
   useHead(
     computed(() => {
       const title = t("bang-xep-hang-anime-theo-_type", [
-        (types.value.find((item) => item[1] === route.params.type) ?? types.value[0])[0],
+        (types.value.find((item) => item[1] === route.params.type) ??
+          types.value[0])[0],
       ])
 
       const description = title
