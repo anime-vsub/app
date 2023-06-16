@@ -73,7 +73,6 @@ import { useIntervalFn } from "@vueuse/core"
 import { Http } from "client-ext-animevsub-helper"
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { Http } from "client-ext-animevsub-helper"
 
 defineProps<{
   noImage?: boolean
