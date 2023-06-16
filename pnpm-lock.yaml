@@ -200,7 +200,7 @@ dependencies:
 devDependencies:
   '@intlify/vite-plugin-vue-i18n':
     specifier: ^6.0.3
-    version: 6.0.3(vite@2.9.16)(vue-i18n@9.2.2)
+    version: 6.0.3(vite@2.9.14)(vue-i18n@9.2.2)
   '@quasar/app-vite':
     specifier: ^1.4.3
     version: 1.4.3(eslint@8.32.0)(pinia@2.0.29)(quasar@2.11.9)(rollup@2.77.3)(vue-router@4.1.6)(vue@3.2.45)(workbox-build@6.5.0)
@@ -301,11 +301,11 @@ devDependencies:
     specifier: ^5.0.4
     version: 5.0.4
   vite:
-    specifier: 2.9.16
-    version: 2.9.16(sass@1.32.11)
+    specifier: 2.9.14
+    version: 2.9.14(sass@1.32.11)
   vite-plugin-windicss:
     specifier: ^1.8.10
-    version: 1.8.10(vite@2.9.16)
+    version: 1.8.10(vite@2.9.14)
   vitest:
     specifier: ^0.28.2
     version: 0.28.2(jsdom@21.1.0)(sass@1.32.11)
@@ -2214,7 +2214,7 @@ packages:
     engines: {node: '>= 16'}
     dev: true
 
-  /@intlify/vite-plugin-vue-i18n@6.0.3(vite@2.9.16)(vue-i18n@9.2.2):
+  /@intlify/vite-plugin-vue-i18n@6.0.3(vite@2.9.14)(vue-i18n@9.2.2):
     resolution: {integrity: sha512-6SgNzPAOCR90wvt368lKzi7f/5ZEWJn22UCGvhFsP3XvKqlF3cVzojahgQ6o+LTdCkExeM6wPgd+haFf28E9VQ==}
     engines: {node: '>= 14.6'}
     peerDependencies:
@@ -2235,7 +2235,7 @@ packages:
       debug: 4.3.4
       fast-glob: 3.2.12
       source-map: 0.6.1
-      vite: 2.9.16(sass@1.32.11)
+      vite: 2.9.14(sass@1.32.11)
       vue-i18n: 9.2.2(vue@3.2.45)
     transitivePeerDependencies:
       - supports-color
@@ -2899,13 +2899,13 @@ packages:
         optional: true
     dependencies:
       '@quasar/render-ssr-error': 1.0.2
-      '@quasar/vite-plugin': 1.3.3(@vitejs/plugin-vue@2.3.4)(quasar@2.11.9)(vite@2.9.16)(vue@3.2.45)
+      '@quasar/vite-plugin': 1.3.3(@vitejs/plugin-vue@2.3.4)(quasar@2.11.9)(vite@2.9.14)(vue@3.2.45)
       '@rollup/pluginutils': 4.2.1
       '@types/chrome': 0.0.208
       '@types/compression': 1.7.2
       '@types/cordova': 0.0.34
       '@types/express': 4.17.17
-      '@vitejs/plugin-vue': 2.3.4(vite@2.9.16)(vue@3.2.45)
+      '@vitejs/plugin-vue': 2.3.4(vite@2.9.14)(vue@3.2.45)
       archiver: 5.3.1
       chokidar: 3.5.3
       ci-info: 3.8.0
@@ -2933,7 +2933,7 @@ packages:
       semver: 7.3.8
       serialize-javascript: 6.0.1
       table: 6.8.1
-      vite: 2.9.16(sass@1.32.12)
+      vite: 2.9.14(sass@1.32.12)
       vue: 3.2.45
       vue-router: 4.1.6(vue@3.2.45)
       webpack-merge: 5.9.0
@@ -3004,7 +3004,7 @@ packages:
       stack-trace: 1.0.0-pre2
     dev: true
 
-  /@quasar/vite-plugin@1.3.3(@vitejs/plugin-vue@2.3.4)(quasar@2.11.9)(vite@2.9.16)(vue@3.2.45):
+  /@quasar/vite-plugin@1.3.3(@vitejs/plugin-vue@2.3.4)(quasar@2.11.9)(vite@2.9.14)(vue@3.2.45):
     resolution: {integrity: sha512-HSX/Vgec5/Y8fiJRfpf1MR7+um+rdpbilktBGQkYOKw4A9d0smGq4jtSS/K4O2GTXRYqDmZ/5sgCeBcmhB3OCw==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -3013,9 +3013,9 @@ packages:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0
       vue: ^3.0.0
     dependencies:
-      '@vitejs/plugin-vue': 2.3.4(vite@2.9.16)(vue@3.2.45)
+      '@vitejs/plugin-vue': 2.3.4(vite@2.9.14)(vue@3.2.45)
       quasar: 2.11.9
-      vite: 2.9.16(sass@1.32.12)
+      vite: 2.9.14(sass@1.32.12)
       vue: 3.2.45
     dev: true
 
@@ -3642,14 +3642,14 @@ packages:
       vue: 3.2.45
     dev: false
 
-  /@vitejs/plugin-vue@2.3.4(vite@2.9.16)(vue@3.2.45):
+  /@vitejs/plugin-vue@2.3.4(vite@2.9.14)(vue@3.2.45):
     resolution: {integrity: sha512-IfFNbtkbIm36O9KB8QodlwwYvTEsJb4Lll4c2IwB3VHc2gie2mSPtSzL0eYay7X2jd/2WX02FjSGTWR6OPr/zg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.9.16(sass@1.32.12)
+      vite: 2.9.14(sass@1.32.12)
       vue: 3.2.45
     dev: true
 
@@ -10539,7 +10539,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-windicss@1.8.10(vite@2.9.16):
+  /vite-plugin-windicss@1.8.10(vite@2.9.14):
     resolution: {integrity: sha512-scywsuzo46lcTBohspmF0WiwhWEte6p+OUVrX4yr7VMRvLHMHVfLtJReyD5pppjijG7YOwVsZn7XBWWZtF658Q==}
     peerDependencies:
       vite: ^2.0.1 || ^3.0.0 || ^4.0.0
@@ -10547,14 +10547,14 @@ packages:
       '@windicss/plugin-utils': 1.8.10
       debug: 4.3.4
       kolorist: 1.8.0
-      vite: 2.9.16(sass@1.32.11)
+      vite: 2.9.14(sass@1.32.11)
       windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@2.9.16(sass@1.32.11):
-    resolution: {integrity: sha512-X+6q8KPyeuBvTQV8AVSnKDvXoBMnTx8zxh54sOwmmuOdxkjMmEJXH2UEchA+vTMps1xw9vL64uwJOWryULg7nA==}
+  /vite@2.9.14(sass@1.32.11):
+    resolution: {integrity: sha512-P/UCjSpSMcE54r4mPak55hWAZPlyfS369svib/gpmz8/01L822lMPOJ/RYW6tLCe1RPvMvOsJ17erf55bKp4Hw==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
@@ -10578,8 +10578,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vite@2.9.16(sass@1.32.12):
-    resolution: {integrity: sha512-X+6q8KPyeuBvTQV8AVSnKDvXoBMnTx8zxh54sOwmmuOdxkjMmEJXH2UEchA+vTMps1xw9vL64uwJOWryULg7nA==}
+  /vite@2.9.14(sass@1.32.12):
+    resolution: {integrity: sha512-P/UCjSpSMcE54r4mPak55hWAZPlyfS369svib/gpmz8/01L822lMPOJ/RYW6tLCe1RPvMvOsJ17erf55bKp4Hw==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
