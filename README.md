@@ -1,17 +1,11 @@
 # AnimeVsub Application!
 
-## Working Wait... ⚠
-
-**Versions up to `1.7.90` do not currently work. I agree to the objection from [`https://animevietsub.im`](https://animevietsub.im) and also because there are hundreds of apps on `Google Play` that insert ads into this app and upload it in violation of the license [GNU GPL v3](./LICENSE) I decided to add code against piracy.**
-
-**This will also open the door to support for `multiple source` and `multiple language`**
-
 <div style="text-align: center;">
    <img src="./meta/app_icon.svg" width="120px">
    <h1 style="font-size: 16px">AnimeVsub</h1>
 </div>
 
-**Download the app by downloading the latest [release version](https://github.com/anime-vsub/app/releases) or visit https://app.animevsub.eu.org to download it**
+**Visit https://app.animevsub.eu.org to use PWA**
 
 > **The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.eu.org**
 
@@ -30,6 +24,25 @@
 [![Prettier](https://github.com/anime-vsub/app/actions/workflows/pretter.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/pretter.yml)
 [![TypeScript Checker Declaration](https://github.com/anime-vsub/app/actions/workflows/typing.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/typing.yml)
 [![Try build](https://github.com/anime-vsub/app/actions/workflows/try-build.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/try-build.yml)
+
+## Reason for PWA
+
+With Cap4's slowdown in increasingly heavy applications it has proved slower than ever. So we decided to switch it to [Progressive Web Application](https://web.dev/progressive-web-apps/).
+
+However, there was a problem with PWA support that the request cors domain was not accepted. So we resorted to the help of Browser Extensions/Addons [AnimeVsub Helper](https://github.com/anime-vsub/extension-animevsub-helper).
+
+The fact that `Chrome Android` and `Edge Android` do not support extensions like its desktop versions causes many problems that you cannot use this application with only the default browsers on your phone. I consider this a step backwards for both `Chrome` and `Edge` from fully supported extensions/addons like `Firefox`, `Flow` and `Yandex`.
+
+## Use a modern browser that supports extensions
+As I mentioned above this application needs extensions and it requires a really modern browser. I recommend you to use one of the following browsers:
+
+| ![](https://play-lh.googleusercontent.com/d40s5qfJB2xs8DrBjNZTy659ynzG9dn-llx2L1_ZFO5uTZaeHKUIElyk03s3yaFGMWE=w240-h480-rw) | ![](https://kiwibrowser.com/wp-content/uploads/2019/09/cropped-Favicon-512x512-180x180.png) | ![](https://play-lh.googleusercontent.com/l6ftn6BTu7Kfe8OdE4Itrdw5bTRVO3F_mTZH8xDa-FHO4m-lZAXmz5GxkXTMhqcF_y0=w240-h480-rw) | ![](https://play-lh.googleusercontent.com/O_80i5pa9UsBQU25V28J3xqFZllGj-0trqPLvbSygG_5d7SXE-PxxiCJb7pNmATow_Fm=w240-h480-rw) | ![](https://play-lh.googleusercontent.com/kpsfGa5rdvPUPVgiyo3bN4G4TdRuf_YUtm5nK0MYEZlEUrgaptnOZ_K_m2IADFA1jQ=s48-rw) | ![](https://play-lh.googleusercontent.com/CAlpsF5mchuTP6mrEOZW2zXzJKBsVDYWc21K4XiaQKKoEuMhiABJjKWJBc3S6Ux-rY4=w240-h480-rw) |
+| ----- | -------- | --- | --- |  --- | -|
+| [Lemur Browser](https://lemurbrowser.com/) | [Kiwi Browser](https://kiwibrowser.com/) | [Firefox Browser](https://www.mozilla.org/vi/firefox/browsers/mobile/) | [Flow Browser](https://play.google.com/store/apps/details?id=org.flow.browser&hl=en_US) | [Mises Browser](https://www.mises.site/) | [Yandex Browser](https://browser.yandex.com/beta/) |
+
+After installing the browser install the utility [AnimeVsub Helper](https://github.com/anime-vsub/extension-animevsub-helper) and go to https://m.animevsub.eu.org
+
+Wait for a while you will see the browser wants to install `AnimeVsub` and you can exit the browser then open `AnimeVsub` in the main screen.
 
 ## Sponsor ☕
 
