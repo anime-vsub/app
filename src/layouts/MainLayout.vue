@@ -142,19 +142,7 @@
               class="mb-1 filled"
             />
           </template>
-
-          <Icon
-            icon="fluent:person-24-regular"
-            width="24"
-            height="24"
-            class="mb-1 regular"
-          />
-          <Icon
-            icon="fluent:person-24-filled"
-            width="24"
-            height="24"
-            class="mb-1 filled"
-          />
+          
           {{ t("toi") }}
         </q-route-tab>
       </q-tabs>
