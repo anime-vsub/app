@@ -899,7 +899,7 @@ watchEffect(async (onCleanup): Promise<void> => {
   // if this does not exist make sure the status has not finished loading, this function call also useless
 
   // if not login -> return first episode in season
-  if (!authStore.uid) {
+if (!authStore.uid || !settingsStore.restoreLastEp) {
     currentChap.value = currentDataSeason.value?.chaps[0].id
     return
   }
