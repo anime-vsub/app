@@ -20,7 +20,7 @@
 
 Offcial Website:
 
-- https://animevsub.ga
+- ~~https://animevsub.ga~~ This domain has been stolen by Freenom!
 - https://animevsub.netlify.app
 - https://animevsub.eu.org
 
