@@ -2464,6 +2464,7 @@ navigator.mediaSession?.setActionHandler("pause", () => {
   const playing = artPlaying.value
   setArtPlaying(false)
   if (playing) setArtControlShow(true)
+  artPlayingOfBeforeDocumentHide = false
 })
 navigator.mediaSession?.setActionHandler("play", () => {
   setArtPlaying(true)
