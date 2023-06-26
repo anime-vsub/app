@@ -1353,6 +1353,7 @@ watch(
 
         if (uidChap.value !== currentUid) {
           // if process of this result != current process -> skip
+          // eslint-disable-next-line functional/no-throw-statement
           throw new Error("PROCESS_NOT_EQUAL")
         }
 
@@ -1370,7 +1371,7 @@ watch(
       } catch (err) {
         if (
           (err as Error)?.message !== "PROCESS_NOT_EQUAL" &&
-          (err as Error)?.message !== "NOT_RESET" && 
+          (err as Error)?.message !== "NOT_RESET" &&
           !artControlProgressHoving.value /* disable if user hoving to progress bar */
         )
           setArtCurrentTime(0)
