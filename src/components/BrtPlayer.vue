@@ -1351,18 +1351,29 @@ watch(
           await historyStore.getProgressChap(currentSeason, currentChap)
         )?.cur
 
-        if (
-          cur &&
-          !artControlProgressHoving.value /* disable if user hoving to progress bar */
-        ) {
-          setArtCurrentTime(cur)
-          addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
+        if (uidChap.value !== currentUid) {
+          // if process of this result != current process -> skip
+          throw new Error("PROCESS_NOT_EQUAL")
+        }
+
+        if (cur) {
+          if (
+            !artControlProgressHoving.value /* disable if user hoving to progress bar */
+          ) {
+            setArtCurrentTime(cur)
+            addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
+          }
         } else {
           // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")
         }
       } catch (err) {
-        setArtCurrentTime(0)
+        if (
+          (err as Error)?.message !== "PROCESS_NOT_EQUAL" &&
+          (err as Error)?.message !== "NOT_RESET" && 
+          !artControlProgressHoving.value /* disable if user hoving to progress bar */
+        )
+          setArtCurrentTime(0)
         if ((err as Error)?.message !== "NOT_RESET") console.error(err)
       }
 
