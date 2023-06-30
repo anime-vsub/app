@@ -514,33 +514,6 @@ const showDialogTyper = ref(false)
 const showDialogSorter = ref(false)
 const showDialogFilter = ref(false)
 
-const genres = reactive<string[]>([])
-const seaser = ref<string | null>(null)
-const sorter = ref<string | null>(null)
-const typer = ref<string | null>(null)
-const year = ref<string | null>(null)
-
-const textFilter = computed(() => {
-  return (
-    data.value &&
-    data.value.filter &&
-    [
-      data.value.filter.gener
-        .filter((item) => genres.includes(item.value))
-        .map((item) => item.text)
-        .join(", "),
-      data.value.filter.seaser.find((item) => item.value === seaser.value)
-        ?.text,
-      data.value.filter.sorter.find((item) => item.value === sorter.value)
-        ?.text,
-      data.value.filter.typer.find((item) => item.value === typer.value)?.text,
-      data.value.filter.year.find((item) => item.value === year.value)?.text,
-    ]
-      .filter(Boolean)
-      .join(" • ")
-  )
-})
-
 const defaultsOptions = computed<{
   typer?: string
   gener?: string
@@ -563,7 +536,8 @@ const defaultsOptions = computed<{
         gener: value,
       }
     case "season": {
-      const [season, year] = value
+      const [season, year] =
+        typeof value === "string" ? value.replace(/\/*$/, "").split("/") : value
 
       if (year) {
         return {
@@ -579,6 +553,40 @@ const defaultsOptions = computed<{
     default:
       return {}
   }
+})
+  
+const genres = reactive<string[]>([])
+const seaser = ref<string | null>(null)
+const sorter = ref<string | null>(null)
+const typer = ref<string | null>(null)
+const year = ref<string | null>(null)
+
+watch(defaultsOptions, options => {
+  if (genres.length === 0 && options.gener) genres.push(options.gener)
+  seaser.value ??= options.seaser ?? null
+  typer.value ??= options.typer ?? null
+  year.value ??= options.year ?? null
+}, { immediate: true })
+
+const textFilter = computed(() => {
+  return (
+    data.value &&
+    data.value.filter &&
+    [
+      data.value.filter.gener
+        .filter((item) => genres.includes(item.value))
+        .map((item) => item.text)
+        .join(", "),
+      data.value.filter.seaser.find((item) => item.value === seaser.value)
+        ?.text,
+      data.value.filter.sorter.find((item) => item.value === sorter.value)
+        ?.text,
+      data.value.filter.typer.find((item) => item.value === typer.value)?.text,
+      data.value.filter.year.find((item) => item.value === year.value)?.text,
+    ]
+      .filter(Boolean)
+      .join(" • ")
+  )
 })
 
 const showFullGener = ref(false)
@@ -609,7 +617,9 @@ function toggleGenres(item: string) {
 function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   return TypeNormalValue(
     route.params.type_normal as string,
-    route.params.value,
+    typeof route.params.value === "string"
+      ? route.params.value.replace(/\/*$/, "")
+      : route.params.value,
     page,
     onlyItems,
     {
