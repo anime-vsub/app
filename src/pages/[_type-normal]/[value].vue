@@ -39,7 +39,6 @@
             '!text-main font-weight-medium': genres.includes(item.value),
           }"
           :value="item.value"
-          :def="defaultsOptions.gener"
           @click="
             genres.includes(item.value)
               ? genres.splice(genres.indexOf(item.value) >>> 0)
@@ -164,12 +163,6 @@ const route = useRoute()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 const page = usePage()
 
-const genres = reactive<string[]>([])
-const seaser = ref<string | null>(null)
-const sorter = ref<string | null>(null)
-const typer = ref<string | null>(null)
-const year = ref<string | null>(null)
-
 const defaultsOptions = computed<{
   typer?: string
   gener?: string
@@ -191,7 +184,8 @@ const defaultsOptions = computed<{
         gener: value as string,
       }
     case "season": {
-      const [season, year] = value
+      const [season, year] =
+        typeof value === "string" ? value.replace(/\/*$/, "").split("/") : value
 
       if (year) {
         return {
@@ -209,10 +203,25 @@ const defaultsOptions = computed<{
   }
 })
 
+const genres = reactive<string[]>([])
+const seaser = ref<string | null>(null)
+const sorter = ref<string | null>(null)
+const typer = ref<string | null>(null)
+const year = ref<string | null>(null)
+
+watch(defaultsOptions, options => {
+  if (genres.length === 0 && options.gener) genres.push(options.gener)
+  seaser.value ??= options.seaser ?? null
+  typer.value ??= options.typer ?? null
+  year.value ??= options.year ?? null
+}, { immediate: true })
+
 function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   return TypeNormalValue(
     route.params.type_normal as string,
-    route.params.value,
+    typeof route.params.value === "string"
+      ? route.params.value.replace(/\/*$/, "")
+      : route.params.value,
     page,
     onlyItems,
     {
