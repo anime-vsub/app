@@ -1582,6 +1582,7 @@ const savingTimeEpStore = new Set<string>()
 const saveCurTimeToPer = throttle(
   async (
     currentSeason: string,
+    nameSeason: string,
     currentChap: string,
     nameCurrentChap: string,
     poster: string,
@@ -1609,7 +1610,7 @@ const saveCurTimeToPer = throttle(
       return
     }
 
-    if (!(await createSeason(currentSeason, nameCurrentChap, poster, name)))
+    if (!(await createSeason(currentSeason, nameSeason, poster, name)))
       return
 
     // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
@@ -1648,7 +1649,7 @@ const saveCurTimeToPer = throttle(
           },
           {
             poster,
-            seasonName: nameCurrentChap,
+            seasonName: nameSeason,
             name,
           }
         )
@@ -1687,6 +1688,7 @@ function onVideoTimeUpdate() {
   console.log("call throw emit")
   saveCurTimeToPer(
     props.currentSeason,
+    props.nameCurrentSeason,
     props.currentChap,
     props.nameCurrentChap,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
