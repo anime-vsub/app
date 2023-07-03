@@ -267,5 +267,8 @@
   "tro-len": "above.",
   "tro-len-neu-ban-da-cai-dat-extension-vui-long-cap-nhat-no-toi-phien-ban": "or higher, if you have installed the extension please update it to version",
   "ung-dung-hien-tai-yeu-cau-extension": "Current app requires extension",
-  "khoi-phuc-tap-cuoi-cung-bo-anime": "Restore the last episode of the Anime series"
+  "khoi-phuc-tap-cuoi-cung-bo-anime": "Restore the last episode of the Anime series",
+  "luu-tien-trinh-xem-khi-offline": "Save viewing progress when Offline",
+  "tai-lai": "Reload",
+  "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "This option needs a page reload to apply the change"
 }

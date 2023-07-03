@@ -1,14 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { getAnalytics } from "@firebase/analytics"
 import { initializeApp } from "@firebase/app"
-import type {Index
-} from "@firebase/firestore";
+import type { Index } from "@firebase/firestore"
 import {
-  CACHE_SIZE_UNLIMITED,
+  getFirestore,
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
-  setIndexConfiguration
+  setIndexConfiguration,
 } from "@firebase/firestore"
 import configure from "app/firebase/firestore.indexes.json"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -26,25 +25,40 @@ const firebaseConfig = {
   measurementId: "G-F2KJ27SHYK",
 }
 
+const parseJSON = (json?: string | null) => {
+  if (!json) return null
+  try {
+    return JSON.parse(json)
+  } catch {
+    return null
+  }
+}
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
-const db = initializeFirestore(app, {
-  localCache: persistentLocalCache({
-    cacheSizeBytes: CACHE_SIZE_UNLIMITED,
-    tabManager: persistentMultipleTabManager(),
-  }),
-})
+const enablePersistent =
+parseJSON(localStorage?.getItem("settings"))?.enablePersistent ?? true
+const db = enablePersistent
+  ? initializeFirestore(app, {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager(),
+      }),
+    })
+  : getFirestore(app)
 
-setIndexConfiguration(db, configure as {
-  indexes: Index[]
-})
-// eslint-disable-next-line promise/always-return
-.then(() => {
-  console.log("[Install indexes]: Installed indexes")
-})
-.catch((err) => {
-  console.error("[Install indexes]: failure ", err)
-})
+if (enablePersistent)
+  setIndexConfiguration(
+    db,
+    configure as {
+      indexes: Index[]
+    }
+  )
+    // eslint-disable-next-line promise/always-return
+    .then(() => {
+      console.log("[Install indexes]: Installed indexes")
+    })
+    .catch((err) => {
+      console.error("[Install indexes]: failure ", err)
+    })
 
 export { app, analytics, db }

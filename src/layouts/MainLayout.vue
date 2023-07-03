@@ -769,11 +769,35 @@
                     />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>{{ t("khoi-phuc-tap-cuoi-cung-bo-anime") }}</q-item-label>
+                    <q-item-label>{{
+                      t("khoi-phuc-tap-cuoi-cung-bo-anime")
+                    }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <q-toggle
                       v-model="settingsStore.restoreLastEp"
+                      dense
+                      color="main"
+                    />
+                  </q-item-section>
+                </q-item>
+
+                <q-item clickable v-ripple class="rounded-xl">
+                  <q-item-section avatar class="min-w-0">
+                    <Icon
+                      icon="fluent:phone-vertical-scroll-24-regular"
+                      width="20"
+                      height="20"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{
+                      t("luu-tien-trinh-xem-khi-offline")
+                    }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-toggle
+                      v-model="settingsStore.enablePersistent"
                       dense
                       color="main"
                     />
@@ -1026,10 +1050,7 @@
 
     <q-page-container>
       <q-page :style-fn="route.meta?.styleFn">
-        <router-view
-          v-if="Http.version"
-          v-slot="{ Component }"
-        >
+        <router-view v-if="Http.version" v-slot="{ Component }">
           <component :is="Component" />
         </router-view>
         <NotExistsExtension v-else />
@@ -1130,7 +1151,7 @@ import "@fontsource/caveat"
 // =========== suth
 
 import { useEventListener } from "@vueuse/core"
-import { Http } from 'client-ext-animevsub-helper'
+import { Http } from "client-ext-animevsub-helper"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import QImgCustom from "components/QImgCustom"
@@ -1409,6 +1430,30 @@ async function checkForUpdate() {
     }).onOk(updateApp)
   }
 }
+
+// ======= notify reload app apply change =======
+watch(
+  () => settingsStore.enablePersistent,
+  () => {
+    $q.notify({
+      message: t("tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi"),
+      position: "bottom-right",
+      timeout: 0,
+      actions: [
+        {
+          label: t("tai-lai"),
+          color: "yellow",
+          noCaps: true,
+          handler: () => location.reload(),
+        },
+        {
+          label: t("de-sau"),
+          round: true,
+        },
+      ],
+    })
+  }
+)
 </script>
 
 <style lang="scss">
