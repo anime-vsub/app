@@ -160,8 +160,8 @@
         </swiper-slide>
       </swiper>
 
+      <div class="nav-btn swiper-button-prev swiper-button-orev-1" />
       <div class="nav-btn swiper-button-next swiper-button-next-1" />
-      <div class="nav-btn swiper-button-next swiper-button-prev-1" />
     </div>
 
     <div class="px-4 mt-4 md:px-14">
@@ -222,8 +222,8 @@
           </swiper-slide>
         </swiper>
 
+        <div class="nav-btn swiper-button-prev swiper-button-prev-2" />
         <div class="nav-btn swiper-button-next swiper-button-next-2" />
-        <div class="nav-btn swiper-button-next swiper-button-prev-2" />
       </div>
     </div>
 
@@ -312,8 +312,8 @@
           </swiper-slide>
         </swiper>
 
+        <div class="nav-btn swiper-button-prev swiper-button-prev-3" />
         <div class="nav-btn swiper-button-next swiper-button-next-3" />
-        <div class="nav-btn swiper-button-next swiper-button-prev-3" />
       </div>
     </div>
 
