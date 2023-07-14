@@ -1682,7 +1682,7 @@ function onVideoTimeUpdate() {
   }
 
   if (progressRestored !== uidChap.value) return
-  if (!props.currentChap || !props.nameCurrentSeason) return
+  if (props.currentChap === undefined || props.nameCurrentSeason===undefined) return
   if (typeof props.nameCurrentChap !== "string") return
 
   console.log("call throw emit")
