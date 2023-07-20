@@ -22,5 +22,5 @@ defineProps<{
   update: [number, number, number]
 }>()
 
-const currentDay = new Date().getDate() + 1
+const currentDay = new Date().getDay() + 1
 </script>
