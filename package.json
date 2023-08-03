@@ -128,7 +128,7 @@
     "semver": "^7.3.8",
     "tsx": "^3.12.2",
     "typescript": "^5.0.4",
-    "vite": "2.9.14",
+    "vite": "2.9.16",
     "vite-plugin-remove-console": "^2.1.1",
     "vite-plugin-rewrite-all": "^1.0.1",
     "vite-plugin-windicss": "^1.8.10",
