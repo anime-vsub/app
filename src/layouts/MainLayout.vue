@@ -142,7 +142,7 @@
               class="mb-1 filled"
             />
           </template>
-          
+
           {{ t("toi") }}
         </q-route-tab>
       </q-tabs>
@@ -220,28 +220,41 @@ const appInfos = shallowRef()
 
 if (isNative)
   Promise.all([
-    fetch("https://api.github.com/repos/anime-vsub/app/releases").then((res) =>
-      res.json()
+    fetch("https://api.github.com/repos/anime-vsub/app/releases").then(
+      (res) =>
+        res.json() as Promise<
+          {
+            name: string
+            tag_name: string
+            body: string
+          }[]
+        >
     ),
-
     !isNative ? { version } : App.getInfo(),
   ])
     .then((results) => {
       const ignoreUpdateVersion = localStorage.getItem("ignore-update-version")
+      if (isNative) {
+        results[0] = results[0].filter(
+          (item) => !item.tag_name.startsWith("pwa-")
+        )
+      } else {
+        results[0] = results[0].filter(
+          item => item.tag_name.startsWith("pwa-")
+        )
+      }
+
+      const lastVersion = results[0][0]
 
       if (ignoreUpdateVersion) {
-        if (
-          semverEq(
-            ignoreUpdateVersion,
-            results.find((item) => item.tag_name.startsWith("v")).tag_name
-          )
-        ) {
+        if (ignoreUpdateVersion === lastVersion.tag_name) {
           return
         }
       }
 
       // eslint-disable-next-line promise/always-return
-      if (!semverGt(results[0][0].tag_name.slice(1), results[1].version)) return
+      if (!semverGt(lastVersion.tag_name.replace(/^.+-v/, ""), results[1].version))
+        return
       ;[newVersion.value, appInfos.value] = [results[0][0], results[1]]
     })
     .catch((err) => {
