@@ -24,12 +24,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Icon } from "@iconify/vue"
-import { useHead } from "@vueuse/head"
-import UAParser from "ua-parser-js"
-import { computed } from "vue"
-import { useI18n } from "vue-i18n"
-
 defineProps<{
   loading: boolean
 }>()
