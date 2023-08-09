@@ -1477,7 +1477,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     (type === "hls" || type === "m3u" || type === "m3u8") &&
     Hls.isSupported()
   ) {
-    const offEnds = "_extra"
+    const offEnds = isNative ? "" : "_extra"
     const hls = new Hls({
       debug: import.meta.env.isDev,
       workerPath: workerHls,
