@@ -279,7 +279,7 @@ const parse = (str: string) => {
   }
 }
 const appAllowWork = isNative ? computedAsync<boolean>(async () => {
-  const activeCache = parse(localStorage.getItem("active"))
+  const activeCache = parse(localStorage.getItem("active") ?? "")
 
   if (activeCache && Date.now() - activeCache.now <= 1000 * 3600 * 24) {
     return true
