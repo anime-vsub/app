@@ -199,19 +199,18 @@
 import { App } from "@capacitor/app"
 import { Icon } from "@iconify/vue"
 import { computedAsync } from "@vueuse/core"
-import { version, name } from "app/package.json"
+import { name, version } from "app/package.json"
 import { Http } from "client-ext-animevsub-helper"
 import semverGt from "semver/functions/gt"
 import { isNative } from "src/constants"
 import { parseMdBasic } from "src/logic/parseMdBasic"
 import { installedSW, updatingCache } from "src/logic/state-sw"
 import { useNotificationStore } from "stores/notification"
-import { shallowRef, computed } from "vue"
+import { computed, shallowRef } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 
 import AllowWork from "./AllowWork.vue"
-
 import NotExistsExtension from "./NotExistsExtension.vue"
 
 const route = useRoute()
