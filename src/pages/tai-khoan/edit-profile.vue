@@ -118,7 +118,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 name="new_password"
                 class="input"
-                placeholder="{{ t('mat-khau-moi') }}"
+                :placeholder="t('mat-khau-moi')"
               />
               <q-btn
                 dense
