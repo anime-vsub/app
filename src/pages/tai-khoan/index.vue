@@ -312,7 +312,7 @@
               :type="showPassword ? 'text' : 'password'"
               name="password"
               class="input"
-              placeholder="{{ t('mat-khau-moi') }}"
+              :placeholder="t('mat-khau')"
             />
             <q-btn
               dense
