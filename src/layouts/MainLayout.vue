@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
-      <q-page>
+      <q-page v-if="!isNative || appAllowWork">
         <router-view v-if="isNative || Http.version" v-slot="{ Component }">
           <keep-alive exclude="_season">
             <component :is="Component" />
@@ -9,6 +9,7 @@
         </router-view>
         <NotExistsExtension v-else />
       </q-page>
+      <AllowWork v-else :loading="appAllowWork === undefined" />
     </q-page-container>
 
     <q-footer v-if="route.meta?.footer" class="bg-dark-page">
@@ -142,7 +143,7 @@
               class="mb-1 filled"
             />
           </template>
-          
+
           {{ t("toi") }}
         </q-route-tab>
       </q-tabs>
@@ -197,18 +198,19 @@
 <script lang="ts" setup>
 import { App } from "@capacitor/app"
 import { Icon } from "@iconify/vue"
-import { version } from "app/package.json"
+import { computedAsync } from "@vueuse/core"
+import { name, version } from "app/package.json"
 import { Http } from "client-ext-animevsub-helper"
-import semverEq from "semver/functions/eq"
 import semverGt from "semver/functions/gt"
 import { isNative } from "src/constants"
 import { parseMdBasic } from "src/logic/parseMdBasic"
 import { installedSW, updatingCache } from "src/logic/state-sw"
 import { useNotificationStore } from "stores/notification"
-import { shallowRef } from "vue"
+import { computed, shallowRef } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 
+import AllowWork from "./AllowWork.vue"
 import NotExistsExtension from "./NotExistsExtension.vue"
 
 const route = useRoute()
@@ -220,28 +222,43 @@ const appInfos = shallowRef()
 
 if (isNative)
   Promise.all([
-    fetch("https://api.github.com/repos/anime-vsub/app/releases").then((res) =>
-      res.json()
+    fetch("https://api.github.com/repos/anime-vsub/app/releases").then(
+      (res) =>
+        res.json() as Promise<
+          {
+            name: string
+            tag_name: string
+            body: string
+          }[]
+        >
     ),
-
     !isNative ? { version } : App.getInfo(),
   ])
     .then((results) => {
       const ignoreUpdateVersion = localStorage.getItem("ignore-update-version")
+      if (isNative) {
+        results[0] = results[0].filter(
+          (item) => !item.tag_name.startsWith("pwa-")
+        )
+      } else {
+        results[0] = results[0].filter((item) =>
+          item.tag_name.startsWith("pwa-")
+        )
+      }
+
+      const lastVersion = results[0][0]
 
       if (ignoreUpdateVersion) {
-        if (
-          semverEq(
-            ignoreUpdateVersion,
-            results.find((item) => item.tag_name.startsWith("v")).tag_name
-          )
-        ) {
+        if (ignoreUpdateVersion === lastVersion.tag_name) {
           return
         }
       }
 
       // eslint-disable-next-line promise/always-return
-      if (!semverGt(results[0][0].tag_name.slice(1), results[1].version)) return
+      if (
+        !semverGt(lastVersion.tag_name.replace(/^.+-v/, ""), results[1].version)
+      )
+        return
       ;[newVersion.value, appInfos.value] = [results[0][0], results[1]]
     })
     .catch((err) => {
@@ -252,6 +269,41 @@ function ignoreUpdateVersion(version: string) {
   localStorage.setItem("ignore-update-version", version)
   newVersion.value = undefined
 }
+
+const parse = (str: string) => {
+  try {
+    return JSON.parse(str)
+  } catch {
+    return null
+  }
+}
+const appAllowWork = isNative ? computedAsync<boolean>(async () => {
+  const activeCache = parse(localStorage.getItem("active") ?? "")
+
+  if (activeCache && Date.now() - activeCache.now <= 1000 * 3600 * 24) {
+    return true
+  }
+  const [res, { id }] = await Promise.all([
+    fetch(
+      "https://raw.githubusercontent.com/anime-vsub/app/main/native-active"
+    ),
+    App.getInfo()
+  ])
+
+  const active =
+    res.status !== 404 &&
+    (res.status === 200 || res.status === 201) &&
+    id === name
+  if (!active) return false
+
+  localStorage.setItem(
+    "active",
+    JSON.stringify({
+      now: Date.now(),
+    })
+  )
+  return true
+}) : computed(() => true)
 </script>
 
 <style lang="scss">
