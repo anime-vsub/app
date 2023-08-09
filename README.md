@@ -5,7 +5,7 @@
    <h1 style="font-size: 16px">AnimeVsub</h1>
 </div>
 
-**Visit https://app.animevsub.eu.org to use PWA**
+**Visit https://app.animevsub.eu.org to download APK**
 
 > **The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.eu.org**
 
@@ -24,6 +24,9 @@
 [![Prettier](https://github.com/anime-vsub/app/actions/workflows/pretter.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/pretter.yml)
 [![TypeScript Checker Declaration](https://github.com/anime-vsub/app/actions/workflows/typing.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/typing.yml)
 [![Try build](https://github.com/anime-vsub/app/actions/workflows/try-build.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/try-build.yml)
+
+## Download APK for Android
+Download app for Android at: https://app.animevsub.eu.org
 
 ## Reason for PWA
 
