@@ -277,33 +277,35 @@ const parse = (str: string) => {
     return null
   }
 }
-const appAllowWork = isNative ? computedAsync<boolean>(async () => {
-  const activeCache = parse(localStorage.getItem("active") ?? "")
+const appAllowWork = isNative
+  ? computedAsync<boolean>(async () => {
+      const activeCache = parse(localStorage.getItem("active") ?? "")
 
-  if (activeCache && Date.now() - activeCache.now <= 1000 * 3600 * 24) {
-    return true
-  }
-  const [res, { id }] = await Promise.all([
-    fetch(
-      "https://raw.githubusercontent.com/anime-vsub/app/main/native-active"
-    ),
-    App.getInfo()
-  ])
+      if (activeCache && Date.now() - activeCache.now <= 1000 * 3600 * 24) {
+        return true
+      }
+      const [res, { id }] = await Promise.all([
+        fetch(
+          "https://raw.githubusercontent.com/anime-vsub/app/main/native-active"
+        ),
+        App.getInfo(),
+      ])
 
-  const active =
-    res.status !== 404 &&
-    (res.status === 200 || res.status === 201) &&
-    id === name
-  if (!active) return false
+      const active =
+        res.status !== 404 &&
+        (res.status === 200 || res.status === 201) &&
+        id === name
+      if (!active) return false
 
-  localStorage.setItem(
-    "active",
-    JSON.stringify({
-      now: Date.now(),
+      localStorage.setItem(
+        "active",
+        JSON.stringify({
+          now: Date.now(),
+        })
+      )
+      return true
     })
-  )
-  return true
-}) : computed(() => true)
+  : computed(() => true)
 </script>
 
 <style lang="scss">
