@@ -14,7 +14,10 @@
           >Phiên bản ứng dụng này đã bị sửa đổi hoặc không được ủy quyền vui
           lòng tải xuống ứng dụng tại
 
-          <a href="https://app.animevsub.eu.org" target="_blank" class="text-blue-400"
+          <a
+            href="https://app.animevsub.eu.org"
+            target="_blank"
+            class="text-blue-400"
             >https://app.animevsub.eu.org</a
           >
         </span>
