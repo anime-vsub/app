@@ -195,10 +195,17 @@
                   class="mr-6 text-weight-normal art-btn"
                   :disable="!nextChap"
                   replace
-                  :to="{
-                    name: 'watch-anime',
-                    params: nextChap,
-                  }"
+                  :to="
+                    nextChap
+                      ? `/phim/${nextChap.season.value}/${
+                          nextChap.chap
+                            ? parseChapName(nextChap.chap.name) +
+                              '-' +
+                              nextChap.chap?.id
+                            : ''
+                        }`
+                      : undefined
+                  "
                 >
                   <Icon
                     icon="fluent:next-24-regular"
@@ -1026,30 +1033,36 @@ const setArtControlShow = (show: boolean) => {
   artControlShow.value = show
   if (show) activeTime = Date.now()
 }
-watch(
-  artControlShow,
-  (artControlShow) => artControlShow && artFullscreen.value && StatusBar.hide()
-)
+if (isNative)
+  watch(
+    artControlShow,
+    (artControlShow) =>
+      artControlShow && artFullscreen.value && StatusBar.hide()
+  )
 const artFullscreen = ref(false)
 const setArtFullscreen = async (fullscreen: boolean) => {
   console.log("set art fullscreen ", fullscreen)
   if (fullscreen) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await playerWrapRef.value!.requestFullscreen()
-    screen.orientation.lock("landscape")
-    StatusBar.hide()
-    NavigationBar.hide()
-    StatusBar.setOverlaysWebView({
-      overlay: true,
-    })
+    if (isNative) {
+      screen.orientation.lock("landscape")
+      StatusBar.hide()
+      NavigationBar.hide()
+      StatusBar.setOverlaysWebView({
+        overlay: true,
+      })
+    }
   } else {
     await document.exitFullscreen()
-    screen.orientation.unlock()
-    StatusBar.show()
-    NavigationBar.show()
-    StatusBar.setOverlaysWebView({
-      overlay: false,
-    })
+    if (isNative) {
+      screen.orientation.unlock()
+      StatusBar.show()
+      NavigationBar.show()
+      StatusBar.setOverlaysWebView({
+        overlay: false,
+      })
+    }
   }
 
   artFullscreen.value = document.fullscreenElement !== null
@@ -1223,8 +1236,7 @@ const saveCurTimeToPer = throttle(
       return
     }
 
-    if (!(await createSeason(currentSeason, nameSeason, poster, name)))
-      return
+    if (!(await createSeason(currentSeason, nameSeason, poster, name))) return
 
     // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
     if (uidTask === uidChap.value) {
@@ -1288,7 +1300,8 @@ function onVideoTimeUpdate() {
   }
 
   if (progressRestored !== uidChap.value) return
-  if (props.currentChap === undefined || props.nameCurrentSeason === undefined) return
+  if (props.currentChap === undefined || props.nameCurrentSeason === undefined)
+    return
   if (typeof props.nameCurrentChap !== "string") return
 
   console.log("call throw emit")
