@@ -529,8 +529,7 @@ const { data, run, error, loading } = useRequest(
         if (!text) throw new Error("not_found")
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
-        if (result) Object.assign(result.value, JSON.parse(text))
-        else result = ref(JSON.parse(text))
+        if (!result) result = ref(JSON.parse(text))
       }),
       PhimId(realIdCurrentSeason.value)
         .then(async (data) => {
@@ -729,7 +728,7 @@ async function fetchSeason(season: string) {
         // eslint-disable-next-line promise/always-return, functional/no-throw-statement
         if (!json) throw new Error("not_found")
         console.log("[fs]: use cache %s", realIdSeason)
-        response.value = JSON.parse(json)
+        if (!response.value) response.value = JSON.parse(json)
       }),
     ])
 
