@@ -51,7 +51,7 @@
     "pinia-plugin-persistedstate-2": "^2.0.10",
     "qr-scanner": "^1.4.2",
     "qrcode": "^1.5.1",
-    "quasar": "^2.11.5",
+    "quasar": "2.11.5",
     "register-service-worker": "^1.7.2",
     "remove-accents": "^0.4.4",
     "set-cookie-parser": "^2.5.1",
