@@ -37,7 +37,7 @@ const parseJSON = (json?: string | null) => {
 const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
 const enablePersistent =
-parseJSON(localStorage?.getItem("settings"))?.enablePersistent ?? true
+  parseJSON(localStorage?.getItem("settings"))?.enablePersistent ?? true
 const db = enablePersistent
   ? initializeFirestore(app, {
       localCache: persistentLocalCache({

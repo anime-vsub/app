@@ -209,12 +209,16 @@ const sorter = ref<string | null>(null)
 const typer = ref<string | null>(null)
 const year = ref<string | null>(null)
 
-watch(defaultsOptions, options => {
-  if (genres.length === 0 && options.gener) genres.push(options.gener)
-  seaser.value ??= options.seaser ?? null
-  typer.value ??= options.typer ?? null
-  year.value ??= options.year ?? null
-}, { immediate: true })
+watch(
+  defaultsOptions,
+  (options) => {
+    if (genres.length === 0 && options.gener) genres.push(options.gener)
+    seaser.value ??= options.seaser ?? null
+    typer.value ??= options.typer ?? null
+    year.value ??= options.year ?? null
+  },
+  { immediate: true }
+)
 
 function fetchTypeNormalValue(page: number, onlyItems: boolean) {
   return TypeNormalValue(

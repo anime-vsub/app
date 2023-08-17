@@ -66,10 +66,14 @@ async function getImageWithXHR(url: string) {
     url,
     responseType: "arraybuffer",
   })
-  // eslint-disable-next-line functional/no-throw-statement
+
   if (res.status > 299) throw res
 
-  const src = URL.createObjectURL(new Blob([typeof res.data === "object" ? res.data : base64ToArrayBuffer(res.data)]))
+  const src = URL.createObjectURL(
+    new Blob([
+      typeof res.data === "object" ? res.data : base64ToArrayBuffer(res.data),
+    ])
+  )
 
   return { src }
 }
@@ -267,7 +271,7 @@ export default defineComponent({
         const source = img.currentSrc || img.src
         if (source.startsWith("blob:")) {
           URL.revokeObjectURL(source)
-          // eslint-disable-next-line functional/no-throw-statement
+
           throw new Error("blob: url not re-try fetch")
         }
 

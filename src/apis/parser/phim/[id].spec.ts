@@ -1,9 +1,10 @@
+import { readFile } from "fs/promises"
+
 import { describe, expect, test } from "vitest"
 
 import html from "../../../__test__/apis/data/phim/tonikaku-kawaii-a3860.txt?raw"
 
 import PhimId from "./[id]"
-import { readFile } from "fs/promises"
 
 describe("[id]", () => {
   test("normal", async () => {

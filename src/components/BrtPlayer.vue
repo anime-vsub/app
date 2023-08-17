@@ -1344,7 +1344,7 @@ watch(
         console.log(":restore progress")
         if (stateStorageStore.disableAutoRestoration) {
           addNotice(t("bo-qua-khoi-phuc-tien-trinh-xem"))
-          // eslint-disable-next-line functional/no-throw-statement
+
           throw new Error("NOT_RESET")
         }
         const cur = (
@@ -1353,7 +1353,7 @@ watch(
 
         if (uidChap.value !== currentUid) {
           // if process of this result != current process -> skip
-          // eslint-disable-next-line functional/no-throw-statement
+
           throw new Error("PROCESS_NOT_EQUAL")
         }
 
@@ -1365,7 +1365,6 @@ watch(
             addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
           }
         } else {
-          // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")
         }
       } catch (err) {
@@ -1475,6 +1474,7 @@ function onVideoProgress(event: Event) {
   const time = target.currentTime
 
   try {
+    // eslint-disable-next-line functional/no-loop-statements
     while (!(bf.start(range) <= time && time <= bf.end(range))) {
       range += 1
     }
@@ -1610,8 +1610,7 @@ const saveCurTimeToPer = throttle(
       return
     }
 
-    if (!(await createSeason(currentSeason, nameSeason, poster, name)))
-      return
+    if (!(await createSeason(currentSeason, nameSeason, poster, name))) return
 
     // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
     if (uidTask === uidChap.value) {
@@ -1682,7 +1681,8 @@ function onVideoTimeUpdate() {
   }
 
   if (progressRestored !== uidChap.value) return
-  if (props.currentChap === undefined || props.nameCurrentSeason===undefined) return
+  if (props.currentChap === undefined || props.nameCurrentSeason === undefined)
+    return
   if (typeof props.nameCurrentChap !== "string") return
 
   console.log("call throw emit")
@@ -1883,7 +1883,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
         return new Request(context.url, initParams)
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-classes
       pLoader: class CustomLoader extends (Hls.DefaultConfig.loader as any) {
         loadInternal(): void {
           const { config, context } = this
@@ -1912,6 +1912,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           })
           const headers = new Headers()
           if (this.context.headers)
+            // eslint-disable-next-line functional/no-loop-statements
             for (const [key, val] of Object.entries(this.context.headers))
               headers.set(key, val as string)
           const { maxTimeToFirstByteMs, maxLoadTimeMs } = config.loadPolicy

@@ -9,7 +9,6 @@ export async function fetchJava(
     signal?: AbortSignal
   }
 ) {
-  // eslint-disable-next-line functional/no-throw-statement
   if (options?.signal?.aborted) throw new Error("ABORTED")
 
   const res = await get({
@@ -19,7 +18,6 @@ export async function fetchJava(
     headers: Object.fromEntries((options?.headers as any)?.entries() ?? []),
   })
 
-  // eslint-disable-next-line functional/no-throw-statement
   if (options?.signal?.aborted) throw new Error("ABORTED")
 
   return {

@@ -43,7 +43,7 @@ export function PlayerLink(config: {
     link,
     backuplinks: "1",
   }).then(({ data }) => {
-    // eslint-disable-next-line functional/no-throw-statement
+    // eslint-disable-next-line functional/no-throw-statements
     if (!data) throw new Error("unknown_error")
     type Writeable<T> = {
       -readonly [P in keyof T]: T[P] extends object ? Writeable<T[P]> : T[P]

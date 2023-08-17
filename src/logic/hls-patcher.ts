@@ -33,6 +33,7 @@ function getRequestParameters(
   return initParams
 }
 
+// eslint-disable-next-line functional/no-classes
 class FetchError extends Error {
   public code: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,7 +57,7 @@ export function patcher(hls: Hls) {
   ): void {
     const stats = this.stats
     if (stats.loading.start) {
-      // eslint-disable-next-line functional/no-throw-statement
+      // eslint-disable-next-line functional/no-throw-statements
       throw new Error("Loader can only be used once.")
     }
     stats.loading.start = self.performance.now()
@@ -107,7 +108,8 @@ export function patcher(hls: Hls) {
 
         if (!response.ok) {
           const { status, statusText } = response
-          // eslint-disable-next-line functional/no-throw-statement
+
+          // eslint-disable-next-line functional/no-throw-statements
           throw new FetchError(
             statusText || "fetch, bad network response",
             status,

@@ -90,6 +90,6 @@ module.exports = {
     "vue/multi-word-component-names": "off",
     "eslint-comments/no-unlimited-disable": "off",
     "vue/no-use-v-if-with-v-for": "off",
-
+    "functional/prefer-immutable-types": "off"
   },
 }

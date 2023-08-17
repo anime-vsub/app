@@ -9,7 +9,6 @@ import { PostWorker } from "../wrap-worker"
 export async function GetUser(token_name: string, token_value: string) {
   // eslint-disable-next-line camelcase
   if (!token_name || !token_value)
-    // eslint-disable-next-line functional/no-throw-statement
     throw new Error(
       i18n.global.t("errors.require_login_to", [
         i18n.global.t("xem-anime-da-theo-doi"),
@@ -31,7 +30,6 @@ export async function GetUser(token_name: string, token_value: string) {
       cookie: new Headers(headers).get("set-cookie")!,
     }
   } else {
-    // eslint-disable-next-line functional/no-throw-statement
     throw new Error(i18n.global.t("dang-nhap-that-bai"))
   }
 }

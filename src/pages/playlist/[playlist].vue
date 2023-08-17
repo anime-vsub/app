@@ -394,7 +394,7 @@ const {
     if (!playlists) return playlists
 
     const meta = playlists.find((item) => item.id === route.params.playlist)
-    // eslint-disable-next-line functional/no-throw-statement
+
     if (!meta) throw new Error("NOT_FOUND")
 
     const poster = await playlistStore.getPosterPlaylist(meta.id)
@@ -483,7 +483,7 @@ async function onLoad(index: number, done: (end: boolean) => void) {
   if (!playlists) return done(true)
 
   const meta = playlists.find((item) => item.id === route.params.playlist)
-  // eslint-disable-next-line functional/no-throw-statement
+
   if (!meta) throw new Error(t("danh-sach-phat-khong-ton-tai"))
 
   const moviesMore = await playlistStore.getAnimesFromPlaylist(
@@ -517,7 +517,6 @@ watch(editingDescription, (editing) => {
 
 async function updateNewName() {
   try {
-    // eslint-disable-next-line functional/no-throw-statement
     if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
     await playlistStore.renamePlaylist(metaPlaylist.value.id, newName.value)
     editingName.value = false
@@ -534,7 +533,6 @@ async function updateNewName() {
 }
 async function updateNewDescription() {
   try {
-    // eslint-disable-next-line functional/no-throw-statement
     if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
     await playlistStore.setDescriptionPlaylist(
       metaPlaylist.value.id,
@@ -555,7 +553,6 @@ async function updateNewDescription() {
 
 async function removePlaylist() {
   try {
-    // eslint-disable-next-line functional/no-throw-statement
     if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
     await playlistStore.deletePlaylist(metaPlaylist.value.id)
     editingDescription.value = false

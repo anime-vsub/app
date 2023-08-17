@@ -3,31 +3,23 @@
     {
       "collectionGroup": "history",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "timestamp", "order": "DESCENDING" }
-      ]
+      "fields": [{ "fieldPath": "timestamp", "order": "DESCENDING" }]
     },
     {
       "collectionGroup": "playlist",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "created", "order": "DESCENDING" }
-      ]
+      "fields": [{ "fieldPath": "created", "order": "DESCENDING" }]
     },
 
     {
       "collectionGroup": "movies",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "add_at", "order": "ASCENDING" }
-      ]
+      "fields": [{ "fieldPath": "add_at", "order": "ASCENDING" }]
     },
     {
       "collectionGroup": "movies",
       "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "add_at", "order": "DESCENDING" }
-      ]
+      "fields": [{ "fieldPath": "add_at", "order": "DESCENDING" }]
     }
   ]
 }

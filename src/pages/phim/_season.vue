@@ -170,20 +170,20 @@
                       size="2em"
                       color="grey"
                       max="10"
-                      :color-selected="[
-                        'light-green-3',
-                        'light-green-6',
-                        'light-green-7',
+                      :color-selected="([
+                                              'light-green-3',
+                                              'light-green-6',
+                                              'light-green-7',
 
-                        'light-green-8',
-                        'light-green-9',
-                        'green',
+                                              'light-green-8',
+                                              'light-green-9',
+                                              'green',
 
-                        'green-5',
-                        'green-6',
-                        'green-7',
-                        'green-8',
-                      ]"
+                                              'green-5',
+                                              'green-6',
+                                              'green-7',
+                                              'green-8',
+                                            ] as unknown as any)"
                     >
                       <template
                         v-for="(item, i) in ratesText"
@@ -525,7 +525,7 @@ const { data, run, error, loading } = useRequest(
 
     await Promise.any([
       get(`data-${id}`).then((text: string) => {
-        // eslint-disable-next-line functional/no-throw-statement
+        // eslint-disable-next-line functional/no-throw-statements
         if (!text) throw new Error("not_found")
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
@@ -548,7 +548,8 @@ const { data, run, error, loading } = useRequest(
         .catch((err) => {
           error.value = err as Error
           console.error(err)
-          // eslint-disable-next-line functional/no-throw-statement
+
+          // eslint-disable-next-line functional/no-throw-statements
           throw err
         }),
     ])
@@ -725,7 +726,7 @@ async function fetchSeason(season: string) {
         responseOnlineStore.add(response)
       }),
       get(`season_data ${realIdSeason}`).then((json?: string) => {
-        // eslint-disable-next-line functional/no-throw-statement
+        // eslint-disable-next-line functional/no-throw-statements
         if (!json) throw new Error("not_found")
         console.log("[fs]: use cache %s", realIdSeason)
         // eslint-disable-next-line promise/always-return
@@ -899,7 +900,7 @@ watchEffect(async (onCleanup): Promise<void> => {
   // if this does not exist make sure the status has not finished loading, this function call also useless
 
   // if not login -> return first episode in season
-if (!authStore.uid || !settingsStore.restoreLastEp) {
+  if (!authStore.uid || !settingsStore.restoreLastEp) {
     currentChap.value = currentDataSeason.value?.chaps[0].id
     return
   }
@@ -1233,41 +1234,44 @@ watch(
         try {
           if (server === "DU") {
             if (typeCurrentConfig !== "DU")
-              PlayerLink(currentMetaChap).then((conf) => {
-                // eslint-disable-next-line promise/always-return
-                if (settingsStore.player.server === "DU") {
-                  configPlayer.value = conf
-                  typeCurrentConfig = "DU"
-                }
-              })
-              .catch(err => {
-                error.value =err
-              })
+              PlayerLink(currentMetaChap)
+                .then((conf) => {
+                  // eslint-disable-next-line promise/always-return
+                  if (settingsStore.player.server === "DU") {
+                    configPlayer.value = conf
+                    typeCurrentConfig = "DU"
+                  }
+                })
+                .catch((err) => {
+                  error.value = err
+                })
           }
           if (server === "FB") {
             // PlayerFB は常に PlayerLink よりも遅いため、DU を使用して高速プリロード戦術を使用する必要があります。
             if (typeCurrentConfig !== "DU")
-              PlayerLink(currentMetaChap).then((conf) => {
+              PlayerLink(currentMetaChap)
+                .then((conf) => {
+                  // eslint-disable-next-line promise/always-return
+                  if (!loadedServerFB && settingsStore.player.server === "DU") {
+                    configPlayer.value = conf
+                    typeCurrentConfig = "DU"
+                  }
+                })
+                .catch((err) => {
+                  error.value = err
+                })
+            PlayerFB(currentMetaChap.id)
+              .then((conf) => {
                 // eslint-disable-next-line promise/always-return
-                if (!loadedServerFB && settingsStore.player.server === "DU") {
+                if (settingsStore.player.server === "FB") {
                   configPlayer.value = conf
-                  typeCurrentConfig = "DU"
+                  typeCurrentConfig = "FB"
                 }
+                loadedServerFB = true
               })
-              .catch(err => {
-                error.value =err
+              .catch((err) => {
+                error.value = err
               })
-            PlayerFB(currentMetaChap.id).then((conf) => {
-              // eslint-disable-next-line promise/always-return
-              if (settingsStore.player.server === "FB") {
-                configPlayer.value = conf
-                typeCurrentConfig = "FB"
-              }
-              loadedServerFB = true
-            })
-            .catch(err => {
-              error.value =err
-            })
           }
         } catch (err) {
           $q.notify({

@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-throw-statements */
 import type {
   CollectionReference,
   DocumentReference,
@@ -115,7 +116,6 @@ export const useHistoryStore = defineStore("history", () => {
     lastDoc?: QueryDocumentSnapshot<Required<HistoryItem>>
   ) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("xem-lich-su-gan-day"),
@@ -163,7 +163,6 @@ export const useHistoryStore = defineStore("history", () => {
     info: Omit<HistoryItem, "timestamp" | "season">
   ): Promise<void> {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("luu-tien-trinh-xem-season-moi"),
@@ -189,7 +188,6 @@ export const useHistoryStore = defineStore("history", () => {
   // children /chaps/:chap
   function getProgressChaps(season: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("xem-lich-su-gan-day"),
@@ -209,7 +207,6 @@ export const useHistoryStore = defineStore("history", () => {
   }
   function getProgressChap(season: string, chap: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("xem-lich-su-gan-day"),
@@ -235,7 +232,6 @@ export const useHistoryStore = defineStore("history", () => {
     infoSeason: Omit<HistoryItem, "timestamp" | "season">
   ) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("luu-lich-su-xem"),
@@ -338,7 +334,6 @@ export const useHistoryStore = defineStore("history", () => {
 
   async function getLastEpOfSeason(season: string): Promise<null | string> {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("xem-lich-su-gan-day"),

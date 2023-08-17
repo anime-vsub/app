@@ -33,7 +33,6 @@ export async function DangNhap(email: string, password: string) {
       cookie: new Headers(headers).get("set-cookie")!,
     }
   } else {
-    // eslint-disable-next-line functional/no-throw-statement
     throw new Error(i18n.global.t("dang-nhap-that-bai"))
   }
 }

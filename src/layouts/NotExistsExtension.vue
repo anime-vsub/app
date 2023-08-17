@@ -24,10 +24,22 @@
           )
         }}
         <span class="text-blue-400 mt-2 mx-4 block leading-normal text-[16px]"
-          >{{ t('ung-dung-hien-tai-yeu-cau-extension') }} <b>v1.0.1</b> {{ t('tro-len-neu-ban-da-cai-dat-extension-vui-long-cap-nhat-no-toi-phien-ban') }} <b>v1.0.1</b> {{ t('tro-len') }}</span
+          >{{ t("ung-dung-hien-tai-yeu-cau-extension") }} <b>v1.0.1</b>
+          {{
+            t(
+              "tro-len-neu-ban-da-cai-dat-extension-vui-long-cap-nhat-no-toi-phien-ban"
+            )
+          }}
+          <b>v1.0.1</b> {{ t("tro-len") }}</span
         >
-        <span v-if="currentBrowser.text === 'Edge'" class="text-orange-400 mt-2 mx-4 block leading-normal text-[16px]"
-          >{{ t('microsoft-edge-co-the-cap-nhat-cham-hon-github-khi-do-ban-can-cap-nhat-thu-cong') }}</span
+        <span
+          v-if="currentBrowser.text === 'Edge'"
+          class="text-orange-400 mt-2 mx-4 block leading-normal text-[16px]"
+          >{{
+            t(
+              "microsoft-edge-co-the-cap-nhat-cham-hon-github-khi-do-ban-can-cap-nhat-thu-cong"
+            )
+          }}</span
         >
         <q-btn
           no-caps

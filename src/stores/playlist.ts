@@ -74,7 +74,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   async function createPlaylist(name: string, isPublic: boolean) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("tao-danh-sach-phat"),
@@ -98,7 +97,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   async function deletePlaylist(uid: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("xoa-danh-sach-phat"),
@@ -112,7 +110,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   async function renamePlaylist(uid: string, newName: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("xoa-danh-sach-phat"),
@@ -131,7 +128,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   async function setDescriptionPlaylist(uid: string, description: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("xoa-danh-sach-phat"),
@@ -150,7 +146,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   async function publicPlaylist(uid: string, isPublic: boolean) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("xoa-danh-sach-phat"),
@@ -174,7 +169,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
     anime: Omit<Playlist_Movies_Movie, "add_at">
   ) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("theo-vao-danh-sach-phat"),
@@ -186,7 +180,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
     // check playlist exists?
     if (!(await getDoc(playlistRef)).exists())
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(i18n.global.t("errors.danh-sach-phat-khong-ton-tai"))
 
     await setDoc(
@@ -210,7 +203,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   async function deleteAnimeFromPlaylist(uidPlaylist: string, season: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("theo-vao-danh-sach-phat"),
@@ -229,7 +221,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   async function hasAnimeOfPlaylist(uidPlaylist: string, season: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("theo-vao-danh-sach-phat"),
@@ -250,7 +241,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
     sorter?: "asc" | "desc"
   ) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("theo-vao-danh-sach-phat"),
@@ -286,7 +276,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
   async function getPosterPlaylist(idPlaylist: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
           i18n.global.t("theo-vao-danh-sach-phat"),

@@ -11,7 +11,7 @@ import { isDef, tryOnScopeDispose } from "@vueuse/shared"
 import type { Ref } from "vue"
 import { computed, isRef, ref, watch } from "vue"
 
-// eslint-disable-next-line functional/no-mixed-type
+// eslint-disable-next-line functional/no-mixed-types
 export interface UseFirestoreOptions {
   errorHandler?: (err: Error) => void
   autoDispose?: boolean

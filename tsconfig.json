@@ -9,6 +9,7 @@
     /* end */
     "baseUrl": "./",
     "types": ["vitest/globals"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["esnext", "DOM"]
   }
 }

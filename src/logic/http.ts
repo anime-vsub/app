@@ -37,7 +37,7 @@ async function httpGet(
   })
 
   console.log("get-result: ", response)
-  // eslint-disable-next-line functional/no-throw-statement
+
   if (response.status !== 200 && response.status !== 201) throw response
 
   return response as Omit<typeof response, "data"> & { data: string }
@@ -61,7 +61,7 @@ async function httpPost(
   })
 
   console.log("post-result: ", response)
-  // eslint-disable-next-line functional/no-throw-statement
+
   if (response.status !== 200 && response.status !== 201) throw response
 
   return response as Omit<typeof response, "data"> & { data: string }

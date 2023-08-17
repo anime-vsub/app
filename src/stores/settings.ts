@@ -20,7 +20,7 @@ export const useSettingsStore = defineStore("settings", {
     locale: getNavigatorLanguage(),
     infinityScroll: true,
     restoreLastEp: true,
-    enablePersistent: true
+    enablePersistent: true,
   }),
   persist: true,
 })
