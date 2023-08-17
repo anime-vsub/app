@@ -1,4 +1,4 @@
-import { promises as fs } from "fs"
+import { readFile } from "fs/promises"
 
 import { describe, expect, test } from "vitest"
 
@@ -9,7 +9,7 @@ import Index from "."
 describe("Index", () => {
   test("normal", async () => {
     const asset = JSON.parse(
-      await fs.readFile(
+      await readFile(
         // eslint-disable-next-line n/no-path-concat
         `${__dirname}/../../__test__/apis/assets/index.json`,
         "utf8"

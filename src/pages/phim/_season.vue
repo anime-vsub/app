@@ -725,9 +725,10 @@ async function fetchSeason(season: string) {
         responseOnlineStore.add(response)
       }),
       get(`season_data ${realIdSeason}`).then((json?: string) => {
-        // eslint-disable-next-line promise/always-return, functional/no-throw-statement
+        // eslint-disable-next-line functional/no-throw-statement
         if (!json) throw new Error("not_found")
         console.log("[fs]: use cache %s", realIdSeason)
+        // eslint-disable-next-line promise/always-return
         if (!response.value) response.value = JSON.parse(json)
       }),
     ])

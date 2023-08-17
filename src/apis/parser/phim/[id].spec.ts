@@ -1,15 +1,14 @@
-import { promises as fs } from "fs"
-
 import { describe, expect, test } from "vitest"
 
 import html from "../../../__test__/apis/data/phim/tonikaku-kawaii-a3860.txt?raw"
 
 import PhimId from "./[id]"
+import { readFile } from "fs/promises"
 
 describe("[id]", () => {
   test("normal", async () => {
     const asset = JSON.parse(
-      await fs.readFile(
+      await readFile(
         // eslint-disable-next-line n/no-path-concat
         `${__dirname}/../../../__test__/apis/assets/tonikaku-kawaii-a3860.json`,
         "utf8"
