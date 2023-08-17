@@ -25,13 +25,16 @@ jobs:
         with:
           version: 8.6.11
           run_install: false
-          
-      - name: Install depends
-        run: pnpm i
+
+      - name: Install depends with npm
+        run: npm i
 
       - name: Typing
         run: pnpm typing
-        
+
+      - name: Install depends
+        run: rm -rf node_modules && pnpm i
+
       - name: Test
         run: pnpm test
   release:
@@ -55,9 +58,6 @@ jobs:
 
       - name: Install depends
         run: pnpm i
-
-      - name: Test
-        run: pnpm test
 
       - name: Push to branch `release`
         run: |
