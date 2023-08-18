@@ -21,7 +21,7 @@ dependencies:
     specifier: ^4.1.1
     version: 4.1.1(vue@3.3.4)
   '@quasar/extras':
-    specifier: ^1.16.5
+    specifier: ^1.15.10
     version: 1.16.5
   '@vueuse/core':
     specifier: ^9.13.0
@@ -93,7 +93,7 @@ dependencies:
     specifier: ^1.5.3
     version: 1.5.3
   quasar:
-    specifier: ^2.12.4
+    specifier: ^2.11.5
     version: 2.12.4
   register-service-worker:
     specifier: ^1.7.2
