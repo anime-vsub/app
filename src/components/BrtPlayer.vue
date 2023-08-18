@@ -417,7 +417,7 @@
                       anchor="top middle"
                       self="bottom middle"
                       :offset="[0, 20]"
-                      class="rounded-xl bg-[rgba(28,28,30,1)] shadow-xl min-w-[200px] min-h-[165px] max-w-[329px] flex column flex-nowrap overflow-visible"
+                      class="rounded-xl bg-[rgba(28,28,30,1)] shadow-xl min-w-[200px] min-h-[165px] !max-w-[612px] flex column flex-nowrap overflow-visible"
                       :class="{
                         'bg-opacity-95': settingsStore.ui.menuTransparency,
                       }"
@@ -451,7 +451,7 @@
                           </q-btn>
                         </div>
 
-                        <div v-show="gridModeTabsSeasons" class="h-[36px]" />
+                        <!-- <div v-show="gridModeTabsSeasons" class="h-[36px]" /> -->
                         <q-tabs
                           v-model="seasonActive"
                           class="min-w-0 w-full tabs-seasons"
