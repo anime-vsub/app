@@ -1,6 +1,6 @@
 {
   "name": "git.shin.animevsub",
-  "version": "1.8.16",
+  "version": "1.8.17",
   "description": "Watch Anime without advertising, free, private.",
   "productName": "AnimeVsub",
   "author": "Tachibana Shin <45375496+tachibana-shin@users.noreply.github.com>",
@@ -94,6 +94,7 @@
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^6.0.3",
+    "@nativescript/capacitor": "4",
     "@quasar/app-vite": "^1.4.3",
     "@quasar/cli": "^2.0.0",
     "@quasar/icongenie": "^2.5.4",
