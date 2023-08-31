@@ -94,7 +94,6 @@
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^6.0.3",
-    "@nativescript/capacitor": "4",
     "@quasar/app-vite": "^1.4.3",
     "@quasar/cli": "^2.0.0",
     "@quasar/icongenie": "^2.5.4",
