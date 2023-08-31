@@ -26,6 +26,7 @@
 [![Try build](https://github.com/anime-vsub/app/actions/workflows/try-build.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/try-build.yml)
 
 ## Download APK for Android
+
 Download app for Android at: https://app.animevsub.eu.org
 
 ## Reason for PWA
@@ -37,11 +38,12 @@ However, there was a problem with PWA support that the request cors domain was n
 The fact that `Chrome Android` and `Edge Android` do not support extensions like its desktop versions causes many problems that you cannot use this application with only the default browsers on your phone. I consider this a step backwards for both `Chrome` and `Edge` from fully supported extensions/addons like `Firefox`, `Flow` and `Yandex`.
 
 ## Use a modern browser that supports extensions
+
 As I mentioned above this application needs extensions and it requires a really modern browser. I recommend you to use one of the following browsers:
 
 | ![](https://play-lh.googleusercontent.com/d40s5qfJB2xs8DrBjNZTy659ynzG9dn-llx2L1_ZFO5uTZaeHKUIElyk03s3yaFGMWE=w240-h480-rw) | ![](https://kiwibrowser.com/wp-content/uploads/2019/09/cropped-Favicon-512x512-180x180.png) | ![](https://play-lh.googleusercontent.com/l6ftn6BTu7Kfe8OdE4Itrdw5bTRVO3F_mTZH8xDa-FHO4m-lZAXmz5GxkXTMhqcF_y0=w240-h480-rw) | ![](https://play-lh.googleusercontent.com/O_80i5pa9UsBQU25V28J3xqFZllGj-0trqPLvbSygG_5d7SXE-PxxiCJb7pNmATow_Fm=w240-h480-rw) | ![](https://play-lh.googleusercontent.com/kpsfGa5rdvPUPVgiyo3bN4G4TdRuf_YUtm5nK0MYEZlEUrgaptnOZ_K_m2IADFA1jQ=s48-rw) | ![](https://play-lh.googleusercontent.com/CAlpsF5mchuTP6mrEOZW2zXzJKBsVDYWc21K4XiaQKKoEuMhiABJjKWJBc3S6Ux-rY4=w240-h480-rw) |
-| ----- | -------- | --- | --- |  --- | -|
-| [Lemur Browser](https://lemurbrowser.com/) | [Kiwi Browser](https://kiwibrowser.com/) | [Firefox Browser](https://www.mozilla.org/vi/firefox/browsers/mobile/) | [Flow Browser](https://play.google.com/store/apps/details?id=org.flow.browser&hl=en_US) | [Mises Browser](https://www.mises.site/) | [Yandex Browser](https://browser.yandex.com/beta/) |
+| --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [Lemur Browser](https://lemurbrowser.com/)                                                                                  | [Kiwi Browser](https://kiwibrowser.com/)                                                    | [Firefox Browser](https://www.mozilla.org/vi/firefox/browsers/mobile/)                                                      | [Flow Browser](https://play.google.com/store/apps/details?id=org.flow.browser&hl=en_US)                                      | [Mises Browser](https://www.mises.site/)                                                                             | [Yandex Browser](https://browser.yandex.com/beta/)                                                                          |
 
 After installing the browser install the utility [AnimeVsub Helper](https://github.com/anime-vsub/extension-animevsub-helper) and go to https://m.animevsub.eu.org
 

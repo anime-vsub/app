@@ -1046,7 +1046,8 @@ const setArtFullscreen = async (fullscreen: boolean) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await playerWrapRef.value!.requestFullscreen()
     if (isNative) {
-      screen.orientation.lock("landscape")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;(screen.orientation as unknown as any).lock("landscape")
       StatusBar.hide()
       NavigationBar.hide()
       StatusBar.setOverlaysWebView({
@@ -1056,7 +1057,8 @@ const setArtFullscreen = async (fullscreen: boolean) => {
   } else {
     await document.exitFullscreen()
     if (isNative) {
-      screen.orientation.unlock()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;(screen.orientation as unknown as any).unlock()
       StatusBar.show()
       NavigationBar.show()
       StatusBar.setOverlaysWebView({
