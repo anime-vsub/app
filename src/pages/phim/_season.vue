@@ -850,7 +850,7 @@ async function fetchSeason(season: string) {
           json !== JSON.stringify(toRaw(response.value))
         ) {
           // eslint-disable-next-line promise/catch-or-return
-          promiseLoadIndexedb.finally((jsonCache) => {
+          promiseLoadIndexedb.finally((jsonCache?: string) => {
             if (json !== jsonCache) {
               const task = set(`season_data ${realIdSeason}`, json)
               if (import.meta.env.DEV)
