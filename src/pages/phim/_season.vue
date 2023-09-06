@@ -710,7 +710,8 @@ async function fetchSeason(season: string) {
 
     const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
     // eslint-disable-next-line functional/no-let
-    let promiseLoadIndexedb: Promise<string | undefined> = Promise.resolve(undefined)
+    let promiseLoadIndexedb: Promise<string | undefined> =
+      Promise.resolve(undefined)
     await Promise.any([
       PhimIdChap(realIdSeason).then((data) => {
         // mergeListEp(response.value, data)
@@ -724,13 +725,9 @@ async function fetchSeason(season: string) {
           console.info("cache wrong")
 
           // eslint-disable-next-line promise/catch-or-return
-          promiseLoadIndexedb.finally((jsonCache) => {
-            // eslint-disable-next-line promise/always-return
+          promiseLoadIndexedb.finally((jsonCache?: string) => {
             if (json !== jsonCache) {
-              const task = set(
-                `season_data ${realIdSeason}`,
-                json
-              )
+              const task = set(`season_data ${realIdSeason}`, json)
 
               if (import.meta.env.DEV)
                 task
