@@ -850,7 +850,7 @@ async function fetchSeason(season: string) {
         ) {
           // eslint-disable-next-line promise/catch-or-return
           promiseLoadIndexedb.finally((jsonCache) => {
-            // eslint-disable-next-line promise/always-return
+             
             if (json !== jsonCache) {
               const task = set(
                 `season_data ${realIdSeason}`,
@@ -880,13 +880,14 @@ async function fetchSeason(season: string) {
         }
         responseOnlineStore.add(response)
       }),
-      get(`season_data ${realIdSeason}`).then((json?: string) => {
+      (promiseLoadIndexedb = get(`season_data ${realIdSeason}`).then((json?: string) => {
         // eslint-disable-next-line functional/no-throw-statement
         if (!json) throw new Error("not_found")
         console.log("[fs]: use cache %s", realIdSeason)
-        // eslint-disable-next-line promise/always-return
         if (!response.value) response.value = JSON.parse(json)
-      }),
+
+        return json
+      })),
     ])
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
