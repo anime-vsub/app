@@ -837,7 +837,8 @@ async function fetchSeason(season: string) {
 
     const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
     // eslint-disable-next-line functional/no-let
-    let promiseLoadIndexedb: Promise<string | undefined> = Promise.resolve(undefined)
+    let promiseLoadIndexedb: Promise<string | undefined> =
+      Promise.resolve(undefined)
     await Promise.any([
       PhimIdChap(realIdSeason).then((data) => {
         // mergeListEp(response.value, data)
@@ -850,12 +851,8 @@ async function fetchSeason(season: string) {
         ) {
           // eslint-disable-next-line promise/catch-or-return
           promiseLoadIndexedb.finally((jsonCache) => {
-             
             if (json !== jsonCache) {
-              const task = set(
-                `season_data ${realIdSeason}`,
-                json
-              )
+              const task = set(`season_data ${realIdSeason}`, json)
               if (import.meta.env.DEV)
                 task
                   // eslint-disable-next-line promise/no-nesting, promise/always-return
@@ -880,14 +877,16 @@ async function fetchSeason(season: string) {
         }
         responseOnlineStore.add(response)
       }),
-      (promiseLoadIndexedb = get(`season_data ${realIdSeason}`).then((json?: string) => {
-        // eslint-disable-next-line functional/no-throw-statement
-        if (!json) throw new Error("not_found")
-        console.log("[fs]: use cache %s", realIdSeason)
-        if (!response.value) response.value = JSON.parse(json)
+      (promiseLoadIndexedb = get(`season_data ${realIdSeason}`).then(
+        (json?: string) => {
+          // eslint-disable-next-line functional/no-throw-statement
+          if (!json) throw new Error("not_found")
+          console.log("[fs]: use cache %s", realIdSeason)
+          if (!response.value) response.value = JSON.parse(json)
 
-        return json
-      })),
+          return json
+        }
+      )),
     ])
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
