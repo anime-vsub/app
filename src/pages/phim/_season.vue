@@ -559,7 +559,7 @@ const { data, run, error, loading } = useRequest(
               // eslint-disable-next-line promise/no-nesting, @typescript-eslint/no-empty-function
               .catch(() => {})
           } else if (import.meta.env.DEV) {
-            console.log("No update data in IndexedDB")
+            console.log("[data main]: No update data in IndexedDB")
           }
         })
         .catch((err) => {
@@ -724,12 +724,12 @@ async function fetchSeason(season: string) {
           console.info("cache wrong")
 
           // eslint-disable-next-line promise/catch-or-return
-          promiseLoadIndexedb.then((jsonCache) => {
+          promiseLoadIndexedb.finally((jsonCache) => {
             // eslint-disable-next-line promise/always-return
             if (json !== jsonCache) {
               const task = set(
                 `season_data ${realIdSeason}`,
-                JSON.stringify(data)
+                json
               )
 
               if (import.meta.env.DEV)
@@ -747,7 +747,7 @@ async function fetchSeason(season: string) {
                     )
                   )
             } else if (import.meta.env.DEV) {
-              console.log("No update response in IndexedDB")
+              console.log("[data season]: No update response in IndexedDB")
             }
           })
           console.log("[online]: use data from internet")
