@@ -707,17 +707,34 @@ const { data, run, error, loading } = useRequest(
       }),
       PhimId(realIdCurrentSeason.value)
         .then(async (data) => {
-          // eslint-disable-next-line promise/always-return
+          // eslint-disable-next-line functional/no-let
+          let changed = !result // true if result is undefined
+          const watcher =
+            result &&
+            watch(
+              result,
+              () => {
+                watcher()
+                changed = true
+              },
+              { deep: true }
+            )
           if (result) Object.assign(result.value, data)
           else result = ref(data)
+          watcher?.()
 
-          set(`data-${id}`, JSON.stringify(data))
-            // eslint-disable-next-line promise/no-nesting
-            .then(() => {
-              return console.log("[fs]: save cache to fs %s", id)
-            })
-            // eslint-disable-next-line promise/no-nesting, @typescript-eslint/no-empty-function
-            .catch(() => {})
+          // eslint-disable-next-line promise/always-return
+          if (changed) {
+            set(`data-${id}`, JSON.stringify(data))
+              // eslint-disable-next-line promise/no-nesting
+              .then(() => {
+                return console.log("[fs]: save cache to fs %s", id)
+              })
+              // eslint-disable-next-line promise/no-nesting, @typescript-eslint/no-empty-function
+              .catch(() => {})
+          } else if (import.meta.env.DEV) {
+            console.log("No update data in IndexedDB")
+          }
         })
         .catch((err) => {
           error.value = err as Error
@@ -819,33 +836,44 @@ async function fetchSeason(season: string) {
     const realIdSeason = getRealSeasonId(season)
 
     const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
+    // eslint-disable-next-line functional/no-let
+    let promiseLoadIndexedb: Promise<string | undefined> = Promise.resolve(undefined)
     await Promise.any([
       PhimIdChap(realIdSeason).then((data) => {
         // mergeListEp(response.value, data)
+        const json = JSON.stringify(data)
         // eslint-disable-next-line promise/always-return
         if (
           !response.value ||
           response.value.chaps.length !== data.chaps.length ||
-          JSON.stringify(data) !== JSON.stringify(toRaw(response.value))
+          json !== JSON.stringify(toRaw(response.value))
         ) {
-          console.info("cache wrong")
-
-          const task = set(`season_data ${realIdSeason}`, JSON.stringify(data))
-
-          if (import.meta.env.DEV)
-            task
-              // eslint-disable-next-line promise/no-nesting, promise/always-return
-              .then(() => {
-                console.log("[fs]: save cache season %s", realIdSeason)
-              })
-              // eslint-disable-next-line promise/no-nesting
-              .catch((err) =>
-                console.warn(
-                  "[fs]: failure save cache season %s",
-                  realIdSeason,
-                  err
-                )
+          // eslint-disable-next-line promise/catch-or-return
+          promiseLoadIndexedb.then((jsonCache) => {
+            // eslint-disable-next-line promise/always-return
+            if (json !== jsonCache) {
+              const task = set(
+                `season_data ${realIdSeason}`,
+                JSON.stringify(data)
               )
+              if (import.meta.env.DEV)
+                task
+                  // eslint-disable-next-line promise/no-nesting, promise/always-return
+                  .then(() => {
+                    console.log("[fs]: save cache season %s", realIdSeason)
+                  })
+                  // eslint-disable-next-line promise/no-nesting
+                  .catch((err) =>
+                    console.warn(
+                      "[fs]: failure save cache season %s",
+                      realIdSeason,
+                      err
+                    )
+                  )
+            } else if (import.meta.env.DEV) {
+              console.log("No update response in IndexedDB")
+            }
+          })
           console.log("[online]: use data from internet")
           response.value = data
           console.log("data from internet is ", data)
