@@ -1139,6 +1139,8 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+
+  <PanelFixCSR v-model="showPanelFixCSR" />
 </template>
 
 <script lang="ts" setup>
@@ -1151,7 +1153,7 @@ import "@fontsource/caveat"
 // =========== suth
 
 import { useEventListener } from "@vueuse/core"
-import { Http } from "client-ext-animevsub-helper"
+import { Http,execTabs  } from "client-ext-animevsub-helper"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
 import QImgCustom from "components/QImgCustom"
@@ -1181,8 +1183,9 @@ import { useRoute, useRouter } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
 
-// key bind
+import PanelFixCSR from "components/PanelFixCSR.vue"
 
+// key bind
 const { t } = useI18n()
 const drawers = computed(() => [
   {
@@ -1454,6 +1457,14 @@ watch(
     })
   }
 )
+
+// =========== panel fix CSR ===========
+const showPanelFixCSR = ref(false)
+useEventListener(window, "keydown", (event) => {
+  if (event.key === "`" && event.ctrlKey) {
+    showPanelFixCSR.value = !showPanelFixCSR.value
+  }
+})
 </script>
 
 <style lang="scss">

@@ -531,7 +531,7 @@ const { data, run, error, loading } = useRequest(
         // eslint-disable-next-line promise/always-return
         if (!result) result = ref(JSON.parse(text))
       }),
-      PhimId(realIdCurrentSeason.value)
+      PhimId(id)
         .then(async (data) => {
           // eslint-disable-next-line functional/no-let
           let changed = !result // true if result is undefined
