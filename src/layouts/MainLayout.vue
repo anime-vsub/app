@@ -1153,9 +1153,10 @@ import "@fontsource/caveat"
 // =========== suth
 
 import { useEventListener } from "@vueuse/core"
-import { Http,execTabs  } from "client-ext-animevsub-helper"
+import { Http } from "client-ext-animevsub-helper"
 import BottomBlur from "components/BottomBlur.vue"
 import CardVertical from "components/CardVertical.vue"
+import PanelFixCSR from "components/PanelFixCSR.vue"
 import QImgCustom from "components/QImgCustom"
 import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import { debounce, QInput, useQuasar } from "quasar"
@@ -1182,8 +1183,6 @@ import { useRequest } from "vue-request"
 import { useRoute, useRouter } from "vue-router"
 
 import NotExistsExtension from "./NotExistsExtension.vue"
-
-import PanelFixCSR from "components/PanelFixCSR.vue"
 
 // key bind
 const { t } = useI18n()

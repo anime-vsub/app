@@ -41,17 +41,26 @@
 </template>
 
 <script lang="ts" setup>
-import { useRequest } from "vue-request"
 import * as Client from "client-ext-animevsub-helper"
-import { useEventListener } from "@vueuse/core"
-import { getMany } from "idb-keyval"
+import { getMany, set } from "idb-keyval"
 import groupBy from "object.groupby"
-import { useI18n } from "vue-i18n"
+import { PhimId } from "src/apis/runs/phim/[id]"
+import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { ref } from "vue"
+import { useI18n } from "vue-i18n"
+import { useRequest } from "vue-request"
 
 const { t } = useI18n()
 
-const { data, error } = useRequest(() => {
+const { data, error } = useRequest<
+  {
+    id: string
+    title: string
+    url: string
+    favIconUrl: string
+  }[]
+>(() => {
+  // eslint-disable-next-line functional/no-throw-statements
   if (!Client.tabsApi) throw new Error("tabs_api_not_support")
   return Client.execTabs("query", [{ title: "animevsub.eu.org" }])
 })
@@ -59,6 +68,8 @@ const { data, error } = useRequest(() => {
 const fixing = ref(false)
 
 async function fix() {
+  if (!data.value) return
+
   fixing.value = true
 
   const keys = data.value
@@ -71,11 +82,11 @@ async function fix() {
   const ids = data.value.map((item) => item.id)
   const urls = data.value.map((item) => item.url)
 
-  const data: (string | undefined)[] = await getMany(keys)
-
-  const $grouped = groupBy(data, (item, index) => ~~(index / 2))
+  const $grouped = groupBy(await getMany(keys), (item, index) => ~~(index / 2))
   Object.assign($grouped, { length: Object.keys($grouped).length })
-  const grouped = Array.from($grouped)
+  const grouped = Array.from(
+    $grouped as [string | undefined, string | undefined][]
+  )
 
   // scan undefined data
   const groupedResolvedUndef = await Promise.all(
@@ -87,7 +98,7 @@ async function fix() {
         }
         if (!season) {
           season = JSON.stringify(await PhimIdChap(urls[index]))
-          set(`season_data ${urls[indedx]}`, season)
+          set(`season_data ${urls[index]}`, season)
         }
 
         return [data, season]
@@ -97,10 +108,11 @@ async function fix() {
     })
   ).then((res) => res.filter((item) => item[0]))
 
+  // eslint-disable-next-line functional/no-loop-statements
   for (let i = 0; i < ids.length; i++) {
     const [$data, $season] = groupedResolvedUndef[i]
     const [data, season] = [
-      JSON.parse($data),
+      JSON.parse($data!),
       $season ? JSON.parse($season) : undefined,
     ]
 
@@ -111,7 +123,7 @@ async function fix() {
           data.othername,
         ])
       : t("_name-_othername", [data.name, data.othername])
-    await Client.execTabs("update", [id, { title }])
+    await Client.execTabs("update", [ids[i], { title }])
   }
 
   fixing.value = false
