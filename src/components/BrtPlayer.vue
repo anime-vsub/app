@@ -1884,94 +1884,96 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
         return new Request(context.url, initParams)
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-classes
-      pLoader: class CustomLoader extends (Hls.DefaultConfig.loader as any) {
-        loadInternal(): void {
-          const { config, context } = this
-          if (!config) {
-            return
-          }
-
-          const { stats } = this
-          stats.loading.first = 0
-          stats.loaded = 0
-
-          const controller = new AbortController()
-          const xhr = (this.loader = {
-            readyState: 0,
-            status: 0,
-            responseType: context.responseType,
-            abort() {
-              controller.abort()
-            },
-            onreadystatechange: <(() => void) | null>null,
-            onprogress: <
-              ((eventt: { loaded: number; total: number }) => void) | null
-            >null,
-            response: <ArrayBuffer | null>null,
-            responseText: <string | null>null,
-          })
-          const headers = new Headers()
-          if (this.context.headers)
-            // eslint-disable-next-line functional/no-loop-statements
-            for (const [key, val] of Object.entries(this.context.headers))
-              headers.set(key, val as string)
-          const { maxTimeToFirstByteMs, maxLoadTimeMs } = config.loadPolicy
-
-          if (context.rangeEnd) {
-            headers.set(
-              "Range",
-              "bytes=" + context.rangeStart + "-" + (context.rangeEnd - 1)
-            )
-          }
-
-          xhr.onreadystatechange = this.readystatechange.bind(this)
-          xhr.onprogress = this.loadprogress.bind(this)
-          self.clearTimeout(this.requestTimeout)
-          config.timeout =
-            maxTimeToFirstByteMs && Number.isFinite(maxTimeToFirstByteMs)
-              ? maxTimeToFirstByteMs
-              : maxLoadTimeMs
-          this.requestTimeout = self.setTimeout(
-            this.loadtimeout.bind(this),
-            config.timeout
-          )
-
-          fetchJava(context.url + "#animevsub-vsub", {
-            headers,
-            signal: controller.signal,
-          })
-            .then(async (res) => {
-              // eslint-disable-next-line functional/no-let
-              let byteLength: number
-              if (context.responseType !== "text") {
-                xhr.response = await res.arrayBuffer()
-                byteLength = xhr.response.byteLength
-              } else {
-                xhr.responseText = await res.text()
-                byteLength = xhr.responseText.length
+      pLoader: offEnds
+        ? undefined
+        : (class CustomLoader extends (Hls.DefaultConfig.loader as any) {
+            loadInternal(): void {
+              const { config, context } = this
+              if (!config) {
+                return
               }
 
-              xhr.readyState = 4
-              xhr.status = 200
-              xhr.responseType = context.responseType
+              const { stats } = this
+              stats.loading.first = 0
+              stats.loaded = 0
 
-              xhr.onprogress?.({
-                loaded: byteLength,
-                total: byteLength,
+              const controller = new AbortController()
+              const xhr = (this.loader = {
+                readyState: 0,
+                status: 0,
+                responseType: context.responseType,
+                abort() {
+                  controller.abort()
+                },
+                onreadystatechange: <(() => void) | null>null,
+                onprogress: <
+                  ((eventt: { loaded: number; total: number }) => void) | null
+                >null,
+                response: <ArrayBuffer | null>null,
+                responseText: <string | null>null,
               })
-              // eslint-disable-next-line promise/always-return
-              xhr.onreadystatechange?.()
-            })
-            .catch((e) => {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              this.callbacks!.onError(
-                { code: xhr.status, text: e.message },
-                context,
-                xhr
+              const headers = new Headers()
+              if (this.context.headers)
+                // eslint-disable-next-line functional/no-loop-statements
+                for (const [key, val] of Object.entries(this.context.headers))
+                  headers.set(key, val as string)
+              const { maxTimeToFirstByteMs, maxLoadTimeMs } = config.loadPolicy
+
+              if (context.rangeEnd) {
+                headers.set(
+                  "Range",
+                  "bytes=" + context.rangeStart + "-" + (context.rangeEnd - 1)
+                )
+              }
+
+              xhr.onreadystatechange = this.readystatechange.bind(this)
+              xhr.onprogress = this.loadprogress.bind(this)
+              self.clearTimeout(this.requestTimeout)
+              config.timeout =
+                maxTimeToFirstByteMs && Number.isFinite(maxTimeToFirstByteMs)
+                  ? maxTimeToFirstByteMs
+                  : maxLoadTimeMs
+              this.requestTimeout = self.setTimeout(
+                this.loadtimeout.bind(this),
+                config.timeout
               )
-            })
-        }
-      } as unknown as PlaylistLoaderConstructor,
+
+              fetchJava(context.url + "#animevsub-vsub", {
+                headers,
+                signal: controller.signal,
+              })
+                .then(async (res) => {
+                  // eslint-disable-next-line functional/no-let
+                  let byteLength: number
+                  if (context.responseType !== "text") {
+                    xhr.response = await res.arrayBuffer()
+                    byteLength = xhr.response.byteLength
+                  } else {
+                    xhr.responseText = await res.text()
+                    byteLength = xhr.responseText.length
+                  }
+
+                  xhr.readyState = 4
+                  xhr.status = 200
+                  xhr.responseType = context.responseType
+
+                  xhr.onprogress?.({
+                    loaded: byteLength,
+                    total: byteLength,
+                  })
+                  // eslint-disable-next-line promise/always-return
+                  xhr.onreadystatechange?.()
+                })
+                .catch((e) => {
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  this.callbacks!.onError(
+                    { code: xhr.status, text: e.message },
+                    context,
+                    xhr
+                  )
+                })
+            }
+          } as unknown as PlaylistLoaderConstructor),
     })
     if (!offEnds) patcher(hls)
     currentHls = hls
