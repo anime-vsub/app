@@ -62,7 +62,7 @@ const { data, error } = useRequest<
 >(() => {
   // eslint-disable-next-line functional/no-throw-statements
   if (!Client.tabsApi) throw new Error("tabs_api_not_support")
-  return Client.execTabs("query", [{ title: "animevsub.eu.org" }])
+  return Client.execTabs("query", [{ title: "AnimeVsub" }])
 })
 
 const fixing = ref(false)
