@@ -115,9 +115,10 @@ async function fix() {
 
     const [$data, $season] = groupedResolvedUndef[i]
     const [data, ep] = [
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       JSON.parse($data!),
       $season && chapId
-        ? JSON.parse($season).chaps.find((chap) => {
+        ? JSON.parse($season).chaps.find((chap: { id: string }) => {
             return chap.id === chapId
           })
         : undefined,
@@ -126,7 +127,8 @@ async function fix() {
     const title = ep
       ? t("tap-_chap-_name-_othername", [ep.name, data.name, data.othername])
       : t("_name-_othername", [data.name, data.othername])
-    await Client.execTabs("executeScript", [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await Client.execTabs("executeScript" as unknown as any, [
       ids[i],
       { code: `document.title=${JSON.stringify(title)}` },
     ])

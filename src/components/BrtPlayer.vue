@@ -1883,10 +1883,11 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
         return new Request(context.url, initParams)
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-classes
+
       pLoader: offEnds
         ? undefined
-        : (class CustomLoader extends (Hls.DefaultConfig.loader as any) {
+        : // eslint-disable-next-line functional/no-classes, @typescript-eslint/no-explicit-any
+          (class CustomLoader extends (Hls.DefaultConfig.loader as any) {
             loadInternal(): void {
               const { config, context } = this
               if (!config) {
