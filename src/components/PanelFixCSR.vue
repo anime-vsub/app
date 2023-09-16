@@ -110,20 +110,25 @@ async function fix() {
 
   // eslint-disable-next-line functional/no-loop-statements
   for (let i = 0; i < ids.length; i++) {
+    const url = urls[i]
+    const chapId = url.match(/(\d+)\/?$/)?.[1]
+    
     const [$data, $season] = groupedResolvedUndef[i]
-    const [data, season] = [
+    const [data, ep] = [
       JSON.parse($data!),
-      $season ? JSON.parse($season) : undefined,
+      $season && chapId ? JSON.parse($season).chaps.find(chap=>{
+        return chap.id === chapId
+      }) : undefined,
     ]
 
-    const title = season
+    const title = ep
       ? t("tap-_chap-_name-_othername", [
-          season.name,
+          ep.name,
           data.name,
           data.othername,
         ])
       : t("_name-_othername", [data.name, data.othername])
-    await Client.execTabs("update", [ids[i], { title }])
+    await Client.execTabs("executeScript", [ids[i], { code:`document.title=${JSON.stringify(title)}` }])
   }
 
   fixing.value = false
