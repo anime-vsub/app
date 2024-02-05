@@ -9,14 +9,14 @@ export async function AjaxRate(id: string, score: number) {
   if (!token_name || !token_value)
     throw new Error(
       i18n.global.t("errors.require_login_to", [
-        i18n.global.t("danh-gia-anime-nay"),
+        i18n.global.t("danh-gia-anime-nay")
       ])
     )
 
   const { data } = await get(
     `/ajax/rate?_fxAjax=1&_fxResponseType=json&score=${score}&film=${id}`,
     {
-      cookie: `${token_name}=${token_value}`,
+      cookie: `${token_name}=${token_value}`
     }
   )
 
@@ -27,13 +27,13 @@ export async function AjaxRate(id: string, score: number) {
       return {
         success: true,
         count_rate: parseInt(rateCount) + 1,
-        rate: ratePoint,
+        rate: ratePoint
       }
     case 2:
       return {
         success: false,
         count_rate: parseInt(rateCount),
-        rate: ratePoint,
+        rate: ratePoint
       }
     default:
       throw new Error(i18n.global.t("response-not-control"))

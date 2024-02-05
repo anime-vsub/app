@@ -4,7 +4,7 @@ const map = {
   "FHD|HD": "1080p|720p",
   FHD: "1080p",
   HD: "720p",
-  SD: "480p",
+  SD: "480p"
 } as const
 export function getQualityByLabel(
   label: Awaited<ReturnType<typeof PlayerLink>>["link"][0]["label"]

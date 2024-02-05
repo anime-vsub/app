@@ -15,7 +15,7 @@ export async function fetchJava(
     url,
     responseType: "arraybuffer",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    headers: Object.fromEntries((options?.headers as any)?.entries() ?? []),
+    headers: Object.fromEntries((options?.headers as any)?.entries() ?? [])
   })
 
   if (options?.signal?.aborted) throw new Error("ABORTED")
@@ -32,6 +32,6 @@ export async function fetchJava(
     get headers() {
       return new Headers(res.headers)
     },
-    url: res.url,
+    url: res.url
   }
 }

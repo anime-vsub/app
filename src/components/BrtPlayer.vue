@@ -24,7 +24,7 @@
       class="player__wrap max-h-[calc(100vh-169px)]"
       :class="{
         fullscreen: artFullscreen,
-        'desktop-mode': settingsStore.ui.newPlayer,
+        'desktop-mode': settingsStore.ui.newPlayer
       }"
     >
       <video
@@ -66,7 +66,7 @@
         <div
           class="art-layer-controller overflow-hidden flex items-center justify-center"
           :class="{
-            'currenting-time': currentingTime,
+            'currenting-time': currentingTime
           }"
           @touchstart="onBDTouchStart"
           @touchmove="onBDTouchMove"
@@ -204,7 +204,7 @@
                   <div
                     class="art-progress-loaded"
                     :style="{
-                      width: percentageResourceLoadedText,
+                      width: percentageResourceLoadedText
                     }"
                   />
                   <!-- not need memo because this not show if not hover -->
@@ -213,14 +213,14 @@
                     class="art-progress-hoved"
                     :data-title="parseTime(artCurrentTimeHoving)"
                     :style="{
-                      width: `${(artCurrentTimeHoving / artDuration) * 100}%`,
+                      width: `${(artCurrentTimeHoving / artDuration) * 100}%`
                     }"
                   />
                   <!-- /end -->
                   <div
                     class="art-progress-played"
                     :style="{
-                      width: percentagePlaytimeText,
+                      width: percentagePlaytimeText
                     }"
                   >
                     <div
@@ -315,7 +315,7 @@
                         t("_message-hint-next", [
                           currentSeason !== nextChap.season.value
                             ? t("tiep-theo-_season", [nextChap.season.name])
-                            : t("tiep-theo-tap-_chap", [nextChap.chap?.name]),
+                            : t("tiep-theo-tap-_chap", [nextChap.chap?.name])
                         ])
                       }}
                     </q-tooltip>
@@ -332,7 +332,7 @@
                           [
                             'fluent:speaker-off-24-regular',
                             'fluent:speaker-1-24-regular',
-                            'fluent:speaker-2-24-regular',
+                            'fluent:speaker-2-24-regular'
                           ][artVolume === 0 ? 0 : artVolume < 0.5 ? 1 : 2]
                         "
                         class="mr-2 art-icon"
@@ -390,7 +390,7 @@
                     :style="{
                       display: settingsStore.ui.modeMovie
                         ? 'block !important'
-                        : '',
+                        : ''
                     }"
                   >
                     <Icon
@@ -419,7 +419,7 @@
                       :offset="[0, 20]"
                       class="rounded-xl bg-[rgba(28,28,30,1)] shadow-xl min-w-[200px] min-h-[165px] !max-w-[612px] flex column flex-nowrap overflow-visible"
                       :class="{
-                        'bg-opacity-95': settingsStore.ui.menuTransparency,
+                        'bg-opacity-95': settingsStore.ui.menuTransparency
                       }"
                       ref="menuChapsRef"
                     >
@@ -456,7 +456,7 @@
                           v-model="seasonActive"
                           class="min-w-0 w-full tabs-seasons"
                           :class="{
-                            'grid-mode scrollbar-custom': gridModeTabsSeasons,
+                            'grid-mode scrollbar-custom': gridModeTabsSeasons
                           }"
                           no-caps
                           dense
@@ -473,7 +473,13 @@
                             :key="item.value"
                             :name="item.value"
                             :label="item.name"
-                            :ref="(el: QTab) => void (item.value === seasonActive && (tabsRef = el as QTab))"
+                            :ref="
+                              (el: QTab) =>
+                                void (
+                                  item.value === seasonActive &&
+                                  (tabsRef = el as QTab)
+                                )
+                            "
                           />
                         </q-tabs>
                       </div>
@@ -482,7 +488,7 @@
                         class="h-full min-h-0 overflow-y-auto scrollbar-custom"
                         :style="{
                           overflow: gridModeTabsSeasons ? 'hidden' : '',
-                          opacity: gridModeTabsSeasons ? '0' : '',
+                          opacity: gridModeTabsSeasons ? '0' : ''
                         }"
                       >
                         <div
@@ -553,8 +559,12 @@
                                       item.id === currentChap
                                   "
                                   :progress-chaps="
-                                  (progressWatchStore.get(value) as unknown as any)?.response
-                                "
+                                    (
+                                      progressWatchStore.get(
+                                        value
+                                      ) as unknown as any
+                                    )?.response
+                                  "
                                   :deep-scroll="5"
                                   class-item="px-3 !py-[6px] mb-3"
                                 />
@@ -595,7 +605,7 @@
                       :offset="[0, 20]"
                       class="text-shadow-menu rounded-xl shadow-xl min-w-[200px]"
                       :class="{
-                        'm-transparency': settingsStore.ui.menuTransparency,
+                        'm-transparency': settingsStore.ui.menuTransparency
                       }"
                     >
                       <div
@@ -622,7 +632,7 @@
                               :key="id"
                               class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
                               :class="{
-                                'c--main': id === settingsStore.player.server,
+                                'c--main': id === settingsStore.player.server
                               }"
                               @click="settingsStore.player.server = id"
                             >
@@ -667,7 +677,7 @@
                       :offset="[0, 20]"
                       class="text-shadow-menu rounded-xl shadow-xl min-w-[200px]"
                       :class="{
-                        'm-transparency': settingsStore.ui.menuTransparency,
+                        'm-transparency': settingsStore.ui.menuTransparency
                       }"
                     >
                       <div
@@ -694,7 +704,7 @@
                               :key="label"
                               class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
                               :class="{
-                                'c--main': qualityCode === artQuality,
+                                'c--main': qualityCode === artQuality
                               }"
                               @click="setArtQuality(qualityCode)"
                             >
@@ -739,7 +749,7 @@
                       :offset="[0, 20]"
                       class="rounded-xl shadow-xl min-w-[200px]"
                       :class="{
-                        'm-transparency': settingsStore.ui.menuTransparency,
+                        'm-transparency': settingsStore.ui.menuTransparency
                       }"
                     >
                       <div
@@ -763,12 +773,12 @@
                           <ul class="mx-[-16px]">
                             <li
                               v-for="{ name, value } in [
-                                ...playbackRates,
+                                ...playbackRates
                               ].reverse()"
                               :key="value"
                               class="py-2 text-center px-16 cursor-pointer transition-background duration-200 ease-in-out hover:bg-[rgba(255,255,255,0.1)]"
                               :class="{
-                                'c--main': value === artPlaybackRate,
+                                'c--main': value === artPlaybackRate
                               }"
                               @click="setArtPlaybackRate(value)"
                             >
@@ -811,7 +821,7 @@
                       :offset="[-25, 20]"
                       class="rounded-xl shadow-xl min-w-[200px] flex column flex-nowrap overflow-hidden"
                       :class="{
-                        'm-transparency': settingsStore.ui.menuTransparency,
+                        'm-transparency': settingsStore.ui.menuTransparency
                       }"
                     >
                       <div
@@ -842,7 +852,7 @@
                             class="px-2 flex-1 text-weight-norrmal py-2 rounded-xl"
                             v-for="(label, id) in servers"
                             :class="{
-                              'c--main': settingsStore.player.server === id,
+                              'c--main': settingsStore.player.server === id
                             }"
                             :key="label"
                             @click="settingsStore.player.server = id"
@@ -861,7 +871,7 @@
                             class="px-2 flex-1 text-weight-norrmal py-2 rounded-xl"
                             v-for="{ label, qualityCode } in sources"
                             :class="{
-                              'c--main': qualityCode === artQuality,
+                              'c--main': qualityCode === artQuality
                             }"
                             :key="label"
                             @click="setArtQuality(qualityCode)"
@@ -1065,7 +1075,7 @@ import {
   useEventListener,
   useFullscreen,
   useIntervalFn,
-  useMouseInElement,
+  useMouseInElement
 } from "@vueuse/core"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
@@ -1086,7 +1096,7 @@ import {
   QTabPanels,
   QTabs,
   QTooltip,
-  useQuasar,
+  useQuasar
 } from "quasar"
 import type { PlayerLink } from "src/apis/runs/ajax/player-link"
 import { useMemoControl } from "src/composibles/memo-control"
@@ -1094,7 +1104,7 @@ import {
   DELAY_SAVE_HISTORY,
   DELAY_SAVE_VIEWING_PROGRESS,
   playbackRates,
-  servers,
+  servers
 } from "src/constants"
 import { checkContentEditable } from "src/helpers/checkContentEditable"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
@@ -1106,7 +1116,7 @@ import type { ProgressWatchStore } from "src/pages/phim/_season.interface"
 import type {
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
-  ResponseDataSeasonSuccess,
+  ResponseDataSeasonSuccess
 } from "src/pages/phim/response-data-season"
 import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
@@ -1118,7 +1128,7 @@ import {
   ref,
   shallowReactive,
   watch,
-  watchEffect,
+  watchEffect
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
@@ -1189,7 +1199,7 @@ function emitNextChap(noNotice?: boolean) {
         : `Đang phát tập ${props.nextChap.chap?.name ?? ""} tiếp theo`
     )
 
-  router.push(
+  void router.push(
     `/phim/${props.nextChap.season.value}/${
       props.nextChap.chap
         ? parseChapName(props.nextChap.chap.name) +
@@ -1209,7 +1219,7 @@ function emitPrevChap(noNotice?: boolean) {
         : `Đang phát tập ${props.prevChap.chap?.name ?? ""} trước`
     )
 
-  router.push(
+  void router.push(
     `/phim/${props.prevChap.season.value}/${
       props.prevChap.chap
         ? parseChapName(props.prevChap.chap.name) +
@@ -1236,10 +1246,10 @@ watch(
     if (!seasonActive) return
 
     // download data season active
-    props.fetchSeason(seasonActive)
+    void props.fetchSeason(seasonActive)
   },
   {
-    immediate: true,
+    immediate: true
   }
 )
 
@@ -1285,7 +1295,7 @@ watch(
   (video) => {
     if (video && documentVisibility.value === "visible")
       try {
-        video.play()
+        void video.play()
       } catch {}
   },
   { immediate: true }
@@ -1300,7 +1310,7 @@ const setArtPlaying = (playing: boolean) => {
   artPlaying.value = playing
   if (playing) {
     // video.value.load();
-    if (video.value.paused) video.value.play()
+    if (video.value.paused) void video.value.play()
   } else {
     if (!video.value.paused) video.value.pause()
   }
@@ -1311,7 +1321,7 @@ watch(
     if (newVal && oldVal) setArtPlaying(true)
   }
 )
-// eslint-disable-next-line functional/no-let
+
 let artEnded = false
 const artLoading = ref(false)
 const artDuration = ref<number>(0)
@@ -1324,7 +1334,7 @@ const setArtCurrentTime = (currentTime: number) => {
   video.value.currentTime = currentTime
   artCurrentTime.value = currentTime
 }
-// eslint-disable-next-line functional/no-let
+
 let progressRestored: false | string = false
 watch(
   [() => props.currentChap, () => props.currentSeason, () => authStore.uid],
@@ -1396,13 +1406,13 @@ const artVolume = computed<number>({
   get: () => settingsStore.player.volume,
   set: (val) => {
     settingsStore.player.volume = val
-  },
+  }
 })
 const setArtVolume = (value: number) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   video.value!.volume = value
 }
-// eslint-disable-next-line functional/no-let
+
 let lastVolumeBeforeMute: number
 const toggleMuted = () => {
   const newValue = artVolume.value === 0 ? lastVolumeBeforeMute ?? 0.05 : 0
@@ -1418,7 +1428,7 @@ const toggleMuted = () => {
 
 // value control other
 const artControlShow = ref(true)
-// eslint-disable-next-line functional/no-let
+
 let activeTime = Date.now()
 const setArtControlShow = (show: boolean) => {
   artControlShow.value = show
@@ -1427,14 +1437,14 @@ const setArtControlShow = (show: boolean) => {
 const {
   isFullscreen: artFullscreen,
   toggle: toggleArtFullscreen,
-  exit: exitArtFullscreen,
+  exit: exitArtFullscreen
 } = useFullscreen(playerWrapRef)
 const tooltipFullscreenRef = ref<QTooltip>()
 watch(artFullscreen, () => tooltipFullscreenRef.value?.hide())
 // fix done
 onBeforeRouteLeave(() => {
   if (artFullscreen.value) {
-    exitArtFullscreen()
+    void exitArtFullscreen()
 
     return false
   }
@@ -1459,7 +1469,7 @@ const artQuality = computed({
   },
   set(value) {
     _artQuality.value = value
-  },
+  }
 })
 const setArtQuality = (value: Exclude<typeof artQuality.value, undefined>) => {
   artQuality.value = value
@@ -1468,13 +1478,12 @@ const setArtQuality = (value: Exclude<typeof artQuality.value, undefined>) => {
 
 function onVideoProgress(event: Event) {
   const target = event.target as HTMLVideoElement
-  // eslint-disable-next-line functional/no-let
+
   let range = 0
   const bf = target.buffered
   const time = target.currentTime
 
   try {
-    // eslint-disable-next-line functional/no-loop-statements
     while (!(bf.start(range) <= time && time <= bf.end(range))) {
       range += 1
     }
@@ -1519,9 +1528,9 @@ async function createSeason(
     historyStore.createSeason(currentSeason, {
       poster,
       seasonName,
-      name,
+      name
     }),
-    resolveAfter(1_000),
+    resolveAfter(1_000)
   ])
 
   seasonMetaCreated.add(currentSeason)
@@ -1546,10 +1555,8 @@ function throttle<T extends (...args: any[]) => Promise<void>>(
 ): T & {
   cancel: () => void
 } {
-  // eslint-disable-next-line functional/no-let
   let wait = false
 
-  // eslint-disable-next-line functional/no-let, no-undef
   let timeout: NodeJS.Timeout | number | undefined
   // eslint-disable-next-line functional/functional-parameters, @typescript-eslint/no-explicit-any
   const cb = function (...args: any[]) {
@@ -1600,9 +1607,9 @@ const saveCurTimeToPer = throttle(
     savingTimeEpStore.add(uidTask)
 
     // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
-    // eslint-disable-next-line functional/no-let
+
     let cur = artCurrentTime.value
-    // eslint-disable-next-line functional/no-let
+
     let dur = artDuration.value
 
     if (!dur) {
@@ -1633,7 +1640,7 @@ const saveCurTimeToPer = throttle(
     emit("cur-update", {
       cur,
       dur,
-      id: currentChap,
+      id: currentChap
     })
 
     await Promise.race([
@@ -1644,17 +1651,17 @@ const saveCurTimeToPer = throttle(
           {
             cur,
             dur,
-            name: nameCurrentChap,
+            name: nameCurrentChap
           },
           {
             poster,
             seasonName: nameSeason,
-            name,
+            name
           }
         )
         .catch((err) => console.warn("save viewing progress failed: ", err)),
 
-      resolveAfter(1_000),
+      resolveAfter(1_000)
     ])
 
     console.log("save viewing progress")
@@ -1686,7 +1693,7 @@ function onVideoTimeUpdate() {
   if (typeof props.nameCurrentChap !== "string") return
 
   console.log("call throw emit")
-  saveCurTimeToPer(
+  void saveCurTimeToPer(
     props.currentSeason,
     props.nameCurrentSeason,
     props.currentChap,
@@ -1733,7 +1740,6 @@ function onVideoEnded() {
   }
 }
 
-// eslint-disable-next-line functional/no-let
 let artPlayingOfBeforeDocumentHide: boolean
 watch(documentVisibility, (visibility) => {
   console.log("document %s", visibility)
@@ -1746,9 +1752,8 @@ watch(documentVisibility, (visibility) => {
 })
 
 {
-  // eslint-disable-next-line functional/no-let
   let resume: (() => void) | null = null
-  // eslint-disable-next-line functional/no-let
+
   let pause: (() => void) | null = null
   const resumeDelay = debounce(() => resume?.(), 1_000)
   onBeforeUnmount(() => pause?.())
@@ -1769,7 +1774,7 @@ watch(documentVisibility, (visibility) => {
               message: t("ban-van-dang-xem-chu"),
               cancel: { rounded: true, flat: true },
               ok: { rounded: true, flat: true },
-              persistent: false,
+              persistent: false
             })
               .onOk(() => {
                 setArtPlaying(true)
@@ -1813,7 +1818,7 @@ watch(documentVisibility, (visibility) => {
     "touchstart",
     "touchmove",
     "touchend",
-    "scroll",
+    "scroll"
   ].forEach((name) => {
     useEventListener(window, name, resumeDelay)
   })
@@ -1825,10 +1830,10 @@ function runRemount() {
     message: t("ban-dang-muon-doi-relay-khac"),
     cancel: { rounded: true, flat: true },
     ok: { rounded: true, flat: true },
-    persistent: false,
+    persistent: false
   }).onOk(remount)
 }
-// eslint-disable-next-line functional/no-let
+
 let currentHls: Hls
 onBeforeUnmount(() => currentHls?.destroy())
 function remount(resetCurrentTime?: boolean, noDestroy = false) {
@@ -1858,7 +1863,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
   if (!currentStream.value) {
     $q.notify({
       position: "bottom-right",
-      message: t("video-tam-thoi-khong-kha-dung"),
+      message: t("video-tam-thoi-khong-kha-dung")
     })
     return
   }
@@ -1886,7 +1891,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
       pLoader: offEnds
         ? undefined
-        : // eslint-disable-next-line functional/no-classes, @typescript-eslint/no-explicit-any
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (class CustomLoader extends (Hls.DefaultConfig.loader as any) {
             loadInternal(): void {
               const { config, context } = this
@@ -1911,11 +1916,10 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
                   ((eventt: { loaded: number; total: number }) => void) | null
                 >null,
                 response: <ArrayBuffer | null>null,
-                responseText: <string | null>null,
+                responseText: <string | null>null
               })
               const headers = new Headers()
               if (this.context.headers)
-                // eslint-disable-next-line functional/no-loop-statements
                 for (const [key, val] of Object.entries(this.context.headers))
                   headers.set(key, val as string)
               const { maxTimeToFirstByteMs, maxLoadTimeMs } = config.loadPolicy
@@ -1941,10 +1945,9 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
               fetchJava(context.url + "#animevsub-vsub", {
                 headers,
-                signal: controller.signal,
+                signal: controller.signal
               })
                 .then(async (res) => {
-                  // eslint-disable-next-line functional/no-let
                   let byteLength: number
                   if (context.responseType !== "text") {
                     xhr.response = await res.arrayBuffer()
@@ -1960,7 +1963,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
                   xhr.onprogress?.({
                     loaded: byteLength,
-                    total: byteLength,
+                    total: byteLength
                   })
                   // eslint-disable-next-line promise/always-return
                   xhr.onreadystatechange?.()
@@ -1974,7 +1977,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
                   )
                 })
             }
-          } as unknown as PlaylistLoaderConstructor),
+          } as unknown as PlaylistLoaderConstructor)
     })
     if (!offEnds) patcher(hls)
     currentHls = hls
@@ -1984,11 +1987,11 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     hls.attachMedia(video.value!)
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      if (playing) video.value!.play()
+      if (playing) void video.value!.play()
     })
-    // eslint-disable-next-line functional/no-let
+
     let needSwapCodec = false
-    // eslint-disable-next-line functional/no-let, no-undef
+
     let timeoutUnneedSwapCodec: NodeJS.Timeout | number | null = null
     hls.on(Hls.Events.ERROR, (event, data) => {
       if (data.fatal) {
@@ -2005,13 +2008,13 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
                   label: t("thu-lai"),
                   color: "yellow",
                   noCaps: true,
-                  handler: () => hls.startLoad(),
+                  handler: () => hls.startLoad()
                 },
                 {
                   icon: "close",
-                  round: true,
-                },
-              ],
+                  round: true
+                }
+              ]
             })
             break
           }
@@ -2039,7 +2042,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
             hls.recoverMediaError()
             if (playing)
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              video.value!.play()
+              void video.value!.play()
             break
           }
           default: {
@@ -2054,17 +2057,17 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
                   handler() {
                     console.log("retry force")
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    video.value!.load()
+                    void video.value!.load()
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    video.value!.play()
-                  },
+                    void video.value!.play()
+                  }
                 },
                 {
                   label: t("remount"),
                   color: "white",
-                  handler: remount,
-                },
-              ],
+                  handler: remount
+                }
+              ]
             })
             break
           }
@@ -2079,7 +2082,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  if (playing) video.value!.play()
+  if (playing) void video.value!.play()
 
   if (
     resetCurrentTime
@@ -2094,13 +2097,11 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 const watcherVideoTagReady = watch(video, (video) => {
   if (!video) return
 
-  // eslint-disable-next-line promise/catch-or-return
-  Promise.resolve().then(watcherVideoTagReady) // fix this not ready value
+  void Promise.resolve().then(watcherVideoTagReady) // fix this not ready value
 
   // pre set volume to default
   setArtVolume(artVolume.value)
 
-  // eslint-disable-next-line functional/no-let
   let currentEpStream: null | string = null
   watch(
     () => currentStream.value?.file,
@@ -2133,14 +2134,12 @@ const progressInnerRef = ref<HTMLDivElement>()
 const artCurrentTimeHoving = ref(0)
 const artControlProgressHoving = ref(false)
 
-// eslint-disable-next-line functional/no-let
 let bindedMouseUp = false
 
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl?: HTMLDivElement
 ): void
-// eslint-disable-next-line no-redeclare
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl: HTMLDivElement,
@@ -2148,7 +2147,6 @@ function onIndicatorMove(
   curTimeStart: number
 ): void
 
-// eslint-disable-next-line no-redeclare
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -2222,13 +2220,13 @@ useEventListener(window, "mouseup", () => {
 })
 
 // ==== addons swipe backdrop ====
-// eslint-disable-next-line functional/no-let, no-undef
+
 let timeoutHoldBD: number | NodeJS.Timeout | null = null
 
 const holdedBD = ref(false)
-// eslint-disable-next-line functional/no-let
+
 let xStart: number | null = null
-// eslint-disable-next-line functional/no-let
+
 let curTimeStart: number | null = null
 function onBDTouchStart(event: TouchEvent) {
   holdedBD.value = false
@@ -2296,13 +2294,13 @@ function skipForward() {
 }
 
 const doubleClicking = ref<"left" | "right" | false>(false)
-// eslint-disable-next-line functional/no-let, no-undef
+
 let timeoutResetDoubleClicking: number | NodeJS.Timeout | null = null
-// eslint-disable-next-line functional/no-let
+
 let lastTimeClick: number
-// eslint-disable-next-line functional/no-let
+
 let lastPositionClickIsLeft: boolean | null = null
-// eslint-disable-next-line functional/no-let, no-undef
+
 let timeoutDbClick: number | NodeJS.Timeout | null = null
 const countSkip = ref(0)
 function onClickSkip(event: MouseEvent) {
@@ -2361,7 +2359,7 @@ const notices = shallowReactive<
     text: string
   }[]
 >([])
-// eslint-disable-next-line functional/no-let
+
 let id = 1
 function addNotice(text: string) {
   const uuid = id++
@@ -2424,7 +2422,7 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       break
     }
     case "KeyF":
-      toggleArtFullscreen()
+      void toggleArtFullscreen()
       break
     case "ArrowLeft":
       skipBack()
@@ -2464,7 +2462,7 @@ if (typeof MediaMetadata !== "undefined" && navigator.mediaSession)
     const title = t("tap-_chap-_name-_othername", [
       props.nameCurrentChap,
       props.name,
-      "",
+      ""
     ])
 
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -2472,9 +2470,9 @@ if (typeof MediaMetadata !== "undefined" && navigator.mediaSession)
       artist: props.name,
       artwork: [
         {
-          src: props.poster,
-        },
-      ],
+          src: props.poster
+        }
+      ]
     })
   })
 // keybind for headphone control
@@ -2500,7 +2498,6 @@ onBeforeUnmount(() => {
   navigator.mediaSession?.setActionHandler("nexttrack", null)
 })
 
-// eslint-disable-next-line functional/no-let
 let _tmp:
   | ResponseDataSeasonPending
   | ResponseDataSeasonSuccess
@@ -3059,7 +3056,9 @@ const percentagePlaytimeText = useMemoControl(() => {
   &-move,
   &-enter-active,
   &-leave-active {
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
   }
   &-enter-from,
   &-leave-to {

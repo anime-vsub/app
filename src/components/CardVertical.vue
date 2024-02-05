@@ -18,7 +18,7 @@
         class="text-[16px] text-[#eee] leading-snug"
         :class="{
           'line-clamp-3': threeLine,
-          'line-clamp-2': !threeLine,
+          'line-clamp-2': !threeLine
         }"
       >
         {{ data.name }}

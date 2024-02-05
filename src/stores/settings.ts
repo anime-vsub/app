@@ -8,19 +8,19 @@ export const useSettingsStore = defineStore("settings", {
       autoNext: true,
       enableRemindStop: true,
       volume: 1,
-      server: <keyof typeof servers>"DU",
+      server: <keyof typeof servers>"DU"
     },
     ui: {
       modeMovie: false,
       newPlayer: true,
       shortcutsQAP: true,
       menuTransparency: true,
-      commentAnime: true,
+      commentAnime: true
     },
     locale: getNavigatorLanguage(),
     infinityScroll: true,
     restoreLastEp: true,
-    enablePersistent: true,
+    enablePersistent: true
   }),
-  persist: true,
+  persist: true
 })

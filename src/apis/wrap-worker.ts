@@ -17,7 +17,7 @@ export function WrapWorker<Fn extends (...args: any) => any>(fn: Fn) {
     ) => {
       postMessage({
         id: event.data.id,
-        result: fn(...event.data.args),
+        result: fn(...event.data.args)
       })
     }
   )

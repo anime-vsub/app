@@ -15,7 +15,7 @@ async function fetchFromTinAnime(page: number) {
 
   const by = {
     icon: "https://tinanime.com/logos/114x114.png",
-    name: "TinAnime",
+    name: "TinAnime"
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return JSON.parse(data).map((item: any) => {
@@ -25,7 +25,7 @@ async function fetchFromTinAnime(page: number) {
       title: item.title,
       time: new Date(item.published_at).getTime(),
       intro: item.description,
-      by,
+      by
     }
   })
 }
@@ -34,11 +34,11 @@ export async function NewsAnime(page: number) {
     fetchFromMgn(page).then((html) => {
       return PostWorker<typeof MgnParser>(Worker, html)
     }),
-    fetchFromTinAnime(page),
+    fetchFromTinAnime(page)
   ])
 
   return sort([...mgn, ...tinanime], {
     by: "time",
-    order: "desc",
+    order: "desc"
   })
 }

@@ -15,7 +15,7 @@ export async function AjaxNotification() {
     )
 
   const { data: json } = await get("/ajax/notification?notif=true", {
-    cookie: `${token_name}=${token_value}`,
+    cookie: `${token_name}=${token_value}`
   })
 
   const data = JSON.parse(json)
@@ -27,12 +27,12 @@ export async function AjaxNotification() {
       data.html.toLowerCase() === "not login"
         ? "NOT_LOGIN"
         : i18n.global.t("errors.loi-khong-xac-dinh-khi", [
-            i18n.global.t("cap-nhat-thong-bao"),
+            i18n.global.t("cap-nhat-thong-bao")
           ])
     )
 
   return {
     items: await PostWorker<typeof AjaxNotificationParser>(Worker, data.html),
-    max: parseInt(data.total),
+    max: parseInt(data.total)
   }
 }

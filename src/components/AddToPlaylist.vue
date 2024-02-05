@@ -66,7 +66,7 @@
             stack-label
             :input-style="{
               fontSize: '14px',
-              paddingLeft: '0px',
+              paddingLeft: '0px'
             }"
             color="white"
             :rules="[(val) => !!val || 'Bắt buộc']"
@@ -134,7 +134,7 @@ const playlists = computedAsync(
       playlists.map(async (item) => {
         return {
           ...item,
-          added: await props.exists(item.id),
+          added: await props.exists(item.id)
         }
       })
     )
@@ -143,7 +143,7 @@ const playlists = computedAsync(
   {
     onError(err) {
       console.error(err)
-    },
+    }
   }
 )
 
@@ -159,7 +159,7 @@ async function createNewPlaylist() {
     await emit("after-create-playlist", id)
     $q.notify({
       position: "bottom-right",
-      message: t("da-tao-danh-sach-phat-_name", [nameNewPlaylist.value]),
+      message: t("da-tao-danh-sach-phat-_name", [nameNewPlaylist.value])
     })
 
     creatingPlaylist.value = false
@@ -167,7 +167,7 @@ async function createNewPlaylist() {
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 }

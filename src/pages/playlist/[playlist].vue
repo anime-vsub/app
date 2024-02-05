@@ -24,7 +24,7 @@
                   rgba(89, 77, 66, 0.8) 0%,
                   rgba(89, 77, 66, 0.298) 33%,
                   var(--q-dark-page) 100%
-                )`,
+                )`
               }"
             />
           </div>
@@ -66,7 +66,7 @@
                   :input-style="{
                     fontSize: '28px',
                     fontWeight: '500',
-                    paddingLeft: '0px',
+                    paddingLeft: '0px'
                   }"
                   color="white"
                   :rules="[(val) => !!val || 'Bắt buộc']"
@@ -176,7 +176,7 @@
                 class="fix-input"
                 stack-label
                 :input-style="{
-                  paddingLeft: '0px',
+                  paddingLeft: '0px'
                 }"
                 color="white"
               />
@@ -278,7 +278,7 @@
           <div
             class="items-center invisible flex group-hover:visible md:pr-6"
             :class="{
-              visible: storeStateMenu.get(item),
+              visible: storeStateMenu.get(item)
             }"
           >
             <q-btn flat round @click.prevent>
@@ -387,7 +387,7 @@ const infiniteScrollRef = ref<QInfiniteScroll>()
 const {
   data: metaPlaylist,
   run: runGetMetaPlaylist,
-  error: errorMetaPlaylist,
+  error: errorMetaPlaylist
 } = useRequest(
   async () => {
     const { playlists } = playlistStore
@@ -405,21 +405,21 @@ const {
     refreshDeps: [() => playlistStore.playlists, () => route.params.playlist],
     refreshDepsAction() {
       runGetMetaPlaylist()
-    },
+    }
   }
 )
 watch(errorMetaPlaylist, (err) => {
   if (err?.message === "NOT_FOUND") {
     $q.notify({
-      message: t("danh-sach-phat-khong-ton-tai"),
+      message: t("danh-sach-phat-khong-ton-tai")
     })
     router.replace({
       name: "not_found",
       params: {
-        catchAll: route.path.split("/").slice(1),
+        catchAll: route.path.split("/").slice(1)
       },
       query: route.query,
-      hash: route.hash,
+      hash: route.hash
     })
   }
 })
@@ -439,7 +439,7 @@ const { data: movies, run: runGetMovies } = useRequest(
     refreshDeps: [() => route.params.playlist, sorter],
     refreshDepsAction() {
       runGetMovies()
-    },
+    }
   }
 )
 
@@ -457,23 +457,23 @@ useHead(
       meta: [
         {
           property: "og:title",
-          content: title,
+          content: title
         },
         {
           property: "og:description",
-          content: description,
+          content: description
         },
         {
           property: "og:url",
-          content: process.env.APP_URL + `playlist/${route.params.playlist}`,
-        },
+          content: process.env.APP_URL + `playlist/${route.params.playlist}`
+        }
       ],
       link: [
         {
           rel: "canonical",
-          href: process.env.APP_URL + `playlist/${route.params.playlist}`,
-        },
-      ],
+          href: process.env.APP_URL + `playlist/${route.params.playlist}`
+        }
+      ]
     }
   })
 )
@@ -522,12 +522,12 @@ async function updateNewName() {
     editingName.value = false
     $q.notify({
       position: "bottom-right",
-      message: t("da-cap-nhat-ten-danh-sach-phat"),
+      message: t("da-cap-nhat-ten-danh-sach-phat")
     })
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 }
@@ -541,12 +541,12 @@ async function updateNewDescription() {
     editingDescription.value = false
     $q.notify({
       position: "bottom-right",
-      message: t("da-cap-nhat-mo-ta-danh-sach-phat"),
+      message: t("da-cap-nhat-mo-ta-danh-sach-phat")
     })
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 }
@@ -559,12 +559,12 @@ async function removePlaylist() {
     router.push("/tai-khoan/follow")
     $q.notify({
       position: "bottom-right",
-      message: t("da-xoa-danh-sach-phat"),
+      message: t("da-xoa-danh-sach-phat")
     })
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 }
@@ -590,12 +590,12 @@ async function addAnimePlaylist(idPlaylist: string) {
     )
     $q.notify({
       position: "bottom-right",
-      message: t("da-theo-vao-danh-sach-phat"),
+      message: t("da-theo-vao-danh-sach-phat")
     })
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 }
@@ -608,13 +608,13 @@ async function removeAnimePlaylist(
     await playlistStore.deleteAnimeFromPlaylist(idPlaylist, season)
     $q.notify({
       position: "bottom-right",
-      message: t("da-xoa-khoi-danh-sach-phat"),
+      message: t("da-xoa-khoi-danh-sach-phat")
     })
     movies.value = movies.value?.filter((item) => item.season !== season)
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 }

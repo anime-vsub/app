@@ -5,7 +5,6 @@ function toFixed(num: number): string {
 }
 
 export function parseTime(seconds: number): string {
-  // eslint-disable-next-line functional/no-let
   let minutes = ~~(seconds / 60)
   seconds -= minutes * 60
 

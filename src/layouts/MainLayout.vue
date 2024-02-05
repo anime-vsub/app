@@ -3,7 +3,7 @@
     <q-header
       class="bg-dark-page py-1 px-2"
       :class="{
-        '!bg-transparent': route.meta?.transparentHeader,
+        '!bg-transparent': route.meta?.transparentHeader
       }"
     >
       <q-toolbar>
@@ -250,7 +250,7 @@
                       width="20"
                       height="20"
                       :class="{
-                        'animate-spin': checkingForUpdate,
+                        'animate-spin': checkingForUpdate
                       }"
                     />
                   </q-item-section>
@@ -261,7 +261,7 @@
                       <template v-if="newVersionAble">
                         ({{
                           t("da-co-ban-cap-nhat-moi-_newVersion", [
-                            newVersionAble,
+                            newVersionAble
                           ])
                         }}
                         &bull;
@@ -402,7 +402,7 @@
                     v-for="(item, index) in histories.map((item) => {
                       return {
                         ...item,
-                        timestamp: dayjs(item.timestamp.toDate()),
+                        timestamp: dayjs(item.timestamp.toDate())
                       }
                     })"
                     :key="item.id"
@@ -421,10 +421,10 @@
                         item.timestamp.isToday()
                           ? "Hôm nay"
                           : item.timestamp.isYesterday()
-                          ? "Hôm qua"
-                          : item.timestamp.get("date") +
-                            " thg " +
-                            (item.timestamp.get("month") + 1)
+                            ? "Hôm qua"
+                            : item.timestamp.get("date") +
+                              " thg " +
+                              (item.timestamp.get("month") + 1)
                       }}
                     </div>
                     <router-link
@@ -477,7 +477,7 @@
                                 item.timestamp.isToday()
                                   ? "HH:mm"
                                   : "DD/MM/YYYY"
-                              ),
+                              )
                             ])
                           }}
                         </div>
@@ -844,7 +844,7 @@
                 <!-- <q-separator class="bg-[rgba(255,255,255,0.1)]" /> -->
 
                 <q-item
-                  v-for="{ name, code } in languages"
+                  v-for="{ name, code } in langs"
                   :key="code"
                   clickable
                   v-ripple
@@ -1191,25 +1191,25 @@ const drawers = computed(() => [
     icon: "fluent:home-24-regular",
     active: "fluent:home-24-filled",
     name: t("trang-chu"),
-    path: "/",
+    path: "/"
   },
   {
     icon: "ant-design:fire-outlined",
     active: "ant-design:fire-filled",
     name: t("thinh-hanh"),
-    path: "/bang-xep-hang",
+    path: "/bang-xep-hang"
   },
   {
     icon: "ic:outline-filter-alt",
     active: "ic:round-filter-alt",
     name: t("muc-luc"),
-    path: "/danh-sach/all",
+    path: "/danh-sach/all"
   },
   {
     icon: "fluent:calendar-clock-24-regular",
     active: "fluent:calendar-clock-24-filled",
     name: t("lich-chieu"),
-    path: "/lich-chieu-phim",
+    path: "/lich-chieu-phim"
   },
 
   { divider: true },
@@ -1218,40 +1218,40 @@ const drawers = computed(() => [
     icon: "material-symbols:favorite-outline-rounded",
     active: "material-symbols:favorite-rounded",
     name: t("theo-doi"),
-    path: "/tai-khoan/follow",
+    path: "/tai-khoan/follow"
   },
   {
     icon: "fluent:history-24-regular",
     active: "fluent:history-24-filled",
     name: t("lich-su"),
-    path: "/tai-khoan/history",
-  },
+    path: "/tai-khoan/history"
+  }
 ])
 const drawersBottom = computed(() => [
   {
     name: t("ve-chung-toi"),
-    href: "https://anime-vsub.github.io/about",
+    href: "https://anime-vsub.github.io/about"
   },
   {
     name: t("lien-he-chung-toi"),
-    href: "mailto:ogmo2r3q@duck.com?subject=Phản hồi ứng dụng web AnimeVsub",
+    href: "mailto:ogmo2r3q@duck.com?subject=Phản hồi ứng dụng web AnimeVsub"
   },
   {
     name: t("tai-ung-dung"),
-    href: "https://anime-vsub.github.io",
+    href: "https://anime-vsub.github.io"
   },
   {
     name: t("dieu-khoan-su-dung"),
-    href: "https://anime-vsub.github.io/about/tems-of-use",
+    href: "https://anime-vsub.github.io/about/tems-of-use"
   },
   {
     name: t("chinh-sach-rieng-tu"),
-    href: "https://anime-vsub.github.io/about/privacy-police",
+    href: "https://anime-vsub.github.io/about/privacy-police"
   },
   {
     name: t("khieu-nai-vi-pham"),
-    href: "https://anime-vsub.github.io/about/disclaimer",
-  },
+    href: "https://anime-vsub.github.io/about/disclaimer"
+  }
 ])
 
 const route = useRoute()
@@ -1267,14 +1267,14 @@ const query = ref("")
 const {
   data: searchResult,
   loading: searchLoading,
-  run,
+  run
 } = useRequest(() => PreSearch(query.value), {
-  manual: true,
+  manual: true
 })
 watch(query, debounce(run, 300))
 function saveAnalytics() {
   logEvent(analytics, "search", {
-    search_terms: query.value,
+    search_terms: query.value
   })
 }
 
@@ -1307,7 +1307,7 @@ async function login() {
     message: t("dang-xac-thuc-vui-long-doi"),
     boxClass: "bg-dark text-light-9",
     spinnerColor: "main",
-    delay: Infinity,
+    delay: Infinity
   })
 
   try {
@@ -1318,7 +1318,7 @@ async function login() {
     password.value = ""
     $q.notify({
       position: "bottom-right",
-      message: t("da-dang-nhap-voi-tu-cach-_user", [data.name]),
+      message: t("da-dang-nhap-voi-tu-cach-_user", [data.name])
     })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -1326,7 +1326,7 @@ async function login() {
     $q.notify({
       position: "bottom-right",
       message: t("dang-nhap-that-bai"),
-      caption: err.message,
+      caption: err.message
     })
   } finally {
     loader()
@@ -1336,7 +1336,7 @@ async function logout() {
   authStore.logout()
   $q.notify({
     position: "bottom-right",
-    message: t("da-dang-xuat"),
+    message: t("da-dang-xuat")
   })
 }
 
@@ -1350,11 +1350,11 @@ const showMenuAccount = ref(false)
 const {
   data: histories,
   loading: loadingHistories,
-  refreshAsync: refreshHistories,
+  refreshAsync: refreshHistories
 } = useRequest(() => historyStore.loadMoreAfter(), {
   manual: true,
   cacheKey: "history",
-  cacheTime: 5 * 60 * 1000, //
+  cacheTime: 5 * 60 * 1000 //
 })
 watch(
   showMenuHistory,
@@ -1368,11 +1368,11 @@ watch(
 const {
   data: favorites,
   loading: loadingFavorites,
-  refreshAsync: refreshFavorites,
+  refreshAsync: refreshFavorites
 } = useRequest(() => TuPhim(1), {
   manual: true,
   cacheKey: "favorites",
-  cacheTime: 5 * 60 * 1000,
+  cacheTime: 5 * 60 * 1000
 })
 watch(
   showMenuFollow,
@@ -1428,7 +1428,7 @@ async function checkForUpdate() {
       ok: { flat: true, rounded: true },
       cancel: { flat: true, rounded: true },
       focus: "cancel",
-      class: "card-changelog",
+      class: "card-changelog"
     }).onOk(updateApp)
   }
 }
@@ -1446,13 +1446,13 @@ watch(
           label: t("tai-lai"),
           color: "yellow",
           noCaps: true,
-          handler: () => location.reload(),
+          handler: () => location.reload()
         },
         {
           label: t("de-sau"),
-          round: true,
-        },
-      ],
+          round: true
+        }
+      ]
     })
   }
 )

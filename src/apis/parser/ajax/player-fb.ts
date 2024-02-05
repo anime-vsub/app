@@ -8,6 +8,6 @@ export default function AjaxPlayerFBParser(html: string) {
   return {
     id: a.attr("data-id")!,
     play: a.attr("data-play")!,
-    hash: a.attr("data-href")!,
+    hash: a.attr("data-href")!
   }
 }

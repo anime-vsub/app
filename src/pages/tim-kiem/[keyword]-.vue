@@ -57,13 +57,13 @@ useHead(
       meta: [
         { property: "og:title", content: title },
         { property: "og:description", content: description },
-        { property: "og:url" },
+        { property: "og:url" }
       ],
       link: [
         {
-          rel: "canonical",
-        },
-      ],
+          rel: "canonical"
+        }
+      ]
     }
   })
 )
@@ -84,7 +84,7 @@ const { data, loading, run, error } = useRequest(
     refreshDepsAction() {
       run()
       infiniteScrollRef.value?.reset()
-    },
+    }
   }
 )
 
@@ -100,7 +100,7 @@ async function onLoad(_index: number, done: (stop: boolean) => void) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     items: [...data.value!.items, ...items],
     curPage,
-    maxPage,
+    maxPage
   })
   done(curPage === maxPage)
 }

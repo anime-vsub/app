@@ -365,7 +365,7 @@ async function login() {
     message: t("dang-xac-thuc-vui-long-doi"),
     boxClass: "bg-dark text-light-9",
     spinnerColor: "main",
-    delay: Infinity,
+    delay: Infinity
   })
 
   try {
@@ -376,7 +376,7 @@ async function login() {
     password.value = ""
     $q.notify({
       position: "bottom-right",
-      message: t("da-dang-nhap-voi-tu-cach-_name", [data.name]),
+      message: t("da-dang-nhap-voi-tu-cach-_name", [data.name])
     })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -384,7 +384,7 @@ async function login() {
     $q.notify({
       position: "bottom-right",
       message: t("dang-nhap-that-bai"),
-      caption: err.message,
+      caption: err.message
     })
   } finally {
     loader()
@@ -403,7 +403,7 @@ watchEffect(() => {
     JSON.stringify({
       token_name: authStore.token_name,
       token_value: authStore.token_value,
-      user_data: authStore.user_data,
+      user_data: authStore.user_data
     })
   )
     .then((url) => (qrcodeUrl.value = url))
@@ -411,7 +411,7 @@ watchEffect(() => {
       $q.notify({
         position: "bottom-right",
         message: t("loi-khi-tao-qr-code"),
-        caption: err + "",
+        caption: err + ""
       })
     })
 })
@@ -421,7 +421,7 @@ const {
   data: favorites,
   loading: loadingFavorites,
   run: runFavorites,
-  error: errorFavorites,
+  error: errorFavorites
   // refreshAsync: refreshFavorites,
 } = useRequest(() => TuPhim(1), { manual: true })
 
@@ -463,7 +463,7 @@ watch(qrRef, (qrRef) => {
           JSON.stringify({
             token_name: authStore.token_name,
             token_value: authStore.token_value,
-            user_data: authStore.user_data,
+            user_data: authStore.user_data
           })
         )
     )
@@ -473,7 +473,7 @@ watch(qrRef, (qrRef) => {
 // ========== scan qr code ==========
 function startScanQR() {
   $q.notify({
-    message: t("quet-qr-hien-dang-bao-tri"),
+    message: t("quet-qr-hien-dang-bao-tri")
   })
 }
 </script>

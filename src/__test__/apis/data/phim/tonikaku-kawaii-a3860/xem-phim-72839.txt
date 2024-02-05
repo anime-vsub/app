@@ -115,7 +115,7 @@
             filmInfo.playTech = 'auto';
             filmInfo.isAdult = parseInt('0');
             filmInfo.slug = 'http://animevietsub.cc/phim/tonikaku-kawaii-a3860/';
-      
+
     </script>
 <script src="https://animevietsub.cc/statics/default/js/pl.watch.js?v=3.3.1" type="text/javascript"></script>
 <script src="https://animevietsub.cc/statics/default/jw/jwplayer.js?v=1.0" type="text/javascript"></script>

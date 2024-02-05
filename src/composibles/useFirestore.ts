@@ -3,7 +3,7 @@ import type {
   DocumentReference,
   DocumentSnapshot,
   Query,
-  QueryDocumentSnapshot,
+  QueryDocumentSnapshot
 } from "@firebase/firestore"
 import { onSnapshot } from "@firebase/firestore"
 import type { MaybeRef } from "@vueuse/shared"
@@ -11,7 +11,7 @@ import { isDef, tryOnScopeDispose } from "@vueuse/shared"
 import type { Ref } from "vue"
 import { computed, isRef, ref, watch } from "vue"
 
-// eslint-disable-next-line functional/no-mixed-types
+// eslint-disable-next-line functional/no-mixed-type
 export interface UseFirestoreOptions {
   errorHandler?: (err: Error) => void
   autoDispose?: boolean
@@ -71,14 +71,14 @@ export function useFirestore<T extends DocumentData>(
 ): [Ref<unknown>, () => void] {
   const {
     errorHandler = (err: Error) => console.error(err),
-    autoDispose = true,
+    autoDispose = true
   } = options
 
   const refOfDocRef = isRef(maybeDocRef)
     ? maybeDocRef
     : computed(() => maybeDocRef)
 
-  // eslint-disable-next-line functional/no-let, @typescript-eslint/no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   let close = () => {}
   const data = ref() as Ref<T | T[] | null | undefined>
 

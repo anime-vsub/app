@@ -29,7 +29,7 @@ describe("getInfoTPost", () => {
       description: "",
       process: "",
       quality: "",
-      year: null,
+      year: null
     })
   })
   test("full", () => {
@@ -71,8 +71,8 @@ describe("getInfoTPost", () => {
       studio: "Soyep",
       genre: [
         { path: "/the-loai/phep-thuat/", name: "Fantasy" },
-        { path: "/the-loai/hanh-dong/", name: "Action" },
-      ],
+        { path: "/the-loai/hanh-dong/", name: "Action" }
+      ]
     })
   })
   test("countdown", () => {
@@ -96,7 +96,7 @@ describe("getInfoTPost", () => {
     </div>
     </div>
     </article>`)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-let
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let tmp: any
     expect(
       JSON.parse(JSON.stringify((tmp = getInfoTPost($("article"), Date.now()))))
@@ -121,9 +121,9 @@ describe("getInfoTPost", () => {
         { path: "/the-loai/drama/", name: "Drama" },
         { path: "/the-loai/hai-huoc/", name: "Comedy" },
         { path: "/the-loai/mystery/", name: "Mystery" },
-        { path: "/the-loai/hanh-dong/", name: "Action" },
+        { path: "/the-loai/hanh-dong/", name: "Action" }
       ],
-      time_release: tmp.time_release,
+      time_release: tmp.time_release
     })
   })
   test("countdown not absolute", () => {
@@ -170,9 +170,9 @@ describe("getInfoTPost", () => {
         { path: "/the-loai/drama/", name: "Drama" },
         { path: "/the-loai/hai-huoc/", name: "Comedy" },
         { path: "/the-loai/mystery/", name: "Mystery" },
-        { path: "/the-loai/hanh-dong/", name: "Action" },
+        { path: "/the-loai/hanh-dong/", name: "Action" }
       ],
-      time_release: null,
+      time_release: null
     })
   })
 })

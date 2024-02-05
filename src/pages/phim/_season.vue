@@ -4,7 +4,7 @@
     <div
       class="col-9"
       :class="{
-        'col-12': settingsStore.ui.modeMovie,
+        'col-12': settingsStore.ui.modeMovie
       }"
     >
       <!-- <q-responsive
@@ -38,7 +38,7 @@
         @cur-update="
           currentProgresWatch?.set($event.id, {
             cur: $event.cur,
-            dur: $event.dur,
+            dur: $event.dur
           })
         "
       />
@@ -170,20 +170,22 @@
                       size="2em"
                       color="grey"
                       max="10"
-                      :color-selected="([
-                                              'light-green-3',
-                                              'light-green-6',
-                                              'light-green-7',
+                      :color-selected="
+                        [
+                          'light-green-3',
+                          'light-green-6',
+                          'light-green-7',
 
-                                              'light-green-8',
-                                              'light-green-9',
-                                              'green',
+                          'light-green-8',
+                          'light-green-9',
+                          'green',
 
-                                              'green-5',
-                                              'green-6',
-                                              'green-7',
-                                              'green-8',
-                                            ] as unknown as any)"
+                          'green-5',
+                          'green-6',
+                          'green-7',
+                          'green-8'
+                        ] as unknown as any
+                      "
                     >
                       <template
                         v-for="(item, i) in ratesText"
@@ -435,7 +437,7 @@ import SkeletonCardVertical from "components/SkeletonCardVertical.vue"
 import Star from "components/Star.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import { EmbedFbCmt } from "embed-fbcmt-client/vue"
-import { get, set } from "idb-keyval"
+import { set } from "idb-keyval"
 import {
   QBtn,
   QCard,
@@ -446,7 +448,7 @@ import {
   QSkeleton,
   QTooltip,
   QVideo,
-  useQuasar,
+  useQuasar
 } from "quasar"
 import { AjaxLike, checkIsLike } from "src/apis/runs/ajax/like"
 import { PlayerFB } from "src/apis/runs/ajax/player-fb"
@@ -477,7 +479,7 @@ import {
   shallowRef,
   toRaw,
   watch,
-  watchEffect,
+  watchEffect
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -487,7 +489,7 @@ import type { ProgressWatchStore, Season } from "./_season.interface"
 import type {
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
-  ResponseDataSeasonSuccess,
+  ResponseDataSeasonSuccess
 } from "./response-data-season"
 // ================ follow ================
 // =======================================================
@@ -520,7 +522,6 @@ const { data, run, error, loading } = useRequest(
 
     if (!id) return Promise.reject()
 
-    // eslint-disable-next-line functional/no-let
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
 
     await Promise.any([
@@ -533,7 +534,6 @@ const { data, run, error, loading } = useRequest(
       }),
       PhimId(id)
         .then(async (data) => {
-          // eslint-disable-next-line functional/no-let
           let changed = !result // true if result is undefined
           const watcher =
             result &&
@@ -563,12 +563,13 @@ const { data, run, error, loading } = useRequest(
           }
         })
         .catch((err) => {
+          if (result) return
+
           error.value = err as Error
           console.error(err)
 
-          // eslint-disable-next-line functional/no-throw-statements
           throw err
-        }),
+        })
     ])
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -579,7 +580,7 @@ const { data, run, error, loading } = useRequest(
     refreshDepsAction() {
       // data.value = undefined
       run()
-    },
+    }
   }
 )
 function resetErrorAndRun() {
@@ -631,7 +632,7 @@ watch(
       seasons.value = season.map((item) => {
         return {
           name: item.name,
-          value: router.resolve(item.path).params.season as string,
+          value: router.resolve(item.path).params.season as string
         }
       })
       return
@@ -640,12 +641,12 @@ watch(
     seasons.value = [
       {
         name: "",
-        value: currentSeason.value,
-      },
+        value: currentSeason.value
+      }
     ]
   },
   {
-    immediate: true,
+    immediate: true
   }
 )
 
@@ -662,18 +663,18 @@ watch(
         return // "pending" or "success"
 
       Object.assign(item, {
-        status: "pending",
+        status: "pending"
       })
       try {
         console.log("%c fetch progress view", "color: blue")
         Object.assign(item, {
           status: "success",
-          response: await getProgressChaps(season),
+          response: await getProgressChaps(season)
         })
       } catch (err) {
         Object.assign(item, {
           status: "error",
-          error: err as Error,
+          error: err as Error
         })
       }
     })
@@ -699,7 +700,7 @@ async function fetchSeason(season: string) {
   }
 
   _cacheDataSeasons.set(season, {
-    status: "pending",
+    status: "pending"
   })
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const currentDataSeason = _cacheDataSeasons.get(season)!
@@ -709,9 +710,10 @@ async function fetchSeason(season: string) {
     const realIdSeason = getRealSeasonId(season)
 
     const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
-    // eslint-disable-next-line functional/no-let
-    let promiseLoadIndexedb: Promise<string | undefined> =
-      Promise.resolve(undefined)
+
+    let promiseLoadIndexedb: Promise<
+      Awaited<ReturnType<typeof PhimIdChap>> | undefined
+    > = Promise.resolve(undefined)
     await Promise.any([
       PhimIdChap(realIdSeason).then((data) => {
         // mergeListEp(response.value, data)
@@ -776,8 +778,8 @@ async function fetchSeason(season: string) {
 
           hash:
             data.value?.trailer ?? "https://www.youtube.com/embed/qUmMH_TGLS8",
-          name: t("trailer"),
-        },
+          name: t("trailer")
+        }
       ]
     } else if (response.value && response.value.chaps.length > 50) {
       console.log("large chap. spliting...")
@@ -786,7 +788,6 @@ async function fetchSeason(season: string) {
       function watchHandler() {
         if (!seasons.value || !response.value) return
 
-        // eslint-disable-next-line functional/no-let
         let indexMetaSeason = seasons.value.findIndex(
           (item) => item.value === season
         )
@@ -817,8 +818,8 @@ async function fetchSeason(season: string) {
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               ...response.value!,
               chaps: chapsSplited,
-              ssSibs: seasonsSplited,
-            },
+              ssSibs: seasonsSplited
+            }
           }
           if (dataOnCache) {
             Object.assign(dataOnCache, newData)
@@ -828,13 +829,13 @@ async function fetchSeason(season: string) {
 
           seasonsSplited.push({
             name,
-            value,
+            value
           })
         })
         const newSeasons = [
           ...seasons.value.slice(0, indexMetaSeason),
           ...seasonsSplited,
-          ...seasons.value.slice(indexMetaSeason + 1),
+          ...seasons.value.slice(indexMetaSeason + 1)
         ]
         console.log("current seasons: ", seasons.value)
         seasons.value = newSeasons
@@ -844,7 +845,6 @@ async function fetchSeason(season: string) {
         return responseOnlineStore.has(response)
       }
 
-      // eslint-disable-next-line functional/no-let
       let watcherResponse: (() => void) | undefined = watch(response, () => {
         const doneAll = watchHandler()
         if (doneAll) {
@@ -852,7 +852,7 @@ async function fetchSeason(season: string) {
           watcherResponse = undefined
         }
       })
-      // eslint-disable-next-line functional/no-let
+
       let watcherSeasons: (() => void) | undefined
       watcherSeasons = watch(
         () => typeof seasons.value !== "undefined",
@@ -887,7 +887,7 @@ async function fetchSeason(season: string) {
 
     Object.assign(currentDataSeason, {
       status: "success",
-      response,
+      response
     })
 
     console.log(_cacheDataSeasons)
@@ -897,7 +897,7 @@ async function fetchSeason(season: string) {
     Object.assign(currentDataSeason, {
       status: "error",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      response: err as any,
+      response: err as any
     })
   }
 }
@@ -917,7 +917,7 @@ const currentProgresWatch = computed(() => {
 
   return undefined
 })
-// eslint-disable-next-line functional/no-let
+
 let watcherChangeIdFirstEp: (() => void) | null = null
 onBeforeUnmount(() => watcherChangeIdFirstEp?.())
 /** @type - currentChap is episode id */
@@ -958,12 +958,11 @@ watchEffect(async (onCleanup): Promise<void> => {
         resolve(undefined)
         clearTimeout(timeout)
       })
-    }),
+    })
   ])
 
   if (episodeId !== undefined) {
     if (episodeId) {
-      // eslint-disable-next-line functional/no-let
       let watcher: () => void
       // eslint-disable-next-line prefer-const
       watcher = watchEffect(() => {
@@ -1012,7 +1011,7 @@ watch(
         router.replace({
           path: `/phim/${route.params.season}/${correctChapName}-${currentChap.value}`,
           query: route.query,
-          hash: route.hash,
+          hash: route.hash
         })
         watcherRestoreLastEp()
       }
@@ -1049,20 +1048,20 @@ watchEffect(() => {
         name: "watch-anime",
         params: {
           ...route.params,
-          season: seasonAccuracy.value,
+          season: seasonAccuracy.value
         },
         query: route.query,
-        hash: route.hash,
+        hash: route.hash
       })
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
       router.replace({
         name: "not_found",
         params: {
-          catchAll: route.path.split("/").slice(1),
+          catchAll: route.path.split("/").slice(1)
         },
         query: route.query,
-        hash: route.hash,
+        hash: route.hash
       })
     }
   }
@@ -1087,7 +1086,7 @@ watchEffect(() => {
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
       query: route.query,
-      hash: route.hash,
+      hash: route.hash
     })
   } else {
     // old type url /phim/:season/:chap
@@ -1096,7 +1095,7 @@ watchEffect(() => {
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
       query: route.query,
-      hash: route.hash,
+      hash: route.hash
     })
   }
 })
@@ -1108,7 +1107,7 @@ useHead(
       ? t("tap-_chap-_name-_othername", [
           currentMetaChap.value.name,
           data.value.name,
-          data.value.othername,
+          data.value.othername
         ])
       : t("_name-_othername", [data.value.name, data.value.othername])
     const description = data.value.description
@@ -1125,15 +1124,15 @@ useHead(
         },
         {
           property: "og:url",
-          content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
-        },
+          content: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`
+        }
       ],
       link: [
         {
           rel: "canonical",
-          href: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`,
-        },
-      ],
+          href: `${process.env.APP_URL}phim/${realIdCurrentSeason.value}`
+        }
+      ]
     }
   })
 )
@@ -1160,7 +1159,7 @@ const nextChap = computed((): SiblingChap | undefined => {
     if (!currentMetaSeason.value) return
     return {
       season: currentMetaSeason.value,
-      chap: currentDataSeason.value.chaps[indexCurrentChap + 1],
+      chap: currentDataSeason.value.chaps[indexCurrentChap + 1]
     }
   }
 
@@ -1179,7 +1178,7 @@ const nextChap = computed((): SiblingChap | undefined => {
   if (!isLastSeason) {
     // first chap of next season
     return {
-      season: seasons.value[indexSeason + 1],
+      season: seasons.value[indexSeason + 1]
     }
   }
 
@@ -1202,7 +1201,7 @@ const prevChap = computed((): SiblingChap | undefined => {
     if (!currentMetaSeason.value) return
     return {
       season: currentMetaSeason.value,
-      chap: currentDataSeason.value.chaps[indexCurrentChap - 1],
+      chap: currentDataSeason.value.chaps[indexCurrentChap - 1]
     }
   }
 
@@ -1221,7 +1220,7 @@ const prevChap = computed((): SiblingChap | undefined => {
   if (!isFirstSeason) {
     // first chap of next season
     return {
-      season: seasons.value[indexSeason - 1],
+      season: seasons.value[indexSeason - 1]
     }
   }
 
@@ -1242,10 +1241,10 @@ watch(
             label: "HD",
             qualityCode: getQualityByLabel("HD"),
             preload: "auto",
-            type: "youtube",
-          },
+            type: "youtube"
+          }
         ],
-        playTech: "trailer",
+        playTech: "trailer"
       }
 
       return
@@ -1253,9 +1252,8 @@ watch(
 
     configPlayer.value = undefined
 
-    // eslint-disable-next-line functional/no-let
     let typeCurrentConfig: keyof typeof servers | null = null
-    // eslint-disable-next-line functional/no-let
+
     let loadedServerFB = false
     // setup watcher it
     const watcher = watch(
@@ -1307,7 +1305,7 @@ watch(
         } catch (err) {
           $q.notify({
             position: "bottom-right",
-            message: (err as Error).message,
+            message: (err as Error).message
           })
           console.error(err)
         }
@@ -1317,7 +1315,7 @@ watch(
     onCleanup(watcher)
   },
   {
-    immediate: true,
+    immediate: true
   }
 )
 const sources = computed(() => configPlayer.value?.link)
@@ -1335,13 +1333,13 @@ async function getProgressChaps(
       const { cur, dur } = item.data()
       progressChaps.set(item.id, {
         cur,
-        dur,
+        dur
       })
     })
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 
@@ -1370,7 +1368,7 @@ watch(
     }
   },
   {
-    immediate: true,
+    immediate: true
   }
 )
 
@@ -1380,7 +1378,7 @@ watch(
     follows.value = data?.follows ?? 0
   },
   {
-    immediate: true,
+    immediate: true
   }
 )
 
@@ -1388,7 +1386,7 @@ async function toggleFollow() {
   if (!authStore.isLogged) {
     $q.notify({
       position: "bottom-right",
-      message: t("hay-dang-nhap-truoc-de-theo-doi"),
+      message: t("hay-dang-nhap-truoc-de-theo-doi")
     })
     return
   }
@@ -1402,7 +1400,7 @@ async function toggleFollow() {
     position: "bottom-right",
     message: followed.value
       ? t("da-them-vao-danh-sach-theo-doi")
-      : t("da-xoa-khoi-danh-sach-theo-doi"),
+      : t("da-xoa-khoi-danh-sach-theo-doi")
   })
 }
 
@@ -1415,13 +1413,13 @@ function share() {
   navigator.share?.({
     title: t("xem-_name-season-_season", [
       data.value.name,
-      currentMetaSeason.value.name,
+      currentMetaSeason.value.name
     ]),
     text: t("xem-_name-tap-_chap", [
       data.value.name,
-      currentMetaChap.value.name,
+      currentMetaChap.value.name
     ]),
-    url: C_URL + route.path,
+    url: C_URL + route.path
   })
 }
 
@@ -1443,16 +1441,16 @@ async function addAnimePlaylist(idPlaylist: string) {
       poster: currentDataSeason.value?.poster ?? data.value.poster,
       nameSeason: metaSeason.name,
       chap: currentChap.value,
-      nameChap: currentMetaChap.value.name,
+      nameChap: currentMetaChap.value.name
     })
     $q.notify({
       position: "bottom-right",
-      message: t("da-theo-vao-danh-sach-phat"),
+      message: t("da-theo-vao-danh-sach-phat")
     })
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 }
@@ -1463,12 +1461,12 @@ async function removeAnimePlaylist(idPlaylist: string) {
     await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)
     $q.notify({
       position: "bottom-right",
-      message: t("da-xoa-khoi-danh-sach-phat"),
+      message: t("da-xoa-khoi-danh-sach-phat")
     })
   } catch (err) {
     $q.notify({
       position: "bottom-right",
-      message: (err as Error).message,
+      message: (err as Error).message
     })
   }
 }
@@ -1498,7 +1496,7 @@ const ratesText = computed(() => [
   t("co-ve-hay"),
   t("hay"),
   t("tuyet"),
-  t("hoan-hao"),
+  t("hoan-hao")
 ])
 watch(currentSeason, () => {
   myRate.value = 0
@@ -1512,7 +1510,7 @@ async function sendRate() {
       await new Promise<void>((resolve, reject) => {
         $q.dialog({
           title: t("ban-chac-muon-danh-gia-_star-sao-cho-season-nay-chu", [
-            myRate.value,
+            myRate.value
           ]),
           message: t(
             "ban-chi-co-the-danh-gia-mot-lan-cho-moi-season-anime-va-khong-the-sua-lai-sau-khi-danh-gia-hay-chac-chan-rang-ban-cam-thay--b-_text--b",
@@ -1521,7 +1519,7 @@ async function sendRate() {
           html: true,
           focus: "cancel",
           ok: { rounded: true, flat: true },
-          cancel: { rounded: true, flat: true },
+          cancel: { rounded: true, flat: true }
         })
           .onOk(() => {
             resolve()
@@ -1547,7 +1545,7 @@ async function sendRate() {
       if (success) {
         $q.notify({
           position: "bottom-right",
-          message: t("danh-gia-da-duoc-gui"),
+          message: t("danh-gia-da-duoc-gui")
         })
         // eslint-disable-next-line camelcase
         countRate.value = count_rate
@@ -1558,13 +1556,13 @@ async function sendRate() {
 
       $q.notify({
         position: "bottom-right",
-        message: t("ban-da-danh-gia-anime-nay-truoc-day"),
+        message: t("ban-da-danh-gia-anime-nay-truoc-day")
       })
       myRate.value = rate
     } catch (err) {
       $q.notify({
         position: "bottom-right",
-        message: (err as Error).message,
+        message: (err as Error).message
       })
       rated.value = false
     }
@@ -1583,7 +1581,7 @@ watch(
     if (!currentMetaChap) return
     if (!name) return
     logEvent(analytics, "watching", {
-      value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
+      value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`
     })
   },
   { immediate: true }
@@ -1645,7 +1643,9 @@ watch(
   margin-top: 8px;
   background: rgb(0, 190, 6);
   display: block;
-  transition: width 0.22s ease, left 0.22s ease;
+  transition:
+    width 0.22s ease,
+    left 0.22s ease;
   transform: translateX(-50%);
   z-index: 12;
 }

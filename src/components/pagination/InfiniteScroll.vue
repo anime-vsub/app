@@ -35,7 +35,7 @@ const emit = defineEmits<{
 defineExpose({
   reset() {
     infiniteScrollRef.value?.reset()
-  },
+  }
 })
 </script>
 

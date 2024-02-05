@@ -1,617 +1,617 @@
-<!DOCTYPE html>  
-<html>  
-<head>  
-<title>Tonikaku Kawaii [BD] Trọn bộ</title>  
-<meta name="description" content="[Full] Tonikaku Kawaii [BD]: Lớn lên bị chế giễu vì cái tên kỳ lạ của mình, Nasa Yuzaki cố gắng để được mọi người nhớ đến vì điều gì đó nhiều..." />  
-<meta name="keywords" content="Tonikaku Kawaii [BD], TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon, Tonikaku Kawaii [BD] vietsub, TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon vietsub, xem phim Tonikaku Kawaii [BD], Tonikaku Kawaii [BD] full, Tonikaku Kawaii [BD] tron bo, Tonikaku Kawaii [BD] 2020" />  
-<meta itemprop="name" content="Tonikaku Kawaii [BD] Trọn bộ" />  
-<meta itemprop="description" content="[Full] Tonikaku Kawaii [BD]: Lớn lên bị chế giễu vì cái tên kỳ lạ của mình, Nasa Yuzaki cố gắng để được mọi người nhớ đến vì điều gì đó nhiều..." />  
-<meta itemprop="image" content="http://cdn.animevietsub.cc/data/banner/2020/09/30/animevsub-XTTu7FshZj.jpg" />  
-<meta itemprop="image" content="http://cdn.animevietsub.cc/data/poster/2020/09/30/animevsub-1NmQPMC9x0.jpg" />  
-<meta property="og:title" content="Tonikaku Kawaii [BD] Trọn bộ" />  
-<meta property="og:type" content="video.movie" />  
-<meta property="og:description" content="[Full] Tonikaku Kawaii [BD]: Lớn lên bị chế giễu vì cái tên kỳ lạ của mình, Nasa Yuzaki cố gắng để được mọi người nhớ đến vì điều gì đó nhiều..." />  
-<meta property="og:url" content="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" />  
-<link rel="canonical" href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" />  
-<meta property="og:image" content="http://cdn.animevietsub.cc/data/banner/2020/09/30/animevsub-XTTu7FshZj.jpg" />  
-<meta property="og:image" content="http://cdn.animevietsub.cc/data/poster/2020/09/30/animevsub-1NmQPMC9x0.jpg" />  
-<meta property="og:updated_time" content="1619785519" />  
-<meta charset="utf-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">  
-<base href="https://animevietsub.cc" />  
-<meta name="robots" content="index,follow" />  
-<meta name="revisit-after" content="1 days" />  
-<meta name="ROBOTS" content="index,follow,noodp" />  
-<meta name="googlebot" content="index,follow" />  
-<meta name="BingBOT" content="index,follow" />  
-<meta name="yahooBOT" content="index,follow" />  
-<meta name="slurp" content="index,follow" />  
-<meta name="msnbot" content="index,follow" />  
-<meta name="language" content="Vietnamese, English" />  
-<meta property="og:site_name" content="AnimeVietSub.cc" />  
-<meta property="fb:app_id" content="1214104412028762" />  
-<meta property="fb:pages" content="114595880190017" />  
-<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />  
-  
-  
-<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/bootstrap.min.css" />  
-<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/fonts.css?v=1.1" />  
-<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/style.css?v=1.6.2" />  
-<script type="text/javascript">  
-    var  MAIN_URL  =  'https://animevietsub.cc';  
-    var  AjaxURL  =  'https://animevietsub.cc/ajax/all';  
-  </script>  
-<script type="text/javascript">  
-        function w3tc_load_js(u) {  
-            var d = document,  
-                p = d.getElementsByTagName('HEAD')[0],  
-                c = d.createElement('script');  
-            c.type = 'text/javascript';  
-            c.src = u;  
-            p.appendChild(c);  
-        }  
-    </script>  
-<script type="text/javascript">  
-        w3tc_load_js('https://animevietsub.cc/statics/default/js/04538.default.include-footer.2dcd18.js?v=1.0.092022');  
-    </script>  
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/bootstrap.min.js?v=1.0"></script>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.raty.js?v=1.0"></script>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.md5.js"></script>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/fx/util.js?_1.2"></script>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/home-v1.js?v=1.5.1"></script>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.cookie.js?v=1.1"></script>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/schedule.js"></script>  
-<script type="text/javascript"> $(document).ready(function(){ !function () { /*referans:box*/ navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) || (devtoolsDetector.addListener(function (t, e) { t && (document.location.href = "http://animevietsub.cc") }), devtoolsDetector.lanuch()) }(); }); </script>  
-<script src="https://animevietsub.cc/statics/default/js/detect.dev.js?v=1.0" type="text/javascript"></script>  
-<script async src"https: static.amcdn.vn tka cdn.js" type"text javascript"></script>  
-<script>  
-  var arfAsync = arfAsync || [];  
-</script>  
-<script id="arf-core-js" onerror="window.arferrorload=true;" src="//media1.admicro.vn/cms/Arf.min.js" async></script>  
-<script type='application/ld+json'>  
-  {  
-    "@context": "http:\\/\\/schema.org\\/",  
-    "@type": "TVSeries",  
-    "name": "Tonikaku Kawaii [BD] Tr\\u1ecdn b\\u1ed9",  
-    "description": "[Full] Tonikaku Kawaii [BD]: L\\u1edbn l\\u00ean b\\u1ecb ch\\u1ebf gi\\u1ec5u v\\u00ec c\\u00e1i t\\u00ean k\\u1ef3 l\\u1ea1 c\\u1ee7a m\\u00ecnh, Nasa Yuzaki c\\u1ed1 g\\u1eafng \\u0111\\u1ec3 \\u0111\\u01b0\\u1ee3c m\\u1ecdi ng\\u01b0\\u1eddi nh\\u1edb \\u0111\\u1ebfn v\\u00ec \\u0111i\\u1ec1u g\\u00ec \\u0111\\u00f3 nhi\\u1ec1u...",  
-    "url": "http:\\/\\/animevietsub.cc\\/phim\\/tonikaku-kawaii-a3860\\/",  
-    "image": "http:\\/\\/cdn.animevietsub.cc\\/data\\/banner\\/2020\\/09\\/30\\/animevsub-XTTu7FshZj.jpg",  
-    "aggregateRating": {  
-      "@type": "AggregateRating",  
-      "bestRating": "10",  
-      "worstRating": "1",  
-      "ratingCount": "4067",  
-      "ratingValue": "9.6"  
-    },  
-      "dateCreated": "2021-04-30T19:25:19+07:00",  
-    "director": "AnimeVietSub.cc"  
-  }  
-  </script>  
-<script type="application/ld+json">  
-  {  
-    "@context": "https://schema.org",  
-    "@type": "WebSite",  
-    "url": "http://animevietsub.cc/phim/tonikaku-kawaii-a3860/",  
-    "potentialAction": {  
-      "@type": "SearchAction",  
-      "target": "http://animevietsub.cc/tim-kiem/{keyword}/",  
-      "query-input": "required name=keyword"  
-    }  
-  }  
-  </script>  
-<script type="application/ld+json">  
-  {  
-  "@context": "https://schema.org",  
-  "@type": "BreadcrumbList",  
-  "itemListElement": [{"@type":"ListItem","position":1,"name":"Trang ch\\u1ee7","item":"http:\\/\\/animevietsub.cc"},{"@type":"ListItem","position":2,"name":"Anime b\\u1ed9","item":"http:\\/\\/animevietsub.cc\\/anime-bo\\/"},{"@type":"ListItem","position":3,"name":"Tonikaku Kawaii [BD]","item":"http:\\/\\/animevietsub.cc\\/phim\\/tonikaku-kawaii-a3860\\/"}]  }  
-  </script>  
-<script type="text/javascript">  
-                    <!--  
-            
-                    filmInfo.filmID = parseInt('3860');  
-                    filmInfo.title = "Tonikaku Kawaii [BD]";  
-                    filmInfo.fullUrl = "http://animevietsub.cc/phim/tonikaku-kawaii-a3860/";  
-                    -->  
-    </script>  
-</head>  
-<body class="post-template-default single single-post NoBrdRa">  
-<div class="Tp-Wp" id="Tp-Wp">  
-<script data-cfasync="false" type="text/javascript" src="//i8xkjci7nd.com/aas/r45d/vki/1923111/9d801fab.js"></script><header class="Header MnBrCn BgA">  
-<div class="MnBr EcBgA">  
-<div class="Container">  
-<figure class="Logo">  
-<a href="/" title="Xem anime Vietsub" rel="home"><img src="http://cdn.animevietsub.cc/data/logo/logoz.png" alt="Logo"></a>  
-</figure>  
-<span class="Button MenuBtn AAShwHdd-lnk CXHd" data-shwhdd="Tp-Wp"><i></i><i></i><i></i></span>  
-<span class="MenuBtnClose AAShwHdd-lnk CXHd" data-shwhdd="Tp-Wp"></span>  
-<div class="Search" id="SearchMobile" style="display:none">  
-<form method="post" id="form-search1" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchMobile')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>  
-<div class="search-suggest" style="display: none;">  
-<ul style="margin-bottom: 0;" id="search-suggest-list"></ul>  
-</div>  
-</div>  
-<div class="Rght BgA">  
-<div class="Search" id="SearchDesktop">  
-<form method="post" id="form-search" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchDesktop')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>  
-<div class="search-suggest" style="display: none;">  
-<ul style="margin-bottom: 0;" id="search-suggest-list"></ul>  
-</div>  
-</div>  
-<div class="Login">  
-<a href="/account/login/?_fxRef=http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" class="Button StylA">Đăng nhập</a>  
-</div>  
-<nav class="Menu">  
-<ul>  
-<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home menu-item-490"><a href="/">Trang chủ</a></li>  
-<li id="menu-item-495" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-495"><a href="#">Dạng Anime</a>  
-<ul class="sub-menu">  
-<li><a href="/anime-bo/">TV/Series</a></li>  
-<li><a href="/anime-le/">Movie/OVA</a></li>  
-<li><a href="/hoat-hinh-trung-quoc/">HH Trung Quốc</a></li>  
-<li><a href="/anime-sap-chieu/">Anime Sắp Chiếu</a></li>  
-<li><a href="/danh-sach/list-dang-chieu/">Anime Đang Chiếu</a></li>  
-<li><a href="/danh-sach/list-tron-bo/">Anime Trọn Bộ</a></li>  
-</ul>  
-</li>  
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-493"><a href="/bang-xep-hang.html">Top Anime</a>  
-<ul class="sub-menu">  
-<li><a href="/bang-xep-hang/day.html">Theo Ngày</a></li>  
-<li><a href="/bang-xep-hang/voted.html">Yêu Thích</a></li>  
-<li><a href="/bang-xep-hang/month.html">Theo Tháng</a></li>  
-<li><a href="/bang-xep-hang/season.html">Theo Mùa</a></li>  
-<li><a href="/bang-xep-hang/year.html">Theo Năm</a></li>  
-</ul>  
-</li>  
-<li id="menu-item-494" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-494"><a href="#">THỂ LOẠI</a>  
-<ul class="sub-menu"><li><a href="http://animevietsub.cc/the-loai/hanh-dong/">Action</a></li><li><a href="http://animevietsub.cc/the-loai/phieu-luu/">Adventure</a></li><li><a href="http://animevietsub.cc/the-loai/cartoon/">Cartoon</a></li><li><a href="http://animevietsub.cc/the-loai/hai-huoc/">Comedy</a></li><li><a href="http://animevietsub.cc/the-loai/dien-loan/">Dementia</a></li><li><a href="http://animevietsub.cc/the-loai/demons/">Demons</a></li><li><a href="http://animevietsub.cc/the-loai/drama/">Drama</a></li><li><a href="http://animevietsub.cc/the-loai/ecchi/">Ecchi</a></li><li><a href="http://animevietsub.cc/the-loai/phep-thuat/">Fantasy</a></li><li><a href="http://animevietsub.cc/the-loai/tro-choi/">Game</a></li><li><a href="http://animevietsub.cc/the-loai/harem/">Harem</a></li><li><a href="http://animevietsub.cc/the-loai/lich-su/">Historical</a></li><li><a href="http://animevietsub.cc/the-loai/kinh-di/">Horror</a></li><li><a href="http://animevietsub.cc/the-loai/josei/">Josei</a></li><li><a href="http://animevietsub.cc/the-loai/tre-em/">Kids</a></li><li><a href="http://animevietsub.cc/the-loai/live-action/">Live Action</a></li><li><a href="http://animevietsub.cc/the-loai/ma-thuat/">Magic</a></li><li><a href="http://animevietsub.cc/the-loai/martial-arts/">Martial Arts</a></li><li><a href="http://animevietsub.cc/the-loai/mecha/">Mecha</a></li><li><a href="http://animevietsub.cc/the-loai/quan-doi/">Military</a></li><li><a href="http://animevietsub.cc/the-loai/am-nhac/">Music</a></li><li><a href="http://animevietsub.cc/the-loai/mystery/">Mystery</a></li><li><a href="http://animevietsub.cc/the-loai/parody/">Parody</a></li><li><a href="http://animevietsub.cc/the-loai/police/">Police</a></li><li><a href="http://animevietsub.cc/the-loai/psychological/">Psychological</a></li><li><a href="http://animevietsub.cc/the-loai/tinh-cam/">Romance</a></li><li><a href="http://animevietsub.cc/the-loai/samurai/">Samurai</a></li><li><a href="http://animevietsub.cc/the-loai/truong-hoc/">School</a></li><li><a href="http://animevietsub.cc/the-loai/sci-fi/">Sci-Fi</a></li><li><a href="http://animevietsub.cc/the-loai/seinen/">Seinen</a></li><li><a href="http://animevietsub.cc/the-loai/shoujo/">Shoujo</a></li><li><a href="http://animevietsub.cc/the-loai/shoujo-ai/">Shoujo Ai</a></li><li><a href="http://animevietsub.cc/the-loai/shounen/">Shounen</a></li><li><a href="http://animevietsub.cc/the-loai/shounen-ai/">Shounen Ai</a></li><li><a href="http://animevietsub.cc/the-loai/doi-thuong/">Slice of Life</a></li><li><a href="http://animevietsub.cc/the-loai/space/">Space</a></li><li><a href="http://animevietsub.cc/the-loai/the-thao/">Sports</a></li><li><a href="http://animevietsub.cc/the-loai/super-power/">Super Power</a></li><li><a href="http://animevietsub.cc/the-loai/sieu-nhien/">Supernatural</a></li><li><a href="http://animevietsub.cc/the-loai/thriller/">Thriller</a></li><li><a href="http://animevietsub.cc/the-loai/tokusatsu/">Tokusatsu</a></li><li><a href="http://animevietsub.cc/the-loai/vampire/">Vampire</a></li><li><a href="http://animevietsub.cc/the-loai/yaoi/">Yaoi</a></li><li><a href="http://animevietsub.cc/the-loai/yuri/">Yuri</a></li></ul>  
-</li>  
-<li id="menu-item-497" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-497"><a href="#">Season</a>  
-<ul class="sub-menu">  
-<li><a href="/season/winter/2022/">Mùa Đông 2022</a></li>  
-<li><a href="/season/spring/2022/">Mùa Xuân 2022</a></li>  
-<li><a href="/season/summer/2022/">Mùa Hạ 2022</a></li>  
-<li><a href="/season/autumn/2022/">Mùa Thu 2022</a></li>  
-<li><a href="/season/winter/2021/">Mùa Đông 2021</a></li>  
-<li><a href="/season/spring/2021/">Mùa Xuân 2021</a></li>  
-<li><a href="/season/summer/2021/">Mùa Hạ 2021</a></li>  
-<li><a href="/season/autumn/2021/">Mùa Thu 2021</a></li>  
-<li><a href="/season/winter/2020/">Mùa Đông 2020</a></li>  
-<li><a href="/season/spring/2020/">Mùa Xuân 2020</a></li>  
-<li><a href="/season/summer/2020/">Mùa Hạ 2020</a></li>  
-<li><a href="/season/autumn/2020/">Mùa Thu 2020</a></li>  
-<li><a href="/season/winter/2019/">Mùa Đông 2019</a></li>  
-<li><a href="/season/spring/2019/">Mùa Xuân 2019</a></li>  
-<li><a href="/season/summer/2019/">Mùa Hạ 2019</a></li>  
-<li><a href="/season/autumn/2019/">Mùa Thu 2019</a></li>  
-<li><a href="/season/winter/2018/">Mùa Đông 2018</a></li>  
-<li><a href="/season/spring/2018/">Mùa Xuân 2018</a></li>  
-<li><a href="/season/summer/2018/">Mùa Hạ 2018</a></li>  
-<li><a href="/season/autumn/2018/">Mùa Thu 2018</a></li>  
-<li><a href="/season/winter/2017/">Mùa Đông 2017</a></li>  
-<li><a href="/season/spring/2017/">Mùa Xuân 2017</a></li>  
-<li><a href="/season/summer/2017/">Mùa Hạ 2017</a></li>  
-<li><a href="/season/autumn/2017/">Mùa Thu 2017</a></li>  
-<li><a href="/season/winter/2016/">Mùa Đông 2016</a></li>  
-<li><a href="/season/spring/2016/">Mùa Xuân 2016</a></li>  
-<li><a href="/season/summer/2016/">Mùa Hạ 2016</a></li>  
-<li><a href="/season/autumn/2016/">Mùa Thu 2016</a></li>  
-<li><a href="/season/winter/2015/">Mùa Đông 2015</a></li>  
-<li><a href="/season/spring/2015/">Mùa Xuân 2015</a></li>  
-<li><a href="/season/summer/2015/">Mùa Hạ 2015</a></li>  
-<li><a href="/season/autumn/2015/">Mùa Thu 2015</a></li>  
-<li><a href="/season/winter/2014/">Mùa Đông 2014</a></li>  
-<li><a href="/season/spring/2014/">Mùa Xuân 2014</a></li>  
-<li><a href="/season/summer/2014/">Mùa Hạ 2014</a></li>  
-<li><a href="/season/autumn/2014/">Mùa Thu 2014</a></li>  
-</ul>  
-</li>  
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/anime/library/0-9/">Thư viện</a></li>  
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/lich-chieu-phim.html">Lịch chiếu</a></li>  
-</ul>  
-</nav>  
-</div>  
-</div>  
-</div>  
-</header> <div class="Body Container">  
-<div class="Content">  
-<div class="announcement"><span class="ann_title"><i class="fa-bullhorn"></i></span><span class="ann_text"><ul>  
-<li>  
-<p><span style="font-size:24px"><span style="color:#f3dd3d">Do vấn đề quảng c&aacute;o n&ecirc;n&nbsp;</span><span style="color:#e62117">animevietsub</span><span style="color:#f3dd3d"> bị nh&agrave; mạng chặn&nbsp;mời bạn truy cập</span><span style="color:#ffff66">&nbsp;</span><a href="http://animevietsub.co"><span style="color:#e62117">animevietsub.cc</span></a></span></p>  
-</li>  
-<li>  
-<p><span style="color:#f3dd3d"><span style="font-size:22px">Mời bạn tham gia group của AnimeVietsub </span></span><span style="font-size:22px"><a href="https://www.facebook.com/groups/fananimevietsub"><span style="color:#e62117">tại đ&acirc;y!</span></a></span></p>  
-</li>  
-<li>  
-<p><span style="color:#f3dd3d"><span style="font-size:22px">Do thiếu h&uacute;t kinh ph&iacute; n&ecirc;n quảng c&aacute;o c&oacute; thể g&acirc;y kh&oacute; chịu, rất mong c&aacute;c bạn th&ocirc;ng cảm!</span></span></p>  
-</li>  
-</ul></span></div> <div class="Ads ad-center-header"><div><center>  
-<a href="https://ychibatdiet.onelink.me/tYTw/News" target="_blank"><img src="https://i.imgur.com/8RF5FcF.gif" alt="gosu" width="720px" height="80px"></a>  
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6186261113573228" crossorigin="anonymous"></script>  
-  
-<ins class="adsbygoogle" style="display:inline-block;width:1100px;height:150px" data-ad-client="ca-pub-6186261113573228" data-ad-slot="6516846232"></ins>  
-<script>  
-     (adsbygoogle = window.adsbygoogle || []).push({});  
-</script>  
-<zone id="kwvia9z0"></zone>  
-<script>  
-arfAsync.push("kwvia9z0");  
-</script>  
-</center></div></div>  
-<ol class="breadcrumb">  
-<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Trang chủ" href="http://animevietsub.cc" itemprop="url"><span itemprop="name">Trang chủ</span></a><meta itemprop="position" content="1" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Anime bộ" href="http://animevietsub.cc/anime-bo/" itemprop="url"><span itemprop="name">Anime bộ</span></a><meta itemprop="position" content="2" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Shounen" href="http://animevietsub.cc/the-loai/shounen/" itemprop="url"><span itemprop="name">Shounen</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Romance" href="http://animevietsub.cc/the-loai/tinh-cam/" itemprop="url"><span itemprop="name">Romance</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Comedy" href="http://animevietsub.cc/the-loai/hai-huoc/" itemprop="url"><span itemprop="name">Comedy</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Phim Tonikaku Kawaii [BD]" href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" itemprop="url"><span itemprop="name">Tonikaku Kawaii [BD]</span></a><meta itemprop="position" content="4" /></li><li class="active"><span>Thông tin</span></li> </ol>  
-<div class="TpRwCont">  
-<main>  
-<article class="TPost Single">  
-<div class="social-button">  
-<div class="item_social"><div class="fb-like" data-href="http://animevietsub.tv/phim/-3860/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div></div>  
-<div class="item_social"><div class="fb-save" data-uri="http://animevietsub.tv/phim/-3860/" data-size="small"></div></div>  
-</div>  
-<header>  
-<h1 class="Title">Tonikaku Kawaii [BD]</h1>  
-<h2 class="SubTitle">TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon</h2>  
-<div class="Image">  
-<div class="tools-box"><div class="tools-box-bookmark normal" data-filmid="3860" style="display:none"><span class="bookmark-status"></span><span class="bookmark-action"></span></div></div>  
-<figure class="Objf"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2020/09/30/animevsub-1NmQPMC9x0.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Tonikaku Kawaii [BD] - TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon" /></figure>  
-<a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/xem-phim.html"><i class="TpMvPlay AAIco-play_arrow show"></i></a>  
-<a class="watch_button_more" title="Tonikaku Kawaii [BD] - TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon" href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/xem-phim.html">Xem phim </a>  
-</div>  
-<div class="Description">  
-Lớn lên bị chế giễu vì cái tên kỳ lạ của mình, Nasa Yuzaki cố gắng để được mọi người nhớ đến vì điều gì đó nhiều hơn. May mắn thay, có vẻ như anh ấy đang đi đúng hướng, đứng nhất trong các kỳ thi thử của quốc gia và chuẩn bị vào trường trung học mà anh ấy lựa chọn.Tuy nhiên, mọi thứ thay đổi chỉ trong một đêm khi anh nhận ra một cô gái qua đường trên đường về nhà. Mê mẩn trước vẻ dễ thương choáng ngợp của cô ấy, đó là tình yêu sét đánh dành cho Nasa. Nhưng trong cơn mê đắm, anh ta không nhận thấy nguy hiểm đang đến gần và phóng nhanh xuống đường và thấy mình đang đứng trước cửa tử. Chỉ còn sống nhờ sự can thiệp của cô gái, Nasa lấy hết can đảm để thổ lộ tình yêu của mình với cô, vì sợ rằng cô có thể biến mất khỏi cuộc đời anh. Cô chấp nhận lời cầu hôn của anh với một điều kiện: kết hôn, mà Nasa vui vẻ chấp nhận trước khi qua đời vì vết thương của anh. Tuy nhiên, khi tỉnh dậy, cô gái đã không còn nữa.Sau khi bình phục vết thương, Nasa gạt bỏ những tham vọng trước đây của mình và dành cả cuộc đời để tìm kiếm cô gái đã chiếm được trái tim mình, nhưng vài năm trôi qua vẫn vô ích. Nhưng vào một đêm, khi một vị khách bất ngờ đến gõ cửa nhà, Nasa thấy mình phải đối mặt với một người phụ nữ sẽ thay đổi thế giới của anh mãi mãi: vợ anh.  
-</div>  
-</header>  
-<footer class="ClFx">  
-<div class="VotesCn">  
-<div class="Prct">  
-<div id="TPVotes" data-percent="96"></div>  
-</div>  
-<div class="post-ratings">  
-<input id="hint_current" type="hidden" value="">  
-<input id="score_current" type="hidden" value="9.6">  
-<div id="star" data-score="9.6" style="cursor: pointer;"></div>  
-(Đánh giá <strong id="average_score">9.6</strong>/10 từ <strong class="num-rating">423</strong> thành viên)<br /><span class="post-ratings-text" id="hint"></span>  
-</div>  
-<div id="post-ratings-984-loading" class="post-ratings-loading"> <img src="./statics/images/loading.gif" class="post-ratings-image" />Đang tải...</div>  
-</div>  
-<p class="Info"> <span class="Time AAIco-access_time">12/12</span> <span class="Date AAIco-date_range"><a href="http://animevietsub.cc/danh-sach/all/all/all/2020" title="List phim năm 2020 Vietsub">2020</a></span> <span class="View AAIco-remove_red_eye">1,538,971 Lượt Xem</span></p>  
-</footer>  
-<br style="clear:both" />  
-<div class="MovieInfo TPost SeasonList"><div class="season_item"><a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" class="active" title="Phim Tonikaku Kawaii [BD]">Phần TV Series</a><a href="http://animevietsub.cc/phim/tonikaku-kawaii-sns-a4229/" title="Phim Tonikaku Kawaii: SNS">Phần OVA</a><a href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/" title="Phim Tonikaku Kawaii 2nd Season">Phần 2</a></div></div> <div class="TPostBg Objf"><img class="TPostBg" src="http://cdn.animevietsub.cc/data/big_banner/2020/09/30/animevsub-wfw1X0aETl.jpg" alt="Background"></div>  
-</article>  
-<div class="MovieInfo TPost Single">  
-<div class="MovieTabNav">  
-<div class="Lnk on AAIco-description" data-Mvtab="MvTb-Info">Thông tin phim</div>  
-<div class="Lnk AAIco-movie_filter" data-Mvtab="MvTb-Cast">Nhân vật</div>  
-<div class="Lnk AAIco-video_call" data-Mvtab="MvTb-Trailer">Trailer</div>  
-<div class="Lnk AAIco-collections" data-Mvtab="MvTb-Image">Hình ảnh</div>  
-</div>  
-<div class="MvTbCn on anmt" id="MvTb-Info">  
-<div class="mvici-left">  
-<ul class="InfoList">  
-<li class="AAIco-adjust latest_eps"><strong>Tập mới:</strong><a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/tap-12end-73974.html" title="Xem phim Tonikaku Kawaii [BD] Tập 12_END">12_END</a><a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/tap-11-73905.html" title="Xem phim Tonikaku Kawaii [BD] Tập 11">11</a><a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/tap-10-73803.html" title="Xem phim Tonikaku Kawaii [BD] Tập 10">10</a></li> <li class="AAIco-adjust"><strong>Trạng thái:</strong> Full</li>  
-<li class="AAIco-adjust"><strong>Thể loại:</strong> <a href="http://animevietsub.cc/anime-bo/" title="Anime bộ">Anime bộ</a>, <a href="http://animevietsub.cc/the-loai/shounen/" title="Shounen">Shounen</a>, <a href="http://animevietsub.cc/the-loai/tinh-cam/" title="Romance">Romance</a>, <a href="http://animevietsub.cc/the-loai/hai-huoc/" title="Comedy">Comedy</a>, </li>  
-<li class="AAIco-adjust"><strong>Đạo diễn:</strong> <a href="http://animevietsub.cc/tag/ikehata-hiroshi/" rel="follow, index" title="Xem Phim Ikehata Hiroshi">Ikehata Hiroshi</a></li>  
-<li class="AAIco-adjust"><strong>Quốc gia:</strong> <a href="http://animevietsub.cc/quoc-gia/jp/" title="Nhật Bản">Nhật Bản</a>, </li>  
-<li class="AAIco-adjust"><strong>Số người theo dõi:</strong> 2,791</li>  
-</ul>  
-</div>  
-<div class="mvici-right">  
-<ul class="InfoList">  
-<li class="AAIco-adjust"><strong>Thời lượng:</strong> 12/12</li>  
-<li class="AAIco-adjust"><strong>Chất lượng:</strong> <span class="Qlty">HD</span></li>  
-<li class="AAIco-adjust"><strong>Rating:</strong> <span class="imdb">None</span></li>  
-<li class="AAIco-adjust"><strong>Ngôn ngữ:</strong> VietSub</li>  
-<li class="AAIco-adjust"><strong>Studio:</strong> Seven Arcs</li> <li class="AAIco-adjust"><strong>Season: </strong><a href="http://animevietsub.cc/season/autumn/2020/" title="List anime mùa Thu - 2020 Vietsub">Mùa Thu - 2020</a></li>  
-</ul>  
-</div>  
-<div class="clearfix"></div>  
-</div>  
-<div class="MvTbCn anmt" id="MvTb-Cast">  
-<ul class="ListCast Rows AF A06 B03 C02 D20 E02">  
-<li> <a href="/nhan-vat/yuzaki-tsukasa.html" title="Nhân vật Yuzaki Tsukasa"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Yuzaki Tsukasa"></span> <figcaption>Yuzaki Tsukasa</figcaption> </figure> </a></li><li> <a href="/nhan-vat/yuzaki-nasa.html" title="Nhân vật Yuzaki Nasa"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Yuzaki Nasa"></span> <figcaption>Yuzaki Nasa</figcaption> </figure> </a></li><li> <a href="/nhan-vat/arisugawa-kaname.html" title="Nhân vật Arisugawa Kaname"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Arisugawa Kaname"></span> <figcaption>Arisugawa Kaname</figcaption> </figure> </a></li><li> <a href="/nhan-vat/arisugawa-aya.html" title="Nhân vật Arisugawa Aya"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Arisugawa Aya"></span> <figcaption>Arisugawa Aya</figcaption> </figure> </a></li><li> <a href="/nhan-vat/kaginoji-chitose.html" title="Nhân vật Kaginoji Chitose"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Kaginoji Chitose"></span> <figcaption>Kaginoji Chitose</figcaption> </figure> </a></li>   
-</ul>  
-</div>  
-<div class="MvTbCn anmt" id="MvTb-Trailer">  
-<div class="TPlayerCn BgA">  
-<div class="EcBgA">  
-<div class="TPlayer">  
-<div class="TPlayerTb Current" id="Opt1">  
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3M7w-ROU62U" frameborder="0" allowfullscreen=""></iframe>  
-</div>  
-<span class="AAIco-lightbulb_outline lgtbx-lnk"></span>  
-</div>  
-</div>  
-</div>  
-</div>  
-<div class="MvTbCn anmt" id="MvTb-Image">  
-<div class="ImageMovieList owl-carousel"><div class="item "> <img src="http://cdn.animevietsub.cc/data/big_banner/2020/09/30/animevsub-wfw1X0aETl.jpg" alt="Photo Tonikaku Kawaii [BD]" class="img-responsive">  
-<div class="carousel-caption"> Photo Tonikaku Kawaii [BD]</div>  
-</div></div> </div>  
-<div class="TPostBg Objf"></div>  
-</div>  
-<div class="Ads bellow_ads_player"><div>  
-<zone id="kwvim5do"></zone>  
-<script>  
-arfAsync.push("kwvim5do");  
-</script>  
-</div></div>  
-<div class="fbcmt" id="comments">  
-<div class="fbcmt title">Đừng quên để like page của AnimeVsub <div class="fb-like" data-href="https://www.facebook.com/animevsub/" data-layout="button_count" data-action="like" data-size="large" data-lazy="true" data-show-faces="true"></div> để cập nhật anime mỗi ngày</div>  
-<span style="color:#000000">Tham gia Discord <a href="https://bitly.com/discordAVS" target="_blank"><span style="color:#ff5722"><strong>tại đ&acirc;y!!</strong></span></a> hoặc Telegram <a href="https://t.me/animevietsub" target="_blank"><span style="color:#ff5722"><strong>tại đ&acirc;y!!</strong></span></a>để nhận th&ocirc;ng b&aacute;o anime mới nhanh nhất.</span>  
-<div class="Comment Wrt" id="respond">  
-<div class="fb-comments fb_iframe_widget" data-href="http://animevietsub.tv/phim/-3860/" data-numposts="10" data-width="100%" data-colorscheme="light" data-order-by="reverse_time"></div>  
-</div>  
-</div> <div id="mv-keywords">  
-<strong class="mr10">Keywords:</strong>  
-<a href="http://animevietsub.cc/tag/tonikaku-kawaii/" rel="follow, index" title="Xem Phim tonikaku kawaii">tonikaku kawaii</a>, <a href="http://animevietsub.cc/tag/tonikawa:-over-the-moon-for-you:/" rel="follow, index" title="Xem Phim tonikawa: over the moon for you:">tonikawa: over the moon for you:</a>, <a href="http://animevietsub.cc/tag/generally-cute/" rel="follow, index" title="Xem Phim generally cute">generally cute</a>, <a href="http://animevietsub.cc/tag/fly-me-to-the-moon/" rel="follow, index" title="Xem Phim fly me to the moon">fly me to the moon</a> Phim Tonikaku Kawaii [BD], TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon Vietsub, Tonikaku Kawaii [BD] Trọn Bộ, Tonikaku Kawaii [BD] Vuighe, Tonikaku Kawaii [BD] Anime47, Tonikaku Kawaii [BD] Youtube, Tonikaku Kawaii [BD] FPTplay, Tonikaku Kawaii [BD] Animehay, Tonikaku Kawaii [BD] bilibili, Tonikaku Kawaii [BD] iq, Tonikaku Kawaii [BD] Full Vietsub, Xem Ngay Tonikaku Kawaii [BD] Trọn Bộ, Tonikaku Kawaii [BD] 2020 Hot, Tonikaku Kawaii [BD] 2020 Đầy đủ, Phim Tonikaku Kawaii [BD] Đẩy đủ | Xem Tonikaku Kawaii [BD] Full, Coi Tonikaku Kawaii [BD] Trọn bộ, TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon, Phim Tonikaku Kawaii [BD] 2020, Xem Tonikaku Kawaii [BD]  
-</div>  
-<div class="Wdgt">  
-<div class="Title">Phim liên quan</div>  
-<div class="MovieListRelated owl-carousel">  
-<div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/" title="Tonikaku Kawaii 2nd Season (2099)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/02/24/animevsub-vziyRxKpU1.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Tonikaku Kawaii 2nd Season (2099)" /></figure>  
-<span class="mli-timeschedule" data-timer_second="2407549608">4y 28w 5d 3h 46m 48s</span><span class="b">2099-01-01</span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.7 trong số 10 dựa trên 126 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.7</div></div>  
-</div>  
-<div class="Title">Tonikaku Kawaii 2nd Season</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/tonikaku-kawaii-sns-a4229/" title="Tonikaku Kawaii: SNS (2021)">  
-<div class="Image">  
- <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2021/08/18/animevsub-HXKAyrZo5i.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Tonikaku Kawaii: SNS (2021)" /></figure>  
-<span class="mli-quality">HD</span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.8 trong số 10 dựa trên 196 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.8</div></div>  
-</div>  
-<div class="Title">Tonikaku Kawaii: SNS</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/shingetsutan-tsukihime-r1-a216/" title="Shingetsutan Tsukihime (2003)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/08/18/animevsub-20669.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Shingetsutan Tsukihime (2003)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.8 trong số 10 dựa trên 12 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.8</div></div>  
-</div>  
-<div class="Title">Shingetsutan Tsukihime</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-a260/" title="Ore no Imouto ga Konnani Kawaii Wake ga Nai (2010)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-24875.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ore no Imouto ga Konnani Kawaii Wake ga Nai (2010)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.6 trong số 10 dựa trên 36 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.6</div></div>  
-</div>  
-<div class="Title">Ore no Imouto ga Konnani Kawaii Wake ga Nai</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-a261/" title="Ore no Imouto ga Konnani Kawaii Wake ga Nai. (2013)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-45769.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ore no Imouto ga Konnani Kawaii Wake ga Nai. (2013)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.1 trong số 10 dựa trên 38 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.1</div></div>  
-</div>  
-<div class="Title">Ore no Imouto ga Konnani Kawaii Wake ga Nai.</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-specials-a262/" title="Ore no Imouto ga Konnani Kawaii Wake ga Nai. Specials (2013)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-51167.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ore no Imouto ga Konnani Kawaii Wake ga Nai. Specials (2013)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="7.1 trong số 10 dựa trên 23 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.1</div></div>  
-</div>  
-<div class="Title">Ore no Imouto ga Konnani Kawaii Wake ga Nai. Specials</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-r-a460/" title="Thuỷ Thủ Mặt Trăng R (1993)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-740.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng R (1993)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.7 trong số 10 dựa trên 7 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.7</div></div>  
-</div>  
-<div class="Title">Thuỷ Thủ Mặt Trăng R</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-s-a461/" title="Thuỷ Thủ Mặt Trăng S (1994)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-532.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng S (1994)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="7.7 trong số 10 dựa trên 6 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.7</div></div>  
-</div>  
-<div class="Title">Thuỷ Thủ Mặt Trăng S</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/sailor-moon-special-movie-i3-a465/" title="Sailor Moon (Special - Movie ) (1998)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-mAJ0DPb.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Sailor Moon (Special - Movie ) (1998)" /></figure>  
- <span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.5 trong số 10 dựa trên 6 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.5</div></div>  
-</div>  
-<div class="Title">Sailor Moon (Special - Movie )</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-a459/" title="Thuỷ Thủ Mặt Trăng (1992)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-20250.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng (1992)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="9.3 trong số 10 dựa trên 12 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.3</div></div>  
-</div>  
-<div class="Title">Thuỷ Thủ Mặt Trăng</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-supers-a462/" title="Thuỷ Thủ Mặt Trăng SuperS (1995)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-40267.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng SuperS (1995)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="8.7 trong số 10 dựa trên 7 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.7</div></div>  
-</div>  
-<div class="Title">Thuỷ Thủ Mặt Trăng SuperS</div>  
-</a>  
-</div>  
-</div><div class="TPostMv">  
-<div class="TPost B">  
-<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-sailor-stars-a463/" title="Thuỷ Thủ Mặt Trăng: Sailor Stars (1996)">  
-<div class="Image">  
-<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-996.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng: Sailor Stars (1996)" /></figure>  
-<span class="mli-eps">HOÀN<i>TẤT</i></span>  
-<div class="anime-extras"><div class="anime-avg-user-rating" title="6.8 trong số 10 dựa trên 8 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>6.8</div></div>  
-</div>  
-<div class="Title">Thuỷ Thủ Mặt Trăng: Sailor Stars</div>  
-</a>  
-</div>  
-</div>  
-</div>  
-</div>  
-</main>  
-<aside class="widget-area" role="complementary">  
-<section class="Wdgt">  
- <div class="Title">Hôm nay xem gì?</div><p>Nếu bạn buồn phiền không biết xem gì hôm nay. Hãy để chúng tôi chọn cho bạn</p><a href="http://animevietsub.cc/phim/doraemon-movie-26-nobita-no-kyouryuu-2006-a958/" class="Button TPlay AAIco-play_arrow">Xem Anime <strong>Ngẫu Nhiên</strong></a></section>  
-<div class="Dvr-300"><div><center>  
-<a href="https://fb.com/233536333844133" target="_blank"><img src="https://ci3.googleusercontent.com/mZI_lfpGW9NbuQ4qnbnfClQu3lVKccG067BGTYb6YVzaddILwDKSZ4Y_NIHXlkusgYOOI7ZicXMxk_XnnJEIxp3ovzOULO4RRywdmUNq7TPXkyB0-ZNY7xOHmjohwg=s0" alt="group" width="300px" height="250px"></a>  
-<zone id="kwvigxyu"></zone>  
-<script>  
-arfAsync.push("kwvigxyu");  
-</script>  
-<script data-cfasync="false" type="text/javascript" src="//i8xkjci7nd.com/lv/esnk/1890933/code.js" async id="__clb-1890933"></script>  
-</center></div></div>  
-  
-<section class="Wdgt" id="showChonLoc">  
-<div class="Title">ANIME MỚI CẬP NHẬT</div>  
-<ul class="MovieList Newepisode">  
-<li><a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/" title="Xem Anime Ame wo Tsugeru Hyouryuu Danchi"><span>Ame wo Tsugeru Hyouryuu Danchi</span><span>Full</span></a></li><li><a href="http://animevietsub.cc/phim/nho-ban-do-he-thong-chien-than-a4669/" title="Xem Anime Nhờ Bạn Đó! Hệ Thống Chiến Thần"><span>Nhờ Bạn Đó! Hệ Thống Chiến Thần</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/bay-vien-ngoc-rong-heroes-a3290/" title="Xem Anime Bảy Viên Ngọc Rồng Heroes"><span>Bảy Viên Ngọc Rồng Heroes</span><span>Tập 44</span></a></li><li><a href="http://animevietsub.cc/phim/hac-mon-a4672/" title="Xem Anime Hắc Môn"><span>Hắc Môn</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/digimon-ghost-game-a4348/" title="Xem Anime Digimon Ghost Game"><span>Digimon Ghost Game</span><span>Tập 42</span></a></li><li><a href="http://animevietsub.cc/phim/long-toc-a4695/" title="Xem Anime Long Tộc"><span>Long Tộc</span><span>Tập 06</span></a></li><li><a href="http://animevietsub.cc/phim/qi-jie-diyi-xian-that-gioi-de-nhat-tien-a4492/" title="Xem Anime Thất Giới Đệ Nhất Tiên"><span>Thất Giới Đệ Nhất Tiên</span><span>Tập 63</span></a></li><li><a href="http://animevietsub.cc/phim/thuong-lan-quyet-r1-a4648/" title="Xem Anime Thương Lan Quyết"><span>Thương Lan Quyết</span><span>Tập 11</span></a></li><li><a href="http://animevietsub.cc/phim/linh-kiem-ton-a3396/" title="Xem Anime Linh Kiếm Tôn"><span>Linh Kiếm Tôn</span><span>Tập 315</span></a></li><li><a href="http://animevietsub.cc/phim/nghich-thien-chi-ton-a4194/" title="Xem Anime Nghịch Thiên Chí Tôn"><span>Nghịch Thiên Chí Tôn</span><span>Tập 128</span></a></li>  
-<li><a href="/anime-moi/">Xem thêm..</a></li>  
-</ul>  
-</section>  
- <section class="Wdgt">  
-<div class="Title">Hỏi/đáp anime</div>  
-<div class="fbcmt" id="comments">  
-<div class="fbcmt title">Đừng quên để like page của AnimeVsub <div class="fb-like" data-href="https://www.facebook.com/animevsub/" data-layout="button_count" data-action="like" data-size="large" data-lazy="true" data-show-faces="true"></div> để cập nhật anime mỗi ngày</div>  
-<span style="color:#000000">Nếu bạn không truy cập được animevietsub.tv mời truy cập <a href="http://animevietsub.cc" target="_blank"><span style="color:#ff5722"><strong>animevietsub.cc</strong></span></a></span>  
-<div class="Comment Wrt" id="respond">  
-<div class="fb-comments fb_iframe_widget" data-href="http://animevietsub.tv" data-numposts="3" data-width="100%" data-colorscheme="light" data-order-by="reverse_time"></div>  
-</div>  
-</div> </section>  
-  
-<section class="Wdgt" id="showTopPhim">  
-<div class="Title">HOT TUẦN<div class="Top">  
-<a href="/anime-bo/" class="STPb Current" title="Anime TV/Series xem nhiều nhất tuần" data-tag="top-bo-week">TV/Series</a>  
-<a href="/anime-le/" class="STPb" title="Movie/OVA xem nhiều nhất tuần" data-tag="top-le-week">Movie/OVA</a>  
-</div></div>  
-<ul class="MovieList">  
-<li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/overlord-iv-a4263/"> <span class="Top">#1<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2022/06/16/animevsub-N3lu0GaZTE.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Overlord IV - Overlord 4, Overlord SS4"></figure></div><div class="Title">Overlord IV</div> </a><p class="Info"> <span class="Vote AAIco-star">9.6</span><span class="Time AAIco-access_time">11/13</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/one-piece-dao-hai-tac-a1/"> <span class="Top">#2<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2019/09/27/animevsub-sQCBqYz9ve.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="One Piece - Đảo Hải Tặc - Vua Hải Tặc"></figure></div><div class="Title">One Piece - Đảo Hải Tặc</div> </a><p class="Info"> <span class="Vote AAIco-star">9.1</span><span class="Time AAIco-access_time">1032/???</span> <span class="Date AAIco-date_range">1999</span> <span class="Qlty">FHD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/kinsou-no-vermeil-gakeppuchi-majutsushi-wa-saikyou-no-yakusai-to-mahou-sekai-wo-tsukisusumu-r2-a4603/"> <span class="Top">#3<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2022/07/20/animevsub-7lXaym9oxN.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu - Vermeil in Gold"></figure></div><div class="Title">Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu</div> </a><p class="Info"> <span class="Vote AAIco-star">8.3</span><span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/the-gioi-phep-thuat-a474/"> <span class="Top">#4<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2020/10/17/animevsub-IoEzyCjdCJ.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Black Clover (TV) - Black Clover (2017), Black Clover, Thế Giới Phép Thuật, Cỏ Ba Lá Đen"></figure></div><div class="Title">Black Clover (TV)</div> </a><p class="Info"> <span class="Vote AAIco-star">9.5</span><span class="Time AAIco-access_time">170/170</span> <span class="Date AAIco-date_range">2017</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-r3-a3/"> <span class="Top">#5<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2019/08/26/animevsub-bGw5lnUHTC.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Thám Tử Lừng Danh Conan - Detective Conan, Case Closed, Meitantei Conan"></figure></div><div class="Title">Thám Tử Lừng Danh Conan</div> </a><p class="Info"> <span class="Vote AAIco-star">9.4</span><span class="Time AAIco-access_time">1055/????</span> <span class="Date AAIco-date_range">1996</span> <span class="Qlty">HD</span></p></div></li>  
-</ul>  
-</section>  
- <div class="Dvr-300"> </div>  
-<div class="tag-list-main"><ul><li class="tag-item"><a class="tag-link" title="List anime thể loại Action - Comedy" href="http://animevietsub.cc/danh-sach/all/1-3/all/all/">List anime thể loại Action - Comedy</a><span class="tag-end">&nbsp;</span></li>  
-<li class="tag-item"><a class="tag-link" title="List anime thể loại Action  -Romance" href="http://animevietsub.cc/danh-sach/all/1-24/all/all/">List anime thể loại Action -Romance</a><span class="tag-end">&nbsp;</span></li>  
-<li class="tag-item"><a class="tag-link" title=" List anime thể loại Harem - Comedy" href="http://animevietsub.cc/danh-sach/all/3-10/all/all/"> List anime thể loại Harem - Comedy</a><span class="tag-end">&nbsp;</span></li>  
-<li class="tag-item"><a class="tag-link" title=" List Phim Hoạt Hình Trung Quốc" href="http://animevietsub.cc/hoat-hinh-trung-quoc/"> List Phim Hoạt Hình Trung Quốc</a><span class="tag-end">&nbsp;</span></li>  
-<li class="tag-item"><a class="tag-link" title="List anime Ghibli " href="http://animevietsub.cc/tag/ghibli/">List anime Ghibli </a><span class="tag-end">&nbsp;</span></li>  
-</ul></div> </aside> </div>  
-</div>  
-</div>  
-<footer class="Footer">  
-<div class="Container">  
-<div class="MnBrCn BgA">  
-<div class="MnBr EcBgA">  
-<div class="Container">  
-<figure class="Logo">  
-<a href="http://animevietsub.cc" title="Xem anime online" rel="home"><img src="http://cdn.animevietsub.cc/data/logo/logoz.png" alt="logo"></a>  
-</figure>  
-<div class="Rght">  
-<nav class="Menu">  
-<ul>  
-<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home menu-item-490"><a href="<?=$web_link;?>">XEM PHIM</a></li>  
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/yeu-cau-phim.html">YÊU CẦU ANIME</a></li>  
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/pages/discord.html">Chat Anime/Discord</a></li>  
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/pages/thuat-ngu.html">THUẬT NGỮ</a></li>  
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="https://fb.com/233536333844133">GROUP THẢO LUẬN</a></li>  
-</ul>  
-</nav>  
-<ul class="ListSocial">  
-<li>  
-<a target="_blank" href="https://www.facebook.com/animevsub/" class="fa fa-facebook"></a>  
-</li>  
-<li>  
-<a target="_blank" href="https://www.instagram.com/animevsub/" class="fa fa-instagram"></a>  
-</li>  
-<li>  
-<a target="_blank" href="https://twitter.com/AnimeVsub" class="fa-twitter"></a>  
-</li>  
- <li>  
-<a target="_blank" href="https://www.youtube.com/channel/UCtpcar8l0Tv51xlpwwGVpvA" class="fa-youtube-play"></a>  
-</li>  
-<li>  
-<a href="#Tp-Wp" class="Up AAIco-arrow_upward"></a>  
-</li>  
-</ul>  
-</div>  
-</div>  
-</div>  
-</div>  
-<div class="WebDescription">  
-<p><a href="http://www.kanefusafs.net/" rel="dofollow" target="_blank" title="Kanefusa Fansub">Kanefusa Fansub </a>&nbsp;<a href="http://animevietsub.cc/phim/dao-hai-tac-a1/" target="_blank" title="One Piece - Đảo Hải Tặc">One Piece, Vua Hải Tặc&nbsp;Đảo Hải Tặc</a>&nbsp;<a href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-a3/" target="_blank" title="Thám Tử Lừng Danh Conan">Th&aacute;m Tử Lừng Danh Conan</a>&nbsp;<a href="http://animevietsub.cc/hoat-hinh-trung-quoc" target="_blank" title="Hoạt Hình Trung Quốc">Hoạt H&igrave;nh Trung Quốc</a></p>  
-</div>  
-<div class="WebDescription">  
-Liên Hệ Quảng Cáo: <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="86e7e2f5c6e7e8efebe3f0efe3f2f5f3e4a8f2f0">[email&#160;protected]</a></b>  
-</div>  
-<p class="Copy"><a target="_blank" href="<?=$web_link;?>">© Copyright 2022 AnimeVietSub.TV. All rights reserved.</a></p>  
-</div></footer>  
-<div id="loading">  
-<div id="loading-center">  
-<div id="loading-center-absolute">  
-<div class="object" id="object_one"></div>  
-<div class="object" id="object_two"></div>  
-<div class="object" id="object_three"></div>  
-<div class="object" id="object_four"></div>  
-</div>  
-</div>  
-</div>  
-<div class="top-message"></div>  
-  
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-68882454-10"></script>  
-<script>  
-  window.dataLayer = window.dataLayer || [];  
-  function gtag(){dataLayer.push(arguments);}  
-  gtag('js', new Date());  
-  
-  gtag('config', 'UA-68882454-10');  
-</script>  
-<div style="position: fixed; top: 60px; right: 40px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: -700px; margin-right: 0px; visibility: visible;"><zone id="kwybox12"></zone>  
-<script>  
-arfAsync.push("kwybox12");  
-</script></div></div>  
-<div style="position: fixed; top: 60px; left: 70px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: 500px; margin-right: 0px; visibility: visible;"><zone id="kwybpkrw"></zone>  
-<script>  
-arfAsync.push("kwybpkrw");  
-</script></div></div> <div id="fb-root"></div>  
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0&appId=1214104412028762&autoLogAppEvents=1" nonce="zNEV1awW"></script>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/film.notiny.js?v=1.0"></script>  
-<!--[if lt IE 9]><script type="text/javascript" src="https://animevietsub.cc/statics/default/js/ie/css3mq.js"></script><![endif]-->  
-<!--[if lte IE 9]><script type="text/javascript" src="https://animevietsub.cc/statics/default/js/ie/ie.js"></script><![endif]-->  
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6186261113573228" crossorigin="anonymous"></script> </div>  
-<span class="lgtbx"></span>  
-<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/film.rating.js"></script>  
-</body>  
-</html>  
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tonikaku Kawaii [BD] Trọn bộ</title>
+<meta name="description" content="[Full] Tonikaku Kawaii [BD]: Lớn lên bị chế giễu vì cái tên kỳ lạ của mình, Nasa Yuzaki cố gắng để được mọi người nhớ đến vì điều gì đó nhiều..." />
+<meta name="keywords" content="Tonikaku Kawaii [BD], TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon, Tonikaku Kawaii [BD] vietsub, TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon vietsub, xem phim Tonikaku Kawaii [BD], Tonikaku Kawaii [BD] full, Tonikaku Kawaii [BD] tron bo, Tonikaku Kawaii [BD] 2020" />
+<meta itemprop="name" content="Tonikaku Kawaii [BD] Trọn bộ" />
+<meta itemprop="description" content="[Full] Tonikaku Kawaii [BD]: Lớn lên bị chế giễu vì cái tên kỳ lạ của mình, Nasa Yuzaki cố gắng để được mọi người nhớ đến vì điều gì đó nhiều..." />
+<meta itemprop="image" content="http://cdn.animevietsub.cc/data/banner/2020/09/30/animevsub-XTTu7FshZj.jpg" />
+<meta itemprop="image" content="http://cdn.animevietsub.cc/data/poster/2020/09/30/animevsub-1NmQPMC9x0.jpg" />
+<meta property="og:title" content="Tonikaku Kawaii [BD] Trọn bộ" />
+<meta property="og:type" content="video.movie" />
+<meta property="og:description" content="[Full] Tonikaku Kawaii [BD]: Lớn lên bị chế giễu vì cái tên kỳ lạ của mình, Nasa Yuzaki cố gắng để được mọi người nhớ đến vì điều gì đó nhiều..." />
+<meta property="og:url" content="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" />
+<link rel="canonical" href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" />
+<meta property="og:image" content="http://cdn.animevietsub.cc/data/banner/2020/09/30/animevsub-XTTu7FshZj.jpg" />
+<meta property="og:image" content="http://cdn.animevietsub.cc/data/poster/2020/09/30/animevsub-1NmQPMC9x0.jpg" />
+<meta property="og:updated_time" content="1619785519" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<base href="https://animevietsub.cc" />
+<meta name="robots" content="index,follow" />
+<meta name="revisit-after" content="1 days" />
+<meta name="ROBOTS" content="index,follow,noodp" />
+<meta name="googlebot" content="index,follow" />
+<meta name="BingBOT" content="index,follow" />
+<meta name="yahooBOT" content="index,follow" />
+<meta name="slurp" content="index,follow" />
+<meta name="msnbot" content="index,follow" />
+<meta name="language" content="Vietnamese, English" />
+<meta property="og:site_name" content="AnimeVietSub.cc" />
+<meta property="fb:app_id" content="1214104412028762" />
+<meta property="fb:pages" content="114595880190017" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+
+
+<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/fonts.css?v=1.1" />
+<link rel="stylesheet" type="text/css" href="https://animevietsub.cc/statics/default/css/style.css?v=1.6.2" />
+<script type="text/javascript">
+    var  MAIN_URL  =  'https://animevietsub.cc';
+    var  AjaxURL  =  'https://animevietsub.cc/ajax/all';
+  </script>
+<script type="text/javascript">
+        function w3tc_load_js(u) {
+            var d = document,
+                p = d.getElementsByTagName('HEAD')[0],
+                c = d.createElement('script');
+            c.type = 'text/javascript';
+            c.src = u;
+            p.appendChild(c);
+        }
+    </script>
+<script type="text/javascript">
+        w3tc_load_js('https://animevietsub.cc/statics/default/js/04538.default.include-footer.2dcd18.js?v=1.0.092022');
+    </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/bootstrap.min.js?v=1.0"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.raty.js?v=1.0"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.md5.js"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/fx/util.js?_1.2"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/home-v1.js?v=1.5.1"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/jquery.cookie.js?v=1.1"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/schedule.js"></script>
+<script type="text/javascript"> $(document).ready(function(){ !function () { /*referans:box*/ navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) || (devtoolsDetector.addListener(function (t, e) { t && (document.location.href = "http://animevietsub.cc") }), devtoolsDetector.lanuch()) }(); }); </script>
+<script src="https://animevietsub.cc/statics/default/js/detect.dev.js?v=1.0" type="text/javascript"></script>
+<script async src"https: static.amcdn.vn tka cdn.js" type"text javascript"></script>
+<script>
+  var arfAsync = arfAsync || [];
+</script>
+<script id="arf-core-js" onerror="window.arferrorload=true;" src="//media1.admicro.vn/cms/Arf.min.js" async></script>
+<script type='application/ld+json'>
+  {
+    "@context": "http:\\/\\/schema.org\\/",
+    "@type": "TVSeries",
+    "name": "Tonikaku Kawaii [BD] Tr\\u1ecdn b\\u1ed9",
+    "description": "[Full] Tonikaku Kawaii [BD]: L\\u1edbn l\\u00ean b\\u1ecb ch\\u1ebf gi\\u1ec5u v\\u00ec c\\u00e1i t\\u00ean k\\u1ef3 l\\u1ea1 c\\u1ee7a m\\u00ecnh, Nasa Yuzaki c\\u1ed1 g\\u1eafng \\u0111\\u1ec3 \\u0111\\u01b0\\u1ee3c m\\u1ecdi ng\\u01b0\\u1eddi nh\\u1edb \\u0111\\u1ebfn v\\u00ec \\u0111i\\u1ec1u g\\u00ec \\u0111\\u00f3 nhi\\u1ec1u...",
+    "url": "http:\\/\\/animevietsub.cc\\/phim\\/tonikaku-kawaii-a3860\\/",
+    "image": "http:\\/\\/cdn.animevietsub.cc\\/data\\/banner\\/2020\\/09\\/30\\/animevsub-XTTu7FshZj.jpg",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "bestRating": "10",
+      "worstRating": "1",
+      "ratingCount": "4067",
+      "ratingValue": "9.6"
+    },
+      "dateCreated": "2021-04-30T19:25:19+07:00",
+    "director": "AnimeVietSub.cc"
+  }
+  </script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "http://animevietsub.cc/phim/tonikaku-kawaii-a3860/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "http://animevietsub.cc/tim-kiem/{keyword}/",
+      "query-input": "required name=keyword"
+    }
+  }
+  </script>
+<script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{"@type":"ListItem","position":1,"name":"Trang ch\\u1ee7","item":"http:\\/\\/animevietsub.cc"},{"@type":"ListItem","position":2,"name":"Anime b\\u1ed9","item":"http:\\/\\/animevietsub.cc\\/anime-bo\\/"},{"@type":"ListItem","position":3,"name":"Tonikaku Kawaii [BD]","item":"http:\\/\\/animevietsub.cc\\/phim\\/tonikaku-kawaii-a3860\\/"}]  }
+  </script>
+<script type="text/javascript">
+                    <!--
+
+                    filmInfo.filmID = parseInt('3860');
+                    filmInfo.title = "Tonikaku Kawaii [BD]";
+                    filmInfo.fullUrl = "http://animevietsub.cc/phim/tonikaku-kawaii-a3860/";
+                    -->
+    </script>
+</head>
+<body class="post-template-default single single-post NoBrdRa">
+<div class="Tp-Wp" id="Tp-Wp">
+<script data-cfasync="false" type="text/javascript" src="//i8xkjci7nd.com/aas/r45d/vki/1923111/9d801fab.js"></script><header class="Header MnBrCn BgA">
+<div class="MnBr EcBgA">
+<div class="Container">
+<figure class="Logo">
+<a href="/" title="Xem anime Vietsub" rel="home"><img src="http://cdn.animevietsub.cc/data/logo/logoz.png" alt="Logo"></a>
+</figure>
+<span class="Button MenuBtn AAShwHdd-lnk CXHd" data-shwhdd="Tp-Wp"><i></i><i></i><i></i></span>
+<span class="MenuBtnClose AAShwHdd-lnk CXHd" data-shwhdd="Tp-Wp"></span>
+<div class="Search" id="SearchMobile" style="display:none">
+<form method="post" id="form-search1" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchMobile')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>
+<div class="search-suggest" style="display: none;">
+<ul style="margin-bottom: 0;" id="search-suggest-list"></ul>
+</div>
+</div>
+<div class="Rght BgA">
+<div class="Search" id="SearchDesktop">
+<form method="post" id="form-search" action="tim-kiem/"> <label class="Form-Icon"> <input type="text" name="keyword" placeholder="Tìm: tên tiếng nhật, anh, việt" onkeyup="onSearch(this.value,'SearchDesktop')" id="searchkeyword" autocomplete="off"> <button id="searchsubmit" type="submit"><i class="fa-search"></i></button> </label></form>
+<div class="search-suggest" style="display: none;">
+<ul style="margin-bottom: 0;" id="search-suggest-list"></ul>
+</div>
+</div>
+<div class="Login">
+<a href="/account/login/?_fxRef=http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" class="Button StylA">Đăng nhập</a>
+</div>
+<nav class="Menu">
+<ul>
+<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home menu-item-490"><a href="/">Trang chủ</a></li>
+<li id="menu-item-495" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-495"><a href="#">Dạng Anime</a>
+<ul class="sub-menu">
+<li><a href="/anime-bo/">TV/Series</a></li>
+<li><a href="/anime-le/">Movie/OVA</a></li>
+<li><a href="/hoat-hinh-trung-quoc/">HH Trung Quốc</a></li>
+<li><a href="/anime-sap-chieu/">Anime Sắp Chiếu</a></li>
+<li><a href="/danh-sach/list-dang-chieu/">Anime Đang Chiếu</a></li>
+<li><a href="/danh-sach/list-tron-bo/">Anime Trọn Bộ</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-493"><a href="/bang-xep-hang.html">Top Anime</a>
+<ul class="sub-menu">
+<li><a href="/bang-xep-hang/day.html">Theo Ngày</a></li>
+<li><a href="/bang-xep-hang/voted.html">Yêu Thích</a></li>
+<li><a href="/bang-xep-hang/month.html">Theo Tháng</a></li>
+<li><a href="/bang-xep-hang/season.html">Theo Mùa</a></li>
+<li><a href="/bang-xep-hang/year.html">Theo Năm</a></li>
+</ul>
+</li>
+<li id="menu-item-494" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-494"><a href="#">THỂ LOẠI</a>
+<ul class="sub-menu"><li><a href="http://animevietsub.cc/the-loai/hanh-dong/">Action</a></li><li><a href="http://animevietsub.cc/the-loai/phieu-luu/">Adventure</a></li><li><a href="http://animevietsub.cc/the-loai/cartoon/">Cartoon</a></li><li><a href="http://animevietsub.cc/the-loai/hai-huoc/">Comedy</a></li><li><a href="http://animevietsub.cc/the-loai/dien-loan/">Dementia</a></li><li><a href="http://animevietsub.cc/the-loai/demons/">Demons</a></li><li><a href="http://animevietsub.cc/the-loai/drama/">Drama</a></li><li><a href="http://animevietsub.cc/the-loai/ecchi/">Ecchi</a></li><li><a href="http://animevietsub.cc/the-loai/phep-thuat/">Fantasy</a></li><li><a href="http://animevietsub.cc/the-loai/tro-choi/">Game</a></li><li><a href="http://animevietsub.cc/the-loai/harem/">Harem</a></li><li><a href="http://animevietsub.cc/the-loai/lich-su/">Historical</a></li><li><a href="http://animevietsub.cc/the-loai/kinh-di/">Horror</a></li><li><a href="http://animevietsub.cc/the-loai/josei/">Josei</a></li><li><a href="http://animevietsub.cc/the-loai/tre-em/">Kids</a></li><li><a href="http://animevietsub.cc/the-loai/live-action/">Live Action</a></li><li><a href="http://animevietsub.cc/the-loai/ma-thuat/">Magic</a></li><li><a href="http://animevietsub.cc/the-loai/martial-arts/">Martial Arts</a></li><li><a href="http://animevietsub.cc/the-loai/mecha/">Mecha</a></li><li><a href="http://animevietsub.cc/the-loai/quan-doi/">Military</a></li><li><a href="http://animevietsub.cc/the-loai/am-nhac/">Music</a></li><li><a href="http://animevietsub.cc/the-loai/mystery/">Mystery</a></li><li><a href="http://animevietsub.cc/the-loai/parody/">Parody</a></li><li><a href="http://animevietsub.cc/the-loai/police/">Police</a></li><li><a href="http://animevietsub.cc/the-loai/psychological/">Psychological</a></li><li><a href="http://animevietsub.cc/the-loai/tinh-cam/">Romance</a></li><li><a href="http://animevietsub.cc/the-loai/samurai/">Samurai</a></li><li><a href="http://animevietsub.cc/the-loai/truong-hoc/">School</a></li><li><a href="http://animevietsub.cc/the-loai/sci-fi/">Sci-Fi</a></li><li><a href="http://animevietsub.cc/the-loai/seinen/">Seinen</a></li><li><a href="http://animevietsub.cc/the-loai/shoujo/">Shoujo</a></li><li><a href="http://animevietsub.cc/the-loai/shoujo-ai/">Shoujo Ai</a></li><li><a href="http://animevietsub.cc/the-loai/shounen/">Shounen</a></li><li><a href="http://animevietsub.cc/the-loai/shounen-ai/">Shounen Ai</a></li><li><a href="http://animevietsub.cc/the-loai/doi-thuong/">Slice of Life</a></li><li><a href="http://animevietsub.cc/the-loai/space/">Space</a></li><li><a href="http://animevietsub.cc/the-loai/the-thao/">Sports</a></li><li><a href="http://animevietsub.cc/the-loai/super-power/">Super Power</a></li><li><a href="http://animevietsub.cc/the-loai/sieu-nhien/">Supernatural</a></li><li><a href="http://animevietsub.cc/the-loai/thriller/">Thriller</a></li><li><a href="http://animevietsub.cc/the-loai/tokusatsu/">Tokusatsu</a></li><li><a href="http://animevietsub.cc/the-loai/vampire/">Vampire</a></li><li><a href="http://animevietsub.cc/the-loai/yaoi/">Yaoi</a></li><li><a href="http://animevietsub.cc/the-loai/yuri/">Yuri</a></li></ul>
+</li>
+<li id="menu-item-497" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-497"><a href="#">Season</a>
+<ul class="sub-menu">
+<li><a href="/season/winter/2022/">Mùa Đông 2022</a></li>
+<li><a href="/season/spring/2022/">Mùa Xuân 2022</a></li>
+<li><a href="/season/summer/2022/">Mùa Hạ 2022</a></li>
+<li><a href="/season/autumn/2022/">Mùa Thu 2022</a></li>
+<li><a href="/season/winter/2021/">Mùa Đông 2021</a></li>
+<li><a href="/season/spring/2021/">Mùa Xuân 2021</a></li>
+<li><a href="/season/summer/2021/">Mùa Hạ 2021</a></li>
+<li><a href="/season/autumn/2021/">Mùa Thu 2021</a></li>
+<li><a href="/season/winter/2020/">Mùa Đông 2020</a></li>
+<li><a href="/season/spring/2020/">Mùa Xuân 2020</a></li>
+<li><a href="/season/summer/2020/">Mùa Hạ 2020</a></li>
+<li><a href="/season/autumn/2020/">Mùa Thu 2020</a></li>
+<li><a href="/season/winter/2019/">Mùa Đông 2019</a></li>
+<li><a href="/season/spring/2019/">Mùa Xuân 2019</a></li>
+<li><a href="/season/summer/2019/">Mùa Hạ 2019</a></li>
+<li><a href="/season/autumn/2019/">Mùa Thu 2019</a></li>
+<li><a href="/season/winter/2018/">Mùa Đông 2018</a></li>
+<li><a href="/season/spring/2018/">Mùa Xuân 2018</a></li>
+<li><a href="/season/summer/2018/">Mùa Hạ 2018</a></li>
+<li><a href="/season/autumn/2018/">Mùa Thu 2018</a></li>
+<li><a href="/season/winter/2017/">Mùa Đông 2017</a></li>
+<li><a href="/season/spring/2017/">Mùa Xuân 2017</a></li>
+<li><a href="/season/summer/2017/">Mùa Hạ 2017</a></li>
+<li><a href="/season/autumn/2017/">Mùa Thu 2017</a></li>
+<li><a href="/season/winter/2016/">Mùa Đông 2016</a></li>
+<li><a href="/season/spring/2016/">Mùa Xuân 2016</a></li>
+<li><a href="/season/summer/2016/">Mùa Hạ 2016</a></li>
+<li><a href="/season/autumn/2016/">Mùa Thu 2016</a></li>
+<li><a href="/season/winter/2015/">Mùa Đông 2015</a></li>
+<li><a href="/season/spring/2015/">Mùa Xuân 2015</a></li>
+<li><a href="/season/summer/2015/">Mùa Hạ 2015</a></li>
+<li><a href="/season/autumn/2015/">Mùa Thu 2015</a></li>
+<li><a href="/season/winter/2014/">Mùa Đông 2014</a></li>
+<li><a href="/season/spring/2014/">Mùa Xuân 2014</a></li>
+<li><a href="/season/summer/2014/">Mùa Hạ 2014</a></li>
+<li><a href="/season/autumn/2014/">Mùa Thu 2014</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/anime/library/0-9/">Thư viện</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/lich-chieu-phim.html">Lịch chiếu</a></li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+</header> <div class="Body Container">
+<div class="Content">
+<div class="announcement"><span class="ann_title"><i class="fa-bullhorn"></i></span><span class="ann_text"><ul>
+<li>
+<p><span style="font-size:24px"><span style="color:#f3dd3d">Do vấn đề quảng c&aacute;o n&ecirc;n&nbsp;</span><span style="color:#e62117">animevietsub</span><span style="color:#f3dd3d"> bị nh&agrave; mạng chặn&nbsp;mời bạn truy cập</span><span style="color:#ffff66">&nbsp;</span><a href="http://animevietsub.co"><span style="color:#e62117">animevietsub.cc</span></a></span></p>
+</li>
+<li>
+<p><span style="color:#f3dd3d"><span style="font-size:22px">Mời bạn tham gia group của AnimeVietsub </span></span><span style="font-size:22px"><a href="https://www.facebook.com/groups/fananimevietsub"><span style="color:#e62117">tại đ&acirc;y!</span></a></span></p>
+</li>
+<li>
+<p><span style="color:#f3dd3d"><span style="font-size:22px">Do thiếu h&uacute;t kinh ph&iacute; n&ecirc;n quảng c&aacute;o c&oacute; thể g&acirc;y kh&oacute; chịu, rất mong c&aacute;c bạn th&ocirc;ng cảm!</span></span></p>
+</li>
+</ul></span></div> <div class="Ads ad-center-header"><div><center>
+<a href="https://ychibatdiet.onelink.me/tYTw/News" target="_blank"><img src="https://i.imgur.com/8RF5FcF.gif" alt="gosu" width="720px" height="80px"></a>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6186261113573228" crossorigin="anonymous"></script>
+
+<ins class="adsbygoogle" style="display:inline-block;width:1100px;height:150px" data-ad-client="ca-pub-6186261113573228" data-ad-slot="6516846232"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<zone id="kwvia9z0"></zone>
+<script>
+arfAsync.push("kwvia9z0");
+</script>
+</center></div></div>
+<ol class="breadcrumb">
+<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Trang chủ" href="http://animevietsub.cc" itemprop="url"><span itemprop="name">Trang chủ</span></a><meta itemprop="position" content="1" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Anime bộ" href="http://animevietsub.cc/anime-bo/" itemprop="url"><span itemprop="name">Anime bộ</span></a><meta itemprop="position" content="2" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Shounen" href="http://animevietsub.cc/the-loai/shounen/" itemprop="url"><span itemprop="name">Shounen</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Romance" href="http://animevietsub.cc/the-loai/tinh-cam/" itemprop="url"><span itemprop="name">Romance</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Comedy" href="http://animevietsub.cc/the-loai/hai-huoc/" itemprop="url"><span itemprop="name">Comedy</span></a><meta itemprop="position" content="3" /></li><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" title="Phim Tonikaku Kawaii [BD]" href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" itemprop="url"><span itemprop="name">Tonikaku Kawaii [BD]</span></a><meta itemprop="position" content="4" /></li><li class="active"><span>Thông tin</span></li> </ol>
+<div class="TpRwCont">
+<main>
+<article class="TPost Single">
+<div class="social-button">
+<div class="item_social"><div class="fb-like" data-href="http://animevietsub.tv/phim/-3860/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div></div>
+<div class="item_social"><div class="fb-save" data-uri="http://animevietsub.tv/phim/-3860/" data-size="small"></div></div>
+</div>
+<header>
+<h1 class="Title">Tonikaku Kawaii [BD]</h1>
+<h2 class="SubTitle">TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon</h2>
+<div class="Image">
+<div class="tools-box"><div class="tools-box-bookmark normal" data-filmid="3860" style="display:none"><span class="bookmark-status"></span><span class="bookmark-action"></span></div></div>
+<figure class="Objf"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2020/09/30/animevsub-1NmQPMC9x0.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Tonikaku Kawaii [BD] - TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon" /></figure>
+<a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/xem-phim.html"><i class="TpMvPlay AAIco-play_arrow show"></i></a>
+<a class="watch_button_more" title="Tonikaku Kawaii [BD] - TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon" href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/xem-phim.html">Xem phim </a>
+</div>
+<div class="Description">
+Lớn lên bị chế giễu vì cái tên kỳ lạ của mình, Nasa Yuzaki cố gắng để được mọi người nhớ đến vì điều gì đó nhiều hơn. May mắn thay, có vẻ như anh ấy đang đi đúng hướng, đứng nhất trong các kỳ thi thử của quốc gia và chuẩn bị vào trường trung học mà anh ấy lựa chọn.Tuy nhiên, mọi thứ thay đổi chỉ trong một đêm khi anh nhận ra một cô gái qua đường trên đường về nhà. Mê mẩn trước vẻ dễ thương choáng ngợp của cô ấy, đó là tình yêu sét đánh dành cho Nasa. Nhưng trong cơn mê đắm, anh ta không nhận thấy nguy hiểm đang đến gần và phóng nhanh xuống đường và thấy mình đang đứng trước cửa tử. Chỉ còn sống nhờ sự can thiệp của cô gái, Nasa lấy hết can đảm để thổ lộ tình yêu của mình với cô, vì sợ rằng cô có thể biến mất khỏi cuộc đời anh. Cô chấp nhận lời cầu hôn của anh với một điều kiện: kết hôn, mà Nasa vui vẻ chấp nhận trước khi qua đời vì vết thương của anh. Tuy nhiên, khi tỉnh dậy, cô gái đã không còn nữa.Sau khi bình phục vết thương, Nasa gạt bỏ những tham vọng trước đây của mình và dành cả cuộc đời để tìm kiếm cô gái đã chiếm được trái tim mình, nhưng vài năm trôi qua vẫn vô ích. Nhưng vào một đêm, khi một vị khách bất ngờ đến gõ cửa nhà, Nasa thấy mình phải đối mặt với một người phụ nữ sẽ thay đổi thế giới của anh mãi mãi: vợ anh.
+</div>
+</header>
+<footer class="ClFx">
+<div class="VotesCn">
+<div class="Prct">
+<div id="TPVotes" data-percent="96"></div>
+</div>
+<div class="post-ratings">
+<input id="hint_current" type="hidden" value="">
+<input id="score_current" type="hidden" value="9.6">
+<div id="star" data-score="9.6" style="cursor: pointer;"></div>
+(Đánh giá <strong id="average_score">9.6</strong>/10 từ <strong class="num-rating">423</strong> thành viên)<br /><span class="post-ratings-text" id="hint"></span>
+</div>
+<div id="post-ratings-984-loading" class="post-ratings-loading"> <img src="./statics/images/loading.gif" class="post-ratings-image" />Đang tải...</div>
+</div>
+<p class="Info"> <span class="Time AAIco-access_time">12/12</span> <span class="Date AAIco-date_range"><a href="http://animevietsub.cc/danh-sach/all/all/all/2020" title="List phim năm 2020 Vietsub">2020</a></span> <span class="View AAIco-remove_red_eye">1,538,971 Lượt Xem</span></p>
+</footer>
+<br style="clear:both" />
+<div class="MovieInfo TPost SeasonList"><div class="season_item"><a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/" class="active" title="Phim Tonikaku Kawaii [BD]">Phần TV Series</a><a href="http://animevietsub.cc/phim/tonikaku-kawaii-sns-a4229/" title="Phim Tonikaku Kawaii: SNS">Phần OVA</a><a href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/" title="Phim Tonikaku Kawaii 2nd Season">Phần 2</a></div></div> <div class="TPostBg Objf"><img class="TPostBg" src="http://cdn.animevietsub.cc/data/big_banner/2020/09/30/animevsub-wfw1X0aETl.jpg" alt="Background"></div>
+</article>
+<div class="MovieInfo TPost Single">
+<div class="MovieTabNav">
+<div class="Lnk on AAIco-description" data-Mvtab="MvTb-Info">Thông tin phim</div>
+<div class="Lnk AAIco-movie_filter" data-Mvtab="MvTb-Cast">Nhân vật</div>
+<div class="Lnk AAIco-video_call" data-Mvtab="MvTb-Trailer">Trailer</div>
+<div class="Lnk AAIco-collections" data-Mvtab="MvTb-Image">Hình ảnh</div>
+</div>
+<div class="MvTbCn on anmt" id="MvTb-Info">
+<div class="mvici-left">
+<ul class="InfoList">
+<li class="AAIco-adjust latest_eps"><strong>Tập mới:</strong><a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/tap-12end-73974.html" title="Xem phim Tonikaku Kawaii [BD] Tập 12_END">12_END</a><a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/tap-11-73905.html" title="Xem phim Tonikaku Kawaii [BD] Tập 11">11</a><a href="http://animevietsub.cc/phim/tonikaku-kawaii-a3860/tap-10-73803.html" title="Xem phim Tonikaku Kawaii [BD] Tập 10">10</a></li> <li class="AAIco-adjust"><strong>Trạng thái:</strong> Full</li>
+<li class="AAIco-adjust"><strong>Thể loại:</strong> <a href="http://animevietsub.cc/anime-bo/" title="Anime bộ">Anime bộ</a>, <a href="http://animevietsub.cc/the-loai/shounen/" title="Shounen">Shounen</a>, <a href="http://animevietsub.cc/the-loai/tinh-cam/" title="Romance">Romance</a>, <a href="http://animevietsub.cc/the-loai/hai-huoc/" title="Comedy">Comedy</a>, </li>
+<li class="AAIco-adjust"><strong>Đạo diễn:</strong> <a href="http://animevietsub.cc/tag/ikehata-hiroshi/" rel="follow, index" title="Xem Phim Ikehata Hiroshi">Ikehata Hiroshi</a></li>
+<li class="AAIco-adjust"><strong>Quốc gia:</strong> <a href="http://animevietsub.cc/quoc-gia/jp/" title="Nhật Bản">Nhật Bản</a>, </li>
+<li class="AAIco-adjust"><strong>Số người theo dõi:</strong> 2,791</li>
+</ul>
+</div>
+<div class="mvici-right">
+<ul class="InfoList">
+<li class="AAIco-adjust"><strong>Thời lượng:</strong> 12/12</li>
+<li class="AAIco-adjust"><strong>Chất lượng:</strong> <span class="Qlty">HD</span></li>
+<li class="AAIco-adjust"><strong>Rating:</strong> <span class="imdb">None</span></li>
+<li class="AAIco-adjust"><strong>Ngôn ngữ:</strong> VietSub</li>
+<li class="AAIco-adjust"><strong>Studio:</strong> Seven Arcs</li> <li class="AAIco-adjust"><strong>Season: </strong><a href="http://animevietsub.cc/season/autumn/2020/" title="List anime mùa Thu - 2020 Vietsub">Mùa Thu - 2020</a></li>
+</ul>
+</div>
+<div class="clearfix"></div>
+</div>
+<div class="MvTbCn anmt" id="MvTb-Cast">
+<ul class="ListCast Rows AF A06 B03 C02 D20 E02">
+<li> <a href="/nhan-vat/yuzaki-tsukasa.html" title="Nhân vật Yuzaki Tsukasa"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Yuzaki Tsukasa"></span> <figcaption>Yuzaki Tsukasa</figcaption> </figure> </a></li><li> <a href="/nhan-vat/yuzaki-nasa.html" title="Nhân vật Yuzaki Nasa"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Yuzaki Nasa"></span> <figcaption>Yuzaki Nasa</figcaption> </figure> </a></li><li> <a href="/nhan-vat/arisugawa-kaname.html" title="Nhân vật Arisugawa Kaname"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Arisugawa Kaname"></span> <figcaption>Arisugawa Kaname</figcaption> </figure> </a></li><li> <a href="/nhan-vat/arisugawa-aya.html" title="Nhân vật Arisugawa Aya"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Arisugawa Aya"></span> <figcaption>Arisugawa Aya</figcaption> </figure> </a></li><li> <a href="/nhan-vat/kaginoji-chitose.html" title="Nhân vật Kaginoji Chitose"> <figure> <span class="Objf"><img src="https://animevietsub.cc/statics/default/images/cast-image.png" alt="Nhân vật Kaginoji Chitose"></span> <figcaption>Kaginoji Chitose</figcaption> </figure> </a></li>
+</ul>
+</div>
+<div class="MvTbCn anmt" id="MvTb-Trailer">
+<div class="TPlayerCn BgA">
+<div class="EcBgA">
+<div class="TPlayer">
+<div class="TPlayerTb Current" id="Opt1">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3M7w-ROU62U" frameborder="0" allowfullscreen=""></iframe>
+</div>
+<span class="AAIco-lightbulb_outline lgtbx-lnk"></span>
+</div>
+</div>
+</div>
+</div>
+<div class="MvTbCn anmt" id="MvTb-Image">
+<div class="ImageMovieList owl-carousel"><div class="item "> <img src="http://cdn.animevietsub.cc/data/big_banner/2020/09/30/animevsub-wfw1X0aETl.jpg" alt="Photo Tonikaku Kawaii [BD]" class="img-responsive">
+<div class="carousel-caption"> Photo Tonikaku Kawaii [BD]</div>
+</div></div> </div>
+<div class="TPostBg Objf"></div>
+</div>
+<div class="Ads bellow_ads_player"><div>
+<zone id="kwvim5do"></zone>
+<script>
+arfAsync.push("kwvim5do");
+</script>
+</div></div>
+<div class="fbcmt" id="comments">
+<div class="fbcmt title">Đừng quên để like page của AnimeVsub <div class="fb-like" data-href="https://www.facebook.com/animevsub/" data-layout="button_count" data-action="like" data-size="large" data-lazy="true" data-show-faces="true"></div> để cập nhật anime mỗi ngày</div>
+<span style="color:#000000">Tham gia Discord <a href="https://bitly.com/discordAVS" target="_blank"><span style="color:#ff5722"><strong>tại đ&acirc;y!!</strong></span></a> hoặc Telegram <a href="https://t.me/animevietsub" target="_blank"><span style="color:#ff5722"><strong>tại đ&acirc;y!!</strong></span></a>để nhận th&ocirc;ng b&aacute;o anime mới nhanh nhất.</span>
+<div class="Comment Wrt" id="respond">
+<div class="fb-comments fb_iframe_widget" data-href="http://animevietsub.tv/phim/-3860/" data-numposts="10" data-width="100%" data-colorscheme="light" data-order-by="reverse_time"></div>
+</div>
+</div> <div id="mv-keywords">
+<strong class="mr10">Keywords:</strong>
+<a href="http://animevietsub.cc/tag/tonikaku-kawaii/" rel="follow, index" title="Xem Phim tonikaku kawaii">tonikaku kawaii</a>, <a href="http://animevietsub.cc/tag/tonikawa:-over-the-moon-for-you:/" rel="follow, index" title="Xem Phim tonikawa: over the moon for you:">tonikawa: over the moon for you:</a>, <a href="http://animevietsub.cc/tag/generally-cute/" rel="follow, index" title="Xem Phim generally cute">generally cute</a>, <a href="http://animevietsub.cc/tag/fly-me-to-the-moon/" rel="follow, index" title="Xem Phim fly me to the moon">fly me to the moon</a> Phim Tonikaku Kawaii [BD], TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon Vietsub, Tonikaku Kawaii [BD] Trọn Bộ, Tonikaku Kawaii [BD] Vuighe, Tonikaku Kawaii [BD] Anime47, Tonikaku Kawaii [BD] Youtube, Tonikaku Kawaii [BD] FPTplay, Tonikaku Kawaii [BD] Animehay, Tonikaku Kawaii [BD] bilibili, Tonikaku Kawaii [BD] iq, Tonikaku Kawaii [BD] Full Vietsub, Xem Ngay Tonikaku Kawaii [BD] Trọn Bộ, Tonikaku Kawaii [BD] 2020 Hot, Tonikaku Kawaii [BD] 2020 Đầy đủ, Phim Tonikaku Kawaii [BD] Đẩy đủ | Xem Tonikaku Kawaii [BD] Full, Coi Tonikaku Kawaii [BD] Trọn bộ, TONIKAWA: Over the Moon For You:, Generally Cute, Fly Me to the Moon, Phim Tonikaku Kawaii [BD] 2020, Xem Tonikaku Kawaii [BD]
+</div>
+<div class="Wdgt">
+<div class="Title">Phim liên quan</div>
+<div class="MovieListRelated owl-carousel">
+<div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/tonikaku-kawaii-2nd-season-a4476/" title="Tonikaku Kawaii 2nd Season (2099)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2022/02/24/animevsub-vziyRxKpU1.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Tonikaku Kawaii 2nd Season (2099)" /></figure>
+<span class="mli-timeschedule" data-timer_second="2407549608">4y 28w 5d 3h 46m 48s</span><span class="b">2099-01-01</span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.7 trong số 10 dựa trên 126 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.7</div></div>
+</div>
+<div class="Title">Tonikaku Kawaii 2nd Season</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/tonikaku-kawaii-sns-a4229/" title="Tonikaku Kawaii: SNS (2021)">
+<div class="Image">
+ <figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2021/08/18/animevsub-HXKAyrZo5i.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Tonikaku Kawaii: SNS (2021)" /></figure>
+<span class="mli-quality">HD</span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.8 trong số 10 dựa trên 196 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.8</div></div>
+</div>
+<div class="Title">Tonikaku Kawaii: SNS</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/shingetsutan-tsukihime-r1-a216/" title="Shingetsutan Tsukihime (2003)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/08/18/animevsub-20669.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Shingetsutan Tsukihime (2003)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.8 trong số 10 dựa trên 12 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.8</div></div>
+</div>
+<div class="Title">Shingetsutan Tsukihime</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-a260/" title="Ore no Imouto ga Konnani Kawaii Wake ga Nai (2010)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-24875.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ore no Imouto ga Konnani Kawaii Wake ga Nai (2010)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.6 trong số 10 dựa trên 36 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.6</div></div>
+</div>
+<div class="Title">Ore no Imouto ga Konnani Kawaii Wake ga Nai</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-a261/" title="Ore no Imouto ga Konnani Kawaii Wake ga Nai. (2013)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-45769.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ore no Imouto ga Konnani Kawaii Wake ga Nai. (2013)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.1 trong số 10 dựa trên 38 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.1</div></div>
+</div>
+<div class="Title">Ore no Imouto ga Konnani Kawaii Wake ga Nai.</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/ore-no-imouto-ga-konnani-kawaii-wake-ga-nai-specials-a262/" title="Ore no Imouto ga Konnani Kawaii Wake ga Nai. Specials (2013)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/08/21/animevsub-51167.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Ore no Imouto ga Konnani Kawaii Wake ga Nai. Specials (2013)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="7.1 trong số 10 dựa trên 23 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.1</div></div>
+</div>
+<div class="Title">Ore no Imouto ga Konnani Kawaii Wake ga Nai. Specials</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-r-a460/" title="Thuỷ Thủ Mặt Trăng R (1993)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-740.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng R (1993)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.7 trong số 10 dựa trên 7 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.7</div></div>
+</div>
+<div class="Title">Thuỷ Thủ Mặt Trăng R</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-s-a461/" title="Thuỷ Thủ Mặt Trăng S (1994)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-532.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng S (1994)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="7.7 trong số 10 dựa trên 6 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>7.7</div></div>
+</div>
+<div class="Title">Thuỷ Thủ Mặt Trăng S</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/sailor-moon-special-movie-i3-a465/" title="Sailor Moon (Special - Movie ) (1998)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-mAJ0DPb.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Sailor Moon (Special - Movie ) (1998)" /></figure>
+ <span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.5 trong số 10 dựa trên 6 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.5</div></div>
+</div>
+<div class="Title">Sailor Moon (Special - Movie )</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-a459/" title="Thuỷ Thủ Mặt Trăng (1992)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-20250.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng (1992)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="9.3 trong số 10 dựa trên 12 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>9.3</div></div>
+</div>
+<div class="Title">Thuỷ Thủ Mặt Trăng</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-supers-a462/" title="Thuỷ Thủ Mặt Trăng SuperS (1995)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-40267.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng SuperS (1995)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="8.7 trong số 10 dựa trên 7 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>8.7</div></div>
+</div>
+<div class="Title">Thuỷ Thủ Mặt Trăng SuperS</div>
+</a>
+</div>
+</div><div class="TPostMv">
+<div class="TPost B">
+<a href="http://animevietsub.cc/phim/thuy-thu-mat-trang-sailor-stars-a463/" title="Thuỷ Thủ Mặt Trăng: Sailor Stars (1996)">
+<div class="Image">
+<figure class="Objf TpMvPlay AAIco-play_arrow"><img width="180" height="260" src="http://cdn.animevietsub.cc/data/poster/2017/09/07/animevsub-996.jpg" class="attachment-img-mov-md size-img-mov-md wp-post-image" alt="Thuỷ Thủ Mặt Trăng: Sailor Stars (1996)" /></figure>
+<span class="mli-eps">HOÀN<i>TẤT</i></span>
+<div class="anime-extras"><div class="anime-avg-user-rating" title="6.8 trong số 10 dựa trên 8 thành viên đánh giá" data-action="click->anime-card#showLibraryEditor"><i class="fa fa-star"></i>6.8</div></div>
+</div>
+<div class="Title">Thuỷ Thủ Mặt Trăng: Sailor Stars</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<aside class="widget-area" role="complementary">
+<section class="Wdgt">
+ <div class="Title">Hôm nay xem gì?</div><p>Nếu bạn buồn phiền không biết xem gì hôm nay. Hãy để chúng tôi chọn cho bạn</p><a href="http://animevietsub.cc/phim/doraemon-movie-26-nobita-no-kyouryuu-2006-a958/" class="Button TPlay AAIco-play_arrow">Xem Anime <strong>Ngẫu Nhiên</strong></a></section>
+<div class="Dvr-300"><div><center>
+<a href="https://fb.com/233536333844133" target="_blank"><img src="https://ci3.googleusercontent.com/mZI_lfpGW9NbuQ4qnbnfClQu3lVKccG067BGTYb6YVzaddILwDKSZ4Y_NIHXlkusgYOOI7ZicXMxk_XnnJEIxp3ovzOULO4RRywdmUNq7TPXkyB0-ZNY7xOHmjohwg=s0" alt="group" width="300px" height="250px"></a>
+<zone id="kwvigxyu"></zone>
+<script>
+arfAsync.push("kwvigxyu");
+</script>
+<script data-cfasync="false" type="text/javascript" src="//i8xkjci7nd.com/lv/esnk/1890933/code.js" async id="__clb-1890933"></script>
+</center></div></div>
+
+<section class="Wdgt" id="showChonLoc">
+<div class="Title">ANIME MỚI CẬP NHẬT</div>
+<ul class="MovieList Newepisode">
+<li><a href="http://animevietsub.cc/phim/ame-wo-tsugeru-hyouryuu-danchi-a4740/" title="Xem Anime Ame wo Tsugeru Hyouryuu Danchi"><span>Ame wo Tsugeru Hyouryuu Danchi</span><span>Full</span></a></li><li><a href="http://animevietsub.cc/phim/nho-ban-do-he-thong-chien-than-a4669/" title="Xem Anime Nhờ Bạn Đó! Hệ Thống Chiến Thần"><span>Nhờ Bạn Đó! Hệ Thống Chiến Thần</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/bay-vien-ngoc-rong-heroes-a3290/" title="Xem Anime Bảy Viên Ngọc Rồng Heroes"><span>Bảy Viên Ngọc Rồng Heroes</span><span>Tập 44</span></a></li><li><a href="http://animevietsub.cc/phim/hac-mon-a4672/" title="Xem Anime Hắc Môn"><span>Hắc Môn</span><span>Tập 09</span></a></li><li><a href="http://animevietsub.cc/phim/digimon-ghost-game-a4348/" title="Xem Anime Digimon Ghost Game"><span>Digimon Ghost Game</span><span>Tập 42</span></a></li><li><a href="http://animevietsub.cc/phim/long-toc-a4695/" title="Xem Anime Long Tộc"><span>Long Tộc</span><span>Tập 06</span></a></li><li><a href="http://animevietsub.cc/phim/qi-jie-diyi-xian-that-gioi-de-nhat-tien-a4492/" title="Xem Anime Thất Giới Đệ Nhất Tiên"><span>Thất Giới Đệ Nhất Tiên</span><span>Tập 63</span></a></li><li><a href="http://animevietsub.cc/phim/thuong-lan-quyet-r1-a4648/" title="Xem Anime Thương Lan Quyết"><span>Thương Lan Quyết</span><span>Tập 11</span></a></li><li><a href="http://animevietsub.cc/phim/linh-kiem-ton-a3396/" title="Xem Anime Linh Kiếm Tôn"><span>Linh Kiếm Tôn</span><span>Tập 315</span></a></li><li><a href="http://animevietsub.cc/phim/nghich-thien-chi-ton-a4194/" title="Xem Anime Nghịch Thiên Chí Tôn"><span>Nghịch Thiên Chí Tôn</span><span>Tập 128</span></a></li>
+<li><a href="/anime-moi/">Xem thêm..</a></li>
+</ul>
+</section>
+ <section class="Wdgt">
+<div class="Title">Hỏi/đáp anime</div>
+<div class="fbcmt" id="comments">
+<div class="fbcmt title">Đừng quên để like page của AnimeVsub <div class="fb-like" data-href="https://www.facebook.com/animevsub/" data-layout="button_count" data-action="like" data-size="large" data-lazy="true" data-show-faces="true"></div> để cập nhật anime mỗi ngày</div>
+<span style="color:#000000">Nếu bạn không truy cập được animevietsub.tv mời truy cập <a href="http://animevietsub.cc" target="_blank"><span style="color:#ff5722"><strong>animevietsub.cc</strong></span></a></span>
+<div class="Comment Wrt" id="respond">
+<div class="fb-comments fb_iframe_widget" data-href="http://animevietsub.tv" data-numposts="3" data-width="100%" data-colorscheme="light" data-order-by="reverse_time"></div>
+</div>
+</div> </section>
+
+<section class="Wdgt" id="showTopPhim">
+<div class="Title">HOT TUẦN<div class="Top">
+<a href="/anime-bo/" class="STPb Current" title="Anime TV/Series xem nhiều nhất tuần" data-tag="top-bo-week">TV/Series</a>
+<a href="/anime-le/" class="STPb" title="Movie/OVA xem nhiều nhất tuần" data-tag="top-le-week">Movie/OVA</a>
+</div></div>
+<ul class="MovieList">
+<li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/overlord-iv-a4263/"> <span class="Top">#1<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2022/06/16/animevsub-N3lu0GaZTE.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Overlord IV - Overlord 4, Overlord SS4"></figure></div><div class="Title">Overlord IV</div> </a><p class="Info"> <span class="Vote AAIco-star">9.6</span><span class="Time AAIco-access_time">11/13</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/one-piece-dao-hai-tac-a1/"> <span class="Top">#2<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2019/09/27/animevsub-sQCBqYz9ve.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="One Piece - Đảo Hải Tặc - Vua Hải Tặc"></figure></div><div class="Title">One Piece - Đảo Hải Tặc</div> </a><p class="Info"> <span class="Vote AAIco-star">9.1</span><span class="Time AAIco-access_time">1032/???</span> <span class="Date AAIco-date_range">1999</span> <span class="Qlty">FHD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/kinsou-no-vermeil-gakeppuchi-majutsushi-wa-saikyou-no-yakusai-to-mahou-sekai-wo-tsukisusumu-r2-a4603/"> <span class="Top">#3<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2022/07/20/animevsub-7lXaym9oxN.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu - Vermeil in Gold"></figure></div><div class="Title">Kinsou no Vermeil: Gakeppuchi Majutsushi wa Saikyou no Yakusai to Mahou Sekai wo Tsukisusumu</div> </a><p class="Info"> <span class="Vote AAIco-star">8.3</span><span class="Time AAIco-access_time">11/12</span> <span class="Date AAIco-date_range">2022</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/the-gioi-phep-thuat-a474/"> <span class="Top">#4<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2020/10/17/animevsub-IoEzyCjdCJ.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Black Clover (TV) - Black Clover (2017), Black Clover, Thế Giới Phép Thuật, Cỏ Ba Lá Đen"></figure></div><div class="Title">Black Clover (TV)</div> </a><p class="Info"> <span class="Vote AAIco-star">9.5</span><span class="Time AAIco-access_time">170/170</span> <span class="Date AAIco-date_range">2017</span> <span class="Qlty">HD</span></p></div></li><li><div class="TPost A"> <a rel="bookmark" href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-r3-a3/"> <span class="Top">#5<i></i></span><div class="Image"><figure class="Objf TpMvPlay AAIco-play_arrow"><img width="55" height="85" src="http://cdn.animevietsub.cc/data/poster/2019/08/26/animevsub-bGw5lnUHTC.jpg" class="attachment-img-mov-sm size-img-mov-sm wp-post-image" alt="Thám Tử Lừng Danh Conan - Detective Conan, Case Closed, Meitantei Conan"></figure></div><div class="Title">Thám Tử Lừng Danh Conan</div> </a><p class="Info"> <span class="Vote AAIco-star">9.4</span><span class="Time AAIco-access_time">1055/????</span> <span class="Date AAIco-date_range">1996</span> <span class="Qlty">HD</span></p></div></li>
+</ul>
+</section>
+ <div class="Dvr-300"> </div>
+<div class="tag-list-main"><ul><li class="tag-item"><a class="tag-link" title="List anime thể loại Action - Comedy" href="http://animevietsub.cc/danh-sach/all/1-3/all/all/">List anime thể loại Action - Comedy</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title="List anime thể loại Action  -Romance" href="http://animevietsub.cc/danh-sach/all/1-24/all/all/">List anime thể loại Action -Romance</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title=" List anime thể loại Harem - Comedy" href="http://animevietsub.cc/danh-sach/all/3-10/all/all/"> List anime thể loại Harem - Comedy</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title=" List Phim Hoạt Hình Trung Quốc" href="http://animevietsub.cc/hoat-hinh-trung-quoc/"> List Phim Hoạt Hình Trung Quốc</a><span class="tag-end">&nbsp;</span></li>
+<li class="tag-item"><a class="tag-link" title="List anime Ghibli " href="http://animevietsub.cc/tag/ghibli/">List anime Ghibli </a><span class="tag-end">&nbsp;</span></li>
+</ul></div> </aside> </div>
+</div>
+</div>
+<footer class="Footer">
+<div class="Container">
+<div class="MnBrCn BgA">
+<div class="MnBr EcBgA">
+<div class="Container">
+<figure class="Logo">
+<a href="http://animevietsub.cc" title="Xem anime online" rel="home"><img src="http://cdn.animevietsub.cc/data/logo/logoz.png" alt="logo"></a>
+</figure>
+<div class="Rght">
+<nav class="Menu">
+<ul>
+<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-home menu-item-490"><a href="<?=$web_link;?>">XEM PHIM</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/yeu-cau-phim.html">YÊU CẦU ANIME</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/pages/discord.html">Chat Anime/Discord</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="/pages/thuat-ngu.html">THUẬT NGỮ</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-493"><a href="https://fb.com/233536333844133">GROUP THẢO LUẬN</a></li>
+</ul>
+</nav>
+<ul class="ListSocial">
+<li>
+<a target="_blank" href="https://www.facebook.com/animevsub/" class="fa fa-facebook"></a>
+</li>
+<li>
+<a target="_blank" href="https://www.instagram.com/animevsub/" class="fa fa-instagram"></a>
+</li>
+<li>
+<a target="_blank" href="https://twitter.com/AnimeVsub" class="fa-twitter"></a>
+</li>
+ <li>
+<a target="_blank" href="https://www.youtube.com/channel/UCtpcar8l0Tv51xlpwwGVpvA" class="fa-youtube-play"></a>
+</li>
+<li>
+<a href="#Tp-Wp" class="Up AAIco-arrow_upward"></a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="WebDescription">
+<p><a href="http://www.kanefusafs.net/" rel="dofollow" target="_blank" title="Kanefusa Fansub">Kanefusa Fansub </a>&nbsp;<a href="http://animevietsub.cc/phim/dao-hai-tac-a1/" target="_blank" title="One Piece - Đảo Hải Tặc">One Piece, Vua Hải Tặc&nbsp;Đảo Hải Tặc</a>&nbsp;<a href="http://animevietsub.cc/phim/tham-tu-lung-danh-conan-a3/" target="_blank" title="Thám Tử Lừng Danh Conan">Th&aacute;m Tử Lừng Danh Conan</a>&nbsp;<a href="http://animevietsub.cc/hoat-hinh-trung-quoc" target="_blank" title="Hoạt Hình Trung Quốc">Hoạt H&igrave;nh Trung Quốc</a></p>
+</div>
+<div class="WebDescription">
+Liên Hệ Quảng Cáo: <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="86e7e2f5c6e7e8efebe3f0efe3f2f5f3e4a8f2f0">[email&#160;protected]</a></b>
+</div>
+<p class="Copy"><a target="_blank" href="<?=$web_link;?>">© Copyright 2022 AnimeVietSub.TV. All rights reserved.</a></p>
+</div></footer>
+<div id="loading">
+<div id="loading-center">
+<div id="loading-center-absolute">
+<div class="object" id="object_one"></div>
+<div class="object" id="object_two"></div>
+<div class="object" id="object_three"></div>
+<div class="object" id="object_four"></div>
+</div>
+</div>
+</div>
+<div class="top-message"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script async src="https://www.googletagmanager.com/gtag/js?id=UA-68882454-10"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-68882454-10');
+</script>
+<div style="position: fixed; top: 60px; right: 40px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: -700px; margin-right: 0px; visibility: visible;"><zone id="kwybox12"></zone>
+<script>
+arfAsync.push("kwybox12");
+</script></div></div>
+<div style="position: fixed; top: 60px; left: 70px; width: 100%; height: 100%; overflow: hidden; visibility: hidden;"><div style="position: absolute; left: 50%; margin-left: 500px; margin-right: 0px; visibility: visible;"><zone id="kwybpkrw"></zone>
+<script>
+arfAsync.push("kwybpkrw");
+</script></div></div> <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0&appId=1214104412028762&autoLogAppEvents=1" nonce="zNEV1awW"></script>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/film.notiny.js?v=1.0"></script>
+<!--[if lt IE 9]><script type="text/javascript" src="https://animevietsub.cc/statics/default/js/ie/css3mq.js"></script><![endif]-->
+<!--[if lte IE 9]><script type="text/javascript" src="https://animevietsub.cc/statics/default/js/ie/ie.js"></script><![endif]-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6186261113573228" crossorigin="anonymous"></script> </div>
+<span class="lgtbx"></span>
+<script type="text/javascript" src="https://animevietsub.cc/statics/default/js/film.rating.js"></script>
+</body>
+</html>

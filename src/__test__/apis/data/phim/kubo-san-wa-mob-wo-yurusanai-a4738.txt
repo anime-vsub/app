@@ -1238,7 +1238,7 @@ arfAsync.push("kwvigxyu");\r
 <li><a href="/anime-moi/">Xem thêm..</a></li>
 </ul>
 </section>
- 
+
 <section class="Wdgt" id="showTopPhim">
 <div class="Title">HOT TUẦN<div class="Top">
  <a href="/anime-bo/" class="STPb Current" title="Anime TV/Series xem nhiều nhất tuần" data-tag="top-bo-week">TV/Series</a>

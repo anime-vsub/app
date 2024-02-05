@@ -17,7 +17,7 @@ export default function PhimIdChap(html: string) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         hash: $item.attr("data-hash")!,
 
-        name: $item.text().trim(),
+        name: $item.text().trim()
       } as const
     })
     .toArray()
@@ -41,6 +41,6 @@ export default function PhimIdChap(html: string) {
           number
         ]),
     image,
-    poster,
+    poster
   }
 }

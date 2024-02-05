@@ -13,8 +13,8 @@
         {
           [`c--main before:text-[rgb(0,194,52)] active ${classActive ?? ''}`]:
             find(item),
-          'mb-3': grid,
-        },
+          'mb-3': grid
+        }
       ]"
       :to="`/phim/${season}/${parseChapName(item.name)}-${item.id}`"
       :ref="(el: QBtn) => void (find(item) && (activeRef = el as QBtn))"
@@ -62,7 +62,7 @@ function scrollToView() {
 }
 
 watchEffect(scrollToView)
-// eslint-disable-next-line functional/no-let
+
 let tmp: ReturnType<
   Exclude<typeof props.progressChaps, undefined | null>["get"]
 >

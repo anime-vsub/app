@@ -14,7 +14,7 @@
           v-ripple
           @click="viewMode = 1"
           :class="{
-            'bg-light-300 text-dark': viewMode === 1,
+            'bg-light-300 text-dark': viewMode === 1
           }"
         >
           <Icon
@@ -30,7 +30,7 @@
           v-ripple
           @click="viewMode = 2"
           :class="{
-            'bg-light-300 text-dark': viewMode === 2,
+            'bg-light-300 text-dark': viewMode === 2
           }"
         >
           <Icon
@@ -56,7 +56,7 @@
       :key="item"
       class="mx-3 mt-5 rounded-xl overflow-hidden"
       :class="{
-        'news-item': viewMode === 2,
+        'news-item': viewMode === 2
       }"
     >
       <div>
@@ -102,7 +102,7 @@
       :key="item.title"
       class="relative mx-3 mt-5 rounded-xl overflow-hidden"
       :class="{
-        'news-item': viewMode === 2,
+        'news-item': viewMode === 2
       }"
       v-ripple
       @click="open(item.href)"

@@ -22,7 +22,7 @@
               activeIndex === index ||
               dayjs(
                 `${item.month}/${item.date}/${new Date().getFullYear()}`
-              ).isToday(),
+              ).isToday()
           }"
           @click="activeIndex = index"
         >
@@ -61,8 +61,11 @@
         <!-- overtime -->
         <template
           v-for="[time, items] in (_tmp = splitOverTime(
-              ((groupArray as unknown as any)(data[activeIndex].items, 'time_release'))
-            ))[0]"
+            (groupArray as unknown as any)(
+              data[activeIndex].items,
+              'time_release'
+            )
+          ))[0]"
           :key="time"
         >
           <div class="text-grey text-[12px] mt-7 mb-2 flex items-center">
@@ -111,7 +114,13 @@
       </template>
       <template
         v-else
-        v-for="(items, time) in ((groupArray as unknown as any)(data[activeIndex].items, 'time_release')) as Record<string, Exclude<(typeof data.value), undefined>['0']['items']>"
+        v-for="(items, time) in (groupArray as unknown as any)(
+          data[activeIndex].items,
+          'time_release'
+        ) as Record<
+          string,
+          Exclude<typeof data.value, undefined>['0']['items']
+        >"
         :key="time"
       >
         <div class="text-[12px] mt-7 mb-2 flex items-center">
@@ -166,20 +175,19 @@ useHead(
       meta: [
         { property: "og:title", content: title },
         { property: "og:description", content: description },
-        { property: "og:url" },
+        { property: "og:url" }
       ],
       link: [
         {
-          rel: "canonical",
-        },
-      ],
+          rel: "canonical"
+        }
+      ]
     }
   })
 )
 
 const { loading, data, error, run } = useRequest(() => LichChieuPhim())
 
-// eslint-disable-next-line functional/no-let
 let _tmp: ReturnType<typeof splitOverTime>
 
 function splitOverTime(
@@ -195,7 +203,7 @@ function splitOverTime(
 
   return [
     overWrite.slice(0, indexFirstItemNextTime),
-    overWrite.slice(indexFirstItemNextTime),
+    overWrite.slice(indexFirstItemNextTime)
   ]
 }
 

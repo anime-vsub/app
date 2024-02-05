@@ -103,14 +103,14 @@ useHead(
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       {
-        property: "og:url",
-      },
+        property: "og:url"
+      }
     ],
     link: [
       {
-        rel: "canonical",
-      },
-    ],
+        rel: "canonical"
+      }
+    ]
   }))
 )
 
@@ -119,26 +119,26 @@ const browsers = [
     icon: "logos:chrome",
     text: "Chrome",
     name: "Chrome",
-    href: "https://github.com/anime-vsub/extension-animevsub-helper/blob/main/install-on-chrome.md",
+    href: "https://github.com/anime-vsub/extension-animevsub-helper/blob/main/install-on-chrome.md"
   },
   {
     icon: "logos:firefox",
     text: "Firefox",
     name: "Firefox",
-    href: "https://addons.mozilla.org/vi/firefox/addon/animevsub-helper/",
+    href: "https://addons.mozilla.org/vi/firefox/addon/animevsub-helper/"
   },
   {
     icon: "logos:opera",
     text: "Opera",
     name: "Opera",
-    href: "https://github.com/anime-vsub/extension-animevsub-helper/blob/main/install-on-chrome.md",
+    href: "https://github.com/anime-vsub/extension-animevsub-helper/blob/main/install-on-chrome.md"
   },
   {
     icon: "logos:microsoft-edge",
     text: "Edge",
     name: "Edge",
-    href: "https://microsoftedge.microsoft.com/addons/detail/endghpbficnpbadbdalhbpecpgdcojig",
-  },
+    href: "https://microsoftedge.microsoft.com/addons/detail/endghpbficnpbadbdalhbpecpgdcojig"
+  }
 ]
 const currentBrowser = computed(() => {
   const currentBrowserName = new UAParser().getBrowser().name

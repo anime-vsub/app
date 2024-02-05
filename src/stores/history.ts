@@ -1,10 +1,9 @@
-/* eslint-disable functional/no-throw-statements */
 import type {
   CollectionReference,
   DocumentReference,
   DocumentSnapshot,
   QueryDocumentSnapshot,
-  Timestamp,
+  Timestamp
 } from "@firebase/firestore"
 import {
   collection,
@@ -17,7 +16,7 @@ import {
   serverTimestamp,
   setDoc,
   startAfter,
-  where,
+  where
 } from "@firebase/firestore"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
@@ -92,7 +91,7 @@ export const useHistoryStore = defineStore("history", () => {
     {
       errorHandler(err) {
         last30ItemError.value = err
-      },
+      }
     }
   )
   const last30ItemGet = ref(false)
@@ -118,7 +117,7 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day"),
+          i18n.global.t("xem-lich-su-gan-day")
         ])
       )
 
@@ -151,7 +150,7 @@ export const useHistoryStore = defineStore("history", () => {
           ...data,
           poster: addHostUrlImage(data.poster),
           timestamp: dayjs(data.timestamp?.toDate()),
-          $doc: doc,
+          $doc: doc
         })
     })
 
@@ -165,7 +164,7 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("luu-tien-trinh-xem-season-moi"),
+          i18n.global.t("luu-tien-trinh-xem-season-moi")
         ])
       )
 
@@ -181,7 +180,7 @@ export const useHistoryStore = defineStore("history", () => {
         season: seasonId,
         ...info,
         poster: removeHostUrlImage(info.poster),
-        timestamp: serverTimestamp(),
+        timestamp: serverTimestamp()
       })
   }
 
@@ -190,7 +189,7 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day"),
+          i18n.global.t("xem-lich-su-gan-day")
         ])
       )
 
@@ -209,7 +208,7 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day"),
+          i18n.global.t("xem-lich-su-gan-day")
         ])
       )
 
@@ -234,7 +233,7 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("luu-lich-su-xem"),
+          i18n.global.t("luu-lich-su-xem")
         ])
       )
 
@@ -267,7 +266,7 @@ export const useHistoryStore = defineStore("history", () => {
         // update progress and seasonRef put down
         .then(async ({ docs, size }) => {
           // this is old data. not conflict data with save in previous then
-          // eslint-disable-next-line functional/no-let
+
           let oldData: DocumentSnapshot<Required<HistoryItem>> | null = null
 
           // eslint-disable-next-line promise/always-return
@@ -292,8 +291,8 @@ export const useHistoryStore = defineStore("history", () => {
                 poster: removeHostUrlImage(infoSeason.poster),
                 last: {
                   chap,
-                  ...info,
-                },
+                  ...info
+                }
               },
               { merge: true }
             ),
@@ -313,12 +312,12 @@ export const useHistoryStore = defineStore("history", () => {
                   seasonRefOldData,
                   {
                     ...data,
-                    poster: removeHostUrlImage(data.poster),
+                    poster: removeHostUrlImage(data.poster)
                   },
                   { merge: true }
                 )
               }
-            })(),
+            })()
           ])
         })
 
@@ -328,7 +327,7 @@ export const useHistoryStore = defineStore("history", () => {
       // update to progress watch chaps, don't worry
       setDoc(chapRef, info, { merge: true }).catch((err) =>
         console.error("update progress error", err)
-      ),
+      )
     ])
   }
 
@@ -336,7 +335,7 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day"),
+          i18n.global.t("xem-lich-su-gan-day")
         ])
       )
 
@@ -366,6 +365,6 @@ export const useHistoryStore = defineStore("history", () => {
     getProgressChap,
     setProgressChap,
 
-    getLastEpOfSeason,
+    getLastEpOfSeason
   }
 })

@@ -19,7 +19,7 @@ export async function DangNhap(email: string, password: string) {
       // eslint-disable-next-line camelcase
       password_md5,
       save_password: "1",
-      submit: "",
+      submit: ""
     }
   )
 
@@ -30,7 +30,7 @@ export async function DangNhap(email: string, password: string) {
     return {
       ...(await PostWorker<typeof AccountInfoParser>(Worker, html)),
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      cookie: new Headers(headers).get("set-cookie")!,
+      cookie: new Headers(headers).get("set-cookie")!
     }
   } else {
     throw new Error(i18n.global.t("dang-nhap-that-bai"))

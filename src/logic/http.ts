@@ -26,7 +26,7 @@ async function httpGet(
       ? url
       : {
           url: url.includes("://") ? url : C_URL + url + "#animevsub-vsub",
-          headers,
+          headers
         }
   ).then((response) => {
     if (response.status === 403 || response.status === 520) {
@@ -51,13 +51,13 @@ async function httpPost(
   console.log("post: ", {
     url: C_URL + url,
     data,
-    headers,
+    headers
   })
 
   const response = await Http.post({
     url: C_URL + url + "#animevsub-vsub",
     headers,
-    data,
+    data
   })
 
   console.log("post-result: ", response)

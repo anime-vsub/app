@@ -20,5 +20,5 @@ export default [
   rank_ic_7,
   rank_ic_8,
   rank_ic_9,
-  rank_ic_10,
+  rank_ic_10
 ]

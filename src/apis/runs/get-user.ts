@@ -11,13 +11,13 @@ export async function GetUser(token_name: string, token_value: string) {
   if (!token_name || !token_value)
     throw new Error(
       i18n.global.t("errors.require_login_to", [
-        i18n.global.t("xem-anime-da-theo-doi"),
+        i18n.global.t("xem-anime-da-theo-doi")
       ])
     )
 
   const { data: html, headers } = await get("/account/info", {
     // eslint-disable-next-line camelcase
-    cookie: `${token_name}=${token_value}`,
+    cookie: `${token_name}=${token_value}`
   })
 
   if (html.includes("user-name-text")) {
@@ -27,7 +27,7 @@ export async function GetUser(token_name: string, token_value: string) {
     return {
       ...(await PostWorker<typeof AccountInfoParser>(Worker, html)),
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      cookie: new Headers(headers).get("set-cookie")!,
+      cookie: new Headers(headers).get("set-cookie")!
     }
   } else {
     throw new Error(i18n.global.t("dang-nhap-that-bai"))

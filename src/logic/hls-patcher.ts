@@ -3,7 +3,7 @@ import type {
   LoaderConfiguration,
   LoaderContext,
   LoaderOnProgress,
-  LoaderResponse,
+  LoaderResponse
 } from "hls.js"
 import type Hls from "hls.js"
 
@@ -20,7 +20,7 @@ function getRequestParameters(
     mode: "cors",
     credentials: "same-origin",
     signal,
-    headers: new self.Headers(Object.assign({}, context.headers)),
+    headers: new self.Headers(Object.assign({}, context.headers))
   } as const
 
   if (context.rangeEnd) {
@@ -33,7 +33,6 @@ function getRequestParameters(
   return initParams
 }
 
-// eslint-disable-next-line functional/no-classes
 class FetchError extends Error {
   public code: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,7 +56,6 @@ export function patcher(hls: Hls) {
   ): void {
     const stats = this.stats
     if (stats.loading.start) {
-      // eslint-disable-next-line functional/no-throw-statements
       throw new Error("Loader can only be used once.")
     }
     stats.loading.start = self.performance.now()
@@ -85,13 +83,13 @@ export function patcher(hls: Hls) {
 
     fetchJava(this.request.url, {
       headers: this.request.headers,
-      signal: this.request.signal,
+      signal: this.request.signal
     })
       .then(
         async (res) =>
           new Response(await res.arrayBuffer(), {
             status: 200,
-            headers: res.headers,
+            headers: res.headers
           })
       )
       .then((response: Response): Promise<string | ArrayBuffer> => {
@@ -101,15 +99,17 @@ export function patcher(hls: Hls) {
 
         self.clearTimeout(this.requestTimeout)
         config.timeout = maxLoadTimeMs
-        this.requestTimeout = self.setTimeout(() => {
-          this.abortInternal()
-          callbacks.onTimeout(stats, context, this.response)
-        }, maxLoadTimeMs - (first - stats.loading.start))
+        this.requestTimeout = self.setTimeout(
+          () => {
+            this.abortInternal()
+            callbacks.onTimeout(stats, context, this.response)
+          },
+          maxLoadTimeMs - (first - stats.loading.start)
+        )
 
         if (!response.ok) {
           const { status, statusText } = response
 
-          // eslint-disable-next-line functional/no-throw-statements
           throw new FetchError(
             statusText || "fetch, bad network response",
             status,
@@ -153,7 +153,7 @@ export function patcher(hls: Hls) {
         const loaderResponse: LoaderResponse = {
           url: response.url,
           data: responseData,
-          code: response.status,
+          code: response.status
         }
 
         // eslint-disable-next-line promise/always-return

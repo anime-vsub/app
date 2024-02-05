@@ -7,7 +7,7 @@ import {
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
-  setIndexConfiguration,
+  setIndexConfiguration
 } from "@firebase/firestore"
 import configure from "app/firebase/firestore.indexes.json"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -22,7 +22,7 @@ const firebaseConfig = {
   storageBucket: "animevsub-history-app.appspot.com",
   messagingSenderId: "12658633187",
   appId: "1:12658633187:web:56cf1588279277f3a698d6",
-  measurementId: "G-F2KJ27SHYK",
+  measurementId: "G-F2KJ27SHYK"
 }
 
 const parseJSON = (json?: string | null) => {
@@ -41,8 +41,8 @@ const enablePersistent =
 const db = enablePersistent
   ? initializeFirestore(app, {
       localCache: persistentLocalCache({
-        tabManager: persistentMultipleTabManager(),
-      }),
+        tabManager: persistentMultipleTabManager()
+      })
     })
   : getFirestore(app)
 

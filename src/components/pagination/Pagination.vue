@@ -2,7 +2,9 @@
   <q-pagination
     v-if="!settingsStore.infinityScroll && max"
     :model-value="
-      (isFinite(route.query.page as unknown as number) ? parseInt(route.query.page as string) : undefined) ?? 1
+      (isFinite(route.query.page as unknown as number)
+        ? parseInt(route.query.page as string)
+        : undefined) ?? 1
     "
     flat
     active-color="primary"

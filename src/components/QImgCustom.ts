@@ -1,5 +1,5 @@
 /* eslint-disable no-void */
-/* eslint-disable functional/no-let */
+
 import { QSpinner } from "quasar"
 import { base64ToArrayBuffer } from "src/logic/base64ToArrayBuffer"
 import { get } from "src/logic/http"
@@ -12,11 +12,11 @@ import {
   onMounted,
   ref,
   Transition,
-  watch,
+  watch
 } from "vue"
 
 const useRatioProps = {
-  ratio: [String, Number],
+  ratio: [String, Number]
 }
 
 function useRatio(
@@ -64,14 +64,14 @@ const defaultRatio = 16 / 9
 async function getImageWithXHR(url: string) {
   const res = await get({
     url,
-    responseType: "arraybuffer",
+    responseType: "arraybuffer"
   })
 
   if (res.status > 299) throw res
 
   const src = URL.createObjectURL(
     new Blob([
-      typeof res.data === "object" ? res.data : base64ToArrayBuffer(res.data),
+      typeof res.data === "object" ? res.data : base64ToArrayBuffer(res.data)
     ])
   )
 
@@ -97,28 +97,28 @@ export default defineComponent({
 
     loading: {
       type: String,
-      default: "lazy",
+      default: "lazy"
     },
     fetchpriority: {
       type: String,
-      default: "auto",
+      default: "auto"
     },
     width: String,
     height: String,
     initialRatio: {
       type: [Number, String],
-      default: defaultRatio,
+      default: defaultRatio
     },
 
     placeholderSrc: String,
 
     fit: {
       type: String,
-      default: "cover",
+      default: "cover"
     },
     position: {
       type: String,
-      default: "50% 50%",
+      default: "50% 50%"
     },
 
     imgClass: String,
@@ -129,7 +129,7 @@ export default defineComponent({
     noTransition: Boolean,
 
     spinnerColor: String,
-    spinnerSize: String,
+    spinnerSize: String
   },
 
   emits: ["load", "error"],
@@ -143,7 +143,7 @@ export default defineComponent({
 
     const images: Ref<{ src: string } | null>[] = [
       ref(null),
-      ref(getPlaceholderSrc()),
+      ref(getPlaceholderSrc())
     ]
 
     const position = ref(0)
@@ -157,7 +157,7 @@ export default defineComponent({
 
     const style = computed(() => ({
       width: props.width,
-      height: props.height,
+      height: props.height
     }))
 
     const imgClass = computed(
@@ -173,7 +173,7 @@ export default defineComponent({
     const imgStyle = computed(() => ({
       ...props.imgStyle,
       objectFit: props.fit,
-      objectPosition: props.position,
+      objectPosition: props.position
     }))
 
     watch(() => getCurrentSrc(), addImage)
@@ -184,7 +184,7 @@ export default defineComponent({
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             src: props.src!,
             srcset: props.srcset,
-            sizes: props.sizes,
+            sizes: props.sizes
           }
         : null
     }
@@ -307,7 +307,7 @@ export default defineComponent({
         fetchpriority: props.fetchpriority,
         "aria-hidden": "true",
         draggable: props.draggable,
-        ...img,
+        ...img
       }
 
       if (position.value === index) {
@@ -330,7 +330,7 @@ export default defineComponent({
           "div",
           {
             key: "content",
-            class: "q-img__content absolute-full q-anchor--skip",
+            class: "q-img__content absolute-full q-anchor--skip"
           },
           hSlot(slots[hasError.value === true ? "error" : "default"])
         )
@@ -340,18 +340,18 @@ export default defineComponent({
         "div",
         {
           key: "loading",
-          class: "q-img__loading absolute-full flex flex-center",
+          class: "q-img__loading absolute-full flex flex-center"
         },
         slots.loading !== void 0
           ? slots.loading()
           : props.noSpinner === true
-          ? void 0
-          : [
-              h(QSpinner, {
-                color: props.spinnerColor,
-                size: props.spinnerSize,
-              }),
-            ]
+            ? void 0
+            : [
+                h(QSpinner, {
+                  color: props.spinnerColor,
+                  size: props.spinnerSize
+                })
+              ]
       )
     }
 
@@ -399,10 +399,10 @@ export default defineComponent({
           class: classes.value,
           style: style.value,
           role: "img",
-          "aria-label": props.alt,
+          "aria-label": props.alt
         },
         content
       )
     }
-  },
+  }
 })

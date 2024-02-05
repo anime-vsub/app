@@ -10,7 +10,7 @@
           'background-image': `linear-gradient(
             rgba(17, 19, 25, 0) 2%,
             rgb(17, 19, 25) 94%
-          )`,
+          )`
         }"
       />
     </div>
@@ -75,7 +75,7 @@
       :modules="[Autoplay]"
       :autoplay="{
         delay: 5000,
-        disableOnInteraction: false,
+        disableOnInteraction: false
       }"
       class="swiper-hot"
     >
@@ -129,7 +129,7 @@
           'background-image': `linear-gradient(
             rgba(17, 19, 25, 0) 2%,
             rgb(17, 19, 25) 94%
-          )`,
+          )`
         }"
       />
     </swiper>
@@ -139,16 +139,16 @@
         :slides-per-view="6"
         :navigation="{
           nextEl: '.swiper-button-next-1',
-          prevEl: '.swiper-button-prev-1',
+          prevEl: '.swiper-button-prev-1'
         }"
         :modules="[Navigation]"
         :breakpoints="{
           [$q.screen.sizes.sm]: {
-            slidesPerView: 4,
+            slidesPerView: 4
           },
           [$q.screen.sizes.md]: {
-            slidesPerView: 6,
-          },
+            slidesPerView: 6
+          }
         }"
       >
         <swiper-slide
@@ -201,16 +201,16 @@
           :slides-per-view="6"
           :navigation="{
             nextEl: '.swiper-button-next-2',
-            prevEl: '.swiper-button-prev-2',
+            prevEl: '.swiper-button-prev-2'
           }"
           :modules="[Navigation]"
           :breakpoints="{
             [$q.screen.sizes.sm]: {
-              slidesPerView: 4,
+              slidesPerView: 4
             },
             [$q.screen.sizes.md]: {
-              slidesPerView: 6,
-            },
+              slidesPerView: 6
+            }
           }"
         >
           <swiper-slide
@@ -247,16 +247,16 @@
           :slides-per-view="6"
           :navigation="{
             nextEl: '.swiper-button-next-3',
-            prevEl: '.swiper-button-prev-3',
+            prevEl: '.swiper-button-prev-3'
           }"
           :modules="[Navigation]"
           :breakpoints="{
             [$q.screen.sizes.sm]: {
-              slidesPerView: 4,
+              slidesPerView: 4
             },
             [$q.screen.sizes.md]: {
-              slidesPerView: 6,
-            },
+              slidesPerView: 6
+            }
           }"
         >
           <swiper-slide
@@ -386,15 +386,15 @@ useHead(
         { property: "og:image", content: process.env.APP_URL + appIcon },
         {
           property: "og:url",
-          content: process.env.APP_URL,
-        },
+          content: process.env.APP_URL
+        }
       ],
       link: [
         {
           rel: "canonical",
-          href: process.env.APP_URL,
-        },
-      ],
+          href: process.env.APP_URL
+        }
+      ]
     }
   })
 )
@@ -405,9 +405,9 @@ const aspectRatio = 622 / 350
 
 const { data, loading, error, run } = useRequest(() => Index())
 
-// eslint-disable-next-line functional/no-let, @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let tmp: any
-// eslint-disable-next-line functional/no-let, prefer-const
+// eslint-disable-next-line prefer-const
 let isTodayF = false
 </script>
 

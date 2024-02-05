@@ -59,7 +59,7 @@ export default function TypeNormalValue(
 
         return {
           text,
-          value,
+          value
         }
       })
       .toArray()
@@ -77,7 +77,7 @@ export default function TypeNormalValue(
 
         return {
           text,
-          value,
+          value
         }
       })
       .toArray()
@@ -95,7 +95,7 @@ export default function TypeNormalValue(
 
         return {
           text,
-          value,
+          value
         }
       })
       .toArray()
@@ -113,11 +113,11 @@ export default function TypeNormalValue(
 
         return {
           text,
-          value,
+          value
         }
       })
       .toArray()
-      .filter(Boolean),
+      .filter(Boolean)
   }
 
   return {
@@ -125,6 +125,6 @@ export default function TypeNormalValue(
     items,
     curPage,
     maxPage,
-    filter,
+    filter
   }
 }

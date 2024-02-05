@@ -1,11 +1,10 @@
 export function scrollXIntoView(el: HTMLDivElement) {
   // let parent = el.parentNode.parentNode
 
-  // eslint-disable-next-line functional/no-let
   let i = 0
-  // eslint-disable-next-line functional/no-let
+
   let parent: HTMLElement | null = el
-  // eslint-disable-next-line no-unmodified-loop-condition, functional/no-loop-statements
+  // eslint-disable-next-line no-unmodified-loop-condition
   while ((parent = parent.parentNode as HTMLElement) && i++ < 3) {
     const oldLeft = el.offsetLeft
 
@@ -13,7 +12,7 @@ export function scrollXIntoView(el: HTMLDivElement) {
 
     parent.scrollTo({
       left,
-      behavior: "smooth",
+      behavior: "smooth"
     })
 
     if (oldLeft !== el.offsetLeft) break
@@ -22,11 +21,10 @@ export function scrollXIntoView(el: HTMLDivElement) {
 export function scrollYIntoView(el: HTMLDivElement, deep = 3) {
   // let parent = el.parentNode.parentNode
 
-  // eslint-disable-next-line functional/no-let
   let i = 0
-  // eslint-disable-next-line functional/no-let
+
   let parent: HTMLElement | null = el
-  // eslint-disable-next-line no-unmodified-loop-condition, functional/no-loop-statements
+  // eslint-disable-next-line no-unmodified-loop-condition
   while ((parent = parent.parentNode as HTMLElement) && i++ < deep) {
     const oldTop = el.offsetTop
 
@@ -34,7 +32,7 @@ export function scrollYIntoView(el: HTMLDivElement, deep = 3) {
 
     parent.scrollTo({
       top,
-      behavior: "smooth",
+      behavior: "smooth"
     })
 
     if (oldTop !== el.offsetTop) break

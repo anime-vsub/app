@@ -2,7 +2,7 @@ import type {
   CollectionReference,
   DocumentReference,
   QueryDocumentSnapshot,
-  Timestamp,
+  Timestamp
 } from "@firebase/firestore"
 import {
   addDoc,
@@ -18,7 +18,7 @@ import {
   serverTimestamp,
   setDoc,
   startAfter,
-  updateDoc,
+  updateDoc
 } from "@firebase/firestore"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
@@ -50,7 +50,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     {
       errorHandler(err) {
         playlistsError.value = err
-      },
+      }
     }
   )
 
@@ -76,7 +76,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("tao-danh-sach-phat"),
+          i18n.global.t("tao-danh-sach-phat")
         ])
       )
 
@@ -90,7 +90,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
         name,
         public: isPublic,
         created: serverTimestamp(),
-        size: 0,
+        size: 0
       }
     )
   }
@@ -99,7 +99,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat"),
+          i18n.global.t("xoa-danh-sach-phat")
         ])
       )
 
@@ -112,7 +112,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat"),
+          i18n.global.t("xoa-danh-sach-phat")
         ])
       )
 
@@ -121,7 +121,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     return updateDoc(
       doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>,
       {
-        name: newName,
+        name: newName
       }
     )
   }
@@ -130,7 +130,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat"),
+          i18n.global.t("xoa-danh-sach-phat")
         ])
       )
 
@@ -139,7 +139,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     return updateDoc(
       doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>,
       {
-        description,
+        description
       }
     )
   }
@@ -148,7 +148,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat"),
+          i18n.global.t("xoa-danh-sach-phat")
         ])
       )
 
@@ -157,7 +157,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     return updateDoc(
       doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>,
       {
-        public: isPublic,
+        public: isPublic
       }
     )
   }
@@ -171,7 +171,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
@@ -191,13 +191,13 @@ export const usePlaylistStore = defineStore("playlist", () => {
       {
         ...anime,
         poster: removeHostUrlImage(anime.poster),
-        add_at: serverTimestamp(),
+        add_at: serverTimestamp()
       },
       { merge: true }
     )
     await updateDoc(playlistRef, {
       size: increment(1),
-      updated: serverTimestamp(),
+      updated: serverTimestamp()
     })
   }
 
@@ -205,7 +205,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
@@ -215,7 +215,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     await deleteDoc(doc(playlistRef, "movies", season))
     await updateDoc(playlistRef, {
       size: increment(-1),
-      updated: serverTimestamp(),
+      updated: serverTimestamp()
     })
   }
 
@@ -223,7 +223,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
@@ -243,7 +243,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
@@ -268,7 +268,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
           poster: addHostUrlImage(data.poster),
           $doc: item,
           season: item.id,
-          add_at: dayjs(data.add_at.toDate()),
+          add_at: dayjs(data.add_at.toDate())
         }
       })
     )
@@ -278,7 +278,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
@@ -319,6 +319,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
     deleteAnimeFromPlaylist,
     hasAnimeOfPlaylist,
 
-    getAnimesFromPlaylist,
+    getAnimesFromPlaylist
   }
 })

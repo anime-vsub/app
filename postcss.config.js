@@ -3,7 +3,7 @@
 module.exports = {
   plugins: [
     // https://github.com/postcss/autoprefixer
-    // eslint-disable-next-line n/no-unpublished-require
+
     require("autoprefixer")({
       overrideBrowserslist: [
         "last 4 Chrome versions",

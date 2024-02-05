@@ -31,7 +31,7 @@ export default function Index(html: string) {
     lastUpdate,
     preRelease,
     nominate,
-    hotUpdate,
+    hotUpdate
   }
 }
 

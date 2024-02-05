@@ -67,6 +67,6 @@ export function getInfoTPost(cheerio: Cheerio<Element>, now: number) {
         ? (countdown === undefined
             ? undefined
             : Math.round(now / 1e3 + countdown) * 1e3) ?? null
-        : undefined,
+        : undefined
   }
 }

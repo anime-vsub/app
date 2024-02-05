@@ -50,31 +50,30 @@ useHead(
       meta: [
         {
           property: "og:title",
-          content: title,
+          content: title
         },
         {
           property: "og:description",
-          content: description,
+          content: description
         },
         {
-          property: "og:url",
-        },
+          property: "og:url"
+        }
       ],
       link: [
         {
-          rel: "canonical",
-        },
-      ],
+          rel: "canonical"
+        }
+      ]
     }
   })
 )
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const { data, loading, run, error } = useRequest(() => TuPhim(page.value), {
-  refreshDeps: [page],
+  refreshDeps: [page]
 })
 
-// eslint-disable-next-line functional/no-let
 let nextPage = 2
 async function onLoad(_index: number, done: (stop: boolean) => void) {
   const { curPage, maxPage, items } = await TuPhim(nextPage++)
@@ -83,7 +82,7 @@ async function onLoad(_index: number, done: (stop: boolean) => void) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     items: [...data.value!.items, ...items],
     curPage,
-    maxPage,
+    maxPage
   })
   done(curPage === maxPage)
 }

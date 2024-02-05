@@ -9,7 +9,7 @@ describe("player", () => {
     ).toEqual({
       id: "2",
       play: "api",
-      hash: "SEAiZc7pSjNkB2hc9Z9HAgcH_OmZzuBHytI_Q51KqtyHg-T0WfhwQAmVV6i4TM4VtHrk09wA6YFztU0wUl4fCw",
+      hash: "SEAiZc7pSjNkB2hc9Z9HAgcH_OmZzuBHytI_Q51KqtyHg-T0WfhwQAmVV6i4TM4VtHrk09wA6YFztU0wUl4fCw"
     })
   })
 })

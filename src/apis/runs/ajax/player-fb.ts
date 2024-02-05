@@ -8,7 +8,7 @@ import { PlayerLink } from "./player-link"
 export async function PlayerFB(episodeId: string) {
   const { data: json } = await post("/ajax/player?v=2019a", {
     episodeId,
-    backup: 1,
+    backup: 1
   })
 
   const data = JSON.parse(json)

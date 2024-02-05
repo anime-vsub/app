@@ -21,9 +21,8 @@ export const useNotificationStore = defineStore(
 
     const loading = ref(false)
 
-    // eslint-disable-next-line functional/no-let
     let timeout: NodeJS.Timeout | number
-    // eslint-disable-next-line functional/no-let
+
     let countFail = 0
     async function updateNotification() {
       if (timeout) clearTimeout(timeout)
@@ -44,9 +43,9 @@ export const useNotificationStore = defineStore(
             ),
             ok: {
               flat: true,
-              rounded: true,
+              rounded: true
             },
-            persistent: true, // TODO
+            persistent: true // TODO
           }).onOk(() => {
             authStore.logout()
             // updateNotification()
@@ -61,7 +60,7 @@ export const useNotificationStore = defineStore(
           $q.notify({
             position: "bottom-right",
             message: i18n.global.t("nhan-thong-bao-that-bai"),
-            caption: (err as Error).message,
+            caption: (err as Error).message
           })
         else countFail++
 
@@ -87,7 +86,7 @@ export const useNotificationStore = defineStore(
     async function remove(id: string) {
       const { data } = await post("/ajax/notification", {
         Delete: "true",
-        id,
+        id
       })
 
       if (JSON.parse(data).status !== 1)
@@ -110,6 +109,6 @@ export const useNotificationStore = defineStore(
     return { items, max, remove, loading, refresh }
   },
   {
-    persist: true,
+    persist: true
   }
 )

@@ -109,6 +109,6 @@ export default function PhimId(html: string, now: number) {
     studio,
     seasonOf,
     trailer,
-    toPut,
+    toPut
   }
 }

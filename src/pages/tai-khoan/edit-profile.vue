@@ -157,13 +157,13 @@ useHead(
       meta: [
         { property: "og:title", content: title },
         { property: "og:description", content: description },
-        { property: "og:url" },
+        { property: "og:url" }
       ],
       link: [
         {
-          rel: "canonical",
-        },
-      ],
+          rel: "canonical"
+        }
+      ]
     }
   })
 )
@@ -185,7 +185,7 @@ async function changePassword() {
     message: t("dang-xac-thuc-vui-long-doi"),
     boxClass: "bg-dark text-light-9",
     spinnerColor: "main",
-    delay: Infinity,
+    delay: Infinity
   })
 
   try {
@@ -195,7 +195,7 @@ async function changePassword() {
     showDialogChangePassword.value = false
     $q.notify({
       position: "bottom-right",
-      message: t("da-doi-mat-khau"),
+      message: t("da-doi-mat-khau")
     })
     // eslint-disable-next-line camelcase
     new_password.value = ""
@@ -205,7 +205,7 @@ async function changePassword() {
     $q.notify({
       position: "bottom-right",
       message: t("doi-mat-khau-that-bai"),
-      caption: err.message,
+      caption: err.message
     })
   } finally {
     loader()
@@ -218,7 +218,7 @@ async function logout() {
 
   $q.notify({
     position: "bottom-right",
-    message: t("da-dang-xuat"),
+    message: t("da-dang-xuat")
   })
 }
 </script>

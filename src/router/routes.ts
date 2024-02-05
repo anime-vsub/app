@@ -7,14 +7,14 @@ const routes: RouteRecordRaw[] = [
       return `/${(to.params.mainPath as string[]).join("/")}?page=${
         to.params.page
       }`
-    },
+    }
   },
   {
     path: "/",
     component: () => import("pages/index_outlet.vue"),
     meta: {
       footer: true,
-      forceScrollBehavior: true,
+      forceScrollBehavior: true
     },
     children: [
       {
@@ -27,58 +27,58 @@ const routes: RouteRecordRaw[] = [
           styleFn(offset, height) {
             return {
               height: height + "px",
-              marginTop: -offset + "px",
+              marginTop: -offset + "px"
             }
-          },
-        },
+          }
+        }
       },
       {
         path: ":type_normal(anime-bo|anime-le|hoat-hinh-trung-quoc|anime-sap-chieu|anime-moi)",
         redirect(to) {
           return `/danh-sach/${to.params.type_normal}`
-        },
+        }
       },
       {
         path: ":type_normal(danh-sach|the-loai|quoc-gia|tag)/:value",
         alias: [":type_normal(season)/:value(.+/.+)"],
         component: () => import("pages/[_type-normal]/[value].vue"),
         meta: {
-          footer: false,
-        },
+          footer: false
+        }
       },
       {
         path: "muc-luc",
-        redirect: "/danh-sach/all",
+        redirect: "/danh-sach/all"
       },
       {
         path: "lich-chieu-phim",
         component: () => import("pages/lich-chieu-phim.vue"),
         meta: {
-          footer: false,
-        },
+          footer: false
+        }
       },
       {
         path: "bang-xep-hang/:type(day|voted|month|season|year)?",
         component: () => import("pages/bang-xep-hang/[type]-.vue"),
         meta: {
-          footer: false,
-        },
+          footer: false
+        }
       },
       {
         path: "playlist/:playlist",
         component: () => import("pages/playlist/[playlist].vue"),
         meta: {
-          footer: false,
-        },
+          footer: false
+        }
       },
       {
         path: "feed",
         component: () => import("pages/feed.vue"),
         meta: {
-          footer: false,
-        },
-      },
-    ],
+          footer: false
+        }
+      }
+    ]
   },
   {
     name: "search",
@@ -86,8 +86,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import("pages/tim-kiem/[keyword]-.vue"),
     meta: {
       footer: true,
-      forceScrollBehavior: true,
-    },
+      forceScrollBehavior: true
+    }
   },
   {
     name: "news",
@@ -95,8 +95,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import("pages/news.vue"),
     meta: {
       footer: true,
-      forceScrollBehavior: true,
-    },
+      forceScrollBehavior: true
+    }
   },
   {
     name: "notification",
@@ -104,14 +104,14 @@ const routes: RouteRecordRaw[] = [
     component: () => import("pages/notification.vue"),
     meta: {
       footer: true,
-      forceScrollBehavior: true,
-    },
+      forceScrollBehavior: true
+    }
   },
   {
     path: "/tai-khoan",
     component: () => import("pages/tai-khoan/index_outlet.vue"),
     meta: {
-      forceScrollBehavior: true,
+      forceScrollBehavior: true
     },
     children: [
       {
@@ -119,20 +119,20 @@ const routes: RouteRecordRaw[] = [
         path: "",
         component: () => import("pages/tai-khoan/index.vue"),
         meta: {
-          footer: true,
-        },
+          footer: true
+        }
       },
       {
         path: "edit-profile",
-        component: () => import("pages/tai-khoan/edit-profile.vue"),
+        component: () => import("pages/tai-khoan/edit-profile.vue")
       },
       {
         path: "history",
-        component: () => import("pages/tai-khoan/history.vue"),
+        component: () => import("pages/tai-khoan/history.vue")
       },
       {
         path: "follow",
-        component: () => import("pages/tai-khoan/follow.vue"),
+        component: () => import("pages/tai-khoan/follow.vue")
       },
       {
         path: "settings",
@@ -140,15 +140,15 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: "",
-            component: () => import("pages/tai-khoan/settings/index.vue"),
+            component: () => import("pages/tai-khoan/settings/index.vue")
           },
           {
             path: "player",
-            component: () => import("pages/tai-khoan/settings/player.vue"),
-          },
-        ],
-      },
-    ],
+            component: () => import("pages/tai-khoan/settings/player.vue")
+          }
+        ]
+      }
+    ]
   },
 
   // helpers
@@ -159,8 +159,8 @@ const routes: RouteRecordRaw[] = [
     alias: ["/phim/:season/:chapName(\\0)?:chap(\\d+)", "/phim/:season"],
     component: () => import("pages/phim/_season.vue"),
     meta: {
-      hideDrawer: true,
-    },
+      hideDrawer: true
+    }
   },
 
   // try remove .html after url
@@ -169,7 +169,7 @@ const routes: RouteRecordRaw[] = [
     redirect(to) {
       console.log(to)
       return `/${(to.params.catchAll as string[]).join("/")}`
-    },
+    }
   },
 
   // Always leave this as last one,
@@ -177,8 +177,8 @@ const routes: RouteRecordRaw[] = [
   {
     name: "not_found",
     path: "/:catchAll(.*)*",
-    component: () => import("pages/ErrorNotFound.vue"),
-  },
+    component: () => import("pages/ErrorNotFound.vue")
+  }
 ]
 
 export default routes

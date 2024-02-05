@@ -9,7 +9,7 @@ export async function AjaxLike(id: string, value: boolean) {
   if (!token_name || !token_value)
     throw new Error(
       i18n.global.t("errors.require_login_to", [
-        i18n.global.t("theo-doi-anime-nay"),
+        i18n.global.t("theo-doi-anime-nay")
       ])
     )
 
@@ -18,7 +18,7 @@ export async function AjaxLike(id: string, value: boolean) {
       value ? "add" : "remove"
     }`,
     {
-      cookie: `${token_name}=${token_value}`,
+      cookie: `${token_name}=${token_value}`
     }
   )
 
@@ -32,7 +32,7 @@ export async function checkIsLike(id: string) {
     throw new Error("REQUIRE_LOGiN_TO_FETCH_LIKE")
 
   const { data } = await get(`/ajax/notification?Bookmark=true&filmId=${id}`, {
-    cookie: `${token_name}=${token_value}`,
+    cookie: `${token_name}=${token_value}`
   })
 
   return JSON.parse(data).status === 1

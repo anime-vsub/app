@@ -4,6 +4,6 @@ export default defineConfig({
   test: {
     setupFiles: ["@vitest/web-worker"],
     environment: "jsdom",
-    globals: true,
-  },
+    globals: true
+  }
 })

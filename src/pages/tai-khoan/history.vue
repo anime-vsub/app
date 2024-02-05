@@ -21,10 +21,10 @@
               item.timestamp.isToday()
                 ? "Hôm nay"
                 : item.timestamp.isYesterday()
-                ? "Hôm qua"
-                : item.timestamp.get("date") +
-                  " thg " +
-                  (item.timestamp.get("month") + 1)
+                  ? "Hôm qua"
+                  : item.timestamp.get("date") +
+                    " thg " +
+                    (item.timestamp.get("month") + 1)
             }}
           </div>
           <router-link
@@ -75,7 +75,7 @@
                   t("xem-luc-_value", [
                     item.timestamp.format(
                       item.timestamp.isToday() ? "HH:mm" : "DD/MM/YYYY"
-                    ),
+                    )
                   ])
                 }}
               </div>
@@ -124,13 +124,13 @@ useHead(
       meta: [
         { property: "og:title", content: title },
         { property: "og:description", content: description },
-        { property: "og:url" },
+        { property: "og:url" }
       ],
       link: [
         {
-          rel: "canonical",
-        },
-      ],
+          rel: "canonical"
+        }
+      ]
     }
   })
 )
@@ -139,7 +139,7 @@ const {
   loading,
   data: histories,
   run,
-  error,
+  error
 } = useRequest(
   (
     lastDoc: typeof historyStore.loadMoreAfter extends (

@@ -60,7 +60,6 @@ const { data, error } = useRequest<
     favIconUrl: string
   }[]
 >(() => {
-  // eslint-disable-next-line functional/no-throw-statements
   if (!Client.tabsApi) throw new Error("tabs_api_not_support")
   return Client.execTabs("query", [{ title: "AnimeVsub" }])
 })
@@ -108,7 +107,6 @@ async function fix() {
     })
   ).then((res) => res.filter((item) => item[0]))
 
-  // eslint-disable-next-line functional/no-loop-statements
   for (let i = 0; i < ids.length; i++) {
     const url = urls[i]
     const chapId = url.match(/(\d+)\/?$/)?.[1]
@@ -121,7 +119,7 @@ async function fix() {
         ? JSON.parse($season).chaps.find((chap: { id: string }) => {
             return chap.id === chapId
           })
-        : undefined,
+        : undefined
     ]
 
     const title = ep
@@ -130,7 +128,7 @@ async function fix() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await Client.execTabs("executeScript" as unknown as any, [
       ids[i],
-      { code: `document.title=${JSON.stringify(title)}` },
+      { code: `document.title=${JSON.stringify(title)}` }
     ])
   }
 

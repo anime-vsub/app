@@ -36,7 +36,7 @@
           no-caps
           class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
           :class="{
-            '!text-main font-weight-medium': genres.includes(item.value),
+            '!text-main font-weight-medium': genres.includes(item.value)
           }"
           :value="item.value"
           @click="
@@ -61,7 +61,7 @@
           no-caps
           class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
           :class="{
-            '!text-main font-weight-medium': sorter === item.value,
+            '!text-main font-weight-medium': sorter === item.value
           }"
           @click="sorter = item.value"
           outline
@@ -81,7 +81,7 @@
           no-caps
           class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
           :class="{
-            '!text-main font-weight-medium': typer === item.value,
+            '!text-main font-weight-medium': typer === item.value
           }"
           @click="typer = item.value"
           outline
@@ -101,7 +101,7 @@
           no-caps
           class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
           :class="{
-            '!text-main font-weight-medium': seaser === item.value,
+            '!text-main font-weight-medium': seaser === item.value
           }"
           @click="seaser = item.value"
           outline
@@ -121,7 +121,7 @@
           no-caps
           class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
           :class="{
-            '!text-main font-weight-medium': year === item.value,
+            '!text-main font-weight-medium': year === item.value
           }"
           @click="year = item.value"
           outline
@@ -177,11 +177,11 @@ const defaultsOptions = computed<{
   switch (type_normal) {
     case "danh-sach":
       return {
-        typer: value as string,
+        typer: value as string
       }
     case "the-loai":
       return {
-        gener: value as string,
+        gener: value as string
       }
     case "season": {
       const [season, year] =
@@ -190,12 +190,12 @@ const defaultsOptions = computed<{
       if (year) {
         return {
           seaser: season,
-          year,
+          year
         }
       }
 
       return {
-        seaser: season,
+        seaser: season
       }
     }
     default:
@@ -233,7 +233,7 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
       seaser: seaser.value,
       sorter: sorter.value,
       typer: typer.value,
-      year: year.value,
+      year: year.value
     },
     defaultsOptions.value
   )
@@ -242,7 +242,7 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
 const { data, run, loading, error } = useRequest(
   () => fetchTypeNormalValue(page.value, false),
   {
-    refreshDeps: [page],
+    refreshDeps: [page]
   }
 )
 
@@ -271,15 +271,15 @@ useHead(
         { property: "og:description", content: description },
         {
           property: "og:url",
-          content: process.env.APP_URL + route.fullPath.slice(1),
-        },
+          content: process.env.APP_URL + route.fullPath.slice(1)
+        }
       ],
       link: [
         {
           rel: "canonical",
-          href: process.env.APP_URL + route.fullPath.slice(1),
-        },
-      ],
+          href: process.env.APP_URL + route.fullPath.slice(1)
+        }
+      ]
     }
   })
 )
@@ -298,7 +298,7 @@ const textFilter = computed(() => {
       data.value.filter.sorter.find((item) => item.value === sorter.value)
         ?.text,
       data.value.filter.typer.find((item) => item.value === typer.value)?.text,
-      data.value.filter.year.find((item) => item.value === year.value)?.text,
+      data.value.filter.year.find((item) => item.value === year.value)?.text
     ]
       .filter(Boolean)
       .join(" • ")
@@ -323,7 +323,6 @@ watch(defaultsOptions, (newVal, oldVal) => {
   }
 })
 
-// eslint-disable-next-line functional/no-let
 let nextPage = 2
 async function onLoad(_index: number, done: (stop: boolean) => void) {
   const { curPage, maxPage, items } = await fetchTypeNormalValue(
@@ -335,7 +334,7 @@ async function onLoad(_index: number, done: (stop: boolean) => void) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     items: [...data.value!.items, ...items],
     curPage,
-    maxPage,
+    maxPage
   })
   done(curPage === maxPage)
 }

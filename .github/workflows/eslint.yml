@@ -11,12 +11,12 @@ name: ESLint
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
-    - cron: '15 10 * * 5'
+    - cron: "15 10 * * 5"
 
 jobs:
   eslint:
@@ -47,8 +47,8 @@ jobs:
 
       - name: Run ESLint
         run: pnpm lint #--fix
-        
-      
+
+
       # - name: Commit changes
       #   uses: EndBug/add-and-commit@v9
       #   with:

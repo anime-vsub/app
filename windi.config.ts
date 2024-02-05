@@ -10,7 +10,7 @@ export default defineConfig({
     "!py-[6px]",
     "children:!flex",
     "bg-[rgba(28,28,30,0.9)]",
-    "!shadow-8",
+    "!shadow-8"
   ],
   theme: {
     screens: {
@@ -18,9 +18,9 @@ export default defineConfig({
       sm: "600px", // { min: "600px", max: "1023.99px" },
       md: "1024px", // { min: "1024px", max: "1439.99px" },
       lg: "1440px", // { min: "1440px", max: "1919.99px" },
-      xl: "1920px", // { min: "1920px" },
-    },
-  },
+      xl: "1920px" // { min: "1920px" },
+    }
+  }
 })
 
 // !bg-[rgba(0,194,52,.15)]

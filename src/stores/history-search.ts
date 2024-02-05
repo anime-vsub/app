@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 
 export const useHistorySearchStore = defineStore("history-search", {
   state: () => ({
-    items: <string[]>[],
+    items: <string[]>[]
   }),
-  persist: true,
+  persist: true
 })

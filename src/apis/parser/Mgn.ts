@@ -3,7 +3,7 @@ import { parserDom } from "./__helpers__/parserDom"
 export default function Mgn(html: string) {
   const by = {
     name: "MGN",
-    icon: "https://sf.ex-cdn.com/mgn.vn/v0.5.636/templates/themes/images/icon/icon-mgn.png",
+    icon: "https://sf.ex-cdn.com/mgn.vn/v0.5.636/templates/themes/images/icon/icon-mgn.png"
   }
   const $ = parserDom(html)
 

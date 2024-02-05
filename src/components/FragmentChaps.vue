@@ -24,7 +24,7 @@
             [
               'iconoir:cloud-sync',
               'iconoir:cloud-upload',
-              'iconoir:cloud-error',
+              'iconoir:cloud-error'
             ][stateStorageStore.disableAutoRestoration]
           "
           width="20"
@@ -40,7 +40,7 @@
             [
               t("vo-hieu-hoa-tam-thoi-khoi-phuc-tien-trinh-xem-truoc"),
               t("vo-hieu-hoa-ca-2-chieu-dong-bo-tien-trinh-xem"),
-              t("kich-hoat-lai-khoi-phuc-tien-trinh-xem"),
+              t("kich-hoat-lai-khoi-phuc-tien-trinh-xem")
             ][stateStorageStore.disableAutoRestoration]
           }}</q-tooltip
         >
@@ -67,7 +67,7 @@
       v-model="seasonActive"
       class="min-w-0 w-full tabs-seasons"
       :class="{
-        'grid-mode scrollbar-custom': gridModeTabsSeasons,
+        'grid-mode scrollbar-custom': gridModeTabsSeasons
       }"
       no-caps
       dense
@@ -82,7 +82,10 @@
         :key="item.value"
         :name="item.value"
         :label="item.name"
-        :ref="(el: QTab) => void(item.value === seasonActive && (tabsRef = el as QTab))"
+        :ref="
+          (el: QTab) =>
+            void (item.value === seasonActive && (tabsRef = el as QTab))
+        "
       />
     </q-tabs>
 
@@ -132,7 +135,9 @@
             :chaps="_tmp.response.chaps"
             :season="value"
             :find="(item) => value === currentSeason && item.id === currentChap"
-            :progress-chaps="(progressWatchStore.get(value) as unknown as any)?.response"
+            :progress-chaps="
+              (progressWatchStore.get(value) as unknown as any)?.response
+            "
             class-item="px-3 !py-[6px] mb-3"
           />
         </template>
@@ -149,7 +154,7 @@ import { QBtn, QSpinner, QTab, QTabPanel, QTabPanels, QTabs } from "quasar"
 import { scrollXIntoView, scrollYIntoView } from "src/helpers/scrollIntoView"
 import type {
   ProgressWatchStore,
-  Season,
+  Season
 } from "src/pages/phim/_season.interface"
 import { useStateStorageStore } from "src/stores/state-storage"
 import { ref, watch, watchEffect } from "vue"
@@ -158,7 +163,7 @@ import { useI18n } from "vue-i18n"
 import type {
   ResponseDataSeasonError,
   ResponseDataSeasonPending,
-  ResponseDataSeasonSuccess,
+  ResponseDataSeasonSuccess
 } from "../pages/phim/response-data-season"
 
 const props = defineProps<{
@@ -184,7 +189,7 @@ watch(
   () => props.currentSeason,
   (val) => (seasonActive.value = val),
   {
-    immediate: true,
+    immediate: true
   }
 )
 
@@ -192,7 +197,7 @@ watch(seasonActive, (seasonActive) => {
   if (!seasonActive) return
 
   // download data season active
-  props.fetchSeason(seasonActive)
+  void props.fetchSeason(seasonActive)
 })
 
 const gridModeTabsSeasons = ref(false)
@@ -218,7 +223,6 @@ watchEffect(() => {
   }, 70)
 })
 
-// eslint-disable-next-line functional/no-let
 let _tmp:
   | ResponseDataSeasonPending
   | ResponseDataSeasonSuccess

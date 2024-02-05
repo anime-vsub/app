@@ -4,7 +4,7 @@ import {
   getAnalytics,
   logEvent,
   setUserId,
-  setUserProperties,
+  setUserProperties
 } from "@firebase/analytics"
 import cookie from "js-cookie"
 import { defineStore } from "pinia"
@@ -25,7 +25,6 @@ interface User {
   username: string
 }
 
-// eslint-disable-next-line functional/no-let
 let syncCookie: ((ref: Ref<unknown>, name: string) => void) | null = null
 if (typeof BroadcastChannel !== "undefined") {
   const broad = new BroadcastChannel("sync_cookie")
@@ -36,7 +35,6 @@ if (typeof BroadcastChannel !== "undefined") {
   broad.onmessage = (event) => cbs.forEach((cb) => cb(event))
 
   syncCookie = function syncCookie(ref: Ref<unknown>, name: string) {
-    // eslint-disable-next-line functional/no-let
     let paused = false
     cbs.add(async (event) => {
       if (event.data.name === name) {
@@ -51,7 +49,7 @@ if (typeof BroadcastChannel !== "undefined") {
       if (!paused)
         broad.postMessage({
           name,
-          value: toRaw(ref),
+          value: toRaw(ref)
         })
       else console.info("[cookie sync]: bypass emit")
     })
@@ -88,7 +86,7 @@ export const useAuthStore = defineStore("auth", () => {
         email: data.email,
         name: data.name,
         sex: data.sex,
-        username: data.username,
+        username: data.username
       })
       setTokenByCookie(data.cookie)
     })
@@ -98,7 +96,7 @@ export const useAuthStore = defineStore("auth", () => {
     cookie.set("user_data", JSON.stringify(value), {
       expires: 30,
       sameSite: "None",
-      secure: true,
+      secure: true
     })
   }
   function setToken(name: string, value: string) {
@@ -107,12 +105,12 @@ export const useAuthStore = defineStore("auth", () => {
     cookie.set("token_name", name, {
       expires: 30,
       sameSite: "None",
-      secure: true,
+      secure: true
     })
     cookie.set("token_value", value, {
       expires: 30,
       sameSite: "None",
-      secure: true,
+      secure: true
     })
   }
   function deleteUser() {
@@ -145,7 +143,7 @@ export const useAuthStore = defineStore("auth", () => {
       email: data.email,
       name: data.name,
       sex: data.sex,
-      username: data.username,
+      username: data.username
     })
     setTokenByCookie(data.cookie)
 
@@ -163,7 +161,7 @@ export const useAuthStore = defineStore("auth", () => {
     if (!user_data.value)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("thay-doi-mat-khau"),
+          i18n.global.t("thay-doi-mat-khau")
         ])
       )
 
@@ -173,10 +171,10 @@ export const useAuthStore = defineStore("auth", () => {
         "User[hoten]": user_data.value.username,
         "User[gender]": user_data.value.sex,
         "User[password]": newPassword,
-        submit: "Cập nhật",
+        submit: "Cập nhật"
       },
       {
-        cookie: `${token_name.value}=${token_value.value}`,
+        cookie: `${token_name.value}=${token_value.value}`
       }
     ).catch((res) => {
       // eslint-disable-next-line promise/no-return-wrap
@@ -196,7 +194,7 @@ export const useAuthStore = defineStore("auth", () => {
     user_data,
     (user_data) =>
       setUserProperties(analytics, {
-        sex: user_data?.sex ?? "unknown",
+        sex: user_data?.sex ?? "unknown"
       }),
     { immediate: true }
   )
@@ -216,7 +214,7 @@ export const useAuthStore = defineStore("auth", () => {
     setTokenByCookie,
     login,
     logout,
-    changePassword,
+    changePassword
   }
 })
 

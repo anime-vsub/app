@@ -38,7 +38,7 @@
       :data="{
         ...item,
         description: item.othername,
-        process: item.process.replace('Tập ', ''),
+        process: item.process.replace('Tập ', '')
       }"
       class="mt-4 mx-3"
     >
@@ -73,12 +73,12 @@ const types = [
   [t("thang"), "month"],
   [t("nam"), "year"],
   [t("danh-gia"), "voted"],
-  [t("mua"), "season"],
+  [t("mua"), "season"]
 ]
 useHead(
   computed(() => {
     const title = t("bang-xep-hang-anime-theo-_type", [
-      (types.find((item) => item[1] === route.params.type) ?? types[0])[0],
+      (types.find((item) => item[1] === route.params.type) ?? types[0])[0]
     ])
 
     const description = title
@@ -91,15 +91,15 @@ useHead(
         { property: "og:description", content: description },
         {
           property: "og:url",
-          content: process.env.APP_URL + `bang-xep-hang/${route.params.type}`,
-        },
+          content: process.env.APP_URL + `bang-xep-hang/${route.params.type}`
+        }
       ],
       link: [
         {
           rel: "canonical",
-          href: process.env.APP_URL + `bang-xep-hang/${route.params.type}`,
-        },
-      ],
+          href: process.env.APP_URL + `bang-xep-hang/${route.params.type}`
+        }
+      ]
     }
   })
 )
@@ -110,7 +110,7 @@ const { data, loading, run, error } = useRequest(
     refreshDeps: [() => route.params.type],
     refreshDepsAction() {
       run()
-    },
+    }
   }
 )
 </script>

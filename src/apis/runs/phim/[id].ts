@@ -14,7 +14,7 @@ export async function PhimId(seasonId: string) {
       `/phim/${seasonId}/`,
       token_name && token_value
         ? {
-            cookie: `${token_name}=${token_value}`,
+            cookie: `${token_name}=${token_value}`
           }
         : undefined
     )

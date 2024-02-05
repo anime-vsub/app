@@ -24,7 +24,7 @@ export async function AjaxItem(type: "top-bo-week" | "top-le-week") {
   return await useCache(`/ajax/item/${type}`, async () => {
     const { data: html } = await post("/ajax/item", {
       widget: "list-film",
-      type,
+      type
     })
 
     return PostWorker<typeof AjaxItemParser>(Worker, html)
