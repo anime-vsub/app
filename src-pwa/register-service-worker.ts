@@ -45,13 +45,13 @@ register(process.env.SERVICE_WORKER_FILE, {
           color: "main",
           noCaps: true,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          handler: () => (location as unknown as any).reload(),
+          handler: () => (location as unknown as any).reload()
         },
         {
           label: i18n.global.t("de-sau"),
-          noCaps: true,
-        },
-      ],
+          noCaps: true
+        }
+      ]
     })
   },
 
@@ -61,5 +61,5 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   error(err) {
     console.error("Error during service worker registration:", err)
-  },
+  }
 })
