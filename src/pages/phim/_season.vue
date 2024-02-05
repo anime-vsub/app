@@ -461,6 +461,8 @@ import type { servers } from "src/constants"
 import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
+import { getDataIDB } from "src/logic/get-data-IDB"
+import { getDataJson } from "src/logic/get-data-json"
 import { getQualityByLabel } from "src/logic/get-quality-by-label"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { parseChapName } from "src/logic/parseChapName"
@@ -525,12 +527,23 @@ const { data, run, error, loading } = useRequest(
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
 
     await Promise.any([
-      get(`data-${id}`).then((text: string) => {
-        // eslint-disable-next-line functional/no-throw-statements
+      new Promise<Awaited<ReturnType<typeof PhimId>>>((resolve, reject) => {
+        const data =
+          getDataJson<Awaited<ReturnType<typeof PhimId>>>("anime_info")
+        if (data) {
+          resolve(data)
+          return
+        }
+
+        getDataIDB<string>(`data-${id}`)
+          .then((json) => JSON.parse(json))
+          .then(resolve)
+          .catch(reject)
+      }).then((text) => {
         if (!text) throw new Error("not_found")
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
-        if (!result) result = ref(JSON.parse(text))
+        if (!result) result = ref(text)
       }),
       PhimId(id)
         .then(async (data) => {
@@ -755,16 +768,27 @@ async function fetchSeason(season: string) {
         }
         responseOnlineStore.add(response)
       }),
-      (promiseLoadIndexedb = get(`season_data ${realIdSeason}`).then(
-        (json?: string) => {
-          // eslint-disable-next-line functional/no-throw-statements
-          if (!json) throw new Error("not_found")
-          console.log("[fs]: use cache %s", realIdSeason)
-          if (!response.value) response.value = JSON.parse(json)
-
-          return json
+      (promiseLoadIndexedb = new Promise<
+        Awaited<ReturnType<typeof PhimIdChap>>
+      >((resolve, reject) => {
+        const data =
+          getDataJson<Awaited<ReturnType<typeof PhimIdChap>>>("anime_list")
+        if (data) {
+          resolve(data)
+          return
         }
-      )),
+
+        getDataIDB<string>(`season_data ${realIdSeason}`)
+          .then((json) => JSON.parse(json))
+          .then(resolve)
+          .catch(reject)
+      }).then((json) => {
+        if (!json) throw new Error("not_found")
+        console.log("[fs]: use cache %s", realIdSeason)
+        if (!response.value) response.value = json
+
+        return json
+      }))
     ])
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -893,7 +917,7 @@ async function fetchSeason(season: string) {
     console.log(_cacheDataSeasons)
   } catch (err) {
     console.warn(err)
-    error.value = err as Error
+    // error.value = err as Error
     Object.assign(currentDataSeason, {
       status: "error",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -936,7 +960,7 @@ watchEffect(async (onCleanup): Promise<void> => {
     return
   }
   currentChap.value = undefined
-  const episodeId = await Promise.race([
+  const episodeId = await Promise.any([
     // if logged -> get last episode viewing in season
     historyStore
       .getLastEpOfSeason(currentSeason.value)
@@ -1120,7 +1144,10 @@ useHead(
         { property: "og:description", content: description },
         {
           property: "og:image",
-          content: currentDataSeason.value?.poster ?? data.value.poster,
+          content:
+            currentDataSeason.value?.image ??
+            currentDataSeason.value?.poster ??
+            data.value.poster
         },
         {
           property: "og:url",
@@ -1272,7 +1299,10 @@ watch(
                   }
                 })
                 .catch((err) => {
-                  error.value = err
+                  void $q.notify({
+                    message: `Play load error: ${err}`,
+                    position: "bottom-right"
+                  })
                 })
           }
           if (server === "FB") {
@@ -1287,7 +1317,10 @@ watch(
                   }
                 })
                 .catch((err) => {
-                  error.value = err
+                  void $q.notify({
+                    message: `Play load error: ${err}`,
+                    position: "bottom-right"
+                  })
                 })
             PlayerFB(currentMetaChap.id)
               .then((conf) => {
@@ -1299,7 +1332,10 @@ watch(
                 loadedServerFB = true
               })
               .catch((err) => {
-                error.value = err
+                void $q.notify({
+                  message: `Play load error: ${err}`,
+                  position: "bottom-right"
+                })
               })
           }
         } catch (err) {

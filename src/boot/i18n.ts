@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import { set } from "idb-keyval"
 import { boot } from "quasar/wrappers"
 import { loadLocalize } from "src/i18n"
 import enUS from "src/i18n/messages/en-US.json"
@@ -17,25 +18,38 @@ declare module "vue-i18n" {
 }
 /* eslint-enable @typescript-eslint/no-empty-interface */
 
+let langChangeCast: BroadcastChannel | undefined
+
 export const i18n = createI18n({
   fallbackLocale: "en-US",
   legacy: false,
   messages: {
-    "en-US": enUS,
-  },
+    "en-US": enUS
+  }
 })
 export default boot(({ app }) => {
   const settingsStore = useSettingsStore()
 
   watch(
     () => settingsStore.locale,
-    async (locale) => {
+    async (locale, _, onCleanup) => {
       const messages = await loadLocalize(locale)
 
       i18n.global.setLocaleMessage(locale, messages)
       ;(i18n.global.locale as Ref<string>).value = locale
       document.querySelector("html")?.setAttribute("lang", locale)
       dayjs.locale(locale)
+
+      void set("lang", locale).then(() => {
+        // eslint-disable-next-line promise/always-return
+        langChangeCast ??= new BroadcastChannel("lang-change")
+        langChangeCast.postMessage(locale)
+      })
+
+      onCleanup(() => {
+        langChangeCast?.close()
+        langChangeCast = undefined
+      })
     },
     { immediate: true }
   )
