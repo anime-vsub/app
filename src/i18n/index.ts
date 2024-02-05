@@ -1,23 +1,11 @@
-import ISO6391 from "iso-639-1"
+import langs from "virtual:i18n-langs"
 
 export function loadLocalize(locale: string) {
   return import(`./messages/${locale}.json`).then((res) => res.default)
 }
 
-const reg = /[\w-]+(?=\.json$)/
-const langs = Object.keys(import.meta.glob("./messages/*.json")).map(
-  (path) => reg.exec(path)?.[0]
-) as string[]
-
-export const languages = langs.map((code) => {
-  return {
-    code,
-    name: ISO6391.getNativeName(code?.slice(0, 2) ?? "en"),
-  }
-})
-
 export function getNavigatorLanguage() {
   const lang = self.navigator?.language
 
-  return langs.find((item) => item.startsWith(lang)) ?? "en-US"
+  return langs.find((item) => item.code.startsWith(lang))?.code ?? "en-US"
 }

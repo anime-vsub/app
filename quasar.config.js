@@ -8,10 +8,46 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
+const fs = require("fs")
 const path = require("path")
 
+const ISO6391 = require("iso-639-1")
 const { extend } = require("quasar")
 const { configure } = require("quasar/wrappers")
+
+
+const reg = /[\w-]+(?=\.json$)/
+function vitePluginI18nLangs() {
+  const virtualModuleId = "virtual:i18n-langs"
+  const resolvedVirtualModuleId = "\0" + "virtual:i18n-langs"
+
+  return {
+    name: "vite-plugin-i18n-langs",
+    resolveId(id) {
+      if (id === virtualModuleId) {
+        return resolvedVirtualModuleId
+      }
+    },
+    async load(id) {
+      if (id === resolvedVirtualModuleId) {
+        const langs = (
+          await fs.promises.readdir(path.join(__dirname, "src/i18n/messages"))
+        ).map((name) => reg.exec(name)?.[0])
+        const languages = langs.map((code) => {
+          return {
+            code,
+            name: ISO6391.getNativeName(code?.slice(0, 2) ?? "en")
+          }
+        })
+
+        return {
+          code: `export default ${JSON.stringify(languages)}`,
+          map: null
+        }
+      }
+    }
+  }
+}
 
 module.exports = configure(function (/* ctx */) {
   return {
@@ -117,6 +153,7 @@ module.exports = configure(function (/* ctx */) {
         ],
         ["vite-plugin-rewrite-all", {}],
         ["vite-plugin-remove-console", {}],
+        [vitePluginI18nLangs, {}]
       ],
     },
 
