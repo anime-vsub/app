@@ -529,7 +529,7 @@ const { data, run, error, loading } = useRequest(
     await Promise.any([
       new Promise<Awaited<ReturnType<typeof PhimId>>>((resolve, reject) => {
         const data =
-          getDataJson<Awaited<ReturnType<typeof PhimId>>>("anime_info")
+          getDataJson<Awaited<ReturnType<typeof PhimId>>>("anime_info", id)
         if (data) {
           resolve(data)
           return
@@ -772,7 +772,7 @@ async function fetchSeason(season: string) {
         Awaited<ReturnType<typeof PhimIdChap>>
       >((resolve, reject) => {
         const data =
-          getDataJson<Awaited<ReturnType<typeof PhimIdChap>>>("anime_list")
+          getDataJson<Awaited<ReturnType<typeof PhimIdChap>>>("anime_list", realIdSeason)
         if (data) {
           resolve(data)
           return

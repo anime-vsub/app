@@ -69,7 +69,7 @@ if (process.env.MODE !== "ssr" || process.env.PROD) {
             const [{ value: rawData }, { value: rawList }] =
               (await Promise.allSettled([
                 get(`data-${id}`) as Promise<string>,
-                get(`season_data ${anime}`) as Promise<string>
+                get(`season_data ${id}`) as Promise<string>
               ])) as { value: string }[]
 
             if (!rawData)
@@ -138,15 +138,15 @@ if (process.env.MODE !== "ssr" || process.env.PROD) {
                   ? `\n<hidden style="display:none">Time: ${time}ms</hidden>\n`
                   : "") +
                   (rawData
-                    ? `<script type="data/json" id="anime_info">${
+                    ? `<script type="data/json" id="anime_info" for="${id}">${
                         process.env.PROD
                           ? rawData
                           : JSON.stringify(JSON.parse(rawData), null, 2)
                       }</script>`
                     : "") +
-                  (process.env.PROD ? "\n" : "") +
+                  (process.env.PROD ? "" : "\n") +
                   (rawList
-                    ? `<script type="data/json" id="anime_list">${
+                    ? `<script type="data/json" id="anime_list" for="${id}">${
                         process.env.PROD
                           ? rawList
                           : JSON.stringify(JSON.parse(rawList), null, 2)
