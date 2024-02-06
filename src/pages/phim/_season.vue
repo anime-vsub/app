@@ -1301,7 +1301,8 @@ watch(
                 .catch((err) => {
                   void $q.notify({
                     message: `Play load error: ${err}`,
-                    position: "bottom-right"
+                    position: "bottom-right",
+                    timeout: 0
                   })
                 })
           }
@@ -1319,7 +1320,8 @@ watch(
                 .catch((err) => {
                   void $q.notify({
                     message: `Play load error: ${err}`,
-                    position: "bottom-right"
+                    position: "bottom-right",
+                    timeout: 0
                   })
                 })
             PlayerFB(currentMetaChap.id)
@@ -1334,7 +1336,8 @@ watch(
               .catch((err) => {
                 void $q.notify({
                   message: `Play load error: ${err}`,
-                  position: "bottom-right"
+                  position: "bottom-right",
+                    timeout: 0
                 })
               })
           }
