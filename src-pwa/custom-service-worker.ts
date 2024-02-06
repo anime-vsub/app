@@ -89,9 +89,11 @@ if (process.env.MODE !== "ssr" || process.env.PROD) {
             const poster = list?.poster
             const $listEpisodes = list?.chaps
 
-            const currentEpisode = $listEpisodes?.find((ep) => {
-              return ep.id === episodeId
-            })
+            const currentEpisode = $listEpisodes
+              ? $listEpisodes.find((ep) => {
+                  return ep.id === episodeId
+                }) ?? $listEpisodes[0]
+              : undefined
 
             const data = JSON.parse(rawData) as Awaited<
               ReturnType<typeof PhimId>
@@ -189,12 +191,12 @@ if (process.env.MODE !== "ssr" || process.env.PROD) {
   //   )
 }
 
-const messagesEpisode: Record<string, string> = {
+const messagesEpisode = {
   "vi-VN": "Tập",
   "en-US": "Episode",
   "ja-JP": "話",
   "zn-CN": "集"
-}
+} as const
 let lang: string | undefined
 new BroadcastChannel("lang-change").addEventListener(
   "message",
@@ -212,13 +214,15 @@ async function generateTitle(
 
   if (episodeName) {
     if (!lang) lang = await get("lang")
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const message = messagesEpisode[lang!] ?? messagesEpisode["en-US"]
+    const message =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      messagesEpisode[lang! as keyof typeof messagesEpisode] ??
+      messagesEpisode["en-US"]
 
     return `${message} ${episodeName} ${name} ${othername}`
   }
 
-  return `${episodeName} ${name} ${othername}`
+  return `${name} ${othername}`
 }
 
 // create server get data for IndexedDB
