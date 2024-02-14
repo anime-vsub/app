@@ -51,8 +51,8 @@ dependencies:
     specifier: ^1.0.0
     version: 1.0.0
   hls.js:
-    specifier: 1.4.3
-    version: 1.4.3
+    specifier: 1.5.5
+    version: 1.5.5
   htmlparser2:
     specifier: ^8.0.2
     version: 8.0.2
@@ -6846,8 +6846,8 @@ packages:
     hasBin: true
     dev: true
 
-  /hls.js@1.4.3:
-    resolution: {integrity: sha512-EE1MjIYDNO+ynbmCpAWfhUwQpyG8gUcKKuGDGgYgfRmW/g+inQUQ8sVVVY5WZaCxEGxDMGLbXhXGepkmDIMvdw==}
+  /hls.js@1.5.5:
+    resolution: {integrity: sha512-IMio4uloZNDoBLXUMup2dW0/wOSe+0lHL9qYfRV4oUcPQ/nkTBQibG5h4OPTXOTXSI3iUwcon7TFgNb6uEoKIQ==}
     dev: false
 
   /hookable@5.5.3:
