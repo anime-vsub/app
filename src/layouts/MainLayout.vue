@@ -911,6 +911,18 @@
                     />
                   </q-item-section>
                 </q-item>
+                <q-item clickable v-ripple class="rounded-xl">
+                  <q-item-section>
+                    <q-item-label>{{ $t('hien-thi-thoi-gian-trong-trinh-phat') }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-toggle
+                      v-model="settingsStore.ui.currentTime"
+                      size="sm"
+                      color="green"
+                    />
+                  </q-item-section>
+                </q-item>
               </q-list>
             </q-card>
           </q-menu>

@@ -15,7 +15,8 @@ export const useSettingsStore = defineStore("settings", {
       newPlayer: true,
       shortcutsQAP: true,
       menuTransparency: true,
-      commentAnime: true
+      commentAnime: true,
+      currentTime: true
     },
     locale: getNavigatorLanguage(),
     infinityScroll: true,

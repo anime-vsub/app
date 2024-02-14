@@ -88,14 +88,13 @@
                 </div>
               </div>
             </div>
-            <div>
+            <div class="flex items-center pr-2">
               <q-btn
                 dense
                 flat
                 round
                 @click.stop="runRemount"
                 :disable="!currentStream"
-                class="mr-2"
               >
                 <Icon
                   icon="fluent:flash-flow-24-regular"
@@ -113,6 +112,15 @@
                   {{ t("doi-relay") }}
                 </q-tooltip>
               </q-btn>
+              <div
+                v-if="settingsStore.ui.currentTime && artFullscreen"
+                class="art-subtitle pl-3"
+              >
+                {{ timeText.text }}
+                <span class="text-0.8em">{{
+                  timeText.isAM ? t("sa") : t("ch")
+                }}</span>
+              </div>
             </div>
           </div>
 
@@ -1075,7 +1083,8 @@ import {
   useEventListener,
   useFullscreen,
   useIntervalFn,
-  useMouseInElement
+  useMouseInElement,
+  useTimestamp
 } from "@vueuse/core"
 import BottomBlurRelative from "components/BottomBlurRelative.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
@@ -2521,6 +2530,46 @@ const percentageResourceLoadedText = useMemoControl(() => {
 const percentagePlaytimeText = useMemoControl(() => {
   return `${(artCurrentTime.value / artDuration.value) * 100}%`
 }, showArtLayerController)
+
+const {
+  timestamp: now,
+  pause: pauseTimestamp,
+  resume: resumeTimestamp,
+  isActive: isActiveTimestamp
+} = useTimestamp({
+  interval: 60 * 1e3,
+  controls: true,
+  immediate: false
+})
+watch(
+  documentVisibility,
+  (visibility) => {
+    if (!settingsStore.ui.currentTime) return
+
+    if (visibility) {
+      if (!isActiveTimestamp.value) {
+        resumeTimestamp()
+      }
+    } else {
+      if (isActiveTimestamp.value) {
+        pauseTimestamp()
+      }
+    }
+  },
+  { immediate: true }
+)
+const timeText = computed(() => {
+  console.log("update time")
+  const date = new Date(now.value)
+  const hours = date.getHours()
+
+  const hText = (hours > 12 ? hours - 12 : hours === 0 ? 12 : hours) + ""
+  const mText = date.getMinutes() + ""
+  return {
+    text: `${hText.padStart(2, "0")}:${mText.padStart(2, "0")}`,
+    isAM: hours < 12
+  }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -270,5 +270,8 @@
   "khoi-phuc-tap-cuoi-cung-bo-anime": "Restore the last episode of the Anime series",
   "luu-tien-trinh-xem-khi-offline": "Save viewing progress when Offline",
   "tai-lai": "Reload",
-  "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "This option needs a page reload to apply the change"
+  "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "This option needs a page reload to apply the change",
+  "ch": "PM",
+  "sa": "AM",
+  "hien-thi-thoi-gian-trong-trinh-phat": "Show time in player"
 }

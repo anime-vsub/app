@@ -264,5 +264,8 @@
   "khoi-phuc-tap-cuoi-cung-bo-anime": "アニメシリーズの最終エピソードを復元する",
   "luu-tien-trinh-xem-khi-offline": "オフライン時に視聴の進行状況を保存する",
   "tai-lai": "リロード",
-  "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "このオプションでは、変更を適用するにはページをリロードする必要があります"
+  "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "このオプションでは、変更を適用するにはページをリロードする必要があります",
+  "hien-thi-thoi-gian-trong-trinh-phat": "プレーヤーでの表示時間",
+  "sa": "午前",
+  "ch": "午後"
 }

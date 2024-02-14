@@ -264,5 +264,8 @@
   "khoi-phuc-tap-cuoi-cung-bo-anime": "恢复动漫系列的最后一集",
   "luu-tien-trinh-xem-khi-offline": "离线时保存观看进度",
   "tai-lai": "重新加载",
-  "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "此选项需要重新加载页面才能应用更改"
+  "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "此选项需要重新加载页面才能应用更改",
+  "ch": "下午",
+  "sa": "上午",
+  "hien-thi-thoi-gian-trong-trinh-phat": "在播放器中显示时间"
 }
