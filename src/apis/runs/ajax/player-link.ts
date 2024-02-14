@@ -1,6 +1,6 @@
-import { getQualityByLabel } from "src/logic/get-quality-by-label"
-import { post } from "src/logic/http"
 import { C_URL } from "src/constants"
+import { getQualityByLabel } from "src/logic/get-quality-by-label"
+// import { post } from "src/logic/http"
 
 const addProtocolUrl = (file: string) =>
   file.startsWith("http") ? file : `https:${file}`
