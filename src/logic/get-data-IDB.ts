@@ -12,7 +12,13 @@ const idbCast = swReady && new BroadcastChannel("idb-cast")
 export function getDataIDB<T>(key: string) {
   return new Promise<T>((resolve, reject) => {
     if (!idbCast) {
-      void get(key).then(resolve).catch(reject)
+      void get(key)
+        .then((data) => {
+          // eslint-disable-next-line promise/always-return
+          if (data) resolve(data)
+          else throw new Error("There is no data in IndexedDB.")
+        })
+        .catch(reject)
 
       return
     }
