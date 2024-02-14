@@ -1773,7 +1773,7 @@ watch(documentVisibility, (visibility) => {
         if (resume) resumeDelay()
         else {
           const interval = useIntervalFn(() => {
-            if (!artPlaying.value) return
+            if (!artPlaying.value || !video.value || video.value.paused) return
 
             pause?.()
             setArtPlaying(false)
