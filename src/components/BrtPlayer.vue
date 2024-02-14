@@ -2542,11 +2542,11 @@ const {
   immediate: false
 })
 watch(
-  documentVisibility,
-  (visibility) => {
+  [documentVisibility, showArtLayerController],
+  (visibility, showController) => {
     if (!settingsStore.ui.currentTime) return
 
-    if (visibility) {
+    if (visibility && showController) {
       if (!isActiveTimestamp.value) {
         resumeTimestamp()
       }
