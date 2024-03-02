@@ -12,8 +12,8 @@ export default function AccountInfo(html: string) {
   const sex = $("#male").attr("checked")
     ? "male"
     : $("#female").attr("checked")
-      ? "female"
-      : "unknown"
+    ? "female"
+    : "unknown"
 
   return { avatar, name, email, username, sex }
 }

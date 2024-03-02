@@ -345,13 +345,13 @@ export default defineComponent({
         slots.loading !== void 0
           ? slots.loading()
           : props.noSpinner === true
-            ? void 0
-            : [
-                h(QSpinner, {
-                  color: props.spinnerColor,
-                  size: props.spinnerSize
-                })
-              ]
+          ? void 0
+          : [
+              h(QSpinner, {
+                color: props.spinnerColor,
+                size: props.spinnerSize
+              })
+            ]
       )
     }
 

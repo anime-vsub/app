@@ -421,10 +421,10 @@
                         item.timestamp.isToday()
                           ? "Hôm nay"
                           : item.timestamp.isYesterday()
-                            ? "Hôm qua"
-                            : item.timestamp.get("date") +
-                              " thg " +
-                              (item.timestamp.get("month") + 1)
+                          ? "Hôm qua"
+                          : item.timestamp.get("date") +
+                            " thg " +
+                            (item.timestamp.get("month") + 1)
                       }}
                     </div>
                     <router-link
@@ -913,7 +913,9 @@
                 </q-item>
                 <q-item clickable v-ripple class="rounded-xl">
                   <q-item-section>
-                    <q-item-label>{{ $t('hien-thi-thoi-gian-trong-trinh-phat') }}</q-item-label>
+                    <q-item-label>{{
+                      $t("hien-thi-thoi-gian-trong-trinh-phat")
+                    }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
                     <q-toggle
