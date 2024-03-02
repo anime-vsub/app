@@ -540,7 +540,7 @@ const { data, run, error, loading } = useRequest(
           .then(resolve)
           .catch(reject)
       }).then((text) => {
-        if (!text) throw new Error("not_found")
+        if (!text) throw new Error("not_found_on_idb")
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
         if (!result) result = ref(text)
@@ -561,6 +561,8 @@ const { data, run, error, loading } = useRequest(
           if (result) Object.assign(result.value, data)
           else result = ref(data)
           watcher?.()
+
+          Object.assign(result.value, { __ONLINE__ : true })
 
           // eslint-disable-next-line promise/always-return
           if (changed) {
@@ -1079,6 +1081,7 @@ watchEffect(() => {
       })
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
+      if (data.value.__ONLINE__)
       router.replace({
         name: "not_found",
         params: {
