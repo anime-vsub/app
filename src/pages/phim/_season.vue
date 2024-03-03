@@ -528,8 +528,10 @@ const { data, run, error, loading } = useRequest(
 
     await Promise.any([
       new Promise<Awaited<ReturnType<typeof PhimId>>>((resolve, reject) => {
-        const data =
-          getDataJson<Awaited<ReturnType<typeof PhimId>>>("anime_info", id)
+        const data = getDataJson<Awaited<ReturnType<typeof PhimId>>>(
+          "anime_info",
+          id
+        )
         if (data) {
           resolve(data)
           return
@@ -562,7 +564,7 @@ const { data, run, error, loading } = useRequest(
           else result = ref(data)
           watcher?.()
 
-          Object.assign(result.value, { __ONLINE__ : true })
+          Object.assign(result.value, { __ONLINE__: true })
 
           // eslint-disable-next-line promise/always-return
           if (changed) {
@@ -773,8 +775,10 @@ async function fetchSeason(season: string) {
       (promiseLoadIndexedb = new Promise<
         Awaited<ReturnType<typeof PhimIdChap>>
       >((resolve, reject) => {
-        const data =
-          getDataJson<Awaited<ReturnType<typeof PhimIdChap>>>("anime_list", realIdSeason)
+        const data = getDataJson<Awaited<ReturnType<typeof PhimIdChap>>>(
+          "anime_list",
+          realIdSeason
+        )
         if (data) {
           resolve(data)
           return
@@ -1081,15 +1085,15 @@ watchEffect(() => {
       })
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
-      if (data.value.__ONLINE__)
-      router.replace({
-        name: "not_found",
-        params: {
-          catchAll: route.path.split("/").slice(1)
-        },
-        query: route.query,
-        hash: route.hash
-      })
+      if (data.value && "__ONLINE__" in data.value)
+        router.replace({
+          name: "not_found",
+          params: {
+            catchAll: route.path.split("/").slice(1)
+          },
+          query: route.query,
+          hash: route.hash
+        })
     }
   }
 })
@@ -1340,7 +1344,7 @@ watch(
                 void $q.notify({
                   message: `Play load error: ${err}`,
                   position: "bottom-right",
-                    timeout: 0
+                  timeout: 0
                 })
               })
           }
