@@ -166,7 +166,7 @@ const page = usePage()
 let inited = false
 const defaultsOptions = computed<{
   typer?: string
-  gener?: string
+  gener?: string[]
   seaser?: string
   year?: string
 }>(() => {
@@ -183,9 +183,9 @@ const defaultsOptions = computed<{
     case "the-loai": {
       if (inited)
         return {
-          gener: data.value?.filter.gener
+          gener: data.value?.filter?.gener
             .filter((item) => item.checked)
-            .map((item) => item.value) ?? [value]
+            .map((item) => item.value) ?? [value as string]
         }
 
       return {
