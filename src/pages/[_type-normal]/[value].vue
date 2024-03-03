@@ -514,6 +514,7 @@ const showDialogTyper = ref(false)
 const showDialogSorter = ref(false)
 const showDialogFilter = ref(false)
 
+let inited = false
 const defaultsOptions = computed<{
   typer?: string
   gener?: string
@@ -531,10 +532,18 @@ const defaultsOptions = computed<{
       return {
         typer: value,
       }
-    case "the-loai":
+      case "the-loai": {
+      if (inited)
+        return {
+          gener: data.value?.filter.gener
+            .filter((item) => item.checked)
+            .map((item) => item.value) ?? [value]
+        }
+
       return {
-        gener: value,
+        gener: [value as string]
       }
+    }
     case "season": {
       const [season, year] =
         typeof value === "string" ? value.replace(/\/*$/, "").split("/") : value
@@ -561,10 +570,13 @@ const sorter = ref<string | null>(null)
 const typer = ref<string | null>(null)
 const year = ref<string | null>(null)
 
+const allGenres = computed(() => {
+  return [...(defaultsOptions.value.gener ?? []), ...genres]
+})
+
 watch(
   defaultsOptions,
   (options) => {
-    if (genres.length === 0 && options.gener) genres.push(options.gener)
     seaser.value ??= options.seaser ?? null
     typer.value ??= options.typer ?? null
     year.value ??= options.year ?? null
@@ -578,7 +590,7 @@ const textFilter = computed(() => {
     data.value.filter &&
     [
       data.value.filter.gener
-        .filter((item) => genres.includes(item.value))
+        .filter((item) => allGenres.includes(item.value))
         .map((item) => item.text)
         .join(", "),
       data.value.filter.seaser.find((item) => item.value === seaser.value)
@@ -618,8 +630,12 @@ function toggleGenres(item: string) {
   }
 }
 
+
+const { data, run, loading, refreshAsync, error } = useRequest(() =>
+  fetchTypeNormalValue(1, false)
+)
 function fetchTypeNormalValue(page: number, onlyItems: boolean) {
-  return TypeNormalValue(
+  const r =  TypeNormalValue(
     route.params.type_normal as string,
     typeof route.params.value === "string"
       ? route.params.value.replace(/\/*$/, "")
@@ -635,11 +651,10 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
     },
     defaultsOptions.value
   )
-}
+  inited = true
 
-const { data, run, loading, refreshAsync, error } = useRequest(() =>
-  fetchTypeNormalValue(1, false)
-)
+  return r
+}
 const refresh = (done: () => void) =>
   refreshAsync()
     .then(() => infiniteScrollRef.value?.reset())
@@ -684,7 +699,7 @@ if (!isNative)
   )
 
 watch(
-  [genres, seaser, sorter, typer, year, defaultsOptions],
+  [allGenres, seaser, sorter, typer, year, defaultsOptions],
   () => {
     run()
     infiniteScrollRef.value?.reset()
