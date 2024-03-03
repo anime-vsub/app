@@ -49,8 +49,11 @@ export default function TypeNormalValue(
     typer: $("#filter")
       .find(".fc-filmtype label")
       .map((_i, item) => {
+        const $item = $(item)
+
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = $(item).find("input").attr("value")!
+        const value = $item.find("input").attr("value")!
+        const checked = !!$item.attr("checked")
 
         // eslint-disable-next-line array-callback-return
         if (value === "all") return
@@ -59,7 +62,8 @@ export default function TypeNormalValue(
 
         return {
           text,
-          value
+          value,
+          checked
         }
       })
       .toArray()
@@ -67,8 +71,11 @@ export default function TypeNormalValue(
     seaser: $("#filter")
       .find(".fc-quality label")
       .map((_i, item) => {
+        const $item = $(item)
+
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = $(item).find("input").attr("value")!
+        const value = $item.find("input").attr("value")!
+        const checked = !!$item.attr("checked")
 
         // eslint-disable-next-line array-callback-return
         if (value === "all") return
@@ -77,7 +84,8 @@ export default function TypeNormalValue(
 
         return {
           text,
-          value
+          value,
+          checked
         }
       })
       .toArray()
@@ -85,8 +93,11 @@ export default function TypeNormalValue(
     gener: $("#filter")
       .find(".fc-genre label")
       .map((_i, item) => {
+        const $item = $(item)
+
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const value = $(item).find("input").attr("value")!
+        const checked = !!$item.attr("checked")
 
         // eslint-disable-next-line array-callback-return
         if (value === "all") return
@@ -95,7 +106,8 @@ export default function TypeNormalValue(
 
         return {
           text,
-          value
+          value,
+          checked
         }
       })
       .toArray()
@@ -103,8 +115,11 @@ export default function TypeNormalValue(
     year: $("#filter")
       .find(".fc-release label")
       .map((_i, item) => {
+        const $item = $(item)
+
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const value = $(item).find("input").attr("value")!
+        const checked = !!$item.attr("checked")
 
         // eslint-disable-next-line array-callback-return
         if (value === "all") return
@@ -113,7 +128,8 @@ export default function TypeNormalValue(
 
         return {
           text,
-          value
+          value,
+          checked
         }
       })
       .toArray()

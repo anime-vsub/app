@@ -36,11 +36,11 @@
           no-caps
           class="mx-1 text-[rgba(255,255,255,0.5)] font-weight-normal"
           :class="{
-            '!text-main font-weight-medium': genres.includes(item.value)
+            '!text-main font-weight-medium': allGenres.includes(item.value)
           }"
           :value="item.value"
           @click="
-            genres.includes(item.value)
+            allGenres.includes(item.value)
               ? genres.splice(genres.indexOf(item.value) >>> 0)
               : genres.push(item.value)
           "
@@ -163,6 +163,7 @@ const route = useRoute()
 const infiniteScrollRef = ref<QInfiniteScroll>()
 const page = usePage()
 
+let inited = false
 const defaultsOptions = computed<{
   typer?: string
   gener?: string
@@ -179,10 +180,18 @@ const defaultsOptions = computed<{
       return {
         typer: value as string
       }
-    case "the-loai":
+    case "the-loai": {
+      if (inited)
+        return {
+          gener: data.value?.filter.gener
+            .filter((item) => item.checked)
+            .map((item) => item.value) ?? [value]
+        }
+
       return {
-        gener: value as string
+        gener: [value as string]
       }
+    }
     case "season": {
       const [season, year] =
         typeof value === "string" ? value.replace(/\/*$/, "").split("/") : value
@@ -209,10 +218,13 @@ const sorter = ref<string | null>(null)
 const typer = ref<string | null>(null)
 const year = ref<string | null>(null)
 
+const allGenres = computed(() => {
+  return [...(defaultsOptions.value.gener ?? []), ...genres]
+})
+
 watch(
   defaultsOptions,
   (options) => {
-    if (genres.length === 0 && options.gener) genres.push(options.gener)
     seaser.value ??= options.seaser ?? null
     typer.value ??= options.typer ?? null
     year.value ??= options.year ?? null
@@ -220,8 +232,15 @@ watch(
   { immediate: true }
 )
 
+const { data, run, loading, error } = useRequest(
+  () => fetchTypeNormalValue(page.value, false),
+  {
+    refreshDeps: [page]
+  }
+)
+
 function fetchTypeNormalValue(page: number, onlyItems: boolean) {
-  return TypeNormalValue(
+  const r = TypeNormalValue(
     route.params.type_normal as string,
     typeof route.params.value === "string"
       ? route.params.value.replace(/\/*$/, "")
@@ -229,7 +248,7 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
     page,
     onlyItems,
     {
-      genres,
+      genres: allGenres.value,
       seaser: seaser.value,
       sorter: sorter.value,
       typer: typer.value,
@@ -237,14 +256,10 @@ function fetchTypeNormalValue(page: number, onlyItems: boolean) {
     },
     defaultsOptions.value
   )
-}
+  inited = true
 
-const { data, run, loading, error } = useRequest(
-  () => fetchTypeNormalValue(page.value, false),
-  {
-    refreshDeps: [page]
-  }
-)
+  return r
+}
 
 const title = ref("")
 const watcherData = watch(data, (data) => {
@@ -290,7 +305,7 @@ const textFilter = computed(() => {
     data.value.filter &&
     [
       data.value.filter.gener
-        .filter((item) => genres.includes(item.value))
+        .filter((item) => allGenres.value.includes(item.value))
         .map((item) => item.text)
         .join(", "),
       data.value.filter.seaser.find((item) => item.value === seaser.value)
@@ -306,7 +321,7 @@ const textFilter = computed(() => {
 })
 
 watch(
-  [genres, seaser, sorter, typer, year],
+  [allGenres, seaser, sorter, typer, year],
   () => {
     console.log("refresh by watcher options")
     run()

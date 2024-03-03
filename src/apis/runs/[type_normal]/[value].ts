@@ -25,7 +25,7 @@ export async function TypeNormalValue(
 ) {
   const isCustom =
     options &&
-    (options.genres.length > 0 ||
+    (options.genres.length > 1 ||
       options.seaser ||
       options.typer ||
       options.year ||
