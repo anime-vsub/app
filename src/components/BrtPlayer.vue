@@ -1227,6 +1227,7 @@ const saveCurTimeToPer = throttle(
 
     savingTimeEpStore.add(uidTask)
 
+    try {
     // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
     // eslint-disable-next-line functional/no-let
     let cur = artCurrentTime.value
@@ -1286,8 +1287,11 @@ const saveCurTimeToPer = throttle(
     ])
 
     console.log("save viewing progress")
-
-    savingTimeEpStore.delete(uidTask)
+  } catch (err) {
+      console.error(err)
+    } finally {
+      savingTimeEpStore.delete(uidTask)
+    }
   }
 )
 watch(uidChap, saveCurTimeToPer.cancel)
