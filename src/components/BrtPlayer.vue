@@ -1615,67 +1615,71 @@ const saveCurTimeToPer = throttle(
 
     savingTimeEpStore.add(uidTask)
 
-    // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
+    try {
+      // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
 
-    let cur = artCurrentTime.value
+      let cur = artCurrentTime.value
 
-    let dur = artDuration.value
+      let dur = artDuration.value
 
-    if (!dur) {
-      console.warn("[saveCurTime]: artDuration is %s", dur)
-      return
+      if (!dur) {
+        console.warn("[saveCurTime]: artDuration is %s", dur)
+        return
+      }
+
+      if (!(await createSeason(currentSeason, nameSeason, poster, name))) return
+
+      // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
+      if (uidTask === uidChap.value) {
+        // update value now
+        cur = artCurrentTime.value
+        dur = artDuration.value
+      } else {
+        // because changed ep -> use old data not change
+      }
+
+      if (stateStorageStore.disableAutoRestoration === 2) return
+
+      console.log("%ccall sav curTime", "color: green")
+
+      if (!dur) {
+        console.warn("[saveCurTime]: artDuration is %s", dur)
+        return
+      }
+
+      emit("cur-update", {
+        cur,
+        dur,
+        id: currentChap
+      })
+
+      await Promise.race([
+        historyStore
+          .setProgressChap(
+            currentSeason,
+            currentChap,
+            {
+              cur,
+              dur,
+              name: nameCurrentChap
+            },
+            {
+              poster,
+              seasonName: nameSeason,
+              name
+            }
+          )
+          .catch((err) => console.warn("save viewing progress failed: ", err)),
+
+        resolveAfter(1_000)
+      ])
+
+      console.log("save viewing progress")
+    } catch (err) {
+      console.error(err)
+    } finally {
+      savingTimeEpStore.delete(uidTask)
     }
-
-    if (!(await createSeason(currentSeason, nameSeason, poster, name))) return
-
-    // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
-    if (uidTask === uidChap.value) {
-      // update value now
-      cur = artCurrentTime.value
-      dur = artDuration.value
-    } else {
-      // because changed ep -> use old data not change
-    }
-
-    if (stateStorageStore.disableAutoRestoration === 2) return
-
-    console.log("%ccall sav curTime", "color: green")
-
-    if (!dur) {
-      console.warn("[saveCurTime]: artDuration is %s", dur)
-      return
-    }
-
-    emit("cur-update", {
-      cur,
-      dur,
-      id: currentChap
-    })
-
-    await Promise.race([
-      historyStore
-        .setProgressChap(
-          currentSeason,
-          currentChap,
-          {
-            cur,
-            dur,
-            name: nameCurrentChap
-          },
-          {
-            poster,
-            seasonName: nameSeason,
-            name
-          }
-        )
-        .catch((err) => console.warn("save viewing progress failed: ", err)),
-
-      resolveAfter(1_000)
-    ])
-
-    console.log("save viewing progress")
-
-    savingTimeEpStore.delete(uidTask)
   }
 )
 watch(uidChap, saveCurTimeToPer.cancel)
