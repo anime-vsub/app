@@ -136,11 +136,11 @@
               no-caps
               flat
               class="py-2 bg-[#292929] text-weight-normal w-full ease-bg"
-              :disable="defaultsOptions.gener === item.value"
+              :disable="defaultsOptions.gener?.includes(item.value)"
               @click="toggleGenres(item.value)"
               :class="{
                 'bg-main':
-                  defaultsOptions.gener === item.value ||
+                defaultsOptions.gener?.includes(item.value) ||
                   indexInGenres(item.value) > -1,
               }"
               >{{ item.text }}</q-btn
@@ -369,11 +369,11 @@
                 no-caps
                 flat
                 class="py-2 bg-[#292929] text-weight-normal w-full min-h-10 ease-bg"
-                :disable="defaultsOptions.gener === item.value"
+                :disable="defaultsOptions.gener?.includes(item.value)"
                 @click="toggleGenres(item.value)"
                 :class="{
                   'bg-main':
-                    defaultsOptions.gener === item.value ||
+                  defaultsOptions.gener?.includes(item.value) ||
                     indexInGenres(item.value) > -1,
                 }"
                 >{{ item.text }}</q-btn
@@ -514,10 +514,11 @@ const showDialogTyper = ref(false)
 const showDialogSorter = ref(false)
 const showDialogFilter = ref(false)
 
+// eslint-disable-next-line functional/no-let
 let inited = false
 const defaultsOptions = computed<{
   typer?: string
-  gener?: string
+  gener?: string[]
   seaser?: string
   year?: string
 }>(() => {
@@ -532,10 +533,10 @@ const defaultsOptions = computed<{
       return {
         typer: value,
       }
-      case "the-loai": {
+    case "the-loai": {
       if (inited)
         return {
-          gener: data.value?.filter.gener
+          gener: data.value?.filter?.gener
             .filter((item) => item.checked)
             .map((item) => item.value) ?? [value]
         }
@@ -590,7 +591,7 @@ const textFilter = computed(() => {
     data.value.filter &&
     [
       data.value.filter.gener
-        .filter((item) => allGenres.includes(item.value))
+        .filter((item) => allGenres.value.includes(item.value))
         .map((item) => item.text)
         .join(", "),
       data.value.filter.seaser.find((item) => item.value === seaser.value)
