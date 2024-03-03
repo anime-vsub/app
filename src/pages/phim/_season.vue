@@ -722,6 +722,8 @@ const { data, run, error, loading } = useRequest(
           if (result) Object.assign(result.value, data)
           else result = ref(data)
           watcher?.()
+          
+          Object.assign(result.value, { __ONLINE__: true })
 
           // eslint-disable-next-line promise/always-return
           if (changed) {
@@ -1195,6 +1197,7 @@ watchEffect(() => {
       })
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
+      if (data.value && "__ONLINE__" in data.value)
       router.replace({
         name: "not_found",
         params: {
