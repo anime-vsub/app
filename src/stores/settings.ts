@@ -9,6 +9,7 @@ export const useSettingsStore = defineStore("settings", {
       enableRemindStop: true,
       volume: 1,
       server: <keyof typeof servers>"DU",
+      autoSkipIEnd: false
     },
     ui: {
       modeMovie: false,
