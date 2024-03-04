@@ -298,12 +298,18 @@
         </div>
         <ChapsGridQBtn
           v-else
-          :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+          :chaps="
+            (
+              _cacheDataSeasons.get(value) as
+                | ResponseDataSeasonSuccess
+                | undefined
+            )?.response.chaps
+          "
           :season="value"
           :find="(item) => value === currentSeason && item.id === currentChap"
           :progressChaps="
-                                  (progressWatchStore.get(value) as unknown as any)?.response
-                                "
+            (progressWatchStore.get(value) as unknown as any)?.response
+          "
           scroll-x
         />
       </q-tab-panel>
@@ -329,7 +335,10 @@
         :label="item.name"
         class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[6px]"
         content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-        :ref="(el: QTab) => void(item.value === seasonActive && (tabsRef = el as QTab))"
+        :ref="
+          (el: QTab) =>
+            void (item.value === seasonActive && (tabsRef = el as QTab))
+        "
       />
     </q-tabs>
 
@@ -420,7 +429,12 @@
             :key="item.value"
             :name="item.value"
             :label="item.name"
-            :ref="(el: QTab) =>void( item.value === seasonActive && (tabsDialogRef = el as QTab))"
+            :ref="
+              (el: QTab) =>
+                void (
+                  item.value === seasonActive && (tabsDialogRef = el as QTab)
+                )
+            "
           />
         </q-tabs>
 
@@ -456,14 +470,20 @@
             <ChapsGridQBtn
               v-else
               grid
-              :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+              :chaps="
+                (
+                  _cacheDataSeasons.get(value) as
+                    | ResponseDataSeasonSuccess
+                    | undefined
+                )?.response.chaps
+              "
               :season="value"
               :find="
                 (item) => value === currentSeason && item.id === currentChap
               "
               :progressChaps="
-                                  (progressWatchStore.get(value) as unknown as any)?.response
-                                "
+                (progressWatchStore.get(value) as unknown as any)?.response
+              "
               class-item="px-4 py-[10px] mx-2 mb-3"
             />
           </q-tab-panel>
@@ -724,7 +744,7 @@ const { data, run, error, loading } = useRequest(
                 watcher()
                 changed = true
               },
-              { deep: true }
+              { deep: true },
             )
           if (result) Object.assign(result.value, data)
           else result = ref(data)
@@ -763,7 +783,7 @@ const { data, run, error, loading } = useRequest(
       if (!realIdCurrentSeason.value) return
       run()
     },
-  }
+  },
 )
 function resetErrorAndRun() {
   error.value = undefined
@@ -803,7 +823,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 )
 
 const _cacheDataSeasons = reactive<
@@ -873,8 +893,8 @@ async function fetchSeason(season: string) {
                     console.warn(
                       "[fs]: failure save cache season %s",
                       realIdSeason,
-                      err
-                    )
+                      err,
+                    ),
                   )
             } else if (import.meta.env.DEV) {
               console.log("[data season]: No update response in IndexedDB")
@@ -894,7 +914,7 @@ async function fetchSeason(season: string) {
           if (!response.value) response.value = JSON.parse(json)
 
           return json
-        }
+        },
       )),
     ])
 
@@ -921,12 +941,12 @@ async function fetchSeason(season: string) {
 
         // eslint-disable-next-line functional/no-let
         let indexMetaSeason = seasons.value.findIndex(
-          (item) => item.value === season
+          (item) => item.value === season,
         )
 
         if (indexMetaSeason === -1)
           indexMetaSeason = seasons.value.findIndex(
-            (item) => item.value === realIdSeason
+            (item) => item.value === realIdSeason,
           )
 
         console.log("index %s = %i", season, indexMetaSeason)
@@ -1008,7 +1028,7 @@ async function fetchSeason(season: string) {
             })
           }
         },
-        { immediate: true }
+        { immediate: true },
       )
 
       onBeforeUnmount(() => {
@@ -1098,7 +1118,7 @@ watchEffect(async (onCleanup): Promise<void> => {
     new Promise<null | undefined>((resolve) => {
       const timeout = setTimeout(
         () => resolve(null),
-        TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE
+        TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE,
       )
 
       onCleanup(() => {
@@ -1128,7 +1148,7 @@ watchEffect(async (onCleanup): Promise<void> => {
         (idFirstEp) => {
           currentChap.value = idFirstEp
         },
-        { immediate: true }
+        { immediate: true },
       )
     }
   }
@@ -1136,7 +1156,7 @@ watchEffect(async (onCleanup): Promise<void> => {
 const currentMetaChap = computed(() => {
   if (!currentChap.value) return
   return currentDataSeason.value?.chaps.find(
-    (item) => item.id === currentChap.value
+    (item) => item.id === currentChap.value,
   )
 })
 
@@ -1167,7 +1187,7 @@ watch(
     })
     onCleanup(watcherRestoreLastEp)
   },
-  { immediate: true }
+  { immediate: true },
 )
 watchEffect(() => {
   // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
@@ -1231,7 +1251,7 @@ watchEffect(() => {
     if (correctChapName === urlChapName) return
 
     console.warn(
-      `Redirect chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
+      `Redirect chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`,
     )
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
@@ -1285,7 +1305,7 @@ if (!isNative)
           },
         ],
       }
-    })
+    }),
   )
 
 interface SiblingChap {
@@ -1462,13 +1482,13 @@ watch(
           console.error(err)
         }
       },
-      { immediate: true }
+      { immediate: true },
     )
     onCleanup(watcher)
   },
   {
     immediate: true,
-  }
+  },
 )
 const sources = computed(() => configPlayer.value?.link)
 
@@ -1500,11 +1520,11 @@ watch(
         })
       }
     })
-  }
+  },
 )
 
 async function getProgressChaps(
-  currentSeason: string
+  currentSeason: string,
 ): Promise<Map<string, { cur: number; dur: number }> | null> {
   if (!authStore.uid) return null
 
@@ -1572,7 +1592,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 )
 // Analytics
 watch(
@@ -1586,7 +1606,7 @@ watch(
       value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
     })
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 watch(
@@ -1596,7 +1616,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 )
 
 async function toggleFollow() {
@@ -1727,7 +1747,6 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
     const controller = new AbortController()
     onCleanup(() => controller.abort())
 
-    // eslint-disable-next-line functional/no-let
     let results: ShallowReactive<ListEpisodes>
     await Promise.any([
       fetch(`${API_OPEND}/list-episodes?name=${name + " " + othername}`, {
@@ -1737,23 +1756,25 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
         .then((data) => {
           if (data.progress.current === data.progress.total) {
             // ok backup data now
-            // eslint-disable-next-line no-void
             void set(`episodes_opend:${realId}`, JSON.stringify(data))
           }
 
           // eslint-disable-next-line promise/always-return
-          if (results) Object.assign(results, data)
-          else results = shallowReactive(data)
+          if (results) {
+            if (JSON.stringify(toRaw(results)) !== JSON.stringify(data))
+              Object.assign(results, data)
+          } else results = shallowReactive(data)
         }),
-      get<string>(`episodes_opend:${realId}`).then((text) => {
-        // eslint-disable-next-line functional/no-throw-statement
+      getDataIDB<string>(`episodes_opend:${realId}`).then((text) => {
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)
 
         // eslint-disable-next-line promise/always-return
-        if (results) Object.assign(results, data)
-        else results = shallowReactive(data)
+        if (results) {
+          if (JSON.stringify(toRaw(results)) !== text)
+            Object.assign(results, data)
+        } else results = shallowReactive(data)
       }),
     ])
 
@@ -1763,7 +1784,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
   null,
   {
     onError: WARN,
-  }
+  },
 )
 const episodeOpEnd = computed(() => {
   // find episode on episodesOpEnd
@@ -1819,28 +1840,29 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
 
     const { id } = episodeOpEnd.value
 
-    // eslint-disable-next-line functional/no-let
     let results: ShallowReactive<InOutroEpisode>
     await Promise.any([
       fetch(`${API_OPEND}/episode-skip/${id}`)
         .then((res) => res.json() as Promise<InOutroEpisode>)
         .then((data) => {
-          // eslint-disable-next-line no-void
           void set(`inoutro:${id}`, data)
 
           // eslint-disable-next-line promise/always-return
-          if (results) Object.assign(results, data)
-          else results = shallowReactive(data)
+          if (results) {
+            if (JSON.stringify(toRaw(results)) !== JSON.stringify(data))
+              Object.assign(results, data)
+          } else results = shallowReactive(data)
         }),
-      get<string>(`inoutro:${id}`).then((text) => {
-        // eslint-disable-next-line functional/no-throw-statement
+      getDataIDB<string>(`inoutro:${id}`).then((text) => {
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)
 
         // eslint-disable-next-line promise/always-return
-        if (results) Object.assign(results, data)
-        else results = shallowReactive(data)
+        if (results) {
+          if (JSON.stringify(toRaw(results)) !== text)
+            Object.assign(results, data)
+        } else results = shallowReactive(data)
       }),
     ])
 
@@ -1848,7 +1870,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
     return results!
   },
   null,
-  { onError: WARN }
+  { onError: WARN },
 )
 </script>
 
@@ -1907,7 +1929,9 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
   margin-top: 8px;
   background: rgb(0, 190, 6);
   display: block;
-  transition: width 0.22s ease, left 0.22s ease;
+  transition:
+    width 0.22s ease,
+    left 0.22s ease;
   transform: translateX(-50%);
   z-index: 12;
 }
