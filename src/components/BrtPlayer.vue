@@ -297,7 +297,7 @@
                   }"
                 />
                 <div
-                  class="absolute z-22 left-0 top-0 right-0 bottom-0 h-full pointer-events-none"
+                  class="absolute z-22 left-0 top-0 right-0 bottom-0 w-0 h-full pointer-events-none"
                   :style="{
                     width: percentagePlaytimeText,
                   }"
@@ -309,9 +309,9 @@
                       (intro && inClamp(artCurrentTime, intro.start, intro.end)
                         ? '\n intro'
                         : outro &&
-                          inClamp(artCurrentTime, outro.start, outro.end)
-                        ? '\n outro'
-                        : '')
+                            inClamp(artCurrentTime, outro.start, outro.end)
+                          ? '\n outro'
+                          : '')
                     "
                     @touchstart.stop="currentingTime = true"
                     @touchmove.stop="onIndicatorMove"
@@ -439,7 +439,7 @@
                   Math.round(
                     skiping.intro
                       ? intro.end - artCurrentTime
-                      : outro.end - artCurrentTime
+                      : outro.end - artCurrentTime,
                   )
                 }}
                 giây</span
@@ -563,7 +563,10 @@
               :label="item.name"
               class="bg-[#2a2a2a] mx-1 rounded-sm !min-h-0 py-[3px]"
               content-class="children:!font-normal children:!text-[13px] children:!min-h-0"
-              :ref="(el: QTab) => void(item.value === currentSeason && (tabsRef = el as QTab))"
+              :ref="
+                (el: QTab) =>
+                  void (item.value === currentSeason && (tabsRef = el as QTab))
+              "
             />
           </q-tabs>
 
@@ -609,14 +612,20 @@
                 class-item="!px-3 !py-2 !mx-1"
                 class-active="!bg-[rgba(0,194,52,.15)]"
                 grid
-                :chaps="(_cacheDataSeasons.get(value) as ResponseDataSeasonSuccess | undefined)?.response.chaps"
+                :chaps="
+                  (
+                    _cacheDataSeasons.get(value) as
+                      | ResponseDataSeasonSuccess
+                      | undefined
+                  )?.response.chaps
+                "
                 :season="value"
                 :find="
                   (item) => value === currentSeason && item.id === currentChap
                 "
                 :progress-chaps="
-                                  (progressWatchStore.get(value) as unknown as any)?.response
-                                "
+                  (progressWatchStore.get(value) as unknown as any)?.response
+                "
               />
             </q-tab-panel>
           </q-tab-panels>
@@ -984,7 +993,7 @@ const seasonActive = ref<string>()
 watch(
   () => props.currentSeason,
   (val) => (seasonActive.value = val),
-  { immediate: true }
+  { immediate: true },
 )
 
 watch(
@@ -997,7 +1006,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 )
 // @scrollIntoView
 const tabsRef = ref<QTab>()
@@ -1020,7 +1029,7 @@ if (import.meta.env.DEV)
     () => props.sources,
     (sources) => {
       console.log("sources changed: ", sources)
-    }
+    },
   )
 
 const video = ref<HTMLVideoElement>()
@@ -1032,7 +1041,7 @@ watch(
         video.play()
       } catch {}
   },
-  { immediate: true }
+  { immediate: true },
 )
 // value control get play
 const artPlaying = ref(false)
@@ -1053,7 +1062,7 @@ watch(
   () => props.currentChap,
   (newVal, oldVal) => {
     if (newVal && oldVal) setArtPlaying(true)
-  }
+  },
 )
 // eslint-disable-next-line functional/no-let
 let artEnded = false
@@ -1110,7 +1119,7 @@ watch(
       progressRestored = currentUid
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 const artPercentageResourceLoaded = ref<number>(0)
 const artPlaybackRate = ref(1)
@@ -1135,7 +1144,7 @@ if (isNative)
   watch(
     artControlShow,
     (artControlShow) =>
-      artControlShow && artFullscreen.value && StatusBar.hide()
+      artControlShow && artFullscreen.value && StatusBar.hide(),
   )
 const artFullscreen = ref(false)
 const setArtFullscreen = async (fullscreen: boolean) => {
@@ -1229,7 +1238,7 @@ async function createSeason(
   currentSeason: string,
   seasonName: string,
   poster: string,
-  name: string
+  name: string,
 ): Promise<boolean> {
   // eslint-disable-next-line camelcase
   const { user_data } = authStore
@@ -1261,14 +1270,14 @@ const emit = defineEmits<{
       cur: number
       dur: number
       id: string
-    }
+    },
   ): void
 }>()
 
 const firstSaveStore = new Set<string>()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function throttle<T extends (...args: any[]) => Promise<void>>(
-  fn: T
+  fn: T,
 ): T & {
   cancel: () => void
 } {
@@ -1290,7 +1299,7 @@ function throttle<T extends (...args: any[]) => Promise<void>>(
         },
         firstSaveStore.has(uidChap.value)
           ? DELAY_SAVE_VIEWING_PROGRESS
-          : DELAY_SAVE_HISTORY
+          : DELAY_SAVE_HISTORY,
       )
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1312,7 +1321,7 @@ const saveCurTimeToPer = throttle(
     currentChap: string,
     nameCurrentChap: string,
     poster: string,
-    name: string
+    name: string,
   ) => {
     console.log("call main fn cur time")
     const uidTask = uidChap.value
@@ -1377,7 +1386,7 @@ const saveCurTimeToPer = throttle(
               poster,
               seasonName: nameSeason,
               name,
-            }
+            },
           )
           .catch((err) => console.warn("save viewing progress failed: ", err)),
 
@@ -1390,7 +1399,7 @@ const saveCurTimeToPer = throttle(
     } finally {
       savingTimeEpStore.delete(uidTask)
     }
-  }
+  },
 )
 watch(uidChap, saveCurTimeToPer.cancel)
 function onVideoTimeUpdate() {
@@ -1417,7 +1426,7 @@ function onVideoTimeUpdate() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     props.poster!,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    props.name!
+    props.name!,
   )
 }
 // function onVideoError(event: Event) {
@@ -1512,7 +1521,7 @@ watch(documentVisibility, (visibility) => {
         pause?.()
       }
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   watch(
@@ -1524,7 +1533,7 @@ watch(documentVisibility, (visibility) => {
         pause?.()
       }
     },
-    { immediate: true }
+    { immediate: true },
   )
   ;[
     "mousedown",
@@ -1643,7 +1652,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
           if (context.rangeEnd) {
             headers.set(
               "Range",
-              "bytes=" + context.rangeStart + "-" + (context.rangeEnd - 1)
+              "bytes=" + context.rangeStart + "-" + (context.rangeEnd - 1),
             )
           }
 
@@ -1656,7 +1665,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
               : maxLoadTimeMs
           this.requestTimeout = self.setTimeout(
             this.loadtimeout.bind(this),
-            config.timeout
+            config.timeout,
           )
 
           // set header because this version always cors not fix by extension liek desktop-web
@@ -1667,7 +1676,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
             {
               headers,
               signal: controller.signal,
-            }
+            },
           )
             .then(async (res) => {
               // eslint-disable-next-line functional/no-let
@@ -1697,7 +1706,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
               this.callbacks!.onError(
                 { code: xhr.status, text: e.message },
                 context,
-                xhr
+                xhr,
               )
             })
         }
@@ -1837,7 +1846,7 @@ const watcherVideoTagReady = watch(video, (video) => {
       // if ((Hls as unknown as any).isSupported()) {
       remount(
         currentEpStream !== uidChap.value,
-        currentEpStream === uidChap.value
+        currentEpStream === uidChap.value,
       )
       currentEpStream = uidChap.value
       // } else {
@@ -1847,7 +1856,7 @@ const watcherVideoTagReady = watch(video, (video) => {
       //   }
       // }
     },
-    { immediate: true }
+    { immediate: true },
   )
 })
 
@@ -1861,21 +1870,21 @@ watch(
       artQuality.value = sources[0].qualityCode // not use setArtQuality because skip notify
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const currentingTime = ref(false)
 const progressInnerRef = ref<HTMLDivElement>()
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
-  innerEl?: HTMLDivElement
+  innerEl?: HTMLDivElement,
 ): void
 // eslint-disable-next-line no-redeclare
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl: HTMLDivElement,
   offsetX: number,
-  curTimeStart: number
+  curTimeStart: number,
 ): void
 // eslint-disable-next-line no-redeclare
 function onIndicatorMove(
@@ -1883,7 +1892,7 @@ function onIndicatorMove(
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   innerEl: HTMLDivElement = progressInnerRef.value!,
   offsetX?: number,
-  curTimeStart?: number
+  curTimeStart?: number,
 ) {
   currentingTime.value = true
 
@@ -1909,8 +1918,8 @@ function onIndicatorMove(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         video.value!.duration,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        curTimeStart! + (video.value!.duration * clientX) / maxX
-      )
+        curTimeStart! + (video.value!.duration * clientX) / maxX,
+      ),
     )
   } else {
     const clientX = Math.min(
@@ -1921,8 +1930,8 @@ function onIndicatorMove(
           (event as TouchEvent).changedTouches?.[0] ??
           (event as TouchEvent).touches?.[0] ??
           event
-        ).clientX - left
-      )
+        ).clientX - left,
+      ),
     )
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -1979,7 +1988,7 @@ function onBDTouchMove(event: TouchEvent) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       xStart!,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      curTimeStart!
+      curTimeStart!,
     )
   }
 }
@@ -2000,15 +2009,15 @@ function onBDTouchEnd() {
 
 function skipBack() {
   setArtCurrentTime(
-    (artCurrentTime.value = Math.max(0, artCurrentTime.value - 10))
+    (artCurrentTime.value = Math.max(0, artCurrentTime.value - 10)),
   )
 }
 function skipForward() {
   setArtCurrentTime(
     (artCurrentTime.value = Math.min(
       artCurrentTime.value + 10,
-      artDuration.value
-    ))
+      artDuration.value,
+    )),
   )
 }
 
@@ -2093,7 +2102,7 @@ function emitNextChap(noNotice?: boolean) {
     addNotice(
       props.currentSeason !== props.nextChap.season.value
         ? `Đang phát season ${props.nextChap.season.name} sau`
-        : `Đang phát tập ${props.nextChap.chap?.name ?? ""} tiếp theo`
+        : `Đang phát tập ${props.nextChap.chap?.name ?? ""} tiếp theo`,
     )
 
   router.push(
@@ -2103,7 +2112,7 @@ function emitNextChap(noNotice?: boolean) {
           "-" +
           props.nextChap.chap?.id
         : ""
-    }`
+    }`,
   )
 }
 function emitPrevChap(noNotice?: boolean) {
@@ -2113,7 +2122,7 @@ function emitPrevChap(noNotice?: boolean) {
     addNotice(
       props.currentSeason !== props.prevChap.season.value
         ? `Đang phát season ${props.prevChap.season.name} trước`
-        : `Đang phát tập ${props.prevChap.chap?.name ?? ""} trước`
+        : `Đang phát tập ${props.prevChap.chap?.name ?? ""} trước`,
     )
 
   router.push(
@@ -2123,7 +2132,7 @@ function emitPrevChap(noNotice?: boolean) {
           "-" +
           props.prevChap.chap?.id
         : ""
-    }`
+    }`,
   )
 }
 
@@ -2181,7 +2190,7 @@ watch(showDialogChapter, (status) => {
 
 // memo-control time and progress
 const showArtLayerController = computed(
-  () => holdedBD.value || artControlShow.value
+  () => holdedBD.value || artControlShow.value,
 )
 
 const playtimeText = useMemoControl(() => {
@@ -2212,7 +2221,7 @@ watch(
   (intro) => {
     if (typeof intro === "boolean") skiping.value = { intro }
     else skiping.value = null
-  }
+  },
 )
 function skipOpEnd() {
   if (!skiping.value) return
@@ -2224,9 +2233,9 @@ function skipOpEnd() {
   if (!skiping.value.intro && props.outro) setArtCurrentTime(props.outro.end)
 }
 const storeSkipFragment = shallowReactive(
-  new WeakSet<{ readonly intro: boolean }>()
+  new WeakSet<{ readonly intro: boolean }>(),
 )
-watch(skiping, skiping => {
+watch(skiping, (skiping) => {
   if (!skiping) return
   if (!settingsStore.player.autoSkipIEnd) return
 
@@ -2537,7 +2546,9 @@ watch(skiping, skiping => {
   &-move,
   &-enter-active,
   &-leave-active {
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
   }
   &-enter-from,
   &-leave-to {
