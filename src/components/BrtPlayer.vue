@@ -526,6 +526,15 @@
             color="green"
           />
         </div>
+
+        <div class="flex items-center justify-between mt-4 mb-2">
+          Tự động bỏ qua mở đầu / kết thúc
+          <q-toggle
+            v-model="settingsStore.player.autoSkipIEnd"
+            size="sm"
+            color="green"
+          />
+        </div>
       </ArtDialog>
       <ArtDialog
         :model-value="artFullscreen && showDialogChapter"
@@ -2217,6 +2226,12 @@ function skipOpEnd() {
 const storeSkipFragment = shallowReactive(
   new WeakSet<{ readonly intro: boolean }>()
 )
+watch(skiping, skiping => {
+  if (!skiping) return
+  if (!settingsStore.player.autoSkipIEnd) return
+
+  skipOpEnd()
+})
 </script>
 
 <style lang="scss" scoped>
