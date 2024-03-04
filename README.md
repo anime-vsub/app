@@ -22,7 +22,7 @@ Offcial Website:
 
 - ~~https://animevsub.ga~~ This domain has been stolen by Freenom!
 - https://animevsub.netlify.app
-- https://animevsub.eu.org
+- https://animevsub.eu.org - **Primary**
 
 ## Sponsor ☕
 
@@ -47,5 +47,12 @@ If you find this project useful please support me through:
 ![7  2022-11-02 150545](https://user-images.githubusercontent.com/45375496/203582166-0f19a814-76c5-4f74-b792-385c214a1379.jpeg)
 ![8  2022-11-02 150627](https://user-images.githubusercontent.com/45375496/203582175-fca05bf0-8d18-49ac-bf2c-39d2bf2a5a7f.jpeg)
 ![9  2022-11-16 153321](https://user-images.githubusercontent.com/45375496/203582196-279f7864-f67b-4974-8003-af4fcce01320.jpeg)
+
+## News
+### 1.0.5
+- Support skip `opening` and `ending`
+- Fix bugs
+  ![image](https://github.com/anime-vsub/desktop-web/assets/45375496/50e19b9f-71af-43b9-822c-880ad8bc540b)
+
 
 <!--/screenshot-->
