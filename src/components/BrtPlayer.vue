@@ -961,6 +961,17 @@
                         <div
                           class="flex items-center justify-between mt-4 mb-2"
                         >
+                          {{ $t("tu-dong-bo-qua-opend") }}
+                          <q-toggle
+                            v-model="settingsStore.player.autoSkipIEnd"
+                            size="sm"
+                            color="green"
+                          />
+                        </div>
+
+                        <div
+                          class="flex items-center justify-between mt-4 mb-2"
+                        >
                           {{ t("giao-dien-moi") }}
                           <q-toggle
                             v-model="settingsStore.ui.newPlayer"
@@ -2714,6 +2725,11 @@ function skipOpEnd() {
 const storeSkipFragment = shallowReactive(
   new WeakSet<{ readonly intro: boolean }>()
 )
+watch(skiping, (skiping) => {
+  if (!skiping) return
+  if (!settingsStore.player.autoSkipIEnd) return
+  skipOpEnd()
+})
 </script>
 
 <style lang="scss" scoped>
