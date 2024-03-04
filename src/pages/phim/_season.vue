@@ -1845,7 +1845,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
       fetch(`${API_OPEND}/episode-skip/${id}`)
         .then((res) => res.json() as Promise<InOutroEpisode>)
         .then((data) => {
-          void set(`inoutro:${id}`, data)
+          void set(`inoutro:${id}`, JSON.stringify(data))
 
           // eslint-disable-next-line promise/always-return
           if (results) {
