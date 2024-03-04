@@ -100,6 +100,7 @@
                 <div v-if="nameCurrentChap" class="text-gray-300">
                   Tập
                   {{ nameCurrentChap }}
+                  {{ engNameCurrentChap ? " - " + engNameCurrentChap : "" }}
                 </div>
               </div>
             </div>
@@ -296,14 +297,22 @@
                   }"
                 />
                 <div
-                  class="art-progress-played"
+                  class="absolute z-22 left-0 top-0 right-0 bottom-0 h-full pointer-events-none"
                   :style="{
                     width: percentagePlaytimeText,
                   }"
                 >
                   <div
                     class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
-                    :data-title="playtimeText"
+                    :data-title="
+                      playtimeText +
+                      (intro && inClamp(artCurrentTime, intro.start, intro.end)
+                        ? '\n intro'
+                        : outro &&
+                          inClamp(artCurrentTime, outro.start, outro.end)
+                        ? '\n outro'
+                        : '')
+                    "
                     @touchstart.stop="currentingTime = true"
                     @touchmove.stop="onIndicatorMove"
                     @touchend.stop="onIndicatorEnd"
@@ -311,6 +320,27 @@
                     <img width="16" heigth="16" src="~assets/indicator.svg" />
                   </div>
                 </div>
+
+                <div
+                  v-if="intro"
+                  class="absolute h-full bg-blue top-0 z-21"
+                  :style="{
+                    width: `${
+                      ((intro.end - intro.start) / artDuration) * 100
+                    }%`,
+                    left: `${(intro.start / artDuration) * 100}%`,
+                  }"
+                />
+                <div
+                  v-if="outro"
+                  class="absolute h-full bg-blue top-0 z-21"
+                  :style="{
+                    width: `${
+                      ((outro.end - outro.start) / artDuration) * 100
+                    }%`,
+                    left: `${(outro.start / artDuration) * 100}%`,
+                  }"
+                />
               </div>
             </div>
 
@@ -370,15 +400,64 @@
           >
         </div>
       </transition-group>
+      <!-- /notices -->
 
+      <!-- loading global -->
       <div
         v-if="!sources || artLoading"
         class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
       >
         <q-spinner size="60px" :thickness="3" />
       </div>
+      <!-- /loading global -->
 
-      <!-- /notices -->
+      <!-- question skip -->
+      <transition
+        v-if="intro && outro"
+        name="q-transition--fade"
+        :duration="500"
+      >
+        <div
+          v-if="skiping && !storeSkipFragment.has(skiping)"
+          class="absolute bottom-[min(35%,100px)] text-[14px] right-10px bg-[#1c1c1c] bg-opacity-90 rounded-[5px] py-2 px-3 flex flex-nowrap items-center !h-auto !w-auto z-60"
+        >
+          <span>
+            Bỏ qua
+            <span class="font-weight-medium">{{
+              skiping.intro ? "Mở đầu" : "Kết thúc"
+            }}</span>
+          </span>
+          <q-separator vertical class="mx-2" />
+          <div class="text-13px flex items-center">
+            <button
+              class="px-2 py-1 rounded-5px transition-background hover:bg-gray-300 hover:bg-opacity-10"
+              @click="skipOpEnd"
+            >
+              Bỏ qua (Enter)
+              <span class="block mt-1 text-12px text-gray-300"
+                >{{
+                  Math.round(
+                    skiping.intro
+                      ? intro.end - artCurrentTime
+                      : outro.end - artCurrentTime
+                  )
+                }}
+                giây</span
+              >
+            </button>
+            <q-btn
+              round
+              flat
+              padding="4px"
+              class="self-start"
+              @click="storeSkipFragment.add(skiping)"
+            >
+              <Icon icon="ion:close" class="text-1.2em" />
+            </q-btn>
+          </div>
+        </div>
+      </transition>
+      <!-- /question skip -->
 
       <!-- dialogs -->
       <!--    dialog is settings    -->
@@ -824,6 +903,7 @@ import {
   onBeforeUnmount,
   ref,
   shallowReactive,
+  shallowRef,
   watch,
   watchEffect,
 } from "vue"
@@ -859,6 +939,7 @@ const props = defineProps<{
   nameCurrentSeason?: string
   currentChap?: string
   nameCurrentChap?: string
+  engNameCurrentChap?: string
   nextChap?: SiblingChap
   prevChap?: SiblingChap
   name?: string
@@ -872,6 +953,14 @@ const props = defineProps<{
   >
   fetchSeason: (season: string) => Promise<void>
   progressWatchStore: ProgressWatchStore
+  intro?: {
+    start: number
+    end: number
+  }
+  outro?: {
+    start: number
+    end: number
+  }
 }>()
 const uidChap = computed(() => {
   const uid = `${props.currentSeason}/${props.currentChap ?? ""}` // 255 byte
@@ -1228,66 +1317,66 @@ const saveCurTimeToPer = throttle(
     savingTimeEpStore.add(uidTask)
 
     try {
-    // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
-    // eslint-disable-next-line functional/no-let
-    let cur = artCurrentTime.value
-    // eslint-disable-next-line functional/no-let
-    let dur = artDuration.value
+      // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
+      // eslint-disable-next-line functional/no-let
+      let cur = artCurrentTime.value
+      // eslint-disable-next-line functional/no-let
+      let dur = artDuration.value
 
-    if (!dur) {
-      console.warn("[saveCurTime]: artDuration is %s", dur)
-      return
-    }
+      if (!dur) {
+        console.warn("[saveCurTime]: artDuration is %s", dur)
+        return
+      }
 
-    if (!(await createSeason(currentSeason, nameSeason, poster, name))) return
+      if (!(await createSeason(currentSeason, nameSeason, poster, name))) return
 
-    // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
-    if (uidTask === uidChap.value) {
-      // update value now
-      cur = artCurrentTime.value
-      dur = artDuration.value
-    } else {
-      // because changed ep -> use old data not change
-    }
+      // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
+      if (uidTask === uidChap.value) {
+        // update value now
+        cur = artCurrentTime.value
+        dur = artDuration.value
+      } else {
+        // because changed ep -> use old data not change
+      }
 
-    if (stateStorageStore.disableAutoRestoration === 2) return
+      if (stateStorageStore.disableAutoRestoration === 2) return
 
-    console.log("%ccall sav curTime", "color: green")
+      console.log("%ccall sav curTime", "color: green")
 
-    if (!dur) {
-      console.warn("[saveCurTime]: artDuration is %s", dur)
-      return
-    }
+      if (!dur) {
+        console.warn("[saveCurTime]: artDuration is %s", dur)
+        return
+      }
 
-    emit("cur-update", {
-      cur,
-      dur,
-      id: currentChap,
-    })
+      emit("cur-update", {
+        cur,
+        dur,
+        id: currentChap,
+      })
 
-    await Promise.race([
-      historyStore
-        .setProgressChap(
-          currentSeason,
-          currentChap,
-          {
-            cur,
-            dur,
-            name: nameCurrentChap,
-          },
-          {
-            poster,
-            seasonName: nameSeason,
-            name,
-          }
-        )
-        .catch((err) => console.warn("save viewing progress failed: ", err)),
+      await Promise.race([
+        historyStore
+          .setProgressChap(
+            currentSeason,
+            currentChap,
+            {
+              cur,
+              dur,
+              name: nameCurrentChap,
+            },
+            {
+              poster,
+              seasonName: nameSeason,
+              name,
+            }
+          )
+          .catch((err) => console.warn("save viewing progress failed: ", err)),
 
-      resolveAfter(1_000),
-    ])
+        resolveAfter(1_000),
+      ])
 
-    console.log("save viewing progress")
-  } catch (err) {
+      console.log("save viewing progress")
+    } catch (err) {
       console.error(err)
     } finally {
       savingTimeEpStore.delete(uidTask)
@@ -2098,6 +2187,36 @@ const percentageResourceLoadedText = useMemoControl(() => {
 const percentagePlaytimeText = useMemoControl(() => {
   return `${(artCurrentTime.value / artDuration.value) * 100}%`
 }, showArtLayerController)
+
+function inClamp(value: number, min: number, max: number) {
+  return value >= min && value < max
+}
+const skiping = shallowRef<{ readonly intro: boolean } | null>(null)
+watch(
+  () => {
+    const { intro, outro } = props
+    if (!intro || !outro) return null
+    const current = artCurrentTime.value
+    if (inClamp(current, intro.start, intro.end)) return true
+    if (inClamp(current, outro.start, outro.end)) return false
+  },
+  (intro) => {
+    if (typeof intro === "boolean") skiping.value = { intro }
+    else skiping.value = null
+  }
+)
+function skipOpEnd() {
+  if (!skiping.value) return
+  if (storeSkipFragment.has(skiping.value)) return
+  if (skiping.value.intro && props.intro) {
+    setArtCurrentTime(props.intro.end)
+    return
+  }
+  if (!skiping.value.intro && props.outro) setArtCurrentTime(props.outro.end)
+}
+const storeSkipFragment = shallowReactive(
+  new WeakSet<{ readonly intro: boolean }>()
+)
 </script>
 
 <style lang="scss" scoped>
@@ -2279,6 +2398,7 @@ const percentagePlaytimeText = useMemoControl(() => {
             white-space: nowrap;
             transform: translateX(-50%);
             display: none;
+            white-space: pre-wrap;
           }
         }
       }

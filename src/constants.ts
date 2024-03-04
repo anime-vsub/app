@@ -53,3 +53,7 @@ export const C_URL =
   [104, 116, 116, 112, 115, 58, 47, 47]
     .map((val) => String.fromCharCode(val))
     .join("") + HOST_CURL
+
+    
+export const API_OPEND = "https://opend-9animetv.animevsub.eu.org"
+export const WARN = console.warn.bind(console)

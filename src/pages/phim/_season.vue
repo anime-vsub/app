@@ -17,6 +17,7 @@
       :name-current-season="currentMetaSeason?.name"
       :current-chap="currentChap"
       :name-current-chap="currentMetaChap?.name"
+      :eng-name-current-chap="episodeOpEnd?.title"
       :next-chap="nextChap"
       :prev-chap="prevChap"
       :name="data?.name"
@@ -25,6 +26,8 @@
       :_cache-data-seasons="_cacheDataSeasons"
       :fetch-season="fetchSeason"
       :progressWatchStore="progressWatchStore"
+      :intro="inoutroEpisode?.intro"
+      :outro="inoutroEpisode?.outro"
       @cur-update="
         currentProgresWatch?.set($event.id, {
           cur: $event.cur,
@@ -580,6 +583,7 @@
 <script lang="ts" setup>
 import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
+import { computedAsync } from "@vueuse/core"
 import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -619,9 +623,11 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { logEvent } from "src/boot/firebase"
 import type { servers } from "src/constants"
 import {
+  API_OPEND,
   C_URL,
   isNative,
   TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE,
+  WARN,
 } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { forceHttp2 } from "src/logic/forceHttp2"
@@ -635,13 +641,14 @@ import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
 import { useStateStorageStore } from "stores/state"
-import type { Ref, ShallowRef } from "vue"
+import type { Ref, ShallowReactive, ShallowRef } from "vue"
 import {
   computed,
   getCurrentInstance,
   onBeforeUnmount,
   reactive,
   ref,
+  shallowReactive,
   shallowRef,
   toRaw,
   watch,
@@ -722,7 +729,7 @@ const { data, run, error, loading } = useRequest(
           if (result) Object.assign(result.value, data)
           else result = ref(data)
           watcher?.()
-          
+
           Object.assign(result.value, { __ONLINE__: true })
 
           // eslint-disable-next-line promise/always-return
@@ -1198,14 +1205,14 @@ watchEffect(() => {
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
       if (data.value && "__ONLINE__" in data.value)
-      router.replace({
-        name: "not_found",
-        params: {
-          catchAll: route.path.split("/").slice(1),
-        },
-        query: route.query,
-        hash: route.hash,
-      })
+        router.replace({
+          name: "not_found",
+          params: {
+            catchAll: route.path.split("/").slice(1),
+          },
+          query: route.query,
+          hash: route.hash,
+        })
     }
   }
 })
@@ -1685,6 +1692,163 @@ async function removeAnimePlaylist(idPlaylist: string) {
     })
   }
 }
+
+// ================ skip op/end ================
+interface ListEpisodes {
+  poster: string
+  progress: {
+    current: string
+    total: string
+  }
+  name: string
+  jName?: string
+  id: string
+  list: {
+    id: string
+    order: string
+    name: string
+    title?: string
+  }[]
+}
+// eslint-disable-next-line functional/no-let
+let episodesOpEndInited = false
+const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
+  async (onCleanup) => {
+    if (episodesOpEndInited) episodesOpEnd.value = null
+    else episodesOpEndInited = true
+
+    const name = data.value?.name
+    const othername = data.value?.othername
+
+    if (!name && !othername) return null
+
+    const realId = realIdCurrentSeason.value
+
+    const controller = new AbortController()
+    onCleanup(() => controller.abort())
+
+    // eslint-disable-next-line functional/no-let
+    let results: ShallowReactive<ListEpisodes>
+    await Promise.any([
+      fetch(`${API_OPEND}/list-episodes?name=${name + " " + othername}`, {
+        signal: controller.signal,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.progress.current === data.progress.total) {
+            // ok backup data now
+            // eslint-disable-next-line no-void
+            void set(`episodes_opend:${realId}`, JSON.stringify(data))
+          }
+
+          // eslint-disable-next-line promise/always-return
+          if (results) Object.assign(results, data)
+          else results = shallowReactive(data)
+        }),
+      get<string>(`episodes_opend:${realId}`).then((text) => {
+        // eslint-disable-next-line functional/no-throw-statements
+        if (!text) throw new Error("not_found_on_idb")
+
+        const data = JSON.parse(text)
+
+        // eslint-disable-next-line promise/always-return
+        if (results) Object.assign(results, data)
+        else results = shallowReactive(data)
+      }),
+    ])
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return results!
+  },
+  null,
+  {
+    onError: WARN,
+  }
+)
+const episodeOpEnd = computed(() => {
+  // find episode on episodesOpEnd
+  if (!episodesOpEnd.value) return
+
+  const epName = currentMetaChap.value?.name.trim().replace(/^\w+0+/, "")
+
+  if (!epName) return
+
+  const { list } = episodesOpEnd.value
+
+  const epFloat = parseFloat(epName)
+  const episode =
+    list.find((item) => {
+      if (item.name === epName) return true
+
+      return parseFloat(item.name) === epFloat
+    }) ??
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    list[currentDataSeason.value?.chaps.indexOf(currentMetaChap.value!) ?? -1]
+
+  return episode
+  // currentMetaChap.name // format is 01...
+})
+
+interface InOutroEpisode {
+  sources: string
+  tracks: {
+    file: string
+    label: string
+    kind: "captions"
+    default?: true
+  }[]
+  encrypted: boolean
+  intro: {
+    start: number
+    end: number
+  }
+  outro: {
+    start: number
+    end: number
+  }
+  server: number
+}
+// eslint-disable-next-line functional/no-let
+let inoutroEpisodeInited = false
+const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
+  async () => {
+    if (!episodeOpEnd.value) return null
+
+    if (inoutroEpisodeInited) inoutroEpisode.value = null
+    else inoutroEpisodeInited = true
+
+    const { id } = episodeOpEnd.value
+
+    // eslint-disable-next-line functional/no-let
+    let results: ShallowReactive<InOutroEpisode>
+    await Promise.any([
+      fetch(`${API_OPEND}/episode-skip/${id}`)
+        .then((res) => res.json() as Promise<InOutroEpisode>)
+        .then((data) => {
+          // eslint-disable-next-line no-void
+          void set(`inoutro:${id}`, data)
+
+          // eslint-disable-next-line promise/always-return
+          if (results) Object.assign(results, data)
+          else results = shallowReactive(data)
+        }),
+      get<string>(`inoutro:${id}`).then((text) => {
+        if (!text) throw new Error("not_found_on_idb")
+
+        const data = JSON.parse(text)
+
+        // eslint-disable-next-line promise/always-return
+        if (results) Object.assign(results, data)
+        else results = shallowReactive(data)
+      }),
+    ])
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return results!
+  },
+  null,
+  { onError: WARN }
+)
 </script>
 
 <style lang="scss" scoped>
