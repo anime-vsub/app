@@ -433,7 +433,7 @@
               class="px-2 py-1 rounded-5px transition-background hover:bg-gray-300 hover:bg-opacity-10"
               @click="skipOpEnd"
             >
-              Bỏ qua (Enter)
+              Bỏ qua
               <span class="block mt-1 text-12px text-gray-300"
                 >{{
                   Math.round(
