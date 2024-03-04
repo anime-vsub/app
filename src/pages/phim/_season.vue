@@ -1746,7 +1746,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
           else results = shallowReactive(data)
         }),
       get<string>(`episodes_opend:${realId}`).then((text) => {
-        // eslint-disable-next-line functional/no-throw-statements
+        // eslint-disable-next-line functional/no-throw-statement
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)
