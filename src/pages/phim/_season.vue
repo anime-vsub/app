@@ -23,6 +23,7 @@
         :name-current-season="currentMetaSeason?.name"
         :current-chap="currentChap"
         :name-current-chap="currentMetaChap?.name"
+        :eng-name-current-chap="episodeOpEnd?.title"
         :next-chap="nextChap"
         :prev-chap="prevChap"
         :name="data?.name"
@@ -35,6 +36,8 @@
         :_cache-data-seasons="_cacheDataSeasons"
         :fetch-season="fetchSeason"
         :progressWatchStore="progressWatchStore"
+        :intro="inoutroEpisode?.intro"
+        :outro="inoutroEpisode?.outro"
         @cur-update="
           currentProgresWatch?.set($event.id, {
             cur: $event.cur,
@@ -425,6 +428,7 @@
 import { getAnalytics, logEvent } from "@firebase/analytics"
 import { Icon } from "@iconify/vue"
 import { useHead } from "@vueuse/head"
+import { computedAsync } from "@vueuse/core"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BottomBlur from "components/BottomBlur.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -458,7 +462,12 @@ import { PhimId } from "src/apis/runs/phim/[id]"
 import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { servers } from "src/constants"
-import { C_URL, TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE } from "src/constants"
+import {
+  C_URL,
+  TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE,
+  API_OPEND,
+  WARN
+} from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
 import { formatView } from "src/logic/formatView"
 import { getDataIDB } from "src/logic/get-data-IDB"
@@ -481,7 +490,8 @@ import {
   shallowRef,
   toRaw,
   watch,
-  watchEffect
+  watchEffect,
+  shallowReactive
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -1631,6 +1641,148 @@ watch(
     })
   },
   { immediate: true }
+)
+
+// ================ skip op/end ================
+interface ListEpisodes {
+  poster: string
+  progress: {
+    current: string
+    total: string
+  }
+  name: string
+  jName?: string
+  id: string
+  list: {
+    id: string
+    order: string
+    name: string
+    title?: string
+  }[]
+}
+let episodesOpEndInited = false
+const episodesOpEnd = computedAsync<ListEpisodes | null>(
+  async (onCleanup) => {
+    if (episodesOpEndInited) episodesOpEnd.value = null
+    else episodesOpEndInited = true
+
+    const name = data.value?.name
+    const othername = data.value?.othername
+
+    if (!name && !othername) return
+
+    const realId = realIdCurrentSeason.value
+
+    const controller = new AbortController()
+    onCleanup(() => controller.abort())
+
+    let results: ShallowRef<ListEpisodes>
+    await Promise.any([
+      fetch(`${API_OPEND}/list-episodes?name=${name + " " + othername}`, {
+        signal: controller.signal
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.progress.current === data.progress.total) {
+            // ok backup data now
+            void set(`episodes_opend:${realId}`, JSON.stringify(data))
+          }
+
+          if (results) Object.assign(results, data)
+          else results = shallowReactive(data)
+        }),
+      getDataIDB<string>(`episodes_opend:${realId}`).then((text) => {
+        if (!text) throw new Error("not_found_on_idb")
+
+        const data = JSON.parse(text)
+
+        if (results) Object.assign(results, data)
+        else results = shallowReactive(data)
+      })
+    ])
+
+    return results
+  },
+  null,
+  {
+    onError: WARN
+  }
+)
+const episodeOpEnd = computed(() => {
+  // find episode on episodesOpEnd
+  if (!episodesOpEnd.value) return
+
+  const epName = currentMetaChap.value?.name.trim().replace(/^\w+0+/, "")
+
+  if (!epName) return
+
+  const { list } = episodesOpEnd.value
+
+  const epFloat = parseFloat(epName)
+  const episode =
+    list.find((item) => {
+      if (item.name === epName) return true
+
+      return parseFloat(item.name) === epFloat
+    }) ?? list[currentDataSeason.value?.chaps.indexOf(currentMetaChap) ?? -1]
+
+  return episode
+  // currentMetaChap.name // format is 01...
+})
+
+interface InOutroEpisode {
+  sources: string
+  tracks: {
+    file: string
+    label: string
+    kind: "captions"
+    default?: true
+  }[]
+  encrypted: boolean
+  intro: {
+    start: number
+    end: number
+  }
+  outro: {
+    start: number
+    end: number
+  }
+  server: number
+}
+let inoutroEpisodeInited = false
+const inoutroEpisode = computedAsync<InOutroEpisode | null>(
+ async () => {
+    if (!episodeOpEnd.value) return
+
+    if (inoutroEpisodeInited) inoutroEpisode.value = null
+    else inoutroEpisodeInited = true
+
+    const { id } = episodeOpEnd.value
+
+    let results: ShallowRef<InOutroEpisode>
+    await Promise.any([
+      fetch(`${API_OPEND}/episode-skip/${id}`)
+        .then((res) => res.json() as Promise<InOutroEpisode>)
+        .then((data) => {
+          void set(`inoutro:${id}`, data)
+
+          if (results) Object.assign(results, data)
+          else results = shallowReactive(data)
+        }),
+      getDataIDB<string>(`inoutro:${id}`).then((text) => {
+        if (!text) throw new Error("not_found_on_idb")
+
+        const data = JSON.parse(text)
+
+        if (results) Object.assign(results, data)
+        else results = shallowReactive(data)
+      })
+    ])
+
+    return results
+  },
+  null,
+  { onError: WARN }
 )
 </script>
 

@@ -85,6 +85,7 @@
                 </div>
                 <div v-if="nameCurrentChap" class="art-subtitle text-gray-300">
                   {{ t("tap-_chap", [nameCurrentChap]) }}
+                  {{ engNameCurrentChap ? " - " + engNameCurrentChap : "" }}
                 </div>
               </div>
             </div>
@@ -219,7 +220,18 @@
                   <div
                     v-if="artControlProgressHoving && !currentingTime"
                     class="art-progress-hoved"
-                    :data-title="parseTime(artCurrentTimeHoving)"
+                    :data-title="
+                      parseTime(artCurrentTimeHoving) +
+                      (intro &&
+                      artCurrentTimeHoving >= intro.start &&
+                      artCurrentTimeHoving <= intro.end
+                        ? '\n intro'
+                        : outro &&
+                          artCurrentTimeHoving >= outro.start &&
+                          artCurrentTimeHoving <= outro.end
+                        ? '\n outro'
+                        : '')
+                    "
                     :style="{
                       width: `${(artCurrentTimeHoving / artDuration) * 100}%`
                     }"
@@ -230,9 +242,15 @@
                     :style="{
                       width: percentagePlaytimeText
                     }"
+                  />
+                  <div
+                    class="absolute z-22 left-0 top-0 right-0 bottom-0 h-full pointer-events-none"
+                    :style="{
+                      width: percentagePlaytimeText
+                    }"
                   >
                     <div
-                      class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
+                      class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator z-22"
                       :data-title="
                         artControlProgressHoving
                           ? parseTime(artCurrentTimeHoving)
@@ -244,6 +262,27 @@
                       <img width="16" heigth="16" src="~assets/indicator.svg" />
                     </div>
                   </div>
+
+                  <div
+                    v-if="intro"
+                    class="absolute h-full bg-blue top-0 z-21"
+                    :style="{
+                      width: `${
+                        ((intro.end - intro.start) / artDuration) * 100
+                      }%`,
+                      left: `${(intro.start / artDuration) * 100}%`
+                    }"
+                  />
+                  <div
+                    v-if="outro"
+                    class="absolute h-full bg-blue top-0 z-21"
+                    :style="{
+                      width: `${
+                        ((outro.end - outro.start) / artDuration) * 100
+                      }%`,
+                      left: `${(outro.start / artDuration) * 100}%`
+                    }"
+                  />
                 </div>
               </div>
 
@@ -1063,15 +1102,67 @@
           >
         </div>
       </transition-group>
+      <!-- /notices -->
 
+      <!-- loading global -->
       <div
         v-if="!sources || artLoading"
         class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-200"
       >
         <q-spinner size="60px" :thickness="3" />
       </div>
+      <!-- /loading global -->
 
-      <!-- /notices -->
+      <!-- question skip -->
+      <transition
+        v-if="intro || outro"
+        name="q-transition--fade"
+        :duration="500"
+      >
+        <div
+          v-if="skiping && !storeSkipFragment.has(skiping)"
+          class="absolute bottom-[min(35%,100px)] text-[14px] right-10px bg-[#1c1c1c] bg-opacity-90 rounded-[5px] py-2 px-3 flex flex-nowrap items-center !h-auto !w-auto z-60"
+        >
+          <span>
+            Bỏ qua
+            <span class="font-weight-medium">{{
+              skiping.intro ? "Mở đầu" : "Kết thúc"
+            }}</span>
+          </span>
+
+          <q-separator vertical class="mx-2" />
+
+          <div class="text-13px flex items-center">
+            <button
+              class="px-2 py-1 rounded-5px transition-background hover:bg-gray-300 hover:bg-opacity-10"
+              @click="skipOpEnd"
+            >
+              Bỏ qua (Enter)
+              <span class="block mt-1 text-12px text-gray-300"
+                >{{
+                  Math.round(
+                    skiping.intro
+                      ? intro.end - artCurrentTime
+                      : outro.end - artCurrentTime
+                  )
+                }}
+                giây</span
+              >
+            </button>
+
+            <q-btn
+              round
+              flat
+              padding="4px"
+              class="self-start"
+              @click="storeSkipFragment.add(skiping)"
+            >
+              <Icon icon="ion:close" class="text-1.2em" />
+            </q-btn>
+          </div>
+        </div>
+      </transition>
+      <!-- /question skip -->
     </q-responsive>
   </div>
 </template>
@@ -1136,6 +1227,7 @@ import {
   onBeforeUnmount,
   ref,
   shallowReactive,
+  shallowRef,
   watch,
   watchEffect
 } from "vue"
@@ -1172,6 +1264,7 @@ const props = defineProps<{
   nameCurrentSeason?: string
   currentChap?: string
   nameCurrentChap?: string
+  engNameCurrentChap?: string
   nextChap?: SiblingChap
   prevChap?: SiblingChap
   name?: string
@@ -1188,6 +1281,14 @@ const props = defineProps<{
   >
   fetchSeason: (season: string) => Promise<void>
   progressWatchStore: ProgressWatchStore
+  intro?: {
+    start: number
+    end: number
+  }
+  outro?: {
+    start: number
+    end: number
+  }
 }>()
 const uidChap = computed(() => {
   const uid = `${props.currentSeason}/${props.currentChap ?? ""}` // 255 byte
@@ -2466,6 +2567,11 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
     case "KeyT":
       settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie
       break
+
+    case "Enter":
+      if (skiping.value) skipOpEnd()
+
+      break
   }
 })
 if (typeof MediaMetadata !== "undefined" && navigator.mediaSession)
@@ -2574,6 +2680,40 @@ const timeText = computed(() => {
     isAM: hours < 12
   }
 })
+
+function inClamp(value: number, min: number, max: number) {
+  return value >= min && value < max
+}
+const skiping = shallowRef<{ readonly intro: boolean } | null>(null)
+watch(
+  () => {
+    const { intro, outro } = props
+    if (!intro || !outro) return null
+
+    const current = artCurrentTime.value
+
+    if (inClamp(current, intro.start, intro.end)) return true
+    if (inClamp(current, outro.start, outro.end)) return false
+  },
+  (intro) => {
+    if (typeof intro === "boolean") skiping.value = { intro }
+    else skiping.value = null
+  }
+)
+function skipOpEnd() {
+  if (!skiping.value) return
+  if (storeSkipFragment.has(skiping.value)) return
+
+  if (skiping.value.intro && props.intro) {
+    setArtCurrentTime(props.intro.end)
+    return
+  }
+  if (!skiping.value.intro && props.outro) setArtCurrentTime(props.outro.end)
+}
+
+const storeSkipFragment = shallowReactive(
+  new WeakSet<{ readonly intro: boolean }>()
+)
 </script>
 
 <style lang="scss" scoped>
@@ -2710,6 +2850,7 @@ const timeText = computed(() => {
             @apply absolute right-0 bottom-[100%] transform translate-x--1/2 translate-y-[-16px];
             background: rgba(0, 0, 0, 0.7);
             @apply py-2 px-3 font-weight-medium rounded-lg;
+            white-space: pre-wrap;
           }
         }
 
