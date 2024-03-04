@@ -5,7 +5,7 @@
  * quasar.config.js > pwa > workboxMode is set to "injectManifest"
  */
 
-import { get } from "idb-keyval"
+import { getMany, get } from "idb-keyval"
 import type PhimIdChap from "src/apis/parser/phim/[id]/[chap]"
 import type { PhimId } from "src/apis/runs/phim/[id]"
 import { clientsClaim } from "workbox-core"
@@ -66,11 +66,10 @@ if (process.env.MODE !== "ssr" || process.env.PROD) {
             const id = getRealSeasonId(anime)
 
             const currentTime = performance.now()
-            const [{ value: rawData }, { value: rawList }] =
-              (await Promise.allSettled([
-                get(`data-${id}`) as Promise<string>,
-                get(`season_data ${id}`) as Promise<string>
-              ])) as { value: string }[]
+            const [rawData, rawList] = (await getMany([
+              `data-${id}`,
+              `season_data ${id}`
+            ])) as string[]
 
             if (!rawData)
               throw new Error("Data season not exists on IndexedDB.")
