@@ -1142,8 +1142,8 @@
                 >{{
                   Math.round(
                     skiping.intro
-                      ? intro.end - artCurrentTime
-                      : outro.end - artCurrentTime
+                      ? intro!.end - artCurrentTime
+                      : outro!.end - artCurrentTime
                   )
                 }}
                 giây</span

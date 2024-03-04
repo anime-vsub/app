@@ -427,8 +427,8 @@
 <script lang="ts" setup>
 import { getAnalytics, logEvent } from "@firebase/analytics"
 import { Icon } from "@iconify/vue"
-import { useHead } from "@vueuse/head"
 import { computedAsync } from "@vueuse/core"
+import { useHead } from "@vueuse/head"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BottomBlur from "components/BottomBlur.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -463,9 +463,8 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 // import BottomSheet from "src/components/BottomSheet.vue"
 import type { servers } from "src/constants"
 import {
-  C_URL,
-  TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE,
   API_OPEND,
+  C_URL,TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE ,
   WARN
 } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
@@ -480,18 +479,18 @@ import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
-import type { Ref, ShallowRef } from "vue"
+import type { Ref, ShallowReactive, ShallowRef } from "vue"
 import {
   computed,
   getCurrentInstance,
   onBeforeUnmount,
   reactive,
   ref,
+  shallowReactive,
   shallowRef,
   toRaw,
   watch,
-  watchEffect,
-  shallowReactive
+  watchEffect
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
@@ -1661,7 +1660,7 @@ interface ListEpisodes {
   }[]
 }
 let episodesOpEndInited = false
-const episodesOpEnd = computedAsync<ListEpisodes | null>(
+const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
   async (onCleanup) => {
     if (episodesOpEndInited) episodesOpEnd.value = null
     else episodesOpEndInited = true
@@ -1669,14 +1668,14 @@ const episodesOpEnd = computedAsync<ListEpisodes | null>(
     const name = data.value?.name
     const othername = data.value?.othername
 
-    if (!name && !othername) return
+    if (!name && !othername) return null
 
     const realId = realIdCurrentSeason.value
 
     const controller = new AbortController()
     onCleanup(() => controller.abort())
 
-    let results: ShallowRef<ListEpisodes>
+    let results: ShallowReactive<ListEpisodes>
     await Promise.any([
       fetch(`${API_OPEND}/list-episodes?name=${name + " " + othername}`, {
         signal: controller.signal
@@ -1688,6 +1687,7 @@ const episodesOpEnd = computedAsync<ListEpisodes | null>(
             void set(`episodes_opend:${realId}`, JSON.stringify(data))
           }
 
+          // eslint-disable-next-line promise/always-return
           if (results) Object.assign(results, data)
           else results = shallowReactive(data)
         }),
@@ -1696,12 +1696,13 @@ const episodesOpEnd = computedAsync<ListEpisodes | null>(
 
         const data = JSON.parse(text)
 
+        // eslint-disable-next-line promise/always-return
         if (results) Object.assign(results, data)
         else results = shallowReactive(data)
       })
     ])
 
-    return results
+    return results!
   },
   null,
   {
@@ -1724,7 +1725,7 @@ const episodeOpEnd = computed(() => {
       if (item.name === epName) return true
 
       return parseFloat(item.name) === epFloat
-    }) ?? list[currentDataSeason.value?.chaps.indexOf(currentMetaChap) ?? -1]
+    }) ?? list[currentDataSeason.value?.chaps.indexOf(currentMetaChap.value!) ?? -1]
 
   return episode
   // currentMetaChap.name // format is 01...
@@ -1750,22 +1751,23 @@ interface InOutroEpisode {
   server: number
 }
 let inoutroEpisodeInited = false
-const inoutroEpisode = computedAsync<InOutroEpisode | null>(
+const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
  async () => {
-    if (!episodeOpEnd.value) return
+    if (!episodeOpEnd.value) return null
 
     if (inoutroEpisodeInited) inoutroEpisode.value = null
     else inoutroEpisodeInited = true
 
     const { id } = episodeOpEnd.value
 
-    let results: ShallowRef<InOutroEpisode>
+    let results: ShallowReactive<InOutroEpisode>
     await Promise.any([
       fetch(`${API_OPEND}/episode-skip/${id}`)
         .then((res) => res.json() as Promise<InOutroEpisode>)
         .then((data) => {
           void set(`inoutro:${id}`, data)
 
+          // eslint-disable-next-line promise/always-return
           if (results) Object.assign(results, data)
           else results = shallowReactive(data)
         }),
@@ -1774,12 +1776,13 @@ const inoutroEpisode = computedAsync<InOutroEpisode | null>(
 
         const data = JSON.parse(text)
 
+        // eslint-disable-next-line promise/always-return
         if (results) Object.assign(results, data)
         else results = shallowReactive(data)
       })
     ])
 
-    return results
+    return results!
   },
   null,
   { onError: WARN }
