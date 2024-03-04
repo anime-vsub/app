@@ -50,5 +50,5 @@ export const C_URL =
     .map((val) => String.fromCharCode(val))
     .join("") + HOST_CURL
 
-export const API_OPEND = "https://opend-9animetv.deno.dev"
+export const API_OPEND = "https://opend-9animetv.animevsub.eu.org"
 export const WARN = console.warn.bind(console)
