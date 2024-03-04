@@ -464,7 +464,8 @@ import { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import type { servers } from "src/constants"
 import {
   API_OPEND,
-  C_URL,TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE ,
+  C_URL,
+  TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE,
   WARN
 } from "src/constants"
 import { forceHttp2 } from "src/logic/forceHttp2"
@@ -1688,8 +1689,10 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
           }
 
           // eslint-disable-next-line promise/always-return
-          if (results) Object.assign(results, data)
-          else results = shallowReactive(data)
+          if (results) {
+            if (JSON.stringify(toRaw(results)) !== JSON.stringify(data))
+              Object.assign(results, data)
+          } else results = shallowReactive(data)
         }),
       getDataIDB<string>(`episodes_opend:${realId}`).then((text) => {
         if (!text) throw new Error("not_found_on_idb")
@@ -1697,8 +1700,10 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
         const data = JSON.parse(text)
 
         // eslint-disable-next-line promise/always-return
-        if (results) Object.assign(results, data)
-        else results = shallowReactive(data)
+        if (results) {
+          if (JSON.stringify(toRaw(results)) !== text)
+            Object.assign(results, data)
+        } else results = shallowReactive(data)
       })
     ])
 
@@ -1725,7 +1730,8 @@ const episodeOpEnd = computed(() => {
       if (item.name === epName) return true
 
       return parseFloat(item.name) === epFloat
-    }) ?? list[currentDataSeason.value?.chaps.indexOf(currentMetaChap.value!) ?? -1]
+    }) ??
+    list[currentDataSeason.value?.chaps.indexOf(currentMetaChap.value!) ?? -1]
 
   return episode
   // currentMetaChap.name // format is 01...
@@ -1752,7 +1758,7 @@ interface InOutroEpisode {
 }
 let inoutroEpisodeInited = false
 const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
- async () => {
+  async () => {
     if (!episodeOpEnd.value) return null
 
     if (inoutroEpisodeInited) inoutroEpisode.value = null
@@ -1768,8 +1774,10 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
           void set(`inoutro:${id}`, data)
 
           // eslint-disable-next-line promise/always-return
-          if (results) Object.assign(results, data)
-          else results = shallowReactive(data)
+          if (results) {
+            if (JSON.stringify(toRaw(results)) !== JSON.stringify(data))
+              Object.assign(results, data)
+          } else results = shallowReactive(data)
         }),
       getDataIDB<string>(`inoutro:${id}`).then((text) => {
         if (!text) throw new Error("not_found_on_idb")
@@ -1777,8 +1785,10 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
         const data = JSON.parse(text)
 
         // eslint-disable-next-line promise/always-return
-        if (results) Object.assign(results, data)
-        else results = shallowReactive(data)
+        if (results) {
+          if (JSON.stringify(toRaw(results)) !== text)
+            Object.assign(results, data)
+        } else results = shallowReactive(data)
       })
     ])
 
