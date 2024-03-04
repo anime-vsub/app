@@ -267,5 +267,10 @@
   "tai-lai": "Tải lại",
   "hien-thi-thoi-gian-trong-trinh-phat": "Hiển thị thời gian trong trình phát",
   "sa": "SA",
-  "ch": "CH"
+  "ch": "CH",
+  "tu-dong-bo-qua-opend": "Tự động bỏ qua mở đầu / kết thúc",
+  "bo-qua": "Bỏ qua",
+  "mo-dau": "Mở đầu",
+  "ket-thuc": "Kết thúc",
+  "bo-qua-enter": "Bỏ qua (Enter)"
 }

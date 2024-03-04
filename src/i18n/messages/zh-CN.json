@@ -267,5 +267,10 @@
   "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "此选项需要重新加载页面才能应用更改",
   "ch": "下午",
   "sa": "上午",
-  "hien-thi-thoi-gian-trong-trinh-phat": "在播放器中显示时间"
+  "hien-thi-thoi-gian-trong-trinh-phat": "在播放器中显示时间",
+  "bo-qua": "跳过",
+  "bo-qua-enter": "跳过（输入）",
+  "ket-thuc": "结尾",
+  "mo-dau": "前言",
+  "tu-dong-bo-qua-opend": "自动跳过开头/结尾"
 }

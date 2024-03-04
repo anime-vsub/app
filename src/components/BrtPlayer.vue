@@ -225,12 +225,12 @@
                       (intro &&
                       artCurrentTimeHoving >= intro.start &&
                       artCurrentTimeHoving <= intro.end
-                        ? '\n intro'
+                        ? '\n ' + $t('mo-dau')
                         : outro &&
-                          artCurrentTimeHoving >= outro.start &&
-                          artCurrentTimeHoving <= outro.end
-                        ? '\n outro'
-                        : '')
+                            artCurrentTimeHoving >= outro.start &&
+                            artCurrentTimeHoving <= outro.end
+                          ? '\n ' + $t('ket-thuc')
+                          : '')
                     "
                     :style="{
                       width: `${(artCurrentTimeHoving / artDuration) * 100}%`
@@ -1135,9 +1135,9 @@
           class="absolute bottom-[min(35%,100px)] text-[14px] right-10px bg-[#1c1c1c] bg-opacity-90 rounded-[5px] py-2 px-3 flex flex-nowrap items-center !h-auto !w-auto z-60"
         >
           <span>
-            Bỏ qua
+            {{ $t("bo-qua") }}
             <span class="font-weight-medium">{{
-              skiping.intro ? "Mở đầu" : "Kết thúc"
+              skiping.intro ? $t("mo-dau") : $t("ket-thuc")
             }}</span>
           </span>
 
@@ -1148,7 +1148,7 @@
               class="px-2 py-1 rounded-5px transition-background hover:bg-gray-300 hover:bg-opacity-10"
               @click="skipOpEnd"
             >
-              Bỏ qua (Enter)
+              {{ $t("bo-qua-enter") }}
               <span class="block mt-1 text-12px text-gray-300"
                 >{{
                   Math.round(

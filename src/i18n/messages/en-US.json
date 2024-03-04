@@ -97,7 +97,7 @@
   "errors.danh-sach-phat-khong-ton-tai": "Playlist does not exist",
   "errors.loi-khong-xac-dinh-khi": "Unknown error when",
   "errors.require_login_to": "You must be logged in to {0}",
-  "errors.xoa-thong-bao-that-bai": "Clear failure message",
+  "errors.xoa-thong-bao-that-bai": "Delete failure message",
   "extension-animevsub-helper-la-cau-noi-quan-trong-de-ung-dung-gui-cac-yeu-cau-toi-may-chu": "Extension AnimeVsub Helper is an important bridge for the application to send requests to the server.",
   "formatview-data-views-luot-xem": "{0} views",
   "giao-dien-moi": "New interface",
@@ -273,5 +273,10 @@
   "tuy-chon-nay-can-tai-lai-trang-de-ap-dung-thay-doi": "This option needs a page reload to apply the change",
   "ch": "PM",
   "sa": "AM",
-  "hien-thi-thoi-gian-trong-trinh-phat": "Show time in player"
+  "hien-thi-thoi-gian-trong-trinh-phat": "Show time in player",
+  "bo-qua": "Skip",
+  "bo-qua-enter": "Skip (Enter)",
+  "ket-thuc": "End",
+  "mo-dau": "Preamble",
+  "tu-dong-bo-qua-opend": "Automatically skip opening/ending"
 }
