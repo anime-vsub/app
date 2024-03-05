@@ -1768,6 +1768,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
           } else results = shallowReactive(data)
         }),
       get(`episodes_opend:${realId}`).then((text: string) => {
+        // eslint-disable-next-line functional/no-throw-statement
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)
@@ -1858,6 +1859,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
           } else results = shallowReactive(data)
         }),
       get(`inoutro:${id}`).then((text: string) => {
+        // eslint-disable-next-line functional/no-throw-statement
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)
