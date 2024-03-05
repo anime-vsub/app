@@ -1747,6 +1747,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
     const controller = new AbortController()
     onCleanup(() => controller.abort())
 
+    // eslint-disable-next-line functional/no-let
     let results: ShallowReactive<ListEpisodes>
     await Promise.any([
       fetch(`${API_OPEND}/list-episodes?name=${name + " " + othername}`, {
@@ -1756,6 +1757,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
         .then((data) => {
           if (data.progress.current === data.progress.total) {
             // ok backup data now
+            // eslint-disable-next-line no-void
             void set(`episodes_opend:${realId}`, JSON.stringify(data))
           }
 
@@ -1840,11 +1842,13 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
 
     const { id } = episodeOpEnd.value
 
+    // eslint-disable-next-line functional/no-let
     let results: ShallowReactive<InOutroEpisode>
     await Promise.any([
       fetch(`${API_OPEND}/episode-skip/${id}`)
         .then((res) => res.json() as Promise<InOutroEpisode>)
         .then((data) => {
+          // eslint-disable-next-line no-void
           void set(`inoutro:${id}`, JSON.stringify(data))
 
           // eslint-disable-next-line promise/always-return
