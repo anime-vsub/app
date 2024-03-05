@@ -1750,9 +1750,17 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
     // eslint-disable-next-line functional/no-let
     let results: ShallowReactive<ListEpisodes>
     await Promise.any([
-      fetch(`${API_OPEND}/list-episodes?name=${name + " " + othername}`, {
-        signal: controller.signal,
-      })
+      fetch(
+        `${API_OPEND}/list-episodes?${[
+          name,
+          ...(othername?.split(",").map((name) => name.trim()) ?? []),
+        ]
+          .map((item) => `name=${item}`)
+          .join("&")}`,
+        {
+          signal: controller.signal,
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.progress.current === data.progress.total) {
