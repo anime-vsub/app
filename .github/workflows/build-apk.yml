@@ -50,8 +50,17 @@ jobs:
           pnpm i
           pnpm build:android --ide
 
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+
       - name: Build Android App
         uses: anime-vsub/android-build-action@1.2.1
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
         with:
             project-path: src-capacitor/android
             output-path: apk-release.apk
