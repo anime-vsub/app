@@ -1707,6 +1707,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
       })
     ])
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return results!
   },
   null,
@@ -1731,6 +1732,7 @@ const episodeOpEnd = computed(() => {
 
       return parseFloat(item.name) === epFloat
     }) ??
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     list[currentDataSeason.value?.chaps.indexOf(currentMetaChap.value!) ?? -1]
 
   return episode
@@ -1792,6 +1794,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
       })
     ])
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return results!
   },
   null,

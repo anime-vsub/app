@@ -5,7 +5,7 @@
  * quasar.config.js > pwa > workboxMode is set to "injectManifest"
  */
 
-import { getMany, get } from "idb-keyval"
+import { get, getMany } from "idb-keyval"
 import type PhimIdChap from "src/apis/parser/phim/[id]/[chap]"
 import type { PhimId } from "src/apis/runs/phim/[id]"
 import { clientsClaim } from "workbox-core"
