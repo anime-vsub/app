@@ -8,7 +8,7 @@
     "noEmitOnError": false,
     /* end */
     "baseUrl": "./",
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "unplugin-icons/types/vue"],
     "esModuleInterop": true,
     "lib": ["esnext", "DOM"]
   }

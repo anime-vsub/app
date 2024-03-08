@@ -14,7 +14,10 @@ const path = require("path")
 const ISO6391 = require("iso-639-1")
 const { extend } = require("quasar")
 const { configure } = require("quasar/wrappers")
-
+const AutoImport = require("unplugin-auto-import/vite").default
+const IconsResolver = require("unplugin-icons/resolver").default
+const Icons = require("unplugin-icons/vite").default
+const Components = require("unplugin-vue-components/vite").default
 
 const reg = /[\w-]+(?=\.json$)/
 function vitePluginI18nLangs() {
@@ -151,6 +154,19 @@ module.exports = configure(function (/* ctx */) {
             include: path.resolve(__dirname, "./src/i18n/**"),
           },
         ],
+        [Icons, {}],
+        [Components, {
+          resolvers: [IconsResolver({
+            prefix: "i"
+          })]
+        }],
+        [AutoImport, {
+          imports: ["vue", "vue-router", {"quasar": ["useQuasar"]}],
+          dts: "./auto-imports.d.ts",
+          eslintrc: {
+            enabled: true
+          }
+        }],
         ["vite-plugin-rewrite-all", {}],
         ["vite-plugin-remove-console", {}],
         [vitePluginI18nLangs, {}]
