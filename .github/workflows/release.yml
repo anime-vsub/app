@@ -30,7 +30,7 @@ jobs:
         run: npm i
 
       - name: Emit auto import
-        run: pnpm test src/logic/noop.spec.ts
+        run: pnpm test
 
       - name: Typing
         run: pnpm typing
@@ -63,7 +63,7 @@ jobs:
         run: pnpm i
 
       - name: Emit auto import
-        run: pnpm test src/logic/noop.spec.ts
+        run: pnpm test
 
       - name: Push to branch `release`
         run: |
