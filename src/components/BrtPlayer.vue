@@ -227,10 +227,10 @@
                       artCurrentTimeHoving <= intro.end
                         ? '\n ' + $t('mo-dau')
                         : outro &&
-                            artCurrentTimeHoving >= outro.start &&
-                            artCurrentTimeHoving <= outro.end
-                          ? '\n ' + $t('ket-thuc')
-                          : '')
+                          artCurrentTimeHoving >= outro.start &&
+                          artCurrentTimeHoving <= outro.end
+                        ? '\n ' + $t('ket-thuc')
+                        : '')
                     "
                     :style="{
                       width: `${(artCurrentTimeHoving / artDuration) * 100}%`
@@ -2535,9 +2535,16 @@ function skipOpening() {
   )
 }
 useEventListener(window, "keydown", (event: KeyboardEvent) => {
+  if (
+    document.activeElement?.tagName === "INPUT" ||
+    document.activeElement?.tagName === "TEXTAREA"
+  )
+    return
+
   switch (event.code) {
     case "Space":
     case "KeyK": {
+      if (event.ctrlKey || event.shiftKey) break
       if (!checkContentEditable(event.target as Element | null))
         event.preventDefault()
       const playing = artPlaying.value
@@ -2547,39 +2554,50 @@ useEventListener(window, "keydown", (event: KeyboardEvent) => {
       break
     }
     case "KeyF":
+      if (event.ctrlKey || event.shiftKey) break
       void toggleArtFullscreen()
       break
     case "ArrowLeft":
+      if (event.ctrlKey || event.shiftKey) break
       skipBack()
       break
     case "ArrowRight":
+      if (event.ctrlKey || event.shiftKey) break
       skipForward()
       break
 
     case "ArrowUp":
+      if (event.ctrlKey || event.shiftKey) break
       if (artFullscreen.value) upVolume()
       break
     case "ArrowDown":
+      if (event.ctrlKey || event.shiftKey) break
       if (artFullscreen.value) downVolume()
       break
 
     case "KeyM":
+      if (event.ctrlKey || event.shiftKey) break
       toggleMuted()
       break
     case "KeyN":
+      if (event.ctrlKey) break
       if (event.shiftKey) emitNextChap(true)
       break
     case "KeyP":
+      if (event.ctrlKey) break
       if (event.shiftKey) emitPrevChap(true)
       break
     case "KeyJ":
+      if (event.ctrlKey || event.shiftKey) break
       skipOpening()
       break
     case "KeyT":
+      if (event.ctrlKey || event.shiftKey) break
       settingsStore.ui.modeMovie = !settingsStore.ui.modeMovie
       break
 
     case "Enter":
+      if (event.ctrlKey || event.shiftKey) break
       if (skiping.value) skipOpEnd()
 
       break
