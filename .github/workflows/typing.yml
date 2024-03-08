@@ -27,14 +27,14 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 8.6.11
           run_install: false
 
       - name: Install depends
         run: npm i
 
       - name: Emit auto import
-        run: pnpm test
+        run: pnpm test src/logic/noop.spec.ts
 
       - name: Typing
         run: pnpm typing
