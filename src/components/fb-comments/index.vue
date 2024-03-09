@@ -39,6 +39,7 @@
       no-autofocus
       :message-error="$t('msg-error-cmt')"
       class="mt-3 mb-4"
+      @merge="mergeData"
     />
 
     <q-infinite-scroll @load="onLoad" :offset="250">

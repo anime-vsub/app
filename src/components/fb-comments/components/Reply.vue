@@ -127,7 +127,10 @@ async function send() {
       emit("done", await props.cmtApi.postComment(text.value))
     }
 
-    emit("update:modelValue", false)
+    if (props.main) toolbar.value = false
+    else emit("update:modelValue", false)
+
+    text.value = ""
   } catch (err) {
     void $q.notify({
       message: props.messageError,
