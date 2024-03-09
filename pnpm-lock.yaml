@@ -51,8 +51,8 @@ dependencies:
     specifier: 0.0.2-b8
     version: 0.0.2-b8
   fb-comments-web:
-    specifier: ^0.0.11
-    version: 0.0.11
+    specifier: ^0.0.13
+    version: 0.0.13
   group-array:
     specifier: ^1.0.0
     version: 1.0.0
@@ -83,6 +83,9 @@ dependencies:
   minisearch:
     specifier: ^6.1.0
     version: 6.1.0
+  mitt:
+    specifier: ^3.0.1
+    version: 3.0.1
   object.groupby:
     specifier: ^1.0.1
     version: 1.0.1
@@ -6373,8 +6376,8 @@ packages:
       reusify: 1.0.4
     dev: true
 
-  /fb-comments-web@0.0.11:
-    resolution: {integrity: sha512-JnpOuWKqrPWwqlgxlUTjStclEChSJjuY7o2vc8AK0sbJOJpOHZ1hs34j1VGDWDKGN05hEbrW6Mu1LPivyMzl3Q==}
+  /fb-comments-web@0.0.13:
+    resolution: {integrity: sha512-EvCSbiAgA4tVRt8w78EuM7VP/may8dEN84TxyJe0yqKaGAyTi+xgNnFyZcFdOHtcC3H7SYyRwiho7WL4Ije6Rw==}
     dev: false
 
   /fd-slicer@1.1.0:
@@ -8135,6 +8138,10 @@ packages:
       minipass: 3.3.6
       yallist: 4.0.0
     dev: true
+
+  /mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+    dev: false
 
   /mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}

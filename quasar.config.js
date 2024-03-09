@@ -161,7 +161,7 @@ module.exports = configure(function (/* ctx */) {
           })]
         }],
         [AutoImport, {
-          imports: ["vue", "vue-router", {"quasar": ["useQuasar"]}],
+          imports: ["vue", "vue-router", {"quasar": ["useQuasar"], "vue-i18n": ["useI18n"]}],
           dts: "./auto-imports.d.ts",
           eslintrc: {
             enabled: true

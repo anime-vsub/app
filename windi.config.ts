@@ -4,6 +4,7 @@ import lineClamp from "windicss/plugin/line-clamp"
 import scrollSnap from "windicss/plugin/scroll-snap"
 
 export default defineConfig({
+  darkMode: "class",
   plugins: [lineClamp, scrollSnap, forms],
   safelist: [
     "children:!px-0",

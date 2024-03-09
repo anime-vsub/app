@@ -342,22 +342,29 @@
       </div>
 
       <!-- comment embed -->
-      <div class="mt-5 flex items-center justify-between flex-nowrap">
-        <span class="text-subtitle1 text-[#eee]">{{ t("binh-luan") }}</span>
-        <q-toggle
-          v-model="settingsStore.ui.commentAnime"
-          color="main"
-          size="sm"
-        />
-      </div>
-      <EmbedFbCmt
-        v-if="settingsStore.ui.commentAnime"
-        :key="seasonId"
+      <FbComments
+        v-if="semverGt(Http.version, '1.0.29')"
         :href="`http://animevietsub.tv/phim/-${seasonId}/`"
         :lang="locale?.replace('-', '_')"
-        no_socket
-        class="bg-gray-300 rounded-xl mt-3 overflow-hidden"
       />
+      <template v-else>
+        <div class="mt-5 flex items-center justify-between flex-nowrap">
+          <span class="text-subtitle1 text-[#eee]">{{ t("binh-luan") }}</span>
+          <q-toggle
+            v-model="settingsStore.ui.commentAnime"
+            color="main"
+            size="sm"
+          />
+        </div>
+        <EmbedFbCmt
+          v-if="settingsStore.ui.commentAnime"
+          :key="seasonId"
+          :href="`http://animevietsub.tv/phim/-${seasonId}/`"
+          :lang="locale?.replace('-', '_')"
+          no_socket
+          class="bg-gray-300 rounded-xl mt-3 overflow-hidden"
+        />
+      </template>
     </div>
     <div class="col-3">
       <q-responsive
@@ -429,6 +436,7 @@ import { getAnalytics, logEvent } from "@firebase/analytics"
 import { Icon } from "@iconify/vue"
 import { computedAsync } from "@vueuse/core"
 import { useHead } from "@vueuse/head"
+import { Http } from "client-ext-animevsub-helper"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BottomBlur from "components/BottomBlur.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
@@ -454,6 +462,7 @@ import {
   QVideo,
   useQuasar
 } from "quasar"
+import semverGt from "semver/functions/gt"
 import { AjaxLike, checkIsLike } from "src/apis/runs/ajax/like"
 import { PlayerFB } from "src/apis/runs/ajax/player-fb"
 import { PlayerLink } from "src/apis/runs/ajax/player-link"
@@ -480,22 +489,9 @@ import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
-import type { Ref, ShallowReactive, ShallowRef } from "vue"
-import {
-  computed,
-  getCurrentInstance,
-  onBeforeUnmount,
-  reactive,
-  ref,
-  shallowReactive,
-  shallowRef,
-  toRaw,
-  watch,
-  watchEffect
-} from "vue"
+import type { ShallowReactive, ShallowRef } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { RouterLink, useRoute, useRouter } from "vue-router"
 
 import type { ProgressWatchStore, Season } from "./_season.interface"
 import type {
@@ -1185,7 +1181,7 @@ interface SiblingChap {
   season: Exclude<typeof seasons.value, undefined>[0]
   chap?: Exclude<typeof currentDataSeason.value, undefined>["chaps"][0]
 }
-// eslint-disable-next-line vue/return-in-computed-property
+
 const nextChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap
@@ -1228,7 +1224,7 @@ const nextChap = computed((): SiblingChap | undefined => {
 
   console.info("[[===THE END===]]")
 })
-// eslint-disable-next-line vue/return-in-computed-property
+
 const prevChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap
