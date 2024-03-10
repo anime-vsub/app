@@ -156,6 +156,7 @@ module.exports = configure(function (/* ctx */) {
         ],
         [Icons, {}],
         [Components, {
+          globs: [],
           resolvers: [IconsResolver({
             prefix: "i"
           })]
