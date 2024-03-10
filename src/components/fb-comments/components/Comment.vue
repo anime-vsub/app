@@ -206,6 +206,7 @@ import type {
   PostComment,
   User
 } from "fb-comments-web"
+import { useQuasar } from "quasar"
 
 import type { EventBus } from "../index.vue";
 

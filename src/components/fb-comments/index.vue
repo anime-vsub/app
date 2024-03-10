@@ -75,6 +75,7 @@ import { computedAsync } from "@vueuse/core"
 import { Http } from "client-ext-animevsub-helper"
 import { FBCommentPlugin } from "fb-comments-web"
 import type { AsyncComments, PostComment } from "fb-comments-web"
+import { useQuasar } from "quasar"
 import { WARN } from "src/constants"
 import type { ComponentInternalInstance, ShallowRef } from "vue"
 
