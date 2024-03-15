@@ -1734,7 +1734,7 @@ const saveCurTimeToPer = throttle(
 
       let dur = artDuration.value
 
-      if (!dur) {
+      if (!dur || cur <= 5) { // <5s -> pass
         console.warn("[saveCurTime]: artDuration is %s", dur)
         return
       }
