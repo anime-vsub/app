@@ -141,6 +141,7 @@ const playlists = computedAsync(
   },
   undefined,
   {
+    lazy: true,
     onError(err) {
       console.error(err)
     }

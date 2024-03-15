@@ -1021,32 +1021,38 @@
 
           <!-- playlist -->
 
-          <q-separator
-            v-if="playlistStore.playlists && playlistStore.playlists.length > 0"
-            class="bg-[rgba(255,255,255,0.1)] my-6 mr-2"
-          />
-
-          <q-item
-            v-for="item in playlistStore.playlists"
-            :key="item.id"
-            :to="`/playlist/${item.id}`"
-            clickable
-            v-ripple
-            class="min-h-0 my-2 rounded-xl"
-            active-class=""
-            exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
+          <template
+            v-if="
+              routerReady &&
+              (hideDrawer ? showDrawer : true) &&
+              playlistStore.playlists &&
+              playlistStore.playlists.length > 0
+            "
           >
-            <q-item-section avatar class="pr-0 min-w-0">
-              <Icon
-                icon="fluent:navigation-play-20-regular"
-                width="23"
-                height="23"
-              />
-            </q-item-section>
-            <q-item-section class="ml-5">
-              <q-item-label class="text-[16px]">{{ item.name }}</q-item-label>
-            </q-item-section>
-          </q-item>
+            <q-separator class="bg-[rgba(255,255,255,0.1)] my-6 mr-2" />
+
+            <q-item
+              v-for="item in playlistStore.playlists"
+              :key="item.id"
+              :to="`/playlist/${item.id}`"
+              clickable
+              v-ripple
+              class="min-h-0 my-2 rounded-xl"
+              active-class=""
+              exact-active-class="bg-[rgba(255,255,255,0.1)] text-main"
+            >
+              <q-item-section avatar class="pr-0 min-w-0">
+                <Icon
+                  icon="fluent:navigation-play-20-regular"
+                  width="23"
+                  height="23"
+                />
+              </q-item-section>
+              <q-item-section class="ml-5">
+                <q-item-label class="text-[16px]">{{ item.name }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
         </q-list>
 
         <div v-if="hideDrawer ? true : showDrawer" class="text-gray-500">
@@ -1296,7 +1302,13 @@ const focusing = ref(false)
 
 const showDrawer = ref(false)
 
-const hideDrawer = computed(() => route.meta?.hideDrawer === true)
+const routerReady = ref(false)
+void router.isReady().then(() => (routerReady.value = true))
+
+const hideDrawer = computed(() => {
+  if (!routerReady.value) return true
+  return route.meta?.hideDrawer === true
+})
 watch(
   hideDrawer,
   (hideDrawer) => {
