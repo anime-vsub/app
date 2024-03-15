@@ -29,7 +29,7 @@
                   pubdate
                   :datetime="comment.timestamp.time + ''"
                   :title="comment.timestamp.text"
-                  >{{ comment.timestamp.text }}</time
+                  >{{ dayjs(comment.timestamp.time * 1000).fromNow() }}</time
                 >
               </div>
 
@@ -95,8 +95,8 @@
           </div>
 
           <!-- button more options -->
-          <div v-show="(!isOutside || menuShowing) && !editing">
-            <q-btn round>
+          <div class="min-w-42px">
+            <q-btn  v-show="(!isOutside || menuShowing) && !editing" round>
               <i-solar-menu-dots-bold class="transform rotate-90" />
               <q-menu
                 v-model="menuShowing"
@@ -207,6 +207,7 @@ import type {
   User
 } from "fb-comments-web"
 import { useQuasar } from "quasar"
+import dayjs from "src/logic/dayjs"
 
 import type { EventBus } from "../index.vue";
 
