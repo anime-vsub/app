@@ -36,24 +36,24 @@ function isDocumentReference<T>(docRef: any): docRef is DocumentReference<T> {
 }
 
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<DocumentReference<T> | false>,
+  maybeDocRef: MaybeRef<DocumentReference<T>>,
   initialValue: T,
   options?: UseFirestoreOptions
 ): [Ref<T | null>, () => void]
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<Query<T> | false>,
+  maybeDocRef: MaybeRef<Query<T>>,
   initialValue: T[],
   options?: UseFirestoreOptions
 ): [Ref<T[]>, () => void]
 
 // nullable initial values
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<DocumentReference<T> | false>,
+  maybeDocRef: MaybeRef<DocumentReference<T>>,
   initialValue?: T | undefined,
   options?: UseFirestoreOptions
 ): [Ref<T | undefined | null>, () => void]
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<Query<T> | false>,
+  maybeDocRef: MaybeRef<Query<T>>,
   initialValue?: T[],
   options?: UseFirestoreOptions
 ): [Ref<T[] | undefined>, () => void]
@@ -69,7 +69,7 @@ export function useFirestore<T extends DocumentData>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialValue: any = undefined,
   options: UseFirestoreOptions = {}
-): [Ref<T | T[] | null>, () => void] {
+): [Ref<unknown>, () => void] {
   const { errorHandler = WARN, autoDispose = true } = options
 
   const refOfDocRef = (
