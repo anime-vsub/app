@@ -506,6 +506,8 @@ import type {
 
 // ============================================
 
+const __ONLINE__ = import.meta.env.DEV ? Symbol("__ONLINE__") : Symbol("")
+
 const route = useRoute()
 const router = useRouter()
 const instance = getCurrentInstance()
@@ -571,7 +573,7 @@ const { data, run, error, loading } = useRequest(
           else result = ref(data)
           watcher?.()
 
-          Object.assign(result.value, { __ONLINE__: true })
+          Object.assign(result.value, { [__ONLINE__]: true })
 
           // eslint-disable-next-line promise/always-return
           if (changed) {
@@ -1092,7 +1094,7 @@ watchEffect(() => {
       })
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
-      if (data.value && "__ONLINE__" in data.value)
+      if (data.value && __ONLINE__ in data.value)
         router.replace({
           name: "not_found",
           params: {
