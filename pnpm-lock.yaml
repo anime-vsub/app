@@ -56,9 +56,6 @@ dependencies:
   group-array:
     specifier: ^1.0.0
     version: 1.0.0
-  hls.js:
-    specifier: 1.5.5
-    version: 1.5.5
   htmlparser2:
     specifier: ^8.0.2
     version: 8.0.2
@@ -241,6 +238,9 @@ devDependencies:
   happy-dom:
     specifier: ^13.7.0
     version: 13.7.0
+  hls.js:
+    specifier: 1.5.7
+    version: 1.5.7
   jsdom:
     specifier: ^22.1.0
     version: 22.1.0
@@ -6995,9 +6995,9 @@ packages:
     hasBin: true
     dev: true
 
-  /hls.js@1.5.5:
-    resolution: {integrity: sha512-IMio4uloZNDoBLXUMup2dW0/wOSe+0lHL9qYfRV4oUcPQ/nkTBQibG5h4OPTXOTXSI3iUwcon7TFgNb6uEoKIQ==}
-    dev: false
+  /hls.js@1.5.7:
+    resolution: {integrity: sha512-Hnyf7ojTBtXHeOW1/t6wCBJSiK1WpoKF9yg7juxldDx8u3iswrkPt2wbOA/1NiwU4j27DSIVoIEJRAhcdMef/A==}
+    dev: true
 
   /hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
