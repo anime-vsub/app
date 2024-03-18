@@ -604,6 +604,7 @@ const { data, run, error, loading } = useRequest(
   {
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
+      delete data.value?.[__ONLINE__]
       // data.value = undefined
       run()
     }
