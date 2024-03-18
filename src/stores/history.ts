@@ -27,14 +27,9 @@ import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
 import { computed, ref } from "vue"
 
-import { useAuthStore } from "./auth"
+import { v4 } from "uuid"
 
-const isCryptoReady = typeof crypto !== "undefined" // firefox not exists crypto
-const generateUUID = isCryptoReady
-  ? () => crypto.randomUUID()
-  : () => {
-      return parseInt(Math.random().toString().replace(".", "")).toString(34)
-    }
+import { useAuthStore } from "./auth"
 
 function isToday(date?: Date) {
   if (!date) return false
@@ -305,7 +300,7 @@ export const useHistoryStore = defineStore("history", () => {
 
                 const seasonRefOldData = doc(
                   seasonRef.parent,
-                  `${generateUUID()}#${realSeason}`
+                  `${v4()}#${realSeason}`
                 )
 
                 return setDoc(

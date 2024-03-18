@@ -1223,6 +1223,7 @@ import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
+import { sleep } from "src/logic/sleep"
 import type { ProgressWatchStore } from "src/pages/phim/_season.interface"
 import type {
   ResponseDataSeasonError,
@@ -1622,8 +1623,6 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
-const resolveAfter = (ms: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms))
 const seasonMetaCreated = new Set<string>()
 
 async function createSeason(
@@ -1651,7 +1650,7 @@ async function createSeason(
       seasonName,
       name
     }),
-    resolveAfter(1_000)
+    sleep(1_000)
   ])
 
   seasonMetaCreated.add(currentSeason)
@@ -1783,7 +1782,7 @@ const saveCurTimeToPer = throttle(
           )
           .catch((err) => console.warn("save viewing progress failed: ", err)),
 
-        resolveAfter(1_000)
+        sleep(1_000)
       ])
 
       console.log("save viewing progress")
