@@ -53,6 +53,9 @@ dependencies:
   fb-comments-web:
     specifier: ^0.0.13
     version: 0.0.13
+  filesize:
+    specifier: ^10.1.0
+    version: 10.1.0
   group-array:
     specifier: ^1.0.0
     version: 1.0.0
@@ -6458,6 +6461,11 @@ packages:
       strip-outer: 1.0.1
       trim-repeated: 1.0.0
     dev: true
+
+  /filesize@10.1.0:
+    resolution: {integrity: sha512-GTLKYyBSDz3nPhlLVPjPWZCnhkd9TrrRArNcy8Z+J2cqScB7h2McAzR6NBX6nYOoWafql0roY8hrocxnZBv9CQ==}
+    engines: {node: '>= 10.4.0'}
+    dev: false
 
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}

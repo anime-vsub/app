@@ -69,7 +69,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ["windi", "firebase", "head", "i18n"],
+    boot: ["windi", "firebase", "head", "i18n", "task-manager"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -163,6 +163,7 @@ module.exports = configure(function (/* ctx */) {
         }],
         [AutoImport, {
           imports: ["vue", "vue-router", {"quasar": ["useQuasar"], "vue-i18n": ["useI18n"]}],
+          dirs: ["./src/*.ts"],
           dts: "./auto-imports.d.ts",
           eslintrc: {
             enabled: true

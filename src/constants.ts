@@ -52,3 +52,5 @@ export const C_URL =
 
 export const API_OPEND = "https://opend-9animetv.animevsub.eu.org"
 export const WARN = console.warn.bind(console)
+
+export const NAME_GET_MEMORY = "get memory"

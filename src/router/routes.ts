@@ -163,6 +163,12 @@ const routes: RouteRecordRaw[] = [
     }
   },
 
+  {
+    name: "task-manager",
+    path: "/task-manager",
+    component: () => import("pages/task-manager.vue")
+  },
+
   // try remove .html after url
   {
     path: "/:catchAll(.*)*.html",
