@@ -604,7 +604,8 @@ const { data, run, error, loading } = useRequest(
   {
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
-      delete data.value?.[__ONLINE__]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      delete (data.value as unknown as any)?.[__ONLINE__]
       // data.value = undefined
       run()
     }
@@ -1186,6 +1187,7 @@ interface SiblingChap {
   chap?: Exclude<typeof currentDataSeason.value, undefined>["chaps"][0]
 }
 
+// eslint-disable-next-line vue/return-in-computed-property
 const nextChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap
@@ -1229,6 +1231,7 @@ const nextChap = computed((): SiblingChap | undefined => {
   console.info("[[===THE END===]]")
 })
 
+// eslint-disable-next-line vue/return-in-computed-property
 const prevChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap

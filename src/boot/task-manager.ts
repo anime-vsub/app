@@ -1,5 +1,6 @@
 import type { MemoryInfo } from "@vueuse/core"
 import { boot } from "quasar/wrappers"
+import { NAME_GET_MEMORY } from "src/constants"
 import { sleep } from "src/logic/sleep"
 import { v4 } from "uuid"
 
@@ -19,6 +20,8 @@ export interface MessageReturnMemory {
   title: string
   tabId: string
   memory: MemoryInfoTab
+  canPlay: boolean
+  poster: string
   playing: boolean
 }
 interface MessagePlayer {
@@ -34,7 +37,7 @@ interface MessagePauseAll {
 
 const $memoryTabs = new Map<string, Exclude<MessageReturnMemory, "id">>()
 export const memoryTabs = shallowReactive(
-  new Map<string, Exclude<MessageGetMemory, "id">>()
+  new Map<string, Exclude<MessageReturnMemory, "id">>()
 )
 
 const broadcast = new BroadcastChannel(NAME_GET_MEMORY)
@@ -46,7 +49,7 @@ export async function getMemoryAllTabs() {
 
   // update $memoryTabs to memoryTabs
   memoryTabs.forEach(({ tabId }) => {
-    if (!$memoryTabs.has(tabId)) delete memoryTabs.delete(tabId)
+    if (!$memoryTabs.has(tabId)) memoryTabs.delete(tabId)
   })
   $memoryTabs.forEach((tab, id) => {
     memoryTabs.set(id, tab)
@@ -71,6 +74,7 @@ export default boot(() => {
 
       if (data.type === "get") {
         const { jsHeapSizeLimit, totalJSHeapSize, usedJSHeapSize } = (
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           performance as unknown as any
         ).memory as MemoryInfo
 
@@ -99,6 +103,7 @@ export default boot(() => {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           Object.assign($memoryTabs.get(data.tabId)!, data)
         } else {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           delete (data as unknown as any).id
           $memoryTabs.set(data.tabId, shallowReactive(data))
         }
