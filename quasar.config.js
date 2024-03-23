@@ -122,12 +122,13 @@ module.exports = configure(function (/* ctx */) {
         ],
          [Icons, {}],
         [Components, {
+          globs: [],
           resolvers: [IconsResolver({
             prefix: "i"
           })]
         }],
         [AutoImport, {
-          imports: ["vue", "vue-router", {"quasar": ["useQuasar"]}],
+          imports: ["vue", "vue-router", {"quasar": ["useQuasar"], "vue-i18n": ["useI18n"]}],
           dts: "./auto-imports.d.ts",
           eslintrc: {
             enabled: true

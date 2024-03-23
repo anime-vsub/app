@@ -12,6 +12,7 @@ export default defineConfig({
   plugins: [
     Icons(),
     Components({
+      globs: [],
       resolvers: [
         IconsResolver({
           prefix: "i",

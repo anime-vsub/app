@@ -355,12 +355,30 @@
         size="sm"
       />
     </div>
-    <EmbedFbCmt
-      v-if="settingsStore.ui.commentAnime"
+    <FbComments
+        v-if="isNative || semverGt(Http.version, '1.0.29')"
+        :key="seasonId"
       :href="`http://animevietsub.tv/phim/-${seasonId}/`"
       :lang="locale?.replace('-', '_')"
-      class="bg-gray-400 rounded-xl mt-3 overflow-hidden"
     />
+    <template v-else>
+        <div class="mt-5 flex items-center justify-between flex-nowrap">
+          <span class="text-subtitle1 text-[#eee]">{{ t("binh-luan") }}</span>
+          <q-toggle
+            v-model="settingsStore.ui.commentAnime"
+            color="main"
+            size="sm"
+          />
+        </div>
+        <EmbedFbCmt
+          v-if="settingsStore.ui.commentAnime"
+          :key="seasonId"
+          :href="`http://animevietsub.tv/phim/-${seasonId}/`"
+          :lang="locale?.replace('-', '_')"
+          no_socket
+          class="bg-gray-300 rounded-xl mt-3 overflow-hidden"
+        />
+      </template>
   </div>
 
   <ScreenError v-else :error="error" @click:retry="resetErrorAndRun()" />
@@ -661,22 +679,12 @@ import { useHistoryStore } from "stores/history"
 import { usePlaylistStore } from "stores/playlist"
 import { useSettingsStore } from "stores/settings"
 import { useStateStorageStore } from "stores/state"
-import type { Ref, ShallowReactive, ShallowRef } from "vue"
-import {
-  computed,
-  getCurrentInstance,
-  onBeforeUnmount,
-  reactive,
-  ref,
-  shallowReactive,
-  shallowRef,
-  toRaw,
-  watch,
-  watchEffect,
-} from "vue"
+import type { ShallowReactive, ShallowRef } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import { RouterLink, useRoute, useRouter } from "vue-router"
+import semverGt from "semver/functions/gt"
+import { Http } from "client-ext-animevsub-helper"
+import FbComments from "components/fb-comments/index.vue"
 
 import type {
   ProgressWatchStore,
