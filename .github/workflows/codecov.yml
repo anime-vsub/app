@@ -48,9 +48,12 @@ jobs:
       - name: Install depends
         run: npm i
 
+      - name: Emit auto import
+        run: pnpm test src/logic/noop.spec.ts
+
       - name: Typing
         run: pnpm typing
-        
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:

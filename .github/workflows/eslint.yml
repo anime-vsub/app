@@ -45,10 +45,13 @@ jobs:
       - name: Install depends
         run: pnpm i
 
+      - name: Emit auto import
+        run: pnpm test src/logic/noop.spec.ts
+
       - name: Run ESLint
         run: pnpm lint #--fix
-        
-      
+
+
       # - name: Commit changes
       #   uses: EndBug/add-and-commit@v9
       #   with:
