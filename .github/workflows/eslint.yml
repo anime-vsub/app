@@ -11,12 +11,12 @@ name: ESLint
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
-    - cron: '15 10 * * 5'
+    - cron: "15 10 * * 5"
 
 jobs:
   eslint:
@@ -39,7 +39,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 8.6.11
           run_install: false
 
       - name: Install depends
