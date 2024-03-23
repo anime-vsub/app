@@ -98,5 +98,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v0.1.14
         with:
-          files: build/release/signed
+          files: /home/runner/work/app/app
           body: ${{ steps.changelog.outputs.changelog }}
