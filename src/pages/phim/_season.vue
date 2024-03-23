@@ -1324,7 +1324,6 @@ interface SiblingChap {
   season: Exclude<typeof seasons.value, undefined>[0]
   chap?: Exclude<typeof currentDataSeason.value, undefined>["chaps"][0]
 }
-// eslint-disable-next-line vue/return-in-computed-property
 const nextChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap
@@ -1367,7 +1366,6 @@ const nextChap = computed((): SiblingChap | undefined => {
 
   console.info("[[===THE END===]]")
 })
-// eslint-disable-next-line vue/return-in-computed-property
 const prevChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap
