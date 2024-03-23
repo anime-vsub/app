@@ -76,7 +76,7 @@ import { FBCommentPlugin } from "fb-comments-web"
 import type { AsyncComments, PostComment } from "fb-comments-web"
 import { useQuasar } from "quasar"
 import { WARN } from "src/constants"
-import { post } from "src/logic/http"
+import { get, post } from "src/logic/http"
 import type { ComponentInternalInstance, ShallowRef } from "vue"
 
 import Comments from "./components/Comments.vue"
@@ -109,17 +109,15 @@ const commentAPI = computed(() => {
       url += "#fb_extrao"
 
       if (options?.method === "POST") {
-        return post({
-          url,
-          headers: options.headers,
-          data: options.body.toString()
-        }).then((res) => res.data as string)
+        return post(url, options.body.toString(), options.headers).then(
+          (res) => res.data as string
+        )
       }
 
-      return Http.get({ url, headers: options?.headers }).then(
+      return get({ url, headers: options?.headers }).then(
         (res) => res.data as string
       )
-    }
+    },
   })
 })
 const loading = ref(false)
@@ -147,7 +145,7 @@ const data = computedAsync<null | Awaited<
     } catch (err) {
       $q.notify({
         message: i18n.t("msg-err-load-cmt"),
-        caption: err + ""
+        caption: err + "",
       })
       throw err
     } finally {
@@ -157,7 +155,7 @@ const data = computedAsync<null | Awaited<
   null,
   {
     onError: WARN,
-    lazy: true
+    lazy: true,
   }
 ) as ShallowRef<null | Awaited<ReturnType<typeof commentAPI.value.setup>>>
 
@@ -178,7 +176,7 @@ async function onLoad(
   data.value.comments.comments.commentIDs = Array.from(
     new Set([
       ...data.value.comments.comments.commentIDs,
-      ...dataMore.payload.commentIDs
+      ...dataMore.payload.commentIDs,
     ])
   )
 

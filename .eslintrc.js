@@ -90,5 +90,6 @@ module.exports = {
     "functional/immutable-data": "off",
     "vue/multi-word-component-names": "off",
     "eslint-comments/no-unlimited-disable": "off",
+    "functional/prefer-immutable-types": "off"
   },
 }
