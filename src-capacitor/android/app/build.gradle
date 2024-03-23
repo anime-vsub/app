@@ -6,8 +6,8 @@ android {
         applicationId "git.shin.animevsub"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 110
-        versionName '1.8.31'
+        versionCode 111
+        versionName '1.8.32'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
