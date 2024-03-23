@@ -235,6 +235,7 @@ const i18n = useI18n()
 
 const bus = inject<EventBus>("bus")
 if (!bus) {
+  // eslint-disable-next-line functional/no-throw-statement
   throw new Error("bus event not exists")
 }
 

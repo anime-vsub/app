@@ -1,4 +1,3 @@
-/* eslint-disable no-void */
 /* eslint-disable functional/no-let */
 import { QSpinner } from "quasar"
 import { base64ToArrayBuffer } from "src/logic/base64ToArrayBuffer"

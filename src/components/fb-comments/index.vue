@@ -76,11 +76,11 @@ import { FBCommentPlugin } from "fb-comments-web"
 import type { AsyncComments, PostComment } from "fb-comments-web"
 import { useQuasar } from "quasar"
 import { WARN } from "src/constants"
+import { get, post } from "src/logic/http"
 import type { ComponentInternalInstance, ShallowRef } from "vue"
 
 import Comments from "./components/Comments.vue"
 import Reply from "./components/Reply.vue"
-import { get, post } from "src/logic/http"
 
 const LIMIT = 10
 
@@ -93,8 +93,10 @@ const $q = useQuasar()
 const i18n = useI18n()
 
 const intersecting = ref(false)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const onIntersection = (({ isIntersecting }: any) => {
   intersecting.value ||= isIntersecting
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 }) as unknown as any
 
 const orderByReverse = ref(true)
@@ -147,6 +149,7 @@ const data = computedAsync<null | Awaited<
         message: i18n.t("msg-err-load-cmt"),
         caption: err + "",
       })
+      // eslint-disable-next-line functional/no-throw-statement
       throw err
     } finally {
       loading.value = false

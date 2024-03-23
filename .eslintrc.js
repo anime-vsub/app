@@ -90,6 +90,12 @@ module.exports = {
     "functional/immutable-data": "off",
     "vue/multi-word-component-names": "off",
     "eslint-comments/no-unlimited-disable": "off",
-    "functional/prefer-immutable-types": "off"
+    "functional/prefer-immutable-types": "off",
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-empty-function": "error",
+    "@typescript-eslint/no-empty-interface": "error",
+    "no-void": "off",
+    "vue/return-in-computed-property": "error"
+
   },
 }

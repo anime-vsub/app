@@ -76,9 +76,10 @@ export function useFirestore<T extends DocumentData>(
     isRef(maybeDocRef) ? maybeDocRef : computed(() => maybeDocRef)
   ) as Ref<FirebaseDocRef<T>>
 
+  // eslint-disable-next-line functional/no-let
   let initd = false
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, functional/no-let
   let close = () => {}
   const data = ref() as Ref<T | T[] | null>
 
