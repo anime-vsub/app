@@ -1230,8 +1230,6 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
-const resolveAfter = (ms: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms))
 const seasonMetaCreated = new Set<string>()
 
 async function createSeason(
@@ -1257,7 +1255,7 @@ async function createSeason(
       seasonName,
       name,
     }),
-    resolveAfter(1_000),
+    sleep(1_000),
   ])
   seasonMetaCreated.add(currentSeason)
   return true
@@ -1390,7 +1388,7 @@ const saveCurTimeToPer = throttle(
           )
           .catch((err) => console.warn("save viewing progress failed: ", err)),
 
-        resolveAfter(1_000),
+        sleep(1_000),
       ])
 
       console.log("save viewing progress")
