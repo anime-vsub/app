@@ -57,47 +57,10 @@ export async function getMemoryAllTabs() {
   $memoryTabs.clear()
 }
 
-export default boot(() => {
-  const tabId = v4()
-
-  let inited = false
-  function initControlBroadcast() {
-    if (!inited) return
-    inited = true
-
-    broadcast.onmessage = ({
-      data
-    }: MessageEvent<
-      MessageGetMemory | MessageReturnMemory | MessagePlayer | MessagePauseAll
-    >) => {
-      if (!data?.id) return
-
-      if (data.type === "get") {
-        const { jsHeapSizeLimit, totalJSHeapSize, usedJSHeapSize } = (
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          performance as unknown as any
-        ).memory as MemoryInfo
-
-        const video = document.querySelector("video")
-        broadcast.postMessage(<MessageReturnMemory>{
-          id: data.id,
-          type: "return",
-          url: location.toString(),
-          title: document.title,
-          tabId,
-          memory: {
-            jsHeapSizeLimit,
-            totalJSHeapSize,
-            usedJSHeapSize
-          },
-          canPlay: !!video,
-          poster: video && video.getAttribute("poster"),
-          playing: (video ? !video.paused : null) ?? false
-        })
-
-        return
-      }
-
+export default boot(({ router }) => {
+  const isTaskManager = router.currentRoute.value.name === "task-manager"
+  if (isTaskManager) {
+    broadcast.onmessage = ({ data }: MessageEvent<MessageReturnMemory>) => {
       if (data.type === "return") {
         if ($memoryTabs.has(data.tabId)) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -107,26 +70,61 @@ export default boot(() => {
           delete (data as unknown as any).id
           $memoryTabs.set(data.tabId, shallowReactive(data))
         }
-
-        return
       }
-
-      if (data.type === "player" && data.tabId === tabId) {
-        if (data.play) document.querySelector("video")?.play()
-        else document.querySelector("video")?.pause()
-
-        return
-      }
-
-      if (data.type === "pause all") document.querySelector("video")?.pause()
     }
+
+    return
+  }
+
+  // other route init normal
+  const tabId = v4()
+
+  // TODO: can save memory this
+  broadcast.onmessage = ({
+    data
+  }: MessageEvent<
+    MessageGetMemory | MessageReturnMemory | MessagePlayer | MessagePauseAll
+  >) => {
+    if (!data?.id) return
+
+    if (data.type === "get") {
+      const { jsHeapSizeLimit, totalJSHeapSize, usedJSHeapSize } =
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (performance as unknown as any).memory as MemoryInfo
+
+      const video = document.querySelector("video")
+      broadcast.postMessage(<MessageReturnMemory>{
+        id: data.id,
+        type: "return",
+        url: location.toString(),
+        title: document.title,
+        tabId,
+        memory: {
+          jsHeapSizeLimit,
+          totalJSHeapSize,
+          usedJSHeapSize
+        },
+        canPlay: !!video,
+        poster: video && video.getAttribute("poster"),
+        playing: (video ? !video.paused : null) ?? false
+      })
+
+      return
+    }
+
+    if (data.type === "player" && data.tabId === tabId) {
+      if (data.play) document.querySelector("video")?.play()
+      else document.querySelector("video")?.pause()
+
+      return
+    }
+
+    if (data.type === "pause all") document.querySelector("video")?.pause()
   }
 
   window.addEventListener("keydown", (event: KeyboardEvent) => {
     if (event.shiftKey && event.altKey && event.code === "KeyX") {
       event.preventDefault()
-
-      void initControlBroadcast()
 
       const width = 650
       const height = 650
