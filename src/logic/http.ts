@@ -190,7 +190,7 @@ async function getNative(
 
 async function postNative(
   url: string,
-  data: Record<string, string>,
+  data: Record<string, string> | string,
   headers?: Record<string, string>
 ) {
   const response = await (!isNative ? Http : CapacitorHttp).post({

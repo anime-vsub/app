@@ -72,11 +72,11 @@
 
 <script lang="ts" setup>
 import { computedAsync } from "@vueuse/core"
-import { Http } from "client-ext-animevsub-helper"
 import { FBCommentPlugin } from "fb-comments-web"
 import type { AsyncComments, PostComment } from "fb-comments-web"
 import { useQuasar } from "quasar"
 import { WARN } from "src/constants"
+import { post } from "src/logic/http"
 import type { ComponentInternalInstance, ShallowRef } from "vue"
 
 import Comments from "./components/Comments.vue"
@@ -109,7 +109,7 @@ const commentAPI = computed(() => {
       url += "#fb_extrao"
 
       if (options?.method === "POST") {
-        return Http.post({
+        return post({
           url,
           headers: options.headers,
           data: options.body.toString()
