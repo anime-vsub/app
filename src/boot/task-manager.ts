@@ -58,7 +58,8 @@ export async function getMemoryAllTabs() {
 }
 
 export default boot(({ router }) => {
-  const isTaskManager = router.currentRoute.value.name === "task-manager"
+  const isTaskManager = router.currentRoute.value.name === "task-manager" || location.pathname === "/task-manager"
+  console.log({ isTaskManager })
   if (isTaskManager) {
     broadcast.onmessage = ({ data }: MessageEvent<MessageReturnMemory>) => {
       if (data.type === "return") {
