@@ -87,7 +87,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: apk-release.apk
-          path: build/release/signed/home/runner/work/app/app
+          path: /home/runner/work/app/app
 
       - name: Generate changelog
         id: changelog
