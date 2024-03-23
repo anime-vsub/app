@@ -905,6 +905,7 @@ import { fetchJava } from "src/logic/fetchJava"
 import { patcher } from "src/logic/hls-patcher"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
+import { sleep } from "src/logic/sleep"
 import type {
   ProgressWatchStore,
   ResponseDataSeasonError,
