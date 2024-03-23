@@ -22,6 +22,9 @@ jobs:
       - name: Install depends
         run: npm i
 
+      - name: Emit autoimport
+        run: npm run test src/logic/noop.spec.ts
+
       - name: Typing
         run: npm run typing
 
