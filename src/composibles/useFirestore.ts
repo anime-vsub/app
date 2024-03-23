@@ -8,6 +8,7 @@ import type {
 import { onSnapshot } from "@firebase/firestore"
 import type { MaybeRef } from "@vueuse/shared"
 import { isDef, tryOnScopeDispose } from "@vueuse/shared"
+import { WARN } from "src/constants"
 import type { Ref } from "vue"
 import { computed, isRef, ref, watch } from "vue"
 
@@ -35,24 +36,24 @@ function isDocumentReference<T>(docRef: any): docRef is DocumentReference<T> {
 }
 
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<DocumentReference<T> | false>,
+  maybeDocRef: MaybeRef<DocumentReference<T>>,
   initialValue: T,
   options?: UseFirestoreOptions
 ): [Ref<T | null>, () => void]
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<Query<T> | false>,
+  maybeDocRef: MaybeRef<Query<T>>,
   initialValue: T[],
   options?: UseFirestoreOptions
 ): [Ref<T[]>, () => void]
 
 // nullable initial values
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<DocumentReference<T> | false>,
+  maybeDocRef: MaybeRef<DocumentReference<T>>,
   initialValue?: T | undefined,
   options?: UseFirestoreOptions
 ): [Ref<T | undefined | null>, () => void]
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<Query<T> | false>,
+  maybeDocRef: MaybeRef<Query<T>>,
   initialValue?: T[],
   options?: UseFirestoreOptions
 ): [Ref<T[] | undefined>, () => void]
@@ -64,25 +65,26 @@ export function useFirestore<T extends DocumentData>(
  * @see https://vueuse.org/useFirestore
  */
 export function useFirestore<T extends DocumentData>(
-  maybeDocRef: MaybeRef<FirebaseDocRef<T> | false>,
+  maybeDocRef: MaybeRef<FirebaseDocRef<T>>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialValue: any = undefined,
   options: UseFirestoreOptions = {}
 ): [Ref<unknown>, () => void] {
-  const {
-    errorHandler = (err: Error) => console.error(err),
-    autoDispose = true,
-  } = options
+  const { errorHandler = WARN, autoDispose = true } = options
 
-  const refOfDocRef = isRef(maybeDocRef)
-    ? maybeDocRef
-    : computed(() => maybeDocRef)
+  const refOfDocRef = (
+    isRef(maybeDocRef) ? maybeDocRef : computed(() => maybeDocRef)
+  ) as Ref<FirebaseDocRef<T>>
 
-  // eslint-disable-next-line functional/no-let, @typescript-eslint/no-empty-function
+  let initd = false
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   let close = () => {}
-  const data = ref() as Ref<T | T[] | null | undefined>
+  const data = ref() as Ref<T | T[] | null>
 
-  function run(docRef: boolean | FirebaseDocRef<T>) {
+  function run(docRef: FirebaseDocRef<T>) {
+    if (!initd) return
+
     close()
     if (!refOfDocRef.value) {
       data.value = initialValue
@@ -105,7 +107,7 @@ export function useFirestore<T extends DocumentData>(
     }
   }
 
-  watch(refOfDocRef, run, { immediate: true })
+  watch(refOfDocRef, run)
 
   // watch(refOfDocRef, run)
 
@@ -115,5 +117,18 @@ export function useFirestore<T extends DocumentData>(
     })
   }
 
-  return [data, () => run(refOfDocRef.value)]
+  function refresh() {
+    run(refOfDocRef.value)
+  }
+
+  return [
+    computed(() => {
+      if (!initd) {
+        initd = true
+        refresh()
+      }
+      return data.value
+    }),
+    refresh,
+  ]
 }
