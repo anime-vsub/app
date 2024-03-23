@@ -1341,7 +1341,7 @@ const saveCurTimeToPer = throttle(
       // eslint-disable-next-line functional/no-let
       let dur = artDuration.value
 
-      if (!dur) {
+      if (!dur || cur <= 5) { // <5s -> pass
         console.warn("[saveCurTime]: artDuration is %s", dur)
         return
       }
