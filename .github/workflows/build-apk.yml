@@ -83,21 +83,6 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-        with:
-          ## limits ssh access and adds the ssh public key for the user which triggered the workflow
-          limit-access-to-actor: true
-          ## limits ssh access and adds the ssh public keys of the listed GitHub users
-          limit-access-to-users: tachibana-shin
-          wait-timeout-minutes: 5
-
-      # Example use of `signedReleaseFile` output -- not needed
-      - uses: actions/upload-artifact@v2
-        with:
-          name: apk-release.apk
-          path: /home/runner/work/app/app
-
       - name: Generate changelog
         id: changelog
         uses: metcalfc/changelog-generator@c3f61b2a3db543ceee83c759ac8e48419a1a2211
@@ -107,5 +92,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v0.1.14
         with:
-          files: /home/runner/work/app/app
+          files: /home/runner/work/app/app/apk-release-signed.apk
           body: ${{ steps.changelog.outputs.changelog }}
