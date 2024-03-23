@@ -77,7 +77,6 @@ jobs:
           alias: ${{ secrets.KEYSTORE_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          output: build/release/signed
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
@@ -85,7 +84,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: apk-release.apk
-          path: build/release/signed
+          path: build/release/signed/home/runner/work/app/app
 
       - name: Generate changelog
         id: changelog
