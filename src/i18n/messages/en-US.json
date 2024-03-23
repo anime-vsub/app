@@ -299,5 +299,6 @@
   "i-binh-luan": "{0} comments",
   "moi-nhat": "Latest",
   "sap-xep-theo": "Sorted by",
-  "msg-err-load-cmt": "An error occurred while loading comments"
+  "msg-err-load-cmt": "An error occurred while loading comments",
+  "tron-bo": "All"
 }

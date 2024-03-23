@@ -293,5 +293,6 @@
   "i-binh-luan": "{0} 条评论",
   "moi-nhat": "最新的",
   "sap-xep-theo": "排序",
-  "msg-err-load-cmt": "加载评论时发生错误"
+  "msg-err-load-cmt": "加载评论时发生错误",
+  "tron-bo": "全部"
 }
