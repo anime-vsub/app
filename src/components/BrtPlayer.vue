@@ -1292,7 +1292,6 @@ function throttle<T extends (...args: any[]) => Promise<void>>(
       timeout = setTimeout(
         async () => {
           firstSaveStore.add(uidChap.value)
-          // eslint-disable-next-line no-void
           await fn(...args).catch(() => void 0)
           wait = false
         },

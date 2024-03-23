@@ -623,6 +623,7 @@ import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
 import { computedAsync } from "@vueuse/core"
 import { useHead } from "@vueuse/head"
+import { Http } from "client-ext-animevsub-helper"
 import AddToPlaylist from "components/AddToPlaylist.vue"
 import BrtPlayer from "components/BrtPlayer.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
@@ -632,6 +633,7 @@ import Quality from "components/Quality.vue"
 import ScreenError from "components/ScreenError.vue"
 import SkeletonGridCard from "components/SkeletonGridCard.vue"
 import Star from "components/Star.vue"
+import FbComments from "components/fb-comments/index.vue"
 import MessageScheludeChap from "components/feat/MessageScheludeChap.vue"
 import { EmbedFbCmt } from "embed-fbcmt-client/vue"
 import { get, set } from "idb-keyval"
@@ -652,6 +654,7 @@ import {
   QVideo,
   useQuasar,
 } from "quasar"
+import semverGt from "semver/functions/gt"
 import { AjaxLike, checkIsLile } from "src/apis/runs/ajax/like"
 import { PlayerFB } from "src/apis/runs/ajax/player-fb"
 import { PlayerLink } from "src/apis/runs/ajax/player-link"
@@ -682,9 +685,6 @@ import { useStateStorageStore } from "stores/state"
 import type { ShallowReactive, ShallowRef } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRequest } from "vue-request"
-import semverGt from "semver/functions/gt"
-import { Http } from "client-ext-animevsub-helper"
-import FbComments from "components/fb-comments/index.vue"
 
 import type {
   ProgressWatchStore,
@@ -790,6 +790,7 @@ const { data, run, error, loading } = useRequest(
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
       // data.value = undefined
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (data.value as unknown as any)?.[__ONLINE__]
       if (!realIdCurrentSeason.value) return
       run()
@@ -1776,7 +1777,6 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
         .then((data) => {
           if (data.progress.current === data.progress.total) {
             // ok backup data now
-            // eslint-disable-next-line no-void
             void set(`episodes_opend:${realId}`, JSON.stringify(data))
           }
 
@@ -1868,7 +1868,6 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
       fetch(`${API_OPEND}/episode-skip/${id}`)
         .then((res) => res.json() as Promise<InOutroEpisode>)
         .then((data) => {
-          // eslint-disable-next-line no-void
           void set(`inoutro:${id}`, JSON.stringify(data))
 
           // eslint-disable-next-line promise/always-return

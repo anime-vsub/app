@@ -76,6 +76,7 @@ const instance = getCurrentInstance()
 
 const bus = inject<EventBus>("bus")
 if (!bus) {
+  // eslint-disable-next-line functional/no-throw-statement
   throw new Error("bus event not exists")
 }
 bus.on("active_reply", ($) => {
