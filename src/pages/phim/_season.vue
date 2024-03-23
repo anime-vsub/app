@@ -356,29 +356,29 @@
       />
     </div>
     <FbComments
-        v-if="isNative || semverGt(Http.version, '1.0.29')"
-        :key="seasonId"
+      v-if="isNative || semverGt(Http.version, '1.0.29')"
+      :key="seasonId"
       :href="`http://animevietsub.tv/phim/-${seasonId}/`"
       :lang="locale?.replace('-', '_')"
     />
     <template v-else>
-        <div class="mt-5 flex items-center justify-between flex-nowrap">
-          <span class="text-subtitle1 text-[#eee]">{{ t("binh-luan") }}</span>
-          <q-toggle
-            v-model="settingsStore.ui.commentAnime"
-            color="main"
-            size="sm"
-          />
-        </div>
-        <EmbedFbCmt
-          v-if="settingsStore.ui.commentAnime"
-          :key="seasonId"
-          :href="`http://animevietsub.tv/phim/-${seasonId}/`"
-          :lang="locale?.replace('-', '_')"
-          no_socket
-          class="bg-gray-300 rounded-xl mt-3 overflow-hidden"
+      <div class="mt-5 flex items-center justify-between flex-nowrap">
+        <span class="text-subtitle1 text-[#eee]">{{ t("binh-luan") }}</span>
+        <q-toggle
+          v-model="settingsStore.ui.commentAnime"
+          color="main"
+          size="sm"
         />
-      </template>
+      </div>
+      <EmbedFbCmt
+        v-if="settingsStore.ui.commentAnime"
+        :key="seasonId"
+        :href="`http://animevietsub.tv/phim/-${seasonId}/`"
+        :lang="locale?.replace('-', '_')"
+        no_socket
+        class="bg-gray-300 rounded-xl mt-3 overflow-hidden"
+      />
+    </template>
   </div>
 
   <ScreenError v-else :error="error" @click:retry="resetErrorAndRun()" />
@@ -700,6 +700,8 @@ import type {
 
 // ============================================
 
+const __ONLINE__ = import.meta.env.DEV ? Symbol("__ONLINE__") : Symbol("")
+
 const route = useRoute()
 const router = useRouter()
 const instance = getCurrentInstance()
@@ -752,13 +754,13 @@ const { data, run, error, loading } = useRequest(
                 watcher()
                 changed = true
               },
-              { deep: true },
+              { deep: true }
             )
           if (result) Object.assign(result.value, data)
           else result = ref(data)
           watcher?.()
 
-          Object.assign(result.value, { __ONLINE__: true })
+          Object.assign(result.value, { [__ONLINE__]: true })
 
           // eslint-disable-next-line promise/always-return
           if (changed) {
@@ -788,10 +790,11 @@ const { data, run, error, loading } = useRequest(
     refreshDeps: [realIdCurrentSeason],
     refreshDepsAction() {
       // data.value = undefined
+      delete (data.value as unknown as any)?.[__ONLINE__]
       if (!realIdCurrentSeason.value) return
       run()
     },
-  },
+  }
 )
 function resetErrorAndRun() {
   error.value = undefined
@@ -831,7 +834,7 @@ watch(
   },
   {
     immediate: true,
-  },
+  }
 )
 
 const _cacheDataSeasons = reactive<
@@ -901,8 +904,8 @@ async function fetchSeason(season: string) {
                     console.warn(
                       "[fs]: failure save cache season %s",
                       realIdSeason,
-                      err,
-                    ),
+                      err
+                    )
                   )
             } else if (import.meta.env.DEV) {
               console.log("[data season]: No update response in IndexedDB")
@@ -922,7 +925,7 @@ async function fetchSeason(season: string) {
           if (!response.value) response.value = JSON.parse(json)
 
           return json
-        },
+        }
       )),
     ])
 
@@ -949,12 +952,12 @@ async function fetchSeason(season: string) {
 
         // eslint-disable-next-line functional/no-let
         let indexMetaSeason = seasons.value.findIndex(
-          (item) => item.value === season,
+          (item) => item.value === season
         )
 
         if (indexMetaSeason === -1)
           indexMetaSeason = seasons.value.findIndex(
-            (item) => item.value === realIdSeason,
+            (item) => item.value === realIdSeason
           )
 
         console.log("index %s = %i", season, indexMetaSeason)
@@ -1036,7 +1039,7 @@ async function fetchSeason(season: string) {
             })
           }
         },
-        { immediate: true },
+        { immediate: true }
       )
 
       onBeforeUnmount(() => {
@@ -1126,7 +1129,7 @@ watchEffect(async (onCleanup): Promise<void> => {
     new Promise<null | undefined>((resolve) => {
       const timeout = setTimeout(
         () => resolve(null),
-        TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE,
+        TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE
       )
 
       onCleanup(() => {
@@ -1156,7 +1159,7 @@ watchEffect(async (onCleanup): Promise<void> => {
         (idFirstEp) => {
           currentChap.value = idFirstEp
         },
-        { immediate: true },
+        { immediate: true }
       )
     }
   }
@@ -1164,7 +1167,7 @@ watchEffect(async (onCleanup): Promise<void> => {
 const currentMetaChap = computed(() => {
   if (!currentChap.value) return
   return currentDataSeason.value?.chaps.find(
-    (item) => item.id === currentChap.value,
+    (item) => item.id === currentChap.value
   )
 })
 
@@ -1195,7 +1198,7 @@ watch(
     })
     onCleanup(watcherRestoreLastEp)
   },
-  { immediate: true },
+  { immediate: true }
 )
 watchEffect(() => {
   // currentChap != undefined because is load done from firestore and ready show but in chaps not found (!currentMetaChap.value)
@@ -1232,7 +1235,7 @@ watchEffect(() => {
       })
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
-      if (data.value && "__ONLINE__" in data.value)
+      if (data.value && __ONLINE__ in data.value)
         router.replace({
           name: "not_found",
           params: {
@@ -1259,7 +1262,7 @@ watchEffect(() => {
     if (correctChapName === urlChapName) return
 
     console.warn(
-      `Redirect chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`,
+      `Redirect chapName wrong current: "${urlChapName}" not equal real: ${correctChapName}.\nAuto edit url to chapName correct`
     )
     router.replace({
       path: `/phim/${route.params.season}/${correctChapName}-${epId}`,
@@ -1313,7 +1316,7 @@ if (!isNative)
           },
         ],
       }
-    }),
+    })
   )
 
 interface SiblingChap {
@@ -1490,13 +1493,13 @@ watch(
           console.error(err)
         }
       },
-      { immediate: true },
+      { immediate: true }
     )
     onCleanup(watcher)
   },
   {
     immediate: true,
-  },
+  }
 )
 const sources = computed(() => configPlayer.value?.link)
 
@@ -1528,11 +1531,11 @@ watch(
         })
       }
     })
-  },
+  }
 )
 
 async function getProgressChaps(
-  currentSeason: string,
+  currentSeason: string
 ): Promise<Map<string, { cur: number; dur: number }> | null> {
   if (!authStore.uid) return null
 
@@ -1600,7 +1603,7 @@ watch(
   },
   {
     immediate: true,
-  },
+  }
 )
 // Analytics
 watch(
@@ -1614,7 +1617,7 @@ watch(
       value: `${name} - ${currentMetaSeason.name} Tập ${currentMetaChap.name}(${seasonId}/${currentMetaChap.id})`,
     })
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 watch(
@@ -1624,7 +1627,7 @@ watch(
   },
   {
     immediate: true,
-  },
+  }
 )
 
 async function toggleFollow() {
@@ -1803,7 +1806,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
   null,
   {
     onError: WARN,
-  },
+  }
 )
 const episodeOpEnd = computed(() => {
   // find episode on episodesOpEnd
@@ -1892,7 +1895,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
     return results!
   },
   null,
-  { onError: WARN },
+  { onError: WARN }
 )
 </script>
 
@@ -1951,9 +1954,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
   margin-top: 8px;
   background: rgb(0, 190, 6);
   display: block;
-  transition:
-    width 0.22s ease,
-    left 0.22s ease;
+  transition: width 0.22s ease, left 0.22s ease;
   transform: translateX(-50%);
   z-index: 12;
 }
