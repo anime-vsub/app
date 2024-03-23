@@ -292,5 +292,6 @@
   "msg-err-reply": "返信中にエラーが発生しました",
   "msg-err-update-cmt": "コメント編集中にエラーが発生しました",
   "msg-error-cmt": "コメント中にエラーが発生しました",
-  "sap-xep-theo": "並べ替え順"
+  "sap-xep-theo": "並べ替え順",
+  "tron-bo": "全部"
 }
