@@ -76,11 +76,11 @@ import { FBCommentPlugin } from "fb-comments-web"
 import type { AsyncComments, PostComment } from "fb-comments-web"
 import { useQuasar } from "quasar"
 import { WARN } from "src/constants"
-import { get, post } from "src/logic/http"
 import type { ComponentInternalInstance, ShallowRef } from "vue"
 
 import Comments from "./components/Comments.vue"
 import Reply from "./components/Reply.vue"
+import { get, post } from "src/logic/http"
 
 const LIMIT = 10
 
