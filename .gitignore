@@ -35,3 +35,7 @@ yarn-error.log*
 package-lock.json
 build
 /src-capacitor/android/app/src/main/assets
+
+/.eslintrc-auto-import.json
+/auto-imports.d.ts
+/components.d.ts
