@@ -162,8 +162,8 @@ module.exports = configure(function (/* ctx */) {
           })]
         }],
         [AutoImport, {
-          imports: ["vue", "vue-router", {"quasar": ["useQuasar"], "vue-i18n": ["useI18n"]}],
-          dirs: ["./src/*.ts"],
+          imports: ["vue", "vue-router", {"quasar": ["useQuasar"], "vue-i18n": ["useI18n"], "vue-request": ["useRequest"]}],
+          dirs: ["./src/*.ts", "./src/stores/*.ts"],
           dts: "./auto-imports.d.ts",
           eslintrc: {
             enabled: true
@@ -171,7 +171,12 @@ module.exports = configure(function (/* ctx */) {
         }],
         ["vite-plugin-rewrite-all", {}],
         ["vite-plugin-remove-console", {}],
-        [vitePluginI18nLangs, {}]
+        [vitePluginI18nLangs, {}],
+        [require("vite-plugin-node-polyfills").nodePolyfills , {
+           globals: {
+              Buffer: true
+            }
+        }]
       ],
     },
 

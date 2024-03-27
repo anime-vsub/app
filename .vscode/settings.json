@@ -44,6 +44,9 @@
     "src/components/errors/cloudflare.vue": [")\n      "],
     "src/components/errors/domain-strange.vue": [
       "\n        {{ extensionVersion ?? \""
+    ],
+    "src/components/adm/PromptQuality.vue": [
+      "\n              {{ source.labele }} ({{ source.qualityCode }} -\n              {{ source.label }})\n            "
     ]
   },
   "scss.lint.unknownAtRules": "ignore",

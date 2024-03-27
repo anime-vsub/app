@@ -299,5 +299,14 @@
   "i-binh-luan": "{0} comments",
   "moi-nhat": "Latest",
   "sap-xep-theo": "Sorted by",
-  "msg-err-load-cmt": "An error occurred while loading comments"
+  "msg-err-load-cmt": "An error occurred while loading comments",
+  "cao-den-full-hd": "High to Full HD",
+  "chat-luong-tai-xuong": "Download quality",
+  "dang-tai-xuong": "Downloading",
+  "msg-app-not-sprt-dl-mpl": "The application currently does not support downloading master playlists",
+  "msg-dont-close-tab-dlg": "Please do not close this window to download",
+  "msg-not-available-on-offline": "Seems to be unavailable offline",
+  "msg-view-cmt-on-online": "You can only view comments when you have an internet connection",
+  "tai-xuong": "Download",
+  "trung-binh-hoac-thap": "Medium or low"
 }

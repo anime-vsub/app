@@ -292,5 +292,15 @@
   "msg-err-reply": "返信中にエラーが発生しました",
   "msg-err-update-cmt": "コメント編集中にエラーが発生しました",
   "msg-error-cmt": "コメント中にエラーが発生しました",
-  "sap-xep-theo": "並べ替え順"
+  "sap-xep-theo": "並べ替え順",
+  "cao-den-full-hd": "高～フル HD",
+  "chat-luong-tai-xuong": "ダウンロード品質",
+  "dang-tai-xuong": "ダウンロード中",
+  "msg-app-not-sprt-dl-mpl": "アプリケーションは現在、マスター プレイリストのダウンロードをサポートしていません。",
+  "msg-dont-close-tab-dlg": "ダウンロードするためにこのウィンドウを閉じないでください",
+  "msg-err-load-cmt": "コメントの読み込み中にエラーが発生しました",
+  "msg-not-available-on-offline": "オフラインでは利用できないようです",
+  "msg-view-cmt-on-online": "コメントはインターネット接続がある場合にのみ表示できます",
+  "tai-xuong": "ダウンロード",
+  "trung-binh-hoac-thap": "中または低"
 }

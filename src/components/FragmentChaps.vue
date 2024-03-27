@@ -113,7 +113,7 @@
           v-else-if="_tmp.status === 'error'"
           class="absolute top-[50%] left-[50%] text-center transform -translate-x-1/2 -translate-y-1/2"
         >
-          {{ t("loi-khi-lay-du-lieu") }}
+          {{_tmp.response.showMsg ? _tmp.response.message : t("loi-khi-lay-du-lieu") }}
           <br />
           <q-btn
             dense

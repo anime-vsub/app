@@ -293,5 +293,14 @@
   "i-binh-luan": "{0} 条评论",
   "moi-nhat": "最新的",
   "sap-xep-theo": "排序",
-  "msg-err-load-cmt": "加载评论时发生错误"
+  "msg-err-load-cmt": "加载评论时发生错误",
+  "cao-den-full-hd": "高至全高清",
+  "chat-luong-tai-xuong": "下载质量",
+  "dang-tai-xuong": "正在下载",
+  "msg-app-not-sprt-dl-mpl": "该应用程序目前不支持下载主播放列表",
+  "msg-dont-close-tab-dlg": "下载时请不要关闭此窗口",
+  "msg-not-available-on-offline": "离线好像不能用",
+  "msg-view-cmt-on-online": "您只能在有互联网连接时查看评论",
+  "tai-xuong": "下载",
+  "trung-binh-hoac-thap": "中或低"
 }

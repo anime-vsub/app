@@ -293,5 +293,14 @@
   "sap-xep-theo": "Sắp xếp theo",
   "moi-nhat": "Mới nhất",
   "cu-nhat": "Cũ nhất",
-  "msg-err-load-cmt": "Đã có lỗi xảy ra khi tải bình luận"
+  "msg-err-load-cmt": "Đã có lỗi xảy ra khi tải bình luận",
+  "chat-luong-tai-xuong": "Chất lượng tải xuống",
+  "tai-xuong": "Tải xuống",
+  "cao-den-full-hd": "Cao đến Full HD",
+  "trung-binh-hoac-thap": "Trung bình hoặc thấp",
+  "dang-tai-xuong": "Đang tải xuống",
+  "msg-dont-close-tab-dlg": "Vui lòng không đóng cửa sổ này để tải xuống",
+  "msg-app-not-sprt-dl-mpl": "Ứng dụng hiện chưa hỗ trợ tải xuống master playlist",
+  "msg-view-cmt-on-online": "Bạn chỉ có thể xem bình luận khi có kết nối internet",
+  "msg-not-available-on-offline": "Có vẻ không khả dụng khi ngoại tuyến"
 }

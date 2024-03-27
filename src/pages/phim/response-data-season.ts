@@ -15,5 +15,7 @@ export interface ResponseDataSeasonError {
   status: "error"
   response: {
     status: number
+    message: string
+    showMsg?: boolean
   }
 }
