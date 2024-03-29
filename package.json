@@ -53,6 +53,7 @@
     "@vueuse/core": "^9.11.1",
     "@vueuse/head": "^1.1.26",
     "@vueuse/shared": "^9.11.1",
+    "animevsub-download-manager": "github:anime-vsub/animevsub-download-manager",
     "artplayer": "^4.6.2",
     "axios": "^1.6.0",
     "cheerio": "1.0.0-rc.12",
