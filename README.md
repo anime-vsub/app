@@ -1,5 +1,10 @@
 # AnimeVsub Application!
 
+ 📢⚠️📌❗ **The application is currently distributed for free on GitHub and it is OPEN SOURCE COMPLYING WITH THE [GNU GPL-3.0 LICENSE](./LICENSE)
+PLEASE DO NOT MODIFY IT TO EMBEDD ADVERTISING OR USE IT FOR COMMERCIAL PURPOSES.**
+
+**IF FRAUDULENT BEHAVIORS SUCH AS INSERTING ADS AND TAKEAWAYS OF THE APP CONTINUE I WILL SHUT DOWN THE ENTIRE APP WITH A FOREIGN KEY (ALL MODIFIED APPS WILL ALSO STOP WORKING) AND STOP APP DEVELOPMENT**
+
 <div style="text-align: center;">
    <img src="./meta/app_icon.svg" width="120px">
    <h1 style="font-size: 16px">AnimeVsub</h1>
