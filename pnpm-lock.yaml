@@ -216,7 +216,7 @@ devDependencies:
     version: 2.2.195
   '@intlify/vite-plugin-vue-i18n':
     specifier: ^6.0.3
-    version: 6.0.3(vite@2.9.17)(vue-i18n@9.2.2)
+    version: 6.0.3(vite@2.9.18)(vue-i18n@9.2.2)
   '@quasar/app-vite':
     specifier: ^1.4.3
     version: 1.4.3(eslint@8.32.0)(pinia@2.0.29)(quasar@2.11.9)(rollup@2.77.3)(vue-router@4.1.6)(vue@3.2.45)(workbox-build@6.5.0)
@@ -332,17 +332,17 @@ devDependencies:
     specifier: ^0.26.0
     version: 0.26.0(rollup@2.77.3)(vue@3.2.45)
   vite:
-    specifier: 2.9.17
-    version: 2.9.17(sass@1.32.11)
+    specifier: 2.9.18
+    version: 2.9.18(sass@1.32.11)
   vite-plugin-remove-console:
     specifier: ^2.1.1
     version: 2.1.1
   vite-plugin-rewrite-all:
     specifier: ^1.0.1
-    version: 1.0.1(vite@2.9.17)
+    version: 1.0.1(vite@2.9.18)
   vite-plugin-windicss:
     specifier: ^1.8.10
-    version: 1.8.10(vite@2.9.17)
+    version: 1.8.10(vite@2.9.18)
   vitest:
     specifier: ^0.28.2
     version: 0.28.2(happy-dom@14.3.1)(jsdom@21.1.0)(sass@1.32.11)
@@ -550,7 +550,7 @@ packages:
       '@babel/helper-plugin-utils': 7.22.5
       debug: 4.3.4
       lodash.debounce: 4.0.8
-      resolve: 1.22.2
+      resolve: 1.22.8
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
@@ -2378,7 +2378,7 @@ packages:
     engines: {node: '>= 16'}
     dev: true
 
-  /@intlify/vite-plugin-vue-i18n@6.0.3(vite@2.9.17)(vue-i18n@9.2.2):
+  /@intlify/vite-plugin-vue-i18n@6.0.3(vite@2.9.18)(vue-i18n@9.2.2):
     resolution: {integrity: sha512-6SgNzPAOCR90wvt368lKzi7f/5ZEWJn22UCGvhFsP3XvKqlF3cVzojahgQ6o+LTdCkExeM6wPgd+haFf28E9VQ==}
     engines: {node: '>= 14.6'}
     peerDependencies:
@@ -2399,7 +2399,7 @@ packages:
       debug: 4.3.4
       fast-glob: 3.2.12
       source-map: 0.6.1
-      vite: 2.9.17(sass@1.32.11)
+      vite: 2.9.18(sass@1.32.11)
       vue-i18n: 9.2.2(vue@3.2.45)
     transitivePeerDependencies:
       - supports-color
@@ -3087,13 +3087,13 @@ packages:
         optional: true
     dependencies:
       '@quasar/render-ssr-error': 1.0.2
-      '@quasar/vite-plugin': 1.3.3(@vitejs/plugin-vue@2.3.4)(quasar@2.11.9)(vite@2.9.17)(vue@3.2.45)
+      '@quasar/vite-plugin': 1.3.3(@vitejs/plugin-vue@2.3.4)(quasar@2.11.9)(vite@2.9.18)(vue@3.2.45)
       '@rollup/pluginutils': 4.2.1
       '@types/chrome': 0.0.208
       '@types/compression': 1.7.2
       '@types/cordova': 0.0.34
       '@types/express': 4.17.17
-      '@vitejs/plugin-vue': 2.3.4(vite@2.9.17)(vue@3.2.45)
+      '@vitejs/plugin-vue': 2.3.4(vite@2.9.18)(vue@3.2.45)
       archiver: 5.3.1
       chokidar: 3.5.3
       ci-info: 3.8.0
@@ -3121,7 +3121,7 @@ packages:
       semver: 7.5.2
       serialize-javascript: 6.0.1
       table: 6.8.1
-      vite: 2.9.17(sass@1.32.12)
+      vite: 2.9.18(sass@1.32.12)
       vue: 3.2.45
       vue-router: 4.1.6(vue@3.2.45)
       webpack-merge: 5.9.0
@@ -3192,7 +3192,7 @@ packages:
       stack-trace: 1.0.0-pre2
     dev: true
 
-  /@quasar/vite-plugin@1.3.3(@vitejs/plugin-vue@2.3.4)(quasar@2.11.9)(vite@2.9.17)(vue@3.2.45):
+  /@quasar/vite-plugin@1.3.3(@vitejs/plugin-vue@2.3.4)(quasar@2.11.9)(vite@2.9.18)(vue@3.2.45):
     resolution: {integrity: sha512-HSX/Vgec5/Y8fiJRfpf1MR7+um+rdpbilktBGQkYOKw4A9d0smGq4jtSS/K4O2GTXRYqDmZ/5sgCeBcmhB3OCw==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -3201,9 +3201,9 @@ packages:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0
       vue: ^3.0.0
     dependencies:
-      '@vitejs/plugin-vue': 2.3.4(vite@2.9.17)(vue@3.2.45)
+      '@vitejs/plugin-vue': 2.3.4(vite@2.9.18)(vue@3.2.45)
       quasar: 2.11.9
-      vite: 2.9.17(sass@1.32.12)
+      vite: 2.9.18(sass@1.32.12)
       vue: 3.2.45
     dev: true
 
@@ -3235,7 +3235,7 @@ packages:
       builtin-modules: 3.3.0
       deepmerge: 4.3.1
       is-module: 1.0.0
-      resolve: 1.22.2
+      resolve: 1.22.8
       rollup: 2.77.3
     dev: true
 
@@ -3997,14 +3997,14 @@ packages:
       url-toolkit: 2.2.5
     dev: false
 
-  /@vitejs/plugin-vue@2.3.4(vite@2.9.17)(vue@3.2.45):
+  /@vitejs/plugin-vue@2.3.4(vite@2.9.18)(vue@3.2.45):
     resolution: {integrity: sha512-IfFNbtkbIm36O9KB8QodlwwYvTEsJb4Lll4c2IwB3VHc2gie2mSPtSzL0eYay7X2jd/2WX02FjSGTWR6OPr/zg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.9.17(sass@1.32.12)
+      vite: 2.9.18(sass@1.32.12)
       vue: 3.2.45
     dev: true
 
@@ -6327,8 +6327,8 @@ packages:
     resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}
     dependencies:
       debug: 3.2.7
-      is-core-module: 2.12.1
-      resolve: 1.22.2
+      is-core-module: 2.13.1
+      resolve: 1.22.8
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -6431,7 +6431,7 @@ packages:
       is-glob: 4.0.3
       minimatch: 3.1.2
       object.values: 1.1.6
-      resolve: 1.22.2
+      resolve: 1.22.8
       semver: 6.3.0
       tsconfig-paths: 3.14.2
     transitivePeerDependencies:
@@ -6453,7 +6453,7 @@ packages:
       ignore: 5.2.4
       is-core-module: 2.12.1
       minimatch: 3.1.2
-      resolve: 1.22.2
+      resolve: 1.22.8
       semver: 7.5.2
     dev: true
 
@@ -9920,15 +9920,6 @@ packages:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
     dev: true
 
-  /resolve@1.22.2:
-    resolution: {integrity: sha512-Sb+mjNHOULsBv818T40qSPeRiuWLyaGMa5ewydRLFimneixmVy2zdivRl+AF6jaYPC8ERxGDmFSiqui6SfPd+g==}
-    hasBin: true
-    dependencies:
-      is-core-module: 2.12.1
-      path-parse: 1.0.7
-      supports-preserve-symlinks-flag: 1.0.0
-    dev: true
-
   /resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
     hasBin: true
@@ -11371,17 +11362,17 @@ packages:
     resolution: {integrity: sha512-AQOsKl9+1YO82otwSchf+P8SRo4RhMvPjOvjm9DXOnkff0SBwBPAzazEn06IUjhsm/zX4miMgicCQH1hPdktrw==}
     dev: true
 
-  /vite-plugin-rewrite-all@1.0.1(vite@2.9.17):
+  /vite-plugin-rewrite-all@1.0.1(vite@2.9.18):
     resolution: {integrity: sha512-W0DAchC8ynuQH0lYLIu5/5+JGfYlUTRD8GGNtHFXRJX4FzzB9MajtqHBp26zq/ly9sDt5BqrfdT08rv3RbB0LQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0
     dependencies:
       connect-history-api-fallback: 1.6.0
-      vite: 2.9.17(sass@1.32.11)
+      vite: 2.9.18(sass@1.32.11)
     dev: true
 
-  /vite-plugin-windicss@1.8.10(vite@2.9.17):
+  /vite-plugin-windicss@1.8.10(vite@2.9.18):
     resolution: {integrity: sha512-scywsuzo46lcTBohspmF0WiwhWEte6p+OUVrX4yr7VMRvLHMHVfLtJReyD5pppjijG7YOwVsZn7XBWWZtF658Q==}
     peerDependencies:
       vite: ^2.0.1 || ^3.0.0 || ^4.0.0
@@ -11389,14 +11380,14 @@ packages:
       '@windicss/plugin-utils': 1.8.10
       debug: 4.3.4
       kolorist: 1.8.0
-      vite: 2.9.17(sass@1.32.11)
+      vite: 2.9.18(sass@1.32.11)
       windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@2.9.17(sass@1.32.11):
-    resolution: {integrity: sha512-XxcRzra6d7xrKXH66jZUgb+srThoPu+TLJc06GifUyKq9JmjHkc1Numc8ra0h56rju2jfVWw3B3fs5l3OFMvUw==}
+  /vite@2.9.18(sass@1.32.11):
+    resolution: {integrity: sha512-sAOqI5wNM9QvSEE70W3UGMdT8cyEn0+PmJMTFvTB8wB0YbYUWw3gUbY62AOyrXosGieF2htmeLATvNxpv/zNyQ==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
@@ -11413,15 +11404,15 @@ packages:
     dependencies:
       esbuild: 0.14.51
       postcss: 8.4.31
-      resolve: 1.22.2
+      resolve: 1.22.8
       rollup: 2.77.3
       sass: 1.32.11
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
 
-  /vite@2.9.17(sass@1.32.12):
-    resolution: {integrity: sha512-XxcRzra6d7xrKXH66jZUgb+srThoPu+TLJc06GifUyKq9JmjHkc1Numc8ra0h56rju2jfVWw3B3fs5l3OFMvUw==}
+  /vite@2.9.18(sass@1.32.12):
+    resolution: {integrity: sha512-sAOqI5wNM9QvSEE70W3UGMdT8cyEn0+PmJMTFvTB8wB0YbYUWw3gUbY62AOyrXosGieF2htmeLATvNxpv/zNyQ==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
@@ -11438,7 +11429,7 @@ packages:
     dependencies:
       esbuild: 0.14.51
       postcss: 8.4.31
-      resolve: 1.22.2
+      resolve: 1.22.8
       rollup: 2.77.3
       sass: 1.32.12
     optionalDependencies:
