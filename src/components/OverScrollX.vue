@@ -33,7 +33,7 @@ import { onMounted, ref } from "vue"
 const statusChaptersScroll = ref<"start" | "startImp" | "end" | "pending">(
   "start"
 )
-const onChaptersScroll = debounce(function ({ target }: UIEvent) {
+const onChaptersScroll = debounce(function ({ target }: Event) {
   const { scrollLeft, offsetWidth, scrollWidth } = target as HTMLDivElement
 
   if (scrollLeft === 0) {
