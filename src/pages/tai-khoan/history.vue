@@ -159,7 +159,7 @@ const {
   error,
 } = useRequest(
   (
-    lastDoc: typeof historyStore.loadMoreAfter extends (
+    lastDoc?: typeof historyStore.loadMoreAfter extends (
       LastDoc: infer R
     ) => void
       ? R
