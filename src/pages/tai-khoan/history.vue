@@ -98,7 +98,7 @@
   </template>
   <ScreenError
     v-else
-    @click:retry="run"
+    @click:retry="run()"
     class="absolute mt-[47px]"
     :error="error"
   />
