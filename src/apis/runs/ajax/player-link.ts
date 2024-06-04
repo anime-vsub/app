@@ -1,3 +1,5 @@
+import { App } from "@capacitor/app"
+import { decryptM3u8, init } from "src/logic/decrypt-hls-animevsub"
 import { getQualityByLabel } from "src/logic/get-quality-by-label"
 import { post } from "src/logic/http"
 
@@ -42,30 +44,50 @@ export function PlayerLink(config: {
     play,
     link,
     backuplinks: "1",
-  }).then(({ data }) => {
+  }).then(async ({ data }) => {
     // eslint-disable-next-line functional/no-throw-statement
     if (!data) throw new Error("unknown_error")
     type Writeable<T> = {
       -readonly [P in keyof T]: T[P] extends object ? Writeable<T[P]> : T[P]
     }
     const config = JSON.parse(data) as Writeable<PlayerLinkReturn>
-    config.link.forEach((item) => {
-      item.file = addProtocolUrl(item.file)
-      switch (
-        (item.label as typeof item.label | undefined)?.toUpperCase() as
-          | Uppercase<Exclude<typeof item.label, undefined>>
-          | undefined
-      ) {
-        case "HD":
-          if (item.preload) item.label = "FHD|HD"
-          break
-        case undefined:
+    await Promise.all(
+      config.link.map(async (item) => {
+        if (item.file.includes("://")) {
+          item.file = addProtocolUrl(item.file)
+        } else {
+          self.hn ??= await App.getInfo().then((info) => info.id)
+          await init()
+
+          try {
+            item.file = `data:application/vnd.apple.mpegurl;base64,${btoa(
+              await decryptM3u8(item.file)
+            )}`
+          } catch (err) {
+            console.error(err)
+          }
+
           item.label = "HD"
-          break
-      }
-      item.qualityCode = getQualityByLabel(item.label)
-      item.type ??= "mp4"
-    })
+          item.preload = "auto"
+          item.type = "hls"
+        }
+
+        switch (
+          (item.label as typeof item.label | undefined)?.toUpperCase() as
+            | Uppercase<Exclude<typeof item.label, undefined>>
+            | undefined
+        ) {
+          case "HD":
+            if (item.preload) item.label = "FHD|HD"
+            break
+          case undefined:
+            item.label = "HD"
+            break
+        }
+        item.qualityCode = getQualityByLabel(item.label)
+        item.type ??= "mp4"
+      })
+    )
 
     return config
   })
