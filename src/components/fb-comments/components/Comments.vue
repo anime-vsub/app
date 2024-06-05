@@ -17,7 +17,7 @@ import type {
   FBCommentPlugin,
   OGObject,
   PostComment,
-  User
+  User,
 } from "fb-comments-web"
 
 import Comment from "./Comment.vue"

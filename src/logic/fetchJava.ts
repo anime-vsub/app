@@ -1,7 +1,9 @@
 import { CapacitorHttp } from "@capacitor/core"
 import { base64ToArrayBuffer } from "src/logic/base64ToArrayBuffer"
 
-async function getResponse(promise: Promise<unknown>): Promise<Response> {
+async function getResponse(
+  promise: Promise<{ data: string }>
+): Promise<Response> {
   const stream = new ReadableStream({
     start(controller) {
       // eslint-disable-next-line promise/always-return

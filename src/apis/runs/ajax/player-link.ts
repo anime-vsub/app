@@ -56,7 +56,10 @@ export function PlayerLink(config: {
         if (item.file.includes("://")) {
           item.file = addProtocolUrl(item.file)
         } else {
-          self.hn ??= await App.getInfo().then((info) => info.id)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any, promise/no-nesting
+          ;(self as unknown as any).hn ??= await App.getInfo().then(
+            (info) => info.id
+          )
           await init()
 
           try {

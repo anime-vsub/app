@@ -44,7 +44,7 @@ export async function TypeNormalValue(
           .join("-") || "all",
         options.seaser ?? defaultsOptions.seaser ?? "all",
         options.year ?? defaultsOptions.year ?? "all",
-        `/trang-${page}.html`
+        `/trang-${page}.html`,
       ].join("/") + (options.sorter ? "?sort=" + options.sorter : "")
     : `/${type}/${
         Array.isArray(value) ? value.join("/") : value
