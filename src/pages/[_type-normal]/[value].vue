@@ -140,7 +140,7 @@
               @click="toggleGenres(item.value)"
               :class="{
                 'bg-main':
-                defaultsOptions.gener?.includes(item.value) ||
+                  defaultsOptions.gener?.includes(item.value) ||
                   indexInGenres(item.value) > -1,
               }"
               >{{ item.text }}</q-btn
@@ -373,7 +373,7 @@
                 @click="toggleGenres(item.value)"
                 :class="{
                   'bg-main':
-                  defaultsOptions.gener?.includes(item.value) ||
+                    defaultsOptions.gener?.includes(item.value) ||
                     indexInGenres(item.value) > -1,
                 }"
                 >{{ item.text }}</q-btn
@@ -538,11 +538,11 @@ const defaultsOptions = computed<{
         return {
           gener: data.value?.filter?.gener
             .filter((item) => item.checked)
-            .map((item) => item.value) ?? [value]
+            .map((item) => item.value) ?? [value],
         }
 
       return {
-        gener: [value as string]
+        gener: [value as string],
       }
     }
     case "season": {
@@ -631,12 +631,11 @@ function toggleGenres(item: string) {
   }
 }
 
-
 const { data, run, loading, refreshAsync, error } = useRequest(() =>
   fetchTypeNormalValue(1, false)
 )
 function fetchTypeNormalValue(page: number, onlyItems: boolean) {
-  const r =  TypeNormalValue(
+  const r = TypeNormalValue(
     route.params.type_normal as string,
     typeof route.params.value === "string"
       ? route.params.value.replace(/\/*$/, "")

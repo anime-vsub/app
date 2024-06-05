@@ -63,7 +63,7 @@ export default function TypeNormalValue(
         return {
           text,
           value,
-          checked
+          checked,
         }
       })
       .toArray()
@@ -85,7 +85,7 @@ export default function TypeNormalValue(
         return {
           text,
           value,
-          checked
+          checked,
         }
       })
       .toArray()
@@ -107,7 +107,7 @@ export default function TypeNormalValue(
         return {
           text,
           value,
-          checked
+          checked,
         }
       })
       .toArray()
@@ -129,11 +129,11 @@ export default function TypeNormalValue(
         return {
           text,
           value,
-          checked
+          checked,
         }
       })
       .toArray()
-      .filter(Boolean)
+      .filter(Boolean),
   }
 
   return {
@@ -141,6 +141,6 @@ export default function TypeNormalValue(
     items,
     curPage,
     maxPage,
-    filter
+    filter,
   }
 }

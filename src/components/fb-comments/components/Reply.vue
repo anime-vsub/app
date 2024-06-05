@@ -15,7 +15,7 @@
           fontSize: '14px',
           boxShadow: 'none',
           minHeight: '0px',
-          paddingTop: '8px'
+          paddingTop: '8px',
         }"
         class="all:!min-h-0"
         @focus="main ? (toolbar = true) : undefined"
@@ -136,7 +136,7 @@ async function send() {
   } catch (err) {
     void $q.notify({
       message: props.messageError,
-      caption: err + ""
+      caption: err + "",
     })
   } finally {
     sending.value = false
