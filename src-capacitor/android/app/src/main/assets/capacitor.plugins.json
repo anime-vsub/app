@@ -1,15 +1,7 @@
 [
 	{
-		"pkg": "@capacitor-community/barcode-scanner",
-		"classpath": "com.getcapacitor.community.barcodescanner.BarcodeScanner"
-	},
-	{
 		"pkg": "@capacitor-community/firebase-analytics",
 		"classpath": "com.getcapacitor.community.firebaseanalytics.FirebaseAnalytics"
-	},
-	{
-		"pkg": "@capacitor-community/http",
-		"classpath": "com.getcapacitor.plugin.http.Http"
 	},
 	{
 		"pkg": "@capacitor/app",
@@ -46,9 +38,5 @@
 	{
 		"pkg": "@hugotomazi/capacitor-navigation-bar",
 		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
-	},
-	{
-		"pkg": "@jcesarmobile/ssl-skip",
-		"classpath": "com.jcesarmobile.sslskip.SslSkipPlugin"
 	}
 ]
