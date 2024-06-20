@@ -1,0 +1,37 @@
+require_relative '../../node_modules/.pnpm/@capacitor+ios@3.9.0_@capacitor+core@3.9.0/node_modules/@capacitor/ios/scripts/pods_helpers'
+
+platform :ios, '13.0'
+use_frameworks!
+
+# workaround to avoid Xcode caching of Pods that requires
+# Product -> Clean Build Folder after new Cordova plugins installed
+# Requires CocoaPods 1.6 or newer
+install! 'cocoapods', :disable_input_output_paths => true
+
+def capacitor_pods
+  pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@3.9.0_@capacitor+core@3.9.0/node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@3.9.0_@capacitor+core@3.9.0/node_modules/@capacitor/ios'
+  pod 'CapacitorCommunityBarcodeScanner', :path => '../../node_modules/.pnpm/@capacitor-community+barcode-scanner@3.0.3_@capacitor+core@5.7.6/node_modules/@capacitor-community/barcode-scanner'
+  pod 'CapacitorCommunityFirebaseAnalytics', :path => '../../node_modules/.pnpm/@capacitor-community+firebase-analytics@5.0.1_@capacitor+core@5.7.6/node_modules/@capacitor-community/firebase-analytics'
+  pod 'CapacitorCommunityHttp', :path => '../../node_modules/.pnpm/@capacitor-community+http@1.4.1/node_modules/@capacitor-community/http'
+  pod 'CapacitorApp', :path => '../../node_modules/.pnpm/@capacitor+app@5.0.8_@capacitor+core@5.7.6/node_modules/@capacitor/app'
+  pod 'CapacitorBrowser', :path => '../../node_modules/.pnpm/@capacitor+browser@5.2.1_@capacitor+core@5.7.6/node_modules/@capacitor/browser'
+  pod 'CapacitorDevice', :path => '../../node_modules/.pnpm/@capacitor+device@5.0.8_@capacitor+core@5.7.6/node_modules/@capacitor/device'
+  pod 'CapacitorFilesystem', :path => '../../node_modules/.pnpm/@capacitor+filesystem@5.2.2_@capacitor+core@5.7.6/node_modules/@capacitor/filesystem'
+  pod 'CapacitorHaptics', :path => '../../node_modules/.pnpm/@capacitor+haptics@5.0.8_@capacitor+core@5.7.6/node_modules/@capacitor/haptics'
+  pod 'CapacitorPreferences', :path => '../../node_modules/.pnpm/@capacitor+preferences@5.0.8_@capacitor+core@5.7.6/node_modules/@capacitor/preferences'
+  pod 'CapacitorShare', :path => '../../node_modules/.pnpm/@capacitor+share@5.0.8_@capacitor+core@5.7.6/node_modules/@capacitor/share'
+  pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@5.0.8_@capacitor+core@5.7.6/node_modules/@capacitor/status-bar'
+  pod 'HugotomaziCapacitorNavigationBar', :path => '../../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@2.0.1_@capacitor+core@5.7.6/node_modules/@hugotomazi/capacitor-navigation-bar'
+  pod 'JcesarmobileSslSkip', :path => '../../node_modules/.pnpm/@jcesarmobile+ssl-skip@0.2.0/node_modules/@jcesarmobile/ssl-skip'
+  pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
+end
+
+target 'App' do
+  capacitor_pods
+  # Add your Pods here
+end
+
+post_install do |installer|
+  assertDeploymentTarget(installer)
+end

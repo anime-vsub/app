@@ -1,7 +1,7 @@
 {
   "name": "git.shin.animevsub",
-  "version": "0.0.1",
-  "description": "A Quasar Project",
+  "version": "1.8.35",
+  "description": "Watch Anime without advertising, free, private.",
   "author": "Tachibana Shin <45375496+tachibana-shin@users.noreply.github.com>",
   "private": true,
   "scripts": {
@@ -9,21 +9,22 @@
     "cap:sync": "cap sync"
   },
   "dependencies": {
-    "@capacitor-community/barcode-scanner": "^3.0.1",
-    "@capacitor-community/firebase-analytics": "^4.0.0",
+    "@capacitor-community/barcode-scanner": "^3.0.3",
+    "@capacitor-community/firebase-analytics": "^5.0.1",
     "@capacitor-community/http": "1.4.1",
-    "@capacitor/android": "^4.6.2",
-    "@capacitor/app": "^4.1.1",
-    "@capacitor/browser": "^4.1.1",
-    "@capacitor/cli": "^4.6.2",
-    "@capacitor/core": "^4.6.2",
-    "@capacitor/device": "^4.1.0",
-    "@capacitor/filesystem": "^4.1.4",
-    "@capacitor/haptics": "^4.1.0",
-    "@capacitor/preferences": "^4.0.2",
-    "@capacitor/share": "^4.1.0",
-    "@capacitor/status-bar": "^4.1.1",
-    "@hugotomazi/capacitor-navigation-bar": "^2.0.0",
-    "cordova-plugin-screen-orientation": "^3.0.2"
+    "@capacitor/android": "^5.7.6",
+    "@capacitor/app": "^5.0.8",
+    "@capacitor/browser": "^5.2.1",
+    "@capacitor/cli": "^5.7.6",
+    "@capacitor/core": "^5.7.6",
+    "@capacitor/device": "^5.0.8",
+    "@capacitor/filesystem": "^5.2.2",
+    "@capacitor/haptics": "^5.0.8",
+    "@capacitor/preferences": "^5.0.8",
+    "@capacitor/share": "^5.0.8",
+    "@capacitor/status-bar": "^5.0.8",
+    "@hugotomazi/capacitor-navigation-bar": "^2.0.1",
+    "@jcesarmobile/ssl-skip": "^0.2.0",
+    "cordova-plugin-screen-orientation": "^3.0.4"
   }
 }
