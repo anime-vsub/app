@@ -1,0 +1,1 @@
+import{_ as e,o as c,l as n,n as r,a6 as s}from"./index.b340747c.js";const o={},t={class:"h-full w-full flex items-center justify-center"};function a(i,l){return c(),n("div",t,[r(s,{color:"main",size:"3em"})])}var f=e(o,[["render",a]]);export{f as S};

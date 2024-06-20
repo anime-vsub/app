@@ -11,5 +11,7 @@
   },
   "bundledWebRuntime": false,
   "webDir": "www",
-  "server": {}
+  "server": {
+    "url": "https://192.168.88.103:9500"
+  }
 }
