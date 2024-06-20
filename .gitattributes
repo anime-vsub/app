@@ -2,3 +2,5 @@ hls-module.js linguist-vendored
 src/logic/hls-module.js linguist-vendored
 dha-release.wasm linguist-language=webassembly
 cordova-plugin-screen-orientation/www/screenorientation.js linguist-language=typescript
+cordova.js linguist-language=typescript
+cordova_plugins.js linguist-language=typescript
