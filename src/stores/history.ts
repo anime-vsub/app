@@ -1,5 +1,6 @@
 import type {
   CollectionReference,
+  DocumentData,
   DocumentReference,
   DocumentSnapshot,
   QueryDocumentSnapshot,
@@ -281,7 +282,7 @@ export const useHistoryStore = defineStore("history", () => {
 
           // const batch = writeBatch(db)
           await Promise.all([
-            setDoc<HistoryItem>(
+            setDoc<HistoryItem, DocumentData>(
               seasonRef,
               {
                 timestamp: serverTimestamp(),
