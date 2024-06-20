@@ -42,8 +42,8 @@ dependencies:
     specifier: ^5.0.8
     version: 5.0.8(@capacitor/core@5.7.6)
   '@hugotomazi/capacitor-navigation-bar':
-    specifier: ^2.0.1
-    version: 2.0.1(@capacitor/core@5.7.6)
+    specifier: ^3.0.0
+    version: 3.0.0(@capacitor/core@5.7.6)
   '@jcesarmobile/ssl-skip':
     specifier: ^0.2.0
     version: 0.2.0
@@ -165,10 +165,10 @@ packages:
       '@capacitor/core': 5.7.6
     dev: false
 
-  /@hugotomazi/capacitor-navigation-bar@2.0.1(@capacitor/core@5.7.6):
-    resolution: {integrity: sha512-Gq6vmAyOZLLHie/8wgGEs/V/aItJMXgivAcNItUDEfTpfXVAVbUdb0juOsXEqYgRCysksAmgHAEOg1WXE+L//Q==}
+  /@hugotomazi/capacitor-navigation-bar@3.0.0(@capacitor/core@5.7.6):
+    resolution: {integrity: sha512-p2VbMmxWu28z7VdWnYjKQjUm2N7O0rjauBOkD4s9X0y64Kgn1hS7/69dZnRqrqw4tSgOO3w9oxUpj9l5cAl5CQ==}
     peerDependencies:
-      '@capacitor/core': ^4.0.1
+      '@capacitor/core': ^4.0.1 || ^5.0.0
     dependencies:
       '@capacitor/core': 5.7.6
     dev: false
