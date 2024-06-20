@@ -5,15 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@capacitor-community/barcode-scanner':
-    specifier: ^3.0.3
-    version: 3.0.3(@capacitor/core@5.7.6)
   '@capacitor-community/firebase-analytics':
     specifier: ^5.0.1
     version: 5.0.1(@capacitor/core@5.7.6)
-  '@capacitor-community/http':
-    specifier: 1.4.1
-    version: 1.4.1
   '@capacitor/android':
     specifier: ^5.7.6
     version: 5.7.6(@capacitor/core@5.7.6)
@@ -59,39 +53,12 @@ dependencies:
 
 packages:
 
-  /@capacitor-community/barcode-scanner@3.0.3(@capacitor/core@5.7.6):
-    resolution: {integrity: sha512-XXxiumONhaIgCwzzoZazmNIybsBq0KFvgQZxtv4TWH2zakmr6dOAvj7DYp6KZOapHS/zg3s6czF8MCpFTjbQWQ==}
-    peerDependencies:
-      '@capacitor/core': ^4.5.0
-    dependencies:
-      '@capacitor/core': 5.7.6
-      '@zxing/browser': 0.1.5(@zxing/library@0.19.3)
-      '@zxing/library': 0.19.3
-    dev: false
-
   /@capacitor-community/firebase-analytics@5.0.1(@capacitor/core@5.7.6):
     resolution: {integrity: sha512-6au0ovXcgtW3O8CT5cprXftELqK4qz8X3QqLc8xDM+c+77JwwriIxE+jST9y18AM2lmpTFWHbPX/Sl0fWxPtTg==}
     peerDependencies:
       '@capacitor/core': ^5.0.0
     dependencies:
       '@capacitor/core': 5.7.6
-    dev: false
-
-  /@capacitor-community/http@1.4.1:
-    resolution: {integrity: sha512-+pCkBXrwfm97UfjOgjV950H/qZ8SE36Mrcb46BlL1ps3VIsGuIO+AulL8GqTC6LewheRVtGJpRspNtneXQotNA==}
-    dependencies:
-      '@capacitor/android': 3.9.0(@capacitor/core@3.9.0)
-      '@capacitor/core': 3.9.0
-      '@capacitor/filesystem': 1.1.0(@capacitor/core@3.9.0)
-      '@capacitor/ios': 3.9.0(@capacitor/core@3.9.0)
-    dev: false
-
-  /@capacitor/android@3.9.0(@capacitor/core@3.9.0):
-    resolution: {integrity: sha512-YTPyrh1NozEuYXWGtfqN27TLXUrLbZX9fggyd4JQ1yMaUZTmLPm5dCuznONhQ49aPkJnUJB02JfpHy/qGwa2Lw==}
-    peerDependencies:
-      '@capacitor/core': ^3.9.0
-    dependencies:
-      '@capacitor/core': 3.9.0
     dev: false
 
   /@capacitor/android@5.7.6(@capacitor/core@5.7.6):
@@ -144,12 +111,6 @@ packages:
       - supports-color
     dev: false
 
-  /@capacitor/core@3.9.0:
-    resolution: {integrity: sha512-j1lL0+/7stY8YhIq1Lm6xixvUqIn89vtyH5ZpJNNmcZ0kwz6K9eLkcG6fvq1UWMDgSVZg9JrRGSFhb4LLoYOsw==}
-    dependencies:
-      tslib: 2.6.3
-    dev: false
-
   /@capacitor/core@5.7.6:
     resolution: {integrity: sha512-YVCNegFg04Pm6Rfc6KbZT2wnxAUzhcyi3b+MWFj+FwUOOFNmnGkzxCFo4tQakXFblfOK6pU0Va5XuiNs1+Fnow==}
     dependencies:
@@ -162,14 +123,6 @@ packages:
       '@capacitor/core': ^5.0.0
     dependencies:
       '@capacitor/core': 5.7.6
-    dev: false
-
-  /@capacitor/filesystem@1.1.0(@capacitor/core@3.9.0):
-    resolution: {integrity: sha512-8O3UuvL8HNUEJvZnmn8yUmvgB1evtXfcF0oxIo3YbSlylqywJwS3JTiuhKmsvSxCdpbTy8IaTsutVh3gZgWbKg==}
-    peerDependencies:
-      '@capacitor/core': ^3.0.0
-    dependencies:
-      '@capacitor/core': 3.9.0
     dev: false
 
   /@capacitor/filesystem@5.2.2(@capacitor/core@5.7.6):
@@ -186,14 +139,6 @@ packages:
       '@capacitor/core': ^5.0.0
     dependencies:
       '@capacitor/core': 5.7.6
-    dev: false
-
-  /@capacitor/ios@3.9.0(@capacitor/core@3.9.0):
-    resolution: {integrity: sha512-GezPCJIujRHnF4wbrKJx6Q/mgFz0f9rmh/steTTXQZI+nEl6mHk6NWh8235p7YbhonYi5WD0rFNirrjGg1EaGw==}
-    peerDependencies:
-      '@capacitor/core': ^3.9.0
-    dependencies:
-      '@capacitor/core': 3.9.0
     dev: false
 
   /@capacitor/preferences@5.0.8(@capacitor/core@5.7.6):
@@ -369,31 +314,6 @@ packages:
     resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
     engines: {node: '>=10.0.0'}
     dev: false
-
-  /@zxing/browser@0.1.5(@zxing/library@0.19.3):
-    resolution: {integrity: sha512-4Lmrn/il4+UNb87Gk8h1iWnhj39TASEHpd91CwwSJtY5u+wa0iH9qS0wNLAWbNVYXR66WmT5uiMhZ7oVTrKfxw==}
-    peerDependencies:
-      '@zxing/library': ^0.21.0
-    dependencies:
-      '@zxing/library': 0.19.3
-    optionalDependencies:
-      '@zxing/text-encoding': 0.9.0
-    dev: false
-
-  /@zxing/library@0.19.3:
-    resolution: {integrity: sha512-RUv5svewpDoD0ymXleOP8yVTO5BLkR0zn5coGC/Vs1671u0OBJ4xdtR8WVWf08OcvrieEMHdSfQY3ZKtqII/hg==}
-    engines: {node: '>= 10.4.0'}
-    dependencies:
-      ts-custom-error: 3.3.1
-    optionalDependencies:
-      '@zxing/text-encoding': 0.9.0
-    dev: false
-
-  /@zxing/text-encoding@0.9.0:
-    resolution: {integrity: sha512-U/4aVJ2mxI0aDNI8Uq0wEhMgY+u4CNtEb0om3+y3+niDAsoTCOB33UF0sxpzqzdqXLqmvc+vZyAt4O8pPdfkwA==}
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -832,11 +752,6 @@ packages:
   /tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
     hasBin: true
-    dev: false
-
-  /ts-custom-error@3.3.1:
-    resolution: {integrity: sha512-5OX1tzOjxWEgsr/YEUWSuPrQ00deKLh6D7OTWcvNHm12/7QPyRh8SYpyWvA4IZv8H/+GQWQEh/kwo95Q9OVW1A==}
-    engines: {node: '>=14.0.0'}
     dev: false
 
   /tslib@2.6.3:
