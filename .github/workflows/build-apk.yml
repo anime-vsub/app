@@ -51,37 +51,27 @@ jobs:
       - name: Install and Build Capacitor 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
           pnpm i
-          pnpm build:android --ide
-
-      - name: Build Android App
-        uses: anime-vsub/android-build-action@1.2.1
-        env:
-          BUILD_TOOLS_VERSION: "33.0.0"
-        with:
-          project-path: src-capacitor/android
-          output-path: apk-release.apk
-          gradle-task: assembleRelease
-          # build-type: bundle
-          # package-name: git.shin.animevsub
-          # keystore-content:  ${{ secrets.KEYSTORE_CONTENT }}
-          # keystore-password: ${{ secrets.KEYSTORE_PASSWORD }}
-          # keystore-alias:  ${{ secrets.KEYSTORE_ALIAS }}
-          # browserstack-upload: true
-          # browserstack-username: ${{ secrets.BROWSERSTACK_USERNAME }}
-          # browserstack-access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          pnpm build:android
 
       - uses: filippoLeporati93/android-release-signer@v1
         name: Sign app APK
         # ID used to access action output
         id: sign_app
         with:
-          releaseDirectory: /home/runner/work/app/app
+          releaseDirectory: /home/runner/work/app/src-capacitor/android/app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.KEYSTORE_CONTENT }}
           alias: ${{ secrets.KEYSTORE_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
+          
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+        if: ${{ failure() }}
+        with:
+          ## If no one connects after 5 minutes, shut down server.
+          wait-timeout-minutes: 5
 
       - name: Generate changelog
         id: changelog
