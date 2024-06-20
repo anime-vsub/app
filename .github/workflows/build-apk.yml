@@ -65,7 +65,7 @@ jobs:
         # ID used to access action output
         id: sign_app
         with:
-          releaseDirectory: /home/runner/work/app/src-capacitor/android/app/build/outputs/apk/release
+          releaseDirectory: /home/runner/work/app/app/src-capacitor/android/app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.KEYSTORE_CONTENT }}
           alias: ${{ secrets.KEYSTORE_ALIAS }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -89,5 +89,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v0.1.14
         with:
-          files: /home/runner/work/app/app/apk-release-signed.apk
+          files: /home/runner/work/app/app/src-capacitor/android/app/build/outputs/apk/release
           body: ${{ steps.changelog.outputs.changelog }}
