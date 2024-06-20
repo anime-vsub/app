@@ -1,2 +1,4 @@
 hls-module.js linguist-vendored
 src/logic/hls-module.js linguist-vendored
+dha-release.wasm linguist-language=assembly
+src-capacitor/ios/App/App/public/plugins/cordova-plugin-screen-orientation/www/screenorientation.js linguist-vendored=typescript
