@@ -60,6 +60,9 @@ jobs:
           pnpm i
           pnpm build:android
 
+      - name: Rename app-release-unsigned.apk to app-release.apk
+        run: mv /home/runner/work/app/app/src-capacitor/android/app/build/outputs/apk/release/app-release-unsigned.apk /home/runner/work/app/app/src-capacitor/android/app/build/outputs/apk/release/app-release.apk
+
       - uses: filippoLeporati93/android-release-signer@v1
         name: Sign app APK
         # ID used to access action output
@@ -88,5 +91,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v0.1.14
         with:
-          files: /home/runner/work/app/app/src-capacitor/android/app/build/outputs/apk/release
+          files: /home/runner/work/app/app/src-capacitor/android/app/build/outputs/apk/release/app-release-signed.apk
           body: ${{ steps.changelog.outputs.changelog }}
