@@ -44,9 +44,6 @@ dependencies:
   '@hugotomazi/capacitor-navigation-bar':
     specifier: ^3.0.0
     version: 3.0.0(@capacitor/core@5.7.6)
-  '@jcesarmobile/ssl-skip':
-    specifier: ^0.2.0
-    version: 0.2.0
   cordova-plugin-screen-orientation:
     specifier: ^3.0.4
     version: 3.0.4
@@ -288,10 +285,6 @@ packages:
       wrap-ansi: 7.0.0
     transitivePeerDependencies:
       - supports-color
-    dev: false
-
-  /@jcesarmobile/ssl-skip@0.2.0:
-    resolution: {integrity: sha512-hkhOM5+qPm5xzOYcbUODzYTZKyATEM3qixzUL1gJsJckZ5wAUQxyZJFM3hcUANv8fV8cONfX7A+d/DJpzVvM+Q==}
     dev: false
 
   /@types/fs-extra@8.1.5:
