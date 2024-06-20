@@ -51,8 +51,8 @@ dependencies:
     specifier: ^4.1.0
     version: 4.6.3(@firebase/app@0.9.11)
   '@hugotomazi/capacitor-navigation-bar':
-    specifier: ^2.0.0
-    version: 2.0.0(@capacitor/core@5.7.6)
+    specifier: ^3.0.0
+    version: 3.0.0(@capacitor/core@5.7.6)
   '@iconify/vue':
     specifier: ^4.0.2
     version: 4.0.2(vue@3.2.45)
@@ -2216,10 +2216,10 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: true
 
-  /@hugotomazi/capacitor-navigation-bar@2.0.0(@capacitor/core@5.7.6):
-    resolution: {integrity: sha512-hebf0ixGPugiZfH6g7HS/hrDzkKmNdJV/pV2jUz5lfoZXFMjE+7aeAr1AqwW6EGNej65WcEP8VUL5YUc3wSCjw==}
+  /@hugotomazi/capacitor-navigation-bar@3.0.0(@capacitor/core@5.7.6):
+    resolution: {integrity: sha512-p2VbMmxWu28z7VdWnYjKQjUm2N7O0rjauBOkD4s9X0y64Kgn1hS7/69dZnRqrqw4tSgOO3w9oxUpj9l5cAl5CQ==}
     peerDependencies:
-      '@capacitor/core': ^4.0.1
+      '@capacitor/core': ^4.0.1 || ^5.0.0
     dependencies:
       '@capacitor/core': 5.7.6
     dev: false
