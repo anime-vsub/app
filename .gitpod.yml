@@ -3,6 +3,6 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
-  - init: pnpm install
+  - init: curl -fsSL https://bun.sh/install | bash
 
 
