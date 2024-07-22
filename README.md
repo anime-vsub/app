@@ -1,18 +1,21 @@
 # AnimeVsub Application!
 
-📢⚠️📌❗ **The application is currently distributed for free on GitHub and it is OPEN SOURCE COMPLYING WITH THE [GNU GPL-3.0 LICENSE](./LICENSE)
-PLEASE DO NOT MODIFY IT TO EMBEDD ADVERTISING OR USE IT FOR COMMERCIAL PURPOSES.**
+> [!WARNING]
+> 📢⚠️📌❗ **The application is currently distributed for free on GitHub and it is OPEN SOURCE COMPLYING WITH THE [GNU GPL-3.0 LICENSE](./LICENSE)
+> PLEASE DO NOT MODIFY IT TO EMBEDD ADVERTISING OR USE IT FOR COMMERCIAL PURPOSES.**
 
-**IF FRAUDULENT BEHAVIORS SUCH AS INSERTING ADS AND TAKEAWAYS OF THE APP CONTINUE I WILL SHUT DOWN THE ENTIRE APP WITH A FOREIGN KEY (ALL MODIFIED APPS WILL ALSO STOP WORKING) AND STOP APP DEVELOPMENT**
+> **IF FRAUDULENT BEHAVIORS SUCH AS INSERTING ADS AND TAKEAWAYS OF THE APP CONTINUE I WILL SHUT DOWN THE ENTIRE APP WITH A FOREIGN KEY (ALL MODIFIED APPS WILL ALSO STOP WORKING) AND STOP APP DEVELOPMENT**
 
 <div style="text-align: center;">
    <img src="./meta/app_icon.svg" width="120px">
    <h1 style="font-size: 16px">AnimeVsub</h1>
 </div>
 
-**Visit https://app.animevsub.eu.org to download APK**
+> [!IMPORTANT]
+> **Visit https://app.animevsub.eu.org to download APK**
 
-> **The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.eu.org**
+> [!TIP]
+> The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.eu.org
 
 > ~~The goal of this application is to allow users to interact intuitively and explore new Anime sets in place of the outdated web interface of [animevietsub](https://animevietsub.pro).~~
 >
@@ -32,7 +35,8 @@ PLEASE DO NOT MODIFY IT TO EMBEDD ADVERTISING OR USE IT FOR COMMERCIAL PURPOSES.
 
 ## Download APK for Android
 
-Download app for Android at: https://app.animevsub.eu.org
+> [!TIP]
+> Download app for Android at: https://app.animevsub.eu.org
 
 ## Reason for PWA
 
