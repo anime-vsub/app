@@ -7,18 +7,16 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 21
 
-      - uses: pnpm/action-setup@v2.0.1
-        name: Install pnpm
-        id: pnpm-install
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 8.6.11
-          run_install: false
+          bun-version: latest
+
+      - name: Install depends
+        run: bun i
+
       - name: Test
-        run: |
-          pnpm i
-          pnpm test
+        run: bun run test

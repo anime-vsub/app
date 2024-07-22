@@ -14,22 +14,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 21
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Install depends
-        run: npm i
+        run: bun i
 
       - name: Emit auto import
-        run: npm run test src/logic/noop.spec.ts
+        run: bun run test src/logic/noop.spec.ts
 
       - name: Typing
-        run: npm run typing
+        run: bun run typing
 
       - name: Test
-        run: npm run test
+        run: bun run test
   release:
     needs: ci
     runs-on: ubuntu-latest
@@ -37,23 +40,19 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 21
 
-      - uses: pnpm/action-setup@v2.0.1
-        name: Install pnpm
-        id: pnpm-install
+      - uses: oven-sh/setup-bun@v2
         with:
-          version: 8.6.11
-          run_install: false
+          bun-version: latest
 
       - name: Install depends
-        run: pnpm i
+        run: bun i
 
       - name: Test
-        run: pnpm test
+        run: bun run test
 
       - name: Push to branch `release`
         run: |
