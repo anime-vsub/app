@@ -1071,7 +1071,6 @@ watch(
     if (newVal && oldVal) setArtPlaying(true)
   }
 )
-// eslint-disable-next-line functional/no-let
 let artEnded = false
 const artLoading = ref(true)
 const artDuration = ref<number>(0)
@@ -1084,7 +1083,7 @@ const setArtCurrentTime = (currentTime: number) => {
   video.value.currentTime = currentTime
   artCurrentTime.value = currentTime
 }
-// eslint-disable-next-line functional/no-let
+ 
 let progressRestored: false | string = false
 watch(
   [() => props.currentChap, () => props.currentSeason, () => authStore.uid],
@@ -1103,7 +1102,6 @@ watch(
       try {
         if (stateStorageStore.disableAutoRestoration > 0) {
           addNotice(t("bo-qua-khoi-phuc-tien-trinh-xem"))
-          // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")
         }
         console.log(":restore progress")
@@ -1115,7 +1113,6 @@ watch(
           setArtCurrentTime(cur)
           addNotice(t("da-khoi-phuc-phien-xem-truoc-_time", [parseTime(cur)]))
         } else {
-          // eslint-disable-next-line functional/no-throw-statement
           throw new Error("NOT_RESET")
         }
       } catch (err) {
@@ -1141,7 +1138,7 @@ const setArtPlaybackRate = (value: number) => {
 
 // value control other
 const artControlShow = ref(true)
-// eslint-disable-next-line functional/no-let
+ 
 let activeTime = Date.now()
 const setArtControlShow = (show: boolean) => {
   artControlShow.value = show
@@ -1214,7 +1211,6 @@ const setArtQuality = (value: Exclude<typeof artQuality.value, undefined>) => {
 
 function onVideoProgress(event: Event) {
   const target = event.target as HTMLVideoElement
-  // eslint-disable-next-line functional/no-let
   let range = 0
   const bf = target.buffered
   const time = target.currentTime
@@ -1237,36 +1233,36 @@ function onVideoProgress(event: Event) {
 function onVideoCanPlay() {
   activeTime = Date.now()
 }
-const seasonMetaCreated = new Set<string>()
+// const seasonMetaCreated = new Set<string>()
 
-async function createSeason(
-  currentSeason: string,
-  seasonName: string,
-  poster: string,
-  name: string
-): Promise<boolean> {
-  // eslint-disable-next-line camelcase
-  const { user_data } = authStore
+// async function createSeason(
+//   currentSeason: string,
+//   seasonName: string,
+//   poster: string,
+//   name: string
+// ): Promise<boolean> {
+//   // eslint-disable-next-line camelcase
+//   const { user_data } = authStore
 
-  if (seasonMetaCreated.has(currentSeason)) return true
+//   if (seasonMetaCreated.has(currentSeason)) return true
 
-  if (
-    // eslint-disable-next-line camelcase
-    !user_data
-  )
-    return false
-  console.log("set new season poster %s", poster)
-  await Promise.race([
-    historyStore.createSeason(currentSeason, {
-      poster,
-      seasonName,
-      name,
-    }),
-    sleep(1_000),
-  ])
-  seasonMetaCreated.add(currentSeason)
-  return true
-}
+//   if (
+//     // eslint-disable-next-line camelcase
+//     !user_data
+//   )
+//     return false
+//   console.log("set new season poster %s", poster)
+//   await Promise.race([
+//     historyStore.createSeason(currentSeason, {
+//       poster,
+//       seasonName,
+//       name,
+//     }),
+//     sleep(1_000),
+//   ])
+//   seasonMetaCreated.add(currentSeason)
+//   return true
+// }
 
 const emit = defineEmits<{
   (
@@ -1286,10 +1282,10 @@ function throttle<T extends (...args: any[]) => Promise<void>>(
 ): T & {
   cancel: () => void
 } {
-  // eslint-disable-next-line functional/no-let
+   
   let wait = false
 
-  // eslint-disable-next-line functional/no-let, no-undef
+   
   let timeout: NodeJS.Timeout | number | undefined
   // eslint-disable-next-line functional/functional-parameters, @typescript-eslint/no-explicit-any
   const cb = function (...args: any[]) {
@@ -1298,6 +1294,7 @@ function throttle<T extends (...args: any[]) => Promise<void>>(
       timeout = setTimeout(
         async () => {
           firstSaveStore.add(uidChap.value)
+          // eslint-disable-next-line no-void
           await fn(...args).catch(() => void 0)
           wait = false
         },
@@ -1340,9 +1337,9 @@ const saveCurTimeToPer = throttle(
 
     try {
       // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
-      // eslint-disable-next-line functional/no-let
+       
       let cur = artCurrentTime.value
-      // eslint-disable-next-line functional/no-let
+       
       let dur = artDuration.value
 
       if (!dur || cur <= 5) {
@@ -1351,7 +1348,7 @@ const saveCurTimeToPer = throttle(
         return
       }
 
-      if (!(await createSeason(currentSeason, nameSeason, poster, name))) return
+      // if (!(await createSeason(currentSeason, nameSeason, poster, name))) return
 
       // NOTE: if this uid (processingSaveCurTimeIn === uid) -> update cur and dur
       if (uidTask === uidChap.value) {
@@ -1383,15 +1380,16 @@ const saveCurTimeToPer = throttle(
             currentSeason,
             currentChap,
             {
-              cur,
-              dur,
-              name: nameCurrentChap,
+              name,
+              poster,
+              season: currentSeason,
+              season_name: nameSeason,
             },
             {
-              poster,
-              seasonName: nameSeason,
-              name,
-            }
+              cur,
+              dur,
+              name: nameCurrentChap
+            },
           )
           .catch((err) => console.warn("save viewing progress failed: ", err)),
 
@@ -1468,7 +1466,7 @@ function onVideoEnded() {
   }
 }
 
-// eslint-disable-next-line functional/no-let
+ 
 let artPlayingOfBeforeDocumentHide: boolean
 watch(documentVisibility, (visibility) => {
   console.log("document %s", visibility)
@@ -1481,9 +1479,9 @@ watch(documentVisibility, (visibility) => {
 })
 
 {
-  // eslint-disable-next-line functional/no-let
+   
   let resume: (() => void) | null = null
-  // eslint-disable-next-line functional/no-let
+   
   let pause: (() => void) | null = null
   const resumeDelay = debounce(() => resume?.(), 1_000)
   onBeforeUnmount(() => pause?.())
@@ -1563,7 +1561,7 @@ function runRemount() {
   }).onOk(remount)
 }
 
-// eslint-disable-next-line functional/no-let
+ 
 let currentHls: Hls
 onBeforeUnmount(() => currentHls?.destroy())
 function remount(resetCurrentTime?: boolean, noDestroy = false) {
@@ -1684,7 +1682,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
             }
           )
             .then(async (res) => {
-              // eslint-disable-next-line functional/no-let
+               
               let byteLength: number
               if (context.responseType !== "text") {
                 xhr.response = await res.arrayBuffer()
@@ -1727,9 +1725,9 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       if (playing) video.value!.play()
     })
-    // eslint-disable-next-line functional/no-let
+     
     let needSwapCodec = false
-    // eslint-disable-next-line functional/no-let, no-undef
+     
     let timeoutUnneedSwapCodec: NodeJS.Timeout | number | null = null
     hls.on(Hls.Events.ERROR, (event, data) => {
       if (data.fatal) {
@@ -1838,7 +1836,7 @@ const watcherVideoTagReady = watch(video, (video) => {
   // eslint-disable-next-line promise/catch-or-return
   Promise.resolve().then(watcherVideoTagReady) // fix this not ready value
 
-  // eslint-disable-next-line functional/no-let
+   
   let currentEpStream: null | string = null
   watch(
     () => currentStream.value?.file,
@@ -1884,14 +1882,14 @@ function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl?: HTMLDivElement
 ): void
-// eslint-disable-next-line no-redeclare
+ 
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl: HTMLDivElement,
   offsetX: number,
   curTimeStart: number
 ): void
-// eslint-disable-next-line no-redeclare
+ 
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -1953,13 +1951,13 @@ function onIndicatorEnd() {
 }
 
 // ==== addons swipe backdrop ====
-// eslint-disable-next-line functional/no-let, no-undef
+ 
 let timeoutHoldBD: number | NodeJS.Timeout | null = null
 
 const holdedBD = ref(false)
-// eslint-disable-next-line functional/no-let
+ 
 let xStart: number | null = null
-// eslint-disable-next-line functional/no-let
+ 
 let curTimeStart: number | null = null
 function onBDTouchStart(event: TouchEvent) {
   holdedBD.value = false
@@ -2027,13 +2025,13 @@ function skipForward() {
 }
 
 const doubleClicking = ref<"left" | "right" | false>(false)
-// eslint-disable-next-line functional/no-let, no-undef
+ 
 let timeoutResetDoubleClicking: number | NodeJS.Timeout | null = null
-// eslint-disable-next-line functional/no-let
+ 
 let lastTimeClick: number
-// eslint-disable-next-line functional/no-let
+ 
 let lastPositionClickIsLeft: boolean | null = null
-// eslint-disable-next-line functional/no-let, no-undef
+ 
 let timeoutDbClick: number | NodeJS.Timeout | null = null
 const countSkip = ref(0)
 function onClickSkip(event: MouseEvent, orFalse: boolean) {
@@ -2090,7 +2088,6 @@ const notices = shallowReactive<
     text: string
   }[]
 >([])
-// eslint-disable-next-line functional/no-let
 let id = 1
 function addNotice(text: string) {
   const uuid = id++

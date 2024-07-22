@@ -23,9 +23,13 @@ export default defineConfig({
       imports: [
         "vue",
         "vue-router",
-        { quasar: ["useQuasar"], "vue-i18n": ["useI18n"] },
+        {
+          quasar: ["useQuasar"],
+          "vue-i18n": ["useI18n"],
+          "@vueuse/core": ["computedAsync"],
+        },
       ],
-      dts: "./auto-imports.d.ts",
+      dirs: ["./src/*.ts"],
       eslintrc: {
         enabled: true,
       },

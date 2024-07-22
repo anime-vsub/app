@@ -80,7 +80,7 @@
                     paddingLeft: '0px',
                   }"
                   color="white"
-                  :rules="[(val) => !!val || 'Bắt buộc']"
+                  :rules="[(val: any) => !!val || 'Bắt buộc']"
                 />
                 <div
                   class="flex items-center justify-end mt-1 mr-[-16px] text-[16px]"
@@ -99,10 +99,10 @@
               </form>
 
               <div class="text-[13px] text-[rgba(255,255,255,0.7)]">
-                {{ metaPlaylist.size }} video Cập nhật
+                {{ metaPlaylist.movies_count }} video Cập nhật
                 {{
                   dayjs(
-                    (metaPlaylist.updated ?? metaPlaylist.created).toDate()
+                    metaPlaylist.updated_at ?? metaPlaylist.created_at
                   ).fromNow()
                 }}
               </div>
@@ -276,11 +276,11 @@
               >{{ item.name }}</span
             >
             <div class="text-grey mt-1">
-              <template v-if="item.nameSeason"
-                >{{ t("_season-tap", [item.nameSeason]) }}
+              <template v-if="item.name_season"
+                >{{ t("_season-tap", [item.name_season]) }}
               </template>
               <template v-else>{{ t("Tap") }}</template>
-              {{ item.nameChap }}
+              {{ item.name_chap }}
             </div>
           </div>
 
@@ -384,6 +384,10 @@ const router = useRouter()
 const $q = useQuasar()
 const playlistStore = usePlaylistStore()
 
+const playlistId = computed(() =>
+  parseInt(atob(route.params.playlist.toString()).split("-")[1])
+)
+
 const infiniteScrollRef = ref<QInfiniteScroll>()
 
 const {
@@ -395,8 +399,8 @@ const {
     const { playlists } = playlistStore
     if (!playlists) return playlists
 
-    const meta = playlists.find((item) => item.id === route.params.playlist)
-    // eslint-disable-next-line functional/no-throw-statement
+    const meta = playlists.find((item) => item.id === playlistId.value)
+
     if (!meta) throw new Error("NOT_FOUND")
 
     const poster = await playlistStore.getPosterPlaylist(meta.id)
@@ -433,15 +437,15 @@ const { data: movies, run: runGetMovies } = useRequest(
     infiniteScrollRef.value?.reset()
 
     return playlistStore.getAnimesFromPlaylist(
-      route.params.playlist as string,
-      undefined,
+      playlistId.value,
+      1,
       sorter.value
     )
   },
   {
-    refreshDeps: [() => route.params.playlist, sorter],
+    refreshDeps: [playlistId, sorter],
     refreshDepsAction() {
-      if (!route.params.playlist) return
+      if (playlistId.value === undefined) return
       runGetMovies()
     },
   }
@@ -452,7 +456,7 @@ if (!isNative)
     computed(() => {
       if (!metaPlaylist.value) return {}
 
-      const title = `(${metaPlaylist.value.size}) ${metaPlaylist.value.name}`
+      const title = `(${metaPlaylist.value.movies_count}) ${metaPlaylist.value.name}`
 
       const description = metaPlaylist.value.description ?? title
 
@@ -483,17 +487,18 @@ if (!isNative)
     })
   )
 
+let page = 1
 async function onLoad(index: number, done: (end: boolean) => void) {
   const { playlists } = playlistStore
   if (!playlists) return done(true)
 
-  const meta = playlists.find((item) => item.id === route.params.playlist)
-  // eslint-disable-next-line functional/no-throw-statement
+  const meta = playlists.find((item) => item.id === playlistId.value)
+
   if (!meta) throw new Error(t("danh-sach-phat-khong-ton-tai"))
 
   const moviesMore = await playlistStore.getAnimesFromPlaylist(
     meta.id,
-    movies.value?.[movies.value.length - 1]?.$doc,
+    ++page,
     sorter.value
   )
   movies.value = [...(movies.value ?? []), ...moviesMore]
@@ -522,9 +527,8 @@ watch(editingDescription, (editing) => {
 
 async function updateNewName() {
   try {
-    // eslint-disable-next-line functional/no-throw-statement
     if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
-    await playlistStore.renamePlaylist(metaPlaylist.value.id, newName.value)
+    await playlistStore.renamePlaylist(metaPlaylist.value.name, newName.value)
     editingName.value = false
     $q.notify({
       position: "bottom-right",
@@ -539,7 +543,6 @@ async function updateNewName() {
 }
 async function updateNewDescription() {
   try {
-    // eslint-disable-next-line functional/no-throw-statement
     if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
     await playlistStore.setDescriptionPlaylist(
       metaPlaylist.value.id,
@@ -560,7 +563,6 @@ async function updateNewDescription() {
 
 async function removePlaylist() {
   try {
-    // eslint-disable-next-line functional/no-throw-statement
     if (!metaPlaylist.value) throw new Error(t("danh-sach-phat-khong-ton-tai"))
     await playlistStore.deletePlaylist(metaPlaylist.value.id)
     editingDescription.value = false
@@ -580,22 +582,25 @@ async function removePlaylist() {
 const seasonWantsToBeAddedToOtherPlaylist = ref<
   Exclude<typeof movies.value, undefined>[0] | null
 >(null)
-const fnExists = (idPlaylist: string) => {
-  if (!seasonWantsToBeAddedToOtherPlaylist.value) return false
+const fnExists = (ids: number[]) => {
+  if (!seasonWantsToBeAddedToOtherPlaylist.value) return []
   return playlistStore.hasAnimeOfPlaylist(
-    idPlaylist,
+    ids,
     seasonWantsToBeAddedToOtherPlaylist.value.season
   )
 }
 
-async function addAnimePlaylist(idPlaylist: string) {
+async function addAnimePlaylist(idPlaylist: number) {
   if (!seasonWantsToBeAddedToOtherPlaylist.value) return
   try {
-    await playlistStore.addAnimeToPlaylist(
-      idPlaylist,
-      seasonWantsToBeAddedToOtherPlaylist.value.season,
-      seasonWantsToBeAddedToOtherPlaylist.value.$doc.data()
-    )
+    await playlistStore.addAnimeToPlaylist(idPlaylist, {
+      chap: seasonWantsToBeAddedToOtherPlaylist.value.chap,
+      name: seasonWantsToBeAddedToOtherPlaylist.value.name,
+      name_chap: seasonWantsToBeAddedToOtherPlaylist.value.name_chap,
+      name_season: seasonWantsToBeAddedToOtherPlaylist.value.name_season,
+      poster: seasonWantsToBeAddedToOtherPlaylist.value.poster,
+      season: seasonWantsToBeAddedToOtherPlaylist.value.season,
+    })
     $q.notify({
       position: "bottom-right",
       message: t("da-theo-vao-danh-sach-phat"),

@@ -1,323 +1,274 @@
-import type {
-  CollectionReference,
-  DocumentReference,
-  QueryDocumentSnapshot,
-  Timestamp,
-} from "@firebase/firestore"
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  increment,
-  limit,
-  orderBy,
-  query,
-  serverTimestamp,
-  setDoc,
-  startAfter,
-  updateDoc,
-} from "@firebase/firestore"
+import type { Database } from "app/database.d.ts"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
-import { db } from "src/boot/firebase"
-import { useFirestore } from "src/composibles/useFirestore"
+import { supabase } from "src/boot/supabase"
 import dayjs from "src/logic/dayjs"
 import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
-import { computed, ref } from "vue"
 
 import { useAuthStore } from "./auth"
 
 export const usePlaylistStore = defineStore("playlist", () => {
   const authStore = useAuthStore()
 
-  const playlistsError = ref<Error | null>(null)
-  // eslint-disable-next-line no-use-before-define
-  const [playlists, refreshPlaylists] = useFirestore<Playlist_Playlist[]>(
-    computed(() => {
+  const playlistsError = ref<unknown | null>(null)
+
+  const playlists = computedAsync(
+    async () => {
       playlistsError.value = null
       if (!authStore.uid) return null
 
-      const userRef = doc(db, "users", authStore.uid)
+      const { data } = await supabase
+        .rpc("get_list_playlist", {
+          user_uid: authStore.uid
+        })
+        .throwOnError()
 
-      return query(collection(userRef, "playlist"), orderBy("created", "desc"))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }) as unknown as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    null as any,
+      return data
+    },
+    undefined,
     {
-      errorHandler(err) {
-        playlistsError.value = err
-      },
+      lazy: true,
+      onError(e) {
+        playlistsError.value = e
+      }
     }
   )
 
-  interface Playlist_Movies_Movie {
-    name: string
-    poster: string
-    nameSeason: string
-    chap: string
-    nameChap: string
-    add_at: Timestamp
-  }
-  interface Playlist_Playlist {
-    id: string
-    name: string
-    description?: string
-    public: boolean
-    created: Timestamp
-    updated?: Timestamp
-    size: number
-  }
-
   async function createPlaylist(name: string, isPublic: boolean) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("tao-danh-sach-phat"),
+          i18n.global.t("tao-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
+    const { data } = await supabase
+      .rpc("create_playlist", {
+        user_uid: authStore.uid,
+        playlist_name: name,
+        is_public: isPublic
+      })
+      .single()
+      .throwOnError()
 
-    return addDoc(
-      collection(userRef, "playlist") as CollectionReference<
-        Omit<Playlist_Playlist, "id">
-      >,
-      {
-        name,
-        public: isPublic,
-        created: serverTimestamp(),
-        size: 0,
-      }
-    )
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return data!
   }
 
-  async function deletePlaylist(uid: string) {
+  async function deletePlaylist(id: number) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat"),
+          i18n.global.t("xoa-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-
-    return deleteDoc(doc(userRef, "playlist", uid))
+    await supabase
+      .rpc("delete_playlist", {
+        user_uid: authStore.uid,
+        playlist_id: id
+      })
+      .throwOnError()
   }
 
-  async function renamePlaylist(uid: string, newName: string) {
+  async function renamePlaylist(oldName: string, newName: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat"),
+          i18n.global.t("xoa-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-
-    return updateDoc(
-      doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>,
-      {
-        name: newName,
-      }
-    )
+    await supabase
+      .rpc("rename_playlist", {
+        user_uid: authStore.uid,
+        old_name: oldName,
+        new_name: newName
+      })
+      .throwOnError()
   }
 
-  async function setDescriptionPlaylist(uid: string, description: string) {
+  async function setDescriptionPlaylist(id: number, description: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat"),
+          i18n.global.t("xoa-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-
-    return updateDoc(
-      doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>,
-      {
-        description,
-      }
-    )
+    await supabase
+      .rpc("set_description_playlist", {
+        user_uid: authStore.uid,
+        playlist_id: id,
+        playlist_description: description
+      })
+      .throwOnError()
   }
 
-  async function publicPlaylist(uid: string, isPublic: boolean) {
+  async function publicPlaylist(id: number, isPublic: boolean) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat"),
+          i18n.global.t("xoa-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-
-    return updateDoc(
-      doc(userRef, "playlist", uid) as DocumentReference<Playlist_Playlist>,
-      {
-        public: isPublic,
-      }
-    )
+    await supabase
+      .rpc("set_public_playlist", {
+        user_uid: authStore.uid,
+        playlist_id: id,
+        is_public: isPublic
+      })
+      .throwOnError()
   }
 
   // prv
   async function addAnimeToPlaylist(
-    uidPlaylist: string,
-    season: string,
-    anime: Omit<Playlist_Movies_Movie, "add_at">
+    id: number,
+    anime: Omit<
+      Database["public"]["Tables"]["movies"]["Insert"],
+      "playlist_id" | "add_at"
+    >
   ) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-    const playlistRef = doc(userRef, "playlist", uidPlaylist)
+    const { data } = await supabase
+      .rpc("add_movie_playlist", {
+        user_uid: authStore.uid,
+        playlist_id: id,
 
-    // check playlist exists?
-    if (!(await getDoc(playlistRef)).exists())
-      // eslint-disable-next-line functional/no-throw-statement
-      throw new Error(i18n.global.t("errors.danh-sach-phat-khong-ton-tai"))
+        p_chap: anime.chap,
+        p_name: anime.name,
+        p_name_chap: anime.name_chap,
+        p_name_season: anime.name_season,
+        p_poster: removeHostUrlImage(anime.poster),
+        p_season: anime.season
+      })
+      .single()
+      .throwOnError()
 
-    await setDoc(
-      doc(
-        playlistRef,
-        "movies",
-        `${season}`
-      ) as DocumentReference<Playlist_Movies_Movie>,
-      {
-        ...anime,
-        poster: removeHostUrlImage(anime.poster),
-        add_at: serverTimestamp(),
-      },
-      { merge: true }
-    )
-    await updateDoc(playlistRef, {
-      size: increment(1),
-      updated: serverTimestamp(),
-    })
+    const index = playlists.value?.findIndex((playlist) => playlist.id === id)
+    if (index !== undefined && index > -1) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      playlists.value![index] = {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ...playlists.value![index],
+        ...(data ?? {})
+      }
+    }
   }
 
-  async function deleteAnimeFromPlaylist(uidPlaylist: string, season: string) {
+  async function deleteAnimeFromPlaylist(id: number, season: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-    const playlistRef = doc(userRef, "playlist", uidPlaylist)
+    const { data } = await supabase
+      .rpc("delete_movie_playlist", {
+        user_uid: authStore.uid,
+        playlist_id: id,
+        p_season: season
+      })
+      .throwOnError()
 
-    await deleteDoc(doc(playlistRef, "movies", season))
-    await updateDoc(playlistRef, {
-      size: increment(-1),
-      updated: serverTimestamp(),
-    })
+    const index = playlists.value?.findIndex((playlist) => playlist.id === id)
+    if (index !== undefined && index > -1) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      playlists.value![index] = {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ...playlists.value![index],
+        ...(data ?? {})
+      }
+    }
   }
 
-  async function hasAnimeOfPlaylist(uidPlaylist: string, season: string) {
+  async function hasAnimeOfPlaylists(ids: number[], season: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-    const playlistRef = doc(userRef, "playlist", uidPlaylist)
+    const { data } = await supabase
+      .rpc("has_movie_playlists", {
+        user_uid: authStore.uid,
+        playlist_ids: ids,
+        season_id: season
+      })
+      .throwOnError()
 
-    return getDoc(doc(playlistRef, "movies", `${season}`)).then((res) =>
-      res.exists()
-    )
+    const map = new Map<number, boolean>()
+    data?.forEach((item) => {
+      map.set(item.playlist_id, item.has_movie)
+    })
+
+    return ids.map((item) => map.get(item) ?? false)
   }
 
   async function getAnimesFromPlaylist(
-    uidPlaylist: string,
-    lastAnimeDoc?: QueryDocumentSnapshot<Playlist_Movies_Movie>,
-    sorter?: "asc" | "desc"
+    id: number,
+    page: number,
+    sorter: "asc" | "desc" = "desc"
   ) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-    const playlistRef = doc(userRef, "playlist", uidPlaylist)
-
-    return getDocs(
-      query(
-        collection(
-          playlistRef,
-          "movies"
-        ) as CollectionReference<Playlist_Movies_Movie>,
-        orderBy("add_at", sorter ?? "asc"),
-        ...(lastAnimeDoc ? [startAfter(lastAnimeDoc)] : []),
-        limit(20)
-      )
-    ).then((res) =>
-      res.docs.map((item) => {
-        const data = item.data()
-        return {
-          ...data,
-          poster: addHostUrlImage(data.poster),
-          $doc: item,
-          season: item.id,
-          add_at: dayjs(data.add_at.toDate()),
-        }
+    const { data } = await supabase
+      .rpc("get_movies_playlist", {
+        user_uid: authStore.uid,
+        playlist_id: id,
+        sorter,
+        page,
+        page_size: 30
       })
-    )
+      .throwOnError()
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return data!.map((item) => {
+      return {
+        ...item,
+        poster: addHostUrlImage(item.poster),
+        add_at: dayjs(item.add_at)
+      }
+    })
   }
 
-  async function getPosterPlaylist(idPlaylist: string) {
+  async function getPosterPlaylist(id: number) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat"),
+          i18n.global.t("theo-vao-danh-sach-phat")
         ])
       )
 
-    const userRef = doc(db, "users", authStore.uid)
-
-    return getDocs(
-      query(
-        collection(
-          userRef,
-          "playlist",
-          idPlaylist,
-          "movies"
-        ) as CollectionReference<Playlist_Movies_Movie>,
-        orderBy("add_at", "asc"),
-        limit(1)
-      )
-    )
-      .then((res) => res.docs?.[0].data().poster ?? null)
-      .then((poster) => {
-        if (poster) return addHostUrlImage(poster)
-        return poster
+    const { data } = await supabase
+      .rpc("get_poster_playlist", {
+        user_uid: authStore.uid,
+        playlist_id: id
       })
+      .single()
+      .throwOnError()
+
+    if (data) return addHostUrlImage(data?.poster)
   }
 
   return {
     playlists,
     playlistsError,
-    refreshPlaylists,
+    // refreshPlaylists,
     // getMetaPlaylist,
     createPlaylist,
     deletePlaylist,
@@ -328,8 +279,8 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
     addAnimeToPlaylist,
     deleteAnimeFromPlaylist,
-    hasAnimeOfPlaylist,
+    hasAnimeOfPlaylist: hasAnimeOfPlaylists,
 
-    getAnimesFromPlaylist,
+    getAnimesFromPlaylist
   }
 })

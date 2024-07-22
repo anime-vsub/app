@@ -33,7 +33,7 @@
             <q-item-section>
               <q-item-label>{{ item.name }}</q-item-label>
               <q-item-label caption>{{
-                t("_size-anime", [item.size])
+                t("_size-anime", [item.movies_count])
               }}</q-item-label>
             </q-item-section>
           </q-item>
@@ -69,7 +69,7 @@
               paddingLeft: '0px',
             }"
             color="white"
-            :rules="[(val) => !!val || 'Bắt buộc']"
+            :rules="[(val: any) => !!val || 'Bắt buộc']"
             @keydown.stop
             @keypress.enter="createNewPlaylist"
           >
@@ -110,28 +110,29 @@ import { usePlaylistStore } from "stores/playlist"
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 const props = defineProps<{
-  exists: (id: string) => Promise<boolean> | boolean
+  exists: (ids: number[]) => Promise<boolean[]> | boolean[]
 }>()
 const emit = defineEmits<{
-  (name: "action:add", idPlaylist: string): void
-  (name: "action:del", idPlaylist: string): void
-  (name: "after-create-playlist", idPlaylist: string): Promise<void> | void
+  (name: "action:add", idPlaylist: number): void
+  (name: "action:del", idPlaylist: number): void
+  (name: "after-create-playlist", idPlaylist: number): Promise<void> | void
 }>()
 const $q = useQuasar()
 const { t } = useI18n()
 const playlistStore = usePlaylistStore()
 const playlists = computedAsync(
-  () => {
+  async () => {
     const { playlists } = playlistStore
     if (!playlists) return playlists
-    return Promise.all(
-      playlists.map(async (item) => {
-        return {
-          ...item,
-          added: await props.exists(item.id),
-        }
-      })
-    )
+
+    const exists = await props.exists(playlists.map((playlist) => playlist.id))
+
+    return playlists.map((item, index) => {
+      return {
+        ...item,
+        added: exists[index],
+      }
+    })
   },
   undefined,
   {

@@ -5,6 +5,7 @@ import sha256 from "sha256"
 import { DangNhap } from "src/apis/runs/dang-nhap"
 import { logEvent, setUserId, setUserProperty } from "src/boot/firebase"
 import { i18n } from "src/boot/i18n"
+import { supabase } from "src/boot/supabase"
 import { post } from "src/logic/http"
 import { computed, ref, watch } from "vue"
 
@@ -83,7 +84,6 @@ export const useAuthStore = defineStore(
     }
     async function changePassword(newPassword: string) {
       if (!user_data.value)
-        // eslint-disable-next-line functional/no-throw-statement
         throw new Error(
           i18n.global.t("errors.require_login_to", [
             i18n.global.t("thay-doi-mat-khau"),
@@ -127,6 +127,22 @@ export const useAuthStore = defineStore(
     watch(uid, (uid) => setUserId(uid ?? (null as unknown as string)), {
       immediate: true,
     })
+
+    watch(user_data, async (user_data) => {
+      if (!user_data) return
+  
+      await supabase.from("users").upsert(
+        {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          uuid: uid.value!,
+          email: user_data.email,
+          name: user_data.name
+        },
+        {
+          onConflict: "uuid"
+        }
+      )
+    }, { immediate: true })
 
     return {
       user_data,

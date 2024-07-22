@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-env node */
 
 /*
@@ -8,17 +9,16 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-import { QuasarConf } from "@quasar/app-vite/types/configuration/conf"
 import path from "path"
 
+import type { QuasarConf } from "@quasar/app-vite/types/configuration/conf"
+import { config } from "dotenv"
 import { extend } from "quasar"
 import { configure } from "quasar/wrappers"
-
 import AutoImport from "unplugin-auto-import/vite"
 import IconsResolver from "unplugin-icons/resolver"
 import Icons from "unplugin-icons/vite"
 import Components from "unplugin-vue-components/vite"
-import { config } from "dotenv"
 
 config()
 
@@ -142,8 +142,13 @@ export default configure(function (/* ctx */) {
             imports: [
               "vue",
               "vue-router",
-              { quasar: ["useQuasar"], "vue-i18n": ["useI18n"] },
+              {
+                quasar: ["useQuasar"],
+                "vue-i18n": ["useI18n"],
+                "@vueuse/core": ["computedAsync"],
+              },
             ],
+            dirs: ["./src/*.ts"],
             dts: "./auto-imports.d.ts",
             eslintrc: {
               enabled: true,

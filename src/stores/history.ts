@@ -1,371 +1,201 @@
-import type {
-  CollectionReference,
-  DocumentData,
-  DocumentReference,
-  DocumentSnapshot,
-  QueryDocumentSnapshot,
-  Timestamp,
-} from "@firebase/firestore"
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  serverTimestamp,
-  setDoc,
-  startAfter,
-  where,
-} from "@firebase/firestore"
+import type { Database } from "app/database.d.ts"
 import { i18n } from "boot/i18n"
 import { defineStore } from "pinia"
-import { db } from "src/boot/firebase"
-import { useFirestore } from "src/composibles/useFirestore"
+import { supabase } from "src/boot/supabase"
 import dayjs from "src/logic/dayjs"
 import { getRealSeasonId } from "src/logic/getRealSeasonId"
 import { addHostUrlImage, removeHostUrlImage } from "src/logic/urlImage"
-import { v4 } from "uuid"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 
 import { useAuthStore } from "./auth"
-
-function isToday(date?: Date) {
-  if (!date) return false
-
-  return dayjs(date).isToday()
-}
 
 export const useHistoryStore = defineStore("history", () => {
   const authStore = useAuthStore()
 
-  interface HistoryItem {
-    name: string
-    poster: string
-    season: string
-    seasonName: string
-
-    last?: {
-      /** @type : is a id chap. (e.g: 1132, 12345) */
-      chap: string
-      cur: number
-      dur: number
-      name: string
-    }
-    timestamp?: Timestamp // set along with last
-  }
-  interface HistoryItem_ChapItem {
-    cur: number
-    dur: number
-    name: string
-  }
-
-  const last30ItemError = ref<Error | null>(null)
-  const [_last30Item, refreshLast30Item] = useFirestore<
-    Required<
-      HistoryItem & {
-        id: string
-      }
-    >[]
-  >(
-    computed(() => {
-      last30ItemError.value = null
+  const last30ItemError = ref<unknown | null>(null)
+  const retryLoadLast30Item = ref(0)
+  const last30Item = computedAsync(
+    async () => {
+      // eslint-disable-next-line no-unused-expressions
+      retryLoadLast30Item.value
       if (!authStore.uid) return null
 
-      return query(
-        collection(db, "users", authStore.uid, "history"),
-        where("timestamp", "!=", null),
-        orderBy("timestamp", "desc"),
-        limit(30)
-      )
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }) as unknown as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    null as any,
+      const { data } = await supabase
+        .rpc("query_history", {
+          user_uid: authStore.uid,
+          page: 1,
+          size: 30
+        })
+        .throwOnError()
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return data!.map((item) => {
+        item.poster = addHostUrlImage(item.poster)
+        return item
+      })
+    },
+    undefined,
     {
-      errorHandler(err) {
+      lazy: true,
+      onError(err) {
         last30ItemError.value = err
-      },
+      }
     }
   )
-  const last30ItemGet = ref(false)
-  const last30Item = computed(() => {
-    if (!last30ItemGet.value) return null
 
-    if (!_last30Item.value) return
+  const refreshLast30Item = () => retryLoadLast30Item.value++
 
-    const items: Exclude<typeof _last30Item.value, undefined> = []
-    _last30Item.value.forEach((item) => {
-      if (!item.last || !item.name) return
-      item.poster = addHostUrlImage(item.poster)
-
-      items.push(item)
-    })
-
-    return items
-  })
-
-  async function loadMoreAfter(
-    lastDoc?: QueryDocumentSnapshot<Required<HistoryItem>>
-  ) {
+  async function loadMoreAfter(page: number) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day"),
+          i18n.global.t("xem-lich-su-gan-day")
         ])
       )
 
-    const result: (Omit<Required<HistoryItem>, "timestamp"> & {
-      id: string
-      timestamp: dayjs.Dayjs
-      $doc: QueryDocumentSnapshot<Required<HistoryItem>>
-    })[] = []
-
-    const { docs } = await getDocs(
-      query(
-        collection(
-          db,
-          "users",
-          authStore.uid,
-          "history"
-        ) as CollectionReference<Required<HistoryItem>>,
-        where("timestamp", "!=", null),
-        orderBy("timestamp", "desc"),
-        ...(lastDoc ? [startAfter(lastDoc)] : []),
-        limit(30)
-      )
-    )
-    docs.forEach((doc) => {
-      const data = doc.data()
-
-      if (data.name && data.last)
-        result.push({
-          id: doc.id,
-          ...data,
-          poster: addHostUrlImage(data.poster),
-          timestamp: dayjs(data.timestamp?.toDate()),
-          $doc: doc,
-        })
-    })
-
-    return result
-  }
-
-  async function createSeason(
-    seasonId: string,
-    info: Omit<HistoryItem, "timestamp" | "season">
-  ): Promise<void> {
-    if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
-      throw new Error(
-        i18n.global.t("errors.require_login_to", [
-          i18n.global.t("luu-tien-trinh-xem-season-moi"),
-        ])
-      )
-
-    const seasonRef = doc(
-      doc(db, "users", authStore.uid),
-      "history",
-      getRealSeasonId(seasonId)
-    ) as DocumentReference<HistoryItem>
-
-    const snap = await getDoc(seasonRef)
-    if (!snap.exists() || snap.data().season !== seasonId)
-      await setDoc(seasonRef, {
-        season: seasonId,
-        ...info,
-        poster: removeHostUrlImage(info.poster),
-        timestamp: serverTimestamp(),
+    const { data } = await supabase
+      .rpc("query_history", {
+        user_uid: authStore.uid,
+        page,
+        size: 30
       })
+      .throwOnError()
+
+    return data?.map((item) => {
+      item.poster = addHostUrlImage(item.poster)
+      return {
+        ...item,
+        timestamp: dayjs(item.created_at)
+      }
+    }) ?? []
   }
+
+  // async function createSeason(
+  //   seasonId: string,
+  //   info: Database["public"]["Tables"]["history"]["Insert"]
+  // ): Promise<void> {
+  //   if (!authStore.uid)
+  //     throw new Error(
+  //       i18n.global.t("errors.require_login_to", [
+  //         i18n.global.t("luu-tien-trinh-xem-season-moi")
+  //       ])
+  //     )
+
+  //   await supabase
+  //     .rpc("add_history", {
+  //       user_uid: authStore.uid,
+  //       ...info,
+  //       season: getRealSeasonId(seasonId),
+  //       poster: removeHostUrlImage(info.poster)
+  //     })
+  //     .throwOnError()
+  // }
 
   // children /chaps/:chap
-  function getProgressChaps(season: string) {
+  async function getProgressChaps(season: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day"),
+          i18n.global.t("xem-lich-su-gan-day")
         ])
       )
 
-    return getDocs(
-      collection(
-        db,
-        "users",
-        authStore.uid,
-        "history",
-        getRealSeasonId(season),
-        "chaps"
-      ) as CollectionReference<HistoryItem_ChapItem>
-    ).then(({ docs }) => docs)
+    const { data } = await supabase
+      .rpc("get_watch_progress", {
+        user_uid: authStore.uid,
+        season_id: getRealSeasonId(season)
+      })
+      .throwOnError()
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return data!
   }
-  function getProgressChap(season: string, chap: string) {
+  async function getProgressChap(season: string, chap: string) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day"),
+          i18n.global.t("xem-lich-su-gan-day")
         ])
       )
 
-    return getDoc(
-      doc(
-        db,
-        "users",
-        authStore.uid,
-        "history",
-        getRealSeasonId(season),
-        "chaps",
-        chap
-      ) as DocumentReference<HistoryItem_ChapItem>
-    ).then((res) => res.data())
+    const {
+      data
+    } = await supabase
+      .rpc("get_single_progress", {
+        user_uid: authStore.uid,
+        season_id: getRealSeasonId(season),
+        p_chap_id: chap
+      })
+      .single()
+      .throwOnError()
+
+    return data
   }
-  function setProgressChap(
+
+  async function setProgressChap(
     season: string,
     chap: string,
-    info: HistoryItem_ChapItem,
-    infoSeason: Omit<HistoryItem, "timestamp" | "season">
+    info: Omit<Database["public"]["Tables"]["history"]["Insert"], "user_id">,
+    watchProgress: Pick<
+      Database["public"]["Tables"]["chaps"]["Insert"],
+      "cur" | "dur" | "name"
+    >
   ) {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("luu-lich-su-xem"),
+          i18n.global.t("luu-lich-su-xem")
         ])
       )
 
-    const realSeason = getRealSeasonId(season)
+    await supabase
+      .rpc("set_single_progress", {
+        user_uid: authStore.uid,
+        p_name: info.name,
+        p_poster: removeHostUrlImage(info.poster),
+        season_id: getRealSeasonId(info.season),
+        p_season_name: info.season_name,
 
-    const seasonRef = doc(
-      db,
-      "users",
-      authStore.uid,
-      "history",
-      realSeason
-    ) as DocumentReference<Required<HistoryItem>>
-    const chapRef = doc(
-      seasonRef,
-      "chaps",
-      chap
-    ) as DocumentReference<HistoryItem_ChapItem>
-
-    return Promise.all([
-      // TODO: can't where after orderBy
-      // queue task this up function
-      getDocs(
-        query(
-          seasonRef.parent,
-          where("timestamp", "!=", null),
-          orderBy("timestamp", "desc"),
-          limit(1)
-        )
-      )
-        // update progress and seasonRef put down
-        .then(async ({ docs, size }) => {
-          // this is old data. not conflict data with save in previous then
-          // eslint-disable-next-line functional/no-let
-          let oldData: DocumentSnapshot<Required<HistoryItem>> | null = null
-
-          // eslint-disable-next-line promise/always-return
-          if (
-            size !== 0 &&
-            ((docs[0].id !== realSeason &&
-              !docs[0].id.endsWith(`#${realSeason}`)) ||
-              !isToday(docs[0].data().timestamp?.toDate()))
-          ) {
-            oldData = await getDoc(seasonRef)
-          }
-          // update to pre-read on history (indexed faster)
-
-          // const batch = writeBatch(db)
-          await Promise.all([
-            setDoc<HistoryItem, DocumentData>(
-              seasonRef,
-              {
-                timestamp: serverTimestamp(),
-                season,
-                ...infoSeason,
-                poster: removeHostUrlImage(infoSeason.poster),
-                last: {
-                  chap,
-                  ...info,
-                },
-              },
-              { merge: true }
-            ),
-            (async () => {
-              // create fake data replace fix #70
-              if (oldData?.exists()) {
-                // clone now
-                const data = oldData.data()
-                // save by buff diff
-
-                const seasonRefOldData = doc(
-                  seasonRef.parent,
-                  `${v4()}#${realSeason}`
-                )
-
-                return setDoc(
-                  seasonRefOldData,
-                  {
-                    ...data,
-                    poster: removeHostUrlImage(data.poster),
-                  },
-                  { merge: true }
-                )
-              }
-            })(),
-          ])
-        })
-
-        .catch((err) => {
-          console.error("error with progress getDocs", err)
-        }),
-      // update to progress watch chaps, don't worry
-      setDoc(chapRef, info, { merge: true }).catch((err) =>
-        console.error("update progress error", err)
-      ),
-    ])
+        e_cur: watchProgress.cur,
+        e_dur: watchProgress.dur,
+        e_name: watchProgress.name,
+        e_chap: chap
+      })
+      .throwOnError()
   }
 
   async function getLastEpOfSeason(season: string): Promise<null | string> {
     if (!authStore.uid)
-      // eslint-disable-next-line functional/no-throw-statement
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day"),
+          i18n.global.t("xem-lich-su-gan-day")
         ])
       )
 
-    const data = await getDoc(
-      doc(
-        db,
-        "users",
-        authStore.uid,
-        "history",
-        getRealSeasonId(season)
-      ) as DocumentReference<HistoryItem>
-    ).then((res) => res.data())
+    const { data } = await supabase
+      .rpc("get_last_chap", {
+        user_uid: authStore.uid,
+        season: getRealSeasonId(season)
+      })
+      .single()
+      .throwOnError()
 
-    return data?.last?.chap ?? null
+    return data?.chap_id??null
   }
 
   return {
     last30Item,
     last30ItemError,
-    refreshLast30Item,
-    last30ItemGet,
     loadMoreAfter,
 
-    createSeason,
+    refreshLast30Item,
+
+    // createSeason,
 
     getProgressChaps,
     getProgressChap,
     setProgressChap,
 
-    getLastEpOfSeason,
+    getLastEpOfSeason
   }
 })
