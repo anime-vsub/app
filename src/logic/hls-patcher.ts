@@ -56,7 +56,7 @@ export function patcher(hls: Hls) {
   ): void {
     const stats = this.stats
     if (stats.loading.start) {
-      // eslint-disable-next-line functional/no-throw-statement
+       
       throw new Error("Loader can only be used once.")
     }
     stats.loading.start = self.performance.now()
@@ -105,7 +105,7 @@ export function patcher(hls: Hls) {
 
         if (!response.ok) {
           const { status, statusText } = response
-          // eslint-disable-next-line functional/no-throw-statement
+           
           throw new FetchError(
             statusText || "fetch, bad network response",
             status,

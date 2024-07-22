@@ -407,9 +407,9 @@ async function refresh(done: () => void) {
   done()
 }
 
-// eslint-disable-next-line functional/no-let, @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let tmp: any
-// eslint-disable-next-line functional/no-let, prefer-const
+// eslint-disable-next-line prefer-const
 let isTodayF = false
 </script>
 

@@ -9,7 +9,7 @@ export async function TuPhim(page: number) {
   const { token_name, token_value } = useAuthStore()
 
   if (!token_name || !token_value)
-    // eslint-disable-next-line functional/no-throw-statement
+     
     throw new Error("TOKEN_REQUIRED_FOR_NOTIFICATION")
 
   const { data: html } = await get(`/tu-phim/trang-${page}.html`, {

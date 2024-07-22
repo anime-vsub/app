@@ -731,12 +731,12 @@ const { data, run, error, loading } = useRequest(
 
     if (!id) return Promise.reject()
 
-    // eslint-disable-next-line functional/no-let
+     
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
 
     await Promise.any([
       get(`data-${id}`).then((text: string) => {
-        // eslint-disable-next-line functional/no-throw-statement
+         
         if (!text) throw new Error("not_found")
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
@@ -744,7 +744,7 @@ const { data, run, error, loading } = useRequest(
       }),
       PhimId(realIdCurrentSeason.value)
         .then(async (data) => {
-          // eslint-disable-next-line functional/no-let
+           
           let changed = !result // true if result is undefined
           const watcher =
             result &&
@@ -778,7 +778,7 @@ const { data, run, error, loading } = useRequest(
         .catch((err) => {
           error.value = err as Error
           console.error(err)
-          // eslint-disable-next-line functional/no-throw-statement
+           
           throw err
         }),
     ])
@@ -877,7 +877,7 @@ async function fetchSeason(season: string) {
     const realIdSeason = getRealSeasonId(season)
 
     const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
-    // eslint-disable-next-line functional/no-let
+     
     let promiseLoadIndexedb: Promise<string | undefined> =
       Promise.resolve(undefined)
     await Promise.any([
@@ -920,7 +920,7 @@ async function fetchSeason(season: string) {
       }),
       (promiseLoadIndexedb = get(`season_data ${realIdSeason}`).then(
         (json?: string) => {
-          // eslint-disable-next-line functional/no-throw-statement
+           
           if (!json) throw new Error("not_found")
           console.log("[fs]: use cache %s", realIdSeason)
           if (!response.value) response.value = JSON.parse(json)
@@ -951,7 +951,7 @@ async function fetchSeason(season: string) {
       function watchHandler() {
         if (!seasons.value || !response.value) return
 
-        // eslint-disable-next-line functional/no-let
+         
         let indexMetaSeason = seasons.value.findIndex(
           (item) => item.value === season
         )
@@ -1009,7 +1009,7 @@ async function fetchSeason(season: string) {
         return responseOnlineStore.has(response)
       }
 
-      // eslint-disable-next-line functional/no-let
+       
       let watcherResponse: (() => void) | undefined = watch(response, () => {
         const doneAll = watchHandler()
         if (doneAll) {
@@ -1017,7 +1017,7 @@ async function fetchSeason(season: string) {
           watcherResponse = undefined
         }
       })
-      // eslint-disable-next-line functional/no-let
+       
       let watcherSeasons: (() => void) | undefined
       watcherSeasons = watch(
         () => typeof seasons.value !== "undefined",
@@ -1095,7 +1095,7 @@ const currentProgresWatch = computed(() => {
   return undefined
 })
 
-// eslint-disable-next-line functional/no-let
+ 
 let watcherChangeIdFirstEp: (() => void) | null = null
 onBeforeUnmount(() => watcherChangeIdFirstEp?.())
 /** @type - currentChap is episode id */
@@ -1142,7 +1142,7 @@ watchEffect(async (onCleanup): Promise<void> => {
 
   if (episodeId !== undefined) {
     if (episodeId) {
-      // eslint-disable-next-line functional/no-let
+       
       let watcher: () => void
       // eslint-disable-next-line prefer-const
       watcher = watchEffect(() => {
@@ -1324,6 +1324,7 @@ interface SiblingChap {
   season: Exclude<typeof seasons.value, undefined>[0]
   chap?: Exclude<typeof currentDataSeason.value, undefined>["chaps"][0]
 }
+// eslint-disable-next-line vue/return-in-computed-property
 const nextChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap
@@ -1366,6 +1367,7 @@ const nextChap = computed((): SiblingChap | undefined => {
 
   console.info("[[===THE END===]]")
 })
+// eslint-disable-next-line vue/return-in-computed-property
 const prevChap = computed((): SiblingChap | undefined => {
   if (!currentDataSeason.value) return
   // get index currentChap
@@ -1433,9 +1435,9 @@ watch(
 
     configPlayer.value = undefined
 
-    // eslint-disable-next-line functional/no-let
+     
     let typeCurrentConfig: keyof typeof servers | null = null
-    // eslint-disable-next-line functional/no-let
+     
     let loadedServerFB = false
     // setup watcher it
     const watcher = watch(
@@ -1741,7 +1743,7 @@ interface ListEpisodes {
     title?: string
   }[]
 }
-// eslint-disable-next-line functional/no-let
+ 
 let episodesOpEndInited = false
 const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
   async (onCleanup) => {
@@ -1758,7 +1760,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
     const controller = new AbortController()
     onCleanup(() => controller.abort())
 
-    // eslint-disable-next-line functional/no-let
+     
     let results: ShallowReactive<ListEpisodes>
     await Promise.any([
       fetch(
@@ -1786,7 +1788,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
           } else results = shallowReactive(data)
         }),
       get(`episodes_opend:${realId}`).then((text: string) => {
-        // eslint-disable-next-line functional/no-throw-statement
+         
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)
@@ -1850,7 +1852,7 @@ interface InOutroEpisode {
   }
   server: number
 }
-// eslint-disable-next-line functional/no-let
+ 
 let inoutroEpisodeInited = false
 const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
   async () => {
@@ -1861,7 +1863,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
 
     const { id } = episodeOpEnd.value
 
-    // eslint-disable-next-line functional/no-let
+     
     let results: ShallowReactive<InOutroEpisode>
     await Promise.any([
       fetch(`${API_OPEND}/episode-skip/${id}`)
@@ -1876,7 +1878,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
           } else results = shallowReactive(data)
         }),
       get(`inoutro:${id}`).then((text: string) => {
-        // eslint-disable-next-line functional/no-throw-statement
+         
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)

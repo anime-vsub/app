@@ -9,7 +9,7 @@ export async function AjaxNotification() {
   const { token_name, token_value } = useAuthStore()
 
   if (!token_name || !token_value)
-    // eslint-disable-next-line functional/no-throw-statement
+     
     throw new Error("TOKEN_REQUIRED_FOR_NOTIFICATION")
 
   const { data: json } = await get("/ajax/notification?notif=true", {
@@ -18,7 +18,7 @@ export async function AjaxNotification() {
 
   const data = JSON.parse(json)
 
-  // eslint-disable-next-line functional/no-throw-statement
+   
   if (data.status === 0) throw new Error("REQUIRED_LOGIN")
 
   return {

@@ -1,4 +1,3 @@
-/* eslint-disable functional/no-let */
 import { QSpinner } from "quasar"
 import { base64ToArrayBuffer } from "src/logic/base64ToArrayBuffer"
 import { get } from "src/logic/http"
@@ -25,7 +24,8 @@ function useRatio(
   // return ratioStyle
   return computed(() => {
     const ratio = Number(
-      props.ratio || (naturalRatio !== void 0 ? naturalRatio.value : void 0)
+      props.ratio ||
+        (naturalRatio !== undefined ? naturalRatio.value : undefined)
     )
 
     return isNaN(ratio) !== true && ratio > 0
@@ -36,7 +36,7 @@ function useRatio(
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function hSlot(slot: (() => any) | undefined, otherwise?: any) {
-  return slot !== void 0 ? slot() || otherwise : otherwise
+  return slot !== undefined ? slot() || otherwise : otherwise
 }
 
 /*
@@ -65,7 +65,7 @@ async function getImageWithXHR(url: string) {
     url,
     responseType: "arraybuffer",
   })
-  // eslint-disable-next-line functional/no-throw-statement
+
   if (res.status > 299) throw res
 
   const src = URL.createObjectURL(
@@ -162,7 +162,7 @@ export default defineComponent({
     const imgClass = computed(
       () =>
         `q-img__image ${
-          props.imgClass !== void 0 ? props.imgClass + " " : ""
+          props.imgClass !== undefined ? props.imgClass + " " : ""
         }` +
         `q-img__image--with${
           props.noTransition === true ? "out" : ""
@@ -189,7 +189,7 @@ export default defineComponent({
     }
 
     function getPlaceholderSrc() {
-      return props.placeholderSrc !== void 0
+      return props.placeholderSrc !== undefined
         ? { src: props.placeholderSrc }
         : null
     }
@@ -270,7 +270,7 @@ export default defineComponent({
         const source = img.currentSrc || img.src
         if (source.startsWith("blob:")) {
           URL.revokeObjectURL(source)
-          // eslint-disable-next-line functional/no-throw-statement
+
           throw new Error("blob: url not re-try fetch")
         }
 
@@ -341,10 +341,10 @@ export default defineComponent({
           key: "loading",
           class: "q-img__loading absolute-full flex flex-center",
         },
-        slots.loading !== void 0
+        slots.loading !== undefined
           ? slots.loading()
           : props.noSpinner === true
-          ? void 0
+          ? undefined
           : [
               h(QSpinner, {
                 color: props.spinnerColor,

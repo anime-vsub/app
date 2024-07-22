@@ -215,7 +215,7 @@ const { loading, data, refreshAsync, error } = useRequest(() => LichChieuPhim())
 // eslint-disable-next-line promise/no-callback-in-promise
 const refresh = (done: () => void) => refreshAsync().then(done)
 
-// eslint-disable-next-line functional/no-let
+ 
 let _tmp: ReturnType<typeof splitOverTime>
 
 function splitOverTime(

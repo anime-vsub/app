@@ -2,7 +2,7 @@ import { onActivated } from "vue"
 import { onBeforeRouteLeave } from "vue-router"
 
 export function useAliveScrollBehavior() {
-  // eslint-disable-next-line functional/no-let
+   
   let saved: { top: number; left: number } | null = null
   onActivated(() => {
     if (saved) setTimeout(() => saved && window.scrollTo(saved))
