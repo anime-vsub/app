@@ -96,7 +96,7 @@ describe("getInfoTPost", () => {
     </div>
     </div>
     </article>`)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, functional/no-let
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let tmp: any
     expect(
       JSON.parse(JSON.stringify((tmp = getInfoTPost($("article"), Date.now()))))

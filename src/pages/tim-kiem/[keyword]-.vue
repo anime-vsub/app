@@ -388,7 +388,7 @@ const dataStore = shallowReactive<
       }
   >
 >(new Map())
-// eslint-disable-next-line functional/no-let
+ 
 let _dataInStoreTmp: ReturnType<typeof dataStore.get>
 
 async function fetchRankType(type: string) {

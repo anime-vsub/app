@@ -514,7 +514,7 @@ const showDialogTyper = ref(false)
 const showDialogSorter = ref(false)
 const showDialogFilter = ref(false)
 
-// eslint-disable-next-line functional/no-let
+ 
 let inited = false
 const defaultsOptions = computed<{
   typer?: string
@@ -709,7 +709,7 @@ watch(
   }
 )
 
-// eslint-disable-next-line functional/no-let
+ 
 let nextPage = 2
 async function onLoad(_index: number, done: (stop: boolean) => void) {
   const { curPage, maxPage, items } = await fetchTypeNormalValue(

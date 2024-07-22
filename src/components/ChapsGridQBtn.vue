@@ -63,7 +63,7 @@ function scrollToView() {
 }
 
 watchEffect(scrollToView)
-// eslint-disable-next-line functional/no-let
+ 
 let tmp: ReturnType<
   Exclude<typeof props.progressChaps, undefined | null>["get"]
 >

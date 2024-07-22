@@ -23,9 +23,9 @@ const breakpoints = [0, innerHeight - (innerWidth * 9) / 16, innerHeight]
 const height = ref(breakpoints[1])
 
 const indexAbsHeight = computed(() => {
-  // eslint-disable-next-line functional/no-let
+   
   let diff = Infinity
-  // eslint-disable-next-line functional/no-let
+   
   let index = -1
   const h = height.value
   // eslint-disable-next-line array-callback-return
@@ -54,9 +54,9 @@ addEventListener("touchend", () => {
   interacting.value = false
   onTouchEnd()
 })
-// eslint-disable-next-line functional/no-let
+ 
 let hStart: number, iStart: number, yStart: number
-// eslint-disable-next-line functional/no-let
+ 
 let yLast: number, tLast: number
 function onTouchStart(event: TouchEvent | MouseEvent) {
   yLast = yStart = ((event as TouchEvent).changedTouches?.[0] || event).clientY
@@ -64,7 +64,7 @@ function onTouchStart(event: TouchEvent | MouseEvent) {
   tLast = performance.now()
   iStart = indexAbsHeight.value
 }
-// eslint-disable-next-line functional/no-let
+ 
 let lastSpeed: number
 function onTouchMove(event: TouchEvent | MouseEvent) {
   if (!interacting.value) return

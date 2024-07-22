@@ -6,7 +6,7 @@ export async function AjaxLike(id: string, value: boolean) {
   const { token_name, token_value } = useAuthStore()
 
   if (!token_name || !token_value)
-    // eslint-disable-next-line functional/no-throw-statement
+     
     throw new Error("TOKEN_REQUIRED_FOR_NOTIFICATION")
 
   const { data } = await get(
@@ -25,7 +25,7 @@ export async function checkIsLile(id: string) {
   const { token_name, token_value } = useAuthStore()
 
   if (!token_name || !token_value)
-    // eslint-disable-next-line functional/no-throw-statement
+     
     throw new Error("TOKEN_REQUIRED_FOR_NOTIFICATION")
 
   const { data } = await get(`/ajax/notification?Bookmark=true&filmId=${id}`, {

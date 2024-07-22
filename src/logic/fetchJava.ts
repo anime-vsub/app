@@ -26,7 +26,7 @@ export async function fetchJava(
 ) {
   if (url.startsWith("data:app")) return fetch(url)
 
-  // eslint-disable-next-line functional/no-throw-statement
+   
   if (options?.signal?.aborted) throw new Error("ABORTED")
 
   const promise = CapacitorHttp.get({

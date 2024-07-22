@@ -149,7 +149,7 @@ const data = computedAsync<null | Awaited<
         message: i18n.t("msg-err-load-cmt"),
         caption: err + "",
       })
-      // eslint-disable-next-line functional/no-throw-statement
+       
       throw err
     } finally {
       loading.value = false
