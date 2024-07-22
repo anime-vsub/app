@@ -8,19 +8,23 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const path = require("path")
+import { QuasarConf } from "@quasar/app-vite/types/configuration/conf"
+import path from "path"
 
-const { extend } = require("quasar")
-const { configure } = require("quasar/wrappers")
+import { extend } from "quasar"
+import { configure } from "quasar/wrappers"
 
-const AutoImport = require("unplugin-auto-import/vite").default
-const IconsResolver = require("unplugin-icons/resolver").default
-const Icons = require("unplugin-icons/vite").default
-const Components = require("unplugin-vue-components/vite").default
+import AutoImport from "unplugin-auto-import/vite"
+import IconsResolver from "unplugin-icons/resolver"
+import Icons from "unplugin-icons/vite"
+import Components from "unplugin-vue-components/vite"
+import { config } from "dotenv"
 
-module.exports = configure(function (/* ctx */) {
-  return {
-    eslint: {
+config()
+
+export default configure(function (/* ctx */) {
+  const conf: QuasarConf = {
+    ["eslint" as unknown as any]: {
       // fix: true,
       // include = [],
       // exclude = [],
@@ -35,7 +39,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ["windi", "firebase", "head", "i18n"],
+    boot: ["windi", "firebase", "supabase", "head", "i18n"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -66,11 +70,11 @@ module.exports = configure(function (/* ctx */) {
       // vueDevtools,
       // vueOptionsAPI: false,
 
-      rebuildCache: false, // rebuilds Vite/linter/etc cache on startup
+      ["rebuildCache" as unknown as any]: false, // rebuilds Vite/linter/etc cache on startup
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: process.env,
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -120,28 +124,40 @@ module.exports = configure(function (/* ctx */) {
             include: path.resolve(__dirname, "./src/i18n/**"),
           },
         ],
-         [Icons, {}],
-        [Components, {
-          globs: [],
-          resolvers: [IconsResolver({
-            prefix: "i"
-          })]
-        }],
-        [AutoImport, {
-          imports: ["vue", "vue-router", {"quasar": ["useQuasar"], "vue-i18n": ["useI18n"]}],
-          dts: "./auto-imports.d.ts",
-          eslintrc: {
-            enabled: true
-          }
-        }],
+        [Icons, {}],
+        [
+          Components,
+          {
+            globs: [],
+            resolvers: [
+              IconsResolver({
+                prefix: "i",
+              }),
+            ],
+          },
+        ],
+        [
+          AutoImport,
+          {
+            imports: [
+              "vue",
+              "vue-router",
+              { quasar: ["useQuasar"], "vue-i18n": ["useI18n"] },
+            ],
+            dts: "./auto-imports.d.ts",
+            eslintrc: {
+              enabled: true,
+            },
+          },
+        ],
         ["vite-plugin-rewrite-all", {}],
         ["vite-plugin-remove-console", {}],
-      ],
+      ] as unknown as any,
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      https: true,
+      ["https" as unknown as any]: true,
       open: false, // opens browser window automatically
     },
 
@@ -207,16 +223,16 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
-      workboxMode: "injectManifest", // or 'generateSW'
+      workboxMode: "InjectManifest", // or 'generateSW'
       injectPwaMetaTags: true,
       swFilename: "sw.js",
       manifestFilename: "manifest.json",
       useCredentialsForManifestTag: false,
       // extendGenerateSWOptions (cfg) {}
-      extendInjectManifestOptions (cfg) {
+      extendInjectManifestOptions(cfg) {
         cfg.globIgnores ??= []
         cfg.globIgnores.push("_redirects", "google7b3e7893e059da35.html")
-      }
+      },
       // extendManifestJson (json) {}
       // extendPWACustomSWConf (esbuildConf) {}
     },
@@ -255,7 +271,7 @@ module.exports = configure(function (/* ctx */) {
         // win32metadata: { ... }
       },
 
-      builder: {
+      ["builder" as unknown as any]: {
         // https://www.electron.build/configuration/configuration
 
         appId: "git.shin.animevsub",
@@ -270,4 +286,6 @@ module.exports = configure(function (/* ctx */) {
       // extendBexManifestJson (json) {}
     },
   }
+
+  return conf
 })
