@@ -175,7 +175,7 @@ export const useHistoryStore = defineStore("history", () => {
     const { data } = await supabase
       .rpc("get_last_chap", {
         user_uid: authStore.uid,
-        season: getRealSeasonId(season)
+        season_id: getRealSeasonId(season)
       })
       .single()
       .throwOnError()
