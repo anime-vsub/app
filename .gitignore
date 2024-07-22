@@ -41,3 +41,5 @@ build
 /components.d.ts
 
 .env
+
+/src-capacitor/android/app/google-services.json
