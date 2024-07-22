@@ -209,41 +209,27 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      add_movie_playlist:
-        | {
-            Args: {
-              user_uid: string
-              playlist_id: number
-              p_chap: string
-              p_name: string
-              p_name_chap: string
-              p_name_season: string
-              p_poster: string
-              p_season: string
-            }
-            Returns: {
-              id: number
-              created_at: string
-              public: boolean
-              name: string
-              description: string
-              updated_at: string
-              movies_count: number
-            }[]
-          }
-        | {
-            Args: {
-              user_uid: string
-              playlist_name: string
-              p_chap: string
-              p_name: string
-              p_name_chap: string
-              p_name_season: string
-              p_poster: string
-              p_season: string
-            }
-            Returns: undefined
-          }
+      add_movie_playlist: {
+        Args: {
+          user_uid: string
+          playlist_id: number
+          p_chap: string
+          p_name: string
+          p_name_chap: string
+          p_name_season: string
+          p_poster: string
+          p_season: string
+        }
+        Returns: {
+          id: number
+          created_at: string
+          public: boolean
+          name: string
+          description: string
+          updated_at: string
+          movies_count: number
+        }[]
+      }
       create_playlist: {
         Args: {
           user_uid: string
@@ -259,58 +245,41 @@ export type Database = {
           updated_at: string
         }[]
       }
-      delete_movie_playlist:
-        | {
-            Args: {
-              user_uid: string
-              playlist_id: number
-              p_season: string
-            }
-            Returns: {
-              id: number
-              created_at: string
-              public: boolean
-              name: string
-              description: string
-              updated_at: string
-              movies_count: number
-            }[]
-          }
-        | {
-            Args: {
-              user_uid: string
-              q_name: string
-              p_season: string
-            }
-            Returns: undefined
-          }
-      delete_playlist:
-        | {
-            Args: {
-              user_uid: string
-              playlist_id: number
-            }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              user_uid: string
-              playlist_name: string
-            }
-            Returns: undefined
-          }
+      delete_movie_playlist: {
+        Args: {
+          user_uid: string
+          playlist_id: number
+          p_season: string
+        }
+        Returns: {
+          id: number
+          created_at: string
+          public: boolean
+          name: string
+          description: string
+          updated_at: string
+          movies_count: number
+        }[]
+      }
+      delete_playlist: {
+        Args: {
+          user_uid: string
+          playlist_id: number
+        }
+        Returns: undefined
+      }
       get_last_chap: {
         Args: {
           user_uid: string
-          season: string
+          season_id: string
         }
         Returns: {
           created_at: string
           cur: number
           dur: number
           name: string
-          chap_id: string
           updated_at: string
+          chap_id: string
         }[]
       }
       get_list_playlist: {
@@ -345,25 +314,15 @@ export type Database = {
           season: string
         }[]
       }
-      get_poster_playlist:
-        | {
-            Args: {
-              user_uid: string
-              playlist_id: number
-            }
-            Returns: {
-              poster: string
-            }[]
-          }
-        | {
-            Args: {
-              user_uid: string
-              playlist_name: string
-            }
-            Returns: {
-              poster: string
-            }[]
-          }
+      get_poster_playlist: {
+        Args: {
+          user_uid: string
+          playlist_id: number
+        }
+        Returns: {
+          poster: string
+        }[]
+      }
       get_single_progress: {
         Args: {
           user_uid: string
@@ -392,27 +351,16 @@ export type Database = {
           chap_id: string
         }[]
       }
-      has_movie_playlist:
-        | {
-            Args: {
-              user_uid: string
-              playlist_id: number
-              season_id: string
-            }
-            Returns: {
-              has_movie: boolean
-            }[]
-          }
-        | {
-            Args: {
-              user_uid: string
-              playlist_name: string
-              season_id: string
-            }
-            Returns: {
-              has_movie: boolean
-            }[]
-          }
+      has_movie_playlist: {
+        Args: {
+          user_uid: string
+          playlist_id: number
+          season_id: string
+        }
+        Returns: {
+          has_movie: boolean
+        }[]
+      }
       has_movie_playlists: {
         Args: {
           user_uid: string
@@ -451,40 +399,22 @@ export type Database = {
         }
         Returns: undefined
       }
-      set_description_playlist:
-        | {
-            Args: {
-              user_uid: string
-              playlist_id: number
-              playlist_description: string
-            }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              user_uid: string
-              playlist_name: string
-              playlist_description: string
-            }
-            Returns: undefined
-          }
-      set_public_playlist:
-        | {
-            Args: {
-              user_uid: string
-              playlist_id: number
-              is_public: boolean
-            }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              user_uid: string
-              playlist_name: string
-              is_public: boolean
-            }
-            Returns: undefined
-          }
+      set_description_playlist: {
+        Args: {
+          user_uid: string
+          playlist_id: number
+          playlist_description: string
+        }
+        Returns: undefined
+      }
+      set_public_playlist: {
+        Args: {
+          user_uid: string
+          playlist_id: number
+          is_public: boolean
+        }
+        Returns: undefined
+      }
       set_single_progress: {
         Args: {
           p_name: string
@@ -496,6 +426,14 @@ export type Database = {
           e_dur: number
           e_name: string
           e_chap: string
+        }
+        Returns: undefined
+      }
+      upsert_user: {
+        Args: {
+          p_uuid: string
+          p_email?: string
+          p_name?: string
         }
         Returns: undefined
       }
