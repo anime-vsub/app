@@ -96,16 +96,16 @@
         class="mx-4 overflow-x-auto whitespace-nowrap"
       >
         <q-card
-          v-for="item in histories"
-          :key="item.id"
+          v-for="(item, index) in histories"
+          :key="index"
           flat
           class="bg-transparent inline-block history-item mr-2"
           style="white-space: initial"
           @click="
             router.push(
-              `/phim/${item.season ?? item.id}/${parseChapName(
-                item.last.name
-              )}-${item.last.chap}`
+              `/phim/${item.season}/${parseChapName(item.watch_name)}-${
+                item.watch_id
+              }`
             )
           "
         >
@@ -121,7 +121,7 @@
                 class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
               >
                 <q-linear-progress
-                  :value="item.last.cur / item.last.dur"
+                  :value="item.watch_cur / item.watch_dur"
                   rounded
                   color="main"
                   class="!h-[3px]"
@@ -130,13 +130,13 @@
             </BottomBlur>
             <span
               class="absolute text-white z-10 text-[12px] bottom-2 right-2"
-              >{{ parseTime(item.last.cur) }}</span
+              >{{ parseTime(item.watch_cur) }}</span
             >
           </q-img-custom>
 
           <span class="line-clamp-2 min-h-10 mt-1">{{ item.name }}</span>
           <div class="text-grey">
-            {{ item.seasonName }} tập {{ item.last.name }}
+            {{ item.season_name }} tập {{ item.watch_name }}
           </div>
         </q-card>
       </div>
@@ -144,12 +144,7 @@
         v-else
         no-image
         class="h-[146px] px-4"
-        @click:retry="
-          () => {
-            last30ItemGet = true
-            refreshHistories()
-          }
-        "
+        @click:retry="refreshHistories"
         :error="undefined"
       />
     </div>
@@ -493,11 +488,8 @@ watchEffect(() => {
 })
 
 // ============ fetch history =============
-const {
-  last30Item: histories,
-  last30ItemError: errorHistories,
-  last30ItemGet,
-} = storeToRefs(historyStore)
+const { last30Item: histories, last30ItemError: errorHistories } =
+  storeToRefs(historyStore)
 const { refreshLast30Item: refreshHistories } = historyStore
 
 // ========== favorite =========
@@ -513,10 +505,8 @@ watch(
   () => authStore.isLogged,
   (isLogged) => {
     if (isLogged) {
-      last30ItemGet.value = true
       runFavorites()
     } else {
-      last30ItemGet.value = false
       errorHistories.value = null
 
       favorites.value = undefined
@@ -526,7 +516,6 @@ watch(
   }
 )
 if (authStore.isLogged) {
-  last30ItemGet.value = true
   runFavorites()
 }
 

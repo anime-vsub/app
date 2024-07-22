@@ -9,6 +9,9 @@ module.exports = {
   // `parser: 'vue-eslint-parser'` is already included with any 'plugin:vue/**' config and should be omitted
   parserOptions: {
     parser: require.resolve("@typescript-eslint/parser"),
+    project: "tsconfig.json",
+    ecmaVersion: "latest",
+    sourceType: "module",
     extraFileExtensions: [".vue"],
   },
 
@@ -21,14 +24,13 @@ module.exports = {
 
   // Rules order is important, please avoid shuffling them
   extends: [
-    "@tachibana-shin/eslint-config",
     // Base ESLint recommended rules
     // 'eslint:recommended',
 
     // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#usage
     // ESLint typescript rules
     "plugin:@typescript-eslint/recommended",
-
+    "@tachibana-shin/eslint-config",
     // Uncomment any of the lines below to choose desired strictness,
     // but leave only one uncommented!
     // See https://eslint.vuejs.org/rules/#available-rules
@@ -90,12 +92,32 @@ module.exports = {
     "functional/immutable-data": "off",
     "vue/multi-word-component-names": "off",
     "eslint-comments/no-unlimited-disable": "off",
+    "vue/no-use-v-if-with-v-for": "off",
     "functional/prefer-immutable-types": "off",
-    "@typescript-eslint/no-non-null-assertion": "error",
-    "@typescript-eslint/no-empty-function": "error",
-    "@typescript-eslint/no-empty-interface": "error",
-    "no-void": "off",
-    "vue/return-in-computed-property": "error"
-
+    "@typescript-eslint/space-before-blocks": "off",
+    "no-undef": "off",
+    "functional/no-let": "off",
+    "vue/valid-v-for": "off",
+    "functional/no-loop-statements": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-floating-promises": "off",// "error",
+    "no-redeclare": "off",
+    "n/no-unsupported-features/node-builtins": "off",
+    "functional/no-throw-statement": "off",
+    "no-void": [
+      "error",
+      {
+        allowAsStatement: true
+      }
+    ],
+    "@typescript-eslint/no-non-null-assertion": ["error"],
+    "@typescript-eslint/no-empty-interface": ["error"],
+    "@typescript-eslint/no-explicit-any": ["warn"],
+    "@typescript-eslint/no-empty-function": ["error"]
   },
 }

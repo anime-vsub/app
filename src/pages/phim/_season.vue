@@ -607,10 +607,10 @@
   <AddToPlaylist
     v-model="showDialogAddToPlaylist"
     :exists="
-      (id) =>
+      (ids) =>
         currentSeason
-          ? playlistStore.hasAnimeOfPlaylist(id, currentSeason)
-          : false
+          ? playlistStore.hasAnimeOfPlaylist(ids, currentSeason)
+          : []
     "
     @action:add="addAnimePlaylist"
     @action:del="removeAnimePlaylist"
@@ -1681,7 +1681,7 @@ function clickShowPlaylist() {
 
   showDialogAddToPlaylist.value = true
 }
-async function addAnimePlaylist(idPlaylist: string) {
+async function addAnimePlaylist(idPlaylist: number) {
   const { value: metaSeason } = currentMetaSeason
   if (!metaSeason) return
   if (!currentDataSeason.value || !data.value) return
@@ -1689,12 +1689,13 @@ async function addAnimePlaylist(idPlaylist: string) {
   if (!currentChap.value) return
   if (!currentMetaChap.value) return
   try {
-    await playlistStore.addAnimeToPlaylist(idPlaylist, currentSeason.value, {
+    await playlistStore.addAnimeToPlaylist(idPlaylist, {
       name: data.value.name,
       poster: currentDataSeason.value?.poster ?? data.value.poster,
-      nameSeason: metaSeason.name,
+      name_season: metaSeason.name,
       chap: currentChap.value,
-      nameChap: currentMetaChap.value.name,
+      name_chap: currentMetaChap.value.name,
+      season: currentSeason.value
     })
     $q.notify({
       position: "bottom-right",
@@ -1707,7 +1708,7 @@ async function addAnimePlaylist(idPlaylist: string) {
     })
   }
 }
-async function removeAnimePlaylist(idPlaylist: string) {
+async function removeAnimePlaylist(idPlaylist: number) {
   if (!currentSeason.value) return
   try {
     await playlistStore.deleteAnimeFromPlaylist(idPlaylist, currentSeason.value)

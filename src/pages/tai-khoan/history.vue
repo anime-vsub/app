@@ -18,7 +18,7 @@
 
     <q-pull-to-refresh v-else @refresh="refresh" class="pt-[47px] px-4">
       <q-infinite-scroll @load="onLoad" :offset="250">
-        <template v-for="(item, index) in histories" :key="item.id">
+        <template v-for="(item, index) in histories" :key="index">
           <div
             v-if="
               !histories[index - 1] ||
@@ -39,9 +39,9 @@
           <router-link
             class="bg-transparent flex mt-1 mb-4"
             style="white-space: initial"
-            :to="`/phim/${item.season ?? item.id}/${parseChapName(
-              item.last.name
-            )}-${item.last.chap}`"
+            :to="`/phim/${item.season}/${parseChapName(item.watch_name)}-${
+              item.watch_id
+            }`"
           >
             <div class="w-[149px]">
               <q-img-custom
@@ -56,7 +56,7 @@
                     class="absolute bottom-0 left-0 z-10 w-full min-h-0 !py-0 !px-0"
                   >
                     <q-linear-progress
-                      :value="item.last.cur / item.last.dur"
+                      :value="item.watch_cur / item.watch_dur"
                       rounded
                       color="main"
                       class="!h-[3px]"
@@ -65,7 +65,7 @@
                 </BottomBlur>
                 <span
                   class="absolute text-white z-10 text-[12px] bottom-2 right-2"
-                  >{{ parseTime(item.last.cur) }}</span
+                  >{{ parseTime(item.watch_cur) }}</span
                 >
               </q-img-custom>
             </div>
@@ -73,7 +73,7 @@
             <div class="flex-1 pl-2 min-w-0">
               <span class="line-clamp-3">{{ item.name }}</span>
               <div class="text-grey mt-1">
-                {{ item.seasonName }} tập {{ item.last.name }}
+                {{ item.season_name }} tập {{ item.watch_name }}
               </div>
               <div class="text-grey mt-2">
                 {{
@@ -157,27 +157,18 @@ const {
   run,
   refreshAsync,
   error,
-} = useRequest(
-  (
-    lastDoc?: typeof historyStore.loadMoreAfter extends (
-      LastDoc: infer R
-    ) => void
-      ? R
-      : unknown
-  ) => {
-    return historyStore.loadMoreAfter(lastDoc)
-  }
-)
+} = useRequest(() => {
+  return historyStore.loadMoreAfter(1)
+})
 const refresh = (done: () => void) =>
   refreshAsync()
     .then(() => infiniteScrollRef.value?.reset())
     // eslint-disable-next-line promise/no-callback-in-promise
     .then(done)
 
-async function onLoad(page: number, done: (end: boolean) => void) {
-  const items = await historyStore.loadMoreAfter(
-    histories.value?.[histories.value.length - 1]?.$doc
-  )
+let page = 1
+async function onLoad(_: number, done: (end: boolean) => void) {
+  const items = await historyStore.loadMoreAfter(++page)
 
   histories.value = [...(histories.value ?? []), ...items]
   done(items.length === 0)
