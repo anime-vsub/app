@@ -129,16 +129,15 @@ export const useAuthStore = defineStore(
     })
 
     watch(
-      user_data,
-      async (user_data) => {
-        if (!user_data) return
+      uid,
+      async (uid) => {
+        if (!uid || !user_data.value) return
 
         await supabase
           .rpc("upsert_user", {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            p_uuid: uid.value!,
-            p_email: user_data.email,
-            p_name: user_data.name,
+            p_uuid: uid,
+            p_email: user_data.value?.email,
+            p_name: user_data.value?.name,
           })
           .throwOnError()
       },
