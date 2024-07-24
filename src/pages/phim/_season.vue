@@ -1544,10 +1544,8 @@ async function getProgressChaps(
 
   try {
     const docs = await historyStore.getProgressChaps(currentSeason)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    docs.forEach((item: any) => {
-      const { cur, dur } = item.data()
-      progressChaps.set(item.id, {
+    docs.forEach(({ chap_id, cur, dur }) => {
+      progressChaps.set(chap_id, {
         cur,
         dur,
       })
