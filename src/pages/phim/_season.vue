@@ -1544,6 +1544,7 @@ async function getProgressChaps(
 
   try {
     const docs = await historyStore.getProgressChaps(currentSeason)
+    // eslint-disable-next-line camelcase
     docs.forEach(({ chap_id, cur, dur }) => {
       progressChaps.set(chap_id, {
         cur,
