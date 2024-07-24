@@ -309,6 +309,8 @@ const appAllowWork = isNative
 </script>
 
 <style lang="scss">
+@use "sass:math";
+
 .filled {
   display: none;
 }
@@ -331,7 +333,7 @@ const appAllowWork = isNative
 .tabs-main .q-tabs__content {
   width: 100% !important;
   > .q-tab {
-    width: (100% / 5);
+    width: math.div(100%, 5);
   }
 }
 </style>
