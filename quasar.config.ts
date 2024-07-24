@@ -90,23 +90,23 @@ export default configure(function (/* ctx */) {
           },
           server: {
             // configure vite for HMR with Gitpod
-            hmr: process.env.GITPOD_WORKSPACE_URL
-              ? {
-                  // removes the protocol and replaces it with the port we're connecting to
-                  host: process.env.GITPOD_WORKSPACE_URL.replace(
-                    "https://",
-                    "9000-"
-                  ),
-                  protocol: "wss",
-                  clientPort: 443,
-                }
-              : process.env.CODESPACE_NAME
-              ? {
-                  host: `${process.env.CODESPACE_NAME}-9000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`,
-                  protocol: "wss",
-                  clientPort: 443,
-                }
-              : true,
+            // hmr: process.env.GITPOD_WORKSPACE_URL
+            //   ? {
+            //       // removes the protocol and replaces it with the port we're connecting to
+            //       host: process.env.GITPOD_WORKSPACE_URL.replace(
+            //         "https://",
+            //         "9000-"
+            //       ),
+            //       protocol: "wss",
+            //       clientPort: 443,
+            //     }
+            //   : process.env.CODESPACE_NAME
+            //   ? {
+            //       host: `${process.env.CODESPACE_NAME}-9000.${process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}`,
+            //       protocol: "wss",
+            //       clientPort: 443,
+            //     }
+            //   : true,
           },
         })
       },
