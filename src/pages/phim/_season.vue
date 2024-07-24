@@ -778,7 +778,7 @@ const { data, run, error, loading } = useRequest(
         .catch((err) => {
           error.value = err as Error
           console.error(err)
-           
+
           throw err
         }),
     ])
@@ -877,7 +877,7 @@ async function fetchSeason(season: string) {
     const realIdSeason = getRealSeasonId(season)
 
     const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
-     
+
     let promiseLoadIndexedb: Promise<string | undefined> =
       Promise.resolve(undefined)
     await Promise.any([
@@ -1017,7 +1017,7 @@ async function fetchSeason(season: string) {
           watcherResponse = undefined
         }
       })
-       
+
       let watcherSeasons: (() => void) | undefined
       watcherSeasons = watch(
         () => typeof seasons.value !== "undefined",
@@ -1172,11 +1172,14 @@ const currentMetaChap = computed(() => {
   )
 })
 
+let watcherRestoreLastEp: () => void
+onBeforeUnmount(() => watcherRestoreLastEp?.())
 watch(
   currentSeason,
-  (_, __, onCleanup) => {
+  () => {
+    watcherRestoreLastEp?.()
     // replace router if last episode viewing exists
-    const watcherRestoreLastEp = watchEffect(() => {
+    watcherRestoreLastEp = watchEffect(() => {
       const episodeIdFirst = currentDataSeason.value?.chaps[0].id
 
       if (
@@ -1197,7 +1200,6 @@ watch(
         watcherRestoreLastEp()
       }
     })
-    onCleanup(watcherRestoreLastEp)
   },
   { immediate: true }
 )
@@ -1435,9 +1437,9 @@ watch(
 
     configPlayer.value = undefined
 
-     
+
     let typeCurrentConfig: keyof typeof servers | null = null
-     
+
     let loadedServerFB = false
     // setup watcher it
     const watcher = watch(
@@ -1742,7 +1744,7 @@ interface ListEpisodes {
     title?: string
   }[]
 }
- 
+
 let episodesOpEndInited = false
 const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
   async (onCleanup) => {
@@ -1759,7 +1761,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
     const controller = new AbortController()
     onCleanup(() => controller.abort())
 
-     
+
     let results: ShallowReactive<ListEpisodes>
     await Promise.any([
       fetch(
@@ -1851,7 +1853,7 @@ interface InOutroEpisode {
   }
   server: number
 }
- 
+
 let inoutroEpisodeInited = false
 const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
   async () => {
@@ -1862,7 +1864,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
 
     const { id } = episodeOpEnd.value
 
-     
+
     let results: ShallowReactive<InOutroEpisode>
     await Promise.any([
       fetch(`${API_OPEND}/episode-skip/${id}`)
