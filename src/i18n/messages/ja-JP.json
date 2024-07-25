@@ -293,5 +293,16 @@
   "msg-err-update-cmt": "コメント編集中にエラーが発生しました",
   "msg-error-cmt": "コメント中にエラーが発生しました",
   "sap-xep-theo": "並べ替え順",
-  "tron-bo": "全部"
+  "tron-bo": "全部",
+  "bang-xep-hang": "チャート",
+  "errors": {
+    "__i18n_ally_root__": {
+      "danh-sach-phat-khong-ton-tai": "",
+      "loi-khong-xac-dinh-khi": "",
+      "require_login_to": "",
+      "xoa-thong-bao-that-bai": ""
+    }
+  },
+  "msg-err-load-cmt": "コメントの読み込み中にエラーが発生しました",
+  "toi": "私"
 }

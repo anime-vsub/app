@@ -296,5 +296,18 @@
   "msg-err-load-cmt": "Đã có lỗi xảy ra khi tải bình luận",
   "tron-bo": "Trọn bộ",
   "bang-xep-hang": "Bảng xếp hạng",
-  "toi": "Tôi"
+  "toi": "Tôi",
+  "cai-dat-phat": "Cài đặt phát",
+  "ve-animevsub": "Về AnimeVsub",
+  "tuyen-bo-tu-choi-trach-nhiem": "Tuyên bố từ chối trách nhiệm",
+  "gioi-thieu-ve-animevsub": "Giới thiệu về AnimeVsub",
+  "phien-ban-ung-dung": "Phiên bản ứng dụng",
+  "he-dieu-hanh": "Hệ điều hành",
+  "danh-sach-phat": "Danh sách phát",
+  "quet-qr": "Quét QR",
+  "qr-cua-ban": "QR của bạn",
+  "quet-qr-code-nay-tren-thiet-bi-khac-de-dang-nhap": "Quét QR code này trên thiết bị khác để đăng nhập",
+  "tuan": "Tuần",
+  "ket-qua-tim-kiem-cho": "Kết quả tìm kiếm cho: ",
+  "dat-lai": "Đặt lại"
 }
