@@ -1,6 +1,6 @@
 <template>
   <router-view v-slot="{ Component }">
-    <keep-alive exclude="_season">
+    <keep-alive exclude="_season,[playlist]">
       <component :is="Component" />
     </keep-alive>
   </router-view>
