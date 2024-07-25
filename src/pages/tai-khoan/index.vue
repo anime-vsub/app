@@ -201,7 +201,7 @@
       <q-item
         v-for="item in playlistStore.playlists"
         :key="item.id"
-        :to="`/tai-khoan/playlist/${item.id}`"
+        :to="`/tai-khoan/playlist/${btoa(`animevsub-${item.id}`)}`"
         clickable
         v-ripple
         class="min-h-0 my-2 rounded-xl"
@@ -554,6 +554,8 @@ function startScanQR() {
     message: t("quet-qr-hien-dang-bao-tri"),
   })
 }
+
+const btoa = (str: string) => self.btoa(str).replace(/={2}$/, "")
 </script>
 
 <style lang="scss" scoped>
