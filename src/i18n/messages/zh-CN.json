@@ -294,5 +294,35 @@
   "moi-nhat": "最新的",
   "sap-xep-theo": "排序",
   "msg-err-load-cmt": "加载评论时发生错误",
-  "tron-bo": "全部"
+  "tron-bo": "全部",
+  "errors": {
+    "__i18n_ally_root__": {
+      "__i18n_ally_root__": {
+        "loi-khong-xac-dinh-khi": "",
+        "require_login_to": "",
+        "xoa-thong-bao-that-bai": ""
+      },
+      "danh-sach-phat-khong-ton-tai": "",
+      "loi-khong-xac-dinh-khi": "",
+      "require_login_to": "",
+      "xoa-thong-bao-that-bai": ""
+    }
+  },
+  "giai-quyet-truoc-yeu-cau-mang": "提前解决网络请求",
+  "gioi-thieu-ve-animevsub": "动漫 Vsub 简介",
+  "he-dieu-hanh": "操作系统",
+  "ket-qua-tim-kiem-cho": "为。。。。寻找结果：",
+  "msg-pre-resolve": "网络请求解析方式（请求请求越高，消耗硬件资源越多）",
+  "nong": "热的",
+  "phien-ban-ung-dung": "应用版本",
+  "qr-cua-ban": "您的二维码",
+  "quet-qr": "扫描二维码",
+  "quet-qr-code-nay-tren-thiet-bi-khac-de-dang-nhap": "在其他设备上扫描此二维码即可登录",
+  "tang-toc-mang": "网络加速",
+  "tat": "关",
+  "toi": "我",
+  "tuan": "星期",
+  "tuyen-bo-tu-choi-trach-nhiem": "免责声明",
+  "val-yeu-cau": "{0}请求",
+  "ve-animevsub": "关于 AnimeVsub"
 }

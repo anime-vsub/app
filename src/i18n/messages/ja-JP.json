@@ -304,5 +304,24 @@
     }
   },
   "msg-err-load-cmt": "コメントの読み込み中にエラーが発生しました",
-  "toi": "私"
+  "toi": "私",
+  "cai-dat-phat": "ブロードキャスト設定",
+  "danh-sach-phat": "プレイリスト",
+  "dat-lai": "リセット",
+  "giai-quyet-truoc-yeu-cau-mang": "ネットワークリクエストを事前に解決する",
+  "gioi-thieu-ve-animevsub": "AnimeVsub の紹介",
+  "he-dieu-hanh": "オペレーティング·システム",
+  "ket-qua-tim-kiem-cho": "の検索結果：",
+  "msg-pre-resolve": "ネットワーク要求解決モード (要求要求が高くなるほど、より多くのハードウェア リソースが消費されます)",
+  "nong": "熱い",
+  "phien-ban-ung-dung": "アプリケーションのバージョン",
+  "qr-cua-ban": "あなたのQR",
+  "quet-qr": "QRをスキャン",
+  "quet-qr-code-nay-tren-thiet-bi-khac-de-dang-nhap": "別のデバイスでこの QR コードをスキャンしてログインします",
+  "tang-toc-mang": "ネットワークの高速化",
+  "tat": "消す",
+  "tuan": "週",
+  "tuyen-bo-tu-choi-trach-nhiem": "免責事項",
+  "val-yeu-cau": "{0} リクエスト",
+  "ve-animevsub": "AnimeVsub について"
 }
