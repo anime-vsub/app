@@ -104,7 +104,33 @@
                 </div>
               </div>
             </div>
-            <div>
+            <div class="flex items-end flex-nowrap">
+              <q-btn dense flat round @click.stop="openPopupFlashNetwork">
+                <i-ri-water-flash-line
+                  v-if="settingsStore.player.preResolve === 0"
+                  width="25"
+                  height="25"
+                />
+                <i-ri-water-flash-fill
+                  v-else
+                  width="25"
+                  height="25"
+                  :class="`text-${
+                    optionsPreResolve.find(
+                      (item) => item.value === settingsStore.player.preResolve
+                    )?.color
+                  }`"
+                />
+                <q-tooltip
+                  anchor="bottom middle"
+                  self="top middle"
+                  class="bg-dark text-[14px] text-weight-medium"
+                  transition-show="jump-up"
+                  transition-hide="jump-down"
+                >
+                  {{ $t("tang-toc-mang") }}
+                </q-tooltip>
+              </q-btn>
               <q-btn
                 dense
                 flat
@@ -873,7 +899,6 @@ import {
 } from "@vueuse/core"
 import ArtDialog from "components/ArtDialog.vue"
 import ChapsGridQBtn from "components/ChapsGridQBtn.vue"
-import type { PlaylistLoaderConstructor } from "hls.js"
 import Hls from "hls.js"
 import workerHls from "hls.js/dist/hls.worker?url"
 import {
@@ -908,9 +933,12 @@ import {
 } from "src/constants"
 import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
-import { patcher } from "src/logic/hls-patcher"
+import { findInRangeSet } from "src/logic/find-in-range-set"
+import { HlsPatched } from "src/logic/hls-patched"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
+import { getSegments } from "src/logic/resolve-master-manifest"
+import { resolveMasterManifestWorker } from "src/logic/resolve-master-manifest.thread"
 import { sleep } from "src/logic/sleep"
 import type {
   ProgressWatchStore,
@@ -923,6 +951,7 @@ import { useAuthStore } from "stores/auth"
 import { useHistoryStore } from "stores/history"
 import { useSettingsStore } from "stores/settings"
 import { useStateStorageStore } from "stores/state"
+import { retryAsync } from "ts-retry"
 import {
   computed,
   onBeforeUnmount,
@@ -1083,7 +1112,7 @@ const setArtCurrentTime = (currentTime: number) => {
   video.value.currentTime = currentTime
   artCurrentTime.value = currentTime
 }
- 
+
 let progressRestored: false | string = false
 watch(
   [() => props.currentChap, () => props.currentSeason, () => authStore.uid],
@@ -1138,7 +1167,7 @@ const setArtPlaybackRate = (value: number) => {
 
 // value control other
 const artControlShow = ref(true)
- 
+
 let activeTime = Date.now()
 const setArtControlShow = (show: boolean) => {
   artControlShow.value = show
@@ -1282,10 +1311,8 @@ function throttle<T extends (...args: any[]) => Promise<void>>(
 ): T & {
   cancel: () => void
 } {
-   
   let wait = false
 
-   
   let timeout: NodeJS.Timeout | number | undefined
   // eslint-disable-next-line functional/functional-parameters, @typescript-eslint/no-explicit-any
   const cb = function (...args: any[]) {
@@ -1337,9 +1364,9 @@ const saveCurTimeToPer = throttle(
 
     try {
       // get data from uid and process because processingSaveCurTimeIn === uid then load all of time current
-       
+
       let cur = artCurrentTime.value
-       
+
       let dur = artDuration.value
 
       if (!dur || cur <= 5) {
@@ -1388,8 +1415,8 @@ const saveCurTimeToPer = throttle(
             {
               cur,
               dur,
-              name: nameCurrentChap
-            },
+              name: nameCurrentChap,
+            }
           )
           .catch((err) => console.warn("save viewing progress failed: ", err)),
 
@@ -1466,7 +1493,6 @@ function onVideoEnded() {
   }
 }
 
- 
 let artPlayingOfBeforeDocumentHide: boolean
 watch(documentVisibility, (visibility) => {
   console.log("document %s", visibility)
@@ -1479,9 +1505,8 @@ watch(documentVisibility, (visibility) => {
 })
 
 {
-   
   let resume: (() => void) | null = null
-   
+
   let pause: (() => void) | null = null
   const resumeDelay = debounce(() => resume?.(), 1_000)
   onBeforeUnmount(() => pause?.())
@@ -1561,7 +1586,6 @@ function runRemount() {
   }).onOk(remount)
 }
 
- 
 let currentHls: Hls
 onBeforeUnmount(() => currentHls?.destroy())
 function remount(resetCurrentTime?: boolean, noDestroy = false) {
@@ -1607,115 +1631,88 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     Hls.isSupported()
   ) {
     const offEnds = isNative ? "" : "_extra"
-    const hls = new Hls({
-      debug: import.meta.env.isDev,
-      workerPath: workerHls,
-      progressive: true,
-      fragLoadingRetryDelay: 10000,
-      fetchSetup(context, initParams) {
-        // set header because this version always cors not fix by extension like desktop-web
-        if (isNative) initParams.headers.set("x-referer", C_URL)
-        else context.url += `#animevsub-vsub${offEnds}_uachrome`
+    let セグメントｓ: string[] | null = null
+    const セグメント解決済み = new Map<string, readonly [string, number]>()
+    const resolvingTask = new Set<number>()
 
-        return new Request(context.url, initParams)
+    const hls = new HlsPatched(
+      {
+        debug: import.meta.env.DEV,
+        workerPath: workerHls,
+        progressive: true,
+        fragLoadingRetryDelay: 10000,
+        fetchSetup(context, initParams) {
+          // set header because this version always cors not fix by extension like desktop-web
+          if (isNative) initParams.headers.set("x-referer", C_URL)
+          else context.url += `#animevsub-vsub${offEnds}`
+
+          return new Request(context.url, initParams)
+        },
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      pLoader: class CustomLoader extends (Hls.DefaultConfig.loader as any) {
-        loadInternal(): void {
-          const { config, context } = this
-          if (!config) {
-            return
-          }
-
-          const { stats } = this
-          stats.loading.first = 0
-          stats.loaded = 0
-
-          const controller = new AbortController()
-          const xhr = (this.loader = {
-            readyState: 0,
-            status: 0,
-            responseType: context.responseType,
-            abort() {
-              controller.abort()
-            },
-            onreadystatechange: <(() => void) | null>null,
-            onprogress: <
-              ((eventt: { loaded: number; total: number }) => void) | null
-            >null,
-            response: <ArrayBuffer | null>null,
-            responseText: <string | null>null,
-          })
-          const headers = new Headers()
-          if (this.context.headers)
-            for (const [key, val] of Object.entries(this.context.headers))
-              headers.set(key, val as string)
-          const { maxTimeToFirstByteMs, maxLoadTimeMs } = config.loadPolicy
-
-          if (context.rangeEnd) {
-            headers.set(
-              "Range",
-              "bytes=" + context.rangeStart + "-" + (context.rangeEnd - 1)
-            )
-          }
-
-          xhr.onreadystatechange = this.readystatechange.bind(this)
-          xhr.onprogress = this.loadprogress.bind(this)
-          self.clearTimeout(this.requestTimeout)
-          config.timeout =
-            maxTimeToFirstByteMs && Number.isFinite(maxTimeToFirstByteMs)
-              ? maxTimeToFirstByteMs
-              : maxLoadTimeMs
-          this.requestTimeout = self.setTimeout(
-            this.loadtimeout.bind(this),
-            config.timeout
-          )
-
-          // set header because this version always cors not fix by extension liek desktop-web
-          headers.set("referer", C_URL)
-
-          fetchJava(
-            context.url + (!isNative ? "#animevsub-vsub_uachrome" : ""),
-            {
-              headers,
-              signal: controller.signal,
-            }
-          )
-            .then(async (res) => {
-               
-              let byteLength: number
-              if (context.responseType !== "text") {
-                xhr.response = await res.arrayBuffer()
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                byteLength = xhr.response!.byteLength
-              } else {
-                xhr.responseText = await res.text()
-                byteLength = xhr.responseText.length
+      settingsStore.player.preResolve !== 0 &&
+      Number.MAX_SAFE_INTEGER !== settingsStore.player.preResolve
+        ? (request) => {
+            /// pre setup
+            // transforming
+            if (!セグメントｓ)
+              void getSegments(file).then((arr) => (セグメントｓ = arr))
+            if (セグメントｓ) {
+              // セグメントｓ ready
+              // preload if in セグメントｓ
+              const realUrl = request.url.split("#")[0]
+              const インデントセグメント = セグメントｓ.indexOf(realUrl)
+              const 解決済み = セグメント解決済み.get(realUrl)
+              if (
+                インデントセグメント > -1 &&
+                (!解決済み ||
+                  settingsStore.player.preResolve - 解決済み[1] <
+                    settingsStore.player.checkEndPreList) &&
+                !findInRangeSet(
+                  resolvingTask,
+                  インデントセグメント,
+                  settingsStore.player.preResolve
+                )
+              ) {
+                console.log(
+                  "Starting pre resolve segment",
+                  インデントセグメント,
+                  resolvingTask
+                )
+                resolvingTask.add(インデントセグメント)
+                // あとで５セメント
+                void retryAsync(
+                  () =>
+                    resolveMasterManifestWorker(
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      セグメントｓ!,
+                      セグメント解決済み,
+                      インデントセグメント,
+                      settingsStore.player.preResolve +
+                        settingsStore.player.checkEndPreList
+                    ),
+                  { maxTry: 10, delay: 3_000 }
+                ).catch(() => resolvingTask.add(インデントセグメント))
+                // load balance 20
+                // check fn セグメントｓ in ２０。workerせとじゃない。メモリー？
               }
-
-              xhr.readyState = 4
-              xhr.status = 200
-              xhr.responseType = context.responseType
-
-              xhr.onprogress?.({
-                loaded: byteLength,
-                total: byteLength,
-              })
-              // eslint-disable-next-line promise/always-return
-              xhr.onreadystatechange?.()
-            })
-            .catch((e) => {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              this.callbacks!.onError(
-                { code: xhr.status, text: e.message },
-                context,
-                xhr
-              )
-            })
-        }
-      } as unknown as PlaylistLoaderConstructor,
-    })
-    if (!offEnds) patcher(hls)
+              if (import.meta.env.DEV && 解決済み)
+                console.info("[Segment]: using url resolved")
+              if (解決済み) return fetchJava(解決済み[0], request)
+            }
+            return fetchJava(request.url, request)
+          }
+        : Number.MAX_SAFE_INTEGER === settingsStore.player.preResolve
+        ? (request) => {
+            const realUrl = request.url.split("#")[0]
+            const 解決済み = セグメント解決済み.get(realUrl)
+            if (import.meta.env.DEV && 解決済み)
+              console.info("[Segment]: using url resolved")
+            if (解決済み) return fetchJava(解決済み[0], request)
+            return fetchJava(request.url, request)
+          }
+        : (request) => fetchJava(request.url, request)
+    )
+    // if (!offEnds) patcher(hls)
     currentHls = hls
     // customLoader(hls.config)
     hls.loadSource(file)
@@ -1724,10 +1721,24 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       if (playing) video.value!.play()
+
+      // !NOTIFY resolve redirect urls
+      if (Number.MAX_SAFE_INTEGER === settingsStore.player.preResolve)
+        void retryAsync(
+          async () =>
+            resolveMasterManifestWorker(
+              await getSegments(file),
+              セグメント解決済み
+            ),
+          {
+            maxTry: 10,
+            delay: 3_000,
+          }
+        )
     })
-     
+
     let needSwapCodec = false
-     
+
     let timeoutUnneedSwapCodec: NodeJS.Timeout | number | null = null
     hls.on(Hls.Events.ERROR, (event, data) => {
       if (data.fatal) {
@@ -1836,7 +1847,6 @@ const watcherVideoTagReady = watch(video, (video) => {
   // eslint-disable-next-line promise/catch-or-return
   Promise.resolve().then(watcherVideoTagReady) // fix this not ready value
 
-   
   let currentEpStream: null | string = null
   watch(
     () => currentStream.value?.file,
@@ -1882,14 +1892,14 @@ function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl?: HTMLDivElement
 ): void
- 
+
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   innerEl: HTMLDivElement,
   offsetX: number,
   curTimeStart: number
 ): void
- 
+
 function onIndicatorMove(
   event: TouchEvent | MouseEvent,
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -1951,13 +1961,13 @@ function onIndicatorEnd() {
 }
 
 // ==== addons swipe backdrop ====
- 
+
 let timeoutHoldBD: number | NodeJS.Timeout | null = null
 
 const holdedBD = ref(false)
- 
+
 let xStart: number | null = null
- 
+
 let curTimeStart: number | null = null
 function onBDTouchStart(event: TouchEvent) {
   holdedBD.value = false
@@ -2025,13 +2035,13 @@ function skipForward() {
 }
 
 const doubleClicking = ref<"left" | "right" | false>(false)
- 
+
 let timeoutResetDoubleClicking: number | NodeJS.Timeout | null = null
- 
+
 let lastTimeClick: number
- 
+
 let lastPositionClickIsLeft: boolean | null = null
- 
+
 let timeoutDbClick: number | NodeJS.Timeout | null = null
 const countSkip = ref(0)
 function onClickSkip(event: MouseEvent, orFalse: boolean) {
@@ -2243,6 +2253,56 @@ watch(skiping, (skiping) => {
 
   skipOpEnd()
 })
+
+const optionsPreResolve = computed(() => [
+  {
+    label: t("tat"),
+    value: 0,
+    color: "secondary",
+    keepColor: true,
+    checkedIcon: "task_alt",
+    uncheckedIcon: "panorama_fish_eye",
+  },
+  ...[20, 30, 40, 50, 60, 70, 80, 100].map((val, i) => ({
+    label: t("val-yeu-cau", [val]),
+    value: val,
+    keepColor: true,
+    checkedIcon: "task_alt",
+    uncheckedIcon: "panorama_fish_eye",
+    color: `light-green-${4 + i}`,
+  })),
+  {
+    label: t("nong"),
+    value: Number.MAX_SAFE_INTEGER,
+    color: "red",
+    keepColor: true,
+    checkedIcon: "task_alt",
+    uncheckedIcon: "panorama_fish_eye",
+  },
+])
+function openPopupFlashNetwork() {
+  $q.dialog({
+    title: t("giai-quyet-truoc-yeu-cau-mang"),
+    message: t("msg-pre-resolve"),
+    options: {
+      type: "radio",
+      model: settingsStore.player.preResolve as unknown as string,
+      // inline: true
+      items: optionsPreResolve.value,
+    },
+    cancel: {
+      label: t("huy"),
+      noCaps: true,
+      color: "grey",
+      text: true,
+      flat: true,
+      rounded: true,
+    },
+    ok: { color: "green", text: true, flat: true, rounded: true },
+  }).onOk((data) => {
+    settingsStore.player.preResolve = data
+  })
+}
 </script>
 
 <style lang="scss" scoped>
