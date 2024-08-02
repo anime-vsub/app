@@ -10,6 +10,8 @@ export const useSettingsStore = defineStore("settings", {
       volume: 1,
       server: <keyof typeof servers>"DU",
       autoSkipIEnd: false,
+      preResolve: 30,
+      checkEndPreList: 5
     },
     ui: {
       modeMovie: false,

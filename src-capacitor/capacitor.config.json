@@ -11,5 +11,7 @@
   },
   "bundledWebRuntime": false,
   "webDir": "www",
-  "server": {}
+  "server": {
+    "url": "http://10.0.5.2:9500"
+  }
 }

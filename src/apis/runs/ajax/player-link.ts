@@ -45,7 +45,7 @@ export function PlayerLink(config: {
     link,
     backuplinks: "1",
   }).then(async ({ data }) => {
-     
+
     if (!data) throw new Error("unknown_error")
     type Writeable<T> = {
       -readonly [P in keyof T]: T[P] extends object ? Writeable<T[P]> : T[P]
@@ -59,7 +59,7 @@ export function PlayerLink(config: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any, promise/no-nesting
           ;(self as unknown as any).hn ??= await App.getInfo().then(
             (info) => info.id
-          )
+          ).catch(() => 'git.shin.animevsub')
           await init()
 
           try {
