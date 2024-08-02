@@ -794,6 +794,7 @@ const { data, run, error, loading } = useRequest(
     },
   }
 )
+console.log(error)
 function resetErrorAndRun() {
   error.value = undefined
   run()
@@ -875,57 +876,68 @@ async function fetchSeason(season: string) {
 
     const response = shallowRef<Awaited<ReturnType<typeof PhimIdChap>>>()
 
-    let promiseLoadIndexedb: Promise<string | undefined> =
-      Promise.resolve(undefined)
+    let promiseLoadIndexedb: Promise<
+      Awaited<ReturnType<typeof PhimIdChap>> | undefined
+    > = Promise.resolve(undefined)
     await Promise.any([
       PhimIdChap(realIdSeason).then((data) => {
         // mergeListEp(response.value, data)
         const json = JSON.stringify(data)
-        // eslint-disable-next-line promise/always-return
+        let changed = false
         if (
           !response.value ||
           response.value.chaps.length !== data.chaps.length ||
           json !== JSON.stringify(toRaw(response.value))
         ) {
-          // eslint-disable-next-line promise/catch-or-return
-          promiseLoadIndexedb.finally((jsonCache?: string) => {
-            if (json !== jsonCache) {
-              const task = set(`season_data ${realIdSeason}`, json)
-              if (import.meta.env.DEV)
-                task
-                  // eslint-disable-next-line promise/no-nesting, promise/always-return
-                  .then(() => {
-                    console.log("[fs]: save cache season %s", realIdSeason)
-                  })
-                  // eslint-disable-next-line promise/no-nesting
-                  .catch((err) =>
-                    console.warn(
-                      "[fs]: failure save cache season %s",
-                      realIdSeason,
-                      err
-                    )
-                  )
-            } else if (import.meta.env.DEV) {
-              console.log("[data season]: No update response in IndexedDB")
-            }
-          })
+          if (response.value) changed = true
+          console.info("cache wrong")
+
           console.log("[online]: use data from internet")
           response.value = data
           console.log("data from internet is ", data)
         }
-        responseOnlineStore.add(response)
-
         Object.assign(response.value, { [__ONLINE__]: true })
-      }),
-      (promiseLoadIndexedb = get(`season_data ${realIdSeason}`).then(
-        (json?: string) => {
-          if (!json) throw new Error("not_found")
-          console.log("[fs]: use cache %s", realIdSeason)
-          if (!response.value) response.value = JSON.parse(json)
 
-          return json
+        // eslint-disable-next-line promise/always-return
+        if (changed) updateIndexedDB()
+        else promiseLoadIndexedb.then(updateIndexedDB).catch(updateIndexedDB)
+
+        function updateIndexedDB(
+          jsonCache?: Awaited<ReturnType<typeof PhimIdChap>>
+        ) {
+          if (!jsonCache || json !== JSON.stringify(jsonCache)) {
+            const task = set(`season_data ${realIdSeason}`, json)
+
+            if (import.meta.env.DEV)
+              task
+                // eslint-disable-next-line promise/no-nesting, promise/always-return
+                .then(() => {
+                  console.log("[fs]: save cache season %s", realIdSeason)
+                })
+                // eslint-disable-next-line promise/no-nesting
+                .catch((err) =>
+                  console.warn(
+                    "[fs]: failure save cache season %s",
+                    realIdSeason,
+                    err
+                  )
+                )
+          } else if (import.meta.env.DEV) {
+            console.log("[data season]: No update response in IndexedDB")
+          }
         }
-      )),
+        responseOnlineStore.add(response)
+      }),
+      (promiseLoadIndexedb = get(`season_data ${realIdSeason}`).then((json) => {
+        if (!json) throw new Error("not_found")
+        console.log("[fs]: use cache %s", realIdSeason)
+        if (!response.value)
+          response.value = JSON.parse(json) as Awaited<
+            ReturnType<typeof PhimIdChap>
+          >
+
+        return json
+      })),
     ])
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -1232,7 +1244,11 @@ watchEffect(() => {
       })
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
-      if (data.value && __ONLINE__ in data.value && __ONLINE__ in currentDataSeason.value)
+      if (
+        data.value &&
+        __ONLINE__ in data.value &&
+        __ONLINE__ in currentDataSeason.value
+      )
         router.replace({
           name: "not_found",
           params: {
