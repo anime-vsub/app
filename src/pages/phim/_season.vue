@@ -731,12 +731,10 @@ const { data, run, error, loading } = useRequest(
 
     if (!id) return Promise.reject()
 
-     
     let result: Ref<Awaited<ReturnType<typeof PhimId>>>
 
     await Promise.any([
       get(`data-${id}`).then((text: string) => {
-         
         if (!text) throw new Error("not_found")
         console.log("[fs]: use cache from fs %s", id)
         // eslint-disable-next-line promise/always-return
@@ -744,7 +742,6 @@ const { data, run, error, loading } = useRequest(
       }),
       PhimId(realIdCurrentSeason.value)
         .then(async (data) => {
-           
           let changed = !result // true if result is undefined
           const watcher =
             result &&
@@ -917,10 +914,11 @@ async function fetchSeason(season: string) {
           console.log("data from internet is ", data)
         }
         responseOnlineStore.add(response)
+
+        Object.assign(response.value, { [__ONLINE__]: true })
       }),
       (promiseLoadIndexedb = get(`season_data ${realIdSeason}`).then(
         (json?: string) => {
-           
           if (!json) throw new Error("not_found")
           console.log("[fs]: use cache %s", realIdSeason)
           if (!response.value) response.value = JSON.parse(json)
@@ -951,7 +949,6 @@ async function fetchSeason(season: string) {
       function watchHandler() {
         if (!seasons.value || !response.value) return
 
-         
         let indexMetaSeason = seasons.value.findIndex(
           (item) => item.value === season
         )
@@ -1009,7 +1006,6 @@ async function fetchSeason(season: string) {
         return responseOnlineStore.has(response)
       }
 
-       
       let watcherResponse: (() => void) | undefined = watch(response, () => {
         const doneAll = watchHandler()
         if (doneAll) {
@@ -1095,7 +1091,6 @@ const currentProgresWatch = computed(() => {
   return undefined
 })
 
- 
 let watcherChangeIdFirstEp: (() => void) | null = null
 onBeforeUnmount(() => watcherChangeIdFirstEp?.())
 /** @type - currentChap is episode id */
@@ -1142,7 +1137,6 @@ watchEffect(async (onCleanup): Promise<void> => {
 
   if (episodeId !== undefined) {
     if (episodeId) {
-       
       let watcher: () => void
       // eslint-disable-next-line prefer-const
       watcher = watchEffect(() => {
@@ -1238,7 +1232,7 @@ watchEffect(() => {
       })
     } else {
       if (import.meta.env.DEV) console.warn("Redirect to not_found")
-      if (data.value && __ONLINE__ in data.value)
+      if (data.value && __ONLINE__ in data.value && __ONLINE__ in currentDataSeason.value)
         router.replace({
           name: "not_found",
           params: {
@@ -1436,7 +1430,6 @@ watch(
     }
 
     configPlayer.value = undefined
-
 
     let typeCurrentConfig: keyof typeof servers | null = null
 
@@ -1698,7 +1691,7 @@ async function addAnimePlaylist(idPlaylist: number) {
       name_season: metaSeason.name,
       chap: currentChap.value,
       name_chap: currentMetaChap.value.name,
-      season: currentSeason.value
+      season: currentSeason.value,
     })
     $q.notify({
       position: "bottom-right",
@@ -1761,7 +1754,6 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
     const controller = new AbortController()
     onCleanup(() => controller.abort())
 
-
     let results: ShallowReactive<ListEpisodes>
     await Promise.any([
       fetch(
@@ -1789,7 +1781,6 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
           } else results = shallowReactive(data)
         }),
       get(`episodes_opend:${realId}`).then((text: string) => {
-         
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)
@@ -1864,7 +1855,6 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
 
     const { id } = episodeOpEnd.value
 
-
     let results: ShallowReactive<InOutroEpisode>
     await Promise.any([
       fetch(`${API_OPEND}/episode-skip/${id}`)
@@ -1879,7 +1869,6 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
           } else results = shallowReactive(data)
         }),
       get(`inoutro:${id}`).then((text: string) => {
-         
         if (!text) throw new Error("not_found_on_idb")
 
         const data = JSON.parse(text)
