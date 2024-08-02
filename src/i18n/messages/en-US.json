@@ -261,7 +261,15 @@
     "danh-sach-phat-khong-ton-tai": "Playlist does not exist",
     "loi-khong-xac-dinh-khi": "Unknown error when",
     "require_login_to": "You must be logged in to {0}",
-    "xoa-thong-bao-that-bai": "Clear failure message"
+    "xoa-thong-bao-that-bai": "Delete failure message",
+    "__i18n_ally_root__": {
+      "__i18n_ally_root__": {
+        "danh-sach-phat-khong-ton-tai": "",
+        "loi-khong-xac-dinh-khi": "",
+        "require_login_to": "",
+        "xoa-thong-bao-that-bai": ""
+      }
+    }
   },
   "microsoft-edge-co-the-cap-nhat-cham-hon-github-khi-do-ban-can-cap-nhat-thu-cong": "Microsoft Edge may update slower than GitHub when you need to update it manually",
   "tro-len": "above.",
@@ -301,5 +309,25 @@
   "sap-xep-theo": "Sorted by",
   "msg-err-load-cmt": "An error occurred while loading comments",
   "tron-bo": "All",
-  "toi": "My"
+  "toi": "My",
+  "bang-xep-hang": "Charts",
+  "cai-dat-phat": "Broadcast settings",
+  "danh-sach-phat": "Playlist",
+  "dat-lai": "Reset",
+  "giai-quyet-truoc-yeu-cau-mang": "Resolve network requests in advance",
+  "gioi-thieu-ve-animevsub": "Introducing AnimeVsub",
+  "he-dieu-hanh": "Operating system",
+  "ket-qua-tim-kiem-cho": "Search results for:",
+  "msg-pre-resolve": "Network request resolution mode (the higher the request request, the more hardware resources are consumed)",
+  "nong": "Hot",
+  "phien-ban-ung-dung": "Application version",
+  "qr-cua-ban": "Your QR",
+  "quet-qr": "Scan QR",
+  "quet-qr-code-nay-tren-thiet-bi-khac-de-dang-nhap": "Scan this QR code on another device to log in",
+  "tang-toc-mang": "Network acceleration",
+  "tat": "Turn off",
+  "tuan": "Week",
+  "tuyen-bo-tu-choi-trach-nhiem": "Disclaimer",
+  "val-yeu-cau": "{0} request",
+  "ve-animevsub": "About AnimeVsub"
 }

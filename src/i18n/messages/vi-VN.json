@@ -309,5 +309,11 @@
   "quet-qr-code-nay-tren-thiet-bi-khac-de-dang-nhap": "Quét QR code này trên thiết bị khác để đăng nhập",
   "tuan": "Tuần",
   "ket-qua-tim-kiem-cho": "Kết quả tìm kiếm cho: ",
-  "dat-lai": "Đặt lại"
+  "dat-lai": "Đặt lại",
+  "tang-toc-mang": "Tăng tốc mạng",
+  "tat": "Tắt",
+  "val-yeu-cau": "{0} yêu cầu",
+  "giai-quyet-truoc-yeu-cau-mang": "Giải quyết trước yêu cầu mạng",
+  "nong": "Nóng",
+  "msg-pre-resolve": "Chế độ giải quyết yêu cầu mạng (yêu cầu giải quyết càng cao thì càng tốn tài nguyên phần cứng)"
 }
