@@ -1,1 +1,0 @@
-const t=new Map;setInterval(()=>{t.forEach(({time:e},n)=>{performance.now()-e>6e4&&t.delete(n)})},6e4);async function c(e,n){const r=t.get(e);if(r)return r.result;const a=await n();return t.set(e,{time:performance.now(),result:a}),a}export{c as u};
