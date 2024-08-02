@@ -1,1 +1,0 @@
-import{W as n}from"./_value_.7e1d0da8.js";import{b4 as s,g as m,P as i}from"./index.b340747c.js";async function h(r){const{token_name:t,token_value:o}=s();if(!t||!o)throw new Error("TOKEN_REQUIRED_FOR_NOTIFICATION");const{data:e}=await m(`/tu-phim/trang-${r}.html`,{cookie:`${t}=${o}`}),a=Date.now();return i(n,e,a,!0)}export{h as T};

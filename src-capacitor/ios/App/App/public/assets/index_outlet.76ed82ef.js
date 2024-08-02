@@ -1,1 +1,0 @@
-import{u as a}from"./useAliveScrollBehavior.af4f2067.js";import{h as r,a as s,o as e,e as o,w as l,K as _,f as c}from"./index.b340747c.js";const v=r({__name:"index_outlet",setup(i){return a(),(p,u)=>{const t=s("router-view");return e(),o(t,null,{default:l(({Component:n})=>[(e(),o(_,{exclude:"_season"},[(e(),o(c(n)))],1024))]),_:1})}}});export{v as default};
