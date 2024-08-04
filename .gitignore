@@ -43,3 +43,6 @@ build
 .env
 
 /src-capacitor/android/app/google-services.json
+
+/@capacitor/android/capacitor/.gradle
+/@capacitor/android/capacitor/.settings
