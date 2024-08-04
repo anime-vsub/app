@@ -59,7 +59,7 @@ export function PlayerLink(config: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any, promise/no-nesting
           ;(self as unknown as any).hn ??= await App.getInfo().then(
             (info) => info.id
-          ).catch(() => 'git.shin.animevsub')
+          )
           await init()
 
           try {

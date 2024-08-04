@@ -14,5 +14,8 @@
   "i18n-ally.keystyle": "nested",
   "editor.tabCompletion": "on",
   "diffEditor.codeLens": true,
-  "MutableAI.upsell": true
+  "MutableAI.upsell": true,
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java"
+  }
 }
