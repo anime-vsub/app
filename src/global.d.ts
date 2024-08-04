@@ -1,5 +1,5 @@
-declare global {
-  interface Window {
-    CapacitorWebFetch: typeof fetch
-  }
+interface Window {
+  CapacitorWebFetch: typeof fetch
 }
+
+declare const CapacitorWebFetch: typeof fetch
