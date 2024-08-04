@@ -3,7 +3,7 @@
 > [!WARNING]
 > 📢⚠️📌❗ **The application is currently distributed for free on GitHub and it is OPEN SOURCE COMPLYING WITH THE [GNU GPL-3.0 LICENSE](./LICENSE)
 > PLEASE DO NOT MODIFY IT TO EMBEDD ADVERTISING OR USE IT FOR COMMERCIAL PURPOSES.**
-
+>
 > **IF FRAUDULENT BEHAVIORS SUCH AS INSERTING ADS AND TAKEAWAYS OF THE APP CONTINUE I WILL SHUT DOWN THE ENTIRE APP WITH A FOREIGN KEY (ALL MODIFIED APPS WILL ALSO STOP WORKING) AND STOP APP DEVELOPMENT**
 
 <div style="text-align: center;">
@@ -17,9 +17,14 @@
 > [!TIP]
 > The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.eu.org
 
-> ~~The goal of this application is to allow users to interact intuitively and explore new Anime sets in place of the outdated web interface of [animevietsub](https://animevietsub.pro).~~
+> The goal of this application is to allow users to interact intuitively and explore new Anime sets in place of the outdated web interface of [animevietsub](https://animevietsub.pro).
 >
 > And especially this app will **speed up the Anime viewer by 20 times**!! That means no more `loading...`, enjoy the best quality Anime episodes and no `loading...`
+
+> [!WARNING]
+> Customized [Capacitor](https://github.com/ionic-team/capacitor) kernel codes under the MIT license are also included in this repository
+
+
 
 [![Build APK](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml)
 [![Test](https://github.com/anime-vsub/app/actions/workflows/test.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/test.yml) <!-- <img src="https://img.shields.io/github/v/release/anime-vsub/app?color=green&display_name=tag&label=APK"> -->
@@ -102,3 +107,7 @@ If you find this project useful please support me through:
 - [x] tai-khoan/history
 - [x] tai-khoan/follow
 - [x] pull to refresh
+
+## Copyright
+(c) 2022 - now by Tachibana Shin with GNU GPL v3
+(c) Capacitor core by Ionic with MIT 
