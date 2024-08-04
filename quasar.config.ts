@@ -39,7 +39,7 @@ export default configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ["windi", "firebase", "supabase", "head", "i18n"],
+    boot: ["patch-request", "windi", "firebase", "supabase", "head", "i18n"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -162,7 +162,7 @@ export default configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      // ["https" as unknown as any]: true,
+      ["https" as unknown as any]: true,
       open: false, // opens browser window automatically
     },
 

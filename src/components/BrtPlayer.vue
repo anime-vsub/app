@@ -6,7 +6,7 @@
     <q-responsive :ratio="16 / 9" class="player__wrap">
       <video
         ref="video"
-        :poster="poster"
+        :poster="poster + '#image'"
         @play="artPlaying = true"
         @pause="artPlaying = false"
         @durationchange="
@@ -1630,21 +1630,22 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
     (type === "hls" || type === "m3u" || type === "m3u8") &&
     Hls.isSupported()
   ) {
-    const offEnds = isNative ? "" : "_extra"
+    const offEnds = "_extra"
     let セグメントｓ: string[] | null = null
     const セグメント解決済み = new Map<string, readonly [string, number]>()
     const resolvingTask = new Set<number>()
 
     const hls = new HlsPatched(
       {
-        debug: import.meta.env.DEV,
+        debug: false && import.meta.env.DEV,
         workerPath: workerHls,
         progressive: true,
         fragLoadingRetryDelay: 10000,
         fetchSetup(context, initParams) {
           // set header because this version always cors not fix by extension like desktop-web
-          if (isNative) initParams.headers.set("x-referer", C_URL)
-          else context.url += `#animevsub-vsub${offEnds}`
+          if (isNative) initParams.headers.set("referer", C_URL)
+          if (!context.url.includes("base64"))
+            context.url += `#animevsub-vsub${offEnds}`
 
           return new Request(context.url, initParams)
         },
@@ -1699,7 +1700,9 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
                 console.info("[Segment]: using url resolved")
               if (解決済み) return fetchJava(解決済み[0], request)
             }
-            return fetchJava(request.url, request)
+            return request.url.includes("base64")
+              ? CapacitorWebFetch(request)
+              : fetchJava(request.url, request)
           }
         : Number.MAX_SAFE_INTEGER === settingsStore.player.preResolve
         ? (request) => {
@@ -1708,9 +1711,14 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
             if (import.meta.env.DEV && 解決済み)
               console.info("[Segment]: using url resolved")
             if (解決済み) return fetchJava(解決済み[0], request)
-            return fetchJava(request.url, request)
+            return request.url.includes("base64")
+              ? CapacitorWebFetch(request)
+              : fetchJava(request.url, request)
           }
-        : (request) => fetchJava(request.url, request)
+        : (request) =>
+            request.url.includes("base64")
+              ? CapacitorWebFetch(request)
+              : fetchJava(request.url, request)
     )
     // if (!offEnds) patcher(hls)
     currentHls = hls

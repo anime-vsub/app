@@ -1772,7 +1772,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
 
     let results: ShallowReactive<ListEpisodes>
     await Promise.any([
-      fetch(
+      CapacitorWebFetch(
         `${API_OPEND}/list-episodes?${[
           name,
           ...(othername?.split(",").map((name) => name.trim()) ?? []),
@@ -1873,7 +1873,7 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
 
     let results: ShallowReactive<InOutroEpisode>
     await Promise.any([
-      fetch(`${API_OPEND}/episode-skip/${id}`)
+      CapacitorWebFetch(`${API_OPEND}/episode-skip/${id}`)
         .then((res) => res.json() as Promise<InOutroEpisode>)
         .then((data) => {
           void set(`inoutro:${id}`, JSON.stringify(data))

@@ -181,7 +181,7 @@ export default defineComponent({
       return props.src || props.srcset || props.sizes
         ? {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            src: props.src!,
+            src: props.src! + "#image",
             srcset: props.srcset,
             sizes: props.sizes,
           }

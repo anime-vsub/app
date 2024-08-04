@@ -38,5 +38,9 @@
 	{
 		"pkg": "@hugotomazi/capacitor-navigation-bar",
 		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
+	},
+	{
+		"pkg": "@jcesarmobile/ssl-skip",
+		"classpath": "com.jcesarmobile.sslskip.SslSkipPlugin"
 	}
 ]
