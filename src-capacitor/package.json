@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@capacitor-community/firebase-analytics": "^5.0.1",
-    "@capacitor/android": "../@capacitor/android",
+    "@capacitor/android": "link:@capacitor/android",
     "@capacitor/app": "^5.0.8",
     "@capacitor/browser": "^5.2.1",
     "@capacitor/cli": "^5.7.6",

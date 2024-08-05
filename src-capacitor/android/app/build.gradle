@@ -1,6 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
+
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+      kotlinOptions {
+          jvmTarget = '17'
+      }
+    }
     namespace "git.shin.animevsub"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -38,6 +44,7 @@ dependencies {
 }
 
 apply from: 'capacitor.build.gradle'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 try {
     def servicesJSON = file('google-services.json')
