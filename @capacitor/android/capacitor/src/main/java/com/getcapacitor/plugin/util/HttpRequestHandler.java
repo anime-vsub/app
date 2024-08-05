@@ -418,19 +418,19 @@ public class HttpRequestHandler {
         // Set HTTP body on a non GET or HEAD request
         if (isHttpMutate) {
             JSValue data = new JSValue(call, "data");
-            if (data.getValue() != null) {
+            if (data.value != null) {
                 connection.setDoOutput(true);
                 connection.setRequestBody(call, data, dataType);
             }
         }
 
-        call.getData().put("activeCapacitorHttpUrlConnection", connection);
+        call.data.put("activeCapacitorHttpUrlConnection", connection);
         connection.connect();
 
         JSObject response = buildResponse(connection, responseType);
 
         connection.disconnect();
-        call.getData().remove("activeCapacitorHttpUrlConnection");
+        call.data.remove("activeCapacitorHttpUrlConnection");
 
         return response;
     }
