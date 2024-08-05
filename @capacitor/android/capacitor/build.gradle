@@ -33,6 +33,7 @@ buildscript {
 tasks.withType(Javadoc).all { enabled = false }
 
 apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 if (System.getenv("CAP_PUBLISH") == "true") {
     apply plugin: 'io.github.gradle-nexus.publish-plugin'
@@ -70,6 +71,9 @@ android {
     publishing {
         singleVariant("release")
     }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 repositories {
@@ -86,6 +90,7 @@ dependencies {
     implementation "androidx.fragment:fragment:$androidxFragmentVersion"
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.webkit:webkit:$androidxWebkitVersion"
+    implementation 'androidx.core:core-ktx:1.13.1'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
