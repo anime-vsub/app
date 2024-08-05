@@ -1,5 +1,7 @@
 import pLimit from "p-limit"
 
+import { getRedirect } from "./get-redirect"
+
 addEventListener(
   "message",
   async ({
@@ -16,9 +18,7 @@ addEventListener(
           if (segment in map) return -1
           return limit(async () => {
             map[segment] = [
-              await fetch(new Request(`${segment}#resolve`)).then((res) =>
-                res.text()
-              ),
+              await getRedirect(new Request(`${segment}#animevsub-vsub_extra`)),
               index,
             ]
 
