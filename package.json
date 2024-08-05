@@ -39,7 +39,7 @@
     "@capacitor/share": "^5.0.0",
     "@capacitor/status-bar": "^5.0.0",
     "@firebase/analytics": "^0.10.0",
-    "@firebase/app": "^0.9.11",
+    "@firebase/app": "^0.10.6",
     "@firebase/firestore": "^4.1.0",
     "@hugotomazi/capacitor-navigation-bar": "^3.0.0",
     "@iconify/vue": "^4.0.2",
