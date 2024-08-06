@@ -24,6 +24,9 @@
 > [!WARNING]
 > Customized [Capacitor](https://github.com/ionic-team/capacitor) kernel codes under the MIT license are also included in this repository
 
+> [!CAUTION]
+> The application currently only supports the `Vietnam` region. If you are not there you need to use a `VPN` to get a `Vietnamese IP address`
+
 
 
 [![Build APK](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml)
