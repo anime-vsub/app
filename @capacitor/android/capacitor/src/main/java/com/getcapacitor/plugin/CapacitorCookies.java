@@ -35,12 +35,12 @@ public class CapacitorCookies extends Plugin {
 
     @JavascriptInterface
     public boolean isEnabled() {
-        PluginConfig pluginConfig = bridge.getConfig().getPluginConfiguration("CapacitorCookies");
+        PluginConfig pluginConfig = getBridge().getConfig().getPluginConfiguration("CapacitorCookies");
         return pluginConfig.getBoolean("enabled", false);
     }
 
     private boolean isAllowingInsecureCookies() {
-        PluginConfig pluginConfig = bridge.getConfig().getPluginConfiguration("CapacitorCookies");
+        PluginConfig pluginConfig = getBridge().getConfig().getPluginConfiguration("CapacitorCookies");
         return pluginConfig.getBoolean("androidCustomSchemeAllowInsecureAccess", false);
     }
 
