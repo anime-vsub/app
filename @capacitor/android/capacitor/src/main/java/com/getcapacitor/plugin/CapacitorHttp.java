@@ -41,16 +41,17 @@ public class CapacitorHttp extends Plugin {
             Runnable job = entry.getKey();
             PluginCall call = entry.getValue();
 
-            if (call.data.has("activeCapacitorHttpUrlConnection")) {
+            if (call.getData().has("activeCapacitorHttpUrlConnection")) {
                 try {
-                    CapacitorHttpUrlConnection connection = (CapacitorHttpUrlConnection) call.data
+                    CapacitorHttpUrlConnection connection = (CapacitorHttpUrlConnection) call
+                        .getData()
                         .get("activeCapacitorHttpUrlConnection");
                     connection.disconnect();
-                    call.data.remove("activeCapacitorHttpUrlConnection");
+                    call.getData().remove("activeCapacitorHttpUrlConnection");
                 } catch (Exception ignored) {}
             }
 
-            bridge.releaseCall(call);
+            getBridge().releaseCall(call);
         }
 
         activeRequests.clear();
@@ -62,7 +63,7 @@ public class CapacitorHttp extends Plugin {
             @Override
             public void run() {
                 try {
-                    JSObject response = HttpRequestHandler.request(call, httpMethod, bridge);
+                    JSObject response = HttpRequestHandler.request(call, httpMethod, getBridge());
                     call.resolve(response);
                 } catch (Exception e) {
                     call.reject(e.getLocalizedMessage(), e.getClass().getSimpleName(), e);
@@ -82,7 +83,7 @@ public class CapacitorHttp extends Plugin {
 
     @JavascriptInterface
     public boolean isEnabled() {
-        PluginConfig pluginConfig = bridge.getConfig().getPluginConfiguration("CapacitorHttp");
+        PluginConfig pluginConfig = getBridge().getConfig().getPluginConfiguration("CapacitorHttp");
         return pluginConfig.getBoolean("enabled", false);
     }
 
