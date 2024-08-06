@@ -10,7 +10,7 @@ src-capacitor/ios/App/App/public/cordova_plugins.js linguist-vendored
 src-capacitor/ios/App/App/public/plugins/cordova-plugin-screen-orientation/www/screenorientation.js linguist-vendored
 
 
-@capacitor/android/capacitor/src/main/java/com/getcapacitor/annotation linguist-vendored
-@capacitor/android/capacitor/src/main/java/com/getcapacitor/cordova linguist-vendored
-@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin linguist-vendored
-@capacitor/android/capacitor/src/main/java/com/getcapacitor/util linguist-vendored
+@capacitor/android/capacitor/src/main/java/com/getcapacitor/annotation/* linguist-vendored
+@capacitor/android/capacitor/src/main/java/com/getcapacitor/cordova/* linguist-vendored
+@capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/* linguist-vendored
+@capacitor/android/capacitor/src/main/java/com/getcapacitor/util/* linguist-vendored
