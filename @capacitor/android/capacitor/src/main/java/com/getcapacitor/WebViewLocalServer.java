@@ -302,9 +302,7 @@ public class WebViewLocalServer {
       }
     }
 
-    if (null != loadingUrl.getPath() &&
-        (loadingUrl.getPath().startsWith(Bridge.CAPACITOR_HTTP_INTERCEPTOR_START) ||
-            loadingUrl.getPath().startsWith(Bridge.CAPACITOR_HTTPS_INTERCEPTOR_START))) {
+    if (null != loadingUrl.getPath() && loadingUrl.getPath().startsWith(Bridge.CAPACITOR_HTTP_INTERCEPTOR_START)) {
       Logger.debug("Handling CapacitorHttp request: " + loadingUrl);
       try {
         return handleCapacitorHttpRequest(request);
@@ -385,16 +383,7 @@ public class WebViewLocalServer {
   }
 
   private WebResourceResponse handleCapacitorHttpRequest(WebResourceRequest request) throws IOException {
-    boolean isHttps = request.getUrl().getPath() != null
-        && request.getUrl().getPath().startsWith(Bridge.CAPACITOR_HTTPS_INTERCEPTOR_START);
-
-    String urlString = request
-        .getUrl()
-        .toString()
-        .replace(bridge.getLocalUrl(), isHttps ? "https:/" : "http:/")
-        .replace(Bridge.CAPACITOR_HTTP_INTERCEPTOR_START, "")
-        .replace(Bridge.CAPACITOR_HTTPS_INTERCEPTOR_START, "");
-    urlString = URLDecoder.decode(urlString, "UTF-8");
+    String urlString = request.getUrl().getQueryParameter(Bridge.CAPACITOR_HTTP_INTERCEPTOR_URL_PARAM);
     URL url = new URL(urlString);
     JSObject headers = new JSObject();
 
@@ -531,7 +520,9 @@ public class WebViewLocalServer {
         return null;
       }
 
-      responseStream = jsInjector.getInjectedStream(responseStream);
+      if (jsInjector != null) {
+        responseStream = jsInjector.getInjectedStream(responseStream);
+      }
 
       int statusCode = getStatusCode(responseStream, handler.getStatusCode());
       return new WebResourceResponse(
@@ -558,7 +549,7 @@ public class WebViewLocalServer {
       InputStream responseStream = new LollipopLazyInputStream(handler, request);
 
       // TODO: Conjure up a bit more subtlety than this
-      if (ext.equals(".html")) {
+      if (ext.equals(".html") && jsInjector != null) {
         responseStream = jsInjector.getInjectedStream(responseStream);
       }
 
@@ -577,63 +568,81 @@ public class WebViewLocalServer {
   }
 
   /**
+   * Prepends an {@code InputStream} with the JavaScript required by Capacitor.
+   * This method only changes the original {@code InputStream} if {@code WebView}
+   * does not
+   * support the {@code DOCUMENT_START_SCRIPT} feature.
+   * 
+   * @param original the original {@code InputStream}
+   * @return the modified {@code InputStream}
+   */
+  public InputStream getJavaScriptInjectedStream(InputStream original) {
+    if (jsInjector != null) {
+      return jsInjector.getInjectedStream(original);
+    }
+    return original;
+  }
+
+  /**
    * Instead of reading files from the filesystem/assets, proxy through to the URL
    * and let an external server handle it.
-   *
+   * 
    * @param request
    * @param handler
    * @return
    */
   private WebResourceResponse handleProxyRequest(WebResourceRequest request, PathHandler handler) {
-    final String method = request.getMethod();
-    if (method.equals("GET")) {
-      try {
-        String url = request.getUrl().toString();
-        Map<String, String> headers = request.getRequestHeaders();
-        boolean isHtmlText = false;
-        for (Map.Entry<String, String> header : headers.entrySet()) {
-          if (header.getKey().equalsIgnoreCase("Accept")
-              && header.getValue().toLowerCase().contains("text/html")) {
-            isHtmlText = true;
-            break;
-          }
-        }
-        if (isHtmlText) {
-          HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+    if (jsInjector != null) {
+      final String method = request.getMethod();
+      if (method.equals("GET")) {
+        try {
+          String url = request.getUrl().toString();
+          Map<String, String> headers = request.getRequestHeaders();
+          boolean isHtmlText = false;
           for (Map.Entry<String, String> header : headers.entrySet()) {
-            conn.setRequestProperty(header.getKey(), header.getValue());
-          }
-          String getCookie = CookieManager.getInstance().getCookie(url);
-          if (getCookie != null) {
-            conn.setRequestProperty("Cookie", getCookie);
-          }
-          conn.setRequestMethod(method);
-          conn.setReadTimeout(30 * 1000);
-          conn.setConnectTimeout(30 * 1000);
-          if (request.getUrl().getUserInfo() != null) {
-            byte[] userInfoBytes = request.getUrl().getUserInfo().getBytes(StandardCharsets.UTF_8);
-            String base64 = Base64.encodeToString(userInfoBytes, Base64.NO_WRAP);
-            conn.setRequestProperty("Authorization", "Basic " + base64);
-          }
-
-          List<String> cookies = conn.getHeaderFields().get("Set-Cookie");
-          if (cookies != null) {
-            for (String cookie : cookies) {
-              CookieManager.getInstance().setCookie(url, cookie);
+            if (header.getKey().equalsIgnoreCase("Accept") && header.getValue().toLowerCase().contains("text/html")) {
+              isHtmlText = true;
+              break;
             }
           }
-          InputStream responseStream = conn.getInputStream();
-          responseStream = jsInjector.getInjectedStream(responseStream);
-          return new WebResourceResponse(
-              "text/html",
-              handler.getEncoding(),
-              handler.getStatusCode(),
-              handler.getReasonPhrase(),
-              handler.getResponseHeaders(),
-              responseStream);
+          if (isHtmlText) {
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+              conn.setRequestProperty(header.getKey(), header.getValue());
+            }
+            String getCookie = CookieManager.getInstance().getCookie(url);
+            if (getCookie != null) {
+              conn.setRequestProperty("Cookie", getCookie);
+            }
+            conn.setRequestMethod(method);
+            conn.setReadTimeout(30 * 1000);
+            conn.setConnectTimeout(30 * 1000);
+            if (request.getUrl().getUserInfo() != null) {
+              byte[] userInfoBytes = request.getUrl().getUserInfo().getBytes(StandardCharsets.UTF_8);
+              String base64 = Base64.encodeToString(userInfoBytes, Base64.NO_WRAP);
+              conn.setRequestProperty("Authorization", "Basic " + base64);
+            }
+
+            List<String> cookies = conn.getHeaderFields().get("Set-Cookie");
+            if (cookies != null) {
+              for (String cookie : cookies) {
+                CookieManager.getInstance().setCookie(url, cookie);
+              }
+            }
+            InputStream responseStream = conn.getInputStream();
+            responseStream = jsInjector.getInjectedStream(responseStream);
+
+            return new WebResourceResponse(
+                "text/html",
+                handler.getEncoding(),
+                handler.getStatusCode(),
+                handler.getReasonPhrase(),
+                handler.getResponseHeaders(),
+                responseStream);
+          }
+        } catch (Exception ex) {
+          bridge.handleAppUrlLoadError(ex);
         }
-      } catch (Exception ex) {
-        bridge.handleAppUrlLoadError(ex);
       }
     }
     return null;
@@ -783,8 +792,7 @@ public class WebViewLocalServer {
       registerUriForScheme(Bridge.CAPACITOR_HTTPS_SCHEME, handler, authority);
 
       String customScheme = this.bridge.getScheme();
-      if (!customScheme.equals(Bridge.CAPACITOR_HTTP_SCHEME)
-          && !customScheme.equals(Bridge.CAPACITOR_HTTPS_SCHEME)) {
+      if (!customScheme.equals(Bridge.CAPACITOR_HTTP_SCHEME) && !customScheme.equals(Bridge.CAPACITOR_HTTPS_SCHEME)) {
         registerUriForScheme(customScheme, handler, authority);
       }
     }

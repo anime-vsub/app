@@ -26,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.pm.PackageInfoCompat;
 import androidx.fragment.app.Fragment;
+import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewFeature;
 import com.getcapacitor.android.R;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
@@ -40,6 +42,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -89,7 +92,12 @@ public class Bridge {
     public static final String CAPACITOR_FILE_START = "/_capacitor_file_";
     public static final String CAPACITOR_CONTENT_START = "/_capacitor_content_";
     public static final String CAPACITOR_HTTP_INTERCEPTOR_START = "/_capacitor_http_interceptor_";
+
+    /** @deprecated CAPACITOR_HTTPS_INTERCEPTOR_START is no longer required. All proxied requests are handled via CAPACITOR_HTTP_INTERCEPTOR_START instead */
+    @Deprecated
     public static final String CAPACITOR_HTTPS_INTERCEPTOR_START = "/_capacitor_https_interceptor_";
+
+    public static final String CAPACITOR_HTTP_INTERCEPTOR_URL_PARAM = "u";
 
     public static final int DEFAULT_ANDROID_WEBVIEW_VERSION = 60;
     public static final int MINIMUM_ANDROID_WEBVIEW_VERSION = 55;
@@ -249,7 +257,17 @@ public class Bridge {
         final boolean html5mode = this.config.isHTML5Mode();
 
         // Start the local web server
-        localServer = new WebViewLocalServer(context, this, getJSInjector(), authorities, html5mode);
+        JSInjector injector = getJSInjector();
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {
+            String allowedOrigin = Uri.parse(appUrl).buildUpon().path(null).fragment(null).clearQuery().build().toString();
+            try {
+                WebViewCompat.addDocumentStartJavaScript(webView, injector.getScriptString(), Collections.singleton(allowedOrigin));
+                injector = null;
+            } catch (IllegalArgumentException ex) {
+                Logger.warn("Invalid url, using fallback");
+            }
+        }
+        localServer = new WebViewLocalServer(context, this, injector, authorities, html5mode);
         localServer.hostAssets(DEFAULT_WEB_ASSET_DIR);
 
         Logger.debug("Loading app at " + appUrl);
@@ -570,6 +588,9 @@ public class Bridge {
         } catch (IllegalArgumentException ex) {
             Logger.debug("WebView background color not applied");
         }
+
+        settings.setDisplayZoomControls(false);
+        settings.setBuiltInZoomControls(this.config.isZoomableWebView());
 
         if (config.isInitialFocus()) {
             webView.requestFocusFromTouch();

@@ -36,6 +36,10 @@
 		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
 	},
 	{
+		"pkg": "@capawesome/capacitor-screen-orientation",
+		"classpath": "io.capawesome.capacitorjs.plugins.screenorientation.ScreenOrientationPlugin"
+	},
+	{
 		"pkg": "@hugotomazi/capacitor-navigation-bar",
 		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
 	},
