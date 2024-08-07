@@ -947,6 +947,7 @@ import {
   C_URL,
   DELAY_SAVE_HISTORY,
   DELAY_SAVE_VIEWING_PROGRESS,
+  IS_IOS,
   MEDIA_STREAM_SUPPORT,
   playbackRates,
   servers,
