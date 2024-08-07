@@ -8,7 +8,7 @@ android {
       }
     }
     namespace "git.shin.animevsub"
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "git.shin.animevsub"
         minSdkVersion rootProject.ext.minSdkVersion

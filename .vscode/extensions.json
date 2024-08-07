@@ -5,7 +5,9 @@
     "editorconfig.editorconfig",
     "vue.volar",
     "wayou.vscode-todo-highlight",
-    "lokalise.i18n-ally"
+    "lokalise.i18n-ally",
+    "redhat.java",
+    "oracle.oracle-java"
   ],
   "unwantedRecommendations": [
     "octref.vetur",
