@@ -910,6 +910,7 @@
 <script lang="ts" setup>
 import { Haptics } from "@capacitor/haptics"
 import { StatusBar } from "@capacitor/status-bar"
+import { ScreenOrientation } from "@capawesome/capacitor-screen-orientation"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
 import {
