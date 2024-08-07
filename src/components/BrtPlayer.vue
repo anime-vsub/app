@@ -1,6 +1,9 @@
 <template>
   <div
     class="w-full overflow-hidden fixed top-0 left-0 z-200 bg-[#000]"
+    :class="{
+      'h-full': IS_IOS && artFullscreen,
+    }"
     ref="playerWrapRef"
   >
     <q-responsive :ratio="16 / 9" class="player__wrap">
@@ -105,7 +108,13 @@
               </div>
             </div>
             <div class="flex items-end flex-nowrap">
-              <q-btn dense flat round @click.stop="openPopupFlashNetwork">
+              <q-btn
+                dense
+                flat
+                round
+                :disable="!MEDIA_STREAM_SUPPORT"
+                @click.stop="openPopupFlashNetwork"
+              >
                 <i-ri-water-flash-line
                   v-if="settingsStore.player.preResolve === 0"
                   width="25"
@@ -122,6 +131,7 @@
                   }`"
                 />
                 <q-tooltip
+                  v-if="MEDIA_STREAM_SUPPORT"
                   anchor="bottom middle"
                   self="top middle"
                   class="bg-dark text-[14px] text-weight-medium"
@@ -129,6 +139,16 @@
                   transition-hide="jump-down"
                 >
                   {{ $t("tang-toc-mang") }}
+                </q-tooltip>
+                <q-tooltip
+                  v-else
+                  anchor="bottom middle"
+                  self="top middle"
+                  class="bg-dark text-[14px] text-weight-medium"
+                  transition-show="jump-up"
+                  transition-hide="jump-down"
+                >
+                  Phiên bản iOS không hỗ trợ tính năng này
                 </q-tooltip>
               </q-btn>
               <q-btn
@@ -927,7 +947,7 @@ import {
   C_URL,
   DELAY_SAVE_HISTORY,
   DELAY_SAVE_VIEWING_PROGRESS,
-  isNative,
+  MEDIA_STREAM_SUPPORT,
   playbackRates,
   servers,
 } from "src/constants"
@@ -1183,11 +1203,17 @@ const artFullscreen = ref(false)
 const setArtFullscreen = async (fullscreen: boolean) => {
   console.log("set art fullscreen ", fullscreen)
   if (fullscreen) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await playerWrapRef.value!.requestFullscreen()
+    if (IS_IOS) {
+      await ScreenOrientation.lock({ type: OrientationType.LANDSCAPE })
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      await playerWrapRef.value!.requestFullscreen()
+    }
     if (isNative) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ;(screen.orientation as unknown as any).lock("landscape")
+      if (!IS_IOS) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ;(screen.orientation as unknown as any).lock("landscape")
+      }
       StatusBar.hide()
       NavigationBar.hide()
       StatusBar.setOverlaysWebView({
@@ -1195,10 +1221,13 @@ const setArtFullscreen = async (fullscreen: boolean) => {
       })
     }
   } else {
-    await document.exitFullscreen()
+    if (IS_IOS) await ScreenOrientation.unlock()
+    else await document.exitFullscreen()
     if (isNative) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ;(screen.orientation as unknown as any).unlock()
+      if (!IS_IOS) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ;(screen.orientation as unknown as any).unlock()
+      }
       StatusBar.show()
       NavigationBar.show()
       StatusBar.setOverlaysWebView({

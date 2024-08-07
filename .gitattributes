@@ -14,3 +14,5 @@ src-capacitor/ios/App/App/public/plugins/cordova-plugin-screen-orientation/www/s
 @capacitor/android/capacitor/src/main/java/com/getcapacitor/cordova/* linguist-vendored
 @capacitor/android/capacitor/src/main/java/com/getcapacitor/plugin/* linguist-vendored
 @capacitor/android/capacitor/src/main/java/com/getcapacitor/util/* linguist-vendored
+
+native-bridge.js linguist-vendored

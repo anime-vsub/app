@@ -18,10 +18,11 @@
     "@capacitor/device": "^5.0.8",
     "@capacitor/filesystem": "^5.2.2",
     "@capacitor/haptics": "^5.0.8",
-    "@capacitor/ios": "^6.1.1",
+    "@capacitor/ios": "../@capacitor/ios",
     "@capacitor/preferences": "^5.0.8",
     "@capacitor/share": "^5.0.8",
     "@capacitor/status-bar": "^5.0.8",
+    "@capawesome/capacitor-screen-orientation": "^6.0.1",
     "@hugotomazi/capacitor-navigation-bar": "^3.0.0",
     "@jcesarmobile/ssl-skip": "^0.4.0",
     "cordova-plugin-screen-orientation": "^3.0.4"

@@ -1,4 +1,5 @@
 import { App } from "@capacitor/app"
+import { MEDIA_STREAM_SUPPORT } from "src/constants"
 import { decryptM3u8, init } from "src/logic/decrypt-hls-animevsub"
 import { getQualityByLabel } from "src/logic/get-quality-by-label"
 import { post } from "src/logic/http"
@@ -45,7 +46,6 @@ export function PlayerLink(config: {
     link,
     backuplinks: "1",
   }).then(async ({ data }) => {
-
     if (!data) throw new Error("unknown_error")
     type Writeable<T> = {
       -readonly [P in keyof T]: T[P] extends object ? Writeable<T[P]> : T[P]
@@ -64,7 +64,7 @@ export function PlayerLink(config: {
 
           try {
             item.file = `data:application/vnd.apple.mpegurl;base64,${btoa(
-              await decryptM3u8(item.file)
+              fixiOSLow17(await decryptM3u8(item.file))
             )}`
           } catch (err) {
             console.error(err)
@@ -94,4 +94,18 @@ export function PlayerLink(config: {
 
     return config
   })
+}
+
+function fixiOSLow17(manifest: string): string {
+  if (MEDIA_STREAM_SUPPORT) {
+    return manifest
+      .split("\n")
+      .map((line) => {
+        if (line.includes("//")) return line + "#animevsub-vsub_extra"
+        return line
+      })
+      .join("\n")
+  }
+
+  return manifest
 }
