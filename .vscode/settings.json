@@ -17,5 +17,13 @@
   "MutableAI.upsell": true,
   "[java]": {
     "editor.defaultFormatter": "redhat.java"
+  },
+  "[swift]": {
+    "editor.defaultFormatter": "vknabel.vscode-apple-swift-format"
+  },
+  "editor.quickSuggestions": {
+    "comments": "off",
+    "strings": "off",
+    "other": "off"
   }
 }

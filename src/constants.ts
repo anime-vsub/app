@@ -45,7 +45,7 @@ export const TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE = 5_000 // 5s
 export const REGEXP_OLD_HOST_CURL = /animevietsub\.(?:\w+)/i
 
 export const HOST_CURL = [
-  97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46, 97, 112, 112
+  97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46, 97, 112, 112,
 ]
   .map((val) => String.fromCharCode(val))
   .join("")
@@ -56,3 +56,6 @@ export const C_URL =
 
 export const API_OPEND = "https://opend-9animetv.animevsub.eu.org"
 export const WARN = console.warn.bind(console)
+
+export const MEDIA_STREAM_SUPPORT = !isNative || !!self.MediaStream
+export const IS_IOS = process.env.MODE === "ios"
