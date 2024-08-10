@@ -18,6 +18,8 @@
     "typing": "vue-tsc --noEmit",
     "dev:android": "bun run dev -m capacitor -T android",
     "build:android": "bun run build -m capacitor -T android",
+    "dev:ios": "bun run dev -m capacitor -T ios",
+    "build:ios": "bun run build -m capacitor -T ios",
     "quasar": "quasar",
     "icongenie": "icongenie generate -m pwa -i public/favicon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim",
     "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts",

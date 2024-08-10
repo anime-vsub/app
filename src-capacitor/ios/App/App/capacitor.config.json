@@ -13,19 +13,5 @@
 	"server": {
 		"androidScheme": "https",
 		"url": "https://192.168.88.103:9500"
-	},
-	"packageClassList": [
-		"FirebaseAnalytics",
-		"AppPlugin",
-		"CAPBrowserPlugin",
-		"DevicePlugin",
-		"FilesystemPlugin",
-		"HapticsPlugin",
-		"PreferencesPlugin",
-		"SharePlugin",
-		"StatusBarPlugin",
-		"ScreenOrientationPlugin",
-		"NavigationBarPlugin",
-		"CDVPlugin"
-	]
+	}
 }
