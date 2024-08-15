@@ -1,9 +1,9 @@
 import { App } from "@capacitor/app"
+import { name as packageName } from "app/package.json"
 import { MEDIA_STREAM_SUPPORT } from "src/constants"
 import { decryptM3u8, init } from "src/logic/decrypt-hls-animevsub"
 import { getQualityByLabel } from "src/logic/get-quality-by-label"
 import { post } from "src/logic/http"
-import { name as packageName } from "app/package.json"
 
 const addProtocolUrl = (file: string) =>
   file.startsWith("http") ? file : `https:${file}`
