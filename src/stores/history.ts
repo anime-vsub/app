@@ -37,6 +37,7 @@ export const useHistoryStore = defineStore("history", () => {
     undefined,
     {
       lazy: true,
+      shallow: true,
       onError(err) {
         last30ItemError.value = err
       }

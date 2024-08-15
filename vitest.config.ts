@@ -26,10 +26,10 @@ export default defineConfig({
         {
           quasar: ["useQuasar"],
           "vue-i18n": ["useI18n"],
-          "@vueuse/core": ["computedAsync"],
+          // "@vueuse/core": ["computedAsync"],
         },
       ],
-      dirs: ["./src/*.ts"],
+      dirs: ["./src/*.ts", "./src/composibles"],
       eslintrc: {
         enabled: true,
       },

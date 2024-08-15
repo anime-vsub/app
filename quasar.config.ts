@@ -21,8 +21,7 @@ import Icons from "unplugin-icons/vite"
 import Components from "unplugin-vue-components/vite"
 
 config()
-
-export default configure(function (/* ctx */) {
+export default configure(function (/* ctx */ { modeName }) {
   const conf: QuasarConf = {
     ["eslint" as unknown as any]: {
       // fix: true,
@@ -145,10 +144,10 @@ export default configure(function (/* ctx */) {
               {
                 quasar: ["useQuasar"],
                 "vue-i18n": ["useI18n"],
-                "@vueuse/core": ["computedAsync"],
+                // "@vueuse/core": ["computedAsync"],
               },
             ],
-            dirs: ["./src/*.ts"],
+            dirs: ["./src/*.ts", "./src/composibles"],
             dts: "./auto-imports.d.ts",
             eslintrc: {
               enabled: true,
@@ -162,7 +161,7 @@ export default configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      ["https" as unknown as any]: true,
+      ["https" as unknown as any]: !(modeName === "spa" || modeName === "pwa"),
       open: false, // opens browser window automatically
     },
 

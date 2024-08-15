@@ -104,7 +104,6 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue"
-import { computedAsync } from "@vueuse/core"
 import { useQuasar } from "quasar"
 import { usePlaylistStore } from "stores/playlist"
 import { ref } from "vue"
