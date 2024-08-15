@@ -26,8 +26,9 @@
       :_cache-data-seasons="_cacheDataSeasons"
       :fetch-season="fetchSeason"
       :progressWatchStore="progressWatchStore"
-      :intro="inoutroEpisode?.intro"
-      :outro="inoutroEpisode?.outro"
+      :intro="inoutroEpisode?.intro ?? skEpisode?.intro"
+      :outro="inoutroEpisode?.outro ?? skEpisode?.outro"
+      :sk-url="skEpisode?.thumbs"
       @cur-update="
         currentProgresWatch?.set($event.id, {
           cur: $event.cur,
@@ -621,7 +622,6 @@
 <script lang="ts" setup>
 import { Share } from "@capacitor/share"
 import { Icon } from "@iconify/vue"
-import { computedAsync } from "@vueuse/core"
 import { useHead } from "@vueuse/head"
 import { Http } from "client-ext-animevsub-helper"
 import AddToPlaylist from "components/AddToPlaylist.vue"
@@ -1754,12 +1754,8 @@ interface ListEpisodes {
   }[]
 }
 
-let episodesOpEndInited = false
 const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
   async (onCleanup) => {
-    if (episodesOpEndInited) episodesOpEnd.value = null
-    else episodesOpEndInited = true
-
     const name = data.value?.name
     const othername = data.value?.othername
 
@@ -1813,9 +1809,7 @@ const episodesOpEnd = computedAsync<ShallowReactive<ListEpisodes> | null>(
     return results!
   },
   null,
-  {
-    onError: WARN,
-  }
+  { onError: WARN, shallow: true, lazy: true }
 )
 const episodeOpEnd = computed(() => {
   // find episode on episodesOpEnd
@@ -1861,13 +1855,9 @@ interface InOutroEpisode {
   server: number
 }
 
-let inoutroEpisodeInited = false
 const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
   async () => {
     if (!episodeOpEnd.value) return null
-
-    if (inoutroEpisodeInited) inoutroEpisode.value = null
-    else inoutroEpisodeInited = true
 
     const { id } = episodeOpEnd.value
 
@@ -1901,7 +1891,51 @@ const inoutroEpisode = computedAsync<ShallowReactive<InOutroEpisode> | null>(
     return results!
   },
   null,
-  { onError: WARN }
+  { onError: WARN, shallow: true, lazy: true }
+)
+
+// ============== thumbnail =============
+// reuse episodeRK
+interface SkEpisode extends InOutroEpisode {
+  thumbs: string | null
+}
+const skEpisode = computedAsync<ShallowReactive<SkEpisode> | null>(
+  async () => {
+    if (!episodeOpEnd.value) return null
+
+    const { id } = episodeOpEnd.value
+
+    let results: ShallowReactive<SkEpisode>
+    await Promise.any([
+      fetch(`${API_SK}/episode-skip/${id}`)
+        .then((res) => res.json() as Promise<SkEpisode>)
+        .then((data) => {
+          void set(`sk:${id}`, JSON.stringify(data))
+
+          // eslint-disable-next-line promise/always-return
+          if (results) {
+            if (JSON.stringify(toRaw(results)) !== JSON.stringify(data))
+              Object.assign(results, data)
+          } else results = shallowReactive(data)
+        }),
+      get<string>(`sk:${id}`).then((text) => {
+        if (!text) throw new Error("not_found_on_idb")
+
+        const data = JSON.parse(text)
+
+        // eslint-disable-next-line promise/always-return
+        if (results) {
+          if (JSON.stringify(toRaw(results)) !== text)
+            Object.assign(results, data)
+        } else results = shallowReactive(data)
+      }),
+    ])
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return results!
+  },
+  null,
+  { onError: WARN, shallow: true, lazy: true }
 )
 </script>
 

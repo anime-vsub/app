@@ -71,7 +71,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computedAsync } from "@vueuse/core"
 import { FBCommentPlugin } from "fb-comments-web"
 import type { AsyncComments, PostComment } from "fb-comments-web"
 import { useQuasar } from "quasar"

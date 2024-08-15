@@ -348,6 +348,25 @@
                     width: percentagePlaytimeText,
                   }"
                 />
+                <!-- seek thumbs -->
+                <div
+                  v-if="currentingTime"
+                  class="art-sk-hoved"
+                  :class="{
+                    'art-sk-hoved--thumbs': sktStyle.thumbs,
+                  }"
+                  :data-title="
+                    playtimeText +
+                    (intro && inClamp(artCurrentTime, intro.start, intro.end)
+                      ? ' Mở đầu'
+                      : outro && inClamp(artCurrentTime, outro.start, outro.end)
+                      ? ' Kết thúc'
+                      : '')
+                  "
+                  :style="{ left: leftSkt + 'px' }"
+                  ref="skRef"
+                />
+                <!-- /seek thumbs -->
                 <div
                   class="absolute z-22 left-0 top-0 right-0 bottom-0 w-0 h-full pointer-events-none"
                   :style="{
@@ -356,15 +375,6 @@
                 >
                   <div
                     class="absolute w-[20px] h-[20px] right-[-10px] top-[calc(100%-10px)] art-progress-indicator"
-                    :data-title="
-                      playtimeText +
-                      (intro && inClamp(artCurrentTime, intro.start, intro.end)
-                        ? '\n intro'
-                        : outro &&
-                          inClamp(artCurrentTime, outro.start, outro.end)
-                        ? '\n outro'
-                        : '')
-                    "
                     @touchstart.stop="currentingTime = true"
                     @touchmove.stop="onIndicatorMove"
                     @touchend.stop="onIndicatorEnd"
@@ -910,7 +920,10 @@
 <script lang="ts" setup>
 import { Haptics } from "@capacitor/haptics"
 import { StatusBar } from "@capacitor/status-bar"
-import { OrientationType, ScreenOrientation } from "@capawesome/capacitor-screen-orientation"
+import {
+  OrientationType,
+  ScreenOrientation,
+} from "@capawesome/capacitor-screen-orientation"
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
 import {
@@ -986,6 +999,9 @@ import {
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
 
+import { getSktAt } from "../logic/get-skt-at"
+import { loadVttSk } from "../logic/load-vtt-sk"
+
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
 const historyStore = useHistoryStore()
@@ -1037,6 +1053,7 @@ const props = defineProps<{
     start: number
     end: number
   }
+  skUrl?: string | null
 }>()
 const uidChap = computed(() => {
   const uid = `${props.currentSeason}/${props.currentChap ?? ""}` // 255 byte
@@ -2342,6 +2359,73 @@ function openPopupFlashNetwork() {
     settingsStore.player.preResolve = data
   })
 }
+
+// sk thumb
+const vttMeta = computedAsync(
+  async () => {
+    if (!props.skUrl) return
+
+    const meta = await loadVttSk(props.skUrl)
+    const aspect = (meta[0].h / meta[0].w) * 100
+
+    return { meta, aspect }
+  },
+  undefined,
+  {
+    onError: WARN,
+    lazy: true,
+    shallow: true,
+  }
+)
+const currentSkt = computed(() => {
+  if (!vttMeta.value) return
+  const { meta, aspect } = vttMeta.value
+
+  const current = getSktAt(artCurrentTime.value, meta)
+  if (!current) return
+
+  return [current, aspect] as const
+})
+const sktStyle = computed(() => {
+  const val = currentSkt.value
+  if (!val) return {}
+
+  const [current, aspect] = val
+
+  // max width = 220px
+  const scale = current.w > 220 ? 220 / current.w : 1
+
+  return {
+    thumbs: true,
+    aspect: `${aspect}%`,
+    image: `url(${new URL(current.text, props.skUrl ?? "")})`,
+    scale,
+    x: current.x + "px",
+    y: current.y + "px",
+    w: current.w + "px",
+    h: current.h + "px",
+  }
+})
+const skRef = ref<HTMLDivElement>()
+const leftSkt = computed(() => {
+  if (!skRef.value || !playerWrapRef.value || !progressInnerRef.value)
+    return null
+
+  const minWidth = (skRef.value.offsetWidth / 2) * (sktStyle.value.scale ?? 1)
+  const maxWidth = playerWrapRef.value.offsetWidth - minWidth
+  const padding =
+    (playerWrapRef.value.offsetWidth - progressInnerRef.value.offsetWidth) / 2
+  const offset = Math.max(
+    minWidth - padding + 3,
+    Math.min(
+      maxWidth - padding - 3,
+      (artCurrentTime.value / artDuration.value) *
+        (playerWrapRef.value.offsetWidth - padding * 2)
+    )
+  )
+
+  return offset
+})
 </script>
 
 <style lang="scss" scoped>
@@ -2396,9 +2480,9 @@ function openPopupFlashNetwork() {
       visibility: hidden !important;
     }
     .art-progress-indicator {
-      &:after {
-        display: block !important;
-      }
+      // &:after {
+      //   display: block !important;
+      // }
       transform: scale(1.2) !important;
     }
     .art-control-progress-inner {
@@ -2417,7 +2501,7 @@ function openPopupFlashNetwork() {
     @media (orientation: landscape) {
       padding-bottom: 32px !important;
     }
-    @apply h-min-[100px] z-60;
+    @apply h-min-[100px] z-199;
     background: {
       image: linear-gradient(to top, #000, #0006, #0000);
       position: bottom;
@@ -2505,25 +2589,48 @@ function openPopupFlashNetwork() {
 
         .art-progress-indicator {
           transition: transform 0.2s ease-in-out;
+        }
+
+        .art-sk-hoved {
+          @apply absolute z-199 left-0 top-0 bottom-0 h-full inline-block;
+          pointer-events: none;
           &:after {
             content: attr(data-title);
-            position: absolute;
-            z-index: 50;
-            top: -25px;
-            left: 50%;
-            height: 20px;
-            padding: 0 5px;
-            line-height: 20px;
-            color: #fff;
-            font-size: 12px;
-            text-align: center;
+            @apply relative transform translate-x-[-50%] translate-y-[calc(-100%-16px)] left-0 inline-block;
             background: rgba(0, 0, 0, 0.7);
-            border-radius: 3px;
-            font-weight: bold;
+            @apply py-2 px-3 font-weight-medium rounded-lg;
             white-space: nowrap;
-            transform: translateX(-50%);
+          }
+          &.art-sk-hoved--thumbs {
+            &:after {
+              padding: 3px 5px;
+              font-size: 12px;
+              background-color: #000000b3;
+              border-radius: 3px;
+              @apply absolute right-0 bottom-[100%] bottom-unset right-auto translate-x-[-50%] translate-y-[calc(-10%-16px)];
+              // @apply relative translate-y-[calc(-100%-16px)] translate-x-[-50%] bottom-auto right-auto;
+            }
+            &:before {
+              content: "";
+              display: block;
+              @apply rounded-[3px] relative left-0; // transform translate-y-[calc(-100%-10px)] translate-x-[-50%] left-0 scale-[v-bind("sktStyle.scale")];
+              box-shadow: 0 1px 3px #0003, 0 1px 2px -1px #0003;
+              pointer-events: none;
+              width: v-bind("sktStyle.w");
+              // height: v-bind("sktStyle.h");
+              transform: translateY(calc(-100% - 10px)) translateX(-50%)
+                scale(v-bind("sktStyle.scale"));
+              padding-top: v-bind("sktStyle.aspect");
+              background: {
+                color: #000000d9;
+                repeat: no-repeat;
+                image: v-bind("sktStyle.image");
+                position: v-bind("sktStyle.x") v-bind("sktStyle.y");
+              }
+            }
+          }
+          &:before {
             display: none;
-            white-space: pre-wrap;
           }
         }
       }

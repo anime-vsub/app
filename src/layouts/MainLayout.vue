@@ -198,7 +198,6 @@
 <script lang="ts" setup>
 import { App } from "@capacitor/app"
 import { Icon } from "@iconify/vue"
-import { computedAsync } from "@vueuse/core"
 import { name, version } from "app/package.json"
 import { Http } from "client-ext-animevsub-helper"
 import semverGt from "semver/functions/gt"

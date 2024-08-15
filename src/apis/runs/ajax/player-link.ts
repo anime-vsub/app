@@ -3,6 +3,7 @@ import { MEDIA_STREAM_SUPPORT } from "src/constants"
 import { decryptM3u8, init } from "src/logic/decrypt-hls-animevsub"
 import { getQualityByLabel } from "src/logic/get-quality-by-label"
 import { post } from "src/logic/http"
+import { name as packageName } from "app/package.json"
 
 const addProtocolUrl = (file: string) =>
   file.startsWith("http") ? file : `https:${file}`
@@ -56,10 +57,15 @@ export function PlayerLink(config: {
         if (item.file.includes("://")) {
           item.file = addProtocolUrl(item.file)
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any, promise/no-nesting
-          ;(self as unknown as any).hn ??= await App.getInfo().then(
-            (info) => info.id
-          )
+          if (isNative) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, promise/no-nesting
+            ;(self as unknown as any).hn ??= await App.getInfo().then(
+              (info) => info.id
+            )
+          } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ;(self as unknown as any).hn = packageName
+          }
           await init()
 
           try {

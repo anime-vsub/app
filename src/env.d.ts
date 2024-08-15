@@ -9,5 +9,6 @@ declare namespace NodeJS {
     SUPABASE_KEY: string
 
     FIREBASE_CONFIG: string
+    API_SK: string
   }
 }

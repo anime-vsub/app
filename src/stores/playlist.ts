@@ -28,6 +28,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     undefined,
     {
       lazy: true,
+      shallow: true,
       onError(e) {
         playlistsError.value = e
       }
