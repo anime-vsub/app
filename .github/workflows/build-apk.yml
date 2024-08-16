@@ -64,7 +64,7 @@ jobs:
 
       - name: Write .env
         run: |
-          echo $'SUPABASE_URL="${{ secrets.SUPABASE_URL }}"\nSUPABASE_KEY="${{ secrets.SUPABASE_KEY }}"\nFIREBASE_CONFIG="${{ secrets.FIREBASE_CONFIG }}"' > .env
+          echo $'SUPABASE_URL="${{ secrets.SUPABASE_URL }}"\nSUPABASE_KEY="${{ secrets.SUPABASE_KEY }}"\nFIREBASE_CONFIG="${{ secrets.FIREBASE_CONFIG }}"\nAPI_SK="${{ secrets.API_SK }}"' > .env
 
       - name: Install and Build Capacitor 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
