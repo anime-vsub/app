@@ -1815,7 +1815,9 @@ const episodeOpEnd = computed(() => {
   // find episode on episodesOpEnd
   if (!episodesOpEnd.value) return
 
-  const epName = currentMetaChap.value?.name.trim().replace(/^\w+0+/, "")
+  const rawName = currentMetaChap.value?.name.trim()
+
+  const epName = rawName?.replace(/^[^0-9.+_-]+/, "")
 
   if (!epName) return
 
@@ -1824,7 +1826,7 @@ const episodeOpEnd = computed(() => {
   const epFloat = parseFloat(epName)
   const episode =
     list.find((item) => {
-      if (item.name === epName) return true
+      if (item.name === epName || item.name === rawName) return true
 
       return parseFloat(item.name) === epFloat
     }) ??
