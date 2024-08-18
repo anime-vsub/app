@@ -1752,7 +1752,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
                   if (
                     err instanceof TypeError &&
                     err.message === "Failed to fetch" &&
-                    !(await isConnectedToNetwork())
+                    await isConnectedToNetwork()
                   ) {
                     // url expired
                     セグメント解決済み.clear()
