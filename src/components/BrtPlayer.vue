@@ -970,6 +970,7 @@ import { scrollXIntoView } from "src/helpers/scrollIntoView"
 import { fetchJava } from "src/logic/fetchJava"
 import { findInRangeSet } from "src/logic/find-in-range-set"
 import { HlsPatched } from "src/logic/hls-patched"
+import { isConnectedToNetwork } from "src/logic/is-connected-to-network"
 import { parseChapName } from "src/logic/parseChapName"
 import { parseTime } from "src/logic/parseTime"
 import { getSegments } from "src/logic/resolve-master-manifest"
@@ -1746,7 +1747,27 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
               }
               if (import.meta.env.DEV && 解決済み)
                 console.info("[Segment]: using url resolved")
-              if (解決済み) return fetchJava(解決済み[0], request)
+              if (解決済み)
+                return fetch(解決済み[0], request).catch(async (err) => {
+                  if (
+                    err instanceof TypeError &&
+                    err.message === "Failed to fetch" &&
+                    !(await isConnectedToNetwork())
+                  ) {
+                    // url expired
+                    セグメント解決済み.clear()
+                    resolvingTask.clear()
+                    console.log("[Segment]: url expired. Clear all cache")
+                    if (
+                      Number.MAX_SAFE_INTEGER ===
+                      settingsStore.player.preResolve
+                    )
+                      preResolveHot()
+                    return fetchJava(request.url, request)
+                  }
+
+                  throw err
+                })
             }
             return request.url.includes("base64")
               ? CapacitorWebFetch(request)
@@ -1780,18 +1801,23 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
 
       // !NOTIFY resolve redirect urls
       if (Number.MAX_SAFE_INTEGER === settingsStore.player.preResolve)
-        void retryAsync(
-          async () =>
-            resolveMasterManifestWorker(
-              await getSegments(file),
-              セグメント解決済み
-            ),
-          {
-            maxTry: 10,
-            delay: 3_000,
-          }
-        )
+        preResolveHot()
     })
+
+    // eslint-disable-next-line no-inner-declarations
+    function preResolveHot() {
+      void retryAsync(
+        async () =>
+          resolveMasterManifestWorker(
+            await getSegments(file),
+            セグメント解決済み
+          ),
+        {
+          maxTry: 10,
+          delay: 3_000,
+        }
+      )
+    }
 
     let needSwapCodec = false
 
