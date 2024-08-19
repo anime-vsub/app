@@ -9,6 +9,10 @@ import { ref } from "vue"
 
 import { useAuthStore } from "./auth"
 
+const GMT =
+  self.Intl?.DateTimeFormat()?.resolvedOptions()?.timeZone ??
+  Math.round(new Date().getTimezoneOffset() / 60)
+
 export const useHistoryStore = defineStore("history", () => {
   const authStore = useAuthStore()
 
@@ -24,7 +28,7 @@ export const useHistoryStore = defineStore("history", () => {
         .rpc("query_history", {
           user_uid: authStore.uid,
           page: 1,
-          size: 30
+          size: 30,
         })
         .throwOnError()
 
@@ -40,7 +44,7 @@ export const useHistoryStore = defineStore("history", () => {
       shallow: true,
       onError(err) {
         last30ItemError.value = err
-      }
+      },
     }
   )
 
@@ -50,7 +54,7 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day")
+          i18n.global.t("xem-lich-su-gan-day"),
         ])
       )
 
@@ -58,17 +62,19 @@ export const useHistoryStore = defineStore("history", () => {
       .rpc("query_history", {
         user_uid: authStore.uid,
         page,
-        size: 30
+        size: 30,
       })
       .throwOnError()
 
-    return data?.map((item) => {
-      item.poster = addHostUrlImage(item.poster)
-      return {
-        ...item,
-        timestamp: dayjs(item.created_at)
-      }
-    }) ?? []
+    return (
+      data?.map((item) => {
+        item.poster = addHostUrlImage(item.poster)
+        return {
+          ...item,
+          timestamp: dayjs(item.created_at),
+        }
+      }) ?? []
+    )
   }
 
   // async function createSeason(
@@ -97,14 +103,14 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day")
+          i18n.global.t("xem-lich-su-gan-day"),
         ])
       )
 
     const { data } = await supabase
       .rpc("get_watch_progress", {
         user_uid: authStore.uid,
-        season_id: getRealSeasonId(season)
+        season_id: getRealSeasonId(season),
       })
       .throwOnError()
 
@@ -115,17 +121,15 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day")
+          i18n.global.t("xem-lich-su-gan-day"),
         ])
       )
 
-    const {
-      data
-    } = await supabase
+    const { data } = await supabase
       .rpc("get_single_progress", {
         user_uid: authStore.uid,
         season_id: getRealSeasonId(season),
-        p_chap_id: chap
+        p_chap_id: chap,
       })
       .single()
       .throwOnError()
@@ -145,7 +149,7 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("luu-lich-su-xem")
+          i18n.global.t("luu-lich-su-xem"),
         ])
       )
 
@@ -160,7 +164,8 @@ export const useHistoryStore = defineStore("history", () => {
         e_cur: watchProgress.cur,
         e_dur: watchProgress.dur,
         e_name: watchProgress.name,
-        e_chap: chap
+        e_chap: chap,
+        gmt: GMT,
       })
       .throwOnError()
   }
@@ -169,19 +174,19 @@ export const useHistoryStore = defineStore("history", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xem-lich-su-gan-day")
+          i18n.global.t("xem-lich-su-gan-day"),
         ])
       )
 
     const { data } = await supabase
       .rpc("get_last_chap", {
         user_uid: authStore.uid,
-        season_id: getRealSeasonId(season)
+        season_id: getRealSeasonId(season),
       })
       .single()
       .throwOnError()
 
-    return data?.chap_id??null
+    return data?.chap_id ?? null
   }
 
   return {
@@ -197,6 +202,6 @@ export const useHistoryStore = defineStore("history", () => {
     getProgressChap,
     setProgressChap,
 
-    getLastEpOfSeason
+    getLastEpOfSeason,
   }
 })
