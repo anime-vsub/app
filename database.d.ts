@@ -185,6 +185,7 @@ export type Database = {
           created_at: string
           email: string | null
           id: number
+          last_signin: string | null
           name: string | null
           uuid: string
         }
@@ -192,6 +193,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: number
+          last_signin?: string | null
           name?: string | null
           uuid: string
         }
@@ -199,6 +201,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: number
+          last_signin?: string | null
           name?: string | null
           uuid?: string
         }
@@ -415,20 +418,36 @@ export type Database = {
         }
         Returns: undefined
       }
-      set_single_progress: {
-        Args: {
-          p_name: string
-          p_poster: string
-          season_id: string
-          p_season_name: string
-          user_uid: string
-          e_cur: number
-          e_dur: number
-          e_name: string
-          e_chap: string
-        }
-        Returns: undefined
-      }
+      set_single_progress:
+        | {
+            Args: {
+              p_name: string
+              p_poster: string
+              season_id: string
+              p_season_name: string
+              user_uid: string
+              e_cur: number
+              e_dur: number
+              e_name: string
+              e_chap: string
+            }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              p_name: string
+              p_poster: string
+              season_id: string
+              p_season_name: string
+              user_uid: string
+              e_cur: number
+              e_dur: number
+              e_name: string
+              e_chap: string
+              gmt: string
+            }
+            Returns: undefined
+          }
       upsert_user: {
         Args: {
           p_uuid: string
