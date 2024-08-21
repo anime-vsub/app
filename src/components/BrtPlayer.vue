@@ -1748,7 +1748,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
               if (import.meta.env.DEV && 解決済み)
                 console.info("[Segment]: using url resolved")
               if (解決済み)
-                return fetch(解決済み[0], request).catch(async (err) => {
+                return fetchJava(解決済み[0], request).catch(async (err) => {
                   if (
                     err instanceof TypeError &&
                     err.message === "Failed to fetch" &&
