@@ -6,8 +6,10 @@ export default function LichChieuPhim(html: string, now: number) {
 
   return $("#sched-content > .Homeschedule")
     .map((_i, item) => {
-      const day = $(item).find(".Top > h1 > b").text()
-      const _tmp = $(item)
+      const $item = $(item)
+
+      const day = $item.find(".Top > h1 > b").text()
+      const _tmp = $item
         .find(".Top > h1")
         .text()
         .split(",", 2)[1]
@@ -16,7 +18,7 @@ export default function LichChieuPhim(html: string, now: number) {
       const date = _tmp?.[0] ?? null
       const month = _tmp?.[1] ?? null
 
-      const items = $(item)
+      const items = $item
         .find(".MovieList:eq(0)")
         .find(".TPostMv")
         .map((_i, item) => getInfoTPost($(item), now))
