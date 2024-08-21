@@ -37,10 +37,11 @@ export default function TypeNormalValue(
     sorter: $("#filter")
       .find(".fc-main-list > li > a")
       .map((_i, anchor) => {
-        const text = $(anchor).text()
+        const $anchor = $(anchor)
+        const text = $anchor.text()
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const value = new URL(
-          $(anchor).attr("href") ?? "",
+          $anchor.attr("href") ?? "",
           "https://example.com"
         ).searchParams.get("sort")!
         return { text, value }
@@ -58,7 +59,7 @@ export default function TypeNormalValue(
         // eslint-disable-next-line array-callback-return
         if (value === "all") return
 
-        const text = $(item).text()
+        const text = $item.text()
 
         return {
           text,
@@ -80,7 +81,7 @@ export default function TypeNormalValue(
         // eslint-disable-next-line array-callback-return
         if (value === "all") return
 
-        const text = $(item).text()
+        const text = $item.text()
 
         return {
           text,
@@ -96,13 +97,13 @@ export default function TypeNormalValue(
         const $item = $(item)
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = $(item).find("input").attr("value")!
+        const value = $item.find("input").attr("value")!
         const checked = !!$item.attr("checked")
 
         // eslint-disable-next-line array-callback-return
         if (value === "all") return
 
-        const text = $(item).text()
+        const text = $item.text()
 
         return {
           text,
@@ -118,13 +119,13 @@ export default function TypeNormalValue(
         const $item = $(item)
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = $(item).find("input").attr("value")!
+        const value = $item.find("input").attr("value")!
         const checked = !!$item.attr("checked")
 
         // eslint-disable-next-line array-callback-return
         if (value === "all") return
 
-        const text = $(item).text()
+        const text = $item.text()
 
         return {
           text,
