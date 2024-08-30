@@ -43,6 +43,8 @@ import java.io.ByteArrayOutputStream;
 
 import java.lang.reflect.Field;
 
+import com.getcapacitor.shin.SegmentCache;
+
 /**
  * Helper class meant to be used with the android.webkit.WebView class to enable
  * hosting assets,
@@ -73,6 +75,8 @@ public class WebViewLocalServer {
   private final boolean html5mode;
   private final JSInjector jsInjector;
   private final Bridge bridge;
+
+  private final SegmentCache segmentCache;
 
   /**
    * A handler that produces responses for paths on the virtual asset server.
@@ -159,6 +163,7 @@ public class WebViewLocalServer {
     this.authorities = authorities;
     this.bridge = bridge;
     this.jsInjector = jsInjector;
+    this.segmentCache = new SegmentCache(context, 10 * 24 * 3600_000);
   }
 
   private static Uri parseAndVerifyUrl(String url) {
@@ -232,8 +237,14 @@ public class WebViewLocalServer {
         connection.setInstanceFollowRedirects(false);
         connection.connect();
 
-        String locationHeader = connection.getHeaderField("Location");
+        String hash = SegmentCache.sha256(url.toString());
+        String pathToCache = segmentCache.get(hash);
+
+        String locationHeader = pathToCache == null ? connection.getHeaderField("Location") : pathToCache;
         String resolvedUrl = (locationHeader != null) ? locationHeader : loadingUrl.toString();
+
+        if (pathToCache == null)
+          segmentCache.cache(locationHeader, hash);
 
         WebResourceResponse response = new WebResourceResponse("text/plain", "UTF-8",
             new ByteArrayInputStream(resolvedUrl.getBytes(StandardCharsets.UTF_8)));
@@ -572,7 +583,7 @@ public class WebViewLocalServer {
    * This method only changes the original {@code InputStream} if {@code WebView}
    * does not
    * support the {@code DOCUMENT_START_SCRIPT} feature.
-   * 
+   *
    * @param original the original {@code InputStream}
    * @return the modified {@code InputStream}
    */
@@ -586,7 +597,7 @@ public class WebViewLocalServer {
   /**
    * Instead of reading files from the filesystem/assets, proxy through to the URL
    * and let an external server handle it.
-   * 
+   *
    * @param request
    * @param handler
    * @return
