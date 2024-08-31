@@ -1,6 +1,7 @@
 import { CapacitorHttp } from "@capacitor/core"
 import { isNative } from "src/constants"
 import { base64ToArrayBuffer } from "src/logic/base64ToArrayBuffer"
+import { Filesystem } from "@capacitor/filesystem"
 
 async function getResponse(
   promise: Promise<{ data: string }>
@@ -27,6 +28,7 @@ export async function fetchJava(
 ) {
   if (url.startsWith("data:app")) return fetch(url)
   if (!isNative) return CapacitorWebFetch(url, options)
+  if (isNative && url.startsWith("/_capacitor_file_")) return CapacitorWebFetch(url, options)
 
   if (options?.signal?.aborted) throw new Error("ABORTED")
 
