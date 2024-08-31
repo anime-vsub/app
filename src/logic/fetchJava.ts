@@ -1,7 +1,6 @@
 import { CapacitorHttp } from "@capacitor/core"
 import { isNative } from "src/constants"
 import { base64ToArrayBuffer } from "src/logic/base64ToArrayBuffer"
-import { Filesystem } from "@capacitor/filesystem"
 
 async function getResponse(
   promise: Promise<{ data: string }>
