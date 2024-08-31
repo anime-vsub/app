@@ -103,7 +103,7 @@ export function PlayerLink(config: {
 }
 
 function fixiOSLow17(manifest: string): string {
-  if (MEDIA_STREAM_SUPPORT) {
+  if (!MEDIA_STREAM_SUPPORT) {
     return manifest
       .split("\n")
       .map((line) => {
