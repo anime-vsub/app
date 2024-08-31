@@ -58,5 +58,5 @@ export const API_OPEND = "https://opend-9animetv.animevsub.eu.org"
 export const API_SK = process.env.API_SK
 export const WARN = console.warn.bind(console)
 
-export const MEDIA_STREAM_SUPPORT = !isNative || !!self.MediaStream
+export const MEDIA_STREAM_SUPPORT = !!self.MediaStream
 export const IS_IOS = process.env.MODE === "ios"
