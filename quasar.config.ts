@@ -19,6 +19,7 @@ import AutoImport from "unplugin-auto-import/vite"
 import IconsResolver from "unplugin-icons/resolver"
 import Icons from "unplugin-icons/vite"
 import Components from "unplugin-vue-components/vite"
+import Dart from "vite-plugin-dart"
 
 config()
 export default configure(function (/* ctx */ { modeName }) {
@@ -82,6 +83,10 @@ export default configure(function (/* ctx */ { modeName }) {
 
       extendViteConf(viteConf) {
         extend(true, viteConf, {
+          optimizeDeps: {
+            exclude: ["@ffmpeg/ffmpeg"]
+          },
+
           resolve: {
             alias: {
               path: "path-browserify",
@@ -156,6 +161,7 @@ export default configure(function (/* ctx */ { modeName }) {
         ],
         ["vite-plugin-rewrite-all", {}],
         ["vite-plugin-remove-console", {}],
+        [Dart, {}]
       ] as unknown as any,
     },
 

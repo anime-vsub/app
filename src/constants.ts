@@ -60,3 +60,11 @@ export const WARN = console.warn.bind(console)
 
 export const MEDIA_STREAM_SUPPORT = !!self.MediaStream
 export const IS_IOS = process.env.MODE === "ios"
+export const EMPTY_ARRAY = Object.freeze([])
+
+export const PREFIX_VIDEO = "video_"
+export const PREFIX_SEASON = "season_"
+export const PREFIX_CHAPS = "chaps_"
+export const PREFIX_POSTER = "poster_"
+export const PREFIX_IMAGE = "image_"
+export const REGISTRY_OFFLINE = "$registry_offline$"

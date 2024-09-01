@@ -217,6 +217,53 @@
         />
         <span class="text-[12px] mt-1">{{ t("luu") }}</span>
       </q-btn>
+      <q-btn
+        no-caps
+        stack
+        :disable="
+              !realIdCurrentSeason ||
+              !data ||
+              !currentDataCache?.response! ||
+              !currentChap ||
+              stateOffline === undefined
+            "
+        class="bg-[rgba(113,113,113,0.3)] mr-4 text-weight-normal"
+        @click=";(stateOffline ? remove : download)()"
+      >
+        <template v-if="!stateOffline">
+          <template v-if="stateProgress && Array.isArray(stateProgress)">
+            <q-circular-progress
+              show-value
+              class="text-white"
+              :value="(stateProgress[2] / stateProgress[3]) * 100"
+              size="28px"
+              color="main"
+            >
+              <span class="text-10px"
+                >{{
+                  Math.round((stateProgress[2] / stateProgress[3]) * 100)
+                }}%</span
+              >
+            </q-circular-progress>
+          </template>
+          <i-fluent-arrow-download-16-regular v-else width="28" height="28" />
+        </template>
+        <template v-else>
+          <i-fluent-checkmark-underline-circle-16-regular
+            width="28"
+            height="28"
+          />
+        </template>
+        <span class="text-[12px] mt-1">{{
+          stateOffline
+            ? "Xóa tập"
+            : stateProgress
+            ? Array.isArray(stateProgress)
+              ? "Đang tải"
+              : "Lỗi"
+            : "Tải xuống"
+        }}</span>
+      </q-btn>
     </div>
 
     <div
@@ -1939,6 +1986,69 @@ const skEpisode = computedAsync<ShallowReactive<SkEpisode> | null>(
   null,
   { onError: WARN, shallow: true, lazy: true }
 )
+
+// ============== download video ===============
+const refreshStateOffline = shallowRef(0)
+const stateOffline = computedAsync(
+  () => {
+    /** @track */
+    // eslint-disable-next-line no-unused-expressions
+    refreshStateOffline.value
+    if (!realIdCurrentSeason.value || !currentChap.value) return null
+    return hasVideoOffline(realIdCurrentSeason.value, currentChap.value)
+  },
+  undefined,
+  { onError: WARN, lazy: true, shallow: true }
+)
+const vdmStoreRef = shallowRef<ReturnType<
+  typeof import("stores/vdm").useVDMStore
+> | null>(null)
+const stateProgress = computed(() => {
+  if (!vdmStoreRef.value || !realIdCurrentSeason.value || !currentChap.value)
+    return null
+  return vdmStoreRef.value?.getProgress(
+    realIdCurrentSeason.value,
+    currentChap.value
+  )
+})
+async function download() {
+  const { useVDMStore } = await import("stores/vdm")
+  vdmStoreRef.value ??= useVDMStore()
+  try {
+    await vdmStoreRef.value.download(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      realIdCurrentSeason.value!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      data.value!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      currentDataCache.value!.response!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      currentChap.value!
+    )
+    refreshStateOffline.value++
+    $q.notify({
+      message: "Đã tải xong video",
+      caption: "Bạn có thể yên tâm đóng cửa sổ này",
+      position: "bottom-left",
+    })
+  } catch (err) {
+    $q.notify({
+      message: "Tải video thất bại",
+      caption: err + "",
+      position: "bottom-left",
+    })
+  }
+}
+async function remove() {
+  const { useVDMStore } = await import("stores/vdm")
+  vdmStoreRef.value ??= useVDMStore()
+  if (!realIdCurrentSeason.value || !currentChap.value) return
+  await vdmStoreRef.value.confirmRemove(
+    realIdCurrentSeason.value,
+    currentChap.value
+  )
+  refreshStateOffline.value++
+}
 </script>
 
 <style lang="scss" scoped>
