@@ -1,10 +1,11 @@
-import { delMany, get, set } from "idb-keyval"
+import { delMany, get, set, setMany } from "idb-keyval"
 import { defineStore } from "pinia"
 import { Dialog, Notify } from "quasar"
 import { PlayerLink } from "src/apis/runs/ajax/player-link"
 import type { PhimId } from "src/apis/runs/phim/[id]"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { i18n } from "src/boot/i18n"
+import { bufferToBase64 } from "src/logic/buffer-to-b64"
 import { downloadToMp4 } from "src/logic/download-to-mp4"
 import { hasVideoOffline as has, initStore } from "src/logic/has-video-offline"
 import {
@@ -17,8 +18,11 @@ export interface VideoOfflineMeta {
   readonly size: number
   readonly saved_at: string
 }
-export interface SeasonOffline {
-  readonly dat: Readonly<Awaited<ReturnType<typeof PhimId>>>
+export interface SeasonOffline
+  extends Readonly<Awaited<ReturnType<typeof PhimId>>> {
+  readonly off: Readonly<Record<string, VideoOfflineMeta>>
+}
+export interface ChapsOffline extends Awaited<ReturnType<typeof PhimIdChap>> {
   readonly off: Readonly<Record<string, VideoOfflineMeta>>
 }
 async function questionQualityDownload(
@@ -62,10 +66,57 @@ async function questionQualityDownload(
   })
 }
 
+async function questionSaveToFile() {
+  return new Promise<boolean>((resolve, reject) => {
+    Dialog.create({
+      title: "Lưu vào",
+      message: "Anime sẽ lưu vào đâu",
+      options: {
+        type: "radio",
+        model: "device",
+        // inline: true
+        items: [
+          {
+            label: "Thiết bị - Bạn có thể mở hoặc chia sẻ chúng như tệp",
+            value: "device",
+            color: "secondary",
+            keepColor: true,
+            checkedIcon: "task_alt",
+            uncheckedIcon: "panorama_fish_eye"
+          },
+          {
+            label:
+              "Ứng dụng - Bạn có mở AnimeVsub ngay cả khi không có internet",
+            value: "app",
+            color: "secondary",
+            keepColor: true,
+            checkedIcon: "task_alt",
+            uncheckedIcon: "panorama_fish_eye"
+          }
+        ]
+      },
+      cancel: {
+        label: i18n.global.t("huy"),
+        noCaps: true,
+        color: "grey",
+        text: true,
+        flat: true,
+        rounded: true
+      },
+      ok: { color: "green", text: true, flat: true, rounded: true }
+    })
+      .onOk((data) => {
+        resolve(data === "device")
+      })
+      .onCancel(() => reject(new Error("Cancel by user")))
+      .onDismiss(() => reject(new Error("Cancel by user")))
+  })
+}
+
 async function getMetaChaps(realSeasonId: string) {
   return get(`${PREFIX_CHAPS}${realSeasonId}`, initStore()).then((data) =>
     data
-      ? (JSON.parse(data) as Awaited<ReturnType<typeof PhimIdChap>>)
+      ? (JSON.parse(data) as ChapsOffline)
       : Promise.reject(new Error("not_found"))
   )
 }
@@ -111,6 +162,8 @@ async function download(
       ? await questionQualityDownload(player.link)
       : player.link[0].file) + "#animevsub-vsub_extra"
 
+  const saveToFile = await questionSaveToFile()
+
   Notify.create({
     message: "Đang tải xuống...",
     caption: "Giữ cửa sổ này mở để tiếp tục",
@@ -128,6 +181,7 @@ async function download(
       season,
       chaps,
       currentChapId,
+      saveToFile,
       // eslint-disable-next-line functional/functional-parameters
       (...args) => {
         progressStore.set(`${currentChapId}@${realSeasonId}`, args)
@@ -180,9 +234,16 @@ async function remove(realSeasonId: string, currentChapId: string) {
     )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (season.off as unknown as any)[currentChapId]
-    await set(
-      `${PREFIX_SEASON}${realSeasonId}`,
-      JSON.stringify(season),
+
+    const oldChaps = await getMetaChaps(currentChapId)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (oldChaps.off as unknown as any)[currentChapId]
+
+    await setMany(
+      [
+        [`${PREFIX_SEASON}${realSeasonId}`, JSON.stringify(season)],
+        [`${PREFIX_CHAPS}${realSeasonId}`, JSON.stringify(oldChaps)]
+      ],
       initStore()
     )
   }
@@ -236,6 +297,20 @@ function confirmRemove(realSeasonId: string, currentChapId: string) {
   })
 }
 
+function getURL(path: string) {
+  return getFile(path).then(
+    (data) => `data:image;base64,${bufferToBase64(data as ArrayBuffer)}`
+  )
+}
+
+function getFile(path: string) {
+  return get(path, initStore()).then((data) => {
+    if (typeof data === "object") return data as ArrayBuffer
+
+    throw data
+  })
+}
+
 export const useVDMStore = defineStore("vdm", () => {
   // const queue = []
   // const dlStore = new Map<string, {
@@ -250,6 +325,8 @@ export const useVDMStore = defineStore("vdm", () => {
     getMetaSeason,
     getProgress,
     removeProgress,
-    confirmRemove
+    confirmRemove,
+    getURL,
+    getFile
   }
 })

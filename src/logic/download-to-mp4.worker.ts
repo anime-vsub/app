@@ -9,6 +9,7 @@ import {
   REGISTRY_OFFLINE
 } from "src/constants"
 import type { SeasonOffline, VideoOfflineMeta } from "src/stores/vdm"
+import { retryAsync } from "ts-retry"
 
 import { convertHlsToMP4 } from "./convert-hls-to-mp4"
 
@@ -19,7 +20,8 @@ async function download(
   realSeasonId: string,
   season: Awaited<ReturnType<typeof PhimId>>,
   chaps: Awaited<ReturnType<typeof PhimIdChap>>,
-  currentChapId: string
+  currentChapId: string,
+  saveToFile: boolean
 ) {
   const hlsContent = await fetch(url).then((res) =>
     res.ok ? res.text() : Promise.reject(res)
@@ -52,6 +54,10 @@ async function download(
     type: "video/mp4"
   }).arrayBuffer()
 
+  if (saveToFile) {
+    return buffer
+  }
+
   const datM: VideoOfflineMeta = {
     size: buffer.byteLength,
     saved_at: new Date().toString()
@@ -61,13 +67,32 @@ async function download(
     .then((data) => (data ? JSON.parse(data) : null))
     .catch(() => null)) as SeasonOffline | null
 
+  const posterBuffer =
+    season.poster || chaps.poster
+      ? await retryAsync(
+          () =>
+            fetch(
+              (season.poster || chaps.poster) + "#animevsub-vsub_extra"
+            ).then((res) => (res.ok ? res.arrayBuffer() : Promise.reject(res))),
+          { maxTry: 5, delay: 3_000 }
+        )
+      : undefined
+  const imageBuffer =
+    season.image || chaps.image
+      ? await retryAsync(
+          () =>
+            fetch((season.image || chaps.image) + "#animevsub-vsub_extra").then(
+              (res) => (res.ok ? res.arrayBuffer() : Promise.reject(res))
+            ),
+          { maxTry: 5, delay: 3_000 }
+        )
+      : undefined
+
   const seasonData: SeasonOffline = {
-    dat: {
-      ...season,
-      // prettier-ignore
-      poster: season.poster ? `file:/${PREFIX_POSTER}${realSeasonId}` : undefined,
-      image: `file:/${PREFIX_IMAGE}${realSeasonId}`
-    },
+    ...season,
+    // prettier-ignore
+    poster: posterBuffer ? `file:/${PREFIX_POSTER}${realSeasonId}` : undefined,
+    image: imageBuffer ? `file:/${PREFIX_IMAGE}${realSeasonId}` : "",
     off: {
       ...oldSeasonData?.off,
       [currentChapId]: datM
@@ -80,8 +105,12 @@ async function download(
 
   await setMany(
     [
+      // season data
       [`${PREFIX_SEASON}${realSeasonId}`, JSON.stringify(seasonData)],
-      [`${PREFIX_CHAPS}${realSeasonId}`, JSON.stringify(chaps)],
+      // chaps data
+      // prettier-ignore
+      [`${PREFIX_CHAPS}${realSeasonId}`, JSON.stringify({...chaps, poster: seasonData.poster, image: seasonData.image , off: seasonData.off})],
+      // registry global
       [
         `${REGISTRY_OFFLINE}`,
         JSON.stringify({
@@ -89,8 +118,15 @@ async function download(
           [realSeasonId]: datM
         })
       ],
+      // file video
       [filename, buffer],
-      [filename + "_m", JSON.stringify(datM)]
+      // file meta video
+      [filename + "_m", JSON.stringify(datM)],
+      // file image poster
+      // prettier-ignore
+      ...posterBuffer ? [[`${PREFIX_POSTER}${realSeasonId}`, posterBuffer]] as [string, ArrayBuffer][] : [],
+      // file image image
+      [`${PREFIX_IMAGE}${realSeasonId}`, imageBuffer]
     ],
     store
   )
@@ -109,17 +145,21 @@ addEventListener(
     season: Awaited<ReturnType<typeof PhimId>>
     chaps: Awaited<ReturnType<typeof PhimIdChap>>
     currentChapId: string
+    saveToFile: boolean
   }>) => {
     try {
-      await download(
+      const buffer = await download(
         data.url,
         data.filename,
         data.realSeasonId,
         data.season,
         data.chaps,
-        data.currentChapId
+        data.currentChapId,
+        data.saveToFile
       )
-      postMessage({ ok: true })
+
+      if (buffer) postMessage({ ok: true, buffer }, { transfer: [buffer] })
+      else postMessage({ ok: true })
     } catch (err) {
       console.error(err)
       postMessage({ ok: false, message: err + "" })
