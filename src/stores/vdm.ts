@@ -1,38 +1,23 @@
-import { delMany, get, set, setMany } from "idb-keyval"
 import { defineStore } from "pinia"
 import { Dialog, Notify } from "quasar"
 import { PlayerLink } from "src/apis/runs/ajax/player-link"
 import type { PhimId } from "src/apis/runs/phim/[id]"
 import type { PhimIdChap } from "src/apis/runs/phim/[id]/[chap]"
 import { i18n } from "src/boot/i18n"
-import { bufferToBase64 } from "src/logic/buffer-to-b64"
 import { downloadToMp4 } from "src/logic/download-to-mp4"
-import { hasVideoOffline as has, initStore } from "src/logic/has-video-offline"
 import {
   registerBeforeUnload,
   unRegisterBeforeUnload
 } from "src/logic/registry-before-unload"
 // import { convertHlsToMP4 } from "src/logic/convert-hls-to-mp4"
 
-export interface VideoOfflineMeta {
-  readonly size: number
-  readonly saved_at: string
-}
-export interface SeasonOffline
-  extends Readonly<Awaited<ReturnType<typeof PhimId>>> {
-  readonly off: Readonly<Record<string, VideoOfflineMeta>>
-}
-export interface ChapsOffline extends Awaited<ReturnType<typeof PhimIdChap>> {
-  readonly off: Readonly<Record<string, VideoOfflineMeta>>
-}
 async function questionQualityDownload(
   list: Awaited<ReturnType<typeof PlayerLink>>["link"]
 ) {
   return new Promise<string>((resolve, reject) => {
     Dialog.create({
-      title: "Chất lượng tải xuống",
-      message:
-        "Chất lượng càng cao thì chiếm dụng bộ nhớ càng lớn và thời gian tải càng lâu",
+      title: i18n.global.t("chat-luong-tai-xuong"),
+      message: i18n.global.t("msg-ques-quality"),
       options: {
         type: "radio",
         model: list[0].file,
@@ -61,73 +46,57 @@ async function questionQualityDownload(
       .onOk((data) => {
         resolve(data)
       })
-      .onCancel(() => reject(new Error("Cancel by user")))
-      .onDismiss(() => reject(new Error("Cancel by user")))
+      .onCancel(() => reject(new Error(i18n.global.t("cancel-by-user"))))
+      .onDismiss(() => reject(new Error(i18n.global.t("cancel-by-user"))))
   })
 }
 
-async function questionSaveToFile() {
-  return new Promise<boolean>((resolve, reject) => {
-    Dialog.create({
-      title: "Lưu vào",
-      message: "Anime sẽ lưu vào đâu",
-      options: {
-        type: "radio",
-        model: "device",
-        // inline: true
-        items: [
-          {
-            label: "Thiết bị - Bạn có thể mở hoặc chia sẻ chúng như tệp",
-            value: "device",
-            color: "secondary",
-            keepColor: true,
-            checkedIcon: "task_alt",
-            uncheckedIcon: "panorama_fish_eye"
-          },
-          {
-            label:
-              "Ứng dụng - Bạn có mở AnimeVsub ngay cả khi không có internet",
-            value: "app",
-            color: "secondary",
-            keepColor: true,
-            checkedIcon: "task_alt",
-            uncheckedIcon: "panorama_fish_eye"
-          }
-        ]
-      },
-      cancel: {
-        label: i18n.global.t("huy"),
-        noCaps: true,
-        color: "grey",
-        text: true,
-        flat: true,
-        rounded: true
-      },
-      ok: { color: "green", text: true, flat: true, rounded: true }
-    })
-      .onOk((data) => {
-        resolve(data === "device")
-      })
-      .onCancel(() => reject(new Error("Cancel by user")))
-      .onDismiss(() => reject(new Error("Cancel by user")))
-  })
-}
-
-async function getMetaChaps(realSeasonId: string) {
-  return get(`${PREFIX_CHAPS}${realSeasonId}`, initStore()).then((data) =>
-    data
-      ? (JSON.parse(data) as ChapsOffline)
-      : Promise.reject(new Error("not_found"))
-  )
-}
-
-async function getMetaSeason(realSeasonId: string) {
-  return get(`${PREFIX_SEASON}${realSeasonId}`, initStore()).then((data) =>
-    data
-      ? (JSON.parse(data) as SeasonOffline)
-      : Promise.reject(new Error("not_found"))
-  )
-}
+// async function questionSaveToFile() {
+//   return new Promise<boolean>((resolve, reject) => {
+//     Dialog.create({
+//       title: "Lưu vào",
+//       message: "Anime sẽ lưu vào đâu",
+//       options: {
+//         type: "radio",
+//         model: "device",
+//         // inline: true
+//         items: [
+//           {
+//             label: "Thiết bị - Bạn có thể mở hoặc chia sẻ chúng như tệp",
+//             value: "device",
+//             color: "secondary",
+//             keepColor: true,
+//             checkedIcon: "task_alt",
+//             uncheckedIcon: "panorama_fish_eye"
+//           },
+//           {
+//             label:
+//               "Ứng dụng - Bạn có mở AnimeVsub ngay cả khi không có internet",
+//             value: "app",
+//             color: "secondary",
+//             keepColor: true,
+//             checkedIcon: "task_alt",
+//             uncheckedIcon: "panorama_fish_eye"
+//           }
+//         ]
+//       },
+//       cancel: {
+//         label: i18n.global.i18n.global.t("huy"),
+//         noCaps: true,
+//         color: "grey",
+//         text: true,
+//         flat: true,
+//         rounded: true
+//       },
+//       ok: { color: "green", text: true, flat: true, rounded: true }
+//     })
+//       .onOk((data) => {
+//         resolve(data === "device")
+//       })
+//       .onCancel(() => reject(new Error("Cancel by user")))
+//       .onDismiss(() => reject(new Error("Cancel by user")))
+//   })
+// }
 
 const progressStore = shallowReactive(
   new Map<
@@ -150,10 +119,7 @@ async function download(
 ) {
   // get episode
   const currentChap = chaps.chaps.find((chap) => chap.id === currentChapId)
-  if (!currentChap) throw new Error(`Chap ${currentChapId} not found`)
-
-  if (await has(realSeasonId, currentChapId))
-    throw new Error("Video đã tải xuống trước đó")
+  if (!currentChap) throw new Error(i18n.global.t("chap-not-found", [currentChapId]))
 
   const player = await PlayerLink(currentChap)
 
@@ -162,11 +128,11 @@ async function download(
       ? await questionQualityDownload(player.link)
       : player.link[0].file) + "#animevsub-vsub_extra"
 
-  const saveToFile = await questionSaveToFile()
+  // const saveToFile = await questionSaveToFile()
 
   Notify.create({
-    message: "Đang tải xuống...",
-    caption: "Giữ cửa sổ này mở để tiếp tục",
+    message: i18n.global.t("dlg"),
+    caption: i18n.global.t("msg-keep-tab"),
     position: "bottom-left"
   })
   registerBeforeUnload()
@@ -176,12 +142,9 @@ async function download(
   try {
     await downloadToMp4(
       hlsUrl,
-      `${PREFIX_VIDEO}${currentChapId}@${realSeasonId}`,
-      realSeasonId,
       season,
       chaps,
       currentChapId,
-      saveToFile,
       // eslint-disable-next-line functional/functional-parameters
       (...args) => {
         progressStore.set(`${currentChapId}@${realSeasonId}`, args)
@@ -196,119 +159,12 @@ async function download(
   }
 }
 
-async function remove(realSeasonId: string, currentChapId: string) {
-  const season = await getMetaSeason(realSeasonId)
-  const off = Object.keys(season.off)
-
-  removeProgress(realSeasonId, currentChapId)
-
-  if (off.length === 1 ? off[0] === currentChapId : off.length === 0) {
-    // delete all
-    await delMany(
-      [
-        `${PREFIX_VIDEO}${currentChapId}@${realSeasonId}`,
-        `${PREFIX_VIDEO}${currentChapId}@${realSeasonId}_m`,
-        `${PREFIX_SEASON}${realSeasonId}`,
-        `${PREFIX_CHAPS}${realSeasonId}`,
-        `${PREFIX_POSTER}${realSeasonId}`,
-        `${PREFIX_IMAGE}${realSeasonId}`
-      ],
-      initStore()
-    )
-
-    const oldRegistry = (await get(`${REGISTRY_OFFLINE}`, initStore())
-      .then((data) => (data ? JSON.parse(data) : null))
-      .catch(() => null)) as Record<string, VideoOfflineMeta> | null
-
-    if (oldRegistry) {
-      delete oldRegistry[realSeasonId]
-      await set(`${REGISTRY_OFFLINE}`, JSON.stringify(oldRegistry), initStore())
-    }
-  } else {
-    await delMany(
-      [
-        `${PREFIX_VIDEO}${currentChapId}@${realSeasonId}`,
-        `${PREFIX_VIDEO}${currentChapId}@${realSeasonId}_m`
-      ],
-      initStore()
-    )
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete (season.off as unknown as any)[currentChapId]
-
-    const oldChaps = await getMetaChaps(currentChapId)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete (oldChaps.off as unknown as any)[currentChapId]
-
-    await setMany(
-      [
-        [`${PREFIX_SEASON}${realSeasonId}`, JSON.stringify(season)],
-        [`${PREFIX_CHAPS}${realSeasonId}`, JSON.stringify(oldChaps)]
-      ],
-      initStore()
-    )
-  }
-}
-
 function getProgress(realSeasonId: string, currentChapId: string) {
   return progressStore.get(`${currentChapId}@${realSeasonId}`)
 }
 
 function removeProgress(realSeasonId: string, currentChapId: string) {
   return progressStore.delete(`${currentChapId}@${realSeasonId}`)
-}
-
-function confirmRemove(realSeasonId: string, currentChapId: string) {
-  return new Promise<void>((resolve, reject) => {
-    Dialog.create({
-      title: "Bạn muốn xóa video chứ?",
-      message: "Sau khi xóa bạn không thể xem tập này ngoại tuyến nữa",
-      persistent: true,
-      cancel: {
-        label: i18n.global.t("huy"),
-        noCaps: true,
-        color: "grey",
-        text: true,
-        flat: true,
-        rounded: true
-      },
-      ok: { color: "green", text: true, flat: true, rounded: true }
-    })
-      .onOk(async () => {
-        try {
-          await remove(realSeasonId, currentChapId)
-
-          Notify.create({
-            message: "Đã xoá video",
-            caption: "Bạn không thể xem tập này ngoại tuyến nữa",
-            position: "bottom-left"
-          })
-
-          resolve()
-        } catch (err) {
-          reject(err)
-          Notify.create({
-            message: "Xóa video thất bại",
-            caption: err + "",
-            position: "bottom-left"
-          })
-        }
-      })
-      .onCancel(resolve)
-  })
-}
-
-function getURL(path: string) {
-  return getFile(path).then(
-    (data) => `data:image;base64,${bufferToBase64(data as ArrayBuffer)}`
-  )
-}
-
-function getFile(path: string) {
-  return get(path, initStore()).then((data) => {
-    if (typeof data === "object") return data as ArrayBuffer
-
-    throw data
-  })
 }
 
 export const useVDMStore = defineStore("vdm", () => {
@@ -318,15 +174,8 @@ export const useVDMStore = defineStore("vdm", () => {
   // }>()
 
   return {
-    has,
     download,
-    remove,
-    getMetaChaps,
-    getMetaSeason,
     getProgress,
-    removeProgress,
-    confirmRemove,
-    getURL,
-    getFile
+    removeProgress
   }
 })

@@ -315,5 +315,14 @@
   "val-yeu-cau": "{0} yêu cầu",
   "giai-quyet-truoc-yeu-cau-mang": "Giải quyết trước yêu cầu mạng",
   "nong": "Nóng",
-  "msg-pre-resolve": "Chế độ giải quyết yêu cầu mạng (yêu cầu giải quyết càng cao thì càng tốn tài nguyên phần cứng)"
+  "msg-pre-resolve": "Chế độ giải quyết yêu cầu mạng (yêu cầu giải quyết càng cao thì càng tốn tài nguyên phần cứng)",
+  "da-tai-xong-video": "Đã tải xong video",
+  "msg-close-tab": "Bạn có thể yên tâm đóng cửa sổ này",
+  "tai-video-that-bai": "Tải video thất bại",
+  "chat-luong-tai-xuong": "Chất lượng tải xuống",
+  "msg-ques-quality": "Chất lượng càng cao thì chiếm dụng bộ nhớ càng lớn và thời gian tải càng lâu",
+  "cancel-by-user": "Cancel by user",
+  "dlg": "Đang tải xuống...",
+  "msg-keep-tab": "Giữ cửa sổ này mở để tiếp tục",
+  "chap-not-found": "Chap {0} not found"
 }

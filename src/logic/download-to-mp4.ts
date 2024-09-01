@@ -6,12 +6,9 @@ import Worker from "./download-to-mp4.worker?worker"
 
 export function downloadToMp4(
   url: string,
-  filename: string,
-  realSeasonId: string,
   season: Awaited<ReturnType<typeof PhimId>>,
   chaps: Awaited<ReturnType<typeof PhimIdChap>>,
   currentChapId: string,
-  saveToFile: boolean,
   onProgress: (
     current: number,
     total: number,
@@ -76,13 +73,7 @@ export function downloadToMp4(
     // worker.onmessageerror = (event) => reject(event)
 
     worker.postMessage({
-      url,
-      filename,
-      realSeasonId,
-      season,
-      chaps,
-      currentChapId,
-      saveToFile
+      url
     })
   })
 }

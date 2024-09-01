@@ -224,44 +224,33 @@
               !realIdCurrentSeason ||
               !data ||
               !currentDataCache?.response! ||
-              !currentChap ||
-              stateOffline === undefined
+              !currentChap
             "
         class="bg-[rgba(113,113,113,0.3)] mr-4 text-weight-normal"
-        @click=";(stateOffline ? remove : download)()"
+        @click="download"
       >
-        <template v-if="!stateOffline">
-          <template v-if="stateProgress && Array.isArray(stateProgress)">
-            <q-circular-progress
-              show-value
-              class="text-white"
-              :value="(stateProgress[2] / stateProgress[3]) * 100"
-              size="28px"
-              color="main"
+        <template v-if="stateProgress && Array.isArray(stateProgress)">
+          <q-circular-progress
+            show-value
+            class="text-white"
+            :value="(stateProgress[2] / stateProgress[3]) * 100"
+            size="28px"
+            color="main"
+          >
+            <span class="text-12px mt-1"
+              >{{
+                Math.round((stateProgress[2] / stateProgress[3]) * 100)
+              }}%</span
             >
-              <span class="text-10px"
-                >{{
-                  Math.round((stateProgress[2] / stateProgress[3]) * 100)
-                }}%</span
-              >
-            </q-circular-progress>
-          </template>
-          <i-fluent-arrow-download-16-regular v-else width="28" height="28" />
+          </q-circular-progress>
         </template>
-        <template v-else>
-          <i-fluent-checkmark-underline-circle-16-regular
-            width="28"
-            height="28"
-          />
-        </template>
+        <i-fluent-arrow-download-16-regular v-else width="28" height="28" />
         <span class="text-[12px] mt-1">{{
-          stateOffline
-            ? "Xóa tập"
-            : stateProgress
+          stateProgress
             ? Array.isArray(stateProgress)
               ? "Đang tải"
               : "Lỗi"
-            : "Tải xuống"
+            : "Tải"
         }}</span>
       </q-btn>
     </div>
@@ -1988,18 +1977,6 @@ const skEpisode = computedAsync<ShallowReactive<SkEpisode> | null>(
 )
 
 // ============== download video ===============
-const refreshStateOffline = shallowRef(0)
-const stateOffline = computedAsync(
-  () => {
-    /** @track */
-    // eslint-disable-next-line no-unused-expressions
-    refreshStateOffline.value
-    if (!realIdCurrentSeason.value || !currentChap.value) return null
-    return hasVideoOffline(realIdCurrentSeason.value, currentChap.value)
-  },
-  undefined,
-  { onError: WARN, lazy: true, shallow: true }
-)
 const vdmStoreRef = shallowRef<ReturnType<
   typeof import("stores/vdm").useVDMStore
 > | null>(null)
@@ -2025,29 +2002,18 @@ async function download() {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       currentChap.value!
     )
-    refreshStateOffline.value++
     $q.notify({
-      message: "Đã tải xong video",
-      caption: "Bạn có thể yên tâm đóng cửa sổ này",
-      position: "bottom-left",
+      message: t("da-tai-xong-video"),
+      caption: t("msg-close-tab"),
+      position: "bottom-left"
     })
   } catch (err) {
     $q.notify({
-      message: "Tải video thất bại",
+      message: t("tai-video-that-bai"),
       caption: err + "",
-      position: "bottom-left",
+      position: "bottom-left"
     })
   }
-}
-async function remove() {
-  const { useVDMStore } = await import("stores/vdm")
-  vdmStoreRef.value ??= useVDMStore()
-  if (!realIdCurrentSeason.value || !currentChap.value) return
-  await vdmStoreRef.value.confirmRemove(
-    realIdCurrentSeason.value,
-    currentChap.value
-  )
-  refreshStateOffline.value++
 }
 </script>
 

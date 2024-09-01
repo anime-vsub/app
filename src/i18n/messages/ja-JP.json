@@ -300,7 +300,14 @@
       "danh-sach-phat-khong-ton-tai": "",
       "loi-khong-xac-dinh-khi": "",
       "require_login_to": "",
-      "xoa-thong-bao-that-bai": ""
+      "xoa-thong-bao-that-bai": "",
+      "__i18n_ally_root__": {
+        "__i18n_ally_root__": {
+          "loi-khong-xac-dinh-khi": "",
+          "require_login_to": "",
+          "xoa-thong-bao-that-bai": ""
+        }
+      }
     }
   },
   "msg-err-load-cmt": "コメントの読み込み中にエラーが発生しました",
