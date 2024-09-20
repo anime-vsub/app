@@ -23,6 +23,7 @@
     "quasar": "quasar",
     "icongenie": "icongenie generate -m pwa -i public/favicon.png -b meta/app_bg@1024x500-blured.png --png-color 000 --splashscreen-color 000   --skip-trim",
     "gen-md-screenshot": "tsx ./scripts/gen-md-screenshot.ts",
+    "update:host-curl": "bun run scripts/update-host-curl.ts",
     "release": "tsx scripts/release.ts",
     "release:pwa": "bumpp package.json --commit \"(chore): release PWA %s\" --tag \"pwa-v%s\" --push",
     "ci": "bun run format && bun run lint --fix && bun run typing"
@@ -109,6 +110,7 @@
     "@quasar/cli": "^2.4.1",
     "@quasar/icongenie": "^4.0.0",
     "@tachibana-shin/eslint-config": "1.0.7",
+    "@types/bun": "^1.1.9",
     "@types/group-array": "^1.0.1",
     "@types/js-cookie": "^3.0.2",
     "@types/lz-string": "^1.3.34",

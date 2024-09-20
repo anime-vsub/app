@@ -44,11 +44,13 @@ export const TIMEOUT_GET_LAST_EP_VIEWING_IN_STORE = 5_000 // 5s
 
 export const REGEXP_OLD_HOST_CURL = /animevietsub\.(?:\w+)/i
 
+// @host
 export const HOST_CURL = [
   97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46, 117, 107
 ]
   .map((val) => String.fromCharCode(val))
   .join("")
+// @end
 export const C_URL =
   [104, 116, 116, 112, 115, 58, 47, 47]
     .map((val) => String.fromCharCode(val))
