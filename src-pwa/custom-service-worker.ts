@@ -24,7 +24,7 @@ declare const self: ServiceWorkerGlobalScope & typeof globalThis
 void self.skipWaiting()
 clientsClaim()
 
-addEventListener("activate", (event) => {
+addEventListener("activate", (event: ExtendableEvent) => {
   event.waitUntil(clients.claim())
 })
 
