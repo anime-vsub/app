@@ -46,11 +46,11 @@ export const REGEXP_OLD_HOST_CURL = /animevietsub\.(?:\w+)/i
 
 // @host
 export const HOST_CURL = [
-  97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46, 112, 117, 98
+  97, 110, 105, 109, 101, 118, 105, 101, 116, 115, 117, 98, 46, 110, 108
 ]
   .map((val) => String.fromCharCode(val))
   .join("")
-// @end// @end// @end// @end
+// @end// @end// @end// @end// @end
 export const C_URL =
   [104, 116, 116, 112, 115, 58, 47, 47]
     .map((val) => String.fromCharCode(val))
