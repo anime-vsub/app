@@ -50,7 +50,7 @@ export const HOST_CURL = [
 ]
   .map((val) => String.fromCharCode(val))
   .join("")
-// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end
+// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end// @end
 export const C_URL =
   [104, 116, 116, 112, 115, 58, 47, 47]
     .map((val) => String.fromCharCode(val))
