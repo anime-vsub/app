@@ -1,11 +1,11 @@
-import wasmURL from "@ffmpeg/core/wasm?url"
-import coreURL from "@ffmpeg/core?url"
-import { FFmpeg } from "@ffmpeg/ffmpeg"
-import { parse, stringify } from "hls-parser"
-import pLimit from "p-limit"
-import sha256 from "sha256"
-import type { RetryOptions } from "ts-retry"
-import { retryAsync } from "ts-retry"
+import wasmURL from "@ffmpeg/core/wasm?url";
+import coreURL from "@ffmpeg/core?url";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { parse, stringify } from "hls-parser";
+import pLimit from "p-limit";
+import sha256 from "sha256";
+import type { RetryOptions } from "ts-retry";
+import { retryAsync } from "ts-retry";
 
 /**
  * Converts an HLS (HTTP Live Streaming) manifest to an MP4 file.
@@ -29,80 +29,80 @@ export async function convertHlsToMP4(
   concurrency = 20,
   retryOptions?: RetryOptions
 ) {
-  const ffmpeg = new FFmpeg()
+  const ffmpeg = new FFmpeg();
 
-  const hash = sha256(m3u8Content)
-  const manifest = parse(m3u8Content)
+  const hash = sha256(m3u8Content);
+  const manifest = parse(m3u8Content);
 
   if (!("segments" in manifest))
-    throw new Error("Can't support master playlist")
+    throw new Error("Can't support master playlist");
 
   if (import.meta.env.DEV)
     ffmpeg.on("log", ({ message }) => {
-      console.log(`[@ffmpeg/ffmpeg]: ${message}`)
-    })
+      console.log(`[@ffmpeg/ffmpeg]: ${message}`);
+    });
 
   if (import.meta.env.DEV)
     ffmpeg.on("progress", ({ progress, time }) => {
-      console.log(`${progress * 100} % (transcoded time: ${time / 1000000} s)`)
-    })
+      console.log(`${progress * 100} % (transcoded time: ${time / 1000000} s)`);
+    });
 
   await ffmpeg.load({
     coreURL,
-    wasmURL
-  })
+    wasmURL,
+  });
 
-  const limit = pLimit(concurrency)
+  const limit = pLimit(concurrency);
 
   const timeDuration = manifest.segments.reduce(
     (prev, cur) => cur.duration + prev,
     0
-  )
+  );
   // Download all the TS segments
-  let downloaded = 0
-  let timeCurrent = 0
+  let downloaded = 0;
+  let timeCurrent = 0;
   await Promise.all(
     manifest.segments.map((segment, i) =>
       limit(() =>
         retryAsync<void>(async () => {
-          const path = `${hash}-${i}.ts`
+          const path = `${hash}-${i}.ts`;
           let response = await fetchFile(segment.uri);
-          response = response.slice(
-            indexOfIEND(response.buffer as ArrayBuffer)
-          );
-          await ffmpeg.writeFile(path, response)
-          segment.uri = path
-          downloaded++
-          timeCurrent += segment.duration
+          response =
+            indexOfIEND(response) !== 1
+              ? response.slice(indexOfIEND(response))
+              : response;
+          await ffmpeg.writeFile(path, response);
+          segment.uri = path;
+          downloaded++;
+          timeCurrent += segment.duration;
           onProgress(
             downloaded,
             manifest.segments.length,
             timeCurrent,
             timeDuration
-          )
+          );
         }, retryOptions)
       )
     )
-  )
-  await ffmpeg.writeFile(`${hash}-media.m3u8`, stringify(manifest))
+  );
+  await ffmpeg.writeFile(`${hash}-media.m3u8`, stringify(manifest));
 
   await ffmpeg.exec([
     "-i",
     `${hash}-media.m3u8`,
     ..."-acodec copy -vcodec copy".split(" "),
-    `${hash}-output.mp4`
-  ])
+    `${hash}-output.mp4`,
+  ]);
 
   // Retrieve the output file
-  const mp4Data = await ffmpeg.readFile(`${hash}-output.mp4`)
+  const mp4Data = await ffmpeg.readFile(`${hash}-output.mp4`);
 
-  return mp4Data
+  return mp4Data;
 }
 const IEND_IMAGE = Uint8Array.from([
   0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 ]);
-function indexOfIEND(data: ArrayBuffer): number {
-  const buf = new Uint8Array(data);
+function indexOfIEND(buf: Uint8Array<ArrayBufferLike>): number {
   for (let i = 0; i < buf.length - IEND_IMAGE.length; i++) {
     let found = true;
     for (let j = 0; j < IEND_IMAGE.length; j++) {
@@ -117,6 +117,3 @@ function indexOfIEND(data: ArrayBuffer): number {
   }
   return -1;
 }
-
-
-
