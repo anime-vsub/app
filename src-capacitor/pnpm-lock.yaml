@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@boengli/capacitor-fullscreen':
+        specifier: ^0.0.19
+        version: 0.0.19(@capacitor/core@6.2.0)
       '@capacitor-community/firebase-analytics':
         specifier: ^6.0.0
         version: 6.0.0(@capacitor/core@6.2.0)
@@ -61,6 +64,11 @@ importers:
         version: 3.0.4
 
 packages:
+
+  '@boengli/capacitor-fullscreen@0.0.19':
+    resolution: {integrity: sha512-bHw/iU3BMpmwoOz3YUoICbHUecU4pbfKuNXnGF65odVGb0+JF6Mnjj3W0eHPFzPSqvaCdSvEQszzFFflca/K5Q==}
+    peerDependencies:
+      '@capacitor/core': '>=7.0.0'
 
   '@capacitor-community/firebase-analytics@6.0.0':
     resolution: {integrity: sha512-3/B4V8V6exw4pits9H5JWqfyzvgsoW+NfxdaJoimNVx2YcpDYJtYj79DsmuMe5DXf6mxRIbQ+InxfGV4vwoxDA==}
@@ -494,6 +502,10 @@ packages:
     resolution: {integrity: sha512-p4a9I6X6nu6IhoGmBqAcbJy1mlC4j27vEPZX9F4L4/vZT3Lyq1VkFHw/V/PUcB9Buo+DG3iHkT0x3Qya58zc3g==}
 
 snapshots:
+
+  '@boengli/capacitor-fullscreen@0.0.19(@capacitor/core@6.2.0)':
+    dependencies:
+      '@capacitor/core': 6.2.0
 
   '@capacitor-community/firebase-analytics@6.0.0(@capacitor/core@6.2.0)':
     dependencies:
