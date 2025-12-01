@@ -1,5 +1,6 @@
 import type { Cheerio } from "cheerio"
 import type { Element } from "domhandler"
+
 import { getInfoAnchor } from "./getInfoAnchor"
 import { getPathName } from "./getPathName"
 import { int } from "./int"
