@@ -999,7 +999,7 @@ import {
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
-
+import { Fullscreen } from "@boengli/capacitor-fullscreen"
 import { getSktAt } from "../logic/get-skt-at"
 import { loadVttSk } from "../logic/load-vtt-sk"
 
@@ -1225,34 +1225,18 @@ const setArtFullscreen = async (fullscreen: boolean) => {
   if (fullscreen) {
     if (IS_IOS) {
       await ScreenOrientation.lock({ type: OrientationType.LANDSCAPE })
-    } else {
+    } else if (!isNative) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       await playerWrapRef.value!.requestFullscreen()
     }
     if (isNative) {
-      if (!IS_IOS) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ;(screen.orientation as unknown as any).lock("landscape")
-      }
-      StatusBar.hide()
-      NavigationBar.hide()
-      StatusBar.setOverlaysWebView({
-        overlay: true,
-      })
+      await Fullscreen.activateImmersiveMode()
     }
   } else {
     if (IS_IOS) await ScreenOrientation.unlock()
-    else await document.exitFullscreen()
+    else if (!isNative) await document.exitFullscreen()
     if (isNative) {
-      if (!IS_IOS) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ;(screen.orientation as unknown as any).unlock()
-      }
-      StatusBar.show()
-      NavigationBar.show()
-      StatusBar.setOverlaysWebView({
-        overlay: false,
-      })
+      await Fullscreen.deactivateImmersiveMode()
     }
   }
 
@@ -1752,7 +1736,7 @@ function remount(resetCurrentTime?: boolean, noDestroy = false) {
                   if (
                     err instanceof TypeError &&
                     err.message === "Failed to fetch" &&
-                    await isConnectedToNetwork()
+                    (await isConnectedToNetwork())
                   ) {
                     // url expired
                     セグメント解決済み.clear()
