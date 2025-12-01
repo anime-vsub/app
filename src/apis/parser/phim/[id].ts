@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import type { Cheerio, CheerioAPI, Element } from "cheerio"
+import type { Cheerio, CheerioAPI } from "cheerio"
 
+import type { Element } from "domhandler"
 import { getInfoAnchor } from "../__helpers__/getInfoAnchor"
 import { getInfoTPost } from "../__helpers__/getInfoTPost"
 import { getPathName } from "../__helpers__/getPathName"
