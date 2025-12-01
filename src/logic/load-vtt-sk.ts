@@ -14,7 +14,7 @@ export async function loadVttSk(url: string) {
       x: -x,
       y: -y,
       w,
-      h
+      h,
     }
   })
 }

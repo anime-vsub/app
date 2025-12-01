@@ -388,7 +388,7 @@ const dataStore = shallowReactive<
       }
   >
 >(new Map())
- 
+
 let _dataInStoreTmp: ReturnType<typeof dataStore.get>
 
 async function fetchRankType(type: string) {

@@ -13,7 +13,6 @@ export async function PlayerFB(episodeId: string) {
 
   const data = JSON.parse(json)
 
-   
   if (!data.success) throw new Error("Failed load player facebook")
 
   const config = await PostWorker<typeof AjaxPlayerFBParser>(Worker, data.html)

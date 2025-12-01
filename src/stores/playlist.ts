@@ -19,7 +19,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
 
       const { data } = await supabase
         .rpc("get_list_playlist", {
-          user_uid: authStore.uid
+          user_uid: authStore.uid,
         })
         .throwOnError()
 
@@ -31,7 +31,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       shallow: true,
       onError(e) {
         playlistsError.value = e
-      }
+      },
     }
   )
 
@@ -39,7 +39,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("tao-danh-sach-phat")
+          i18n.global.t("tao-danh-sach-phat"),
         ])
       )
 
@@ -47,7 +47,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       .rpc("create_playlist", {
         user_uid: authStore.uid,
         playlist_name: name,
-        is_public: isPublic
+        is_public: isPublic,
       })
       .single()
       .throwOnError()
@@ -60,14 +60,14 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat")
+          i18n.global.t("xoa-danh-sach-phat"),
         ])
       )
 
     await supabase
       .rpc("delete_playlist", {
         user_uid: authStore.uid,
-        playlist_id: id
+        playlist_id: id,
       })
       .throwOnError()
   }
@@ -76,7 +76,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat")
+          i18n.global.t("xoa-danh-sach-phat"),
         ])
       )
 
@@ -84,7 +84,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       .rpc("rename_playlist", {
         user_uid: authStore.uid,
         old_name: oldName,
-        new_name: newName
+        new_name: newName,
       })
       .throwOnError()
   }
@@ -93,7 +93,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat")
+          i18n.global.t("xoa-danh-sach-phat"),
         ])
       )
 
@@ -101,7 +101,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       .rpc("set_description_playlist", {
         user_uid: authStore.uid,
         playlist_id: id,
-        playlist_description: description
+        playlist_description: description,
       })
       .throwOnError()
   }
@@ -110,7 +110,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("xoa-danh-sach-phat")
+          i18n.global.t("xoa-danh-sach-phat"),
         ])
       )
 
@@ -118,7 +118,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       .rpc("set_public_playlist", {
         user_uid: authStore.uid,
         playlist_id: id,
-        is_public: isPublic
+        is_public: isPublic,
       })
       .throwOnError()
   }
@@ -134,7 +134,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat")
+          i18n.global.t("theo-vao-danh-sach-phat"),
         ])
       )
 
@@ -148,7 +148,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
         p_name_chap: anime.name_chap,
         p_name_season: anime.name_season,
         p_poster: removeHostUrlImage(anime.poster),
-        p_season: anime.season
+        p_season: anime.season,
       })
       .single()
       .throwOnError()
@@ -159,7 +159,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       playlists.value![index] = {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ...playlists.value![index],
-        ...(data ?? {})
+        ...(data ?? {}),
       }
     }
   }
@@ -168,7 +168,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat")
+          i18n.global.t("theo-vao-danh-sach-phat"),
         ])
       )
 
@@ -176,7 +176,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       .rpc("delete_movie_playlist", {
         user_uid: authStore.uid,
         playlist_id: id,
-        p_season: season
+        p_season: season,
       })
       .throwOnError()
 
@@ -186,7 +186,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       playlists.value![index] = {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ...playlists.value![index],
-        ...(data ?? {})
+        ...(data ?? {}),
       }
     }
   }
@@ -195,7 +195,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat")
+          i18n.global.t("theo-vao-danh-sach-phat"),
         ])
       )
 
@@ -203,7 +203,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       .rpc("has_movie_playlists", {
         user_uid: authStore.uid,
         playlist_ids: ids,
-        season_id: season
+        season_id: season,
       })
       .throwOnError()
 
@@ -223,7 +223,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat")
+          i18n.global.t("theo-vao-danh-sach-phat"),
         ])
       )
 
@@ -233,7 +233,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
         playlist_id: id,
         sorter,
         page,
-        page_size: 30
+        page_size: 30,
       })
       .throwOnError()
 
@@ -242,7 +242,7 @@ export const usePlaylistStore = defineStore("playlist", () => {
       return {
         ...item,
         poster: addHostUrlImage(item.poster),
-        add_at: dayjs(item.add_at)
+        add_at: dayjs(item.add_at),
       }
     })
   }
@@ -251,14 +251,14 @@ export const usePlaylistStore = defineStore("playlist", () => {
     if (!authStore.uid)
       throw new Error(
         i18n.global.t("errors.require_login_to", [
-          i18n.global.t("theo-vao-danh-sach-phat")
+          i18n.global.t("theo-vao-danh-sach-phat"),
         ])
       )
 
     const { data } = await supabase
       .rpc("get_poster_playlist", {
         user_uid: authStore.uid,
-        playlist_id: id
+        playlist_id: id,
       })
       .single()
       .throwOnError()
@@ -282,6 +282,6 @@ export const usePlaylistStore = defineStore("playlist", () => {
     deleteAnimeFromPlaylist,
     hasAnimeOfPlaylist: hasAnimeOfPlaylists,
 
-    getAnimesFromPlaylist
+    getAnimesFromPlaylist,
   }
 })

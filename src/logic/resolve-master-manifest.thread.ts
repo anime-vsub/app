@@ -12,7 +12,7 @@ export async function resolveMasterManifestWorker(
     worker.addEventListener(
       "message",
       ({
-        data
+        data,
       }: MessageEvent<
         | {
             map: Record<string, readonly [string, number]>
@@ -50,7 +50,7 @@ export async function resolveMasterManifestWorker(
     // { uris: string[]; old: Record<string, string>  }
     worker.postMessage({
       old: Object.fromEntries(Array.from(map.entries())),
-      uris: segments.slice(index, balance ? index + balance : -1)
+      uris: segments.slice(index, balance ? index + balance : -1),
     })
   })
 }

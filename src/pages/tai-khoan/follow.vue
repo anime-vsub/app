@@ -90,7 +90,6 @@ const refresh = (done: () => void) =>
     // eslint-disable-next-line promise/no-callback-in-promise
     .then(done)
 
- 
 let nextPage = 2
 async function onLoad(_index: number, done: (stop: boolean) => void) {
   const { curPage, maxPage, items } = await TuPhim(nextPage++)

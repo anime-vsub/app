@@ -4,7 +4,6 @@ export function unflat<T>(array: readonly T[], size: number): T[][] {
 
   const result: T[][] = []
 
-   
   for (let i = 0; i < max; i++) {
     const index = i * size
     result.push(array.slice(index, index + size))

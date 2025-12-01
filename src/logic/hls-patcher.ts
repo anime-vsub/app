@@ -56,7 +56,6 @@ export function patcher(hls: Hls) {
   ): void {
     const stats = this.stats
     if (stats.loading.start) {
-       
       throw new Error("Loader can only be used once.")
     }
     stats.loading.start = self.performance.now()
@@ -105,7 +104,7 @@ export function patcher(hls: Hls) {
 
         if (!response.ok) {
           const { status, statusText } = response
-           
+
           throw new FetchError(
             statusText || "fetch, bad network response",
             status,
