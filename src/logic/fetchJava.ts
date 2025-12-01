@@ -27,7 +27,8 @@ export async function fetchJava(
 ) {
   if (url.startsWith("data:app")) return fetch(url)
   if (!isNative) return CapacitorWebFetch(url, options)
-  if (isNative && url.startsWith("/_capacitor_file_")) return CapacitorWebFetch(url, options)
+  if (isNative && url.startsWith("/_capacitor_file_"))
+    return CapacitorWebFetch(url, options)
 
   if (options?.signal?.aborted) throw new Error("ABORTED")
 

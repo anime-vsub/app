@@ -4,7 +4,7 @@ import type {
   LoaderConfiguration,
   LoaderContext,
   LoaderOnProgress,
-  LoaderResponse
+  LoaderResponse,
 } from "hls.js"
 import Hls from "hls.js"
 
@@ -17,7 +17,7 @@ function getRequestParameters(
     mode: "cors",
     credentials: "same-origin",
     signal,
-    headers: new self.Headers(Object.assign({}, context.headers))
+    headers: new self.Headers(Object.assign({}, context.headers)),
   }
 
   if (context.rangeEnd) {
@@ -114,13 +114,10 @@ export class HlsPatched extends Hls {
 
             self.clearTimeout(this.requestTimeout)
             config.timeout = maxLoadTimeMs
-            this.requestTimeout = self.setTimeout(
-              () => {
-                this.abortInternal()
-                callbacks.onTimeout(stats, context, this.response)
-              },
-              maxLoadTimeMs - (first - stats.loading.start)
-            )
+            this.requestTimeout = self.setTimeout(() => {
+              this.abortInternal()
+              callbacks.onTimeout(stats, context, this.response)
+            }, maxLoadTimeMs - (first - stats.loading.start))
 
             if (!response.ok) {
               const { status, statusText } = response
@@ -179,7 +176,7 @@ export class HlsPatched extends Hls {
             const loaderResponse: LoaderResponse = {
               url: response.url,
               data: responseData,
-              code: response.status
+              code: response.status,
             }
 
             // eslint-disable-next-line promise/always-return

@@ -11,8 +11,7 @@
    <h1 style="font-size: 16px">AnimeVsub</h1>
 </div>
 
-> [!IMPORTANT]
-> **Visit https://app.animevsub.eu.org to download APK**
+> [!IMPORTANT] > **Visit https://app.animevsub.eu.org to download APK**
 
 > [!TIP]
 > The current desktop version [open source](https://github.com/anime-vsub/desktop-web) is available at: https://animevsub.eu.org
@@ -26,8 +25,6 @@
 
 > [!CAUTION]
 > The application currently only supports the `Vietnam` region. If you are not there you need to use a `VPN` to get a `Vietnamese IP address`
-
-
 
 [![Build APK](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/build-apk.yml)
 [![Test](https://github.com/anime-vsub/app/actions/workflows/test.yml/badge.svg)](https://github.com/anime-vsub/app/actions/workflows/test.yml) <!-- <img src="https://img.shields.io/github/v/release/anime-vsub/app?color=green&display_name=tag&label=APK"> -->
@@ -112,5 +109,6 @@ If you find this project useful please support me through:
 - [x] pull to refresh
 
 ## Copyright
+
 (c) 2022 - now by Tachibana Shin with GNU GPL v3
-(c) Capacitor core by Ionic with MIT 
+(c) Capacitor core by Ionic with MIT

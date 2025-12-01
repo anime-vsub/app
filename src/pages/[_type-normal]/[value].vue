@@ -514,7 +514,6 @@ const showDialogTyper = ref(false)
 const showDialogSorter = ref(false)
 const showDialogFilter = ref(false)
 
- 
 let inited = false
 const defaultsOptions = computed<{
   typer?: string
@@ -709,7 +708,6 @@ watch(
   }
 )
 
- 
 let nextPage = 2
 async function onLoad(_index: number, done: (stop: boolean) => void) {
   const { curPage, maxPage, items } = await fetchTypeNormalValue(

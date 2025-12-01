@@ -918,13 +918,13 @@
 </template>
 
 <script lang="ts" setup>
+import { Fullscreen } from "@boengli/capacitor-fullscreen"
 import { Haptics } from "@capacitor/haptics"
 import { StatusBar } from "@capacitor/status-bar"
 import {
   OrientationType,
   ScreenOrientation,
 } from "@capawesome/capacitor-screen-orientation"
-import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar"
 import { Icon } from "@iconify/vue"
 import {
   useDocumentVisibility,
@@ -999,7 +999,7 @@ import {
 } from "vue"
 import { useI18n } from "vue-i18n"
 import { onBeforeRouteLeave, useRouter } from "vue-router"
-import { Fullscreen } from "@boengli/capacitor-fullscreen"
+
 import { getSktAt } from "../logic/get-skt-at"
 import { loadVttSk } from "../logic/load-vtt-sk"
 

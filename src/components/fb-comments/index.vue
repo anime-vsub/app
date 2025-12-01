@@ -148,7 +148,7 @@ const data = computedAsync<null | Awaited<
         message: i18n.t("msg-err-load-cmt"),
         caption: err + "",
       })
-       
+
       throw err
     } finally {
       loading.value = false

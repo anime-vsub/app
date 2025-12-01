@@ -177,7 +177,6 @@ async function getNative(
       return response
     })
 
-   
   if (response.status !== 200 && response.status !== 201) throw response
 
   if (typeof url !== "string" && url.responseType === "arraybuffer")
@@ -323,7 +322,6 @@ async function postNative(
     data: !isNative ? data : new URLSearchParams(data).toString(),
   })
 
-   
   if (response.status !== 200 && response.status !== 201) throw response
 
   return response
@@ -365,7 +363,7 @@ async function httpGet(
   })
 
   console.log("get-result: ", response)
-   
+
   if (response.status !== 200 && response.status !== 201) throw response
 
   return response as Omit<typeof response, "data"> & { data: string }
@@ -389,7 +387,7 @@ async function httpPost(
   })
 
   console.log("post-result: ", response)
-   
+
   if (response.status !== 200 && response.status !== 201) throw response
 
   return response as Omit<typeof response, "data"> & { data: string }

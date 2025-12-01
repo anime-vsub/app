@@ -76,7 +76,6 @@ export function useFirestore<T extends DocumentData>(
     isRef(maybeDocRef) ? maybeDocRef : computed(() => maybeDocRef)
   ) as Ref<FirebaseDocRef<T>>
 
-   
   let initd = false
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

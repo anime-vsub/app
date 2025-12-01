@@ -162,7 +162,7 @@ const dataStore = shallowReactive<
       }
   >
 >(new Map())
- 
+
 let _dataInStoreTmp:
   | { status: "pending" | "error"; response?: unknown }
   | {
