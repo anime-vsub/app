@@ -918,7 +918,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Fullscreen } from "@boengli/capacitor-fullscreen"
+import { AndroidFullScreen } from "@awesome-cordova-plugins/android-full-screen"
 import { Haptics } from "@capacitor/haptics"
 import { StatusBar } from "@capacitor/status-bar"
 import {
@@ -1225,18 +1225,26 @@ const setArtFullscreen = async (fullscreen: boolean) => {
   if (fullscreen) {
     if (IS_IOS) {
       await ScreenOrientation.lock({ type: OrientationType.LANDSCAPE })
-    } else if (!isNative) {
+    } else {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       await playerWrapRef.value!.requestFullscreen()
     }
     if (isNative) {
-      await Fullscreen.activateImmersiveMode()
+      if (!IS_IOS) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ;(screen.orientation as unknown as any).lock("landscape")
+      }
+      await AndroidFullScreen.immersiveMode()
     }
   } else {
     if (IS_IOS) await ScreenOrientation.unlock()
-    else if (!isNative) await document.exitFullscreen()
+    else await document.exitFullscreen()
     if (isNative) {
-      await Fullscreen.deactivateImmersiveMode()
+      if (!IS_IOS) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ;(screen.orientation as unknown as any).unlock()
+      }
+      await AndroidFullScreen.showSystemUI()
     }
   }
 
