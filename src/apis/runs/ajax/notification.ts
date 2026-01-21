@@ -17,8 +17,6 @@ export async function AjaxNotification() {
 
   const data = JSON.parse(json)
 
-  if (data.status === 0) throw new Error("REQUIRED_LOGIN")
-
   return {
     items: await PostWorker<typeof AjaxNotificationParser>(Worker, data.html),
     max: parseInt(data.total),
