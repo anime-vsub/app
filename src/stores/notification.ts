@@ -53,11 +53,11 @@ export const useNotificationStore = defineStore(
         }
         console.error(err)
 
-        $q.notify({
-          position: "bottom-right",
-          message: i18n.global.t("nhan-thong-bao-that-bai"),
-          caption: (err as Error).message,
-        })
+        // $q.notify({
+        //   position: "bottom-right",
+        //   message: i18n.global.t("nhan-thong-bao-that-bai"),
+        //   caption: (err as Error).message,
+        // })
 
         timeout = setTimeout(updateNotification, 10 * 60_000)
       } finally {
