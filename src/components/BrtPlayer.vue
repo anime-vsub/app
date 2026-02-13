@@ -2191,7 +2191,7 @@ function emitNextChap(noNotice?: boolean) {
         : `Đang phát tập ${props.nextChap.chap?.name ?? ""} tiếp theo`
     )
 
-  router.push(
+  router.replace(
     `/phim/${props.nextChap.season.value}/${
       props.nextChap.chap
         ? parseChapName(props.nextChap.chap.name) +
@@ -2211,7 +2211,7 @@ function emitPrevChap(noNotice?: boolean) {
         : `Đang phát tập ${props.prevChap.chap?.name ?? ""} trước`
     )
 
-  router.push(
+  router.replace(
     `/phim/${props.prevChap.season.value}/${
       props.prevChap.chap
         ? parseChapName(props.prevChap.chap.name) +
