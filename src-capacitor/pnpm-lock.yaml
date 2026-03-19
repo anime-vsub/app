@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@boengli/capacitor-fullscreen':
-        specifier: ^0.0.19
-        version: 0.0.19(@capacitor/core@6.2.0)
+      '@awesome-cordova-plugins/android-full-screen':
+        specifier: ^8.1.0
+        version: 8.1.0(@awesome-cordova-plugins/core@8.1.0(rxjs@7.8.2))(rxjs@7.8.2)
       '@capacitor-community/firebase-analytics':
         specifier: ^6.0.0
         version: 6.0.0(@capacitor/core@6.2.0)
@@ -24,7 +24,7 @@ importers:
         specifier: ^6.0.1
         version: 6.0.4(@capacitor/core@6.2.0)
       '@capacitor/cli':
-        specifier: ^6.1.2
+        specifier: ^6
         version: 6.2.0
       '@capacitor/core':
         specifier: ^6.1.2
@@ -59,16 +59,25 @@ importers:
       '@jcesarmobile/ssl-skip':
         specifier: ^0.4.0
         version: 0.4.0
+      cordova-plugin-fullscreen:
+        specifier: ^1.3.0
+        version: 1.3.0
       cordova-plugin-screen-orientation:
         specifier: ^3.0.4
         version: 3.0.4
 
 packages:
 
-  '@boengli/capacitor-fullscreen@0.0.19':
-    resolution: {integrity: sha512-bHw/iU3BMpmwoOz3YUoICbHUecU4pbfKuNXnGF65odVGb0+JF6Mnjj3W0eHPFzPSqvaCdSvEQszzFFflca/K5Q==}
+  '@awesome-cordova-plugins/android-full-screen@8.1.0':
+    resolution: {integrity: sha512-jEBHkKepJa4N7kQAoyXOdtQ51i6YWiy2lCGNeivCWox1oN1uh5AUdKUEspMHTiW27pvryXunmpw1J4tN+TQSzQ==}
     peerDependencies:
-      '@capacitor/core': '>=7.0.0'
+      '@awesome-cordova-plugins/core': ^8.0.2
+      rxjs: ^5.5.0 || ^6.5.0 || ^7.3.0
+
+  '@awesome-cordova-plugins/core@8.1.0':
+    resolution: {integrity: sha512-7NkUC2FcXSlIuIH2xc1miIdN8/by2uewrIg5JBWauN1KCzCXLhCwZ39C8nBsWxCloAxCvec+MMU5SzJGGWfjTg==}
+    peerDependencies:
+      rxjs: ^5.5.0 || ^6.5.0 || ^7.3.0
 
   '@capacitor-community/firebase-analytics@6.0.0':
     resolution: {integrity: sha512-3/B4V8V6exw4pits9H5JWqfyzvgsoW+NfxdaJoimNVx2YcpDYJtYj79DsmuMe5DXf6mxRIbQ+InxfGV4vwoxDA==}
@@ -176,6 +185,9 @@ packages:
   '@jcesarmobile/ssl-skip@0.4.0':
     resolution: {integrity: sha512-GUVnexaLUHZS4f9TXBIwmKYvp/NVW8A4tcMoQJmNwViQMOGJbi7lWdRCVDWOY9tyq5XJxk80AcjJvxSgqA8V6w==}
 
+  '@types/cordova@11.0.3':
+    resolution: {integrity: sha512-kyuRQ40/NWQVhqGIHq78Ehu2Bf9Mlg0LhmSmis6ZFJK7z933FRfYi8tHe/k/0fB+PGfCf95rJC6TO7dopaFvAg==}
+
   '@types/fs-extra@8.1.5':
     resolution: {integrity: sha512-0dzKcwO+S8s2kuF5Z9oUWatQJj5Uq/iqphEtE3GQJVRRYm/tD1LglU2UnXi2A8jLq5umkGouOXOR9y0n613ZwQ==}
 
@@ -240,6 +252,10 @@ packages:
     resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
     engines: {node: ^12.20.0 || >=14}
 
+  cordova-plugin-fullscreen@1.3.0:
+    resolution: {integrity: sha512-K0SQMUyemQrezNlnfyHXQd8BgpwR3TS/fx456GueRCUdro5QG6tCzDDVBCVEGeKroDhXWmabAlhvO3gPoqw/tg==}
+    engines: {'0': {name: cordova, version: '>=3.0.0'}}
+
   cordova-plugin-screen-orientation@3.0.4:
     resolution: {integrity: sha512-AswRuUKJ8J3HycUilTJsIB50aa9TLrwndPNBFG+wfAPhHEqIBF0HaD0q3HbAK7ypgmaj0cvbzk84qP51IcTfrQ==}
     engines: {cordovaDependencies: {4.0.0: {cordova: '>100'}}}
@@ -289,6 +305,7 @@ packages:
   glob@9.3.5:
     resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
     engines: {node: '>=16 || 14 >=14.17'}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
@@ -399,6 +416,9 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
+  rxjs@7.8.2:
+    resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
+
   safe-buffer@5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
 
@@ -449,6 +469,7 @@ packages:
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   through2@4.0.2:
     resolution: {integrity: sha512-iOqSav00cVxEEICeD7TjLB1sueEL+81Wpzp2bY17uZjZN0pWZPuo4suZ/61VujxmqSGFfgOcNuTZ85QJwNZQpw==}
@@ -503,9 +524,16 @@ packages:
 
 snapshots:
 
-  '@boengli/capacitor-fullscreen@0.0.19(@capacitor/core@6.2.0)':
+  '@awesome-cordova-plugins/android-full-screen@8.1.0(@awesome-cordova-plugins/core@8.1.0(rxjs@7.8.2))(rxjs@7.8.2)':
     dependencies:
-      '@capacitor/core': 6.2.0
+      '@awesome-cordova-plugins/core': 8.1.0(rxjs@7.8.2)
+      '@types/cordova': 11.0.3
+      rxjs: 7.8.2
+
+  '@awesome-cordova-plugins/core@8.1.0(rxjs@7.8.2)':
+    dependencies:
+      '@types/cordova': 11.0.3
+      rxjs: 7.8.2
 
   '@capacitor-community/firebase-analytics@6.0.0(@capacitor/core@6.2.0)':
     dependencies:
@@ -678,6 +706,8 @@ snapshots:
 
   '@jcesarmobile/ssl-skip@0.4.0': {}
 
+  '@types/cordova@11.0.3': {}
+
   '@types/fs-extra@8.1.5':
     dependencies:
       '@types/node': 22.1.0
@@ -725,6 +755,8 @@ snapshots:
   color-name@1.1.4: {}
 
   commander@9.5.0: {}
+
+  cordova-plugin-fullscreen@1.3.0: {}
 
   cordova-plugin-screen-orientation@3.0.4: {}
 
@@ -874,6 +906,10 @@ snapshots:
   rimraf@4.4.1:
     dependencies:
       glob: 9.3.5
+
+  rxjs@7.8.2:
+    dependencies:
+      tslib: 2.6.3
 
   safe-buffer@5.2.1: {}
 
