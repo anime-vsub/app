@@ -3,14 +3,15 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
-    namespace = "eu.org.animevsub"
+    namespace = "git.shin.animevsub"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "eu.org.animevsub"
+        applicationId = "git.shin.animevsub"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -41,9 +42,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
     }
     packaging {
         resources {

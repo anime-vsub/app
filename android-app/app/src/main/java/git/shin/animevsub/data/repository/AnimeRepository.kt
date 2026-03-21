@@ -1,0 +1,97 @@
+package git.shin.animevsub.data.repository
+
+import git.shin.animevsub.data.local.PreferencesManager
+import git.shin.animevsub.data.model.*
+import git.shin.animevsub.data.remote.AnimeApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class AnimeRepository @Inject constructor(
+    private val api: AnimeApi,
+    private val prefs: PreferencesManager
+) {
+    // Home
+    suspend fun getHomePage(): Result<HomeData> = runCatching { api.getHomePage() }
+
+    // Detail
+    suspend fun getAnimeDetail(seasonId: String): Result<AnimeDetail> = runCatching {
+        val cookie = prefs.userCookie.first()
+        api.getAnimeDetail(seasonId, cookie)
+    }
+
+    // Chapters
+    suspend fun getChapters(seasonId: String): Result<ChapterData> = runCatching {
+        val cookie = prefs.userCookie.first()
+        api.getChapters(seasonId, cookie)
+    }
+
+    // Rankings
+    suspend fun getRankings(type: String): Result<List<RankingItem>> = runCatching {
+        api.getRankings(type)
+    }
+
+    // Schedule
+    suspend fun getSchedule(): Result<List<ScheduleDay>> = runCatching {
+        api.getSchedule()
+    }
+
+    // Search
+    suspend fun preSearch(keyword: String): Result<List<SearchSuggestion>> = runCatching {
+        api.preSearch(keyword)
+    }
+
+    // Category
+    suspend fun getCategoryPage(typeNormal: String, value: String, page: Int = 1): Result<CategoryPage> = runCatching {
+        api.getCategoryPage(typeNormal, value, page)
+    }
+
+    // Player
+    suspend fun getPlayerLink(id: String, play: String, hash: String): Result<String> = runCatching {
+        api.getPlayerLink(id, play, hash)
+    }
+
+    // Auth
+    val user: Flow<User?> = prefs.userData
+    val cookie: Flow<String?> = prefs.userCookie
+    val isLoggedIn: Flow<Boolean> = prefs.userCookie.map { it != null }
+
+    suspend fun login(email: String, password: String): Result<User> = runCatching {
+        val (user, cookie) = api.login(email, password)
+        prefs.saveUser(user, cookie)
+        user
+    }
+
+    suspend fun logout() {
+        prefs.clearUser()
+    }
+
+    // Settings
+    val autoNext = prefs.autoNext
+    val autoSkip = prefs.autoSkip
+    val server = prefs.server
+    val movieMode = prefs.movieMode
+    val showComments = prefs.showComments
+    val infiniteScroll = prefs.infiniteScroll
+
+    suspend fun setAutoNext(value: Boolean) = prefs.setAutoNext(value)
+    suspend fun setAutoSkip(value: Boolean) = prefs.setAutoSkip(value)
+    suspend fun setServer(value: String) = prefs.setServer(value)
+    suspend fun setMovieMode(value: Boolean) = prefs.setMovieMode(value)
+    suspend fun setShowComments(value: Boolean) = prefs.setShowComments(value)
+    suspend fun setInfiniteScroll(value: Boolean) = prefs.setInfiniteScroll(value)
+
+    // Search History
+    val searchHistory = prefs.searchHistory
+    suspend fun addSearchHistory(query: String) = prefs.addSearchHistory(query)
+    suspend fun clearSearchHistory() = prefs.clearSearchHistory()
+
+    // Notifications
+    suspend fun getNotifications(): Result<NotificationData> = runCatching {
+        val cookie = prefs.userCookie.first() ?: throw Exception("Not logged in")
+        api.getNotifications(cookie)
+    }
+}

@@ -14,6 +14,6 @@
 -dontnote kotlinx.serialization.AnnotationsKt
 -keepclassmembers class kotlinx.serialization.json.** { *** Companion; }
 -keepclasseswithmembers class kotlinx.serialization.json.** { kotlinx.serialization.KSerializer serializer(...); }
--keep,includedescriptorclasses class eu.org.animevsub.**$$serializer { *; }
--keepclassmembers class eu.org.animevsub.** { *** Companion; }
--keepclasseswithmembers class eu.org.animevsub.** { kotlinx.serialization.KSerializer serializer(...); }
+-keep,includedescriptorclasses class git.shin.animevsub.**$$serializer { *; }
+-keepclassmembers class git.shin.animevsub.** { *** Companion; }
+-keepclasseswithmembers class git.shin.animevsub.** { kotlinx.serialization.KSerializer serializer(...); }
