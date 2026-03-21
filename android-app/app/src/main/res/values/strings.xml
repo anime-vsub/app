@@ -18,11 +18,13 @@
     <string name="schedule">Schedule</string>
     <string name="rankings">Rankings</string>
     <string name="nominate">Nominated</string>
+    <string name="this_season">This Season</string>
     <string name="top">Top</string>
     <string name="coming_soon">Coming Soon</string>
     <string name="last_updated">Last Updated</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
+    <string name="upcoming">Upcoming</string>
     <string name="view_all">View All</string>
 
     <!-- Search -->
@@ -46,6 +48,8 @@
     <string name="duration_label">Duration</string>
     <string name="watch_now">Watch Now</string>
     <string name="add_to_playlist">Add to Playlist</string>
+    <string name="episode_label">Episode %1$s</string>
+    <string name="ep_label">Ep.%1$s</string>
 
     <!-- Player -->
     <string name="server_high">High</string>

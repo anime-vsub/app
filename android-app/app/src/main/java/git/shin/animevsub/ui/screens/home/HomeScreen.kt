@@ -2,10 +2,15 @@ package git.shin.animevsub.ui.screens.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,9 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,434 +35,484 @@ import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.ui.components.*
 import git.shin.animevsub.ui.theme.*
 import kotlinx.coroutines.delay
+import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onNavigateToDetail: (String) -> Unit,
-    onNavigateToCategory: (String, String) -> Unit,
-    onNavigateToRankings: (String) -> Unit,
-    onNavigateToSchedule: () -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+  onNavigateToDetail: (String) -> Unit,
+  onNavigateToCategory: (String, String) -> Unit,
+  onNavigateToRankings: (String) -> Unit,
+  onNavigateToSchedule: () -> Unit,
+  viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+  val uiState by viewModel.uiState.collectAsState()
 
-    when {
-        uiState.isLoading -> HomeLoadingSkeleton()
-        uiState.error != null && uiState.data == null -> {
-            ErrorScreen(
-                error = uiState.error,
-                onRetry = { viewModel.loadHomePage() }
-            )
-        }
-        uiState.data != null -> {
-            val data = uiState.data!!
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                    // Carousel
-                    if (data.carousel.isNotEmpty()) {
-                        CarouselSection(
-                            items = data.carousel,
-                            onItemClick = { anime ->
-                                val seasonId = anime.path.removePrefix("/phim/").trimEnd('/')
-                                onNavigateToDetail(seasonId)
-                            }
-                        )
-                    }
-
-                    // Quick links
-                    QuickLinksRow(
-                        onCatalogClick = { onNavigateToCategory("danh-sach", "all") },
-                        onScheduleClick = onNavigateToSchedule,
-                        onRankingsClick = { onNavigateToRankings("day") }
-                    )
-
-                    // This Season
-                    if (data.thisSeason.isNotEmpty()) {
-                        HorizontalAnimeList(
-                            items = data.thisSeason,
-                            onItemClick = { anime ->
-                                val seasonId = anime.path.removePrefix("/phim/").trimEnd('/')
-                                onNavigateToDetail(seasonId)
-                            }
-                        )
-                    }
-
-                    // Nominated
-                    if (data.nominate.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        SectionHeader(
-                            title = stringResource(R.string.nominate),
-                            onViewAll = { onNavigateToRankings("day") }
-                        )
-                        GridAnimeList(
-                            items = data.nominate.take(6),
-                            onItemClick = { anime ->
-                                val seasonId = anime.path.removePrefix("/phim/").trimEnd('/')
-                                onNavigateToDetail(seasonId)
-                            }
-                        )
-                    }
-
-                    // Top / Hot Update
-                    if (data.hotUpdate.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        SectionHeader(
-                            title = stringResource(R.string.top),
-                            onViewAll = { onNavigateToRankings("day") }
-                        )
-                        HorizontalAnimeList(
-                            items = data.hotUpdate,
-                            onItemClick = { anime ->
-                                val seasonId = anime.path.removePrefix("/phim/").trimEnd('/')
-                                onNavigateToDetail(seasonId)
-                            },
-                            showTrending = true
-                        )
-                    }
-
-                    // Coming Soon / Pre-release
-                    if (data.preRelease.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        SectionHeader(
-                            title = stringResource(R.string.coming_soon),
-                            onViewAll = { onNavigateToCategory("danh-sach", "anime-sap-chieu") }
-                        )
-                        HorizontalAnimeList(
-                            items = data.preRelease,
-                            onItemClick = { anime ->
-                                val seasonId = anime.path.removePrefix("/phim/").trimEnd('/')
-                                onNavigateToDetail(seasonId)
-                            }
-                        )
-                    }
-
-                    // Last Updated
-                    if (data.lastUpdate.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        SectionHeader(
-                            title = stringResource(R.string.last_updated),
-                            onViewAll = { onNavigateToCategory("danh-sach", "anime-moi") }
-                        )
-                        GridAnimeList(
-                            items = data.lastUpdate.take(6),
-                            onItemClick = { anime ->
-                                val seasonId = anime.path.removePrefix("/phim/").trimEnd('/')
-                                onNavigateToDetail(seasonId)
-                            }
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(80.dp))
-            }
-        }
+  when {
+    uiState.isLoading -> HomeLoadingSkeleton()
+    uiState.error != null && uiState.data == null -> {
+      ErrorScreen(
+        error = uiState.error,
+        onRetry = { viewModel.loadHomePage() }
+      )
     }
+    uiState.data != null -> {
+      val data = uiState.data!!
+      val hotUpdateListState = rememberLazyListState()
+
+      Column(
+        modifier = Modifier
+          .fillMaxSize()
+          .verticalScroll(rememberScrollState())
+      ) {
+        // Carousel (No padding, no corner radius)
+        if (data.carousel.isNotEmpty()) {
+          CarouselSection(
+            items = data.carousel,
+            onItemClick = { anime ->
+              onNavigateToDetail(anime.animeId)
+            }
+          )
+        }
+
+        // Quick links
+        QuickLinksRow(
+          onCatalogClick = { onNavigateToCategory("danh-sach", "all") },
+          onScheduleClick = onNavigateToSchedule,
+          onRankingsClick = { onNavigateToRankings("day") }
+        )
+
+        // This Season
+        if (data.thisSeason.isNotEmpty()) {
+          SectionHeader(
+            title = stringResource(R.string.this_season),
+            onViewAll = { onNavigateToCategory("danh-sach", "anime-moi") }
+          )
+          HorizontalAnimeList(
+            items = data.thisSeason,
+            onItemClick = { anime ->
+              onNavigateToDetail(anime.animeId)
+            }
+          )
+        }
+
+        // Nominated (Grid)
+        if (data.nominate.isNotEmpty()) {
+          Spacer(modifier = Modifier.height(16.dp))
+          SectionHeader(
+            title = stringResource(R.string.nominate),
+            onViewAll = { onNavigateToRankings("day") }
+          )
+          GridAnimeList(
+            items = data.nominate,
+            onItemClick = { anime ->
+              onNavigateToDetail(anime.animeId)
+            }
+          )
+        }
+
+        // Top / Hot Update
+        if (data.hotUpdate.isNotEmpty()) {
+          Spacer(modifier = Modifier.height(16.dp))
+          SectionHeader(
+            title = stringResource(R.string.top),
+            onViewAll = { onNavigateToRankings("day") }
+          )
+          HorizontalAnimeList(
+            items = data.hotUpdate,
+            state = hotUpdateListState,
+            showRating = true,
+            onItemClick = { anime ->
+              onNavigateToDetail(anime.animeId)
+            },
+            showTrending = true
+          )
+        }
+
+        // Coming Soon / Pre-release
+        if (data.preRelease.isNotEmpty()) {
+          val preReleaseListState = rememberLazyListState()
+
+          Spacer(modifier = Modifier.height(16.dp))
+          SectionHeader(
+            title = stringResource(R.string.coming_soon),
+            onViewAll = { onNavigateToCategory("danh-sach", "anime-sap-chieu") }
+          )
+
+          HorizontalAnimeList(
+            items = data.preRelease,
+            state = preReleaseListState,
+            showTimeline = true,
+            onItemClick = { anime ->
+              onNavigateToDetail(anime.animeId)
+            }
+          )
+        }
+
+        // Last Updated (Grid)
+        if (data.lastUpdate.isNotEmpty()) {
+          Spacer(modifier = Modifier.height(16.dp))
+          SectionHeader(
+            title = stringResource(R.string.last_updated),
+            onViewAll = { onNavigateToCategory("danh-sach", "anime-moi") }
+          )
+          GridAnimeList(
+            items = data.lastUpdate,
+            onItemClick = { anime ->
+              onNavigateToDetail(anime.animeId)
+            }
+          )
+        }
+
+        Spacer(modifier = Modifier.height(80.dp))
+      }
+    }
+  }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CarouselSection(
-    items: List<AnimeCard>,
-    onItemClick: (AnimeCard) -> Unit
+  items: List<AnimeCard>,
+  onItemClick: (AnimeCard) -> Unit
 ) {
-    val pagerState = rememberPagerState(pageCount = { items.size })
+  val pagerState = rememberPagerState(pageCount = { items.size })
 
-    // Auto-scroll
-    LaunchedEffect(pagerState) {
-        while (true) {
-            delay(5000)
-            val nextPage = (pagerState.currentPage + 1) % items.size
-            pagerState.animateScrollToPage(nextPage)
-        }
+  // Auto-scroll
+  LaunchedEffect(pagerState) {
+    while (true) {
+      delay(5000)
+      if (items.isNotEmpty()) {
+        val nextPage = (pagerState.currentPage + 1) % items.size
+        pagerState.animateScrollToPage(nextPage)
+      }
     }
+  }
 
-    Box(
+  Column(modifier = Modifier.fillMaxWidth()) {
+    HorizontalPager(
+      state = pagerState,
+      modifier = Modifier.fillMaxWidth(),
+      contentPadding = PaddingValues(horizontal = 0.dp),
+      pageSpacing = 0.dp
+    ) { page ->
+      val item = items[page]
+      val pageOffset = (
+        (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+        ).absoluteValue
+
+      val scale = 1f - (pageOffset * 0.02f).coerceIn(0f, 0.02f)
+      val alpha = 1f - (pageOffset * 0.05f).coerceIn(0f, 0.05f)
+
+      Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(16f / 10f)
-    ) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxSize()
-        ) { page ->
-            val item = items[page]
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable { onItemClick(item) }
-            ) {
-                AsyncImage(
-                    model = item.image,
-                    contentDescription = item.name,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+          .graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            this.alpha = alpha
+          }
+          .aspectRatio(16f / 9.5f)
+          .clickable { onItemClick(item) }
+      ) {
+        AsyncImage(
+          model = item.image,
+          contentDescription = item.name,
+          contentScale = ContentScale.Crop,
+          modifier = Modifier.fillMaxSize()
+        )
+
+        // Improved Gradient overlay
+        Box(
+          modifier = Modifier
+            .fillMaxSize()
+            .background(
+              Brush.verticalGradient(
+                colors = listOf(
+                  Color.Transparent,
+                  Color.Black.copy(alpha = 0.2f),
+                  Color.Black.copy(alpha = 0.95f)
                 )
+              )
+            )
+        )
 
-                // Top gradient
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .align(Alignment.TopCenter)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    DarkBackground.copy(alpha = 0.7f),
-                                    Color.Transparent
-                                )
-                            )
-                        )
-                )
-
-                // Bottom gradient + info
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    DarkBackground.copy(alpha = 0.9f)
-                                )
-                            )
-                        )
-                        .padding(16.dp)
-                ) {
-                    Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            if (!item.quality.isNullOrEmpty()) {
-                                QualityBadge(quality = item.quality)
-                                Spacer(modifier = Modifier.width(8.dp))
-                            }
-                            Text(
-                                text = item.name,
-                                color = Color.White,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            if (item.rate > 0) {
-                                Text("★", color = StarColor, fontSize = 12.sp)
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = String.format("%.1f", item.rate),
-                                    color = TextSecondary,
-                                    fontSize = 12.sp
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                            }
-                            if (item.year != null) {
-                                Text(
-                                    text = item.year.toString(),
-                                    color = TextSecondary,
-                                    fontSize = 12.sp
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                            }
-                            if (!item.process.isNullOrEmpty()) {
-                                Text(
-                                    text = item.process,
-                                    color = TextSecondary,
-                                    fontSize = 12.sp
-                                )
-                            }
-                        }
-
-                        if (item.genre.isNotEmpty()) {
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = item.genre.joinToString(", ") { it.name },
-                                color = AccentMain,
-                                fontSize = 11.sp,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        // Page indicators
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        // Info
+        Column(
+          modifier = Modifier
+            .align(Alignment.BottomStart)
+            .padding(16.dp)
         ) {
-            repeat(items.size) { index ->
-                Box(
-                    modifier = Modifier
-                        .size(if (pagerState.currentPage == index) 8.dp else 6.dp)
-                        .clip(CircleShape)
-                        .background(
-                            if (pagerState.currentPage == index) AccentMain
-                            else Color.White.copy(alpha = 0.5f)
-                        )
-                )
+          if (!item.quality.isNullOrEmpty()) {
+            QualityBadge(quality = item.quality, isCarousel = true)
+            Spacer(modifier = Modifier.height(6.dp))
+          }
+
+          Text(
+            text = item.name,
+            color = Color.White,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+          )
+
+          Spacer(modifier = Modifier.height(4.dp))
+
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            if (item.rate > 0) {
+              Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = StarColor,
+                modifier = Modifier.size(14.dp)
+              )
+              Spacer(modifier = Modifier.width(4.dp))
+              Text(
+                text = String.format("%.1f", item.rate),
+                color = Color.White,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+              )
+              Text(
+                text = " | ",
+                color = Color.White.copy(alpha = 0.6f),
+                fontSize = 12.sp
+              )
             }
+
+            val metaInfo = mutableListOf<String>()
+            item.year?.let { metaInfo.add(it.toString()) }
+            item.process?.let { metaInfo.add(it) }
+
+            Text(
+              text = metaInfo.joinToString(" | "),
+              color = Color.White.copy(alpha = 0.8f),
+              fontSize = 12.sp
+            )
+          }
+
+          if (item.genre.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+              text = item.genre.joinToString(", ") { it.name },
+              color = Color(0xFF00D639),
+              fontSize = 12.sp,
+              maxLines = 1,
+              overflow = TextOverflow.Ellipsis
+            )
+          }
+
+          if (!item.description.isNullOrEmpty()) {
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+              text = item.description,
+              color = Color.White.copy(alpha = 0.7f),
+              fontSize = 12.sp,
+              maxLines = 2,
+              lineHeight = 16.sp,
+              overflow = TextOverflow.Ellipsis
+            )
+          }
         }
+      }
     }
+
+    // Indicators
+    Row(
+      modifier = Modifier
+        .align(Alignment.CenterHorizontally)
+        .padding(vertical = 12.dp),
+      horizontalArrangement = Arrangement.spacedBy(6.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      repeat(items.size) { index ->
+        val isSelected = pagerState.currentPage == index
+        Box(
+          modifier = Modifier
+            .height(6.dp)
+            .width(if (isSelected) 20.dp else 6.dp)
+            .clip(CircleShape)
+            .background(
+              if (isSelected) Color(0xFF00D639)
+              else Color.White.copy(alpha = 0.3f)
+            )
+        )
+      }
+    }
+  }
 }
 
 @Composable
 private fun QuickLinksRow(
-    onCatalogClick: () -> Unit,
-    onScheduleClick: () -> Unit,
-    onRankingsClick: () -> Unit
+  onCatalogClick: () -> Unit,
+  onScheduleClick: () -> Unit,
+  onRankingsClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        QuickLinkItem(
-            label = stringResource(R.string.catalog),
-            emoji = "📑",
-            onClick = onCatalogClick
-        )
-        QuickLinkItem(
-            label = stringResource(R.string.schedule),
-            emoji = "📅",
-            onClick = onScheduleClick
-        )
-        QuickLinkItem(
-            label = stringResource(R.string.rankings),
-            emoji = "🏆",
-            onClick = onRankingsClick
-        )
-    }
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp, vertical = 12.dp),
+    horizontalArrangement = Arrangement.Center
+  ) {
+    QuickLinkItem(
+      label = stringResource(R.string.catalog),
+      icon = painterResource(id = R.drawable.icon_tool_alp),
+      onClick = onCatalogClick,
+      modifier = Modifier.weight(1f)
+    )
+    QuickLinkItem(
+      label = stringResource(R.string.schedule),
+      icon = painterResource(id = R.drawable.icon_tool_calc),
+      onClick = onScheduleClick,
+      modifier = Modifier.weight(1f)
+    )
+    QuickLinkItem(
+      label = stringResource(R.string.rankings),
+      icon = painterResource(id = R.drawable.icon_tool_rank),
+      onClick = onRankingsClick,
+      modifier = Modifier.weight(1f)
+    )
+  }
 }
 
 @Composable
 private fun QuickLinkItem(
-    label: String,
-    emoji: String,
-    onClick: () -> Unit
+  label: String,
+  icon: Painter,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .clickable(onClick = onClick)
-            .padding(12.dp)
-    ) {
-        Text(text = emoji, fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = label,
-            color = TextSecondary,
-            fontSize = 12.sp
-        )
-    }
+  Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center,
+    modifier = modifier
+      .clip(RoundedCornerShape(8.dp))
+      .clickable(onClick = onClick)
+      .padding(8.dp)
+  ) {
+    Image(
+      painter = icon,
+      contentDescription = label,
+      modifier = Modifier.size(32.dp)
+    )
+    Spacer(modifier = Modifier.height(6.dp))
+    Text(
+      text = label,
+      color = TextPrimary,
+      fontSize = 12.sp,
+      fontWeight = FontWeight.Medium,
+      textAlign = TextAlign.Center
+    )
+  }
 }
 
 @Composable
 private fun HomeLoadingSkeleton() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(top = 0.dp)
+  Column(
+    modifier = Modifier
+      .fillMaxSize()
+      .verticalScroll(rememberScrollState())
+  ) {
+    // Carousel skeleton (Full width)
+    Box(
+      modifier = Modifier
+        .fillMaxWidth()
+        .aspectRatio(16f / 9.5f)
+        .background(DarkCard)
+    )
+
+    // Quick links skeleton
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 12.dp),
+      horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        // Carousel skeleton
-        Box(
+      repeat(3) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
+          Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(16f / 10f)
-                .background(DarkCard)
-        )
-
-        // Quick links skeleton
-        Row(
+              .size(32.dp)
+              .clip(RoundedCornerShape(8.dp))
+              .background(DarkCard)
+          )
+          Spacer(modifier = Modifier.height(8.dp))
+          Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            repeat(3) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(DarkCard)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Box(
-                        modifier = Modifier
-                            .width(50.dp)
-                            .height(12.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(DarkCard)
-                    )
-                }
-            }
+              .width(60.dp)
+              .height(12.dp)
+              .clip(RoundedCornerShape(4.dp))
+              .background(DarkCard)
+          )
         }
-
-        // Card skeletons
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            repeat(3) { SkeletonCard() }
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .width(100.dp)
-                .height(20.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .background(DarkCard)
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-        repeat(3) {
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(80.dp)
-                        .aspectRatio(2f / 3f)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(DarkCard)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .height(14.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(DarkCard)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .height(12.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(DarkCard)
-                    )
-                }
-            }
-        }
+      }
     }
+
+    // This Season (Horizontal Scroll)
+    SectionSkeleton()
+    LazyRow(
+      modifier = Modifier.fillMaxWidth(),
+      contentPadding = PaddingValues(horizontal = 16.dp),
+      horizontalArrangement = Arrangement.spacedBy(12.dp),
+      userScrollEnabled = false
+    ) {
+      items(5) {
+        SkeletonCard(modifier = Modifier.width(110.dp))
+      }
+    }
+
+    // Nominated (Grid 3 columns)
+    Spacer(modifier = Modifier.height(24.dp))
+    SectionSkeleton()
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp)
+    ) {
+      repeat(2) {
+        Row(
+          modifier = Modifier.fillMaxWidth(),
+          horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+          repeat(3) {
+            SkeletonCard(modifier = Modifier.weight(1f))
+          }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+      }
+    }
+
+    // Timeline skeleton
+    Spacer(modifier = Modifier.height(16.dp))
+    LazyRow(
+      modifier = Modifier.fillMaxWidth(),
+      contentPadding = PaddingValues(horizontal = 16.dp),
+      horizontalArrangement = Arrangement.spacedBy(20.dp),
+      userScrollEnabled = false
+    ) {
+      items(5) {
+        Box(
+          modifier = Modifier
+            .width(80.dp)
+            .height(40.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .background(DarkCard)
+        )
+      }
+    }
+
+    Spacer(modifier = Modifier.height(100.dp))
+  }
+}
+
+@Composable
+private fun SectionSkeleton() {
+  Box(
+    modifier = Modifier
+      .padding(horizontal = 16.dp, vertical = 12.dp)
+      .width(120.dp)
+      .height(20.dp)
+      .clip(RoundedCornerShape(4.dp))
+      .background(DarkCard)
+  )
 }

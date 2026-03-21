@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AnimeCard(
-    val path: String,
+    val animeId: String,
     val image: String,
     val name: String,
     val chap: String? = null,
@@ -16,13 +16,13 @@ data class AnimeCard(
     val description: String? = null,
     val studio: String? = null,
     val genre: List<NamePath> = emptyList(),
-    val timeRelease: String? = null
+    val timeRelease: Long? = null
 )
 
 @Serializable
 data class NamePath(
     val name: String,
-    val path: String
+    val tagId: String,
 )
 
 data class HomeData(
@@ -75,8 +75,8 @@ data class ChapterData(
 )
 
 data class RankingItem(
+    val animeId: String,
     val image: String,
-    val path: String,
     val name: String,
     val othername: String? = null,
     val process: String? = null,
@@ -93,8 +93,8 @@ data class ScheduleDay(
 )
 
 data class SearchSuggestion(
+    val animeId: String,
     val image: String,
-    val path: String,
     val name: String,
     val status: String
 )
@@ -124,7 +124,7 @@ data class NotificationItem(
     val content: String = "",
     val description: String = "",
     val link: String = "",
-    val path: String? = null,
+    val animeId: String? = null,
     val time: String = "",
     val isRead: Boolean = false
 )

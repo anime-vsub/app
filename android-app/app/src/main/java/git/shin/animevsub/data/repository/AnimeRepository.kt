@@ -18,15 +18,15 @@ class AnimeRepository @Inject constructor(
     suspend fun getHomePage(): Result<HomeData> = runCatching { api.getHomePage() }
 
     // Detail
-    suspend fun getAnimeDetail(seasonId: String): Result<AnimeDetail> = runCatching {
+    suspend fun getAnimeDetail(animeId: String): Result<AnimeDetail> = runCatching {
         val cookie = prefs.userCookie.first()
-        api.getAnimeDetail(seasonId, cookie)
+        api.getAnimeDetail(animeId, cookie)
     }
 
     // Chapters
-    suspend fun getChapters(seasonId: String): Result<ChapterData> = runCatching {
+    suspend fun getChapters(animeId: String): Result<ChapterData> = runCatching {
         val cookie = prefs.userCookie.first()
-        api.getChapters(seasonId, cookie)
+        api.getChapters(animeId, cookie)
     }
 
     // Rankings

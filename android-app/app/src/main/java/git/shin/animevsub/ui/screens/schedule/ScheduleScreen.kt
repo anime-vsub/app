@@ -116,10 +116,7 @@ fun ScheduleScreen(
                                             .clip(RoundedCornerShape(8.dp))
                                             .background(DarkCard)
                                             .clickable {
-                                                val seasonId = item.path
-                                                    .removePrefix("/phim/")
-                                                    .trimEnd('/')
-                                                onNavigateToDetail(seasonId)
+                                                onNavigateToDetail(item.animeId)
                                             }
                                             .padding(12.dp),
                                         verticalAlignment = Alignment.CenterVertically
@@ -150,9 +147,9 @@ fun ScheduleScreen(
                                                     fontSize = 12.sp
                                                 )
                                             }
-                                            if (!item.timeRelease.isNullOrEmpty()) {
+                                            if (item.timeRelease != null) {
                                                 Text(
-                                                    text = item.timeRelease,
+                                                    text = item.timeRelease.toString(),
                                                     color = TextGrey,
                                                     fontSize = 11.sp
                                                 )

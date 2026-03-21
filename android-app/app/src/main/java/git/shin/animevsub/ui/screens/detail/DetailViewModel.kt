@@ -18,7 +18,7 @@ data class DetailUiState(
     val detail: AnimeDetail? = null,
     val chapterData: ChapterData? = null,
     val error: String? = null,
-    val seasonId: String = ""
+    val animeId: String = ""
 )
 
 @HiltViewModel
@@ -31,16 +31,16 @@ class DetailViewModel @Inject constructor(
     val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
 
     init {
-        val seasonId = savedStateHandle.get<String>("seasonId") ?: ""
-        _uiState.value = _uiState.value.copy(seasonId = seasonId)
-        loadDetail(seasonId)
+        val animeId = savedStateHandle.get<String>("animeId") ?: ""
+        _uiState.value = _uiState.value.copy(animeId = animeId)
+        loadDetail(animeId)
     }
 
-    fun loadDetail(seasonId: String) {
+    fun loadDetail(animeId: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
 
-            repository.getAnimeDetail(seasonId)
+            repository.getAnimeDetail(animeId)
                 .onSuccess { detail ->
                     _uiState.value = _uiState.value.copy(
                         detail = detail,
@@ -55,7 +55,7 @@ class DetailViewModel @Inject constructor(
                 }
 
             // Also load chapters
-            repository.getChapters(seasonId)
+            repository.getChapters(animeId)
                 .onSuccess { chapterData ->
                     _uiState.value = _uiState.value.copy(chapterData = chapterData)
                 }
@@ -63,6 +63,6 @@ class DetailViewModel @Inject constructor(
     }
 
     fun retry() {
-        loadDetail(_uiState.value.seasonId)
+        loadDetail(_uiState.value.animeId)
     }
 }

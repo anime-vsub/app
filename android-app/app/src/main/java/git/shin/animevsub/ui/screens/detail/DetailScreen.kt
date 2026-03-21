@@ -160,7 +160,7 @@ fun DetailScreen(
                     Button(
                         onClick = {
                             onNavigateToPlayer(
-                                uiState.seasonId,
+                                uiState.animeId,
                                 firstChap.id,
                                 firstChap.play,
                                 firstChap.hash
@@ -255,10 +255,10 @@ fun DetailScreen(
 
                     ChapterGrid(
                         chapters = chapterData.chaps,
-                        seasonId = uiState.seasonId,
+                        animeId = uiState.animeId,
                         onChapterClick = { chap ->
                             onNavigateToPlayer(
-                                uiState.seasonId,
+                                uiState.animeId,
                                 chap.id,
                                 chap.play,
                                 chap.hash
@@ -274,8 +274,7 @@ fun DetailScreen(
                     HorizontalAnimeList(
                         items = detail.related,
                         onItemClick = { anime ->
-                            val seasonId = anime.path.removePrefix("/phim/").trimEnd('/')
-                            onNavigateToDetail(seasonId)
+                            onNavigateToDetail(anime.animeId)
                         }
                     )
                 }
@@ -310,7 +309,7 @@ private fun InfoRow(label: String, value: String) {
 @Composable
 private fun ChapterGrid(
     chapters: List<ChapterInfo>,
-    seasonId: String,
+    animeId: String,
     onChapterClick: (ChapterInfo) -> Unit
 ) {
     val rows = (chapters.size + 3) / 4

@@ -113,10 +113,10 @@ fun NotificationScreen(
                                         )
                                         .clickable {
                                             if (notification.link.isNotEmpty()) {
-                                                val seasonId = notification.link
-                                                    .removePrefix("/phim/")
-                                                    .trimEnd('/')
-                                                onNavigateToDetail(seasonId)
+                                                val animeId = notification.animeId
+                                                if (animeId != null) {
+                                                    onNavigateToDetail(animeId)
+                                                }
                                             }
                                         }
                                         .padding(12.dp),

@@ -14,12 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.*
 import git.shin.animevsub.ui.theme.*
 
@@ -86,10 +88,7 @@ fun CategoryScreen(
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(DarkCard)
                                 .clickable {
-                                    val seasonId = item.path
-                                        .removePrefix("/phim/")
-                                        .trimEnd('/')
-                                    onNavigateToDetail(seasonId)
+                                    onNavigateToDetail(item.animeId)
                                 }
                                 .padding(12.dp),
                             verticalAlignment = Alignment.CenterVertically
@@ -115,7 +114,7 @@ fun CategoryScreen(
                                 Spacer(modifier = Modifier.height(4.dp))
                                 if (!item.chap.isNullOrEmpty()) {
                                     Text(
-                                        text = item.chap,
+                                        text = stringResource(id = R.string.ep_label, item.chap),
                                         color = AccentMain,
                                         fontSize = 12.sp
                                     )

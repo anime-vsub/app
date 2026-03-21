@@ -8,12 +8,12 @@ sealed class Screen(val route: String) {
     data object News : Screen("news")
     data object Notification : Screen("notification")
     data object Account : Screen("account")
-    data object AnimeDetail : Screen("detail/{seasonId}") {
-        fun createRoute(seasonId: String) = "detail/$seasonId"
+    data object AnimeDetail : Screen("detail/{animeId}") {
+        fun createRoute(animeId: String) = "detail/$animeId"
     }
-    data object Player : Screen("player/{seasonId}/{chapId}/{play}/{hash}") {
-        fun createRoute(seasonId: String, chapId: String, play: String, hash: String) =
-            "player/$seasonId/$chapId/$play/$hash"
+    data object Player : Screen("player/{animeId}/{chapId}/{play}/{hash}") {
+        fun createRoute(animeId: String, chapId: String, play: String, hash: String) =
+            "player/$animeId/$chapId/$play/$hash"
     }
     data object Rankings : Screen("rankings?type={type}") {
         fun createRoute(type: String = "day") = "rankings?type=$type"

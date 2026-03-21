@@ -14,11 +14,13 @@
     <string name="schedule">Lịch chiếu</string>
     <string name="rankings">Bảng xếp hạng</string>
     <string name="nominate">Đề xuất</string>
+    <string name="this_season">Mùa này</string>
     <string name="top">Top</string>
     <string name="coming_soon">Sắp chiếu</string>
     <string name="last_updated">Mới cập nhật</string>
     <string name="today">Hôm nay</string>
     <string name="tomorrow">Ngày mai</string>
+    <string name="upcoming">Sắp chiếu</string>
     <string name="view_all">Xem tất cả</string>
 
     <!-- Search -->

@@ -18,7 +18,7 @@ data class PlayerUiState(
     val isLoading: Boolean = true,
     val videoUrl: String? = null,
     val error: String? = null,
-    val seasonId: String = "",
+    val animeId: String = "",
     val chapId: String = "",
     val play: String = "",
     val hash: String = "",
@@ -38,13 +38,13 @@ class PlayerViewModel @Inject constructor(
     val uiState: StateFlow<PlayerUiState> = _uiState.asStateFlow()
 
     init {
-        val seasonId = savedStateHandle.get<String>("seasonId") ?: ""
+        val animeId = savedStateHandle.get<String>("animeId") ?: ""
         val chapId = savedStateHandle.get<String>("chapId") ?: ""
         val play = savedStateHandle.get<String>("play") ?: ""
         val hash = savedStateHandle.get<String>("hash") ?: ""
 
         _uiState.value = _uiState.value.copy(
-            seasonId = seasonId,
+            animeId = animeId,
             chapId = chapId,
             play = play,
             hash = hash
@@ -58,7 +58,7 @@ class PlayerViewModel @Inject constructor(
         }
 
         loadPlayer(chapId, play, hash)
-        loadChapters(seasonId)
+        loadChapters(animeId)
     }
 
     private fun loadPlayer(id: String, play: String, hash: String) {
@@ -81,9 +81,9 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    private fun loadChapters(seasonId: String) {
+    private fun loadChapters(animeId: String) {
         viewModelScope.launch {
-            repository.getChapters(seasonId)
+            repository.getChapters(animeId)
                 .onSuccess { data ->
                     val currentIndex = data.chaps.indexOfFirst { it.id == _uiState.value.chapId }
                     _uiState.value = _uiState.value.copy(

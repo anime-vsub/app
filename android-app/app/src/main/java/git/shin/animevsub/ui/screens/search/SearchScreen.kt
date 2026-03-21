@@ -164,10 +164,7 @@ fun SearchScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                val seasonId = suggestion.path
-                                    .removePrefix("/phim/")
-                                    .trimEnd('/')
-                                onNavigateToDetail(seasonId)
+                                onNavigateToDetail(suggestion.animeId)
                             }
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically

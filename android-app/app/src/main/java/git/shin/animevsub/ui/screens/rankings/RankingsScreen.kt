@@ -109,8 +109,7 @@ fun RankingsScreen(
                                 rank = index + 1,
                                 item = item,
                                 onClick = {
-                                    val seasonId = item.path.removePrefix("/phim/").trimEnd('/')
-                                    onNavigateToDetail(seasonId)
+                                    onNavigateToDetail(item.animeId)
                                 }
                             )
                         }

@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -70,7 +71,8 @@ fun AnimeVsubAppUI() {
             if (!hideBottomBar) {
                 NavigationBar(
                     containerColor = DarkSurface,
-                    contentColor = TextPrimary
+                    contentColor = TextPrimary,
+                    tonalElevation = 0.dp
                 ) {
                     bottomNavItems.forEach { item ->
                         val selected = currentDestination?.hierarchy?.any {
@@ -105,7 +107,7 @@ fun AnimeVsubAppUI() {
                                 selectedTextColor = AccentMain,
                                 unselectedIconColor = TextGrey,
                                 unselectedTextColor = TextGrey,
-                                indicatorColor = AccentMain.copy(alpha = 0.15f)
+                                indicatorColor = Color.Transparent
                             )
                         )
                     }
@@ -121,8 +123,8 @@ fun AnimeVsubAppUI() {
             // Bottom nav destinations
             composable(Screen.Home.route) {
                 HomeScreen(
-                    onNavigateToDetail = { seasonId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    onNavigateToDetail = { animeId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
                     },
                     onNavigateToCategory = { type, value ->
                         navController.navigate(Screen.Category.createRoute(type, value))
@@ -138,8 +140,8 @@ fun AnimeVsubAppUI() {
 
             composable(Screen.Search.route) {
                 SearchScreen(
-                    onNavigateToDetail = { seasonId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    onNavigateToDetail = { animeId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
                     }
                 )
             }
@@ -150,8 +152,8 @@ fun AnimeVsubAppUI() {
 
             composable(Screen.Notification.route) {
                 NotificationScreen(
-                    onNavigateToDetail = { seasonId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    onNavigateToDetail = { animeId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
                     },
                     onNavigateToLogin = {
                         navController.navigate(Screen.Login.route)
@@ -173,15 +175,15 @@ fun AnimeVsubAppUI() {
             // Detail screen
             composable(
                 route = Screen.AnimeDetail.route,
-                arguments = listOf(navArgument("seasonId") { type = NavType.StringType })
+                arguments = listOf(navArgument("animeId") { type = NavType.StringType })
             ) {
                 DetailScreen(
                     onNavigateBack = { navController.popBackStack() },
-                    onNavigateToPlayer = { seasonId, chapId, play, hash ->
-                        navController.navigate(Screen.Player.createRoute(seasonId, chapId, play, hash))
+                    onNavigateToPlayer = { animeId, chapId, play, hash ->
+                        navController.navigate(Screen.Player.createRoute(animeId, chapId, play, hash))
                     },
-                    onNavigateToDetail = { seasonId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    onNavigateToDetail = { animeId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
                     }
                 )
             }
@@ -190,7 +192,7 @@ fun AnimeVsubAppUI() {
             composable(
                 route = Screen.Player.route,
                 arguments = listOf(
-                    navArgument("seasonId") { type = NavType.StringType },
+                    navArgument("animeId") { type = NavType.StringType },
                     navArgument("chapId") { type = NavType.StringType },
                     navArgument("play") { type = NavType.StringType },
                     navArgument("hash") { type = NavType.StringType }
@@ -213,8 +215,8 @@ fun AnimeVsubAppUI() {
             ) {
                 RankingsScreen(
                     onNavigateBack = { navController.popBackStack() },
-                    onNavigateToDetail = { seasonId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    onNavigateToDetail = { animeId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
                     }
                 )
             }
@@ -223,8 +225,8 @@ fun AnimeVsubAppUI() {
             composable(Screen.Schedule.route) {
                 ScheduleScreen(
                     onNavigateBack = { navController.popBackStack() },
-                    onNavigateToDetail = { seasonId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    onNavigateToDetail = { animeId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
                     }
                 )
             }
@@ -239,8 +241,8 @@ fun AnimeVsubAppUI() {
             ) {
                 CategoryScreen(
                     onNavigateBack = { navController.popBackStack() },
-                    onNavigateToDetail = { seasonId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    onNavigateToDetail = { animeId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
                     }
                 )
             }

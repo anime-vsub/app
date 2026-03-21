@@ -1,9 +1,12 @@
 package git.shin.animevsub.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -14,12 +17,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.remote.AnimeApi
 import git.shin.animevsub.ui.theme.*
@@ -30,7 +36,8 @@ fun AnimeCardItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     showQuality: Boolean = true,
-    trendingIndex: Int? = null
+    trendingIndex: Int? = null,
+    showRating: Boolean = false
 ) {
     val context = LocalContext.current
     val imageRequest = remember(anime.image) {
@@ -47,7 +54,6 @@ fun AnimeCardItem(
 
     Column(
         modifier = modifier
-            .width(130.dp)
             .clickable(onClick = onClick)
     ) {
         Box(
@@ -79,7 +85,7 @@ fun AnimeCardItem(
             // Chapter badge
             if (!anime.chap.isNullOrEmpty()) {
                 Text(
-                    text = anime.chap,
+                    text = stringResource(id = R.string.ep_label, anime.chap),
                     color = Color.White,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
@@ -96,38 +102,67 @@ fun AnimeCardItem(
 
             // Quality badge
             if (showQuality && !anime.quality.isNullOrEmpty()) {
-                Text(
-                    text = anime.quality,
-                    color = Color.White,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
+                QualityBadge(
+                    quality = anime.quality,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(6.dp)
-                        .background(
-                            Color(0xFFE91E63).copy(alpha = 0.85f),
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(horizontal = 6.dp, vertical = 2.dp)
                 )
             }
 
-            // Trending index
+            // Trending index with custom images
             if (trendingIndex != null) {
-                Text(
-                    text = "#$trendingIndex",
-                    color = Color.White,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
+                val rankResId = when (trendingIndex) {
+                    1 -> R.drawable.bangumi_rank_ic_1
+                    2 -> R.drawable.bangumi_rank_ic_2
+                    3 -> R.drawable.bangumi_rank_ic_3
+                    4 -> R.drawable.bangumi_rank_ic_4
+                    5 -> R.drawable.bangumi_rank_ic_5
+                    6 -> R.drawable.bangumi_rank_ic_6
+                    7 -> R.drawable.bangumi_rank_ic_7
+                    8 -> R.drawable.bangumi_rank_ic_8
+                    9 -> R.drawable.bangumi_rank_ic_9
+                    10 -> R.drawable.bangumi_rank_ic_10
+                    else -> null
+                }
+
+                if (rankResId != null) {
+                    Image(
+                        painter = painterResource(id = rankResId),
+                        contentDescription = "Rank $trendingIndex",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .fillMaxWidth(0.4f)
+                            .padding(0.dp)
+                            .align(Alignment.TopStart)
+                    )
+                }
+            }
+
+            // Rating
+            if (showRating && anime.rate > 0) {
+                Row(
                     modifier = Modifier
-                        .align(Alignment.TopStart)
+                        .align(Alignment.BottomEnd)
                         .padding(6.dp)
-                        .background(
-                            StarColor.copy(alpha = 0.9f),
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
-                )
+                        .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(4.dp))
+                        .padding(horizontal = 4.dp, vertical = 2.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = StarColor,
+                        modifier = Modifier.size(12.dp)
+                    )
+                    Spacer(modifier = Modifier.width(2.dp))
+                    Text(
+                        text = String.format("%.1f", anime.rate),
+                        color = Color.White,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
 
@@ -146,101 +181,8 @@ fun AnimeCardItem(
 }
 
 @Composable
-fun AnimeGridCard(
-    anime: AnimeCard,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
-    val imageRequest = remember(anime.image) {
-        ImageRequest.Builder(context)
-            .data(anime.image)
-            .apply {
-                AnimeApi.getHeaders(anime.image ?: "").forEach { (key, value) ->
-                    addHeader(key, value)
-                }
-            }
-            .crossfade(true)
-            .build()
-    }
-
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(vertical = 6.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .width(80.dp)
-                .aspectRatio(2f / 3f)
-                .clip(RoundedCornerShape(6.dp))
-        ) {
-            AsyncImage(
-                model = imageRequest,
-                contentDescription = anime.name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-
-            if (!anime.quality.isNullOrEmpty()) {
-                Text(
-                    text = anime.quality,
-                    color = Color.White,
-                    fontSize = 9.sp,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(4.dp)
-                        .background(
-                            Color(0xFFE91E63).copy(alpha = 0.85f),
-                            RoundedCornerShape(3.dp)
-                        )
-                        .padding(horizontal = 4.dp, vertical = 1.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = anime.name,
-                color = TextPrimary,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            if (!anime.chap.isNullOrEmpty()) {
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = anime.chap,
-                    color = AccentMain,
-                    fontSize = 12.sp
-                )
-            }
-
-            if (anime.rate > 0) {
-                Spacer(modifier = Modifier.height(4.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "★", color = StarColor, fontSize = 12.sp)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = String.format("%.1f", anime.rate),
-                        color = TextSecondary,
-                        fontSize = 12.sp
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun SkeletonCard(modifier: Modifier = Modifier) {
-    Column(modifier = modifier.width(130.dp)) {
+    Column(modifier = modifier.width(110.dp)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
