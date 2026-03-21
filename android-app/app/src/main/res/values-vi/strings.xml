@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AnimeVsub</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_search">Tìm kiếm</string>
+    <string name="nav_news">Tin tức</string>
+    <string name="nav_notification">Thông báo</string>
+    <string name="nav_account">Tôi</string>
+
+    <!-- Home -->
+    <string name="catalog">Mục lục</string>
+    <string name="schedule">Lịch chiếu</string>
+    <string name="rankings">Bảng xếp hạng</string>
+    <string name="nominate">Đề xuất</string>
+    <string name="top">Top</string>
+    <string name="coming_soon">Sắp chiếu</string>
+    <string name="last_updated">Mới cập nhật</string>
+    <string name="today">Hôm nay</string>
+    <string name="tomorrow">Ngày mai</string>
+    <string name="view_all">Xem tất cả</string>
+
+    <!-- Search -->
+    <string name="search_hint">Tìm kiếm anime…</string>
+    <string name="search_history">Lịch sử tìm kiếm</string>
+    <string name="clear_history">Xóa</string>
+    <string name="no_results">Không tìm thấy kết quả</string>
+
+    <!-- Detail -->
+    <string name="episodes">Tập phim</string>
+    <string name="description">Mô tả</string>
+    <string name="related">Liên quan</string>
+    <string name="status_label">Trạng thái</string>
+    <string name="genre_label">Thể loại</string>
+    <string name="studio_label">Studio</string>
+    <string name="country_label">Quốc gia</string>
+    <string name="language_label">Ngôn ngữ</string>
+    <string name="year_label">Năm</string>
+    <string name="views_label">Lượt xem</string>
+    <string name="followers_label">Người theo dõi</string>
+    <string name="duration_label">Thời lượng</string>
+    <string name="watch_now">Xem ngay</string>
+    <string name="add_to_playlist">Thêm vào danh sách phát</string>
+
+    <!-- Player -->
+    <string name="server_high">Cao</string>
+    <string name="server_low">Thấp</string>
+    <string name="next_episode">Tập tiếp theo</string>
+    <string name="previous_episode">Tập trước</string>
+    <string name="playback_speed">Tốc độ phát</string>
+    <string name="quality">Chất lượng</string>
+
+    <!-- Account -->
+    <string name="login">Đăng nhập</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="email">Email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="history">Lịch sử</string>
+    <string name="follow">Theo dõi</string>
+    <string name="settings">Cài đặt</string>
+    <string name="about">Giới thiệu</string>
+    <string name="playlists">Danh sách phát</string>
+    <string name="edit_profile">Sửa hồ sơ</string>
+    <string name="change_password">Đổi mật khẩu</string>
+    <string name="login_required">Cần đăng nhập để %1$s</string>
+
+    <!-- Settings -->
+    <string name="player_settings">Cài đặt trình phát</string>
+    <string name="auto_next">Tự động phát tập tiếp theo</string>
+    <string name="auto_skip">Tự động bỏ qua Intro/Ending</string>
+    <string name="language_settings">Ngôn ngữ</string>
+    <string name="infinite_scroll">Cuộn vô hạn</string>
+    <string name="movie_mode">Chế độ phim</string>
+    <string name="show_comments">Hiển thị bình luận</string>
+
+    <!-- Rankings -->
+    <string name="rank_day">Ngày</string>
+    <string name="rank_month">Tháng</string>
+    <string name="rank_season">Mùa</string>
+    <string name="rank_year">Năm</string>
+    <string name="rank_voted">Bình chọn nhiều</string>
+
+    <!-- General -->
+    <string name="retry">Thử lại</string>
+    <string name="error_occurred">Đã xảy ra lỗi</string>
+    <string name="loading">Đang tải…</string>
+    <string name="no_internet">Không có kết nối mạng</string>
+    <string name="cancel">Hủy</string>
+    <string name="ok">OK</string>
+    <string name="save">Lưu</string>
+    <string name="delete">Xóa</string>
+    <string name="create">Tạo</string>
+    <string name="version">Phiên bản %1$s</string>
+
+    <!-- News -->
+    <string name="news">Tin tức</string>
+    <string name="no_news">Không có tin tức</string>
+
+    <!-- Notification -->
+    <string name="no_notifications">Không có thông báo</string>
+    <string name="mark_read">Đánh dấu đã đọc</string>
+
+    <!-- Playlist -->
+    <string name="create_playlist">Tạo danh sách phát</string>
+    <string name="playlist_name">Tên danh sách phát</string>
+    <string name="public_playlist">Công khai</string>
+    <string name="empty_playlist">Danh sách phát trống</string>
+</resources>

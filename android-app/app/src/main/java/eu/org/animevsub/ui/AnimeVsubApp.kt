@@ -1,0 +1,346 @@
+package eu.org.animevsub.ui
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import eu.org.animevsub.R
+import eu.org.animevsub.ui.navigation.BottomNavItem
+import eu.org.animevsub.ui.navigation.Screen
+import eu.org.animevsub.ui.screens.about.AboutScreen
+import eu.org.animevsub.ui.screens.account.AccountScreen
+import eu.org.animevsub.ui.screens.category.CategoryScreen
+import eu.org.animevsub.ui.screens.detail.DetailScreen
+import eu.org.animevsub.ui.screens.home.HomeScreen
+import eu.org.animevsub.ui.screens.login.LoginScreen
+import eu.org.animevsub.ui.screens.news.NewsScreen
+import eu.org.animevsub.ui.screens.notification.NotificationScreen
+import eu.org.animevsub.ui.screens.player.PlayerScreen
+import eu.org.animevsub.ui.screens.rankings.RankingsScreen
+import eu.org.animevsub.ui.screens.schedule.ScheduleScreen
+import eu.org.animevsub.ui.screens.search.SearchScreen
+import eu.org.animevsub.ui.theme.*
+
+@Composable
+fun AnimeVsubAppUI() {
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    val bottomNavItems = listOf(
+        BottomNavItem(Screen.Home, R.string.home, Icons.Filled.Home, Icons.Outlined.Home),
+        BottomNavItem(Screen.Search, R.string.search, Icons.Filled.Search, Icons.Outlined.Search),
+        BottomNavItem(Screen.News, R.string.news, Icons.Filled.Article, Icons.Outlined.Article),
+        BottomNavItem(Screen.Notification, R.string.notifications, Icons.Filled.Notifications, Icons.Outlined.Notifications),
+        BottomNavItem(Screen.Account, R.string.account, Icons.Filled.Person, Icons.Outlined.Person)
+    )
+
+    // Routes where bottom bar should be hidden
+    val hideBottomBar = currentDestination?.route?.let { route ->
+        route.startsWith("detail/") ||
+        route.startsWith("player/") ||
+        route == Screen.Rankings.route ||
+        route == Screen.Schedule.route ||
+        route.startsWith("category/") ||
+        route == Screen.Login.route ||
+        route == Screen.Settings.route ||
+        route == Screen.About.route ||
+        route == Screen.History.route ||
+        route == Screen.Follow.route
+    } ?: false
+
+    Scaffold(
+        containerColor = DarkBackground,
+        bottomBar = {
+            if (!hideBottomBar) {
+                NavigationBar(
+                    containerColor = DarkSurface,
+                    contentColor = TextPrimary
+                ) {
+                    bottomNavItems.forEach { item ->
+                        val selected = currentDestination?.hierarchy?.any {
+                            it.route == item.screen.route
+                        } == true
+
+                        NavigationBarItem(
+                            icon = {
+                                Icon(
+                                    imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                                    contentDescription = stringResource(item.labelRes)
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(item.labelRes),
+                                    fontSize = 11.sp
+                                )
+                            },
+                            selected = selected,
+                            onClick = {
+                                navController.navigate(item.screen.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = AccentMain,
+                                selectedTextColor = AccentMain,
+                                unselectedIconColor = TextGrey,
+                                unselectedTextColor = TextGrey,
+                                indicatorColor = AccentMain.copy(alpha = 0.15f)
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            // Bottom nav destinations
+            composable(Screen.Home.route) {
+                HomeScreen(
+                    onNavigateToDetail = { seasonId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    },
+                    onNavigateToCategory = { type, value ->
+                        navController.navigate(Screen.Category.createRoute(type, value))
+                    },
+                    onNavigateToRankings = { type ->
+                        navController.navigate(Screen.Rankings.createRoute(type))
+                    },
+                    onNavigateToSchedule = {
+                        navController.navigate(Screen.Schedule.route)
+                    }
+                )
+            }
+
+            composable(Screen.Search.route) {
+                SearchScreen(
+                    onNavigateToDetail = { seasonId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    }
+                )
+            }
+
+            composable(Screen.News.route) {
+                NewsScreen()
+            }
+
+            composable(Screen.Notification.route) {
+                NotificationScreen(
+                    onNavigateToDetail = { seasonId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    },
+                    onNavigateToLogin = {
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
+            }
+
+            composable(Screen.Account.route) {
+                AccountScreen(
+                    onNavigateToLogin = { navController.navigate(Screen.Login.route) },
+                    onNavigateToHistory = { navController.navigate(Screen.History.route) },
+                    onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
+                    onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
+                    onNavigateToAbout = { navController.navigate(Screen.About.route) },
+                    onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) }
+                )
+            }
+
+            // Detail screen
+            composable(
+                route = Screen.AnimeDetail.route,
+                arguments = listOf(navArgument("seasonId") { type = NavType.StringType })
+            ) {
+                DetailScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToPlayer = { seasonId, chapId, play, hash ->
+                        navController.navigate(Screen.Player.createRoute(seasonId, chapId, play, hash))
+                    },
+                    onNavigateToDetail = { seasonId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    }
+                )
+            }
+
+            // Player screen
+            composable(
+                route = Screen.Player.route,
+                arguments = listOf(
+                    navArgument("seasonId") { type = NavType.StringType },
+                    navArgument("chapId") { type = NavType.StringType },
+                    navArgument("play") { type = NavType.StringType },
+                    navArgument("hash") { type = NavType.StringType }
+                )
+            ) {
+                PlayerScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+
+            // Rankings screen
+            composable(
+                route = Screen.Rankings.route,
+                arguments = listOf(
+                    navArgument("type") {
+                        type = NavType.StringType
+                        defaultValue = "day"
+                    }
+                )
+            ) {
+                RankingsScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToDetail = { seasonId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    }
+                )
+            }
+
+            // Schedule screen
+            composable(Screen.Schedule.route) {
+                ScheduleScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToDetail = { seasonId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    }
+                )
+            }
+
+            // Category screen
+            composable(
+                route = Screen.Category.route,
+                arguments = listOf(
+                    navArgument("typeNormal") { type = NavType.StringType },
+                    navArgument("value") { type = NavType.StringType }
+                )
+            ) {
+                CategoryScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToDetail = { seasonId ->
+                        navController.navigate(Screen.AnimeDetail.createRoute(seasonId))
+                    }
+                )
+            }
+
+            // Login screen
+            composable(Screen.Login.route) {
+                LoginScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+
+            // About screen
+            composable(Screen.About.route) {
+                AboutScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+
+            // Placeholder screens for history, follow, settings, playlists
+            composable(Screen.History.route) {
+                PlaceholderScreen(
+                    title = stringResource(R.string.history),
+                    emoji = "📋",
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.Follow.route) {
+                PlaceholderScreen(
+                    title = stringResource(R.string.follow),
+                    emoji = "❤️",
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.Settings.route) {
+                PlaceholderScreen(
+                    title = stringResource(R.string.settings),
+                    emoji = "⚙️",
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.Playlists.route) {
+                PlaceholderScreen(
+                    title = stringResource(R.string.playlists),
+                    emoji = "📂",
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlaceholderScreen(
+    title: String,
+    emoji: String,
+    onNavigateBack: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = title, color = TextPrimary) },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = TextPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
+            )
+        },
+        containerColor = DarkBackground
+    ) { padding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = emoji, fontSize = 48.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = title,
+                    color = TextSecondary,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Coming soon",
+                    color = TextGrey,
+                    fontSize = 13.sp
+                )
+            }
+        }
+    }
+}
