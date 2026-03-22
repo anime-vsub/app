@@ -21,8 +21,8 @@ data class AnimeCard(
 
 @Serializable
 data class NamePath(
-    val name: String,
-    val tagId: String,
+  val name: String,
+  val id: String,
 )
 
 data class HomeData(
@@ -49,7 +49,6 @@ data class AnimeDetail(
     val season: List<NamePath>,
     val genre: List<NamePath>,
     val quality: String?,
-    val status: String?,
     val authors: List<NamePath>,
     val countries: List<NamePath>,
     val follows: Int,

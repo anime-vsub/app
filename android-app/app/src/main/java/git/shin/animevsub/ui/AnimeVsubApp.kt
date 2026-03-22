@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -31,7 +32,6 @@ import git.shin.animevsub.ui.screens.home.HomeScreen
 import git.shin.animevsub.ui.screens.login.LoginScreen
 import git.shin.animevsub.ui.screens.news.NewsScreen
 import git.shin.animevsub.ui.screens.notification.NotificationScreen
-import git.shin.animevsub.ui.screens.player.PlayerScreen
 import git.shin.animevsub.ui.screens.rankings.RankingsScreen
 import git.shin.animevsub.ui.screens.schedule.ScheduleScreen
 import git.shin.animevsub.ui.screens.search.SearchScreen
@@ -44,20 +44,19 @@ fun AnimeVsubAppUI() {
     val currentDestination = navBackStackEntry?.destination
 
     val bottomNavItems = listOf(
-        BottomNavItem(Screen.Home, R.string.home, Icons.Filled.Home, Icons.Outlined.Home),
-        BottomNavItem(Screen.Search, R.string.search, Icons.Filled.Search, Icons.Outlined.Search),
-        BottomNavItem(Screen.News, R.string.news, Icons.Filled.Article, Icons.Outlined.Article),
-        BottomNavItem(Screen.Notification, R.string.notifications, Icons.Filled.Notifications, Icons.Outlined.Notifications),
-        BottomNavItem(Screen.Account, R.string.account, Icons.Filled.Person, Icons.Outlined.Person)
+        BottomNavItem(Screen.Home, R.string.nav_home, Icons.Filled.Home, Icons.Outlined.Home),
+        BottomNavItem(Screen.Search, R.string.nav_search, Icons.Filled.Search, Icons.Outlined.Search),
+        BottomNavItem(Screen.News, R.string.nav_news, Icons.Filled.Article, Icons.Outlined.Article),
+        BottomNavItem(Screen.Notification, R.string.nav_notification, Icons.Filled.Notifications, Icons.Outlined.Notifications),
+        BottomNavItem(Screen.Account, R.string.nav_account, Icons.Filled.Person, Icons.Outlined.Person)
     )
 
     // Routes where bottom bar should be hidden
     val hideBottomBar = currentDestination?.route?.let { route ->
-        route.startsWith("detail/") ||
-        route.startsWith("player/") ||
+        route.startsWith("detail") ||
         route == Screen.Rankings.route ||
         route == Screen.Schedule.route ||
-        route.startsWith("category/") ||
+        route.startsWith("category") ||
         route == Screen.Login.route ||
         route == Screen.Settings.route ||
         route == Screen.About.route ||
@@ -172,34 +171,26 @@ fun AnimeVsubAppUI() {
                 )
             }
 
-            // Detail screen
+            // Detail screen (Now includes Player)
             composable(
                 route = Screen.AnimeDetail.route,
-                arguments = listOf(navArgument("animeId") { type = NavType.StringType })
+                arguments = listOf(
+                    navArgument("animeId") { type = NavType.StringType },
+                    navArgument("chapterId") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
             ) {
                 DetailScreen(
                     onNavigateBack = { navController.popBackStack() },
-                    onNavigateToPlayer = { animeId, chapId, play, hash ->
-                        navController.navigate(Screen.Player.createRoute(animeId, chapId, play, hash))
-                    },
                     onNavigateToDetail = { animeId ->
                         navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+                    },
+                    onNavigateToCategory = { type, value ->
+                        navController.navigate(Screen.Category.createRoute(type, value))
                     }
-                )
-            }
-
-            // Player screen
-            composable(
-                route = Screen.Player.route,
-                arguments = listOf(
-                    navArgument("animeId") { type = NavType.StringType },
-                    navArgument("chapId") { type = NavType.StringType },
-                    navArgument("play") { type = NavType.StringType },
-                    navArgument("hash") { type = NavType.StringType }
-                )
-            ) {
-                PlayerScreen(
-                    onNavigateBack = { navController.popBackStack() }
                 )
             }
 
@@ -261,7 +252,7 @@ fun AnimeVsubAppUI() {
                 )
             }
 
-            // Placeholder screens for history, follow, settings, playlists
+            // Placeholder screens
             composable(Screen.History.route) {
                 PlaceholderScreen(
                     title = stringResource(R.string.history),
@@ -312,7 +303,7 @@ private fun PlaceholderScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = TextPrimary
                         )
                     }
@@ -322,27 +313,27 @@ private fun PlaceholderScreen(
         },
         containerColor = DarkBackground
     ) { padding ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            contentAlignment = Alignment.Center
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = emoji, fontSize = 48.sp)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = title,
-                    color = TextSecondary,
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Coming soon",
-                    color = TextGrey,
-                    fontSize = 13.sp
-                )
-            }
+            Text(text = emoji, fontSize = 64.sp)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextPrimary
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.coming_soon_desc),
+                fontSize = 14.sp,
+                color = TextGrey
+            )
         }
     }
 }

@@ -50,6 +50,27 @@
     <string name="add_to_playlist">Add to Playlist</string>
     <string name="episode_label">Episode %1$s</string>
     <string name="ep_label">Ep.%1$s</string>
+    <string name="views_count">%1$s views</string>
+    <string name="author_label">Author</string>
+    <string name="studio_prefix">Produced by %1$s</string>
+    <string name="rating_count">%1$s ratings</string>
+    <string name="share">Share</string>
+    <string name="save_label">Save</string>
+    <string name="episodes_title">Episodes</string>
+    <string name="total_episodes">%1$s episodes</string>
+    <string name="full_series">Full series</string>
+    <string name="recommended_for_you">Recommended for you</string>
+    <string name="trailer_title">Trailer</string>
+    <string name="other_name">Other Name</string>
+    <string name="updated_to_episode">Updated to episode %1$s</string>
+    <string name="no_episodes">No episodes available</string>
+    <string name="unknown">unknown</string>
+    <string name="schedule_update_format">New episode at %1$s %2$s %3$s</string>
+    <string name="today_text">today</string>
+    <string name="sunday_text">Sunday</string>
+    <string name="day_of_week_format">on %1$s</string>
+    <string name="next_week_text">next week</string>
+    <string name="this_week_text">this week</string>
 
     <!-- Player -->
     <string name="server_high">High</string>
@@ -113,6 +134,10 @@
     <string name="developer">Developer</string>
     <string name="source_code">Source Code</string>
     <string name="license">License</string>
+    <string name="coming_soon_desc">Coming soon…</string>
+    <string name="back">Back</string>
+    <string name="million_suffix">M</string>
+    <string name="thousand_suffix">K</string>
 
     <!-- News -->
     <string name="news">News</string>

@@ -55,7 +55,7 @@ fun RankingsScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = TextPrimary
                         )
                     }
@@ -85,6 +85,7 @@ fun RankingsScreen(
                         selected = uiState.selectedType == type,
                         onClick = { viewModel.loadRankings(type) },
                         text = {
+                            @Suppress("DEPRECATION")
                             Text(
                                 text = tabLabels[index],
                                 color = if (uiState.selectedType == type) AccentMain else TextGrey
@@ -183,7 +184,7 @@ private fun RankingItemRow(
                     Spacer(modifier = Modifier.width(8.dp))
                 }
                 Text(
-                    text = "${item.views} views",
+                    text = stringResource(R.string.views_count, item.views),
                     color = TextGrey,
                     fontSize = 12.sp
                 )

@@ -44,6 +44,27 @@
     <string name="duration_label">Thời lượng</string>
     <string name="watch_now">Xem ngay</string>
     <string name="add_to_playlist">Thêm vào danh sách phát</string>
+    <string name="views_count">%1$s lượt xem</string>
+    <string name="author_label">Tác giả</string>
+    <string name="studio_prefix">Sản xuất bởi %1$s</string>
+    <string name="rating_count">%1$s người đánh giá</string>
+    <string name="share">Chia sẻ</string>
+    <string name="save_label">Lưu</string>
+    <string name="episodes_title">Tập</string>
+    <string name="total_episodes">%1$s tập</string>
+    <string name="full_series">Trọn bộ</string>
+    <string name="recommended_for_you">Đề xuất cho bạn</string>
+    <string name="trailer_title">Trailer</string>
+    <string name="other_name">Tên khác</string>
+    <string name="updated_to_episode">Cập nhật tới tập %1$s</string>
+    <string name="no_episodes">Chưa có tập phim</string>
+    <string name="unknown">không rõ</string>
+    <string name="schedule_update_format">Tập mới chiếu vào %1$s %2$s %3$s</string>
+    <string name="today_text">hôm nay</string>
+    <string name="sunday_text">Chủ Nhật</string>
+    <string name="day_of_week_format">thứ %1$s</string>
+    <string name="next_week_text">tuần sau</string>
+    <string name="this_week_text">tuần này</string>
 
     <!-- Player -->
     <string name="server_high">Cao</string>
@@ -94,6 +115,10 @@
     <string name="delete">Xóa</string>
     <string name="create">Tạo</string>
     <string name="version">Phiên bản %1$s</string>
+    <string name="coming_soon_desc">Sắp ra mắt…</string>
+    <string name="back">Quay lại</string>
+    <string name="million_suffix">Tr</string>
+    <string name="thousand_suffix">N</string>
 
     <!-- News -->
     <string name="news">Tin tức</string>

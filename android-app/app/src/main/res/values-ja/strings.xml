@@ -35,6 +35,7 @@
     <string name="duration_label">再生時間</string>
     <string name="watch_now">今すぐ見る</string>
     <string name="add_to_playlist">プレイリストに追加</string>
+    <string name="total_episodes">%1$s エピソード</string>
     <string name="login">ログイン</string>
     <string name="logout">ログアウト</string>
     <string name="email">メール</string>
