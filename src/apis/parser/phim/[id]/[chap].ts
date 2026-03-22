@@ -22,7 +22,7 @@ export default function PhimIdChap(html: string) {
     })
     .toArray()
   const [day, hour, minus] =
-    $(".schedule-title-main > h4 > strong:nth-child(3)")
+    $(".schedule-text > h4 > .highlight:last-of-type")
       .text()
       .match(/(Thứ [^\s]+|chủ nhật) vào lúc (\d+) giờ (\d+) phút/i)
       ?.slice(1) ?? []
