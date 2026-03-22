@@ -2,19 +2,57 @@ package git.shin.animevsub.ui.screens.detail
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.PlaylistAdd
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,642 +61,674 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
-import git.shin.animevsub.ui.components.*
-import git.shin.animevsub.ui.theme.*
+import git.shin.animevsub.ui.components.ActionButton
+import git.shin.animevsub.ui.components.Badge
+import git.shin.animevsub.ui.components.ErrorScreen
+import git.shin.animevsub.ui.components.GridAnimeList
+import git.shin.animevsub.ui.components.QualityBadge
+import git.shin.animevsub.ui.components.VideoPlayer
+import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.DarkBackground
+import git.shin.animevsub.ui.theme.DarkCard
+import git.shin.animevsub.ui.theme.StarColor
+import git.shin.animevsub.ui.theme.TextGrey
+import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.shimmerEffect
+import git.shin.animevsub.ui.screens.detail.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun DetailScreen(
-    onNavigateBack: () -> Unit,
-    onNavigateToDetail: (String) -> Unit,
-    onNavigateToCategory: (String, String) -> Unit,
-    viewModel: DetailViewModel = hiltViewModel()
+  onNavigateBack: () -> Unit,
+  onNavigateToDetail: (String) -> Unit,
+  onNavigateToCategory: (String, String) -> Unit,
+  viewModel: DetailViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
-    val sheetState = rememberModalBottomSheetState()
-    var showBottomSheet by remember { mutableStateOf(false) }
+  val uiState by viewModel.uiState.collectAsState()
+  val context = LocalContext.current
+  val sheetState = rememberModalBottomSheetState()
+  var showBottomSheet by remember { mutableStateOf(false) }
 
-    // List states for scrolling
-    val seasonListState = rememberLazyListState()
+  // List states for scrolling
+  val seasonListState = rememberLazyListState()
 
-    // Store scroll states for each season to maintain separate scroll positions
-    val chapterListStates = remember { mutableStateMapOf<String, LazyListState>() }
-    val currentChapterListState = chapterListStates.getOrPut(uiState.currentSeasonId) {
-        LazyListState()
-    }
+  // Store scroll states for each season to maintain separate scroll positions
+  val chapterListStates = remember { mutableStateMapOf<String, LazyListState>() }
+  val currentChapterListState = chapterListStates.getOrPut(uiState.activeDisplaySeasonId) {
+    LazyListState()
+  }
 
-    // Scroll to current chapter only if it's the currently viewed season
-    LaunchedEffect(uiState.currentChapIndex, uiState.currentSeasonId) {
-        if (uiState.currentChapIndex >= 0 && uiState.currentSeasonId == uiState.animeId) {
+  // Scroll to current chapter only if it's the currently viewed season
+  LaunchedEffect(uiState.currentChapIndex, uiState.activeDisplaySeasonId) {
+    if (uiState.currentChapIndex >= 0 && uiState.currentSeasonId == uiState.animeId) {
+        val activeSeason = uiState.displaySeasons.find { it.id == uiState.activeDisplaySeasonId }
+        if (activeSeason?.range != null) {
+            if (uiState.currentChapIndex in activeSeason.range) {
+                val scrollIndex = uiState.currentChapIndex - activeSeason.range.first
+                currentChapterListState.animateScrollToItem(scrollIndex)
+            }
+        } else {
             currentChapterListState.animateScrollToItem(uiState.currentChapIndex)
         }
     }
+  }
 
-    // Cleanup orientation on dispose
-    DisposableEffect(Unit) {
-        onDispose {
-            val activity = context as? Activity
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
+  // Cleanup orientation on dispose
+  DisposableEffect(Unit) {
+    onDispose {
+      val activity = context as? Activity
+      activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
+  }
 
-    Scaffold(
-        containerColor = DarkBackground
-    ) { innerPadding ->
-        Column(
+  Scaffold(
+    containerColor = DarkBackground
+  ) { innerPadding ->
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(innerPadding)
+    ) {
+      val detail = uiState.detail
+
+      // Player or Poster Area (Fixed at top)
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .aspectRatio(16f / 9f)
+          .background(Color.Black)
+      ) {
+        if (uiState.videoUrl != null) {
+          VideoPlayer(
+            url = uiState.videoUrl!!,
+            isLoading = uiState.isPlayerLoading,
+            onVideoEnded = {
+              if (uiState.autoNext) {
+                viewModel.playNext()
+              }
+            },
+            modifier = Modifier.fillMaxSize()
+          )
+        } else if (detail != null) {
+          AsyncImage(
+            model = detail.poster ?: detail.image,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+          )
+          Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+              .fillMaxSize()
+              .background(
+                Brush.verticalGradient(
+                  listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
+                )
+              )
+          )
+
+          if (uiState.chapterData?.chaps?.isNotEmpty() == true) {
+            IconButton(
+              onClick = {
+                viewModel.playChapter(
+                  uiState.chapterData!!.chaps.first(), uiState.animeId
+                )
+              },
+              modifier = Modifier
+                .align(Alignment.Center)
+                .size(56.dp)
+                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
+            ) {
+              Icon(
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = stringResource(R.string.watch_now),
+                tint = Color.White,
+                modifier = Modifier.size(36.dp)
+              )
+            }
+          }
+        } else {
+          Box(
+            modifier = Modifier
+              .fillMaxSize()
+              .shimmerEffect()
+          )
+        }
+
+        // Top buttons
+        Row(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .align(Alignment.TopCenter),
+          horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            val detail = uiState.detail
-
-            // Player or Poster Area (Fixed at top)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
-                    .background(Color.Black)
-            ) {
-                if (uiState.videoUrl != null) {
-                    VideoPlayer(
-                        url = uiState.videoUrl!!,
-                        isLoading = uiState.isPlayerLoading,
-                        onVideoEnded = {
-                            if (uiState.autoNext) {
-                                viewModel.playNext()
-                            }
-                        },
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else if (detail != null) {
-                    AsyncImage(
-                        model = detail.poster ?: detail.image,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
-                                )
-                            )
-                    )
-
-                    if (uiState.chapterData?.chaps?.isNotEmpty() == true) {
-                        IconButton(
-                            onClick = {
-                                viewModel.playChapter(
-                                    uiState.chapterData!!.chaps.first(), uiState.animeId
-                                )
-                            },
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(56.dp)
-                                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = stringResource(R.string.watch_now),
-                                tint = Color.White,
-                                modifier = Modifier.size(36.dp)
-                            )
-                        }
-                    }
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .shimmerEffect()
-                    )
-                }
-
-                // Top buttons
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .align(Alignment.TopCenter),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    IconButton(
-                        onClick = onNavigateBack,
-                        modifier = Modifier.background(Color.Black.copy(alpha = 0.3f), CircleShape)
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back),
-                            tint = Color.White
-                        )
-                    }
-                }
-            }
-
-            // Scrollable Content
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                if (uiState.error != null) {
-                    ErrorScreen(
-                        error = uiState.error,
-                        onRetry = { viewModel.retry() },
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(32.dp)
-                    )
-                } else if (uiState.isLoading && detail == null) {
-                    DetailSkeleton()
-                } else if (detail != null) {
-                    // Info Block (Clickable to open sheet)
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { showBottomSheet = true }
-                            .padding(horizontal = 16.dp, vertical = 8.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = detail.name,
-                                color = TextPrimary,
-                                fontSize = 17.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.weight(1f),
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                style = NoPaddingTextStyle,
-                            )
-                            Icon(Icons.Default.ChevronRight, null, tint = TextGrey)
-                        }
-
-                        Row(
-                            modifier = Modifier.padding(top = 2.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-
-                            Text(
-                                text = stringResource(R.string.views_count, formatNumber(detail.views)),
-                                color = TextGrey,
-                                fontSize = 12.sp,
-                                style = NoPaddingTextStyle
-                            )
-
-                            uiState.chapterData?.update?.let { update ->
-                                Text(
-                                    text = " • ",
-                                    color = TextGrey,
-                                    fontSize = 12.sp,
-                                    style = NoPaddingTextStyle
-                                )
-
-                                Text(
-                                    text = formatScheduleUpdate(update),
-                                    color = AccentMain,
-                                    fontSize = 12.sp,
-                                    style = NoPaddingTextStyle
-                                )
-                            }
-                        }
-                    }
-
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                            // Author and Studio Section
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                if (detail.authors.isNotEmpty()) {
-                                    Text(
-                                        text = "${stringResource(R.string.author_label)} ",
-                                        color = TextGrey,
-                                        fontSize = 12.sp,
-                                        style = NoPaddingTextStyle,
-                                    )
-
-                                    Text(
-                                        text = detail.authors.first().name,
-                                        color = Color(0xFF00D639),
-                                        fontSize = 12.sp,
-                                        style = NoPaddingTextStyle,
-                                        modifier = Modifier.clickable {
-                                            onNavigateToCategory(
-                                                "tac-gia",
-                                                detail.authors.first().id.removePrefix("/tac-gia/").trim('/')
-                                            )
-                                        })
-
-                                    Text(
-                                        text = " | ",
-                                        color = TextGrey,
-                                        fontSize = 12.sp,
-                                        style = NoPaddingTextStyle
-                                    )
-                                }
-
-                                Text(
-                                    text = stringResource(
-                                        R.string.studio_prefix,
-                                        detail.studio ?: stringResource(R.string.unknown)
-                                    ),
-                                    color = TextGrey,
-                                    fontSize = 12.sp,
-                                    style = NoPaddingTextStyle,
-                                    modifier = Modifier.clickable {
-                                        detail.studio?.let {
-                                            onNavigateToCategory("studio", it)
-                                        }
-                                    })
-                            }
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            // Badges row
-                            FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                if (!detail.quality.isNullOrEmpty()) {
-                                    QualityBadge(quality = detail.quality!!)
-                                }
-                                if (detail.yearOf != null) {
-                                    Badge(text = detail.yearOf.toString(), textStyle = NoPaddingTextStyle)
-                                }
-                                if (!detail.duration.isNullOrEmpty()) {
-                                    Badge(text = stringResource(R.string.updated_to_episode, detail.duration!!), textStyle = NoPaddingTextStyle)
-                                }
-                                if (detail.countries.isNotEmpty()) {
-                                    Text(
-                                        text = detail.countries.first().name,
-                                        color = Color(0xFF00D639),
-                                        fontSize = 12.sp,
-                                        style = NoPaddingTextStyle,
-                                        modifier = Modifier.clickable {
-                                            onNavigateToCategory(
-                                                "quoc-gia",
-                                                detail.countries.first().id.removePrefix("/quoc-gia/").trim('/')
-                                            )
-                                        })
-                                }
-                            }
-
-                            // Rating info (Stars on new line)
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(top = 8.dp)
-                            ) {
-                                Text(
-                                    text = detail.rate.toString(),
-                                    color = TextPrimary,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    style = NoPaddingTextStyle
-                                )
-                                Icon(Icons.Default.Star, null, tint = StarColor, modifier = Modifier.size(14.dp))
-
-                                Spacer(modifier = Modifier.width(8.dp))
-
-                                Text(
-                                    text = stringResource(R.string.rating_count, formatNumber(detail.countRate)),
-                                    color = TextGrey,
-                                    fontSize = 12.sp,
-                                    style = NoPaddingTextStyle,
-                                )
-                                detail.seasonOf?.let {
-                                    Text(
-                                        text = " | ",
-                                        color = TextGrey,
-                                        fontSize = 12.sp,
-                                        style = NoPaddingTextStyle
-                                    )
-
-                                    Text(
-                                        text = it.name,
-                                        color = Color(0xFF00D639),
-                                        fontSize = 12.sp,
-                                        style = NoPaddingTextStyle,
-                                        modifier = Modifier.clickable {
-                                            onNavigateToCategory("season", it.id.removePrefix("/season/").trim('/'))
-                                        })
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            // Tags/Genres
-                            FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                detail.genre.forEach { genre ->
-                                    Text(
-                                        text = "#${genre.name}",
-                                        color = Color(0xFF00D639),
-                                        fontSize = 11.sp,
-                                        style = NoPaddingTextStyle.copy(lineHeight = 14.sp),
-                                        modifier = Modifier
-                                            .padding(vertical = 1.dp)
-                                            .clickable {
-                                                onNavigateToCategory(
-                                                    "the-loai", genre.id.removePrefix("/the-loai/").trim('/')
-                                                )
-                                            })
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
-                            // Action Buttons
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                ActionButton(
-                                    icon = Icons.Default.BookmarkBorder,
-                                    label = formatNumber(detail.follows),
-                                    modifier = Modifier.weight(1f)
-                                )
-                                ActionButton(
-                                    icon = Icons.Default.Share,
-                                    label = stringResource(R.string.share),
-                                    modifier = Modifier.weight(1f)
-                                )
-                                ActionButton(
-                                    icon = Icons.Default.PlaylistAdd,
-                                    label = stringResource(R.string.save_label),
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        // Episode Section
-                        if (uiState.isChaptersLoading) {
-                            ChapterSkeleton()
-                        } else if (uiState.chaptersError != null) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = uiState.chaptersError ?: "Lỗi tải tập phim",
-                                    color = TextSecondary,
-                                    fontSize = 13.sp
-                                )
-                                TextButton(onClick = { viewModel.retry() }) {
-                                    Text("Thử lại", color = AccentMain)
-                                }
-                            }
-                        } else {
-                            val chapterData = uiState.chapterData
-                            if (chapterData != null && chapterData.chaps.isNotEmpty()) {
-                                LazyRow(
-                                    state = currentChapterListState,
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    contentPadding = PaddingValues(horizontal = 16.dp)
-                                ) {
-                                    items(chapterData.chaps.size) { index ->
-                                        val chap = chapterData.chaps[index]
-                                        val isSelected =
-                                            index == uiState.currentChapIndex && uiState.currentSeasonId == uiState.animeId
-
-                                        Box(
-                                            modifier = Modifier
-                                                .height(36.dp)
-                                                .widthIn(min = 45.dp)
-                                                .clip(RoundedCornerShape(4.dp))
-                                                .background(if (isSelected) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
-                                                .border(
-                                                    width = if (isSelected) 1.5.dp else 1.dp,
-                                                    color = if (isSelected) Color(0xFF00D639) else Color.Transparent,
-                                                    shape = RoundedCornerShape(4.dp)
-                                                )
-                                                .clickable { viewModel.playChapter(chap, uiState.currentSeasonId) },
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = chap.name,
-                                                modifier = Modifier.padding(horizontal = 12.dp),
-                                                color = if (isSelected) Color(0xFF00D639) else TextPrimary,
-                                                fontSize = 13.sp,
-                                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                                            )
-                                        }
-                                    }
-                                }
-                            } else {
-                                Text(
-                                    text = stringResource(R.string.no_episodes),
-                                    color = TextSecondary,
-                                    fontSize = 13.sp,
-                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                                )
-                            }
-                        }
-
-                        // Seasons
-                        if (detail.season.isNotEmpty()) {
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            // Find current season index for scrolling
-                            val currentSeasonIndex = detail.season.indexOfFirst {
-                                it.id.contains(uiState.currentSeasonId)
-                            }
-
-                            LaunchedEffect(currentSeasonIndex) {
-                                if (currentSeasonIndex >= 0) {
-                                    seasonListState.animateScrollToItem(currentSeasonIndex)
-                                }
-                            }
-
-                            LazyRow(
-                                state = seasonListState,
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                contentPadding = PaddingValues(horizontal = 16.dp)
-                            ) {
-                                items(detail.season) { season ->
-                                    val seasonId = season.id
-                                    val isCurrent = seasonId == uiState.currentSeasonId
-
-                                    Box(
-                                        modifier = Modifier
-                                            .widthIn(min = 100.dp)
-                                            .height(36.dp)
-                                            .clip(RoundedCornerShape(4.dp))
-                                            .background(if (isCurrent) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
-                                            .border(
-                                                width = if (isCurrent) 1.5.dp else 1.dp,
-                                                color = if (isCurrent) Color(0xFF00D639) else Color.Transparent,
-                                                shape = RoundedCornerShape(4.dp)
-                                            )
-                                            .clickable {
-                                                viewModel.loadChaptersOnly(seasonId)
-                                            }, contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            text = season.name,
-                                            modifier = Modifier.padding(horizontal = 12.dp),
-                                            color = if (isCurrent) Color(0xFF00D639) else TextSecondary,
-                                            fontSize = 12.sp,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // Related
-                    if (detail.related.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Text(
-                            text = stringResource(R.string.recommended_for_you),
-                            color = TextPrimary,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        GridAnimeList(
-                            items = detail.related, onItemClick = { anime -> onNavigateToDetail(anime.animeId) })
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(50.dp))
-            }
-        }
-
-        // Detail Bottom Sheet
-        if (showBottomSheet && uiState.detail != null) {
-            DetailBottomSheet(
-                detail = uiState.detail!!,
-                sheetState = sheetState,
-                onDismissRequest = { showBottomSheet = false },
-                onNavigateToCategory = onNavigateToCategory
+          IconButton(
+            onClick = onNavigateBack,
+            modifier = Modifier.background(Color.Black.copy(alpha = 0.3f), CircleShape)
+          ) {
+            Icon(
+              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+              contentDescription = stringResource(R.string.back),
+              tint = Color.White
             )
+          }
         }
+      }
+
+      // Scrollable Content
+      Column(
+        modifier = Modifier
+          .fillMaxWidth()
+          .weight(1f)
+          .verticalScroll(rememberScrollState())
+      ) {
+        if (uiState.error != null) {
+          ErrorScreen(
+            error = uiState.error,
+            onRetry = { viewModel.retry() },
+            modifier = Modifier
+              .fillMaxSize()
+              .padding(32.dp)
+          )
+        } else if (uiState.isLoading && detail == null) {
+          DetailSkeleton()
+        } else if (detail != null) {
+          // Info Block (Clickable to open sheet)
+          Column(
+            modifier = Modifier
+              .fillMaxWidth()
+              .clickable { showBottomSheet = true }
+              .padding(horizontal = 16.dp, vertical = 8.dp)) {
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+              Text(
+                text = detail.name,
+                color = TextPrimary,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = NoPaddingTextStyle,
+              )
+              Icon(Icons.Default.ChevronRight, null, tint = TextGrey)
+            }
+
+            Row(
+              modifier = Modifier.padding(top = 2.dp),
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+
+              Text(
+                text = stringResource(R.string.views_count, formatNumber(detail.views)),
+                color = TextGrey,
+                fontSize = 12.sp,
+                style = NoPaddingTextStyle
+              )
+
+              uiState.chapterData?.update?.let { update ->
+                Text(
+                  text = " • ",
+                  color = TextGrey,
+                  fontSize = 12.sp,
+                  style = NoPaddingTextStyle
+                )
+
+                Text(
+                  text = formatScheduleUpdate(update),
+                  color = AccentMain,
+                  fontSize = 12.sp,
+                  style = NoPaddingTextStyle
+                )
+              }
+            }
+          }
+
+          Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+              // Author and Studio Section
+              Row(verticalAlignment = Alignment.CenterVertically) {
+                if (detail.authors.isNotEmpty()) {
+                  Text(
+                    text = "${stringResource(R.string.author_label)} ",
+                    color = TextGrey,
+                    fontSize = 12.sp,
+                    style = NoPaddingTextStyle,
+                  )
+
+                  Text(
+                    text = detail.authors.first().name,
+                    color = Color(0xFF00D639),
+                    fontSize = 12.sp,
+                    style = NoPaddingTextStyle,
+                    modifier = Modifier.clickable {
+                      onNavigateToCategory(
+                        "tac-gia",
+                        detail.authors.first().id.removePrefix("/tac-gia/").trim('/')
+                      )
+                    })
+
+                  Text(
+                    text = " | ",
+                    color = TextGrey,
+                    fontSize = 12.sp,
+                    style = NoPaddingTextStyle
+                  )
+                }
+
+                Text(
+                  text = stringResource(
+                    R.string.studio_prefix,
+                    detail.studio ?: stringResource(R.string.unknown)
+                  ),
+                  color = TextGrey,
+                  fontSize = 12.sp,
+                  style = NoPaddingTextStyle,
+                  modifier = Modifier.clickable {
+                    detail.studio?.let {
+                      onNavigateToCategory("studio", it)
+                    }
+                  })
+              }
+
+              Spacer(modifier = Modifier.height(8.dp))
+
+              // Badges row
+              FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+              ) {
+                if (!detail.quality.isNullOrEmpty()) {
+                  QualityBadge(quality = detail.quality!!)
+                }
+                if (detail.yearOf != null) {
+                  Badge(text = detail.yearOf.toString(), textStyle = NoPaddingTextStyle)
+                }
+                if (!detail.duration.isNullOrEmpty()) {
+                  Badge(
+                    text = stringResource(R.string.updated_to_episode, detail.duration!!),
+                    textStyle = NoPaddingTextStyle
+                  )
+                }
+                if (detail.countries.isNotEmpty()) {
+                  Text(
+                    text = detail.countries.first().name,
+                    color = Color(0xFF00D639),
+                    fontSize = 12.sp,
+                    style = NoPaddingTextStyle,
+                    modifier = Modifier.clickable {
+                      onNavigateToCategory(
+                        "quoc-gia",
+                        detail.countries.first().id.removePrefix("/quoc-gia/").trim('/')
+                      )
+                    })
+                }
+              }
+
+              // Rating info (Stars on new line)
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(top = 8.dp)
+              ) {
+                Text(
+                  text = detail.rate.toString(),
+                  color = TextPrimary,
+                  fontSize = 12.sp,
+                  fontWeight = FontWeight.Bold,
+                  style = NoPaddingTextStyle
+                )
+                Icon(Icons.Default.Star, null, tint = StarColor, modifier = Modifier.size(14.dp))
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                  text = stringResource(R.string.rating_count, formatNumber(detail.countRate)),
+                  color = TextGrey,
+                  fontSize = 12.sp,
+                  style = NoPaddingTextStyle,
+                )
+                detail.seasonOf?.let {
+                  Text(
+                    text = " | ",
+                    color = TextGrey,
+                    fontSize = 12.sp,
+                    style = NoPaddingTextStyle
+                  )
+
+                  Text(
+                    text = it.name,
+                    color = Color(0xFF00D639),
+                    fontSize = 12.sp,
+                    style = NoPaddingTextStyle,
+                    modifier = Modifier.clickable {
+                      onNavigateToCategory("season", it.id.removePrefix("/season/").trim('/'))
+                    })
+                }
+              }
+
+              Spacer(modifier = Modifier.height(8.dp))
+
+              // Tags/Genres
+              FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+              ) {
+                detail.genre.forEach { genre ->
+                  Text(
+                    text = "#${genre.name}",
+                    color = Color(0xFF00D639),
+                    fontSize = 11.sp,
+                    style = NoPaddingTextStyle.copy(lineHeight = 14.sp),
+                    modifier = Modifier
+                      .padding(vertical = 1.dp)
+                      .clickable {
+                        onNavigateToCategory(
+                          "the-loai", genre.id.removePrefix("/the-loai/").trim('/')
+                        )
+                      })
+                }
+              }
+
+              Spacer(modifier = Modifier.height(12.dp))
+
+              // Action Buttons
+              Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+              ) {
+                ActionButton(
+                  icon = Icons.Default.BookmarkBorder,
+                  label = formatNumber(detail.follows),
+                  modifier = Modifier.weight(1f)
+                )
+                ActionButton(
+                  icon = Icons.Default.Share,
+                  label = stringResource(R.string.share),
+                  modifier = Modifier.weight(1f)
+                )
+                ActionButton(
+                  icon = Icons.Default.PlaylistAdd,
+                  label = stringResource(R.string.save_label),
+                  modifier = Modifier.weight(1f)
+                )
+              }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Episode Section
+            if (uiState.isChaptersLoading) {
+              ChapterSkeleton()
+            } else if (uiState.chaptersError != null) {
+              Column(
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+              ) {
+                Text(
+                  text = uiState.chaptersError ?: "Lỗi tải tập phim",
+                  color = TextSecondary,
+                  fontSize = 13.sp
+                )
+                TextButton(onClick = { viewModel.retry() }) {
+                  Text("Thử lại", color = AccentMain)
+                }
+              }
+            } else {
+              val chapterData = uiState.chapterData
+              if (chapterData != null && chapterData.chaps.isNotEmpty()) {
+                val activeSeason = uiState.displaySeasons.find { it.id == uiState.activeDisplaySeasonId }
+                val displayChaps = if (activeSeason?.range != null) {
+                    chapterData.chaps.slice(activeSeason.range.filter { it < chapterData.chaps.size })
+                } else {
+                    chapterData.chaps
+                }
+
+                LazyRow(
+                  state = currentChapterListState,
+                  modifier = Modifier.fillMaxWidth(),
+                  horizontalArrangement = Arrangement.spacedBy(8.dp),
+                  contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                  items(displayChaps.size) { index ->
+                    val chap = displayChaps[index]
+                    val originalIndex = if (activeSeason?.range != null) activeSeason.range.first + index else index
+                    val isSelected =
+                      originalIndex == uiState.currentChapIndex && uiState.currentSeasonId == activeSeason?.realId
+
+                    Box(
+                      modifier = Modifier
+                        .height(36.dp)
+                        .widthIn(min = 45.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(if (isSelected) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                        .border(
+                          width = if (isSelected) 1.5.dp else 1.dp,
+                          color = if (isSelected) Color(0xFF00D639) else Color.Transparent,
+                          shape = RoundedCornerShape(4.dp)
+                        )
+                        .clickable { viewModel.playChapter(chap, activeSeason?.realId ?: uiState.currentSeasonId) },
+                      contentAlignment = Alignment.Center
+                    ) {
+                      Text(
+                        text = chap.name,
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        color = if (isSelected) Color(0xFF00D639) else TextPrimary,
+                        fontSize = 13.sp,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                      )
+                    }
+                  }
+                }
+              } else {
+                Text(
+                  text = stringResource(R.string.no_episodes),
+                  color = TextSecondary,
+                  fontSize = 13.sp,
+                  modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+              }
+            }
+
+            // Seasons
+            if (uiState.displaySeasons.isNotEmpty()) {
+              Spacer(modifier = Modifier.height(16.dp))
+
+              // Find current season index for scrolling
+              val currentSeasonIndex = uiState.displaySeasons.indexOfFirst {
+                it.id == uiState.activeDisplaySeasonId
+              }
+
+              LaunchedEffect(currentSeasonIndex) {
+                if (currentSeasonIndex >= 0) {
+                  seasonListState.animateScrollToItem(currentSeasonIndex)
+                }
+              }
+
+              LazyRow(
+                state = seasonListState,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+              ) {
+                items(uiState.displaySeasons) { season ->
+                  val isCurrent = season.id == uiState.activeDisplaySeasonId
+
+                  Box(
+                    modifier = Modifier
+                      .widthIn(min = 100.dp)
+                      .height(36.dp)
+                      .clip(RoundedCornerShape(4.dp))
+                      .background(if (isCurrent) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                      .border(
+                        width = if (isCurrent) 1.5.dp else 1.dp,
+                        color = if (isCurrent) Color(0xFF00D639) else Color.Transparent,
+                        shape = RoundedCornerShape(4.dp)
+                      )
+                      .clickable {
+                        viewModel.setActiveDisplaySeason(season.id)
+                      }, contentAlignment = Alignment.Center
+                  ) {
+                    Text(
+                      text = season.name,
+                      modifier = Modifier.padding(horizontal = 12.dp),
+                      color = if (isCurrent) Color(0xFF00D639) else TextSecondary,
+                      fontSize = 12.sp,
+                      maxLines = 1,
+                      overflow = TextOverflow.Ellipsis,
+                      fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal
+                    )
+                  }
+                }
+              }
+            }
+          }
+
+          // Related
+          if (detail.related.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+              text = stringResource(R.string.recommended_for_you),
+              color = TextPrimary,
+              fontSize = 16.sp,
+              fontWeight = FontWeight.Bold,
+              modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            GridAnimeList(
+              items = detail.related, onItemClick = { anime -> onNavigateToDetail(anime.animeId) })
+          }
+        }
+
+        Spacer(modifier = Modifier.height(50.dp))
+      }
     }
+
+    // Detail Bottom Sheet
+    if (showBottomSheet && uiState.detail != null) {
+      DetailBottomSheet(
+        detail = uiState.detail!!,
+        sheetState = sheetState,
+        onDismissRequest = { showBottomSheet = false },
+        onNavigateToCategory = onNavigateToCategory
+      )
+    }
+  }
 }
 
 @Composable
 private fun DetailSkeleton() {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.7f)
-                .height(24.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .shimmerEffect()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .width(100.dp)
-                .height(14.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .shimmerEffect()
-        )
+  Column(modifier = Modifier.padding(16.dp)) {
+    Box(
+      modifier = Modifier
+        .fillMaxWidth(0.7f)
+        .height(24.dp)
+        .clip(RoundedCornerShape(4.dp))
+        .shimmerEffect()
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    Box(
+      modifier = Modifier
+        .width(100.dp)
+        .height(14.dp)
+        .clip(RoundedCornerShape(4.dp))
+        .shimmerEffect()
+    )
 
-        Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
-        Row {
-            Box(
-                modifier = Modifier
-                    .width(120.dp)
-                    .height(14.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .shimmerEffect()
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Box(
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(14.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .shimmerEffect()
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            repeat(3) {
-                Box(
-                    modifier = Modifier
-                        .width(50.dp)
-                        .height(20.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .shimmerEffect()
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-            repeat(3) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clip(CircleShape)
-                            .shimmerEffect()
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Box(
-                        modifier = Modifier
-                            .width(40.dp)
-                            .height(10.dp)
-                            .clip(RoundedCornerShape(2.dp))
-                            .shimmerEffect()
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        ChapterSkeleton()
+    Row {
+      Box(
+        modifier = Modifier
+          .width(120.dp)
+          .height(14.dp)
+          .clip(RoundedCornerShape(4.dp))
+          .shimmerEffect()
+      )
+      Spacer(modifier = Modifier.width(8.dp))
+      Box(
+        modifier = Modifier
+          .width(80.dp)
+          .height(14.dp)
+          .clip(RoundedCornerShape(4.dp))
+          .shimmerEffect()
+      )
     }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+      repeat(3) {
+        Box(
+          modifier = Modifier
+            .width(50.dp)
+            .height(20.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .shimmerEffect()
+        )
+      }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+      repeat(3) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+          Box(
+            modifier = Modifier
+              .size(24.dp)
+              .clip(CircleShape)
+              .shimmerEffect()
+          )
+          Spacer(modifier = Modifier.height(4.dp))
+          Box(
+            modifier = Modifier
+              .width(40.dp)
+              .height(10.dp)
+              .clip(RoundedCornerShape(2.dp))
+              .shimmerEffect()
+          )
+        }
+      }
+    }
+
+    Spacer(modifier = Modifier.height(24.dp))
+
+    ChapterSkeleton()
+  }
 }
 
 @Composable
 private fun ChapterSkeleton() {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        items(6) {
-            Box(
-                modifier = Modifier
-                    .size(width = 50.dp, height = 36.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .shimmerEffect()
-            )
-        }
+  LazyRow(
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    contentPadding = PaddingValues(horizontal = 16.dp),
+    modifier = Modifier.fillMaxWidth()
+  ) {
+    items(6) {
+      Box(
+        modifier = Modifier
+          .size(width = 50.dp, height = 36.dp)
+          .clip(RoundedCornerShape(4.dp))
+          .shimmerEffect()
+      )
     }
+  }
 }
