@@ -19,6 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -82,6 +84,13 @@ fun AnimeCardItem(
                     )
             )
 
+            @Suppress("DEPRECATION")
+            val badgeTextStyle = TextStyle(
+                platformStyle = PlatformTextStyle(
+                    includeFontPadding = false
+                )
+            )
+
             // Chapter badge
             if (!anime.chap.isNullOrEmpty()) {
                 Text(
@@ -89,6 +98,7 @@ fun AnimeCardItem(
                     color = Color.White,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
+                    style = badgeTextStyle,
                     modifier = Modifier
                         .align(Alignment.BottomStart)
                         .padding(6.dp)
@@ -160,7 +170,8 @@ fun AnimeCardItem(
                         text = String.format("%.1f", anime.rate),
                         color = Color.White,
                         fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        style = badgeTextStyle
                     )
                 }
             }

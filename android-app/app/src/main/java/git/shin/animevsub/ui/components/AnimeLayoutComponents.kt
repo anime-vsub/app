@@ -16,6 +16,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
@@ -25,7 +27,6 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @Composable
 fun HorizontalAnimeList(
@@ -78,20 +79,53 @@ fun HorizontalAnimeList(
                             .height(35.dp) // Fixed height to standardize row height
                             .clickable { scope.launch { state.animateScrollToItem(index) } }
                     ) {
+                        @Suppress("DEPRECATION")
+                        val timelineTextStyle = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false
+                            )
+                        )
+
                         if (timeRelease != null) {
                             val isToday = timeRelease.toLocalDate().isEqual(now.toLocalDate())
                             val isTomorrow = timeRelease.toLocalDate().isEqual(now.toLocalDate().plusDays(1))
 
                             if (isToday || isTomorrow) {
-                                Text(text = timeRelease.format(DateTimeFormatter.ofPattern("HH:mm")), fontSize = 12.sp, color = Color.White)
-                                Text(text = stringResource(if (isToday) R.string.today else R.string.tomorrow), fontSize = 10.sp, color = Color.Gray)
+                                Text(
+                                    text = timeRelease.format(DateTimeFormatter.ofPattern("HH:mm")),
+                                    fontSize = 12.sp,
+                                    color = Color.White,
+                                    style = timelineTextStyle
+                                )
+                                Text(
+                                    text = stringResource(if (isToday) R.string.today else R.string.tomorrow),
+                                    fontSize = 10.sp,
+                                    color = Color.Gray,
+                                    style = timelineTextStyle
+                                )
                             } else {
                                 val pattern = if (timeRelease.year == now.year) "MM-dd" else "yyyy-MM-dd"
-                                Text(text = timeRelease.format(DateTimeFormatter.ofPattern(pattern)), fontSize = 12.sp, color = Color.White)
-                                Text(text = timeRelease.format(DateTimeFormatter.ofPattern("EEEE", locale)), fontSize = 10.sp, color = Color.Gray)
+                                Text(
+                                    text = timeRelease.format(DateTimeFormatter.ofPattern(pattern)),
+                                    fontSize = 12.sp,
+                                    color = Color.White,
+                                    style = timelineTextStyle
+                                )
+                                Text(
+                                    text = timeRelease.format(DateTimeFormatter.ofPattern("EEEE", locale)),
+                                    fontSize = 10.sp,
+                                    color = Color.Gray,
+                                    style = timelineTextStyle
+                                )
                             }
                         } else {
-                            Text(text = stringResource(id = R.string.upcoming), fontSize = 12.sp, color = Color.Gray, modifier = Modifier.padding(top = 8.dp))
+                            Text(
+                                text = stringResource(id = R.string.upcoming),
+                                fontSize = 12.sp,
+                                color = Color.Gray,
+                                style = timelineTextStyle,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
                         }
                     }
 
@@ -99,21 +133,7 @@ fun HorizontalAnimeList(
 
                     // Dot timeline with horizontal line
                     Row(verticalAlignment = Alignment.CenterVertically) {
-//                        // Horizontal line to the left of the dot
-//                        if (index > 0) {
-//                            Box(modifier = Modifier.width(55.dp).height(2.dp).background(Color.Gray))
-//                        } else {
-//                            Spacer(modifier = Modifier.width(55.dp))
-//                        }
-
                         Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(Color.Gray))
-
-                        // Horizontal line to the right of the dot
-//                        if (index < items.size - 1) {
-//                            Box(modifier = Modifier.width(55.dp).height(2.dp).background(Color.Gray))
-//                        } else {
-//                            Spacer(modifier = Modifier.width(50.dp))
-//                        }
                     }
 
                     Spacer(modifier = Modifier.height(4.dp))

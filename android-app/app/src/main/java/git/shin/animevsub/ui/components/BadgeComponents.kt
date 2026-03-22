@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,11 +33,17 @@ fun QualityBadge(
         )
     }
 
+    @Suppress("DEPRECATION")
     Text(
         text = quality,
         color = Color.White,
         fontSize = 10.sp,
         fontWeight = FontWeight.Bold,
+        style = TextStyle(
+            platformStyle = PlatformTextStyle(
+                includeFontPadding = false
+            )
+        ),
         modifier = modifier
             .then(backgroundModifier)
             .padding(horizontal = 6.dp, vertical = 2.dp)

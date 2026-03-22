@@ -52,7 +52,7 @@ android {
 
 dependencies {
     // Compose BOM
-    val composeBom = platform("androidx.compose:compose-bom:2024.01.00")
+    val composeBom = platform("androidx.compose:compose-bom:2024.04.01")
     implementation(composeBom)
 
     // Compose
@@ -69,7 +69,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.50")
