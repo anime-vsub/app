@@ -2,11 +2,27 @@ package git.shin.animevsub.ui.screens.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,8 +40,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeDetail
-import git.shin.animevsub.ui.components.*
-import git.shin.animevsub.ui.theme.*
+import git.shin.animevsub.ui.components.InfoRow
+import git.shin.animevsub.ui.theme.DarkCard
+import git.shin.animevsub.ui.theme.DarkSurface
+import git.shin.animevsub.ui.theme.TextGrey
+import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.theme.TextSecondary
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -46,7 +66,9 @@ fun DetailBottomSheet(
     containerColor = DarkSurface,
     modifier = Modifier
       .height(sheetHeight)
-      .fillMaxWidth() dragHandle = { BottomSheetDefaults.DragHandle(color = TextGrey) }) {
+      .fillMaxWidth(),
+
+    dragHandle = { BottomSheetDefaults.DragHandle(color = TextGrey) }) {
     Column(
       modifier = Modifier
         .fillMaxWidth()

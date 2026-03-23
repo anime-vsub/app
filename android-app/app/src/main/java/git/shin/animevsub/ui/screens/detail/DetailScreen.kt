@@ -84,6 +84,7 @@ import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.shimmerEffect
+import androidx.compose.foundation.layout.wrapContentWidth
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -95,8 +96,8 @@ fun DetailScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val context = LocalContext.current
-  val detailSheetState = rememberModalBottomSheetState(  skipPartiallyExpanded = true )
-  val chapterSheetState = rememberModalBottomSheetState(  skipPartiallyExpanded = true )
+  val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   var showDetailSheet by remember { mutableStateOf(false) }
   var showChapterSheet by remember { mutableStateOf(false) }
 
@@ -447,23 +448,31 @@ fun DetailScreen(
 
               // Action Buttons
               Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
               ) {
                 ActionButton(
                   icon = Icons.Default.BookmarkBorder,
                   label = formatNumber(detail.follows),
-                  modifier = Modifier.weight(1f)
+                  modifier = Modifier
+                    .widthIn(min = 40.dp)
+                    .wrapContentWidth()
                 )
                 ActionButton(
                   icon = Icons.Default.Share,
                   label = stringResource(R.string.share),
-                  modifier = Modifier.weight(1f)
+                  modifier = Modifier
+                    .widthIn(min = 40.dp)
+                    .wrapContentWidth()
                 )
                 ActionButton(
                   icon = Icons.Default.PlaylistAdd,
                   label = stringResource(R.string.save_label),
-                  modifier = Modifier.weight(1f)
+                  modifier = Modifier
+                    .widthIn(min = 40.dp)
+                    .wrapContentWidth()
                 )
               }
             }
