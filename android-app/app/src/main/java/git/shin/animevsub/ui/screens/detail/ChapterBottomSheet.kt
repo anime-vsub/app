@@ -63,6 +63,7 @@ import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import androidx.compose.ui.platform.LocalConfiguration
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +74,11 @@ fun ChapterBottomSheet(
   onSeasonClick: (String) -> Unit,
   onChapterClick: (ChapterInfo, String) -> Unit
 ) {
+  val configuration = LocalConfiguration.current
+  val screenWidth = configuration.screenWidthDp.dp
+  val videoHeight = screenWidth * 9 / 16
+  val sheetHeight = configuration.screenHeightDp.dp - videoHeight
+
   var searchQuery by remember { mutableStateOf("") }
   var showVerticalSeasons by remember { mutableStateOf(false) }
 
@@ -93,9 +99,9 @@ fun ChapterBottomSheet(
     sheetState = sheetState,
     containerColor = DarkSurface,
     dragHandle = { BottomSheetDefaults.DragHandle(color = TextGrey) },
-    modifier = Modifier.fillMaxHeight(0.85f)
+    modifier = Modifier.height(sheetHeight).fillMaxWidth()
   ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth() .fillMaxHeight()) {
       // Header with Title and View Toggle
       Row(
         modifier = Modifier

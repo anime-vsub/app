@@ -95,8 +95,8 @@ fun DetailScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val context = LocalContext.current
-  val detailSheetState = rememberModalBottomSheetState()
-  val chapterSheetState = rememberModalBottomSheetState()
+  val detailSheetState = rememberModalBottomSheetState(  skipPartiallyExpanded = true )
+  val chapterSheetState = rememberModalBottomSheetState(  skipPartiallyExpanded = true )
   var showDetailSheet by remember { mutableStateOf(false) }
   var showChapterSheet by remember { mutableStateOf(false) }
 
