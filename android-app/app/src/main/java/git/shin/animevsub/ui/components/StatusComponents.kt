@@ -6,8 +6,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import git.shin.animevsub.R
 import git.shin.animevsub.ui.theme.*
 
 @Composable
@@ -27,7 +29,7 @@ fun ErrorScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = error ?: "An error occurred",
+            text = error ?: stringResource(R.string.error_occurred),
             color = TextSecondary,
             fontSize = 14.sp
         )
@@ -37,7 +39,7 @@ fun ErrorScreen(
             colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text("Retry")
+            Text(stringResource(R.string.retry))
         }
     }
 }

@@ -61,9 +61,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -86,7 +84,6 @@ import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.shimmerEffect
-import git.shin.animevsub.ui.screens.detail.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -98,8 +95,10 @@ fun DetailScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val context = LocalContext.current
-  val sheetState = rememberModalBottomSheetState()
-  var showBottomSheet by remember { mutableStateOf(false) }
+  val detailSheetState = rememberModalBottomSheetState()
+  val chapterSheetState = rememberModalBottomSheetState()
+  var showDetailSheet by remember { mutableStateOf(false) }
+  var showChapterSheet by remember { mutableStateOf(false) }
 
   // List states for scrolling
   val seasonListState = rememberLazyListState()
@@ -113,15 +112,15 @@ fun DetailScreen(
   // Scroll to current chapter only if it's the currently viewed season
   LaunchedEffect(uiState.currentChapIndex, uiState.activeDisplaySeasonId) {
     if (uiState.currentChapIndex >= 0 && uiState.currentSeasonId == uiState.animeId) {
-        val activeSeason = uiState.displaySeasons.find { it.id == uiState.activeDisplaySeasonId }
-        if (activeSeason?.range != null) {
-            if (uiState.currentChapIndex in activeSeason.range) {
-                val scrollIndex = uiState.currentChapIndex - activeSeason.range.first
-                currentChapterListState.animateScrollToItem(scrollIndex)
-            }
-        } else {
-            currentChapterListState.animateScrollToItem(uiState.currentChapIndex)
+      val activeSeason = uiState.displaySeasons.find { it.id == uiState.activeDisplaySeasonId }
+      if (activeSeason?.range != null) {
+        if (uiState.currentChapIndex in activeSeason.range) {
+          val scrollIndex = uiState.currentChapIndex - activeSeason.range.first
+          currentChapterListState.animateScrollToItem(scrollIndex)
         }
+      } else {
+        currentChapterListState.animateScrollToItem(uiState.currentChapIndex)
+      }
     }
   }
 
@@ -249,7 +248,7 @@ fun DetailScreen(
           Column(
             modifier = Modifier
               .fillMaxWidth()
-              .clickable { showBottomSheet = true }
+              .clickable { showDetailSheet = true }
               .padding(horizontal = 16.dp, vertical = 8.dp)) {
             Row(
               modifier = Modifier.fillMaxWidth(),
@@ -305,7 +304,7 @@ fun DetailScreen(
               Row(verticalAlignment = Alignment.CenterVertically) {
                 if (detail.authors.isNotEmpty()) {
                   Text(
-                    text = "${stringResource(R.string.author_label)} ",
+                    text = stringResource(R.string.author_label) + " ",
                     color = TextGrey,
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
@@ -433,7 +432,7 @@ fun DetailScreen(
                     text = "#${genre.name}",
                     color = Color(0xFF00D639),
                     fontSize = 11.sp,
-                    style = NoPaddingTextStyle.copy(lineHeight = 14.sp),
+                    style = DetailSmallTextStyle,
                     modifier = Modifier
                       .padding(vertical = 1.dp)
                       .clickable {
@@ -469,9 +468,30 @@ fun DetailScreen(
               }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            // Episode Section Header
+            Row(
+              modifier = Modifier
+                .fillMaxWidth()
+                .clickable { showChapterSheet = true }
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+              horizontalArrangement = Arrangement.SpaceBetween,
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              Text(
+                text = stringResource(R.string.episodes),
+                color = TextPrimary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+              )
+              Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = TextGrey,
+                modifier = Modifier.size(20.dp)
+              )
+            }
 
-            // Episode Section
+            // Episode List (Horizontal)
             if (uiState.isChaptersLoading) {
               ChapterSkeleton()
             } else if (uiState.chaptersError != null) {
@@ -482,22 +502,23 @@ fun DetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
               ) {
                 Text(
-                  text = uiState.chaptersError ?: "Lỗi tải tập phim",
+                  text = uiState.chaptersError ?: stringResource(R.string.error_loading_episodes),
                   color = TextSecondary,
                   fontSize = 13.sp
                 )
                 TextButton(onClick = { viewModel.retry() }) {
-                  Text("Thử lại", color = AccentMain)
+                  Text(stringResource(R.string.retry), color = AccentMain)
                 }
               }
             } else {
               val chapterData = uiState.chapterData
               if (chapterData != null && chapterData.chaps.isNotEmpty()) {
-                val activeSeason = uiState.displaySeasons.find { it.id == uiState.activeDisplaySeasonId }
+                val activeSeason =
+                  uiState.displaySeasons.find { it.id == uiState.activeDisplaySeasonId }
                 val displayChaps = if (activeSeason?.range != null) {
-                    chapterData.chaps.slice(activeSeason.range.filter { it < chapterData.chaps.size })
+                  chapterData.chaps.slice(activeSeason.range.filter { it < chapterData.chaps.size })
                 } else {
-                    chapterData.chaps
+                  chapterData.chaps
                 }
 
                 LazyRow(
@@ -508,9 +529,11 @@ fun DetailScreen(
                 ) {
                   items(displayChaps.size) { index ->
                     val chap = displayChaps[index]
-                    val originalIndex = if (activeSeason?.range != null) activeSeason.range.first + index else index
+                    val originalIndex =
+                      if (activeSeason?.range != null) activeSeason.range.first + index else index
                     val isSelected =
-                      originalIndex == uiState.currentChapIndex && uiState.currentSeasonId == activeSeason?.realId
+                      originalIndex == uiState.currentChapIndex && uiState.currentSeasonId == (activeSeason?.realId
+                        ?: uiState.currentSeasonId)
 
                     Box(
                       modifier = Modifier
@@ -523,7 +546,12 @@ fun DetailScreen(
                           color = if (isSelected) Color(0xFF00D639) else Color.Transparent,
                           shape = RoundedCornerShape(4.dp)
                         )
-                        .clickable { viewModel.playChapter(chap, activeSeason?.realId ?: uiState.currentSeasonId) },
+                        .clickable {
+                          viewModel.playChapter(
+                            chap,
+                            activeSeason?.realId ?: uiState.currentSeasonId
+                          )
+                        },
                       contentAlignment = Alignment.Center
                     ) {
                       Text(
@@ -622,12 +650,23 @@ fun DetailScreen(
     }
 
     // Detail Bottom Sheet
-    if (showBottomSheet && uiState.detail != null) {
+    if (showDetailSheet && uiState.detail != null) {
       DetailBottomSheet(
         detail = uiState.detail!!,
-        sheetState = sheetState,
-        onDismissRequest = { showBottomSheet = false },
+        sheetState = detailSheetState,
+        onDismissRequest = { showDetailSheet = false },
         onNavigateToCategory = onNavigateToCategory
+      )
+    }
+
+    // Chapter Grid Bottom Sheet
+    if (showChapterSheet) {
+      ChapterBottomSheet(
+        uiState = uiState,
+        sheetState = chapterSheetState,
+        onDismissRequest = { showChapterSheet = false },
+        onSeasonClick = { viewModel.setActiveDisplaySeason(it) },
+        onChapterClick = { chap, seasonId -> viewModel.playChapter(chap, seasonId) }
       )
     }
   }
@@ -686,7 +725,7 @@ private fun DetailSkeleton() {
       }
     }
 
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(24.dp))
 
     Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
       repeat(3) {

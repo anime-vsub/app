@@ -65,6 +65,12 @@
     <string name="day_of_week_format">thứ %1$s</string>
     <string name="next_week_text">tuần sau</string>
     <string name="this_week_text">tuần này</string>
+    <string name="season_list">Danh sách Season</string>
+    <string name="select_episode">Chọn tập phim</string>
+    <string name="toggle_view_mode">Chế độ xem</string>
+    <string name="search_episode_hint">Tìm tên tập hoặc số tập…</string>
+    <string name="no_episodes_found">Không tìm thấy tập phim nào</string>
+    <string name="error_loading_episodes">Lỗi tải tập phim</string>
 
     <!-- Player -->
     <string name="server_high">Cao</string>
@@ -107,6 +113,7 @@
     <!-- General -->
     <string name="retry">Thử lại</string>
     <string name="error_occurred">Đã xảy ra lỗi</string>
+    <string name="language_label_short">Ngôn ngữ</string>
     <string name="loading">Đang tải…</string>
     <string name="no_internet">Không có kết nối mạng</string>
     <string name="cancel">Hủy</string>
@@ -115,10 +122,17 @@
     <string name="delete">Xóa</string>
     <string name="create">Tạo</string>
     <string name="version">Phiên bản %1$s</string>
+    <string name="about_description">AnimeVsub là ứng dụng xem phim anime miễn phí. Xem anime yêu thích của bạn với phụ đề tiếng Việt.</string>
+    <string name="developer">Nhà phát triển</string>
+    <string name="developer_name">Đội ngũ AnimeVsub</string>
+    <string name="source_code">Mã nguồn</string>
+    <string name="license">Giấy phép</string>
+    <string name="mit_license">Giấy phép MIT</string>
     <string name="coming_soon_desc">Sắp ra mắt…</string>
     <string name="back">Quay lại</string>
     <string name="million_suffix">Tr</string>
     <string name="thousand_suffix">N</string>
+    <string name="made_with_love">Được làm với ❤️ cho người hâm mộ anime</string>
 
     <!-- News -->
     <string name="news">Tin tức</string>

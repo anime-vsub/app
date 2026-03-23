@@ -115,7 +115,7 @@ fun PlayerScreen(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = uiState.error ?: "Error",
+                            text = uiState.error ?: stringResource(R.string.error_occurred),
                             color = Color.White,
                             fontSize = 14.sp
                         )
@@ -124,7 +124,7 @@ fun PlayerScreen(
                             onClick = { viewModel.retry() },
                             colors = ButtonDefaults.buttonColors(containerColor = AccentMain)
                         ) {
-                            Text("Retry")
+                            Text(stringResource(R.string.retry))
                         }
                     }
                 }
@@ -153,7 +153,7 @@ fun PlayerScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -167,7 +167,7 @@ fun PlayerScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Fullscreen,
-                            contentDescription = "Fullscreen",
+                            contentDescription = null,
                             tint = Color.White
                         )
                     }

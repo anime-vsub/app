@@ -38,7 +38,7 @@ fun AboutScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = TextPrimary
                         )
                     }
@@ -115,7 +115,7 @@ fun AboutScreen(
             // Info cards
             InfoCard(
                 title = stringResource(R.string.developer),
-                value = "AnimeVsub Team"
+                value = stringResource(R.string.developer_name)
             )
 
             InfoCard(
@@ -125,13 +125,13 @@ fun AboutScreen(
 
             InfoCard(
                 title = stringResource(R.string.license),
-                value = "MIT License"
+                value = stringResource(R.string.mit_license)
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = "Made with ❤️ for anime fans",
+                text = stringResource(R.string.made_with_love),
                 color = TextGrey,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center

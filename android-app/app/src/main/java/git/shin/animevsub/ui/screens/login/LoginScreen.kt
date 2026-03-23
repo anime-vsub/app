@@ -58,7 +58,7 @@ fun LoginScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = TextPrimary
                         )
                     }
@@ -79,7 +79,7 @@ fun LoginScreen(
 
             // Logo / Title
             Text(
-                text = "AnimeVsub",
+                text = stringResource(R.string.app_name),
                 color = AccentMain,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
@@ -97,7 +97,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.email,
                 onValueChange = { viewModel.onEmailChange(it) },
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.email)) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Email,
