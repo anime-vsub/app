@@ -85,6 +85,7 @@ import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.shimmerEffect
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.WindowInsets
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -134,12 +135,13 @@ fun DetailScreen(
   }
 
   Scaffold(
-    containerColor = DarkBackground
+    containerColor = DarkBackground,
+    contentWindowInsets = WindowInsets(0, 0, 0, 0)
   ) { innerPadding ->
     Column(
       modifier = Modifier
         .fillMaxSize()
-        .padding(innerPadding)
+        .padding(top = innerPadding.calculateTopPadding())
     ) {
       val detail = uiState.detail
 
