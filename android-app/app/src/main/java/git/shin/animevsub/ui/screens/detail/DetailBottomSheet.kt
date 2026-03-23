@@ -40,7 +40,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeDetail
+import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.components.InfoRow
+import git.shin.animevsub.ui.styles.NoPaddingTextStyle
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
@@ -97,12 +99,12 @@ fun DetailBottomSheet(
             InfoRow(
               label = stringResource(R.string.language_label),
               value = detail.language,
-              textStyle = DetailSmallTextStyle
+              textStyle = SmallTextStyle
             )
             InfoRow(
               label = stringResource(R.string.country_label),
               value = detail.countries.firstOrNull()?.name,
-              textStyle = DetailSmallTextStyle,
+              textStyle = SmallTextStyle,
               onClick = {
                 detail.countries.firstOrNull()?.let {
                   onNavigateToCategory(
@@ -113,7 +115,7 @@ fun DetailBottomSheet(
             InfoRow(
               label = stringResource(R.string.year_label),
               value = detail.yearOf?.toString(),
-              textStyle = DetailSmallTextStyle,
+              textStyle = SmallTextStyle,
               onClick = {
                 detail.yearOf?.let {
                   onNavigateToCategory(
@@ -124,7 +126,7 @@ fun DetailBottomSheet(
             InfoRow(
               label = stringResource(R.string.duration_label),
               value = detail.duration,
-              textStyle = DetailSmallTextStyle
+              textStyle = SmallTextStyle
             )
           }
         }

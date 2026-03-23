@@ -33,7 +33,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
@@ -56,9 +55,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -66,7 +63,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.ActionButton
 import git.shin.animevsub.ui.components.Badge
@@ -86,6 +82,9 @@ import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.shimmerEffect
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.ui.viewinterop.AndroidView
+import git.shin.animevsub.ui.styles.SmallTextStyle
+import git.shin.animevsub.ui.styles.NoPaddingTextStyle
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -145,17 +144,52 @@ fun DetailScreen(
     ) {
       val detail = uiState.detail
 
-      // Player or Poster Area (Fixed at top)
+      // Player Area (Fixed at top)
       Box(
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(16f / 9f)
           .background(Color.Black)
       ) {
-        if (uiState.videoUrl != null) {
+        if (detail != null && uiState.currentChapId == "0" && !detail.trailer.isNullOrEmpty()) {
+          // Trailer Embed mode
+          AndroidView(
+            factory = { ctx ->
+              android.webkit.WebView(ctx).apply {
+                settings.javaScriptEnabled = true
+                settings.loadWithOverviewMode = true
+                settings.useWideViewPort = true
+                webViewClient = android.webkit.WebViewClient()
+                loadUrl(detail.trailer)
+              }
+            },
+            modifier = Modifier.fillMaxSize()
+          )
+          IconButton(
+            onClick = onNavigateBack,
+            modifier = Modifier
+              .padding(8.dp)
+              .align(Alignment.TopStart)
+              .background(Color.Black.copy(alpha = 0.3f), CircleShape)
+          ) {
+            Icon(
+              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+              contentDescription = null,
+              tint = Color.White
+            )
+          }
+        } else {
+          // Player mode (handles loading detail, loading link, and errors)
+          val currentChap = uiState.chapterData?.chaps?.getOrNull(uiState.currentChapIndex)
           VideoPlayer(
-            url = uiState.videoUrl!!,
-            isLoading = uiState.isPlayerLoading,
+            url = uiState.videoUrl,
+            poster = detail?.poster ?: detail?.image,
+            title = detail?.name ?: "",
+            subtitle = currentChap?.name ?: "",
+            isLoading = uiState.isPlayerLoading || uiState.isLoading,
+            errorMessage = uiState.playerError,
+            onBack = onNavigateBack,
+            onReload = { viewModel.retryPlayer() },
             onVideoEnded = {
               if (uiState.autoNext) {
                 viewModel.playNext()
@@ -163,69 +197,6 @@ fun DetailScreen(
             },
             modifier = Modifier.fillMaxSize()
           )
-        } else if (detail != null) {
-          AsyncImage(
-            model = detail.poster ?: detail.image,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-          )
-          Box(
-            modifier = Modifier
-              .fillMaxSize()
-              .background(
-                Brush.verticalGradient(
-                  listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
-                )
-              )
-          )
-
-          if (uiState.chapterData?.chaps?.isNotEmpty() == true) {
-            IconButton(
-              onClick = {
-                viewModel.playChapter(
-                  uiState.chapterData!!.chaps.first(), uiState.animeId
-                )
-              },
-              modifier = Modifier
-                .align(Alignment.Center)
-                .size(56.dp)
-                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
-            ) {
-              Icon(
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = stringResource(R.string.watch_now),
-                tint = Color.White,
-                modifier = Modifier.size(36.dp)
-              )
-            }
-          }
-        } else {
-          Box(
-            modifier = Modifier
-              .fillMaxSize()
-              .shimmerEffect()
-          )
-        }
-
-        // Top buttons
-        Row(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .align(Alignment.TopCenter),
-          horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-          IconButton(
-            onClick = onNavigateBack,
-            modifier = Modifier.background(Color.Black.copy(alpha = 0.3f), CircleShape)
-          ) {
-            Icon(
-              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = stringResource(R.string.back),
-              tint = Color.White
-            )
-          }
         }
       }
 
@@ -435,7 +406,7 @@ fun DetailScreen(
                     text = "#${genre.name}",
                     color = Color(0xFF00D639),
                     fontSize = 11.sp,
-                    style = DetailSmallTextStyle,
+                    style = SmallTextStyle,
                     modifier = Modifier
                       .padding(vertical = 1.dp)
                       .clickable {

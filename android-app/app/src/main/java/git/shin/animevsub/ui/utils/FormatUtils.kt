@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import git.shin.animevsub.R
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun formatNumber(num: Int): String {
@@ -43,4 +44,16 @@ fun formatScheduleUpdate(update: Triple<Int, Int, Int>): String {
     }
 
     return stringResource(R.string.schedule_update_format, time, dayText, weekText)
+}
+
+fun formatDuration(durationMs: Long): String {
+    val hours = TimeUnit.MILLISECONDS.toHours(durationMs)
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(durationMs) % 60
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(durationMs) % 60
+
+    return if (hours > 0) {
+        String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    } else {
+        String.format("%02d:%02d", minutes, seconds)
+    }
 }

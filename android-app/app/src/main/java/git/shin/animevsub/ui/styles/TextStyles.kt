@@ -1,4 +1,4 @@
-package git.shin.animevsub.ui.screens.detail
+package git.shin.animevsub.ui.styles
 
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
@@ -8,6 +8,6 @@ val NoPaddingTextStyle = TextStyle(
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
-val DetailSmallTextStyle = NoPaddingTextStyle.copy(
+val SmallTextStyle = NoPaddingTextStyle.copy(
     lineHeight = 14.sp
 )
