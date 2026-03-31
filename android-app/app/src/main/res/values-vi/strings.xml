@@ -75,6 +75,7 @@
     <!-- Player -->
     <string name="server_high">Cao</string>
     <string name="server_low">Thấp</string>
+    <string name="server_label">Server</string>
     <string name="next_episode">Tập tiếp theo</string>
     <string name="previous_episode">Tập trước</string>
     <string name="playback_speed">Tốc độ phát</string>

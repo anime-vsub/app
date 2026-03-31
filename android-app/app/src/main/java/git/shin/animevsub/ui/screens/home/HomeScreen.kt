@@ -3,7 +3,6 @@ package git.shin.animevsub.ui.screens.home
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -295,7 +294,7 @@ private fun CarouselSection(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
               text = item.genre.joinToString(", ") { it.name },
-              color = Color(0xFF00D639),
+              color = MainColor,
               fontSize = 12.sp,
               maxLines = 1,
               overflow = TextOverflow.Ellipsis
@@ -333,7 +332,7 @@ private fun CarouselSection(
             .width(if (isSelected) 20.dp else 6.dp)
             .clip(CircleShape)
             .background(
-              if (isSelected) Color(0xFF00D639)
+              if (isSelected) MainColor
               else Color.White.copy(alpha = 0.3f)
             )
         )

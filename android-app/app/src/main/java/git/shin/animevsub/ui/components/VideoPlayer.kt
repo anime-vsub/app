@@ -1,7 +1,6 @@
 package git.shin.animevsub.ui.components
 
 import android.net.Uri
-import android.util.Base64
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -76,6 +75,7 @@ import androidx.media3.ui.PlayerView
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.ui.styles.SmallTextStyle
+import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
 import kotlinx.coroutines.delay
 import java.io.File
@@ -100,20 +100,22 @@ fun VideoPlayer(
   onVideoEnded: () -> Unit = {}
 ) {
   val context = LocalContext.current
-  var isPlaying by remember { mutableStateOf(false) }
+  var isPlaying by remember { mutableStateOf(true) }
+  var isBuffering by remember { mutableStateOf(false) }
 
   val exoPlayer = remember {
     ExoPlayer.Builder(context).build().apply {
       playWhenReady = true
       addListener(object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
+          isBuffering = playbackState == Player.STATE_BUFFERING
           if (playbackState == Player.STATE_ENDED) {
             onVideoEnded()
           }
         }
 
-        override fun onIsPlayingChanged(isPlayingChanged: Boolean) {
-          isPlaying = isPlayingChanged
+        override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+          isPlaying = playWhenReady
         }
       })
     }
@@ -211,7 +213,7 @@ fun VideoPlayer(
 
       // Full screen background overlay
       AnimatedVisibility(
-        visible = isControlsVisible && errorMessage == null && !isLoading && playerData != null,
+        visible = isControlsVisible && errorMessage == null,
         enter = fadeIn(),
         exit = fadeOut()
       ) {
@@ -307,77 +309,88 @@ fun VideoPlayer(
           Spacer(modifier = Modifier.height(16.dp))
           Button(
             onClick = onReload,
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00D639))
+            colors = ButtonDefaults.buttonColors(containerColor = MainColor)
           ) {
-            Text("Thử lại")
+            Text(stringResource(R.string.retry))
           }
         }
-      } else if ((isLoading || playerData == null) && !isDragging) {
-        // Center Loading
-        CircularProgressIndicator(
-          modifier = Modifier
-            .align(Alignment.Center)
-            .size(32.dp),
-          color = Color(0xFF00D639),
-          strokeWidth = 2.5.dp
-        )
-      }
+      } else {
+        // Center Area: Loading Indicator & Controls
+        val showLoading = (isLoading || isBuffering || playerData == null) && !isDragging
 
-      // Center Controls (Play/Pause, Rewind, Forward)
-      AnimatedVisibility(
-        visible = isControlsVisible && errorMessage == null && !isLoading && playerData != null,
-        enter = fadeIn(),
-        exit = fadeOut(),
-        modifier = Modifier.align(Alignment.Center)
-      ) {
-        Row(
-          verticalAlignment = Alignment.CenterVertically,
-          horizontalArrangement = Arrangement.spacedBy(48.dp)
+        if (showLoading) {
+          CircularProgressIndicator(
+            modifier = Modifier
+              .align(Alignment.Center)
+              .size(42.dp),
+            color = Color(0xFFFFFFFF),
+            strokeWidth = 3.dp
+          )
+        }
+
+        // Center Controls (Play/Pause, Rewind, Forward)
+        AnimatedVisibility(
+          visible = isControlsVisible && !isDragging,
+          enter = fadeIn(),
+          exit = fadeOut(),
+          modifier = Modifier.align(Alignment.Center)
         ) {
-          IconButton(
-            onClick = {
-              exoPlayer.seekTo((exoPlayer.currentPosition - 10000).coerceAtLeast(0))
-            },
-            modifier = Modifier.size(32.dp)
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(48.dp)
           ) {
-            Icon(
-              imageVector = Icons.Default.Replay10,
-              contentDescription = "Rewind 10s",
-              tint = Color.White,
-              modifier = Modifier.fillMaxSize()
-            )
-          }
+            IconButton(
+              onClick = {
+                exoPlayer.seekTo((exoPlayer.currentPosition - 10000).coerceAtLeast(0))
+              },
+              modifier = Modifier.size(32.dp),
+              enabled = playerData != null
+            ) {
+              Icon(
+                imageVector = Icons.Default.Replay10,
+                contentDescription = "Rewind 10s",
+                tint = if (playerData != null) Color.White else Color.White.copy(alpha = 0.5f),
+                modifier = Modifier.fillMaxSize()
+              )
+            }
 
-          IconButton(
-            onClick = {
-              if (exoPlayer.isPlaying) {
-                exoPlayer.pause()
-              } else {
-                exoPlayer.play()
+            if (showLoading) {
+              // Hide play button when loading, indicator is shown behind or at same position
+              Spacer(modifier = Modifier.size(48.dp))
+            } else {
+              IconButton(
+                onClick = {
+                  if (isPlaying) {
+                    exoPlayer.pause()
+                  } else {
+                    exoPlayer.play()
+                  }
+                },
+                modifier = Modifier.size(48.dp)
+              ) {
+                Icon(
+                  imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                  contentDescription = if (isPlaying) "Pause" else "Play",
+                  tint = Color.White,
+                  modifier = Modifier.fillMaxSize()
+                )
               }
-            },
-            modifier = Modifier.size(48.dp)
-          ) {
-            Icon(
-              imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-              contentDescription = if (isPlaying) "Pause" else "Play",
-              tint = Color.White,
-              modifier = Modifier.fillMaxSize()
-            )
-          }
+            }
 
-          IconButton(
-            onClick = {
-              exoPlayer.seekTo((exoPlayer.currentPosition + 10000).coerceAtMost(exoPlayer.duration))
-            },
-            modifier = Modifier.size(32.dp)
-          ) {
-            Icon(
-              imageVector = Icons.Default.Forward10,
-              contentDescription = "Forward 10s",
-              tint = Color.White,
-              modifier = Modifier.fillMaxSize()
-            )
+            IconButton(
+              onClick = {
+                exoPlayer.seekTo((exoPlayer.currentPosition + 10000).coerceAtMost(exoPlayer.duration))
+              },
+              modifier = Modifier.size(32.dp),
+              enabled = playerData != null
+            ) {
+              Icon(
+                imageVector = Icons.Default.Forward10,
+                contentDescription = "Forward 10s",
+                tint = if (playerData != null) Color.White else Color.White.copy(alpha = 0.5f),
+                modifier = Modifier.fillMaxSize()
+              )
+            }
           }
         }
       }
@@ -440,7 +453,7 @@ fun VideoPlayer(
             },
             valueRange = 0f..duration.toFloat().coerceAtLeast(1f),
             colors = SliderDefaults.colors(
-              activeTrackColor = Color(0xFF00D639),
+              activeTrackColor = MainColor,
               inactiveTrackColor = Color.White.copy(alpha = 0.2f),
               thumbColor = Color.Transparent
             ),
@@ -452,7 +465,7 @@ fun VideoPlayer(
                 Box(
                   modifier = Modifier
                     .size(12.dp)
-                    .background(Color(0xFF00D639), CircleShape)
+                    .background(MainColor, CircleShape)
                     .border(1.dp, Color.White, CircleShape)
                 )
               }
@@ -490,7 +503,7 @@ fun VideoPlayer(
                   val activeEnd =
                     (sliderState.value / sliderState.valueRange.endInclusive) * trackWidth
                   drawRoundRect(
-                    color = Color(0xFF00D639),
+                    color = MainColor,
                     size = Size(activeEnd, trackH),
                     cornerRadius = CornerRadius(radius, radius)
                   )

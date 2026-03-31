@@ -77,6 +77,7 @@ import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.shimmerEffect
@@ -284,7 +285,7 @@ fun DetailScreen(
 
                   Text(
                     text = detail.authors.first().name,
-                    color = Color(0xFF00D639),
+                    color = MainColor,
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
                     modifier = Modifier.clickable {
@@ -340,7 +341,7 @@ fun DetailScreen(
                 if (detail.countries.isNotEmpty()) {
                   Text(
                     text = detail.countries.first().name,
-                    color = Color(0xFF00D639),
+                    color = MainColor,
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
                     modifier = Modifier.clickable {
@@ -384,7 +385,7 @@ fun DetailScreen(
 
                   Text(
                     text = it.name,
-                    color = Color(0xFF00D639),
+                    color = MainColor,
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
                     modifier = Modifier.clickable {
@@ -402,7 +403,7 @@ fun DetailScreen(
                 detail.genre.forEach { genre ->
                   Text(
                     text = "#${genre.name}",
-                    color = Color(0xFF00D639),
+                    color = MainColor,
                     fontSize = 12.sp,
                     style = SmallTextStyle,
                     modifier = Modifier
@@ -449,10 +450,9 @@ fun DetailScreen(
             }
 
             // Server Section
-            if (uiState.servers.isNotEmpty()) {
-              Spacer(modifier = Modifier.height(16.dp))
+            if (uiState.servers.size >= 2) {
               Text(
-                text = "Server",
+                text = stringResource(R.string.server_label),
                 color = TextPrimary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
@@ -469,10 +469,10 @@ fun DetailScreen(
                     modifier = Modifier
                       .height(36.dp)
                       .clip(RoundedCornerShape(4.dp))
-                      .background(if (isSelected) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                      .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
                       .border(
                         width = if (isSelected) 1.5.dp else 1.dp,
-                        color = if (isSelected) Color(0xFF00D639) else Color.Transparent,
+                        color = if (isSelected) MainColor else Color.Transparent,
                         shape = RoundedCornerShape(4.dp)
                       )
                       .clickable { viewModel.selectServer(server) },
@@ -481,7 +481,7 @@ fun DetailScreen(
                     Text(
                       text = server.name,
                       modifier = Modifier.padding(horizontal = 12.dp),
-                      color = if (isSelected) Color(0xFF00D639) else TextPrimary,
+                      color = if (isSelected) MainColor else TextPrimary,
                       fontSize = 13.sp,
                       fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                     )
@@ -562,10 +562,10 @@ fun DetailScreen(
                         .height(36.dp)
                         .widthIn(min = 45.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(if (isSelected) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                        .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
                         .border(
                           width = if (isSelected) 1.5.dp else 1.dp,
-                          color = if (isSelected) Color(0xFF00D639) else Color.Transparent,
+                          color = if (isSelected) MainColor else Color.Transparent,
                           shape = RoundedCornerShape(4.dp)
                         )
                         .clickable {
@@ -579,7 +579,7 @@ fun DetailScreen(
                       Text(
                         text = chap.name,
                         modifier = Modifier.padding(horizontal = 12.dp),
-                        color = if (isSelected) Color(0xFF00D639) else TextPrimary,
+                        color = if (isSelected) MainColor else TextPrimary,
                         fontSize = 13.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                       )
@@ -625,10 +625,10 @@ fun DetailScreen(
                       .widthIn(min = 100.dp)
                       .height(36.dp)
                       .clip(RoundedCornerShape(4.dp))
-                      .background(if (isCurrent) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                      .background(if (isCurrent) MainColor.copy(alpha = 0.15f) else DarkCard)
                       .border(
                         width = if (isCurrent) 1.5.dp else 1.dp,
-                        color = if (isCurrent) Color(0xFF00D639) else Color.Transparent,
+                        color = if (isCurrent) MainColor else Color.Transparent,
                         shape = RoundedCornerShape(4.dp)
                       )
                       .clickable {
@@ -638,7 +638,7 @@ fun DetailScreen(
                     Text(
                       text = season.name,
                       modifier = Modifier.padding(horizontal = 12.dp),
-                      color = if (isCurrent) Color(0xFF00D639) else TextSecondary,
+                      color = if (isCurrent) MainColor else TextSecondary,
                       fontSize = 12.sp,
                       maxLines = 1,
                       overflow = TextOverflow.Ellipsis,

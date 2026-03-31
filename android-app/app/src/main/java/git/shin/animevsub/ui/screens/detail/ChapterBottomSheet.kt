@@ -62,6 +62,7 @@ import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.theme.MainColor
 import androidx.compose.ui.platform.LocalConfiguration
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,7 +124,7 @@ fun ChapterBottomSheet(
           Icon(
             imageVector = if (showVerticalSeasons) Icons.Default.GridView else Icons.AutoMirrored.Filled.List,
             contentDescription = stringResource(R.string.toggle_view_mode),
-            tint = if (showVerticalSeasons) Color(0xFF00D639) else TextPrimary
+            tint = if (showVerticalSeasons) MainColor else TextPrimary
           )
         }
       }
@@ -152,11 +153,11 @@ fun ChapterBottomSheet(
           singleLine = true,
           shape = RoundedCornerShape(8.dp),
           colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color(0xFF00D639),
+            focusedBorderColor = MainColor,
             unfocusedBorderColor = DarkCard,
             unfocusedContainerColor = DarkCard,
             focusedContainerColor = DarkCard,
-            cursorColor = Color(0xFF00D639)
+            cursorColor = MainColor
           )
         )
       }
@@ -177,10 +178,10 @@ fun ChapterBottomSheet(
                 .fillMaxWidth()
                 .height(52.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(if (isCurrent) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                .background(if (isCurrent) MainColor.copy(alpha = 0.15f) else DarkCard)
                 .border(
                   width = if (isCurrent) 1.5.dp else 1.dp,
-                  color = if (isCurrent) Color(0xFF00D639) else Color.Transparent,
+                  color = if (isCurrent) MainColor else Color.Transparent,
                   shape = RoundedCornerShape(8.dp)
                 )
                 .clickable {
@@ -195,7 +196,7 @@ fun ChapterBottomSheet(
               ) {
                 Text(
                   text = season.name,
-                  color = if (isCurrent) Color(0xFF00D639) else TextPrimary,
+                  color = if (isCurrent) MainColor else TextPrimary,
                   fontSize = 15.sp,
                   fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,
                   maxLines = 1,
@@ -206,7 +207,7 @@ fun ChapterBottomSheet(
                   Icon(
                     imageVector = Icons.Default.GridView,
                     contentDescription = null,
-                    tint = Color(0xFF00D639),
+                    tint = MainColor,
                     modifier = Modifier.size(16.dp)
                   )
                 }
@@ -235,10 +236,10 @@ fun ChapterBottomSheet(
                   .widthIn(min = 100.dp)
                   .height(36.dp)
                   .clip(RoundedCornerShape(4.dp))
-                  .background(if (isCurrent) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                  .background(if (isCurrent) MainColor.copy(alpha = 0.15f) else DarkCard)
                   .border(
                     width = if (isCurrent) 1.5.dp else 1.dp,
-                    color = if (isCurrent) Color(0xFF00D639) else Color.Transparent,
+                    color = if (isCurrent) MainColor else Color.Transparent,
                     shape = RoundedCornerShape(4.dp)
                   )
                   .clickable {
@@ -248,7 +249,7 @@ fun ChapterBottomSheet(
                 Text(
                   text = season.name,
                   modifier = Modifier.padding(horizontal = 12.dp),
-                  color = if (isCurrent) Color(0xFF00D639) else TextSecondary,
+                  color = if (isCurrent) MainColor else TextSecondary,
                   fontSize = 12.sp,
                   maxLines = 1,
                   overflow = TextOverflow.Ellipsis,
@@ -304,10 +305,10 @@ fun ChapterBottomSheet(
                   modifier = Modifier
                     .height(42.dp)
                     .clip(RoundedCornerShape(6.dp))
-                    .background(if (isSelected) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                    .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
                     .border(
                       width = if (isSelected) 1.5.dp else 1.dp,
-                      color = if (isSelected) Color(0xFF00D639) else Color.Transparent,
+                      color = if (isSelected) MainColor else Color.Transparent,
                       shape = RoundedCornerShape(6.dp)
                     )
                     .clickable {
@@ -319,7 +320,7 @@ fun ChapterBottomSheet(
                 ) {
                   Text(
                     text = chap.name,
-                    color = if (isSelected) Color(0xFF00D639) else TextPrimary,
+                    color = if (isSelected) MainColor else TextPrimary,
                     fontSize = 13.sp,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                     maxLines = 1,

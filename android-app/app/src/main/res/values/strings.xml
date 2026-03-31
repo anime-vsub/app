@@ -81,6 +81,7 @@
     <!-- Player -->
     <string name="server_high">High</string>
     <string name="server_low">Low</string>
+    <string name="server_label">Server</string>
     <string name="next_episode">Next Episode</string>
     <string name="previous_episode">Previous Episode</string>
     <string name="next_ep">Next</string>

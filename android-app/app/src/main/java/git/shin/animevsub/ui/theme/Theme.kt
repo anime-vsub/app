@@ -4,6 +4,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+// Theme Colors
 val DarkBackground = Color(0xFF141E33)
 val DarkSurface = Color(0xFF1A2540)
 val DarkCard = Color(0xFF1E2D4A)
@@ -15,6 +16,9 @@ val TextGrey = Color(0xFF9E9E9E)
 val StarColor = Color(0xFFFFD700)
 val ErrorColor = Color(0xFFCF6679)
 val SuccessColor = Color(0xFF4CAF50)
+
+// Popular Colors
+val MainColor = Color(0xFF00D639)
 
 private val DarkColorScheme = darkColorScheme(
     primary = AccentMain,
