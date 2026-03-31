@@ -150,7 +150,7 @@ fun VideoPlayer(
   }
 
   LaunchedEffect(isControlsVisible, isDragging, isPlaying) {
-    if (isControlsVisible && !isDragging && isPlaying) {
+    if (isControlsVisible && !isDragging && isPlaying && !isBuffering) {
       delay(5000)
       isControlsVisible = false
     }
@@ -221,14 +221,16 @@ fun VideoPlayer(
   }
 
   Box(
-    modifier = if (isFullScreen) Modifier.fillMaxSize() else modifier
+    modifier = (if (isFullScreen) Modifier.fillMaxSize() else modifier)
       .background(Color.Black)
       .clipToBounds()
       .clickable(
-        interactionSource = remember { MutableInteractionSource() }, indication = null
+        interactionSource = remember { MutableInteractionSource() },
+        indication = null
       ) {
         isControlsVisible = !isControlsVisible
-      }) {
+      }
+  ) {
     AndroidView(
       factory = { ctx ->
         PlayerView(ctx).apply {
