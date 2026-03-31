@@ -322,7 +322,13 @@ fun VideoPlayer(
           CircularProgressIndicator(
             modifier = Modifier
               .align(Alignment.Center)
-              .size(42.dp),
+              .size(42.dp)
+              .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+              ) {
+                exoPlayer.pause()
+              },
             color = Color(0xFFFFFFFF),
             strokeWidth = 3.dp
           )
