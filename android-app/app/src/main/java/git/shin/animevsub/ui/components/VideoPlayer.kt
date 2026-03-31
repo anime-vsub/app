@@ -86,9 +86,12 @@ import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionOverride
+import androidx.media3.common.Tracks
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.DefaultHttpDataSource
@@ -125,7 +128,6 @@ fun VideoPlayer(
   onNextEpisode: () -> Unit = {},
   onSelectEpisode: () -> Unit = {},
   onSelectServer: () -> Unit = {},
-  onSelectQuality: () -> Unit = {},
   onVideoEnded: () -> Unit = {}
 ) {
   val context = LocalContext.current
@@ -134,6 +136,11 @@ fun VideoPlayer(
   var isFullScreen by remember { mutableStateOf(false) }
   var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
   var playbackSpeed by remember { mutableFloatStateOf(1f) }
+
+  // Tracks / Quality state
+  data class QualityInfo(val label: String, val group: Tracks.Group, val trackIndex: Int)
+  var availableQualities by remember { mutableStateOf<List<QualityInfo>>(emptyList()) }
+  var selectedQualityLabel by remember { mutableStateOf("Auto") }
 
   // Notification and Auto-next states
   var notificationText by remember { mutableStateOf("") }
@@ -169,6 +176,39 @@ fun VideoPlayer(
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
           playbackSpeed = playbackParameters.speed
         }
+
+        override fun onTracksChanged(tracks: Tracks) {
+          val qualities = mutableListOf<QualityInfo>()
+          tracks.groups.forEach { group ->
+            if (group.type == C.TRACK_TYPE_VIDEO) {
+              for (i in 0 until group.length) {
+                val format = group.getTrackFormat(i)
+                if (format.height > 0) {
+                  qualities.add(QualityInfo("${format.height}p", group, i))
+                }
+              }
+            }
+          }
+          // Sort qualities descending and remove duplicates by label
+          availableQualities = qualities.distinctBy { it.label }
+            .sortedByDescending { it.label.replace("p", "").toIntOrNull() ?: 0 }
+
+          val params = trackSelectionParameters
+          val hasOverride = params.overrides.values.any { it.type == C.TRACK_TYPE_VIDEO }
+
+          if (!hasOverride) {
+            selectedQualityLabel = "Auto"
+          } else {
+            var foundLabel = "Auto"
+            availableQualities.forEach { q ->
+              val override = params.overrides[q.group.mediaTrackGroup]
+              if (override != null && override.trackIndices.contains(q.trackIndex)) {
+                foundLabel = q.label
+              }
+            }
+            selectedQualityLabel = foundLabel
+          }
+        }
       })
     }
   }
@@ -180,8 +220,9 @@ fun VideoPlayer(
   var dragTime by remember { mutableLongStateOf(0L) }
   var isControlsVisible by remember { mutableStateOf(true) }
 
-  // Speed selection state
+  // Menus state
   var showSpeedMenu by remember { mutableStateOf(false) }
+  var showQualityMenu by remember { mutableStateOf(false) }
   val speeds = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f)
 
   // Auto-next delay hint
@@ -219,8 +260,8 @@ fun VideoPlayer(
     }
   }
 
-  LaunchedEffect(isControlsVisible, isDragging, isPlaying, isBuffering, showSpeedMenu) {
-    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu) {
+  LaunchedEffect(isControlsVisible, isDragging, isPlaying, isBuffering, showSpeedMenu, showQualityMenu) {
+    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu && !showQualityMenu) {
       delay(5000)
       isControlsVisible = false
     }
@@ -751,11 +792,53 @@ fun VideoPlayer(
                   text = null,
                   onClick = onSelectServer
                 )
-                PlayerControlSmallButton(
-                  icon = Icons.Default.HighQuality,
-                  text = null,
-                  onClick = onSelectQuality
-                )
+                Box {
+                  PlayerControlSmallButton(
+                    icon = Icons.Default.HighQuality,
+                    text = selectedQualityLabel,
+                    onClick = { showQualityMenu = true }
+                  )
+
+                  DropdownMenu(
+                    expanded = showQualityMenu,
+                    onDismissRequest = { showQualityMenu = false },
+                    modifier = Modifier.background(Color(0xFF2B2B2B))
+                  ) {
+                    DropdownMenuItem(
+                      text = {
+                        Text(
+                          text = selectedQualityLabel,
+                          color = if (selectedQualityLabel == "Auto") MainColor else Color.White
+                        )
+                      },
+                      onClick = {
+                        exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                          .buildUpon()
+                          .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
+                          .build()
+                        showQualityMenu = false
+                      }
+                    )
+                    availableQualities.forEach { quality ->
+                      DropdownMenuItem(
+                        text = {
+                          Text(
+                            text = quality.label,
+                            color = if (selectedQualityLabel == quality.label) MainColor else Color.White
+                          )
+                        },
+                        onClick = {
+                          exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                            .buildUpon()
+                            .setOverrideForType(TrackSelectionOverride(quality.group.mediaTrackGroup, quality.trackIndex))
+                            .build()
+                          selectedQualityLabel = quality.label
+                          showQualityMenu = false
+                        }
+                      )
+                    }
+                  }
+                }
                 Box {
                   PlayerControlSmallButton(
                     icon = Icons.Default.SlowMotionVideo,

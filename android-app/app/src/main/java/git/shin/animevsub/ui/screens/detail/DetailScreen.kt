@@ -330,14 +330,14 @@ fun DetailScreen(
                 modifier = Modifier.fillMaxWidth()
               ) {
                 if (!detail.quality.isNullOrEmpty()) {
-                  QualityBadge(quality = detail.quality!!)
+                  QualityBadge(quality = detail.quality)
                 }
                 if (detail.yearOf != null) {
                   Badge(text = detail.yearOf.toString(), textStyle = NoPaddingTextStyle)
                 }
                 if (!detail.duration.isNullOrEmpty()) {
                   Badge(
-                    text = stringResource(R.string.updated_to_episode, detail.duration!!),
+                    text = stringResource(R.string.updated_to_episode, detail.duration),
                     textStyle = NoPaddingTextStyle
                   )
                 }
