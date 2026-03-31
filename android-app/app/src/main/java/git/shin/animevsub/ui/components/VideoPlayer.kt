@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -62,6 +61,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -70,17 +70,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.datasource.DataSource
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.ui.PlayerView
+import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.ui.styles.SmallTextStyle
@@ -88,7 +90,6 @@ import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
 import kotlinx.coroutines.delay
 import java.io.File
-import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
@@ -112,6 +113,7 @@ fun VideoPlayer(
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
   var isFullScreen by remember { mutableStateOf(false) }
+  var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
 
   val exoPlayer = remember {
     ExoPlayer.Builder(context).build().apply {
@@ -126,6 +128,10 @@ fun VideoPlayer(
 
         override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
           isPlaying = playWhenReady
+        }
+
+        override fun onRenderedFirstFrame() {
+          isFirstFrameRendered = true
         }
       })
     }
@@ -149,7 +155,7 @@ fun VideoPlayer(
     }
   }
 
-  LaunchedEffect(isControlsVisible, isDragging, isPlaying) {
+  LaunchedEffect(isControlsVisible, isDragging, isPlaying, isBuffering) {
     if (isControlsVisible && !isDragging && isPlaying && !isBuffering) {
       delay(5000)
       isControlsVisible = false
@@ -166,7 +172,8 @@ fun VideoPlayer(
     if (isFullScreen) {
       activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
       controller.hide(WindowInsetsCompat.Type.systemBars())
-      controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+      controller.systemBarsBehavior =
+        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     } else {
       activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
       controller.show(WindowInsetsCompat.Type.systemBars())
@@ -200,9 +207,11 @@ fun VideoPlayer(
           .createMediaSource(mediaItem)
         exoPlayer.setMediaSource(hlsMediaSource)
       }
+
       "mp4" -> {
         exoPlayer.setMediaItem(mediaItem)
       }
+
       else -> {
         exoPlayer.setMediaItem(mediaItem)
       }
@@ -239,6 +248,15 @@ fun VideoPlayer(
         }
       }, modifier = Modifier.fillMaxSize()
     )
+
+    if (!isFirstFrameRendered && !poster.isNullOrEmpty()) {
+      AsyncImage(
+        model = poster,
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop
+      )
+    }
 
     // Overlay UI
     Box(modifier = Modifier.fillMaxSize()) {
@@ -467,7 +485,10 @@ fun VideoPlayer(
         Column(
           modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = if (isFullScreen) 32.dp else 12.dp, vertical = if (isFullScreen) 16.dp else 2.dp)
+            .padding(
+              horizontal = if (isFullScreen) 32.dp else 12.dp,
+              vertical = if (isFullScreen) 16.dp else 2.dp
+            )
         ) {
           if (!isDragging) {
             Row(
