@@ -24,22 +24,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
+import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Forward10
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.FullscreenExit
+import androidx.compose.material.icons.filled.HighQuality
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Replay10
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SlowMotionVideo
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -50,17 +59,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -75,6 +87,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
@@ -104,9 +117,15 @@ fun VideoPlayer(
   errorMessage: String? = null,
   introRange: LongRange? = null,
   outroRange: LongRange? = null,
+  autoNextEnabled: Boolean = false,
+  hasNextEpisode: Boolean = false,
   onBack: () -> Unit = {},
   onReload: () -> Unit = {},
   onSettings: () -> Unit = {},
+  onNextEpisode: () -> Unit = {},
+  onSelectEpisode: () -> Unit = {},
+  onSelectServer: () -> Unit = {},
+  onSelectQuality: () -> Unit = {},
   onVideoEnded: () -> Unit = {}
 ) {
   val context = LocalContext.current
@@ -114,6 +133,15 @@ fun VideoPlayer(
   var isBuffering by remember { mutableStateOf(false) }
   var isFullScreen by remember { mutableStateOf(false) }
   var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
+  var playbackSpeed by remember { mutableFloatStateOf(1f) }
+
+  // Notification and Auto-next states
+  var notificationText by remember { mutableStateOf("") }
+  var showNotification by remember { mutableStateOf(false) }
+  var notificationIcon by remember { mutableStateOf(Icons.Default.SkipNext) }
+  var isNotificationClickable by remember { mutableStateOf(false) }
+
+  var isAutoNexting by remember(playerData) { mutableStateOf(false) }
 
   val exoPlayer = remember {
     ExoPlayer.Builder(context).build().apply {
@@ -122,6 +150,10 @@ fun VideoPlayer(
         override fun onPlaybackStateChanged(playbackState: Int) {
           isBuffering = playbackState == Player.STATE_BUFFERING
           if (playbackState == Player.STATE_ENDED) {
+            if (autoNextEnabled && hasNextEpisode) {
+              isAutoNexting = true
+            }
+
             onVideoEnded()
           }
         }
@@ -132,6 +164,10 @@ fun VideoPlayer(
 
         override fun onRenderedFirstFrame() {
           isFirstFrameRendered = true
+        }
+
+        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
+          playbackSpeed = playbackParameters.speed
         }
       })
     }
@@ -144,6 +180,34 @@ fun VideoPlayer(
   var dragTime by remember { mutableLongStateOf(0L) }
   var isControlsVisible by remember { mutableStateOf(true) }
 
+  // Speed selection state
+  var showSpeedMenu by remember { mutableStateOf(false) }
+  val speeds = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f)
+
+  // Auto-next delay hint
+  LaunchedEffect(isAutoNexting) {
+    if (isAutoNexting) {
+      notificationText = context.getString(R.string.auto_next_hint)
+      notificationIcon = Icons.Default.SkipNext
+      isNotificationClickable = true
+      showNotification = true
+      delay(3000)
+      showNotification = false
+    }
+  }
+
+  // Show Speed change notification
+  LaunchedEffect(playbackSpeed) {
+    if (isFirstFrameRendered) {
+      notificationText = context.getString(R.string.playback_speed_changed, if (playbackSpeed % 1.0f == 0.0f) playbackSpeed.toInt() else playbackSpeed)
+      notificationIcon = Icons.Default.Speed
+      isNotificationClickable = false
+      showNotification = true
+      delay(2000)
+      showNotification = false
+    }
+  }
+
   LaunchedEffect(exoPlayer) {
     while (true) {
       if (!isDragging) {
@@ -155,8 +219,8 @@ fun VideoPlayer(
     }
   }
 
-  LaunchedEffect(isControlsVisible, isDragging, isPlaying, isBuffering) {
-    if (isControlsVisible && !isDragging && isPlaying && !isBuffering) {
+  LaunchedEffect(isControlsVisible, isDragging, isPlaying, isBuffering, showSpeedMenu) {
+    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu) {
       delay(5000)
       isControlsVisible = false
     }
@@ -246,7 +310,8 @@ fun VideoPlayer(
           player = exoPlayer
           useController = false
         }
-      }, modifier = Modifier.fillMaxSize()
+      },
+      modifier = Modifier.fillMaxSize()
     )
 
     if (!isFirstFrameRendered && !poster.isNullOrEmpty()) {
@@ -308,7 +373,7 @@ fun VideoPlayer(
             Text(
               text = title,
               color = Color.White,
-              fontSize = 15.sp,
+              fontSize = if (isFullScreen) 18.sp else 15.sp,
               fontWeight = FontWeight.Bold,
               maxLines = 1,
               overflow = TextOverflow.Ellipsis,
@@ -318,7 +383,7 @@ fun VideoPlayer(
               Text(
                 text = stringResource(id = R.string.ep_label, subtitle),
                 color = Color.White.copy(alpha = 0.7f),
-                fontSize = 13.sp,
+                fontSize = if (isFullScreen) 16.sp else 13.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = SmallTextStyle,
@@ -333,7 +398,7 @@ fun VideoPlayer(
             )
           }
 
-          IconButton(onClick = {}) {
+          IconButton(onClick = onSettings) {
             Icon(
               imageVector = Icons.Default.Settings,
               contentDescription = "Settings",
@@ -475,6 +540,49 @@ fun VideoPlayer(
         }
       }
 
+      // Notification Pop-up (Now Playing, Speed Changed, Auto Next Hint)
+      AnimatedVisibility(
+        visible = showNotification,
+        enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
+        exit = fadeOut() + slideOutVertically(targetOffsetY = { it }),
+        modifier = Modifier
+          .align(Alignment.BottomStart)
+          .padding(
+            start = if (isFullScreen) 32.dp else 16.dp,
+            bottom = if (isFullScreen) 100.dp else 70.dp
+          )
+      ) {
+        Box(
+          modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(Color.Black.copy(alpha = 0.8f))
+            .border(1.dp, MainColor.copy(alpha = 0.5f), RoundedCornerShape(4.dp))
+            .clickable(enabled = isNotificationClickable) {
+              showNotification = false
+              isNotificationClickable = false
+              isAutoNexting = false
+              onNextEpisode()
+            }
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+              imageVector = notificationIcon,
+              contentDescription = null,
+              tint = MainColor,
+              modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+              text = notificationText,
+              color = Color.White,
+              fontSize = 13.sp,
+              fontWeight = FontWeight.Medium
+            )
+          }
+        }
+      }
+
       // Bottom Controls
       AnimatedVisibility(
         visible = isControlsVisible && errorMessage == null,
@@ -501,7 +609,7 @@ fun VideoPlayer(
               Text(
                 text = "${formatDuration(currentTime)} / ${formatDuration(duration)}",
                 color = Color.White,
-                fontSize = 13.sp
+                fontSize = if (isFullScreen) 16.sp else 13.sp
               )
 
               IconButton(
@@ -616,8 +724,103 @@ fun VideoPlayer(
             },
             modifier = Modifier.height(24.dp)
           )
+
+          if (isFullScreen) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.SpaceBetween,
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                PlayerControlSmallButton(
+                  icon = Icons.Default.SkipNext,
+                  text = stringResource(R.string.next_ep),
+                  onClick = onNextEpisode
+                )
+                PlayerControlSmallButton(
+                  icon = Icons.AutoMirrored.Filled.PlaylistPlay,
+                  text = null,
+                  onClick = onSelectEpisode
+                )
+              }
+
+              Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                PlayerControlSmallButton(
+                  icon = Icons.Default.Dns,
+                  text = null,
+                  onClick = onSelectServer
+                )
+                PlayerControlSmallButton(
+                  icon = Icons.Default.HighQuality,
+                  text = null,
+                  onClick = onSelectQuality
+                )
+                Box {
+                  PlayerControlSmallButton(
+                    icon = Icons.Default.SlowMotionVideo,
+                    text = "${if (playbackSpeed % 1.0f == 0.0f) playbackSpeed.toInt() else playbackSpeed}x",
+                    onClick = { showSpeedMenu = true }
+                  )
+
+                  DropdownMenu(
+                    expanded = showSpeedMenu,
+                    onDismissRequest = { showSpeedMenu = false },
+                    modifier = Modifier.background(Color(0xFF2B2B2B))
+                  ) {
+                    speeds.forEach { speed ->
+                      DropdownMenuItem(
+                        text = {
+                          Text(
+                            text = "${speed}x",
+                            color = if (playbackSpeed == speed) MainColor else Color.White
+                          )
+                        },
+                        onClick = {
+                          exoPlayer.setPlaybackSpeed(speed)
+                          showSpeedMenu = false
+                        }
+                      )
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
+    }
+  }
+}
+
+@Composable
+fun PlayerControlSmallButton(
+  icon: ImageVector,
+  text: String? = null,
+  onClick: () -> Unit
+) {
+  Row(
+    modifier = Modifier
+      .clip(RoundedCornerShape(4.dp))
+      .clickable(onClick = onClick)
+      .padding(horizontal = 8.dp, vertical = 4.dp),
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.Center
+  ) {
+    Icon(
+      imageVector = icon,
+      contentDescription = null,
+      tint = Color.White,
+      modifier = Modifier.size(20.dp)
+    )
+    if (text != null) {
+      Spacer(modifier = Modifier.width(4.dp))
+      Text(
+        text = text,
+        color = Color.White,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Medium
+      )
     }
   }
 }

@@ -102,7 +102,7 @@ fun DetailScreen(
   var showDetailSheet by remember { mutableStateOf(false) }
   var showChapterSheet by remember { mutableStateOf(false) }
 
-  // List states for scrolling
+  // List states for scrollingon
   val seasonListState = rememberLazyListState()
 
   // Store scroll states for each season to maintain separate scroll positions
@@ -187,8 +187,11 @@ fun DetailScreen(
             errorMessage = uiState.playerError,
             introRange = uiState.introRange,
             outroRange = uiState.outroRange,
+            autoNextEnabled = uiState.autoNext,
+            hasNextEpisode = uiState.currentChapIndex + 1 < (uiState.chapterData?.chaps?.size ?: 0),
             onBack = onNavigateBack,
             onReload = { viewModel.retryPlayer() },
+            onNextEpisode = { viewModel.playNext() },
             onVideoEnded = {
               if (uiState.autoNext) {
                 viewModel.playNext()
