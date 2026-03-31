@@ -2,6 +2,8 @@ package git.shin.animevsub.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
+import androidx.compose.material.icons.automirrored.outlined.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -46,7 +48,7 @@ fun AnimeVsubAppUI() {
     val bottomNavItems = listOf(
         BottomNavItem(Screen.Home, R.string.nav_home, Icons.Filled.Home, Icons.Outlined.Home),
         BottomNavItem(Screen.Search, R.string.nav_search, Icons.Filled.Search, Icons.Outlined.Search),
-        BottomNavItem(Screen.News, R.string.nav_news, Icons.Filled.Article, Icons.Outlined.Article),
+        BottomNavItem(Screen.News, R.string.nav_news, Icons.AutoMirrored.Filled.Article, Icons.AutoMirrored.Outlined.Article),
         BottomNavItem(Screen.Notification, R.string.nav_notification, Icons.Filled.Notifications, Icons.Outlined.Notifications),
         BottomNavItem(Screen.Account, R.string.nav_account, Icons.Filled.Person, Icons.Outlined.Person)
     )
@@ -302,7 +304,7 @@ private fun PlaceholderScreen(
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
-                            imageVector = Icons.Filled.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back),
                             tint = TextPrimary
                         )

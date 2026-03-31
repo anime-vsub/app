@@ -31,9 +31,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -151,7 +151,7 @@ fun DetailScreen(
           .aspectRatio(16f / 9f)
           .background(Color.Black)
       ) {
-        if (detail != null && uiState.currentChapId == "0" && !detail.trailer.isNullOrEmpty()) {
+        if (detail != null && uiState.currentChapter?.id == "0" && !detail.trailer.isNullOrEmpty()) {
           // Trailer Embed mode
           AndroidView(
             factory = { ctx ->
@@ -167,10 +167,6 @@ fun DetailScreen(
           )
           IconButton(
             onClick = onNavigateBack,
-            modifier = Modifier
-              .padding(8.dp)
-              .align(Alignment.TopStart)
-              .background(Color.Black.copy(alpha = 0.3f), CircleShape)
           ) {
             Icon(
               imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -182,12 +178,14 @@ fun DetailScreen(
           // Player mode (handles loading detail, loading link, and errors)
           val currentChap = uiState.chapterData?.chaps?.getOrNull(uiState.currentChapIndex)
           VideoPlayer(
-            url = uiState.videoUrl,
+            playerData = uiState.playerData,
             poster = detail?.poster ?: detail?.image,
             title = detail?.name ?: "",
             subtitle = currentChap?.name ?: "",
             isLoading = uiState.isPlayerLoading || uiState.isLoading,
             errorMessage = uiState.playerError,
+            introRange = uiState.introRange,
+            outroRange = uiState.outroRange,
             onBack = onNavigateBack,
             onReload = { viewModel.retryPlayer() },
             onVideoEnded = {
@@ -405,7 +403,7 @@ fun DetailScreen(
                   Text(
                     text = "#${genre.name}",
                     color = Color(0xFF00D639),
-                    fontSize = 11.sp,
+                    fontSize = 12.sp,
                     style = SmallTextStyle,
                     modifier = Modifier
                       .padding(vertical = 1.dp)
@@ -441,12 +439,54 @@ fun DetailScreen(
                     .wrapContentWidth()
                 )
                 ActionButton(
-                  icon = Icons.Default.PlaylistAdd,
+                  icon = Icons.AutoMirrored.Filled.PlaylistAdd,
                   label = stringResource(R.string.save_label),
                   modifier = Modifier
                     .widthIn(min = 40.dp)
                     .wrapContentWidth()
                 )
+              }
+            }
+
+            // Server Section
+            if (uiState.servers.isNotEmpty()) {
+              Spacer(modifier = Modifier.height(16.dp))
+              Text(
+                text = "Server",
+                color = TextPrimary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+              )
+              LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+              ) {
+                items(uiState.servers) { server ->
+                  val isSelected = server == uiState.currentServer
+                  Box(
+                    modifier = Modifier
+                      .height(36.dp)
+                      .clip(RoundedCornerShape(4.dp))
+                      .background(if (isSelected) Color(0xFF00D639).copy(alpha = 0.15f) else DarkCard)
+                      .border(
+                        width = if (isSelected) 1.5.dp else 1.dp,
+                        color = if (isSelected) Color(0xFF00D639) else Color.Transparent,
+                        shape = RoundedCornerShape(4.dp)
+                      )
+                      .clickable { viewModel.selectServer(server) },
+                    contentAlignment = Alignment.Center
+                  ) {
+                    Text(
+                      text = server.name,
+                      modifier = Modifier.padding(horizontal = 12.dp),
+                      color = if (isSelected) Color(0xFF00D639) else TextPrimary,
+                      fontSize = 13.sp,
+                      fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                    )
+                  }
+                }
               }
             }
 

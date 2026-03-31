@@ -50,8 +50,17 @@ class AnimeRepository @Inject constructor(
     }
 
     // Player
-    suspend fun getPlayerLink(id: String, play: String, hash: String): Result<String> = runCatching {
-        api.getPlayerLink(id, play, hash)
+    suspend fun getServers(chapter: ChapterInfo): Result<List<ServerInfo>> = runCatching {
+        api.getServers(chapter)
+    }
+
+    suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerData> = runCatching {
+        api.getPlayerLink(chapter, server)
+    }
+
+    // Skip Range
+    suspend fun getSkipRange(chapter: ChapterInfo): Result<Pair<LongRange?, LongRange?>> = runCatching {
+        api.getSkipRange(chapter)
     }
 
     // Auth

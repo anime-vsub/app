@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.remote.AnimeApi
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -15,6 +16,17 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideJson(): Json {
+        return Json {
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+            encodeDefaults = true
+            isLenient = true
+        }
+    }
 
     @Provides
     @Singleton
@@ -30,8 +42,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAnimeApi(client: OkHttpClient): AnimeApi {
-        return AnimeApi(client)
+    fun provideAnimeApi(client: OkHttpClient, json: Json): AnimeApi {
+        return AnimeApi(client, json)
     }
 
     @Provides

@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "git.shin.animevsub"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "git.shin.animevsub"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "2.0.0"
 
@@ -78,7 +78,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     // Network
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
 
     // HTML Parsing (replaces cheerio)
     implementation("org.jsoup:jsoup:1.17.2")
@@ -90,9 +90,9 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Media3 ExoPlayer
-    implementation("androidx.media3:media3-exoplayer:1.2.1")
-    implementation("androidx.media3:media3-exoplayer-hls:1.2.1")
-    implementation("androidx.media3:media3-ui:1.2.1")
+    implementation("androidx.media3:media3-exoplayer:1.10.0")
+    implementation("androidx.media3:media3-exoplayer-hls:1.10.0")
+    implementation("androidx.media3:media3-ui:1.10.0")
 
     // Supabase
     implementation("io.github.jan-tennert.supabase:postgrest-kt:2.1.0")

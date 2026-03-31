@@ -4,9 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import git.shin.animevsub.data.model.AnimeDetail
-import git.shin.animevsub.data.model.ChapterData
-import git.shin.animevsub.data.model.ChapterInfo
+import git.shin.animevsub.data.model.*
 import git.shin.animevsub.data.repository.AnimeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,14 +37,15 @@ data class DetailUiState(
   val initialChapterId: String? = null,
   // Player state
   val isPlayerLoading: Boolean = false,
-  val videoUrl: String? = null,
+  val playerData: PlayerData? = null,
   val playerError: String? = null,
-  val currentChapId: String = "",
-  val currentPlay: String = "",
-  val currentHash: String = "",
-  val currentChapIndex: Int = -1,
+  val currentChapter: ChapterInfo? = null,
+  val servers: List<ServerInfo> = emptyList(),
+  val currentServer: ServerInfo? = null,
   val autoNext: Boolean = true,
   val autoSkip: Boolean = false,
+  val introRange: LongRange? = null,
+  val outroRange: LongRange? = null,
 
   /**
    * The actual season ID from the API (Real ID).
@@ -66,7 +65,13 @@ data class DetailUiState(
   val activeDisplaySeasonId: String = "",
 
   val chapterCounts: Map<String, Int> = emptyMap()
-)
+) {
+  val currentChapIndex: Int
+    get() {
+      if (currentChapter == null || chapterData == null) return -1
+      return chapterData.chaps.indexOfFirst { it.id == currentChapter.id }
+    }
+}
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
@@ -189,7 +194,6 @@ class DetailViewModel @Inject constructor(
     chapterCache[seasonId]?.let { cachedChapters ->
       _uiState.update { it.copy(chapterData = cachedChapters, isChaptersLoading = false) }
       updateChapterCount(seasonId, cachedChapters.chaps.size)
-      updateCurrentChapterIndex(cachedChapters)
     } ?: run {
       viewModelScope.launch {
         repository.getChapters(seasonId)
@@ -197,7 +201,6 @@ class DetailViewModel @Inject constructor(
             chapterCache[seasonId] = chapterData
             _uiState.update { it.copy(chapterData = chapterData, isChaptersLoading = false) }
             updateChapterCount(seasonId, chapterData.chaps.size)
-            updateCurrentChapterIndex(chapterData)
           }
           .onFailure { e ->
             _uiState.update { it.copy(isChaptersLoading = false, chaptersError = e.message) }
@@ -244,8 +247,6 @@ class DetailViewModel @Inject constructor(
       updateChapterCount(animeId, cachedChapters.chaps.size)
       if (!isSwitchingSeason) {
         handleInitialChapter(cachedChapters, targetChapterId)
-      } else {
-        updateCurrentChapterIndex(cachedChapters)
       }
     } ?: run {
       viewModelScope.launch {
@@ -256,8 +257,6 @@ class DetailViewModel @Inject constructor(
             updateChapterCount(animeId, chapterData.chaps.size)
             if (!isSwitchingSeason) {
               handleInitialChapter(chapterData, targetChapterId)
-            } else {
-              updateCurrentChapterIndex(chapterData)
             }
           }
           .onFailure { e ->
@@ -278,19 +277,9 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  private fun updateCurrentChapterIndex(chapterData: ChapterData) {
-    val currentChapId = _uiState.value.currentChapId
-    if (currentChapId.isNotEmpty() && _uiState.value.currentSeasonId == _uiState.value.animeId) {
-      val newIndex = chapterData.chaps.indexOfFirst { it.id == currentChapId }
-      _uiState.update { it.copy(currentChapIndex = newIndex) }
-    } else {
-      _uiState.update { it.copy(currentChapIndex = -1) }
-    }
-  }
-
-  fun playChapter(chap: ChapterInfo, seasonId: String) {
+  fun playChapter(chapter: ChapterInfo, seasonId: String) {
     val data = chapterCache[seasonId] ?: _uiState.value.chapterData ?: return
-    val index = data.chaps.indexOfFirst { it.id == chap.id }
+    val index = data.chaps.indexOfFirst { it.id == chapter.id }
     val isNewSeason = seasonId != _uiState.value.animeId
 
     // Determine appropriate display ID (could be virtual) based on chapter index
@@ -302,33 +291,75 @@ class DetailViewModel @Inject constructor(
 
     _uiState.update {
       it.copy(
-        currentChapId = chap.id,
-        currentPlay = chap.play,
-        currentHash = chap.hash,
-        currentChapIndex = index,
+        currentChapter = chapter,
         animeId = seasonId,
         isPlayerLoading = true,
         playerError = null,
         activeDisplaySeasonId = displayId,
-        currentSeasonId = seasonId
+        currentSeasonId = seasonId,
+        introRange = null,
+        outroRange = null,
+        servers = emptyList(),
+        currentServer = null,
+        playerData = null,
       )
     }
 
     if (isNewSeason) {
-      loadDetail(seasonId, chap.id, isSwitchingSeason = true)
+      loadDetail(seasonId, chapter.id, isSwitchingSeason = true)
     }
 
-    loadPlayer(chap.id, chap.play, chap.hash)
+    loadServers(chapter)
+    loadSkipRange(chapter)
   }
 
-  private fun loadPlayer(id: String, play: String, hash: String) {
+  private fun loadSkipRange(chapter: ChapterInfo) {
     viewModelScope.launch {
-      repository.getPlayerLink(id, play, hash)
-        .onSuccess { url ->
+      repository.getSkipRange(chapter)
+        .onSuccess { (intro, outro) ->
+          _uiState.update {
+            it.copy(
+              introRange = intro,
+              outroRange = outro
+            )
+          }
+        }
+    }
+  }
+
+  private fun loadServers(chapter: ChapterInfo) {
+    viewModelScope.launch {
+      repository.getServers(chapter)
+        .onSuccess { servers ->
+          _uiState.update { it.copy(servers = servers) }
+          if (servers.isNotEmpty()) {
+            val defaultServer = servers.first()
+            _uiState.update { it.copy(currentServer = defaultServer) }
+            loadPlayer(chapter, defaultServer)
+          } else {
+            _uiState.update { it.copy(isPlayerLoading = false, playerError = "Không tìm thấy server nào") }
+          }
+        }
+        .onFailure { e ->
+          _uiState.update { it.copy(isPlayerLoading = false, playerError = e.message) }
+        }
+    }
+  }
+
+  fun selectServer(server: ServerInfo) {
+    val chapter = _uiState.value.currentChapter ?: return
+    _uiState.update { it.copy(currentServer = server, isPlayerLoading = true, playerError = null, playerData = null) }
+    loadPlayer(chapter, server)
+  }
+
+  private fun loadPlayer(chapter: ChapterInfo, server: ServerInfo) {
+    viewModelScope.launch {
+      repository.getPlayerLink(chapter, server)
+        .onSuccess { data ->
           _uiState.update {
             it.copy(
               isPlayerLoading = false,
-              videoUrl = url,
+              playerData = data,
               playerError = null
             )
           }
@@ -356,8 +387,13 @@ class DetailViewModel @Inject constructor(
 
   fun retryPlayer() {
     val state = _uiState.value
-    if (state.currentChapId.isNotEmpty()) {
-      loadPlayer(state.currentChapId, state.currentPlay, state.currentHash)
+    if (state.currentChapter != null) {
+      if (state.currentServer != null) {
+        loadPlayer(state.currentChapter, state.currentServer)
+      } else {
+        loadServers(state.currentChapter)
+      }
+      loadSkipRange(state.currentChapter)
     }
   }
 

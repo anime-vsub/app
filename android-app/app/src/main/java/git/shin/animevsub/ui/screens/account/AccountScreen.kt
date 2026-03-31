@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -131,7 +132,7 @@ fun AccountScreen(
                 onClick = onNavigateToFollow
             )
             MenuItem(
-                icon = Icons.Default.PlaylistPlay,
+                icon = Icons.AutoMirrored.Filled.PlaylistPlay,
                 label = stringResource(R.string.playlists),
                 onClick = onNavigateToPlaylists
             )

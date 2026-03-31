@@ -76,7 +76,7 @@ fun ScheduleScreen(
                             contentColor = AccentMain,
                             edgePadding = 8.dp,
                             indicator = { tabPositions ->
-                                TabRowDefaults.Indicator(
+                                TabRowDefaults.SecondaryIndicator(
                                     modifier = Modifier.tabIndicatorOffset(tabPositions[uiState.selectedDay]),
                                     color = AccentMain
                                 )
@@ -140,9 +140,9 @@ fun ScheduleScreen(
                                                 overflow = TextOverflow.Ellipsis
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
-                                            if (!item.chap.isNullOrEmpty()) {
+                                            if (!item.lastEpisodeId.isNullOrEmpty()) {
                                                 Text(
-                                                    text = item.chap,
+                                                    text = item.lastEpisodeId,
                                                     color = AccentMain,
                                                     fontSize = 12.sp
                                                 )

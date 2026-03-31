@@ -7,7 +7,7 @@ data class AnimeCard(
   val animeId: String,
   val image: String,
   val name: String,
-  val chap: String? = null,
+  val lastEpisodeId: String? = null,
   val rate: Float = 0f,
   val views: Int? = null,
   val quality: String? = null,
@@ -60,7 +60,21 @@ data class AnimeDetail(
 )
 
 data class ChapterInfo(
-  val id: String, val play: String, val hash: String, val name: String
+  val id: String,
+  val name: String,
+  val extra: Map<String, String> = emptyMap()
+)
+
+data class ServerInfo(
+  val name: String,
+  val extra: Map<String, String> = emptyMap()
+)
+
+data class PlayerData(
+  val link: String,
+  val type: String,
+  val headers: Map<String, String>? = null,
+  val isContent: Boolean = false
 )
 
 data class ChapterData(

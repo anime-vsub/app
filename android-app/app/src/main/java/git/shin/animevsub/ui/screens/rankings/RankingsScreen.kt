@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +42,7 @@ fun RankingsScreen(
         stringResource(R.string.ranking_season),
         stringResource(R.string.ranking_year)
     )
+    val selectedIndex = tabs.indexOf(uiState.selectedType).coerceAtLeast(0)
 
     Scaffold(
         topBar = {
@@ -72,12 +74,15 @@ fun RankingsScreen(
         ) {
             // Tab row
             ScrollableTabRow(
-                selectedTabIndex = tabs.indexOf(uiState.selectedType).coerceAtLeast(0),
+                selectedTabIndex = selectedIndex,
                 containerColor = DarkBackground,
                 contentColor = AccentMain,
                 edgePadding = 16.dp,
-                indicator = {
-                    TabRowDefaults.Indicator(color = AccentMain)
+                indicator = { tabPositions ->
+                    TabRowDefaults.SecondaryIndicator(
+                        modifier = Modifier.tabIndicatorOffset(tabPositions[selectedIndex]),
+                        color = AccentMain
+                    )
                 }
             ) {
                 tabs.forEachIndexed { index, type ->
@@ -85,7 +90,6 @@ fun RankingsScreen(
                         selected = uiState.selectedType == type,
                         onClick = { viewModel.loadRankings(type) },
                         text = {
-                            @Suppress("DEPRECATION")
                             Text(
                                 text = tabLabels[index],
                                 color = if (uiState.selectedType == type) AccentMain else TextGrey

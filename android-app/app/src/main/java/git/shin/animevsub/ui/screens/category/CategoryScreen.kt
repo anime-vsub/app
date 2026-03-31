@@ -112,9 +112,9 @@ fun CategoryScreen(
                                     overflow = TextOverflow.Ellipsis
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
-                                if (!item.chap.isNullOrEmpty()) {
+                                if (!item.lastEpisodeId.isNullOrEmpty()) {
                                     Text(
-                                        text = stringResource(id = R.string.ep_label, item.chap),
+                                        text = stringResource(id = R.string.ep_label, item.lastEpisodeId),
                                         color = AccentMain,
                                         fontSize = 12.sp
                                     )
