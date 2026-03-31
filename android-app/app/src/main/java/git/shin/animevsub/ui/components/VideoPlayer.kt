@@ -1,5 +1,9 @@
 package git.shin.animevsub.ui.components
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -27,6 +31,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Forward10
+import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
@@ -64,6 +70,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.datasource.DataSource
@@ -102,6 +111,7 @@ fun VideoPlayer(
   val context = LocalContext.current
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
+  var isFullScreen by remember { mutableStateOf(false) }
 
   val exoPlayer = remember {
     ExoPlayer.Builder(context).build().apply {
@@ -146,6 +156,23 @@ fun VideoPlayer(
     }
   }
 
+  // Handle Fullscreen orientation and System UI
+  LaunchedEffect(isFullScreen) {
+    val activity = context.findActivity() ?: return@LaunchedEffect
+    val window = activity.window
+    val view = window.decorView
+    val controller = WindowCompat.getInsetsController(window, view)
+
+    if (isFullScreen) {
+      activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+      controller.hide(WindowInsetsCompat.Type.systemBars())
+      controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    } else {
+      activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+      controller.show(WindowInsetsCompat.Type.systemBars())
+    }
+  }
+
   LaunchedEffect(playerData) {
     if (playerData == null || playerData.link.isEmpty()) return@LaunchedEffect
 
@@ -164,7 +191,7 @@ fun VideoPlayer(
 
       MediaItem.fromUri(tempFile.toUri())
     } else {
-      MediaItem.fromUri(Uri.parse(playerData.link))
+      MediaItem.fromUri(playerData.link.toUri())
     }
 
     when (playerData.type.lowercase()) {
@@ -187,11 +214,14 @@ fun VideoPlayer(
   DisposableEffect(Unit) {
     onDispose {
       exoPlayer.release()
+      // Reset orientation when player is destroyed
+      val activity = context.findActivity()
+      activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
   }
 
   Box(
-    modifier = modifier
+    modifier = if (isFullScreen) Modifier.fillMaxSize() else modifier
       .background(Color.Black)
       .clipToBounds()
       .clickable(
@@ -233,11 +263,17 @@ fun VideoPlayer(
         Row(
           modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
+            .padding(top = if (isFullScreen) 32.dp else 16.dp)
             .padding(horizontal = 8.dp, vertical = 2.dp),
           verticalAlignment = Alignment.CenterVertically
         ) {
-          IconButton(onClick = onBack) {
+          IconButton(onClick = {
+            if (isFullScreen) {
+              isFullScreen = false
+            } else {
+              onBack()
+            }
+          }) {
             Icon(
               imageVector = Icons.AutoMirrored.Filled.ArrowBack,
               contentDescription = null,
@@ -327,6 +363,7 @@ fun VideoPlayer(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
               ) {
+                // Click vào loading để pause
                 exoPlayer.pause()
               },
             color = Color(0xFFFFFFFF),
@@ -428,13 +465,13 @@ fun VideoPlayer(
         Column(
           modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 2.dp)
+            .padding(horizontal = if (isFullScreen) 32.dp else 12.dp, vertical = if (isFullScreen) 16.dp else 2.dp)
         ) {
           if (!isDragging) {
             Row(
               modifier = Modifier
                 .fillMaxWidth()
-                .height(24.dp),
+                .height(28.dp),
               horizontalArrangement = Arrangement.SpaceBetween,
               verticalAlignment = Alignment.CenterVertically
             ) {
@@ -443,6 +480,18 @@ fun VideoPlayer(
                 color = Color.White,
                 fontSize = 13.sp
               )
+
+              IconButton(
+                onClick = { isFullScreen = !isFullScreen },
+                modifier = Modifier.size(28.dp)
+              ) {
+                Icon(
+                  imageVector = if (isFullScreen) Icons.Default.FullscreenExit else Icons.Default.Fullscreen,
+                  contentDescription = "Toggle Full Screen",
+                  tint = Color.White,
+                  modifier = Modifier.fillMaxSize()
+                )
+              }
             }
           }
 
@@ -548,4 +597,10 @@ fun VideoPlayer(
       }
     }
   }
+}
+
+fun Context.findActivity(): Activity? = when (this) {
+  is Activity -> this
+  is ContextWrapper -> baseContext.findActivity()
+  else -> null
 }
