@@ -7,7 +7,9 @@ import android.content.pm.ActivityInfo
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +33,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Forward10
@@ -100,8 +104,12 @@ import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
+import git.shin.animevsub.data.model.ChapterInfo
+import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.ui.styles.SmallTextStyle
+import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
 import kotlinx.coroutines.delay
@@ -128,7 +136,23 @@ fun VideoPlayer(
   onNextEpisode: () -> Unit = {},
   onSelectEpisode: () -> Unit = {},
   onSelectServer: () -> Unit = {},
-  onVideoEnded: () -> Unit = {}
+  onVideoEnded: () -> Unit = {},
+  // Additional data for side menus
+
+  // @start props only using by Side Menu Servers
+  servers: List<ServerInfo> = emptyList(),
+  currentServer: ServerInfo? = null,
+  onServerSelected: (ServerInfo) -> Unit = {},
+  // @end
+
+  // @start props only using by Side Menu Episodes
+  displaySeasons: List<DisplaySeason> = emptyList(),
+  activeDisplaySeasonId: String = "",
+  onSeasonSelected: (String) -> Unit = {},
+  episodes: List<ChapterInfo> = emptyList(),
+  currentEpisode: ChapterInfo? = null,
+  onEpisodeSelected: (ChapterInfo, String) -> Unit = { _, _ -> }
+  // @end
 ) {
   val context = LocalContext.current
   var isPlaying by remember { mutableStateOf(true) }
@@ -137,8 +161,13 @@ fun VideoPlayer(
   var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
   var playbackSpeed by remember { mutableFloatStateOf(1f) }
 
+  // Side menus visibility
+  var showEpisodeSideMenu by remember { mutableStateOf(false) }
+  var showServerSideMenu by remember { mutableStateOf(false) }
+
   // Tracks / Quality state
   data class QualityInfo(val label: String, val group: Tracks.Group, val trackIndex: Int)
+
   var availableQualities by remember { mutableStateOf<List<QualityInfo>>(emptyList()) }
   var selectedQualityLabel by remember { mutableStateOf("Auto") }
 
@@ -240,7 +269,10 @@ fun VideoPlayer(
   // Show Speed change notification
   LaunchedEffect(playbackSpeed) {
     if (isFirstFrameRendered) {
-      notificationText = context.getString(R.string.playback_speed_changed, if (playbackSpeed % 1.0f == 0.0f) playbackSpeed.toInt() else playbackSpeed)
+      notificationText = context.getString(
+        R.string.playback_speed_changed,
+        if (playbackSpeed % 1.0f == 0.0f) playbackSpeed.toInt() else playbackSpeed
+      )
       notificationIcon = Icons.Default.Speed
       isNotificationClickable = false
       showNotification = true
@@ -260,8 +292,17 @@ fun VideoPlayer(
     }
   }
 
-  LaunchedEffect(isControlsVisible, isDragging, isPlaying, isBuffering, showSpeedMenu, showQualityMenu) {
-    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu && !showQualityMenu) {
+  LaunchedEffect(
+    isControlsVisible,
+    isDragging,
+    isPlaying,
+    isBuffering,
+    showSpeedMenu,
+    showQualityMenu,
+    showEpisodeSideMenu,
+    showServerSideMenu
+  ) {
+    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu && !showQualityMenu && !showEpisodeSideMenu && !showServerSideMenu) {
       delay(5000)
       isControlsVisible = false
     }
@@ -782,7 +823,11 @@ fun VideoPlayer(
                 PlayerControlSmallButton(
                   icon = Icons.AutoMirrored.Filled.PlaylistPlay,
                   text = null,
-                  onClick = onSelectEpisode
+                  onClick = {
+                    showEpisodeSideMenu = true
+                    isControlsVisible = false
+                    onSelectEpisode()
+                  }
                 )
               }
 
@@ -790,7 +835,11 @@ fun VideoPlayer(
                 PlayerControlSmallButton(
                   icon = Icons.Default.Dns,
                   text = null,
-                  onClick = onSelectServer
+                  onClick = {
+                    showServerSideMenu = true
+                    isControlsVisible = false
+                    onSelectServer()
+                  }
                 )
                 Box {
                   PlayerControlSmallButton(
@@ -807,7 +856,7 @@ fun VideoPlayer(
                     DropdownMenuItem(
                       text = {
                         Text(
-                          text = selectedQualityLabel,
+                          text = "Auto",
                           color = if (selectedQualityLabel == "Auto") MainColor else Color.White
                         )
                       },
@@ -830,7 +879,12 @@ fun VideoPlayer(
                         onClick = {
                           exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
                             .buildUpon()
-                            .setOverrideForType(TrackSelectionOverride(quality.group.mediaTrackGroup, quality.trackIndex))
+                            .setOverrideForType(
+                              TrackSelectionOverride(
+                                quality.group.mediaTrackGroup,
+                                quality.trackIndex
+                              )
+                            )
                             .build()
                           selectedQualityLabel = quality.label
                           showQualityMenu = false
@@ -870,6 +924,103 @@ fun VideoPlayer(
               }
             }
           }
+        }
+      }
+
+      // Side Menus episodes
+      PlayerSideMenu(
+        visible = showEpisodeSideMenu,
+        onDismiss = { showEpisodeSideMenu = false },
+        title = null
+      ) {
+        EpisodeSelectorContent(
+          displaySeasons = displaySeasons,
+          activeDisplaySeasonId = activeDisplaySeasonId,
+          episodes = episodes,
+          currentEpisodeId = currentEpisode?.id,
+          onSeasonClick = onSeasonSelected,
+          onChapterClick = { chap, seasonId ->
+            onEpisodeSelected(chap, seasonId)
+            showEpisodeSideMenu = false
+          },
+          isSideMenu = true,
+          onClose = { showEpisodeSideMenu = false }
+        )
+      }
+
+      // Side Menus servers
+      PlayerSideMenu(
+        visible = showServerSideMenu,
+        onDismiss = { showServerSideMenu = false },
+        title = stringResource(R.string.server_label)
+      ) {
+        ServerSelectorContent(
+          servers = servers,
+          currentServer = currentServer,
+          onServerClick = {
+            onServerSelected(it)
+            showServerSideMenu = false
+          }
+        )
+      }
+    }
+  }
+}
+
+@Composable
+fun PlayerSideMenu(
+  visible: Boolean,
+  onDismiss: () -> Unit,
+  title: String? = null,
+  content: @Composable () -> Unit
+) {
+  AnimatedVisibility(
+    visible = visible,
+    enter = fadeIn() + slideInHorizontally(initialOffsetX = { it }),
+    exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it }),
+    modifier = Modifier.fillMaxSize()
+  ) {
+    Row(modifier = Modifier.fillMaxSize()) {
+      Box(
+        modifier = Modifier
+          .weight(1f)
+          .fillMaxHeight()
+          .background(Color.Black.copy(alpha = 0.3f))
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = onDismiss
+          )
+      )
+      Column(
+        modifier = Modifier
+          .fillMaxHeight()
+          .fillMaxWidth(0.5f)
+          .background(DarkSurface)
+          .clickable(enabled = false) {}
+          .padding(bottom = 16.dp)
+      ) {
+        if (title != null) {
+          Row(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+          ) {
+            Text(
+              text = title,
+              color = Color.White,
+              fontSize = 18.sp,
+              fontWeight = FontWeight.Bold
+            )
+            IconButton(onClick = onDismiss) {
+              Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+            }
+          }
+        }
+        Box(modifier = Modifier.weight(1f)) {
+          content()
         }
       }
     }

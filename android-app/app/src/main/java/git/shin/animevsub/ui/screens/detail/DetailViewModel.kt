@@ -14,18 +14,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * Represents a Season displayed on the UI.
- * Can be a real season from the API or a "Virtual Season" split from a very long season.
- */
-data class DisplaySeason(
-  val id: String,        // Unique ID for UI (can be a virtual ID like "ss1_30")
-  val realId: String,    // Real ID used for API calls (e.g., "ss1")
-  val name: String,      // Display name (e.g., "Season 1 (31-60)")
-  val range: IntRange? = null, // Index range of chapters in the real season (if virtual)
-  val isVirtual: Boolean = false
-)
-
 data class DetailUiState(
   val isLoading: Boolean = true,
   val detail: AnimeDetail? = null,

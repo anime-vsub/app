@@ -25,6 +25,18 @@ data class NamePath(
   val id: String,
 )
 
+/**
+ * Represents a Season displayed on the UI.
+ * Can be a real season from the API or a "Virtual Season" split from a very long season.
+ */
+data class DisplaySeason(
+  val id: String,        // Unique ID for UI (can be a virtual ID like "ss1_30")
+  val realId: String,    // Real ID used for API calls (e.g., "ss1")
+  val name: String,      // Display name (e.g., "Season 1 (31-60)")
+  val range: IntRange? = null, // Index range of chapters in the real season (if virtual)
+  val isVirtual: Boolean = false
+)
+
 data class HomeData(
   val thisSeason: List<AnimeCard>,
   val carousel: List<AnimeCard>,

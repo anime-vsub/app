@@ -197,6 +197,15 @@ fun DetailScreen(
                 viewModel.playNext()
               }
             },
+            servers = uiState.servers,
+            currentServer = uiState.currentServer,
+            onServerSelected = { viewModel.selectServer(it) },
+            displaySeasons = uiState.displaySeasons,
+            activeDisplaySeasonId = uiState.activeDisplaySeasonId,
+            onSeasonSelected = { viewModel.setActiveDisplaySeason(it) },
+            episodes = uiState.chapterData?.chaps ?: emptyList(),
+            currentEpisode = uiState.currentChapter,
+            onEpisodeSelected = { chap, seasonId -> viewModel.playChapter(chap, seasonId) },
             modifier = Modifier.fillMaxSize()
           )
         }
