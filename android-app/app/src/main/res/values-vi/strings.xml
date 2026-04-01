@@ -75,14 +75,16 @@
     <!-- Player -->
     <string name="server_high">Cao</string>
     <string name="server_low">Thấp</string>
-    <string name="server_label">Server</string>
+    <string name="server_label">Máy chủ phát</string>
     <string name="next_episode">Tập tiếp theo</string>
     <string name="previous_episode">Tập trước</string>
     <string name="playback_speed">Tốc độ phát</string>
-    <string name="quality">Chất lượng</string>
+    <string name="quality">Chất lượng phát</string>
     <string name="auto_next_hint">Sắp chuyển tập tiếp theo…</string>
     <string name="auto_next_now_playing">Đang phát tập tiếp theo: %1$s</string>
     <string name="playback_speed_changed">Tốc độ phát: %1$sx</string>
+    <string name="report_bug">Báo lỗi</string>
+    <string name="feedback">Phản hồi</string>
 
     <!-- Account -->
     <string name="login">Đăng nhập</string>

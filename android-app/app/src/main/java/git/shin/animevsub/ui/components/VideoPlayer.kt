@@ -1,15 +1,10 @@
 package git.shin.animevsub.ui.components
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -21,7 +16,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,7 +27,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Forward10
@@ -56,9 +49,11 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -76,7 +71,6 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -164,6 +158,11 @@ fun VideoPlayer(
   // Side menus visibility
   var showEpisodeSideMenu by remember { mutableStateOf(false) }
   var showServerSideMenu by remember { mutableStateOf(false) }
+
+  // Settings states
+  var showSettingsBottomSheet by remember { mutableStateOf(false) }
+  var showSettingsSideMenu by remember { mutableStateOf(false) }
+  var settingsSubMenu by remember { mutableStateOf<String?>(null) } // null = main, "server", "quality", "speed"
 
   // Tracks / Quality state
   data class QualityInfo(val label: String, val group: Tracks.Group, val trackIndex: Int)
@@ -300,9 +299,11 @@ fun VideoPlayer(
     showSpeedMenu,
     showQualityMenu,
     showEpisodeSideMenu,
-    showServerSideMenu
+    showServerSideMenu,
+    showSettingsBottomSheet,
+    showSettingsSideMenu
   ) {
-    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu && !showQualityMenu && !showEpisodeSideMenu && !showServerSideMenu) {
+    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu && !showQualityMenu && !showEpisodeSideMenu && !showServerSideMenu && !showSettingsBottomSheet && !showSettingsSideMenu) {
       delay(5000)
       isControlsVisible = false
     }
@@ -480,7 +481,14 @@ fun VideoPlayer(
             )
           }
 
-          IconButton(onClick = onSettings) {
+          IconButton(onClick = {
+            if (isFullScreen) {
+              showSettingsSideMenu = true
+            } else {
+              showSettingsBottomSheet = true
+            }
+            isControlsVisible = false
+          }) {
             Icon(
               imageVector = Icons.Default.Settings,
               contentDescription = "Settings",
@@ -963,104 +971,92 @@ fun VideoPlayer(
           }
         )
       }
-    }
-  }
-}
 
-@Composable
-fun PlayerSideMenu(
-  visible: Boolean,
-  onDismiss: () -> Unit,
-  title: String? = null,
-  content: @Composable () -> Unit
-) {
-  AnimatedVisibility(
-    visible = visible,
-    enter = fadeIn() + slideInHorizontally(initialOffsetX = { it }),
-    exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it }),
-    modifier = Modifier.fillMaxSize()
-  ) {
-    Row(modifier = Modifier.fillMaxSize()) {
-      Box(
-        modifier = Modifier
-          .weight(1f)
-          .fillMaxHeight()
-          .background(Color.Black.copy(alpha = 0.3f))
-          .clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = onDismiss
-          )
-      )
-      Column(
-        modifier = Modifier
-          .fillMaxHeight()
-          .fillMaxWidth(0.5f)
-          .background(DarkSurface)
-          .clickable(enabled = false) {}
-          .padding(bottom = 16.dp)
+      // Settings Side Menu (Fullscreen)
+      PlayerSideMenu(
+        visible = showSettingsSideMenu,
+        onDismiss = { showSettingsSideMenu = false },
+        title = stringResource(R.string.settings)
       ) {
-        if (title != null) {
-          Row(
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-          ) {
-            Text(
-              text = title,
-              color = Color.White,
-              fontSize = 18.sp,
-              fontWeight = FontWeight.Bold
-            )
-            IconButton(onClick = onDismiss) {
-              Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+        SettingsSideMenuContent(
+          servers = servers,
+          currentServer = currentServer,
+          onServerSelected = {
+            onServerSelected(it)
+            showSettingsSideMenu = false
+          },
+          qualities = availableQualities.map { it.label },
+          currentQuality = selectedQualityLabel,
+          onQualitySelected = { label ->
+            if (label == "Auto") {
+              exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                .buildUpon()
+                .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
+                .build()
+            } else {
+              availableQualities.find { it.label == label }?.let { q ->
+                exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                  .buildUpon()
+                  .setOverrideForType(TrackSelectionOverride(q.group.mediaTrackGroup, q.trackIndex))
+                  .build()
+              }
             }
+            showSettingsSideMenu = false
+          },
+          speeds = speeds,
+          currentSpeed = playbackSpeed,
+          onSpeedSelected = {
+            exoPlayer.setPlaybackSpeed(it)
+            showSettingsSideMenu = false
           }
-        }
-        Box(modifier = Modifier.weight(1f)) {
-          content()
+        )
+      }
+
+      // Settings Bottom Sheet (Normal mode)
+      if (showSettingsBottomSheet) {
+        ModalBottomSheet(
+          onDismissRequest = {
+            showSettingsBottomSheet = false
+            settingsSubMenu = null
+          },
+          sheetState = rememberModalBottomSheetState(),
+          containerColor = DarkSurface,
+          contentColor = Color.White,
+          dragHandle = null
+        ) {
+          SettingsBottomSheetContent(
+            settingsSubMenu = settingsSubMenu,
+            onSubMenuChange = { settingsSubMenu = it },
+            servers = servers,
+            currentServer = currentServer,
+            onServerSelected = onServerSelected,
+            availableQualities = availableQualities.map { it.label },
+            selectedQualityLabel = selectedQualityLabel,
+            onQualitySelected = { label ->
+              if (label == "Auto") {
+                exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                  .buildUpon()
+                  .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
+                  .build()
+              } else {
+                availableQualities.find { it.label == label }?.let { q ->
+                  exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                    .buildUpon()
+                    .setOverrideForType(TrackSelectionOverride(q.group.mediaTrackGroup, q.trackIndex))
+                    .build()
+                }
+              }
+            },
+            speeds = speeds,
+            playbackSpeed = playbackSpeed,
+            onSpeedSelected = { exoPlayer.setPlaybackSpeed(it) },
+            onDismiss = {
+              showSettingsBottomSheet = false
+              settingsSubMenu = null
+            }
+          )
         }
       }
     }
   }
-}
-
-@Composable
-fun PlayerControlSmallButton(
-  icon: ImageVector,
-  text: String? = null,
-  onClick: () -> Unit
-) {
-  Row(
-    modifier = Modifier
-      .clip(RoundedCornerShape(4.dp))
-      .clickable(onClick = onClick)
-      .padding(horizontal = 8.dp, vertical = 4.dp),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.Center
-  ) {
-    Icon(
-      imageVector = icon,
-      contentDescription = null,
-      tint = Color.White,
-      modifier = Modifier.size(20.dp)
-    )
-    if (text != null) {
-      Spacer(modifier = Modifier.width(4.dp))
-      Text(
-        text = text,
-        color = Color.White,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Medium
-      )
-    }
-  }
-}
-
-fun Context.findActivity(): Activity? = when (this) {
-  is Activity -> this
-  is ContextWrapper -> baseContext.findActivity()
-  else -> null
 }

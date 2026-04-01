@@ -92,6 +92,8 @@
     <string name="auto_next_hint">Next episode starting soon…</string>
     <string name="auto_next_now_playing">Now playing next episode: %1$s</string>
     <string name="playback_speed_changed">Playback speed: %1$sx</string>
+    <string name="report_bug">Report Bug</string>
+    <string name="feedback">Feedback</string>
 
     <!-- Account -->
     <string name="login">Login</string>
