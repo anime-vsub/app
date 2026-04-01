@@ -24,6 +24,8 @@ class PreferencesManager(private val context: Context) {
         private val SHOW_COMMENTS_KEY = booleanPreferencesKey("show_comments")
         private val INFINITE_SCROLL_KEY = booleanPreferencesKey("infinite_scroll")
         private val SEARCH_HISTORY_KEY = stringPreferencesKey("search_history")
+        private val VOLUME_GESTURE_KEY = booleanPreferencesKey("volume_gesture")
+        private val BRIGHTNESS_GESTURE_KEY = booleanPreferencesKey("brightness_gesture")
     }
 
     val userData: Flow<User?> = context.dataStore.data.map { preferences ->
@@ -45,6 +47,8 @@ class PreferencesManager(private val context: Context) {
     val movieMode: Flow<Boolean> = context.dataStore.data.map { it[MOVIE_MODE_KEY] ?: false }
     val showComments: Flow<Boolean> = context.dataStore.data.map { it[SHOW_COMMENTS_KEY] ?: true }
     val infiniteScroll: Flow<Boolean> = context.dataStore.data.map { it[INFINITE_SCROLL_KEY] ?: true }
+    val volumeGesture: Flow<Boolean> = context.dataStore.data.map { it[VOLUME_GESTURE_KEY] ?: true }
+    val brightnessGesture: Flow<Boolean> = context.dataStore.data.map { it[BRIGHTNESS_GESTURE_KEY] ?: true }
 
     val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
         val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -91,6 +95,14 @@ class PreferencesManager(private val context: Context) {
 
     suspend fun setInfiniteScroll(value: Boolean) {
         context.dataStore.edit { it[INFINITE_SCROLL_KEY] = value }
+    }
+
+    suspend fun setVolumeGesture(value: Boolean) {
+        context.dataStore.edit { it[VOLUME_GESTURE_KEY] = value }
+    }
+
+    suspend fun setBrightnessGesture(value: Boolean) {
+        context.dataStore.edit { it[BRIGHTNESS_GESTURE_KEY] = value }
     }
 
     suspend fun addSearchHistory(query: String) {

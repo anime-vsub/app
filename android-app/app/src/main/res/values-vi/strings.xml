@@ -85,6 +85,11 @@
     <string name="playback_speed_changed">Tốc độ phát: %1$sx</string>
     <string name="report_bug">Báo lỗi</string>
     <string name="feedback">Phản hồi</string>
+    <string name="skip_intro">Bỏ qua Opening</string>
+    <string name="skip_outro">Bỏ qua Ending</string>
+    <string name="seconds_remaining">%1$d giây</string>
+    <string name="brightness">Độ sáng</string>
+    <string name="volume">Âm lượng</string>
 
     <!-- Account -->
     <string name="login">Đăng nhập</string>
@@ -108,6 +113,9 @@
     <string name="infinite_scroll">Cuộn vô hạn</string>
     <string name="movie_mode">Chế độ phim</string>
     <string name="show_comments">Hiển thị bình luận</string>
+    <string name="gesture_controls">Điều khiển cử chỉ</string>
+    <string name="volume_gesture">Vuốt để chỉnh âm lượng</string>
+    <string name="brightness_gesture">Vuốt để chỉnh độ sáng</string>
 
     <!-- Rankings -->
     <string name="rank_day">Ngày</string>

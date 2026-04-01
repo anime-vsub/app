@@ -94,6 +94,11 @@
     <string name="playback_speed_changed">Playback speed: %1$sx</string>
     <string name="report_bug">Report Bug</string>
     <string name="feedback">Feedback</string>
+    <string name="skip_intro">Skip Intro</string>
+    <string name="skip_outro">Skip Outro</string>
+    <string name="seconds_remaining">%1$d seconds</string>
+    <string name="brightness">Brightness</string>
+    <string name="volume">Volume</string>
 
     <!-- Account -->
     <string name="login">Login</string>
@@ -119,6 +124,9 @@
     <string name="infinite_scroll">Infinite Scroll</string>
     <string name="movie_mode">Movie Mode</string>
     <string name="show_comments">Show Comments</string>
+    <string name="gesture_controls">Gesture Controls</string>
+    <string name="volume_gesture">Swipe Volume</string>
+    <string name="brightness_gesture">Swipe Brightness</string>
 
     <!-- Rankings -->
     <string name="ranking_day">Day</string>

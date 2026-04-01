@@ -1,5 +1,8 @@
 package git.shin.animevsub.ui.components
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -10,6 +13,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +32,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.BrightnessLow
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Forward10
@@ -57,11 +65,13 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,6 +81,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -98,6 +109,7 @@ import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
+import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.PlayerData
@@ -107,7 +119,9 @@ import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
@@ -149,6 +163,12 @@ fun VideoPlayer(
   // @end
 ) {
   val context = LocalContext.current
+  val scope = rememberCoroutineScope()
+  val preferencesManager = remember { PreferencesManager(context) }
+  val volumeGestureEnabled by preferencesManager.volumeGesture.collectAsState(initial = true)
+  val brightnessGestureEnabled by preferencesManager.brightnessGesture.collectAsState(initial = true)
+  val autoSkipEnabled by preferencesManager.autoSkip.collectAsState(initial = false)
+
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
   var isFullScreen by remember { mutableStateOf(false) }
@@ -177,6 +197,17 @@ fun VideoPlayer(
   var isNotificationClickable by remember { mutableStateOf(false) }
 
   var isAutoNexting by remember(playerData) { mutableStateOf(false) }
+
+  // Skip Notification states
+  var showSkipNotification by remember { mutableStateOf(false) }
+  var skipNotificationText by remember { mutableStateOf("") }
+  var skipTargetTime by remember { mutableLongStateOf(0L) }
+  var skipRemainingSeconds by remember { mutableStateOf(0) }
+
+  // Gesture states
+  var gestureIcon by remember { mutableStateOf(Icons.AutoMirrored.Filled.VolumeUp) }
+  var gestureText by remember { mutableStateOf("") }
+  var showGestureIndicator by remember { mutableStateOf(false) }
 
   val exoPlayer = remember {
     ExoPlayer.Builder(context).build().apply {
@@ -280,6 +311,43 @@ fun VideoPlayer(
     }
   }
 
+  // Monitor ranges for Skip Notification
+  LaunchedEffect(currentTime, introRange, outroRange, autoSkipEnabled) {
+    val currentMillis = currentTime
+
+    // Check Intro
+    if (introRange != null && currentMillis in introRange) {
+      if (autoSkipEnabled) {
+        exoPlayer.seekTo(introRange.last + 1)
+      } else if (!showSkipNotification) {
+        skipNotificationText = context.getString(R.string.skip_intro)
+        skipTargetTime = introRange.last + 1
+        showSkipNotification = true
+      }
+
+      if (showSkipNotification) {
+        skipRemainingSeconds = ((introRange.last - currentMillis) / 1000).toInt().coerceAtLeast(0)
+      }
+    }
+    // Check Outro
+    else if (outroRange != null && currentMillis in outroRange) {
+      if (autoSkipEnabled) {
+        if (hasNextEpisode) onNextEpisode() else exoPlayer.pause()
+      } else if (!showSkipNotification) {
+        skipNotificationText = context.getString(R.string.skip_outro)
+        skipTargetTime = outroRange.last + 1 // or next episode
+        showSkipNotification = true
+      }
+
+      if (showSkipNotification) {
+        skipRemainingSeconds = ((outroRange.last - currentMillis) / 1000).toInt().coerceAtLeast(0)
+      }
+    }
+    else {
+      showSkipNotification = false
+    }
+  }
+
   LaunchedEffect(exoPlayer) {
     while (true) {
       if (!isDragging) {
@@ -301,9 +369,10 @@ fun VideoPlayer(
     showEpisodeSideMenu,
     showServerSideMenu,
     showSettingsBottomSheet,
-    showSettingsSideMenu
+    showSettingsSideMenu,
+    showSkipNotification
   ) {
-    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu && !showQualityMenu && !showEpisodeSideMenu && !showServerSideMenu && !showSettingsBottomSheet && !showSettingsSideMenu) {
+    if (isControlsVisible && !isDragging && isPlaying && !isBuffering && !showSpeedMenu && !showQualityMenu && !showEpisodeSideMenu && !showServerSideMenu && !showSettingsBottomSheet && !showSettingsSideMenu && !showSkipNotification) {
       delay(5000)
       isControlsVisible = false
     }
@@ -311,7 +380,7 @@ fun VideoPlayer(
 
   // Handle Fullscreen orientation and System UI
   LaunchedEffect(isFullScreen) {
-    val activity = context.findActivity() ?: return@LaunchedEffect
+    val activity = findActivity(context) ?: return@LaunchedEffect
     val window = activity.window
     val view = window.decorView
     val controller = WindowCompat.getInsetsController(window, view)
@@ -371,7 +440,7 @@ fun VideoPlayer(
     onDispose {
       exoPlayer.release()
       // Reset orientation when player is destroyed
-      val activity = context.findActivity()
+      val activity = findActivity(context)
       activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
   }
@@ -380,11 +449,53 @@ fun VideoPlayer(
     modifier = (if (isFullScreen) Modifier.fillMaxSize() else modifier)
       .background(Color.Black)
       .clipToBounds()
-      .clickable(
-        interactionSource = remember { MutableInteractionSource() },
-        indication = null
-      ) {
-        isControlsVisible = !isControlsVisible
+      .pointerInput(volumeGestureEnabled, brightnessGestureEnabled) {
+        val activity = findActivity(context)
+        detectVerticalDragGestures(
+          onDragStart = { _ ->
+            showGestureIndicator = true
+          },
+          onDragEnd = {
+            showGestureIndicator = false
+          },
+          onVerticalDrag = { change, dragAmount ->
+            val isLeftSide = change.position.x < size.width / 2
+            if (isLeftSide && brightnessGestureEnabled) {
+              // Brightness
+              activity?.let {
+                val params = it.window.attributes
+                val currentBrightness = if (params.screenBrightness < 0) 0.5f else params.screenBrightness
+                val newBrightness = (currentBrightness - dragAmount / size.height).coerceIn(0f, 1f)
+                params.screenBrightness = newBrightness
+                it.window.attributes = params
+
+                gestureIcon = Icons.Default.BrightnessLow
+                gestureText = "${(newBrightness * 100).roundToInt()}%"
+              }
+            } else if (!isLeftSide && volumeGestureEnabled) {
+              // Volume
+              val currentVolume = exoPlayer.volume
+              val newVolume = (currentVolume - dragAmount / size.height).coerceIn(0f, 1f)
+              exoPlayer.volume = newVolume
+
+              gestureIcon = Icons.AutoMirrored.Filled.VolumeUp
+              gestureText = "${(newVolume * 100).roundToInt()}%"
+            }
+          }
+        )
+      }
+      .pointerInput(Unit) {
+        detectTapGestures(
+          onTap = { isControlsVisible = !isControlsVisible },
+          onDoubleTap = { offset ->
+            val isLeft = offset.x < size.width / 2
+            if (isLeft) {
+              exoPlayer.seekTo((exoPlayer.currentPosition - 10000).coerceAtLeast(0))
+            } else {
+              exoPlayer.seekTo((exoPlayer.currentPosition + 10000).coerceAtMost(exoPlayer.duration))
+            }
+          }
+        )
       }
   ) {
     AndroidView(
@@ -628,6 +739,33 @@ fun VideoPlayer(
             fontWeight = FontWeight.Bold
           )
         }
+      }
+
+      // Gesture Indicator
+      if (showGestureIndicator) {
+        GestureIndicator(
+          icon = gestureIcon,
+          text = gestureText,
+          modifier = Modifier.align(Alignment.Center)
+        )
+      }
+
+      // Skip Notification
+      if (showSkipNotification) {
+        SkipNotification(
+          text = skipNotificationText,
+          secondsRemaining = skipRemainingSeconds,
+          onSkip = {
+            exoPlayer.seekTo(skipTargetTime)
+            showSkipNotification = false
+          },
+          onClose = {
+            showSkipNotification = false
+          },
+          modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(end = if (isFullScreen) 32.dp else 16.dp, bottom = if (isFullScreen) 100.dp else 70.dp)
+        )
       }
 
       // Notification Pop-up (Now Playing, Speed Changed, Auto Next Hint)
@@ -1008,6 +1146,18 @@ fun VideoPlayer(
           onSpeedSelected = {
             exoPlayer.setPlaybackSpeed(it)
             showSettingsSideMenu = false
+          },
+          volumeGestureEnabled = volumeGestureEnabled,
+          onVolumeGestureToggle = {
+            scope.launch { preferencesManager.setVolumeGesture(it) }
+          },
+          brightnessGestureEnabled = brightnessGestureEnabled,
+          onBrightnessGestureToggle = {
+            scope.launch { preferencesManager.setBrightnessGesture(it) }
+          },
+          autoSkipEnabled = autoSkipEnabled,
+          onAutoSkipToggle = {
+            scope.launch { preferencesManager.setAutoSkip(it) }
           }
         )
       }
@@ -1050,6 +1200,18 @@ fun VideoPlayer(
             speeds = speeds,
             playbackSpeed = playbackSpeed,
             onSpeedSelected = { exoPlayer.setPlaybackSpeed(it) },
+            volumeGestureEnabled = volumeGestureEnabled,
+            onVolumeGestureToggle = {
+              scope.launch { preferencesManager.setVolumeGesture(it) }
+            },
+            brightnessGestureEnabled = brightnessGestureEnabled,
+            onBrightnessGestureToggle = {
+              scope.launch { preferencesManager.setBrightnessGesture(it) }
+            },
+            autoSkipEnabled = autoSkipEnabled,
+            onAutoSkipToggle = {
+              scope.launch { preferencesManager.setAutoSkip(it) }
+            },
             onDismiss = {
               showSettingsBottomSheet = false
               settingsSubMenu = null
