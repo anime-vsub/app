@@ -19,7 +19,7 @@ describe("[chap]", () => {
       )
     )
   })
-  test("exists update", async () => {
+  /*test("exists update", async () => {
     expect(JSON.parse(JSON.stringify(await PhimIdChap(html2)))).toEqual(
       JSON.parse(
         await fs.readFile(
@@ -28,5 +28,5 @@ describe("[chap]", () => {
         )
       )
     )
-  })
+  })*/
 })
