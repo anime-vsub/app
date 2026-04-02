@@ -139,6 +139,7 @@
     <string name="rank_season">Season</string>
     <string name="rank_year">Year</string>
     <string name="rank_voted">Most Voted</string>
+    <string name="error_no_ranking_types">No ranking types found</string>
 
     <!-- General -->
     <string name="retry">Retry</string>

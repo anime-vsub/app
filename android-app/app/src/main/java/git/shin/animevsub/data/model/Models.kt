@@ -96,16 +96,6 @@ data class ChapterData(
   val poster: String
 )
 
-data class RankingItem(
-  val animeId: String,
-  val image: String,
-  val name: String,
-  val othername: String? = null,
-  val process: String? = null,
-  val rate: Float = 0f,
-  val views: String = ""
-)
-
 data class ScheduleDay(
   val date: Long,
   val items: List<AnimeCard>

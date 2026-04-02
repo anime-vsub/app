@@ -1,15 +1,16 @@
 package git.shin.animevsub.data.repository
 
 import git.shin.animevsub.data.local.PreferencesManager
+import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.CategoryPage
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.FilterGroup
+import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.HomeData
 import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.model.PlayerData
-import git.shin.animevsub.data.model.RankingItem
 import git.shin.animevsub.data.model.ScheduleDay
 import git.shin.animevsub.data.model.SearchSuggestion
 import git.shin.animevsub.data.model.SelectedFilter
@@ -40,7 +41,11 @@ class AnimeRepository @Inject constructor(
   }
 
   // Rankings
-  suspend fun getRankings(type: String): Result<List<RankingItem>> = runCatching {
+  suspend fun getRankingTypes(): Result<List<FilterOption>> = runCatching {
+    api.getRankingTypes()
+  }
+
+  suspend fun getRankings(type: String): Result<List<AnimeCard>> = runCatching {
     api.getRankings(type)
   }
 
