@@ -107,10 +107,7 @@ data class RankingItem(
 )
 
 data class ScheduleDay(
-  val dayName: String,
-  val date: String? = null,
-  val month: String? = null,
-  val isToday: Boolean = false,
+  val date: Long,
   val items: List<AnimeCard>
 )
 

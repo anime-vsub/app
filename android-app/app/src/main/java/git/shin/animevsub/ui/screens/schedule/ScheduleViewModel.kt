@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 data class ScheduleUiState(
@@ -36,7 +37,22 @@ class ScheduleViewModel @Inject constructor(
       repository.getSchedule()
         .onSuccess { days ->
           // Find today's index
-          val todayIndex = days.indexOfFirst { it.isToday }
+          val today = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+          }.timeInMillis
+
+          val todayIndex = days.indexOfFirst {
+            val dayCal = Calendar.getInstance().apply { timeInMillis = it.date }
+            dayCal.set(Calendar.HOUR_OF_DAY, 0)
+            dayCal.set(Calendar.MINUTE, 0)
+            dayCal.set(Calendar.SECOND, 0)
+            dayCal.set(Calendar.MILLISECOND, 0)
+            dayCal.timeInMillis == today
+          }
+
           _uiState.value = _uiState.value.copy(
             isLoading = false,
             days = days,
@@ -54,9 +70,5 @@ class ScheduleViewModel @Inject constructor(
 
   fun selectDay(index: Int) {
     _uiState.value = _uiState.value.copy(selectedDay = index)
-  }
-
-  fun retry() {
-    loadSchedule()
   }
 }

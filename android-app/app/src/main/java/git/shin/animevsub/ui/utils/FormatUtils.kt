@@ -3,7 +3,10 @@ package git.shin.animevsub.ui.utils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import git.shin.animevsub.R
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @Composable
@@ -56,4 +59,37 @@ fun formatDuration(durationMs: Long): String {
   } else {
     String.format("%02d:%02d", minutes, seconds)
   }
+}
+
+fun formatTime(timestampMillis: Long): String {
+  val date = Date(timestampMillis)
+  val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+  return sdf.format(date)
+}
+
+fun formatDayName(timestampMillis: Long): String {
+  val date = Date(timestampMillis)
+  val sdf = SimpleDateFormat("EEEE", Locale("vi", "VN"))
+  return sdf.format(date).replaceFirstChar { it.uppercase() }
+}
+
+fun formatShortDayAndDate(timestampMillis: Long): Pair<String, String> {
+  val date = Date(timestampMillis)
+  val calendar = Calendar.getInstance().apply { time = date }
+  val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
+  val shortDay = when (dayOfWeek) {
+    Calendar.SUNDAY -> "CN"
+    else -> "T$dayOfWeek"
+  }
+
+  val sdfDate = SimpleDateFormat("dd/MM", Locale.getDefault())
+  return Pair(shortDay, sdfDate.format(date))
+}
+
+fun isToday(timestampMillis: Long): Boolean {
+  val today = Calendar.getInstance()
+  val date = Calendar.getInstance().apply { timeInMillis = timestampMillis }
+  return today.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
+    today.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR)
 }
