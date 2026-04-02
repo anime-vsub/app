@@ -52,8 +52,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.ScheduleDay
+import git.shin.animevsub.ui.components.anime.ScheduleLoadingSkeleton
 import git.shin.animevsub.ui.components.status.ErrorScreen
-import git.shin.animevsub.ui.components.status.LoadingScreen
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.AccentMainLight
 import git.shin.animevsub.ui.theme.DarkBackground
@@ -108,7 +108,7 @@ fun ScheduleScreen(
         .padding(padding)
     ) {
       when {
-        uiState.isLoading -> LoadingScreen()
+        uiState.isLoading -> ScheduleLoadingSkeleton()
         uiState.error != null -> {
           ErrorScreen(error = uiState.error, onRetry = { viewModel.loadSchedule() })
         }
