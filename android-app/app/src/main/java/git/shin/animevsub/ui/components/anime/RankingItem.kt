@@ -80,9 +80,9 @@ fun RankingItem(
         overflow = TextOverflow.Ellipsis
       )
 
-      item.lastEpisodeId?.let {
+      item.lastEpisode?.let {
         Text(
-          text = it,
+          text = stringResource(id = R.string.episode_label, it.name),
           color = TextSecondary,
           fontSize = 12.sp,
           maxLines = 1,

@@ -7,7 +7,7 @@ data class AnimeCard(
   val animeId: String,
   val image: String,
   val name: String,
-  val lastEpisodeId: String? = null,
+  val lastEpisode: ChapterInfo? = null,
   val rate: Float = 0f,
   val views: Int? = null,
   val quality: String? = null,

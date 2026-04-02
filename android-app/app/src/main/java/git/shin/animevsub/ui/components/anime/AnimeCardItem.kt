@@ -106,9 +106,9 @@ fun AnimeCardItem(
       )
 
       // Chapter badge
-      if (!anime.lastEpisodeId.isNullOrEmpty()) {
+      if (anime.lastEpisode != null) {
         Text(
-          text = stringResource(id = R.string.ep_label, anime.lastEpisodeId),
+          text = stringResource(id = R.string.ep_label, anime.lastEpisode.name),
           color = Color.White,
           fontSize = 10.sp,
           fontWeight = FontWeight.Bold,
