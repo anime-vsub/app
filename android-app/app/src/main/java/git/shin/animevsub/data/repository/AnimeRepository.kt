@@ -11,96 +11,107 @@ import javax.inject.Singleton
 
 @Singleton
 class AnimeRepository @Inject constructor(
-    private val api: AnimeApi,
-    private val prefs: PreferencesManager
+  private val api: AnimeApi,
+  private val prefs: PreferencesManager
 ) {
-    // Home
-    suspend fun getHomePage(): Result<HomeData> = runCatching { api.getHomePage() }
+  // Home
+  suspend fun getHomePage(): Result<HomeData> = runCatching { api.getHomePage() }
 
-    // Detail
-    suspend fun getAnimeDetail(animeId: String): Result<AnimeDetail> = runCatching {
-        val cookie = prefs.userCookie.first()
-        api.getAnimeDetail(animeId, cookie)
+  // Detail
+  suspend fun getAnimeDetail(animeId: String): Result<AnimeDetail> = runCatching {
+    val cookie = prefs.userCookie.first()
+    api.getAnimeDetail(animeId, cookie)
+  }
+
+  // Chapters
+  suspend fun getChapters(animeId: String): Result<ChapterData> = runCatching {
+    val cookie = prefs.userCookie.first()
+    api.getChapters(animeId, cookie)
+  }
+
+  // Rankings
+  suspend fun getRankings(type: String): Result<List<RankingItem>> = runCatching {
+    api.getRankings(type)
+  }
+
+  // Schedule
+  suspend fun getSchedule(): Result<List<ScheduleDay>> = runCatching {
+    api.getSchedule()
+  }
+
+  // Search
+  suspend fun preSearch(keyword: String): Result<List<SearchSuggestion>> = runCatching {
+    api.preSearch(keyword)
+  }
+
+  // Category
+  suspend fun getCategory(
+    type: String,
+    value: String,
+    filters: List<SelectedFilter> = emptyList(),
+    page: Int = 1
+  ): Result<CategoryPage> = runCatching {
+    api.getCategory(type, value, filters, page)
+  }
+
+  suspend fun getFilters(path: String): Result<List<FilterGroup>> = runCatching {
+    api.getFilters(path)
+  }
+
+  // Player
+  suspend fun getServers(chapter: ChapterInfo): Result<List<ServerInfo>> = runCatching {
+    api.getServers(chapter)
+  }
+
+  suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerData> =
+    runCatching {
+      api.getPlayerLink(chapter, server)
     }
 
-    // Chapters
-    suspend fun getChapters(animeId: String): Result<ChapterData> = runCatching {
-        val cookie = prefs.userCookie.first()
-        api.getChapters(animeId, cookie)
+  // Skip Range
+  suspend fun getSkipRange(chapter: ChapterInfo): Result<Pair<LongRange?, LongRange?>> =
+    runCatching {
+      api.getSkipRange(chapter)
     }
 
-    // Rankings
-    suspend fun getRankings(type: String): Result<List<RankingItem>> = runCatching {
-        api.getRankings(type)
-    }
+  // Auth
+  val user: Flow<User?> = prefs.userData
+  val cookie: Flow<String?> = prefs.userCookie
+  val isLoggedIn: Flow<Boolean> = prefs.userCookie.map { it != null }
 
-    // Schedule
-    suspend fun getSchedule(): Result<List<ScheduleDay>> = runCatching {
-        api.getSchedule()
-    }
+  suspend fun login(email: String, password: String): Result<User> = runCatching {
+    val (user, cookie) = api.login(email, password)
+    prefs.saveUser(user, cookie)
+    user
+  }
 
-    // Search
-    suspend fun preSearch(keyword: String): Result<List<SearchSuggestion>> = runCatching {
-        api.preSearch(keyword)
-    }
+  suspend fun logout() {
+    prefs.clearUser()
+  }
 
-    // Category
-    suspend fun getCategoryPage(typeNormal: String, value: String, page: Int = 1): Result<CategoryPage> = runCatching {
-        api.getCategoryPage(typeNormal, value, page)
-    }
+  // Settings
+  val autoNext = prefs.autoNext
+  val autoSkip = prefs.autoSkip
+  val server = prefs.server
+  val movieMode = prefs.movieMode
+  val showComments = prefs.showComments
+  val infiniteScroll = prefs.infiniteScroll
 
-    // Player
-    suspend fun getServers(chapter: ChapterInfo): Result<List<ServerInfo>> = runCatching {
-        api.getServers(chapter)
-    }
+  suspend fun setAutoNext(value: Boolean) = prefs.setAutoNext(value)
+  suspend fun setAutoSkip(value: Boolean) = prefs.setAutoSkip(value)
+  suspend fun setServer(value: String) = prefs.setServer(value)
+  suspend fun setMovieMode(value: Boolean) = prefs.setMovieMode(value)
+  suspend fun setShowComments(value: Boolean) = prefs.setShowComments(value)
+  suspend fun setInfiniteScroll(value: Boolean) = prefs.setInfiniteScroll(value)
 
-    suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerData> = runCatching {
-        api.getPlayerLink(chapter, server)
-    }
+  // Search History
+  val searchHistory = prefs.searchHistory
+  suspend fun addSearchHistory(query: String) = prefs.addSearchHistory(query)
+  suspend fun clearSearchHistory() = prefs.clearSearchHistory()
 
-    // Skip Range
-    suspend fun getSkipRange(chapter: ChapterInfo): Result<Pair<LongRange?, LongRange?>> = runCatching {
-        api.getSkipRange(chapter)
-    }
-
-    // Auth
-    val user: Flow<User?> = prefs.userData
-    val cookie: Flow<String?> = prefs.userCookie
-    val isLoggedIn: Flow<Boolean> = prefs.userCookie.map { it != null }
-
-    suspend fun login(email: String, password: String): Result<User> = runCatching {
-        val (user, cookie) = api.login(email, password)
-        prefs.saveUser(user, cookie)
-        user
-    }
-
-    suspend fun logout() {
-        prefs.clearUser()
-    }
-
-    // Settings
-    val autoNext = prefs.autoNext
-    val autoSkip = prefs.autoSkip
-    val server = prefs.server
-    val movieMode = prefs.movieMode
-    val showComments = prefs.showComments
-    val infiniteScroll = prefs.infiniteScroll
-
-    suspend fun setAutoNext(value: Boolean) = prefs.setAutoNext(value)
-    suspend fun setAutoSkip(value: Boolean) = prefs.setAutoSkip(value)
-    suspend fun setServer(value: String) = prefs.setServer(value)
-    suspend fun setMovieMode(value: Boolean) = prefs.setMovieMode(value)
-    suspend fun setShowComments(value: Boolean) = prefs.setShowComments(value)
-    suspend fun setInfiniteScroll(value: Boolean) = prefs.setInfiniteScroll(value)
-
-    // Search History
-    val searchHistory = prefs.searchHistory
-    suspend fun addSearchHistory(query: String) = prefs.addSearchHistory(query)
-    suspend fun clearSearchHistory() = prefs.clearSearchHistory()
-
-    // Notifications
-    suspend fun getNotifications(): Result<NotificationData> = runCatching {
-        val cookie = prefs.userCookie.first() ?: throw Exception("Not logged in")
-        api.getNotifications(cookie)
-    }
+  // Notifications
+  suspend fun getNotifications(): Result<NotificationData> = runCatching {
+    val cookie = prefs.userCookie.first() ?: throw Exception("Not logged in")
+    api.getNotifications(cookie)
+  }
 }

@@ -558,7 +558,6 @@ fun FlowRow(
     val placeables = measurables.map { it.measure(constraints.copy(minWidth = 0)) }
 
     var rowWidth = 0
-    var rowHeight = 0
     val rows = mutableListOf<List<androidx.compose.ui.layout.Placeable>>()
     var currentRow = mutableListOf<androidx.compose.ui.layout.Placeable>()
 

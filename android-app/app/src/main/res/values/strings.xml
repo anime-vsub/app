@@ -176,4 +176,11 @@
     <string name="playlist_name">Playlist Name</string>
     <string name="public_playlist">Public</string>
     <string name="empty_playlist">This playlist is empty</string>
+
+    <!-- Category/Filter -->
+    <string name="filter">Filter</string>
+    <string name="filters">Filters</string>
+    <string name="filter_title">Filter</string>
+    <string name="filter_group_format">Filter: %1$s</string>
+    <string name="more">More</string>
 </resources>

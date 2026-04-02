@@ -159,3 +159,25 @@ data class NewsItem(
   val pubDate: String?,
   val image: String?
 )
+
+@Serializable
+data class FilterOption(
+  val id: String,
+  val name: String
+)
+
+data class FilterGroup(
+  val id: String,
+  val name: String,
+  val options: List<FilterOption>,
+  val isMultiple: Boolean = false
+)
+
+@Serializable
+data class SelectedFilter(
+  val groupId: String,
+  val id: String,
+  val name: String,
+  val include: Boolean = true,
+  val exclude: Boolean = false
+)
