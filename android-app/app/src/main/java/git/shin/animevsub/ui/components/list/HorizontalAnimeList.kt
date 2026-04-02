@@ -1,18 +1,14 @@
-package git.shin.animevsub.ui.components
+package git.shin.animevsub.ui.components.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeCard
-import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.components.anime.AnimeCardItem
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
@@ -68,20 +64,19 @@ fun HorizontalAnimeList(
             if (showTimeline) {
                 val timeRelease = try {
                     anime.timeRelease?.let {
-                      LocalDateTime.ofInstant(
-                        Instant.ofEpochSecond(it),
-                        ZoneId.systemDefault()
-                      )
+                        LocalDateTime.ofInstant(
+                            Instant.ofEpochSecond(it),
+                            ZoneId.systemDefault()
+                        )
                     }
                 } catch (e: Exception) { null }
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    // Time information - Set min height to avoid shifting
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .width(110.dp)
-                            .height(35.dp) // Fixed height to standardize row height
+                            .height(35.dp)
                             .clickable { scope.launch { state.animateScrollToItem(index) } }
                     ) {
                         @Suppress("DEPRECATION")
@@ -136,132 +131,16 @@ fun HorizontalAnimeList(
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    // Dot timeline with horizontal line
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(Color.Gray))
                     }
 
                     Spacer(modifier = Modifier.height(4.dp))
-
-                    // The Card
                     card()
                 }
             } else {
                 card()
             }
-        }
-    }
-}
-
-@Composable
-fun GridAnimeList(
-    items: List<AnimeCard>,
-    onItemClick: (AnimeCard) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-          .fillMaxWidth()
-          .padding(horizontal = 16.dp)
-    ) {
-        val chunkedItems = items.chunked(3)
-        chunkedItems.forEachIndexed { rowIndex, rowItems ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                rowItems.forEach { item ->
-                    AnimeCardItem(
-                        anime = item,
-                        onClick = { onItemClick(item) },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                // Fill remaining space if row is not full
-                if (rowItems.size < 3) {
-                    repeat(3 - rowItems.size) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-            }
-            if (rowIndex < chunkedItems.size - 1) {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-        }
-    }
-}
-
-@Composable
-fun VerticalGridAnimeList(
-    items: List<AnimeCard>,
-    onItemClick: (AnimeCard) -> Unit,
-    modifier: Modifier = Modifier,
-    state: LazyGridState = rememberLazyGridState(),
-    isLoadingMore: Boolean = false,
-    onLoadMore: () -> Unit = {},
-    contentPadding: PaddingValues = PaddingValues(16.dp)
-) {
-    LaunchedEffect(state.canScrollForward) {
-        if (!state.canScrollForward && !isLoadingMore && items.isNotEmpty()) {
-            onLoadMore()
-        }
-    }
-
-    LazyVerticalGrid(
-        state = state,
-        columns = GridCells.Fixed(3),
-        modifier = modifier.fillMaxSize(),
-        contentPadding = contentPadding,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(items) { item ->
-            AnimeCardItem(
-                anime = item,
-                onClick = { onItemClick(item) },
-                showRating = true
-            )
-        }
-
-        if (isLoadingMore) {
-            item(span = { GridItemSpan(3) }) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = AccentMain,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
-        }
-
-        item(span = { GridItemSpan(3) }) {
-            Spacer(modifier = Modifier.height(80.dp))
-        }
-    }
-}
-
-@Composable
-fun GridLoadingSkeleton(
-    modifier: Modifier = Modifier,
-    columns: Int = 3,
-    itemCount: Int = 12,
-    contentPadding: PaddingValues = PaddingValues(16.dp)
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(columns),
-        modifier = modifier,
-        contentPadding = contentPadding,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        userScrollEnabled = false
-    ) {
-        items(itemCount) {
-            SkeletonCard(modifier = Modifier.fillMaxWidth())
         }
     }
 }

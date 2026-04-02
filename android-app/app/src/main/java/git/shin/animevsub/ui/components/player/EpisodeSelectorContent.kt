@@ -1,4 +1,4 @@
-package git.shin.animevsub.ui.components
+package git.shin.animevsub.ui.components.player
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -8,20 +8,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -35,17 +22,8 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,13 +36,7 @@ import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
-import git.shin.animevsub.data.model.ServerInfo
-import git.shin.animevsub.ui.theme.DarkCard
-import git.shin.animevsub.ui.theme.MainColor
-import git.shin.animevsub.ui.theme.TextGrey
-import git.shin.animevsub.ui.theme.TextPrimary
-import git.shin.animevsub.ui.theme.TextSecondary
-import git.shin.animevsub.ui.theme.DarkSurface
+import git.shin.animevsub.ui.theme.*
 
 @Composable
 fun EpisodeSelectorContent(
@@ -74,6 +46,7 @@ fun EpisodeSelectorContent(
     currentEpisodeId: String?,
     onSeasonClick: (String) -> Unit,
     onChapterClick: (ChapterInfo, String) -> Unit,
+    modifier: Modifier = Modifier,
     isSideMenu: Boolean = false,
     onClose: (() -> Unit)? = null
 ) {
@@ -81,7 +54,6 @@ fun EpisodeSelectorContent(
     var showVerticalSeasons by remember { mutableStateOf(false) }
     val seasonListState = rememberLazyListState()
 
-    // Scroll to current season in the horizontal list when not in vertical mode
     val currentSeasonIndex = displaySeasons.indexOfFirst { it.id == activeDisplaySeasonId }
     LaunchedEffect(currentSeasonIndex, showVerticalSeasons) {
         if (currentSeasonIndex >= 0 && !showVerticalSeasons) {
@@ -89,8 +61,7 @@ fun EpisodeSelectorContent(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        // Header with Title and View Toggle
+    Column(modifier = modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -107,7 +78,7 @@ fun EpisodeSelectorContent(
 
             IconButton(onClick = {
                 showVerticalSeasons = !showVerticalSeasons
-                if (showVerticalSeasons) searchQuery = "" // Clear search when switching to season list
+                if (showVerticalSeasons) searchQuery = ""
             }) {
                 Icon(
                     imageVector = if (showVerticalSeasons) Icons.Default.GridView else Icons.AutoMirrored.Filled.List,
@@ -129,7 +100,6 @@ fun EpisodeSelectorContent(
             }
         }
 
-        // Search Bar (Only visible when showing chapters)
         AnimatedVisibility(
             visible = !showVerticalSeasons,
             enter = fadeIn() + expandVertically(),
@@ -165,7 +135,6 @@ fun EpisodeSelectorContent(
         }
 
         if (showVerticalSeasons) {
-            // View 1: Vertical Seasons List (Hide Chapters)
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(16.dp),
@@ -178,16 +147,13 @@ fun EpisodeSelectorContent(
                         isSelected = isCurrent,
                         onClick = {
                             onSeasonClick(season.id)
-                            showVerticalSeasons = false // Switch back to chapter view on selection
+                            showVerticalSeasons = false
                         },
                         isFullWidth = true
                     )
                 }
             }
         } else {
-            // View 2: Chapters View (Horizontal Seasons + Chapter Grid)
-
-            // Horizontal Season Switcher (Only if not searching)
             if (searchQuery.isEmpty() && displaySeasons.isNotEmpty()) {
                 LazyRow(
                     state = seasonListState,
@@ -205,11 +171,7 @@ fun EpisodeSelectorContent(
                 }
             }
 
-            // Chapters Content
             val activeSeason = displaySeasons.find { it.id == activeDisplaySeasonId }
-
-            // Logic: If searching, search across ALL chapters of the real season.
-            // If not searching, only show the current 30-chapter chunk.
             val filteredChaps = if (searchQuery.isEmpty()) {
                 if (activeSeason?.range != null) {
                     episodes.slice(activeSeason.range.filter { it < episodes.size })
@@ -237,51 +199,11 @@ fun EpisodeSelectorContent(
                             chap = chap,
                             isSelected = chap.id == currentEpisodeId,
                             onClick = {
-                                // Pass the real season ID to play
                                 onChapterClick(chap, activeSeason?.realId ?: activeDisplaySeasonId)
                             }
                         )
                     }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun ServerSelectorContent(
-    servers: List<ServerInfo>,
-    currentServer: ServerInfo?,
-    onServerClick: (ServerInfo) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(servers) { server ->
-            val isSelected = server == currentServer
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
-                    .border(
-                        width = if (isSelected) 1.5.dp else 1.dp,
-                        color = if (isSelected) MainColor else Color.Transparent,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clickable { onServerClick(server) },
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Text(
-                    text = server.name,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    color = if (isSelected) MainColor else TextPrimary,
-                    fontSize = 15.sp,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                )
             }
         }
     }

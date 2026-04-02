@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import git.shin.animevsub.data.model.ChapterInfo
-import git.shin.animevsub.ui.components.EpisodeSelectorContent
+import git.shin.animevsub.ui.components.player.EpisodeSelectorContent
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 

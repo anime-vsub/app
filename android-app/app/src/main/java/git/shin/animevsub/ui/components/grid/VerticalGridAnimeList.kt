@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import git.shin.animevsub.data.model.AnimeCard
-import git.shin.animevsub.ui.components.AnimeCardItem
+import git.shin.animevsub.ui.components.anime.AnimeCardItem
 import git.shin.animevsub.ui.theme.AccentMain
 
 @Composable
@@ -61,7 +61,6 @@ fun VerticalGridAnimeList(
         }
 
         item(span = { GridItemSpan(3) }) {
-            // Space for bottom navigation or padding
             Spacer(modifier = Modifier.height(80.dp))
         }
     }

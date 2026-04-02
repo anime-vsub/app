@@ -1,4 +1,4 @@
-package git.shin.animevsub.ui.components
+package git.shin.animevsub.ui.components.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -20,6 +20,7 @@ import git.shin.animevsub.ui.theme.TextSecondary
 fun InfoRow(
     label: String,
     value: String?,
+    modifier: Modifier = Modifier,
     fontSize: TextUnit = 12.sp,
     textStyle: TextStyle = TextStyle.Default,
     onClick: (() -> Unit)? = null
@@ -36,7 +37,7 @@ fun InfoRow(
             },
             fontSize = fontSize,
             style = textStyle,
-            modifier = Modifier
+            modifier = modifier
                 .padding(vertical = 2.dp)
                 .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
         )

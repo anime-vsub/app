@@ -41,7 +41,7 @@ import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.ui.styles.SmallTextStyle
-import git.shin.animevsub.ui.components.InfoRow
+import git.shin.animevsub.ui.components.common.InfoRow
 import git.shin.animevsub.ui.styles.NoPaddingTextStyle
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.DarkSurface

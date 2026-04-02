@@ -1,7 +1,17 @@
 package git.shin.animevsub.ui.screens.category
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
@@ -12,8 +22,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -25,10 +51,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.SelectedFilter
-import git.shin.animevsub.ui.components.ErrorScreen
-import git.shin.animevsub.ui.components.GridLoadingSkeleton
-import git.shin.animevsub.ui.components.VerticalGridAnimeList
-import git.shin.animevsub.ui.theme.*
+import git.shin.animevsub.ui.components.grid.GridLoadingSkeleton
+import git.shin.animevsub.ui.components.grid.VerticalGridAnimeList
+import git.shin.animevsub.ui.components.status.ErrorScreen
+import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.DarkBackground
+import git.shin.animevsub.ui.theme.DarkCard
+import git.shin.animevsub.ui.theme.TextGrey
+import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.theme.TextSecondary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -272,7 +303,9 @@ fun FilterBottomSheet(
               colors = FilterChipDefaults.filterChipColors(
                 containerColor = DarkCard,
                 labelColor = TextSecondary,
-                selectedContainerColor = if (isExcluded) Color.Red.copy(alpha = 0.2f) else AccentMain.copy(alpha = 0.2f),
+                selectedContainerColor = if (isExcluded) Color.Red.copy(alpha = 0.2f) else AccentMain.copy(
+                  alpha = 0.2f
+                ),
                 selectedLabelColor = if (isExcluded) Color.Red else AccentMain
               ),
               border = FilterChipDefaults.filterChipBorder(

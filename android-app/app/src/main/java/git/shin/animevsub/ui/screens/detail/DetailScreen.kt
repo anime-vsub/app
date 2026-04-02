@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -62,30 +64,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
-import git.shin.animevsub.ui.components.ActionButton
-import git.shin.animevsub.ui.components.Badge
-import git.shin.animevsub.ui.components.ErrorScreen
-import git.shin.animevsub.ui.components.GridAnimeList
-import git.shin.animevsub.ui.components.QualityBadge
-import git.shin.animevsub.ui.components.VideoPlayer
+import git.shin.animevsub.ui.components.badge.Badge
+import git.shin.animevsub.ui.components.badge.QualityBadge
+import git.shin.animevsub.ui.components.common.ActionButton
+import git.shin.animevsub.ui.components.list.GridAnimeList
+import git.shin.animevsub.ui.components.player.VideoPlayer
+import git.shin.animevsub.ui.components.status.ErrorScreen
+import git.shin.animevsub.ui.styles.NoPaddingTextStyle
+import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
+import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
-import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.shimmerEffect
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.ui.viewinterop.AndroidView
-import git.shin.animevsub.ui.styles.SmallTextStyle
-import git.shin.animevsub.ui.styles.NoPaddingTextStyle
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable

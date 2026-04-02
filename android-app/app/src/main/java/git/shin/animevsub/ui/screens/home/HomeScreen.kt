@@ -31,7 +31,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeCard
-import git.shin.animevsub.ui.components.*
+import git.shin.animevsub.ui.components.anime.SkeletonCard
+import git.shin.animevsub.ui.components.badge.QualityBadge
+import git.shin.animevsub.ui.components.common.SectionHeader
+import git.shin.animevsub.ui.components.list.GridAnimeList
+import git.shin.animevsub.ui.components.list.HorizontalAnimeList
+import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue

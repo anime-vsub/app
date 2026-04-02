@@ -1,4 +1,4 @@
-package git.shin.animevsub.ui.components
+package git.shin.animevsub.ui.components.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import git.shin.animevsub.ui.theme.*
+import git.shin.animevsub.ui.theme.TextGrey
+import git.shin.animevsub.ui.theme.TextPrimary
 
 @Composable
 fun SectionHeader(

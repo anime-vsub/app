@@ -24,7 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.RankingItem
-import git.shin.animevsub.ui.components.*
+import git.shin.animevsub.ui.components.status.ErrorScreen
+import git.shin.animevsub.ui.components.status.LoadingScreen
 import git.shin.animevsub.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)

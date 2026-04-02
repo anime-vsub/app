@@ -1,4 +1,4 @@
-package git.shin.animevsub.ui.components
+package git.shin.animevsub.ui.components.status
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +10,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
-import git.shin.animevsub.ui.theme.*
+import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.TextSecondary
 
 @Composable
 fun ErrorScreen(
@@ -41,15 +42,5 @@ fun ErrorScreen(
         ) {
             Text(stringResource(R.string.retry))
         }
-    }
-}
-
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(color = AccentMain)
     }
 }
