@@ -32,6 +32,7 @@
     <string name="search_history">Search History</string>
     <string name="clear_history">Clear</string>
     <string name="no_results">No results found</string>
+    <string name="view_all_results">View all results</string>
 
     <!-- Detail -->
     <string name="episodes">Episodes</string>

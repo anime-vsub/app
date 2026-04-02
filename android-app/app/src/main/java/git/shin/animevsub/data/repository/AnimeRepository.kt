@@ -59,6 +59,10 @@ class AnimeRepository @Inject constructor(
     api.preSearch(keyword)
   }
 
+  suspend fun search(keyword: String, page: Int = 1): Result<CategoryPage> = runCatching {
+    api.search(keyword, page)
+  }
+
   // Category
   suspend fun getCategory(
     type: String,

@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -47,6 +49,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
+import git.shin.animevsub.data.model.SearchSuggestion
+import git.shin.animevsub.ui.components.grid.GridLoadingSkeleton
+import git.shin.animevsub.ui.components.grid.VerticalGridAnimeList
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
@@ -118,125 +123,183 @@ fun SearchScreen(
         .clip(RoundedCornerShape(12.dp))
     )
 
-    if (uiState.isLoading) {
-      LinearProgressIndicator(
-        modifier = Modifier.fillMaxWidth(),
-        color = AccentMain
-      )
-    }
-
     // Content
-    if (uiState.query.length < 2 && uiState.suggestions.isEmpty()) {
-      // Show search history
-      if (uiState.searchHistory.isNotEmpty()) {
-        Row(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-          horizontalArrangement = Arrangement.SpaceBetween,
-          verticalAlignment = Alignment.CenterVertically
-        ) {
-          Text(
-            text = stringResource(R.string.search_history),
-            color = TextPrimary,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
+    Box(modifier = Modifier.fillMaxSize()) {
+      if (uiState.isSearching) {
+        if (uiState.isLoading && uiState.searchResults.isEmpty()) {
+          GridLoadingSkeleton()
+        } else {
+          VerticalGridAnimeList(
+            items = uiState.searchResults,
+            onItemClick = { onNavigateToDetail(it.animeId) },
+            isLoadingMore = uiState.isLoading && uiState.searchResults.isNotEmpty(),
+            onLoadMore = { viewModel.loadMore() },
+            contentPadding = PaddingValues(16.dp),
+            state = rememberLazyGridState()
           )
-          TextButton(onClick = { viewModel.clearHistory() }) {
-            Text(
-              text = stringResource(R.string.clear_history),
-              color = AccentMain,
-              fontSize = 13.sp
-            )
-          }
         }
-
-        LazyColumn {
-          items(uiState.searchHistory) { item ->
-            Row(
-              modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                  viewModel.onQueryChange(item)
-                  viewModel.onSearch(item)
-                }
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-              Icon(
-                imageVector = Icons.Default.History,
-                contentDescription = null,
-                tint = TextGrey,
-                modifier = Modifier.size(20.dp)
-              )
-              Spacer(modifier = Modifier.width(12.dp))
-              Text(
-                text = item,
-                color = TextPrimary,
-                fontSize = 14.sp
-              )
-            }
+      } else if (uiState.query.isEmpty()) {
+        // Show search history
+        SearchHistoryList(
+          history = uiState.searchHistory,
+          onHistoryClick = {
+            viewModel.onSearch(it)
+          },
+          onClearHistory = { viewModel.clearHistory() }
+        )
+      } else {
+        // Show suggestions
+        SearchSuggestionsList(
+          suggestions = uiState.suggestions,
+          onSuggestionClick = { onNavigateToDetail(it.animeId) },
+          onFullSearch = {
+            viewModel.onSearch(uiState.query)
+            focusManager.clearFocus()
           }
+        )
+      }
+
+      if (!uiState.isLoading && uiState.isSearching && uiState.searchResults.isEmpty()) {
+        EmptyState(message = stringResource(R.string.no_results))
+      }
+    }
+  }
+}
+
+@Composable
+fun SearchHistoryList(
+  history: List<String>,
+  onHistoryClick: (String) -> Unit,
+  onClearHistory: () -> Unit
+) {
+  Column {
+    if (history.isNotEmpty()) {
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(horizontal = 16.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Text(
+          text = stringResource(R.string.search_history),
+          color = TextPrimary,
+          fontSize = 16.sp,
+          fontWeight = FontWeight.Medium
+        )
+        TextButton(onClick = onClearHistory) {
+          Text(
+            text = stringResource(R.string.clear_history),
+            color = AccentMain,
+            fontSize = 13.sp
+          )
         }
       }
-    } else {
-      // Show suggestions
+
       LazyColumn {
-        items(uiState.suggestions) { suggestion ->
+        items(history) { item ->
           Row(
             modifier = Modifier
               .fillMaxWidth()
-              .clickable {
-                onNavigateToDetail(suggestion.animeId)
-              }
-              .padding(horizontal = 16.dp, vertical = 8.dp),
+              .clickable { onHistoryClick(item) }
+              .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
           ) {
-            AsyncImage(
-              model = suggestion.image,
-              contentDescription = suggestion.name,
-              contentScale = ContentScale.Crop,
-              modifier = Modifier
-                .size(50.dp, 70.dp)
-                .clip(RoundedCornerShape(6.dp))
+            Icon(
+              imageVector = Icons.Default.History,
+              contentDescription = null,
+              tint = TextGrey,
+              modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-              Text(
-                text = suggestion.name,
-                color = TextPrimary,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-              )
-              Spacer(modifier = Modifier.height(4.dp))
-              Text(
-                text = suggestion.status,
-                color = TextSecondary,
-                fontSize = 12.sp
-              )
-            }
-          }
-        }
-
-        if (uiState.suggestions.isEmpty() && uiState.query.length >= 2 && !uiState.isLoading) {
-          item {
-            Box(
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(32.dp),
-              contentAlignment = Alignment.Center
-            ) {
-              Text(
-                text = stringResource(R.string.no_results),
-                color = TextSecondary,
-                fontSize = 14.sp
-              )
-            }
+            Text(
+              text = item,
+              color = TextPrimary,
+              fontSize = 14.sp
+            )
           }
         }
       }
     }
+  }
+}
+
+@Composable
+fun SearchSuggestionsList(
+  suggestions: List<SearchSuggestion>,
+  onSuggestionClick: (SearchSuggestion) -> Unit,
+  onFullSearch: () -> Unit
+) {
+  LazyColumn {
+    items(suggestions) { suggestion ->
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .clickable { onSuggestionClick(suggestion) }
+          .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        AsyncImage(
+          model = suggestion.image,
+          contentDescription = suggestion.name,
+          contentScale = ContentScale.Crop,
+          modifier = Modifier
+            .size(50.dp, 70.dp)
+            .clip(RoundedCornerShape(6.dp))
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(modifier = Modifier.weight(1f)) {
+          Text(
+            text = suggestion.name,
+            color = TextPrimary,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+          )
+          Spacer(modifier = Modifier.height(4.dp))
+          Text(
+            text = suggestion.status,
+            color = TextSecondary,
+            fontSize = 12.sp
+          )
+        }
+      }
+    }
+
+    if (suggestions.isNotEmpty()) {
+      item {
+        Box(
+          modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onFullSearch() }
+            .padding(16.dp),
+          contentAlignment = Alignment.Center
+        ) {
+          Text(
+            text = stringResource(R.string.view_all_results),
+            color = AccentMain,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+fun EmptyState(message: String) {
+  Box(
+    modifier = Modifier
+      .fillMaxSize()
+      .padding(32.dp),
+    contentAlignment = Alignment.Center
+  ) {
+    Text(
+      text = message,
+      color = TextSecondary,
+      fontSize = 14.sp
+    )
   }
 }

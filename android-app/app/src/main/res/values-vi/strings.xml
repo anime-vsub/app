@@ -28,6 +28,7 @@
     <string name="search_history">Lịch sử tìm kiếm</string>
     <string name="clear_history">Xóa</string>
     <string name="no_results">Không tìm thấy kết quả</string>
+    <string name="view_all_results">Xem tất cả kết quả</string>
 
     <!-- Detail -->
     <string name="episodes">Tập phim</string>
