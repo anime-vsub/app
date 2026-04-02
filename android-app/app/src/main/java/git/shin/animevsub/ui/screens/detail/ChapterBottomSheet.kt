@@ -36,9 +36,13 @@ fun ChapterBottomSheet(
     sheetState = sheetState,
     containerColor = DarkSurface,
     dragHandle = { BottomSheetDefaults.DragHandle(color = TextGrey) },
-    modifier = Modifier.height(sheetHeight).fillMaxWidth()
+    modifier = Modifier
+      .height(sheetHeight)
+      .fillMaxWidth()
   ) {
-    Column(modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
+    Column(modifier = Modifier
+      .fillMaxWidth()
+      .fillMaxHeight()) {
       EpisodeSelectorContent(
         displaySeasons = uiState.displaySeasons,
         activeDisplaySeasonId = uiState.activeDisplaySeasonId,

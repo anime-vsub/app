@@ -18,28 +18,28 @@ import git.shin.animevsub.ui.theme.TextSecondary
 
 @Composable
 fun InfoRow(
-    label: String,
-    value: String?,
-    modifier: Modifier = Modifier,
-    fontSize: TextUnit = 12.sp,
-    textStyle: TextStyle = TextStyle.Default,
-    onClick: (() -> Unit)? = null
+  label: String,
+  value: String?,
+  modifier: Modifier = Modifier,
+  fontSize: TextUnit = 12.sp,
+  textStyle: TextStyle = TextStyle.Default,
+  onClick: (() -> Unit)? = null
 ) {
-    if (!value.isNullOrEmpty()) {
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = TextSecondary)) {
-                    append("$label: ")
-                }
-                withStyle(style = SpanStyle(color = if (onClick != null) Color(0xFF00D639) else TextPrimary)) {
-                    append(value)
-                }
-            },
-            fontSize = fontSize,
-            style = textStyle,
-            modifier = modifier
-                .padding(vertical = 2.dp)
-                .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
-        )
-    }
+  if (!value.isNullOrEmpty()) {
+    Text(
+      text = buildAnnotatedString {
+        withStyle(style = SpanStyle(color = TextSecondary)) {
+          append("$label: ")
+        }
+        withStyle(style = SpanStyle(color = if (onClick != null) Color(0xFF00D639) else TextPrimary)) {
+          append(value)
+        }
+      },
+      fontSize = fontSize,
+      style = textStyle,
+      modifier = modifier
+        .padding(vertical = 2.dp)
+        .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier)
+    )
+  }
 }

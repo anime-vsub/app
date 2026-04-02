@@ -13,15 +13,15 @@ import git.shin.animevsub.ui.theme.AnimeVsubTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            AnimeVsubTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    AnimeVsubAppUI()
-                }
-            }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
+    setContent {
+      AnimeVsubTheme {
+        Surface(modifier = Modifier.fillMaxSize()) {
+          AnimeVsubAppUI()
         }
+      }
     }
+  }
 }

@@ -4,7 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import git.shin.animevsub.data.model.*
+import git.shin.animevsub.data.model.AnimeDetail
+import git.shin.animevsub.data.model.ChapterData
+import git.shin.animevsub.data.model.ChapterInfo
+import git.shin.animevsub.data.model.DisplaySeason
+import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.repository.AnimeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -325,7 +330,12 @@ class DetailViewModel @Inject constructor(
             _uiState.update { it.copy(currentServer = defaultServer) }
             loadPlayer(chapter, defaultServer)
           } else {
-            _uiState.update { it.copy(isPlayerLoading = false, playerError = "Không tìm thấy server nào") }
+            _uiState.update {
+              it.copy(
+                isPlayerLoading = false,
+                playerError = "Không tìm thấy server nào"
+              )
+            }
           }
         }
         .onFailure { e ->
@@ -336,7 +346,14 @@ class DetailViewModel @Inject constructor(
 
   fun selectServer(server: ServerInfo) {
     val chapter = _uiState.value.currentChapter ?: return
-    _uiState.update { it.copy(currentServer = server, isPlayerLoading = true, playerError = null, playerData = null) }
+    _uiState.update {
+      it.copy(
+        currentServer = server,
+        isPlayerLoading = true,
+        playerError = null,
+        playerData = null
+      )
+    }
     loadPlayer(chapter, server)
   }
 

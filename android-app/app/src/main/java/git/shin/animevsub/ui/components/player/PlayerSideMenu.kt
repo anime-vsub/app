@@ -9,7 +9,14 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
@@ -28,62 +35,62 @@ import git.shin.animevsub.ui.theme.DarkSurface
 
 @Composable
 fun PlayerSideMenu(
-    visible: Boolean,
-    onDismiss: () -> Unit,
-    title: String? = null,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+  visible: Boolean,
+  onDismiss: () -> Unit,
+  title: String? = null,
+  modifier: Modifier = Modifier,
+  content: @Composable () -> Unit
 ) {
-    val context = LocalContext.current
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn() + slideInHorizontally(initialOffsetX = { it }),
-        exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it }),
-        modifier = modifier.fillMaxSize()
-    ) {
-        Row(modifier = Modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .background(Color.Black.copy(alpha = 0.3f))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = onDismiss
-                    )
+  val context = LocalContext.current
+  AnimatedVisibility(
+    visible = visible,
+    enter = fadeIn() + slideInHorizontally(initialOffsetX = { it }),
+    exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it }),
+    modifier = modifier.fillMaxSize()
+  ) {
+    Row(modifier = Modifier.fillMaxSize()) {
+      Box(
+        modifier = Modifier
+          .weight(1f)
+          .fillMaxHeight()
+          .background(Color.Black.copy(alpha = 0.3f))
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = onDismiss
+          )
+      )
+      Column(
+        modifier = Modifier
+          .fillMaxHeight()
+          .fillMaxWidth(if (findActivity(context)?.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) 0.4f else 0.5f)
+          .background(DarkSurface)
+          .clickable(enabled = false) {}
+          .padding(bottom = 16.dp)
+      ) {
+        if (title != null) {
+          Row(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+          ) {
+            Text(
+              text = title,
+              color = Color.White,
+              fontSize = 18.sp,
+              fontWeight = FontWeight.Bold
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(if (findActivity(context)?.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) 0.4f else 0.5f)
-                    .background(DarkSurface)
-                    .clickable(enabled = false) {}
-                    .padding(bottom = 16.dp)
-            ) {
-                if (title != null) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = title,
-                            color = Color.White,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        IconButton(onClick = onDismiss) {
-                            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
-                        }
-                    }
-                }
-                Box(modifier = Modifier.weight(1f)) {
-                    content()
-                }
+            IconButton(onClick = onDismiss) {
+              Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White)
             }
+          }
         }
+        Box(modifier = Modifier.weight(1f)) {
+          content()
+        }
+      }
     }
+  }
 }

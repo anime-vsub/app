@@ -1,7 +1,20 @@
 package git.shin.animevsub.data.repository
 
 import git.shin.animevsub.data.local.PreferencesManager
-import git.shin.animevsub.data.model.*
+import git.shin.animevsub.data.model.AnimeDetail
+import git.shin.animevsub.data.model.CategoryPage
+import git.shin.animevsub.data.model.ChapterData
+import git.shin.animevsub.data.model.ChapterInfo
+import git.shin.animevsub.data.model.FilterGroup
+import git.shin.animevsub.data.model.HomeData
+import git.shin.animevsub.data.model.NotificationData
+import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.RankingItem
+import git.shin.animevsub.data.model.ScheduleDay
+import git.shin.animevsub.data.model.SearchSuggestion
+import git.shin.animevsub.data.model.SelectedFilter
+import git.shin.animevsub.data.model.ServerInfo
+import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.remote.AnimeApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

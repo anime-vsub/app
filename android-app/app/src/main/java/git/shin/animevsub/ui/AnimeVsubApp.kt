@@ -1,13 +1,35 @@
 package git.shin.animevsub.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.*
-import androidx.compose.material.icons.automirrored.outlined.*
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Article
+import androidx.compose.material.icons.automirrored.outlined.Article
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,305 +59,319 @@ import git.shin.animevsub.ui.screens.notification.NotificationScreen
 import git.shin.animevsub.ui.screens.rankings.RankingsScreen
 import git.shin.animevsub.ui.screens.schedule.ScheduleScreen
 import git.shin.animevsub.ui.screens.search.SearchScreen
-import git.shin.animevsub.ui.theme.*
+import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.DarkBackground
+import git.shin.animevsub.ui.theme.DarkSurface
+import git.shin.animevsub.ui.theme.TextGrey
+import git.shin.animevsub.ui.theme.TextPrimary
 
 @Composable
 fun AnimeVsubAppUI() {
-    val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+  val navController = rememberNavController()
+  val navBackStackEntry by navController.currentBackStackEntryAsState()
+  val currentDestination = navBackStackEntry?.destination
 
-    val bottomNavItems = listOf(
-        BottomNavItem(Screen.Home, R.string.nav_home, Icons.Filled.Home, Icons.Outlined.Home),
-        BottomNavItem(Screen.Search, R.string.nav_search, Icons.Filled.Search, Icons.Outlined.Search),
-        BottomNavItem(Screen.News, R.string.nav_news, Icons.AutoMirrored.Filled.Article, Icons.AutoMirrored.Outlined.Article),
-        BottomNavItem(Screen.Notification, R.string.nav_notification, Icons.Filled.Notifications, Icons.Outlined.Notifications),
-        BottomNavItem(Screen.Account, R.string.nav_account, Icons.Filled.Person, Icons.Outlined.Person)
-    )
+  val bottomNavItems = listOf(
+    BottomNavItem(Screen.Home, R.string.nav_home, Icons.Filled.Home, Icons.Outlined.Home),
+    BottomNavItem(Screen.Search, R.string.nav_search, Icons.Filled.Search, Icons.Outlined.Search),
+    BottomNavItem(
+      Screen.News,
+      R.string.nav_news,
+      Icons.AutoMirrored.Filled.Article,
+      Icons.AutoMirrored.Outlined.Article
+    ),
+    BottomNavItem(
+      Screen.Notification,
+      R.string.nav_notification,
+      Icons.Filled.Notifications,
+      Icons.Outlined.Notifications
+    ),
+    BottomNavItem(Screen.Account, R.string.nav_account, Icons.Filled.Person, Icons.Outlined.Person)
+  )
 
-    // Routes where bottom bar should be hidden
-    val hideBottomBar = currentDestination?.route?.let { route ->
-        route.startsWith("detail") ||
-        route == Screen.Rankings.route ||
-        route == Screen.Schedule.route ||
-        route.startsWith("category") ||
-        route == Screen.Login.route ||
-        route == Screen.Settings.route ||
-        route == Screen.About.route ||
-        route == Screen.History.route ||
-        route == Screen.Follow.route
-    } ?: false
+  // Routes where bottom bar should be hidden
+  val hideBottomBar = currentDestination?.route?.let { route ->
+    route.startsWith("detail") ||
+      route == Screen.Rankings.route ||
+      route == Screen.Schedule.route ||
+      route.startsWith("category") ||
+      route == Screen.Login.route ||
+      route == Screen.Settings.route ||
+      route == Screen.About.route ||
+      route == Screen.History.route ||
+      route == Screen.Follow.route
+  } ?: false
 
-    Scaffold(
-        containerColor = DarkBackground,
-        bottomBar = {
-            if (!hideBottomBar) {
-                NavigationBar(
-                    containerColor = DarkSurface,
-                    contentColor = TextPrimary,
-                    tonalElevation = 0.dp
-                ) {
-                    bottomNavItems.forEach { item ->
-                        val selected = currentDestination?.hierarchy?.any {
-                            it.route == item.screen.route
-                        } == true
-
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                                    contentDescription = stringResource(item.labelRes)
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = stringResource(item.labelRes),
-                                    fontSize = 11.sp
-                                )
-                            },
-                            selected = selected,
-                            onClick = {
-                                navController.navigate(item.screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = AccentMain,
-                                selectedTextColor = AccentMain,
-                                unselectedIconColor = TextGrey,
-                                unselectedTextColor = TextGrey,
-                                indicatorColor = Color.Transparent
-                            )
-                        )
-                    }
-                }
-            }
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Home.route,
-            modifier = Modifier.padding(innerPadding)
+  Scaffold(
+    containerColor = DarkBackground,
+    bottomBar = {
+      if (!hideBottomBar) {
+        NavigationBar(
+          containerColor = DarkSurface,
+          contentColor = TextPrimary,
+          tonalElevation = 0.dp
         ) {
-            // Bottom nav destinations
-            composable(Screen.Home.route) {
-                HomeScreen(
-                    onNavigateToDetail = { animeId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-                    },
-                    onNavigateToCategory = { type, value ->
-                        navController.navigate(Screen.Category.createRoute(type, value))
-                    },
-                    onNavigateToRankings = { type ->
-                        navController.navigate(Screen.Rankings.createRoute(type))
-                    },
-                    onNavigateToSchedule = {
-                        navController.navigate(Screen.Schedule.route)
-                    }
-                )
-            }
+          bottomNavItems.forEach { item ->
+            val selected = currentDestination?.hierarchy?.any {
+              it.route == item.screen.route
+            } == true
 
-            composable(Screen.Search.route) {
-                SearchScreen(
-                    onNavigateToDetail = { animeId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-                    }
+            NavigationBarItem(
+              icon = {
+                Icon(
+                  imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                  contentDescription = stringResource(item.labelRes)
                 )
-            }
-
-            composable(Screen.News.route) {
-                NewsScreen()
-            }
-
-            composable(Screen.Notification.route) {
-                NotificationScreen(
-                    onNavigateToDetail = { animeId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-                    },
-                    onNavigateToLogin = {
-                        navController.navigate(Screen.Login.route)
-                    }
+              },
+              label = {
+                Text(
+                  text = stringResource(item.labelRes),
+                  fontSize = 11.sp
                 )
-            }
-
-            composable(Screen.Account.route) {
-                AccountScreen(
-                    onNavigateToLogin = { navController.navigate(Screen.Login.route) },
-                    onNavigateToHistory = { navController.navigate(Screen.History.route) },
-                    onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
-                    onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
-                    onNavigateToAbout = { navController.navigate(Screen.About.route) },
-                    onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) }
-                )
-            }
-
-            // Detail screen (Now includes Player)
-            composable(
-                route = Screen.AnimeDetail.route,
-                arguments = listOf(
-                    navArgument("animeId") { type = NavType.StringType },
-                    navArgument("chapterId") {
-                        type = NavType.StringType
-                        nullable = true
-                        defaultValue = null
-                    }
-                )
-            ) {
-                DetailScreen(
-                    onNavigateBack = { navController.popBackStack() },
-                    onNavigateToDetail = { animeId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-                    },
-                    onNavigateToCategory = { type, value ->
-                        navController.navigate(Screen.Category.createRoute(type, value))
-                    }
-                )
-            }
-
-            // Rankings screen
-            composable(
-                route = Screen.Rankings.route,
-                arguments = listOf(
-                    navArgument("type") {
-                        type = NavType.StringType
-                        defaultValue = "day"
-                    }
-                )
-            ) {
-                RankingsScreen(
-                    onNavigateBack = { navController.popBackStack() },
-                    onNavigateToDetail = { animeId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-                    }
-                )
-            }
-
-            // Schedule screen
-            composable(Screen.Schedule.route) {
-                ScheduleScreen(
-                    onNavigateBack = { navController.popBackStack() },
-                    onNavigateToDetail = { animeId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-                    }
-                )
-            }
-
-            // Category screen
-            composable(
-                route = Screen.Category.route,
-                arguments = listOf(
-                    navArgument("typeNormal") { type = NavType.StringType },
-                    navArgument("value") { type = NavType.StringType }
-                )
-            ) {
-                CategoryScreen(
-                    onNavigateBack = { navController.popBackStack() },
-                    onNavigateToDetail = { animeId ->
-                        navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-                    }
-                )
-            }
-
-            // Login screen
-            composable(Screen.Login.route) {
-                LoginScreen(
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
-
-            // About screen
-            composable(Screen.About.route) {
-                AboutScreen(
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
-
-            // Placeholder screens
-            composable(Screen.History.route) {
-                PlaceholderScreen(
-                    title = stringResource(R.string.history),
-                    emoji = "📋",
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
-
-            composable(Screen.Follow.route) {
-                PlaceholderScreen(
-                    title = stringResource(R.string.follow),
-                    emoji = "❤️",
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
-
-            composable(Screen.Settings.route) {
-                PlaceholderScreen(
-                    title = stringResource(R.string.settings),
-                    emoji = "⚙️",
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
-
-            composable(Screen.Playlists.route) {
-                PlaceholderScreen(
-                    title = stringResource(R.string.playlists),
-                    emoji = "📂",
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
+              },
+              selected = selected,
+              onClick = {
+                navController.navigate(item.screen.route) {
+                  popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                  }
+                  launchSingleTop = true
+                  restoreState = true
+                }
+              },
+              colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = AccentMain,
+                selectedTextColor = AccentMain,
+                unselectedIconColor = TextGrey,
+                unselectedTextColor = TextGrey,
+                indicatorColor = Color.Transparent
+              )
+            )
+          }
         }
+      }
     }
+  ) { innerPadding ->
+    NavHost(
+      navController = navController,
+      startDestination = Screen.Home.route,
+      modifier = Modifier.padding(innerPadding)
+    ) {
+      // Bottom nav destinations
+      composable(Screen.Home.route) {
+        HomeScreen(
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          },
+          onNavigateToCategory = { type, value ->
+            navController.navigate(Screen.Category.createRoute(type, value))
+          },
+          onNavigateToRankings = { type ->
+            navController.navigate(Screen.Rankings.createRoute(type))
+          },
+          onNavigateToSchedule = {
+            navController.navigate(Screen.Schedule.route)
+          }
+        )
+      }
+
+      composable(Screen.Search.route) {
+        SearchScreen(
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          }
+        )
+      }
+
+      composable(Screen.News.route) {
+        NewsScreen()
+      }
+
+      composable(Screen.Notification.route) {
+        NotificationScreen(
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          },
+          onNavigateToLogin = {
+            navController.navigate(Screen.Login.route)
+          }
+        )
+      }
+
+      composable(Screen.Account.route) {
+        AccountScreen(
+          onNavigateToLogin = { navController.navigate(Screen.Login.route) },
+          onNavigateToHistory = { navController.navigate(Screen.History.route) },
+          onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
+          onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
+          onNavigateToAbout = { navController.navigate(Screen.About.route) },
+          onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) }
+        )
+      }
+
+      // Detail screen (Now includes Player)
+      composable(
+        route = Screen.AnimeDetail.route,
+        arguments = listOf(
+          navArgument("animeId") { type = NavType.StringType },
+          navArgument("chapterId") {
+            type = NavType.StringType
+            nullable = true
+            defaultValue = null
+          }
+        )
+      ) {
+        DetailScreen(
+          onNavigateBack = { navController.popBackStack() },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          },
+          onNavigateToCategory = { type, value ->
+            navController.navigate(Screen.Category.createRoute(type, value))
+          }
+        )
+      }
+
+      // Rankings screen
+      composable(
+        route = Screen.Rankings.route,
+        arguments = listOf(
+          navArgument("type") {
+            type = NavType.StringType
+            defaultValue = "day"
+          }
+        )
+      ) {
+        RankingsScreen(
+          onNavigateBack = { navController.popBackStack() },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          }
+        )
+      }
+
+      // Schedule screen
+      composable(Screen.Schedule.route) {
+        ScheduleScreen(
+          onNavigateBack = { navController.popBackStack() },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          }
+        )
+      }
+
+      // Category screen
+      composable(
+        route = Screen.Category.route,
+        arguments = listOf(
+          navArgument("typeNormal") { type = NavType.StringType },
+          navArgument("value") { type = NavType.StringType }
+        )
+      ) {
+        CategoryScreen(
+          onNavigateBack = { navController.popBackStack() },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          }
+        )
+      }
+
+      // Login screen
+      composable(Screen.Login.route) {
+        LoginScreen(
+          onNavigateBack = { navController.popBackStack() }
+        )
+      }
+
+      // About screen
+      composable(Screen.About.route) {
+        AboutScreen(
+          onNavigateBack = { navController.popBackStack() }
+        )
+      }
+
+      // Placeholder screens
+      composable(Screen.History.route) {
+        PlaceholderScreen(
+          title = stringResource(R.string.history),
+          emoji = "📋",
+          onNavigateBack = { navController.popBackStack() }
+        )
+      }
+
+      composable(Screen.Follow.route) {
+        PlaceholderScreen(
+          title = stringResource(R.string.follow),
+          emoji = "❤️",
+          onNavigateBack = { navController.popBackStack() }
+        )
+      }
+
+      composable(Screen.Settings.route) {
+        PlaceholderScreen(
+          title = stringResource(R.string.settings),
+          emoji = "⚙️",
+          onNavigateBack = { navController.popBackStack() }
+        )
+      }
+
+      composable(Screen.Playlists.route) {
+        PlaceholderScreen(
+          title = stringResource(R.string.playlists),
+          emoji = "📂",
+          onNavigateBack = { navController.popBackStack() }
+        )
+      }
+    }
+  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlaceholderScreen(
-    title: String,
-    emoji: String,
-    onNavigateBack: () -> Unit
+  title: String,
+  emoji: String,
+  onNavigateBack: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = title, color = TextPrimary) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back),
-                            tint = TextPrimary
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = { Text(text = title, color = TextPrimary) },
+        navigationIcon = {
+          IconButton(onClick = onNavigateBack) {
+            Icon(
+              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+              contentDescription = stringResource(R.string.back),
+              tint = TextPrimary
             )
+          }
         },
-        containerColor = DarkBackground
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = emoji, fontSize = 64.sp)
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = title,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = TextPrimary
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(R.string.coming_soon_desc),
-                fontSize = 14.sp,
-                color = TextGrey
-            )
-        }
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
+      )
+    },
+    containerColor = DarkBackground
+  ) { padding ->
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(padding),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.Center
+    ) {
+      Text(text = emoji, fontSize = 64.sp)
+      Spacer(modifier = Modifier.height(16.dp))
+      Text(
+        text = title,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
+        color = TextPrimary
+      )
+      Spacer(modifier = Modifier.height(8.dp))
+      Text(
+        text = stringResource(R.string.coming_soon_desc),
+        fontSize = 14.sp,
+        color = TextGrey
+      )
     }
+  }
 }

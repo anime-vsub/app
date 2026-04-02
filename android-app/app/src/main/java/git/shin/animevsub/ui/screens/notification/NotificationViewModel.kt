@@ -13,53 +13,53 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class NotificationUiState(
-    val isLoading: Boolean = true,
-    val data: NotificationData? = null,
-    val error: String? = null,
-    val isLoggedIn: Boolean = false
+  val isLoading: Boolean = true,
+  val data: NotificationData? = null,
+  val error: String? = null,
+  val isLoggedIn: Boolean = false
 )
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-    private val repository: AnimeRepository
+  private val repository: AnimeRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(NotificationUiState())
-    val uiState: StateFlow<NotificationUiState> = _uiState.asStateFlow()
+  private val _uiState = MutableStateFlow(NotificationUiState())
+  val uiState: StateFlow<NotificationUiState> = _uiState.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            val loggedIn = repository.isLoggedIn.first()
-            _uiState.value = _uiState.value.copy(isLoggedIn = loggedIn)
-            if (loggedIn) {
-                loadNotifications()
-            } else {
-                _uiState.value = _uiState.value.copy(isLoading = false)
-            }
-        }
-    }
-
-    fun loadNotifications() {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            repository.getNotifications()
-                .onSuccess { data ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        data = data,
-                        error = null
-                    )
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        error = e.message
-                    )
-                }
-        }
-    }
-
-    fun retry() {
+  init {
+    viewModelScope.launch {
+      val loggedIn = repository.isLoggedIn.first()
+      _uiState.value = _uiState.value.copy(isLoggedIn = loggedIn)
+      if (loggedIn) {
         loadNotifications()
+      } else {
+        _uiState.value = _uiState.value.copy(isLoading = false)
+      }
     }
+  }
+
+  fun loadNotifications() {
+    viewModelScope.launch {
+      _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+      repository.getNotifications()
+        .onSuccess { data ->
+          _uiState.value = _uiState.value.copy(
+            isLoading = false,
+            data = data,
+            error = null
+          )
+        }
+        .onFailure { e ->
+          _uiState.value = _uiState.value.copy(
+            isLoading = false,
+            error = e.message
+          )
+        }
+    }
+  }
+
+  fun retry() {
+    loadNotifications()
+  }
 }

@@ -17,38 +17,38 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
-    @Singleton
-    fun provideJson(): Json {
-        return Json {
-            ignoreUnknownKeys = true
-            coerceInputValues = true
-            encodeDefaults = true
-            isLenient = true
-        }
+  @Provides
+  @Singleton
+  fun provideJson(): Json {
+    return Json {
+      ignoreUnknownKeys = true
+      coerceInputValues = true
+      encodeDefaults = true
+      isLenient = true
     }
+  }
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .followRedirects(true)
-            .followSslRedirects(true)
-            .build()
-    }
+  @Provides
+  @Singleton
+  fun provideOkHttpClient(): OkHttpClient {
+    return OkHttpClient.Builder()
+      .connectTimeout(30, TimeUnit.SECONDS)
+      .readTimeout(30, TimeUnit.SECONDS)
+      .writeTimeout(30, TimeUnit.SECONDS)
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .build()
+  }
 
-    @Provides
-    @Singleton
-    fun provideAnimeApi(client: OkHttpClient, json: Json): AnimeApi {
-        return AnimeApi(client, json)
-    }
+  @Provides
+  @Singleton
+  fun provideAnimeApi(client: OkHttpClient, json: Json): AnimeApi {
+    return AnimeApi(client, json)
+  }
 
-    @Provides
-    @Singleton
-    fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
-        return PreferencesManager(context)
-    }
+  @Provides
+  @Singleton
+  fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
+    return PreferencesManager(context)
+  }
 }

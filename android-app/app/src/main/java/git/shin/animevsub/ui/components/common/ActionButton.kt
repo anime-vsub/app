@@ -1,7 +1,12 @@
 package git.shin.animevsub.ui.components.common
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -18,28 +23,28 @@ import git.shin.animevsub.ui.theme.TextSecondary
 
 @Composable
 fun ActionButton(
-    icon: ImageVector,
-    label: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+  icon: ImageVector,
+  label: String,
+  modifier: Modifier = Modifier,
+  onClick: () -> Unit = {}
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick() }
-            .padding(vertical = 8.dp)
-    ) {
-        Icon(icon, null, tint = TextPrimary, modifier = Modifier.size(22.dp))
-        Spacer(modifier = Modifier.height(4.dp))
+  Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center,
+    modifier = modifier
+      .clip(RoundedCornerShape(8.dp))
+      .clickable { onClick() }
+      .padding(vertical = 8.dp)
+  ) {
+    Icon(icon, null, tint = TextPrimary, modifier = Modifier.size(22.dp))
+    Spacer(modifier = Modifier.height(4.dp))
 
-        Text(
-            text = label,
-            color = TextSecondary,
-            fontSize = 11.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
+    Text(
+      text = label,
+      color = TextSecondary,
+      fontSize = 11.sp,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis
+    )
+  }
 }

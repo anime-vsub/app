@@ -2,7 +2,16 @@ package git.shin.animevsub.ui.components.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -31,116 +40,121 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun HorizontalAnimeList(
-    items: List<AnimeCard>,
-    onItemClick: (AnimeCard) -> Unit,
-    modifier: Modifier = Modifier,
-    showTrending: Boolean = false,
-    showRating: Boolean = false,
-    showTimeline: Boolean = false,
-    state: LazyListState = rememberLazyListState()
+  items: List<AnimeCard>,
+  onItemClick: (AnimeCard) -> Unit,
+  modifier: Modifier = Modifier,
+  showTrending: Boolean = false,
+  showRating: Boolean = false,
+  showTimeline: Boolean = false,
+  state: LazyListState = rememberLazyListState()
 ) {
-    val scope = rememberCoroutineScope()
-    val now = LocalDateTime.now()
-    val locale = LocalConfiguration.current.locales[0]
+  val scope = rememberCoroutineScope()
+  val now = LocalDateTime.now()
+  val locale = LocalConfiguration.current.locales[0]
 
-    LazyRow(
-        state = state,
-        modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(items.size) { index ->
-            val anime = items[index]
-            val card = @Composable {
-                AnimeCardItem(
-                    anime = anime,
-                    onClick = { onItemClick(anime) },
-                    trendingIndex = if (showTrending) index + 1 else null,
-                    showRating = showRating,
-                    modifier = Modifier.width(110.dp)
-                )
-            }
+  LazyRow(
+    state = state,
+    modifier = modifier,
+    contentPadding = PaddingValues(horizontal = 16.dp),
+    horizontalArrangement = Arrangement.spacedBy(12.dp)
+  ) {
+    items(items.size) { index ->
+      val anime = items[index]
+      val card = @Composable {
+        AnimeCardItem(
+          anime = anime,
+          onClick = { onItemClick(anime) },
+          trendingIndex = if (showTrending) index + 1 else null,
+          showRating = showRating,
+          modifier = Modifier.width(110.dp)
+        )
+      }
 
-            if (showTimeline) {
-                val timeRelease = try {
-                    anime.timeRelease?.let {
-                        LocalDateTime.ofInstant(
-                            Instant.ofEpochSecond(it),
-                            ZoneId.systemDefault()
-                        )
-                    }
-                } catch (e: Exception) { null }
-
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .width(110.dp)
-                            .height(35.dp)
-                            .clickable { scope.launch { state.animateScrollToItem(index) } }
-                    ) {
-                        @Suppress("DEPRECATION")
-                        val timelineTextStyle = TextStyle(
-                            platformStyle = PlatformTextStyle(
-                                includeFontPadding = false
-                            )
-                        )
-
-                        if (timeRelease != null) {
-                            val isToday = timeRelease.toLocalDate().isEqual(now.toLocalDate())
-                            val isTomorrow = timeRelease.toLocalDate().isEqual(now.toLocalDate().plusDays(1))
-
-                            if (isToday || isTomorrow) {
-                                Text(
-                                    text = timeRelease.format(DateTimeFormatter.ofPattern("HH:mm")),
-                                    fontSize = 12.sp,
-                                    color = Color.White,
-                                    style = timelineTextStyle
-                                )
-                                Text(
-                                    text = stringResource(if (isToday) R.string.today else R.string.tomorrow),
-                                    fontSize = 10.sp,
-                                    color = Color.Gray,
-                                    style = timelineTextStyle
-                                )
-                            } else {
-                                val pattern = if (timeRelease.year == now.year) "MM-dd" else "yyyy-MM-dd"
-                                Text(
-                                    text = timeRelease.format(DateTimeFormatter.ofPattern(pattern)),
-                                    fontSize = 12.sp,
-                                    color = Color.White,
-                                    style = timelineTextStyle
-                                )
-                                Text(
-                                    text = timeRelease.format(DateTimeFormatter.ofPattern("EEEE", locale)),
-                                    fontSize = 10.sp,
-                                    color = Color.Gray,
-                                    style = timelineTextStyle
-                                )
-                            }
-                        } else {
-                            Text(
-                                text = stringResource(id = R.string.upcoming),
-                                fontSize = 12.sp,
-                                color = Color.Gray,
-                                style = timelineTextStyle,
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(Color.Gray))
-                    }
-
-                    Spacer(modifier = Modifier.height(4.dp))
-                    card()
-                }
-            } else {
-                card()
-            }
+      if (showTimeline) {
+        val timeRelease = try {
+          anime.timeRelease?.let {
+            LocalDateTime.ofInstant(
+              Instant.ofEpochSecond(it),
+              ZoneId.systemDefault()
+            )
+          }
+        } catch (e: Exception) {
+          null
         }
+
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+          Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+              .width(110.dp)
+              .height(35.dp)
+              .clickable { scope.launch { state.animateScrollToItem(index) } }
+          ) {
+            @Suppress("DEPRECATION")
+            val timelineTextStyle = TextStyle(
+              platformStyle = PlatformTextStyle(
+                includeFontPadding = false
+              )
+            )
+
+            if (timeRelease != null) {
+              val isToday = timeRelease.toLocalDate().isEqual(now.toLocalDate())
+              val isTomorrow = timeRelease.toLocalDate().isEqual(now.toLocalDate().plusDays(1))
+
+              if (isToday || isTomorrow) {
+                Text(
+                  text = timeRelease.format(DateTimeFormatter.ofPattern("HH:mm")),
+                  fontSize = 12.sp,
+                  color = Color.White,
+                  style = timelineTextStyle
+                )
+                Text(
+                  text = stringResource(if (isToday) R.string.today else R.string.tomorrow),
+                  fontSize = 10.sp,
+                  color = Color.Gray,
+                  style = timelineTextStyle
+                )
+              } else {
+                val pattern = if (timeRelease.year == now.year) "MM-dd" else "yyyy-MM-dd"
+                Text(
+                  text = timeRelease.format(DateTimeFormatter.ofPattern(pattern)),
+                  fontSize = 12.sp,
+                  color = Color.White,
+                  style = timelineTextStyle
+                )
+                Text(
+                  text = timeRelease.format(DateTimeFormatter.ofPattern("EEEE", locale)),
+                  fontSize = 10.sp,
+                  color = Color.Gray,
+                  style = timelineTextStyle
+                )
+              }
+            } else {
+              Text(
+                text = stringResource(id = R.string.upcoming),
+                fontSize = 12.sp,
+                color = Color.Gray,
+                style = timelineTextStyle,
+                modifier = Modifier.padding(top = 8.dp)
+              )
+            }
+          }
+
+          Spacer(modifier = Modifier.height(4.dp))
+
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier
+              .size(8.dp)
+              .clip(CircleShape)
+              .background(Color.Gray))
+          }
+
+          Spacer(modifier = Modifier.height(4.dp))
+          card()
+        }
+      } else {
+        card()
+      }
     }
+  }
 }

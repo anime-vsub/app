@@ -10,10 +10,10 @@ import git.shin.animevsub.ui.theme.AccentMain
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(color = AccentMain)
-    }
+  Box(
+    modifier = modifier.fillMaxSize(),
+    contentAlignment = Alignment.Center
+  ) {
+    CircularProgressIndicator(color = AccentMain)
+  }
 }

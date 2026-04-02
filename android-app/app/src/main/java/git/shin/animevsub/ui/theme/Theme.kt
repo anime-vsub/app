@@ -1,6 +1,8 @@
 package git.shin.animevsub.ui.theme
 
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -21,29 +23,29 @@ val SuccessColor = Color(0xFF4CAF50)
 val MainColor = Color(0xFF00D639)
 
 private val DarkColorScheme = darkColorScheme(
-    primary = AccentMain,
-    onPrimary = Color.White,
-    primaryContainer = AccentMainLight,
-    secondary = AccentMainLight,
-    onSecondary = Color.White,
-    background = DarkBackground,
-    onBackground = TextPrimary,
-    surface = DarkSurface,
-    onSurface = TextPrimary,
-    surfaceVariant = DarkCard,
-    onSurfaceVariant = TextSecondary,
-    error = ErrorColor,
-    onError = Color.White,
-    outline = Color(0xFF3A4A6B)
+  primary = AccentMain,
+  onPrimary = Color.White,
+  primaryContainer = AccentMainLight,
+  secondary = AccentMainLight,
+  onSecondary = Color.White,
+  background = DarkBackground,
+  onBackground = TextPrimary,
+  surface = DarkSurface,
+  onSurface = TextPrimary,
+  surfaceVariant = DarkCard,
+  onSurfaceVariant = TextSecondary,
+  error = ErrorColor,
+  onError = Color.White,
+  outline = Color(0xFF3A4A6B)
 )
 
 @Composable
 fun AnimeVsubTheme(
-    content: @Composable () -> Unit
+  content: @Composable () -> Unit
 ) {
-    MaterialTheme(
-        colorScheme = DarkColorScheme,
-        typography = Typography(),
-        content = content
-    )
+  MaterialTheme(
+    colorScheme = DarkColorScheme,
+    typography = Typography(),
+    content = content
+  )
 }
