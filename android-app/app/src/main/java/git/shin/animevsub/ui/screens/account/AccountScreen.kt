@@ -182,21 +182,6 @@ fun AccountScreen(
         checked = uiState.autoSkip,
         onCheckedChange = { viewModel.setAutoSkip(it) }
       )
-      SettingsToggle(
-        label = stringResource(R.string.movie_mode),
-        checked = uiState.movieMode,
-        onCheckedChange = { viewModel.setMovieMode(it) }
-      )
-      SettingsToggle(
-        label = stringResource(R.string.show_comments),
-        checked = uiState.showComments,
-        onCheckedChange = { viewModel.setShowComments(it) }
-      )
-      SettingsToggle(
-        label = stringResource(R.string.infinite_scroll),
-        checked = uiState.infiniteScroll,
-        onCheckedChange = { viewModel.setInfiniteScroll(it) }
-      )
     }
 
     Spacer(modifier = Modifier.height(16.dp))

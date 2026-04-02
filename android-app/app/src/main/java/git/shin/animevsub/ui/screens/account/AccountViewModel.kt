@@ -19,7 +19,6 @@ data class AccountUiState(
   val server: String = "DU",
   val movieMode: Boolean = false,
   val showComments: Boolean = true,
-  val infiniteScroll: Boolean = true
 )
 
 @HiltViewModel
@@ -52,26 +51,6 @@ class AccountViewModel @Inject constructor(
           _uiState.value = _uiState.value.copy(autoSkip = v)
         }
       }
-      launch {
-        repository.server.collect { v ->
-          _uiState.value = _uiState.value.copy(server = v)
-        }
-      }
-      launch {
-        repository.movieMode.collect { v ->
-          _uiState.value = _uiState.value.copy(movieMode = v)
-        }
-      }
-      launch {
-        repository.showComments.collect { v ->
-          _uiState.value = _uiState.value.copy(showComments = v)
-        }
-      }
-      launch {
-        repository.infiniteScroll.collect { v ->
-          _uiState.value = _uiState.value.copy(infiniteScroll = v)
-        }
-      }
     }
   }
 
@@ -87,21 +66,5 @@ class AccountViewModel @Inject constructor(
 
   fun setAutoSkip(value: Boolean) {
     viewModelScope.launch { repository.setAutoSkip(value) }
-  }
-
-  fun setServer(value: String) {
-    viewModelScope.launch { repository.setServer(value) }
-  }
-
-  fun setMovieMode(value: Boolean) {
-    viewModelScope.launch { repository.setMovieMode(value) }
-  }
-
-  fun setShowComments(value: Boolean) {
-    viewModelScope.launch { repository.setShowComments(value) }
-  }
-
-  fun setInfiniteScroll(value: Boolean) {
-    viewModelScope.launch { repository.setInfiniteScroll(value) }
   }
 }

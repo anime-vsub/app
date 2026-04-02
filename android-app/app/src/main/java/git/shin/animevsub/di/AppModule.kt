@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.remote.AnimeApi
 import kotlinx.serialization.json.Json
@@ -42,13 +43,19 @@ object AppModule {
 
   @Provides
   @Singleton
-  fun provideAnimeApi(client: OkHttpClient, json: Json): AnimeApi {
-    return AnimeApi(client, json)
+  fun provideAnimeApi(client: OkHttpClient, json: Json, apiStorage: ApiStorage): AnimeApi {
+    return AnimeApi(client, json, apiStorage)
   }
 
   @Provides
   @Singleton
   fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
     return PreferencesManager(context)
+  }
+
+  @Provides
+  @Singleton
+  fun provideApiStorage(@ApplicationContext context: Context): ApiStorage {
+    return ApiStorage(context)
   }
 }
