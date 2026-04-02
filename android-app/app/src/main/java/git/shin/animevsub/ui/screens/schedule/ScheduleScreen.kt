@@ -70,7 +70,7 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ScheduleScreen(
-  onNavigateBack: () -> Unit,
+  onNavigateBack: (() -> Unit)? = null,
   onNavigateToDetail: (String) -> Unit,
   viewModel: ScheduleViewModel = hiltViewModel()
 ) {
@@ -87,12 +87,14 @@ fun ScheduleScreen(
           )
         },
         navigationIcon = {
-          IconButton(onClick = onNavigateBack) {
-            Icon(
-              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = stringResource(R.string.back),
-              tint = TextPrimary
-            )
+          if (onNavigateBack != null) {
+            IconButton(onClick = onNavigateBack) {
+              Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = TextPrimary
+              )
+            }
           }
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)

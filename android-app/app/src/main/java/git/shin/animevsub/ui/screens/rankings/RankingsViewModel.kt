@@ -34,9 +34,9 @@ class RankingsViewModel @Inject constructor(
   val uiState: StateFlow<RankingsUiState> = _uiState.asStateFlow()
 
   init {
-    val initialType = savedStateHandle.get<String>("type")
+    val initialType = savedStateHandle.get<String?>("type")
 
-    if (initialType != null) {
+    if (!initialType.isNullOrEmpty()) {
       _uiState.update { it.copy(selectedType = initialType) }
       loadRankings(initialType)
       loadRankingTypes(shouldPickDefault = false)

@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 sealed class Screen(val route: String) {
   data object Home : Screen("home")
   data object Search : Screen("search")
-  data object News : Screen("news")
   data object Notification : Screen("notification")
   data object Account : Screen("account")
   data object AnimeDetail : Screen("detail/{animeId}?chapterId={chapterId}") {
@@ -19,7 +18,7 @@ sealed class Screen(val route: String) {
   }
 
   data object Rankings : Screen("rankings?type={type}") {
-    fun createRoute(type: String = "day") = "rankings?type=$type"
+    fun createRoute(type: String?) = "rankings?type=${type ?: ""}"
   }
 
   data object Schedule : Screen("schedule")

@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Article
-import androidx.compose.material.icons.automirrored.outlined.Article
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
@@ -54,7 +54,6 @@ import git.shin.animevsub.ui.screens.category.CategoryScreen
 import git.shin.animevsub.ui.screens.detail.DetailScreen
 import git.shin.animevsub.ui.screens.home.HomeScreen
 import git.shin.animevsub.ui.screens.login.LoginScreen
-import git.shin.animevsub.ui.screens.news.NewsScreen
 import git.shin.animevsub.ui.screens.notification.NotificationScreen
 import git.shin.animevsub.ui.screens.rankings.RankingsScreen
 import git.shin.animevsub.ui.screens.schedule.ScheduleScreen
@@ -75,10 +74,10 @@ fun AnimeVsubAppUI() {
     BottomNavItem(Screen.Home, R.string.nav_home, Icons.Filled.Home, Icons.Outlined.Home),
     BottomNavItem(Screen.Search, R.string.nav_search, Icons.Filled.Search, Icons.Outlined.Search),
     BottomNavItem(
-      Screen.News,
-      R.string.nav_news,
-      Icons.AutoMirrored.Filled.Article,
-      Icons.AutoMirrored.Outlined.Article
+      Screen.Schedule,
+      R.string.schedule,
+      Icons.Default.CalendarMonth,
+      Icons.Outlined.CalendarMonth
     ),
     BottomNavItem(
       Screen.Notification,
@@ -93,7 +92,6 @@ fun AnimeVsubAppUI() {
   val hideBottomBar = currentDestination?.route?.let { route ->
     route.startsWith("detail") ||
       route == Screen.Rankings.route ||
-      route == Screen.Schedule.route ||
       route.startsWith("category") ||
       route == Screen.Login.route ||
       route == Screen.Settings.route ||
@@ -183,8 +181,14 @@ fun AnimeVsubAppUI() {
         )
       }
 
-      composable(Screen.News.route) {
-        NewsScreen()
+      composable(Screen.Schedule.route) {
+        val isFromBottomNav = bottomNavItems.any { it.screen == Screen.Schedule }
+        ScheduleScreen(
+          onNavigateBack = if (isFromBottomNav) null else { { navController.popBackStack() } },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          }
+        )
       }
 
       composable(Screen.Notification.route) {
@@ -243,16 +247,6 @@ fun AnimeVsubAppUI() {
         )
       ) {
         RankingsScreen(
-          onNavigateBack = { navController.popBackStack() },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-          }
-        )
-      }
-
-      // Schedule screen
-      composable(Screen.Schedule.route) {
-        ScheduleScreen(
           onNavigateBack = { navController.popBackStack() },
           onNavigateToDetail = { animeId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId))

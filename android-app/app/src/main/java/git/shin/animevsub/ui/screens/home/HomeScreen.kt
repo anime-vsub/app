@@ -71,7 +71,7 @@ import kotlin.math.absoluteValue
 fun HomeScreen(
   onNavigateToDetail: (String) -> Unit,
   onNavigateToCategory: (String, String) -> Unit,
-  onNavigateToRankings: (String) -> Unit,
+  onNavigateToRankings: (String?) -> Unit,
   onNavigateToSchedule: () -> Unit,
   viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -109,7 +109,7 @@ fun HomeScreen(
         QuickLinksRow(
           onCatalogClick = { onNavigateToCategory("danh-sach", "all") },
           onScheduleClick = onNavigateToSchedule,
-          onRankingsClick = { onNavigateToRankings("day") }
+          onRankingsClick = { onNavigateToRankings(null) }
         )
 
         // This Season
@@ -131,7 +131,7 @@ fun HomeScreen(
           Spacer(modifier = Modifier.height(16.dp))
           SectionHeader(
             title = stringResource(R.string.nominate),
-            onViewAll = { onNavigateToRankings("day") }
+            onViewAll = { onNavigateToRankings(null) }
           )
           GridAnimeList(
             items = data.nominate,
@@ -146,7 +146,7 @@ fun HomeScreen(
           Spacer(modifier = Modifier.height(16.dp))
           SectionHeader(
             title = stringResource(R.string.top),
-            onViewAll = { onNavigateToRankings("day") }
+            onViewAll = { onNavigateToRankings(null) }
           )
           HorizontalAnimeList(
             items = data.hotUpdate,
