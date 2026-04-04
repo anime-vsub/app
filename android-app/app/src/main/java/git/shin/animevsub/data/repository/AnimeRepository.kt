@@ -6,6 +6,7 @@ import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.CategoryPage
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
+import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.HomeData
@@ -25,6 +26,7 @@ import javax.inject.Singleton
 @Singleton
 class AnimeRepository @Inject constructor(
   private val api: AnimeApi,
+  private val historyRepository: HistoryRepository,
   private val prefs: PreferencesManager
 ) {
   // Home
@@ -88,15 +90,14 @@ class AnimeRepository @Inject constructor(
     }
 
   // Skip Range
-  suspend fun getSkipRange(chapter: ChapterInfo): Result<Pair<LongRange?, LongRange?>> =
+  suspend fun getSkipRange(chapter: ChapterInfo): Result<Pair<DoubleRange?, DoubleRange?>> =
     runCatching {
       api.getSkipRange(chapter)
     }
 
   // Auth
-  val user: Flow<User?> = api.userData
-  val cookie: Flow<String?> = api.userCookie
-  val isLoggedIn: Flow<Boolean> = api.userCookie.map { it != null }
+  val user: Flow<User?> = api.getUser()
+  val isLoggedIn: Flow<Boolean> = api.getUser().map { it != null }
 
   suspend fun login(email: String, password: String): Result<User> = runCatching {
     api.login(email, password)
@@ -122,4 +123,25 @@ class AnimeRepository @Inject constructor(
   suspend fun getNotifications(): Result<NotificationData> = runCatching {
     api.getNotifications()
   }
+
+  // History
+  suspend fun getHistory(page: Int) = historyRepository.getHistory(page)
+  suspend fun getWatchProgress(seasonId: String) = historyRepository.getWatchProgress(seasonId)
+  suspend fun getSingleProgress(seasonId: String, chapId: String) =
+    historyRepository.getSingleProgress(seasonId, chapId)
+
+  suspend fun setSingleProgress(
+    name: String,
+    poster: String,
+    seasonId: String,
+    seasonName: String,
+    chapId: String,
+    chapName: String,
+    cur: Double,
+    dur: Double
+  ) = historyRepository.setSingleProgress(
+    name, poster, seasonId, seasonName, chapId, chapName, cur, dur
+  )
+
+  suspend fun getLastChapOfSeason(seasonId: String) = historyRepository.getLastChapOfSeason(seasonId)
 }

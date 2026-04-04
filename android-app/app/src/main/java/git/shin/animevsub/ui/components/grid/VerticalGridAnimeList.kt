@@ -32,7 +32,7 @@ fun VerticalGridAnimeList(
   modifier: Modifier = Modifier,
   state: LazyGridState = rememberLazyGridState(),
   isLoadingMore: Boolean = false,
-  onLoadMore: () -> Unit = {},
+  onLoadMore: () -> Unit,
   contentPadding: PaddingValues = PaddingValues(16.dp)
 ) {
   LaunchedEffect(state.canScrollForward) {

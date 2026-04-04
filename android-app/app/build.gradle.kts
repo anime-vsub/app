@@ -4,6 +4,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
     id("org.jetbrains.kotlin.plugin.compose")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -95,8 +96,8 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.10.0")
 
     // Supabase
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.1.0")
-    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.1.0")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.6.1")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.6.1")
     implementation("io.ktor:ktor-client-okhttp:2.3.7")
 
     // JSON

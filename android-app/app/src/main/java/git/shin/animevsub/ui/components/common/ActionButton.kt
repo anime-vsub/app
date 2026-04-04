@@ -26,7 +26,7 @@ fun ActionButton(
   icon: ImageVector,
   label: String,
   modifier: Modifier = Modifier,
-  onClick: () -> Unit = {}
+  onClick: () -> Unit
 ) {
   Column(
     horizontalAlignment = Alignment.CenterHorizontally,

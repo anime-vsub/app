@@ -117,6 +117,7 @@
     <string name="login_required">Login to access all features</string>
     <string name="personal">Personal</string>
     <string name="general">General</string>
+    <string name="login_note">To register or reset your password, please visit our website.</string>
 
     <!-- Settings -->
     <string name="player_settings">Player Settings</string>
@@ -186,4 +187,5 @@
     <string name="filter_title">Filter</string>
     <string name="filter_group_format">Filter: %1$s</string>
     <string name="more">More</string>
+    <string name="restored_progress">Restored watch progress %1$d:%2$02d</string>
 </resources>

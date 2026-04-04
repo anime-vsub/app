@@ -38,10 +38,14 @@ import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -71,6 +75,7 @@ import git.shin.animevsub.ui.components.badge.Badge
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.components.common.ActionButton
 import git.shin.animevsub.ui.components.list.GridAnimeList
+import git.shin.animevsub.ui.components.player.EpisodeItem
 import git.shin.animevsub.ui.components.player.VideoPlayer
 import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.styles.NoPaddingTextStyle
@@ -97,6 +102,7 @@ fun DetailScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val context = LocalContext.current
+  val snackbarHostState = remember { SnackbarHostState() }
   val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   var showDetailSheet by remember { mutableStateOf(false) }
@@ -136,7 +142,8 @@ fun DetailScreen(
 
   Scaffold(
     containerColor = DarkBackground,
-    contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    contentWindowInsets = WindowInsets(0, 0, 0, 0),
+    snackbarHost = { SnackbarHost(snackbarHostState) }
   ) { innerPadding ->
     Column(
       modifier = Modifier
@@ -206,6 +213,9 @@ fun DetailScreen(
             episodes = uiState.chapterData?.chaps ?: emptyList(),
             currentEpisode = uiState.currentChapter,
             onEpisodeSelected = { chap, seasonId -> viewModel.playChapter(chap, seasonId) },
+            initialPosition = uiState.lastProgress,
+            onProgressUpdate = { cur, dur -> viewModel.updateHistory(cur, dur) },
+            chapterProgress = uiState.chapterProgress,
             modifier = Modifier.fillMaxSize()
           )
         }
@@ -442,21 +452,24 @@ fun DetailScreen(
                   label = formatNumber(detail.follows),
                   modifier = Modifier
                     .widthIn(min = 40.dp)
-                    .wrapContentWidth()
+                    .wrapContentWidth(),
+                  onClick = { /* TODO: Implement Bookmark */ }
                 )
                 ActionButton(
                   icon = Icons.Default.Share,
                   label = stringResource(R.string.share),
                   modifier = Modifier
                     .widthIn(min = 40.dp)
-                    .wrapContentWidth()
+                    .wrapContentWidth(),
+                  onClick = { /* TODO: Implement Share */ }
                 )
                 ActionButton(
                   icon = Icons.AutoMirrored.Filled.PlaylistAdd,
                   label = stringResource(R.string.save_label),
                   modifier = Modifier
                     .widthIn(min = 40.dp)
-                    .wrapContentWidth()
+                    .wrapContentWidth(),
+                  onClick = { /* TODO: Implement Save */ }
                 )
               }
             }
@@ -569,33 +582,19 @@ fun DetailScreen(
                       originalIndex == uiState.currentChapIndex && uiState.currentSeasonId == (activeSeason?.realId
                         ?: uiState.currentSeasonId)
 
-                    Box(
-                      modifier = Modifier
-                        .height(36.dp)
-                        .widthIn(min = 45.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
-                        .border(
-                          width = if (isSelected) 1.5.dp else 1.dp,
-                          color = if (isSelected) MainColor else Color.Transparent,
-                          shape = RoundedCornerShape(4.dp)
+                    val progress = uiState.chapterProgress[chap.id]
+
+                    EpisodeItem(
+                      chap = chap,
+                      isSelected = isSelected,
+                      progress = progress,
+                      onClick = {
+                        viewModel.playChapter(
+                          chap,
+                          activeSeason?.realId ?: uiState.currentSeasonId
                         )
-                        .clickable {
-                          viewModel.playChapter(
-                            chap,
-                            activeSeason?.realId ?: uiState.currentSeasonId
-                          )
-                        },
-                      contentAlignment = Alignment.Center
-                    ) {
-                      Text(
-                        text = chap.name,
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        color = if (isSelected) MainColor else TextPrimary,
-                        fontSize = 13.sp,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                      )
-                    }
+                      }
+                    )
                   }
                 }
               } else {

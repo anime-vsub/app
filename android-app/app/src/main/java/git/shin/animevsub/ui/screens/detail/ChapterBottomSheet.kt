@@ -50,6 +50,7 @@ fun ChapterBottomSheet(
         currentEpisodeId = uiState.currentChapter?.id,
         onSeasonClick = onSeasonClick,
         onChapterClick = onChapterClick,
+        chapterProgress = uiState.chapterProgress,
         isSideMenu = false
       )
     }

@@ -71,6 +71,7 @@ data class AnimeDetail(
   val related: List<AnimeCard>
 )
 
+@Serializable
 data class ChapterInfo(
   val id: String,
   val name: String,
@@ -116,12 +117,13 @@ data class CategoryPage(
 @Serializable
 data class User(
   val avatar: String? = null,
-  val email: String,
+  val email: String? = null,
   val name: String,
-  val sex: String,
+  val sex: String? = null,
   val username: String
 )
 
+@Serializable
 data class NotificationItem(
   val id: String,
   val image: String? = null,
@@ -168,3 +170,14 @@ data class SelectedFilter(
   val include: Boolean = true,
   val exclude: Boolean = false
 )
+
+@Serializable
+data class DoubleRange(
+  val start: Double,
+  val end: Double
+) {
+  val first: Double get() = start
+  val last: Double get() = end
+  operator fun contains(value: Double): Boolean = value in start..end
+  operator fun contains(value: Long): Boolean = value.toDouble() in start..end
+}

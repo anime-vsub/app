@@ -107,7 +107,7 @@ fun AccountScreen(
           )
           Spacer(modifier = Modifier.height(4.dp))
           Text(
-            text = user.email,
+            text = user.email ?: "",
             color = TextSecondary,
             fontSize = 13.sp
           )

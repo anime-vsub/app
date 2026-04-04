@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.Forward10
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.HighQuality
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
@@ -108,8 +109,10 @@ import git.shin.animevsub.R
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
+import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ServerInfo
+import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
@@ -130,26 +133,26 @@ fun VideoPlayer(
   subtitle: String = "",
   isLoading: Boolean = false,
   errorMessage: String? = null,
-  introRange: LongRange? = null,
-  outroRange: LongRange? = null,
+  introRange: DoubleRange? = null,
+  outroRange: DoubleRange? = null,
   autoNextEnabled: Boolean = false,
   hasNextEpisode: Boolean = false,
-  onBack: () -> Unit = {},
-  onReload: () -> Unit = {},
-  onSettings: () -> Unit = {},
-  onNextEpisode: () -> Unit = {},
-  onSelectEpisode: () -> Unit = {},
-  onSelectServer: () -> Unit = {},
-  onVideoEnded: () -> Unit = {},
+  onBack: () -> Unit,
+  onReload: () -> Unit,
+  onNextEpisode: () -> Unit,
+  onVideoEnded: () -> Unit,
   servers: List<ServerInfo> = emptyList(),
   currentServer: ServerInfo? = null,
-  onServerSelected: (ServerInfo) -> Unit = {},
+  onServerSelected: (ServerInfo) -> Unit,
   displaySeasons: List<DisplaySeason> = emptyList(),
   activeDisplaySeasonId: String = "",
-  onSeasonSelected: (String) -> Unit = {},
+  onSeasonSelected: (String) -> Unit,
   episodes: List<ChapterInfo> = emptyList(),
   currentEpisode: ChapterInfo? = null,
-  onEpisodeSelected: (ChapterInfo, String) -> Unit = { _, _ -> }
+  onEpisodeSelected: (ChapterInfo, String) -> Unit,
+  initialPosition: Long = 0L,
+  onProgressUpdate: (Long, Long) -> Unit,
+  chapterProgress: Map<String, WatchProgress>
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
@@ -183,7 +186,7 @@ fun VideoPlayer(
 
   var showSkipNotification by remember { mutableStateOf(false) }
   var skipNotificationText by remember { mutableStateOf("") }
-  var skipTargetTime by remember { mutableLongStateOf(0L) }
+  var skipTargetTime by remember { mutableStateOf(0.0) }
   var skipRemainingSeconds by remember { mutableStateOf(0) }
 
   var gestureIcon by remember { mutableStateOf(Icons.AutoMirrored.Filled.VolumeUp) }
@@ -282,7 +285,7 @@ fun VideoPlayer(
   LaunchedEffect(currentTime, introRange, outroRange, autoSkipEnabled) {
     val currentMillis = currentTime
     if (introRange != null && currentMillis in introRange) {
-      if (autoSkipEnabled) exoPlayer.seekTo(introRange.last + 1)
+      if (autoSkipEnabled) exoPlayer.seekTo((introRange.last + 1).toLong())
       else if (!showSkipNotification) {
         skipNotificationText = context.getString(R.string.skip_intro)
         skipTargetTime = introRange.last + 1
@@ -348,24 +351,68 @@ fun VideoPlayer(
     }
   }
 
-  LaunchedEffect(playerData) {
+  LaunchedEffect(playerData, initialPosition) {
     if (playerData == null || playerData.link.isEmpty()) return@LaunchedEffect
     val httpDataSourceFactory =
       DefaultHttpDataSource.Factory().setDefaultRequestProperties(playerData.headers ?: emptyMap())
     val dataSourceFactory: DataSource.Factory =
       DefaultDataSource.Factory(context, httpDataSourceFactory)
-    val mediaItem: MediaItem = if (playerData.isContent && playerData.type.lowercase() == "hls") {
+
+    val newUri = if (playerData.isContent && playerData.type.lowercase() == "hls") {
       val tempFile = File(context.cacheDir, "temp_playlist.m3u8")
       tempFile.writeText(playerData.link)
-      MediaItem.fromUri(tempFile.toUri())
-    } else MediaItem.fromUri(playerData.link.toUri())
+      tempFile.toUri()
+    } else playerData.link.toUri()
 
-    if (playerData.type.lowercase() == "hls") {
-      exoPlayer.setMediaSource(
-        HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
-      )
-    } else exoPlayer.setMediaItem(mediaItem)
-    exoPlayer.prepare()
+    val currentMediaItem = exoPlayer.currentMediaItem
+    if (currentMediaItem?.localConfiguration?.uri != newUri) {
+      if (playerData.type.lowercase() == "hls") {
+        exoPlayer.setMediaSource(
+          HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(newUri))
+        )
+      } else {
+        exoPlayer.setMediaItem(MediaItem.fromUri(newUri))
+      }
+
+      if (initialPosition > 0) {
+        exoPlayer.seekTo(initialPosition)
+        if (initialPosition > 5000) {
+          val minutes = (initialPosition / 1000 / 60).toInt()
+          val seconds = ((initialPosition / 1000) % 60).toInt()
+          notificationText = context.getString(R.string.restored_progress, minutes, seconds)
+          notificationIcon = Icons.Default.History
+          isNotificationClickable = false
+          showNotification = true
+          scope.launch {
+            delay(3000)
+            showNotification = false
+          }
+        }
+      }
+      exoPlayer.prepare()
+    } else {
+      if (initialPosition > 0 && exoPlayer.currentPosition < 5000 && exoPlayer.currentPosition < initialPosition) {
+        exoPlayer.seekTo(initialPosition)
+        if (initialPosition > 5000) {
+          val minutes = (initialPosition / 1000 / 60).toInt()
+          val seconds = ((initialPosition / 1000) % 60).toInt()
+          notificationText = context.getString(R.string.restored_progress, minutes, seconds)
+          notificationIcon = Icons.Default.History
+          isNotificationClickable = false
+          showNotification = true
+          scope.launch {
+            delay(3000)
+            showNotification = false
+          }
+        }
+      }
+    }
+  }
+
+  LaunchedEffect(currentTime, duration) {
+    if (duration > 0 && currentTime > 0) {
+      onProgressUpdate(currentTime, duration)
+    }
   }
 
   DisposableEffect(Unit) {
@@ -613,7 +660,10 @@ fun VideoPlayer(
         SkipNotification(
           text = skipNotificationText,
           secondsRemaining = skipRemainingSeconds,
-          onSkip = { exoPlayer.seekTo(skipTargetTime); showSkipNotification = false },
+          onSkip = {
+          exoPlayer.seekTo(skipTargetTime.toLong())
+          showSkipNotification = false
+        },
           onClose = { showSkipNotification = false },
           modifier = Modifier
             .align(Alignment.BottomEnd)
@@ -758,8 +808,8 @@ fun VideoPlayer(
                   introRange?.let { range ->
                     if (duration > 0) {
                       val start = (range.first.toFloat() / duration).coerceIn(0f, 1f) * trackWidth
-                      val end =
-                        (range.last.toFloat() / duration).coerceIn(0f, 1f) * trackWidth; drawRect(
+                      val end = (range.last.toFloat() / duration).coerceIn(0f, 1f) * trackWidth
+                      drawRect(
                         color = Color(0xFF2196F3),
                         topLeft = Offset(start, 0f),
                         size = Size((end - start).coerceAtLeast(0f), trackH)
@@ -769,8 +819,8 @@ fun VideoPlayer(
                   outroRange?.let { range ->
                     if (duration > 0) {
                       val start = (range.first.toFloat() / duration).coerceIn(0f, 1f) * trackWidth
-                      val end =
-                        (range.last.toFloat() / duration).coerceIn(0f, 1f) * trackWidth; drawRect(
+                      val end = (range.last.toFloat() / duration).coerceIn(0f, 1f) * trackWidth
+                      drawRect(
                         color = Color(0xFF2196F3),
                         topLeft = Offset(start, 0f),
                         size = Size((end - start).coerceAtLeast(0f), trackH)
@@ -799,14 +849,14 @@ fun VideoPlayer(
                 PlayerControlSmallButton(
                   icon = Icons.AutoMirrored.Filled.PlaylistPlay,
                   onClick = {
-                    showEpisodeSideMenu = true; isControlsVisible = false; onSelectEpisode()
+                    showEpisodeSideMenu = true; isControlsVisible = false;
                   })
               }
               Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PlayerControlSmallButton(
                   icon = Icons.Default.Dns,
                   onClick = {
-                    showServerSideMenu = true; isControlsVisible = false; onSelectServer()
+                    showServerSideMenu = true; isControlsVisible = false;
                   })
                 Box {
                   PlayerControlSmallButton(
@@ -890,6 +940,7 @@ fun VideoPlayer(
               seasonId
             ); showEpisodeSideMenu = false
           },
+          chapterProgress = chapterProgress,
           isSideMenu = true,
           onClose = { showEpisodeSideMenu = false })
       }

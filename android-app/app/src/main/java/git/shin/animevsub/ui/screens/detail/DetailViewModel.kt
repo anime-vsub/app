@@ -8,9 +8,12 @@ import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
+import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ServerInfo
+import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,8 +40,10 @@ data class DetailUiState(
   val currentServer: ServerInfo? = null,
   val autoNext: Boolean = true,
   val autoSkip: Boolean = false,
-  val introRange: LongRange? = null,
-  val outroRange: LongRange? = null,
+  val introRange: DoubleRange? = null,
+  val outroRange: DoubleRange? = null,
+  val lastProgress: Long = 0,
+  val chapterProgress: Map<String, WatchProgress> = emptyMap(),
 
   /**
    * The actual season ID from the API (Real ID).
@@ -187,6 +192,7 @@ class DetailViewModel @Inject constructor(
     chapterCache[seasonId]?.let { cachedChapters ->
       _uiState.update { it.copy(chapterData = cachedChapters, isChaptersLoading = false) }
       updateChapterCount(seasonId, cachedChapters.chaps.size)
+      loadAllChapterProgress(seasonId)
     } ?: run {
       viewModelScope.launch {
         repository.getChapters(seasonId)
@@ -194,6 +200,7 @@ class DetailViewModel @Inject constructor(
             chapterCache[seasonId] = chapterData
             _uiState.update { it.copy(chapterData = chapterData, isChaptersLoading = false) }
             updateChapterCount(seasonId, chapterData.chaps.size)
+            loadAllChapterProgress(seasonId)
           }
           .onFailure { e ->
             _uiState.update { it.copy(isChaptersLoading = false, chaptersError = e.message) }
@@ -295,6 +302,7 @@ class DetailViewModel @Inject constructor(
         servers = emptyList(),
         currentServer = null,
         playerData = null,
+        lastProgress = 0L
       )
     }
 
@@ -304,6 +312,64 @@ class DetailViewModel @Inject constructor(
 
     loadServers(chapter)
     loadSkipRange(chapter)
+    loadHistory(chapter, seasonId)
+    loadAllChapterProgress(seasonId)
+  }
+
+  private fun loadAllChapterProgress(seasonId: String) {
+    viewModelScope.launch {
+      repository.getWatchProgress(seasonId)
+        .onSuccess { progressList ->
+          val progressMap = progressList.associateBy { it.chapId ?: "" }
+          _uiState.update {
+            it.copy(chapterProgress = it.chapterProgress + progressMap)
+          }
+        }
+    }
+  }
+
+  private fun loadHistory(chapter: ChapterInfo, seasonId: String) {
+    viewModelScope.launch {
+      repository.getSingleProgress(seasonId, chapter.id)
+        .onSuccess { progress ->
+          if (progress != null) {
+            _uiState.update { it.copy(lastProgress = (progress.cur * 1000).toLong()) }
+          }
+        }
+    }
+  }
+
+  private var lastUpdateJob: kotlinx.coroutines.Job? = null
+
+  fun updateHistory(currentPosMs: Long, durationMs: Long) {
+    val currentPos = currentPosMs / 1000.0
+    val duration = durationMs / 1000.0
+    val state = _uiState.value
+    val detail = state.detail ?: return
+    val chapter = state.currentChapter ?: return
+
+    // Update local progress map for UI consistency (immediate)
+    _uiState.update {
+      val newMap = it.chapterProgress.toMutableMap()
+      newMap[chapter.id] = WatchProgress(cur = currentPos, dur = duration, chapId = chapter.id)
+      it.copy(chapterProgress = newMap)
+    }
+
+    // Throttle Supabase RPC calls: Only save every 10 seconds
+    if (lastUpdateJob?.isActive == true) return
+    lastUpdateJob = viewModelScope.launch {
+      repository.setSingleProgress(
+        name = detail.name,
+        poster = detail.poster ?: detail.image ?: "",
+        seasonId = state.currentSeasonId,
+        seasonName = detail.seasonOf?.name ?: detail.name,
+        chapId = chapter.id,
+        chapName = chapter.name,
+        cur = currentPos,
+        dur = duration
+      )
+      delay(10000) // 10 second throttle
+    }
   }
 
   private fun loadSkipRange(chapter: ChapterInfo) {

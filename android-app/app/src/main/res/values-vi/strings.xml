@@ -105,6 +105,7 @@
     <string name="edit_profile">Sửa hồ sơ</string>
     <string name="change_password">Đổi mật khẩu</string>
     <string name="login_required">Cần đăng nhập để %1$s</string>
+    <string name="login_note">Để đăng ký hoặc khôi phục mật khẩu, vui lòng truy cập website của chúng tôi.</string>
 
     <!-- Settings -->
     <string name="player_settings">Cài đặt trình phát</string>

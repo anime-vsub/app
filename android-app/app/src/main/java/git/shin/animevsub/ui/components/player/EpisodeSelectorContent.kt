@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
+import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextGrey
@@ -70,6 +71,7 @@ fun EpisodeSelectorContent(
   onSeasonClick: (String) -> Unit,
   onChapterClick: (ChapterInfo, String) -> Unit,
   modifier: Modifier = Modifier,
+  chapterProgress: Map<String, WatchProgress>,
   isSideMenu: Boolean = false,
   onClose: (() -> Unit)? = null
 ) {
@@ -229,6 +231,8 @@ fun EpisodeSelectorContent(
             EpisodeItem(
               chap = chap,
               isSelected = chap.id == currentEpisodeId,
+              progress = chapterProgress[chap.id],
+              isLarge = true,
               onClick = {
                 onChapterClick(chap, activeSeason?.realId ?: activeDisplaySeasonId)
               }
@@ -286,33 +290,3 @@ private fun SeasonItem(
   }
 }
 
-@Composable
-private fun EpisodeItem(
-  chap: ChapterInfo,
-  isSelected: Boolean,
-  onClick: () -> Unit
-) {
-  Box(
-    modifier = Modifier
-      .height(42.dp)
-      .clip(RoundedCornerShape(6.dp))
-      .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
-      .border(
-        width = if (isSelected) 1.5.dp else 1.dp,
-        color = if (isSelected) MainColor else Color.Transparent,
-        shape = RoundedCornerShape(6.dp)
-      )
-      .clickable(onClick = onClick),
-    contentAlignment = Alignment.Center
-  ) {
-    Text(
-      text = chap.name,
-      color = if (isSelected) MainColor else TextPrimary,
-      fontSize = 13.sp,
-      fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-      maxLines = 1,
-      overflow = TextOverflow.Ellipsis,
-      modifier = Modifier.padding(horizontal = 4.dp)
-    )
-  }
-}
