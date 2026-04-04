@@ -365,7 +365,7 @@ class DetailViewModel @Inject constructor(
         name = detail.name,
         poster = detail.poster ?: detail.image ?: "",
         seasonId = state.currentSeasonId,
-        seasonName = detail.seasonOf?.name ?: detail.name,
+        seasonName = detail.season.find { it.id == state.currentSeasonId }?.name ?: "",
         chapId = chapter.id,
         chapName = chapter.name,
         cur = currentPos,

@@ -19,8 +19,14 @@ import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.remote.AnimeApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,6 +36,8 @@ class AnimeRepository @Inject constructor(
   private val historyRepository: HistoryRepository,
   private val prefs: PreferencesManager
 ) {
+  private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
   // Home
   suspend fun getHomePage(): Result<HomeData> = runCatching { api.getHomePage() }
 
@@ -96,10 +104,20 @@ class AnimeRepository @Inject constructor(
 
   // Auth
   val user: Flow<User?> = api.getUser()
-  val isLoggedIn: Flow<Boolean> = api.getUser().map { it != null }
+    .distinctUntilChanged()
+    .onEach { user ->
+      if (user != null) {
+        repositoryScope.launch {
+          historyRepository.upsertUser(user)
+        }
+      }
+    }
+  val isLoggedIn: Flow<Boolean> = user.map { it != null }
 
   suspend fun login(email: String, password: String): Result<User> = runCatching {
-    api.login(email, password)
+    val user = api.login(email, password)
+    historyRepository.upsertUser(user)
+    user
   }
 
   suspend fun logout() {
@@ -109,9 +127,19 @@ class AnimeRepository @Inject constructor(
   // Settings
   val autoNext = prefs.autoNext
   val autoSkip = prefs.autoSkip
+  val volumeGesture = prefs.volumeGesture
+  val brightnessGesture = prefs.brightnessGesture
+  val movieMode = prefs.movieMode
+  val showComments = prefs.showComments
+  val infiniteScroll = prefs.infiniteScroll
 
   suspend fun setAutoNext(value: Boolean) = prefs.setAutoNext(value)
   suspend fun setAutoSkip(value: Boolean) = prefs.setAutoSkip(value)
+  suspend fun setVolumeGesture(value: Boolean) = prefs.setVolumeGesture(value)
+  suspend fun setBrightnessGesture(value: Boolean) = prefs.setBrightnessGesture(value)
+  suspend fun setMovieMode(value: Boolean) = prefs.setMovieMode(value)
+  suspend fun setShowComments(value: Boolean) = prefs.setShowComments(value)
+  suspend fun setInfiniteScroll(value: Boolean) = prefs.setInfiniteScroll(value)
 
   // Search History
   val searchHistory = prefs.searchHistory
@@ -121,6 +149,11 @@ class AnimeRepository @Inject constructor(
   // Notifications
   suspend fun getNotifications(): Result<NotificationData> = runCatching {
     api.getNotifications()
+  }
+
+  // Follows
+  suspend fun getFollows(page: Int = 1): Result<CategoryPage> = runCatching {
+    api.getFollows(page)
   }
 
   // History

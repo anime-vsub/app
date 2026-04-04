@@ -213,7 +213,13 @@ fun AnimeVsubAppUI() {
           onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
           onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
           onNavigateToAbout = { navController.navigate(Screen.About.route) },
-          onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) }
+          onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          },
+          onNavigateToPlayer = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+          }
         )
       }
 

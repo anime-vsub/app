@@ -157,6 +157,9 @@
     <!-- Notification -->
     <string name="no_notifications">Không có thông báo</string>
     <string name="mark_read">Đánh dấu đã đọc</string>
+    <string name="no_history">Chưa có lịch sử xem</string>
+    <string name="no_follows">Chưa theo dõi phim nào</string>
+    <string name="history_subtitle">%1$s tập %2$s</string>
 
     <!-- Playlist -->
     <string name="create_playlist">Tạo danh sách phát</string>

@@ -45,13 +45,13 @@ class HistoryRepository @Inject constructor(
         return -(tz.rawOffset / (1000 * 60 * 60))
     }
 
-    private fun addHostUrlImage(url: String): String {
-        if (url.isEmpty() || url.startsWith("http")) return url
-        return "${AnimeApi.BASE_URL}${if (url.startsWith("/")) "" else "/"}$url"
-    }
-
-    private fun removeHostUrlImage(url: String): String {
-        return url.removePrefix(AnimeApi.BASE_URL)
+    suspend fun upsertUser(user: User): Result<Unit> = runCatching {
+        val uid = sha256((user.email ?: "") + user.name)
+        supabase.postgrest.rpc("upsert_user", buildJsonObject {
+            put("p_uuid", uid)
+            put("p_email", user.email)
+            put("p_name", user.name)
+        })
     }
 
     suspend fun getHistory(page: Int, size: Int = 30): Result<List<HistoryItem>> = runCatching {
@@ -61,7 +61,7 @@ class HistoryRepository @Inject constructor(
             put("page", page)
             put("size", size)
         })
-        response.decodeList<HistoryItem>().map { it.copy(poster = addHostUrlImage(it.poster)) }
+        response.decodeList<HistoryItem>().map { it.copy(poster = AnimeApi.decodeURI(it.poster)) }
     }
 
     suspend fun getWatchProgress(seasonId: String): Result<List<WatchProgress>> = runCatching {
@@ -102,7 +102,7 @@ class HistoryRepository @Inject constructor(
         supabase.postgrest.rpc("set_single_progress", buildJsonObject {
             put("user_uid", uid)
             put("p_name", name)
-            put("p_poster", removeHostUrlImage(poster))
+            put("p_poster", AnimeApi.encodeURI(poster))
             put("season_id", seasonId)
             put("p_season_name", seasonName)
             put("e_cur", cur)
