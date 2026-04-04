@@ -47,6 +47,8 @@ import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.data.model.CategoryLink
+import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.theme.TextSecondary
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -55,7 +57,7 @@ fun DetailBottomSheet(
   detail: AnimeDetail,
   sheetState: SheetState,
   onDismissRequest: () -> Unit,
-  onNavigateToCategory: (String, String) -> Unit
+  onNavigateToCategory: (CategoryLink) -> Unit
 ) {
   val configuration = LocalConfiguration.current
   val screenWidth = configuration.screenWidthDp.dp
@@ -107,20 +109,16 @@ fun DetailBottomSheet(
               textStyle = SmallTextStyle,
               onClick = {
                 detail.countries.firstOrNull()?.let {
-                  onNavigateToCategory(
-                    "quoc-gia", it.id.removePrefix("/quoc-gia/").trim('/')
-                  )
+                  onNavigateToCategory(it)
                 }
               })
             InfoRow(
               label = stringResource(R.string.year_label),
-              value = detail.yearOf?.toString(),
+              value = detail.yearOf?.name,
               textStyle = SmallTextStyle,
               onClick = {
                 detail.yearOf?.let {
-                  onNavigateToCategory(
-                    "nam-phat-hanh", it.toString()
-                  )
+                  onNavigateToCategory(it)
                 }
               })
             InfoRow(
@@ -165,9 +163,7 @@ fun DetailBottomSheet(
               .background(DarkCard, RoundedCornerShape(4.dp))
               .padding(horizontal = 8.dp, vertical = 4.dp)
               .clickable {
-                onNavigateToCategory(
-                  "the-loai", genre.id.removePrefix("/the-loai/").trim('/')
-                )
+                onNavigateToCategory(genre)
               })
         }
       }

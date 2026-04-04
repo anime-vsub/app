@@ -9,7 +9,9 @@ import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.DoubleRange
+import git.shin.animevsub.data.model.NamePath
 import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
@@ -470,5 +472,9 @@ class DetailViewModel @Inject constructor(
 
   fun retry() {
     loadDetail(_uiState.value.animeId, _uiState.value.initialChapterId)
+  }
+
+  fun parseFilters(namePath: NamePath): List<SelectedFilter> {
+    return repository.parseFiltersFromPath(namePath)
   }
 }

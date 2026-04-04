@@ -63,6 +63,9 @@ import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.data.model.SelectedFilter
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun AnimeVsubAppUI() {
@@ -161,8 +164,9 @@ fun AnimeVsubAppUI() {
           onNavigateToDetail = { animeId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId))
           },
-          onNavigateToCategory = { type, value ->
-            navController.navigate(Screen.Category.createRoute(type, value))
+          onNavigateToCategory = { filters ->
+            val filtersJson = Json.encodeToString(filters)
+            navController.navigate(Screen.Category.createRoute(filtersJson))
           },
           onNavigateToRankings = { type ->
             navController.navigate(Screen.Rankings.createRoute(type))
@@ -230,8 +234,9 @@ fun AnimeVsubAppUI() {
           onNavigateToDetail = { animeId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId))
           },
-          onNavigateToCategory = { type, value ->
-            navController.navigate(Screen.Category.createRoute(type, value))
+          onNavigateToCategory = { filters ->
+            val filtersJson = Json.encodeToString(filters)
+            navController.navigate(Screen.Category.createRoute(filtersJson))
           }
         )
       }
@@ -258,8 +263,7 @@ fun AnimeVsubAppUI() {
       composable(
         route = Screen.Category.route,
         arguments = listOf(
-          navArgument("typeNormal") { type = NavType.StringType },
-          navArgument("value") { type = NavType.StringType }
+          navArgument("filters") { type = NavType.StringType }
         )
       ) {
         CategoryScreen(

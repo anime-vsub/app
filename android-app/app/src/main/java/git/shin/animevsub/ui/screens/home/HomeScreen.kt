@@ -62,6 +62,7 @@ import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
+import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.theme.TextPrimary
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
@@ -70,7 +71,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun HomeScreen(
   onNavigateToDetail: (String) -> Unit,
-  onNavigateToCategory: (String, String) -> Unit,
+  onNavigateToCategory: (List<SelectedFilter>) -> Unit,
   onNavigateToRankings: (String?) -> Unit,
   onNavigateToSchedule: () -> Unit,
   viewModel: HomeViewModel = hiltViewModel()
@@ -107,7 +108,9 @@ fun HomeScreen(
 
         // Quick links
         QuickLinksRow(
-          onCatalogClick = { onNavigateToCategory("danh-sach", "all") },
+          onCatalogClick = {
+            onNavigateToCategory(listOf(SelectedFilter("danh-sach", "all", "Tất cả")))
+          },
           onScheduleClick = onNavigateToSchedule,
           onRankingsClick = { onNavigateToRankings(null) }
         )
@@ -116,7 +119,9 @@ fun HomeScreen(
         if (data.thisSeason.isNotEmpty()) {
           SectionHeader(
             title = stringResource(R.string.this_season),
-            onViewAll = { onNavigateToCategory("danh-sach", "anime-moi") }
+            onViewAll = {
+              onNavigateToCategory(listOf(SelectedFilter("danh-sach", "anime-moi", "Mới cập nhật")))
+            }
           )
           HorizontalAnimeList(
             items = data.thisSeason,
@@ -166,7 +171,17 @@ fun HomeScreen(
           Spacer(modifier = Modifier.height(16.dp))
           SectionHeader(
             title = stringResource(R.string.coming_soon),
-            onViewAll = { onNavigateToCategory("danh-sach", "anime-sap-chieu") }
+            onViewAll = {
+              onNavigateToCategory(
+                listOf(
+                  SelectedFilter(
+                    "danh-sach",
+                    "anime-sap-chieu",
+                    "Sắp chiếu"
+                  )
+                )
+              )
+            }
           )
 
           HorizontalAnimeList(
@@ -184,7 +199,9 @@ fun HomeScreen(
           Spacer(modifier = Modifier.height(16.dp))
           SectionHeader(
             title = stringResource(R.string.last_updated),
-            onViewAll = { onNavigateToCategory("danh-sach", "anime-moi") }
+            onViewAll = {
+              onNavigateToCategory(listOf(SelectedFilter("danh-sach", "anime-moi", "Mới cập nhật")))
+            }
           )
           GridAnimeList(
             items = data.lastUpdate,

@@ -10,6 +10,7 @@ import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.HomeData
+import git.shin.animevsub.data.model.NamePath
 import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ScheduleDay
@@ -66,17 +67,17 @@ class AnimeRepository @Inject constructor(
   }
 
   // Category
+  fun parseFiltersFromPath(namePath: NamePath): List<SelectedFilter> = api.parseFiltersFromPath(namePath)
+
   suspend fun getCategory(
-    type: String,
-    value: String,
-    filters: List<SelectedFilter> = emptyList(),
+    filters: List<SelectedFilter>,
     page: Int = 1
   ): Result<CategoryPage> = runCatching {
-    api.getCategory(type, value, filters, page)
+    api.getCategory(filters, page)
   }
 
-  suspend fun getFilters(path: String): Result<List<FilterGroup>> = runCatching {
-    api.getFilters(path)
+  suspend fun getFilters(filters: List<SelectedFilter>): Result<List<FilterGroup>> = runCatching {
+    api.getFilters(filters)
   }
 
   // Player

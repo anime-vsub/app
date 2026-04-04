@@ -15,14 +15,14 @@ data class AnimeCard(
   val year: Int? = null,
   val description: String? = null,
   val studio: String? = null,
-  val genre: List<NamePath> = emptyList(),
+  val genre: List<CategoryLink> = emptyList(),
   val timeRelease: Long? = null
 )
 
 @Serializable
-data class NamePath(
+data class CategoryLink(
   val name: String,
-  val id: String,
+  val filters: List<SelectedFilter> = emptyList()
 )
 
 /**
@@ -56,17 +56,17 @@ data class AnimeDetail(
   val rate: Int,
   val countRate: Int,
   val duration: String?,
-  val yearOf: Int?,
+  val yearOf: CategoryLink?,
   val views: Int,
-  val season: List<NamePath>,
-  val genre: List<NamePath>,
+  val season: List<CategoryLink>,
+  val genre: List<CategoryLink>,
   val quality: String?,
-  val authors: List<NamePath>,
-  val countries: List<NamePath>,
+  val authors: List<CategoryLink>,
+  val countries: List<CategoryLink>,
   val follows: Int,
   val language: String?,
-  val studio: String?,
-  val seasonOf: NamePath?,
+  val studio: CategoryLink?,
+  val seasonOf: CategoryLink?,
   val trailer: String?,
   val related: List<AnimeCard>
 )

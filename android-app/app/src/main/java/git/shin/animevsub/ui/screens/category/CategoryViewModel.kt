@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import kotlinx.serialization.json.Json
+
 data class CategoryUiState(
   val isLoading: Boolean = true,
   val items: List<AnimeCard> = emptyList(),
   val error: String? = null,
-  val typeNormal: String = "",
-  val value: String = "",
   val title: String = "",
   val currentPage: Int = 1,
   val totalPages: Int = 1,
@@ -40,25 +40,30 @@ class CategoryViewModel @Inject constructor(
   val uiState: StateFlow<CategoryUiState> = _uiState.asStateFlow()
 
   init {
-    val typeNormal = savedStateHandle.get<String>("typeNormal") ?: ""
-    val value = savedStateHandle.get<String>("value") ?: ""
+    val filtersJson = savedStateHandle.get<String>("filters") ?: "[]"
+    val filters = try {
+      Json.decodeFromString<List<SelectedFilter>>(filtersJson)
+    } catch (e: Exception) {
+      emptyList()
+    }
+
     _uiState.update {
       it.copy(
-        typeNormal = typeNormal,
-        value = value,
-        title = value.replace("-", " ").replaceFirstChar { char -> char.uppercase() }
+        selectedFilters = filters,
+        title = filters.firstOrNull()?.name ?: "Danh mục"
       )
     }
     loadPage(1)
-    if (typeNormal == "danh-sach") {
+    if (filters.isNotEmpty()) {
       loadFilters()
     }
   }
 
   private fun loadFilters() {
+    val filters = _uiState.value.selectedFilters
     viewModelScope.launch {
       _uiState.update { it.copy(isFilterLoading = true) }
-      repository.getFilters("/danh-sach/${_uiState.value.value}/")
+      repository.getFilters(filters)
         .onSuccess { groups ->
           _uiState.update { it.copy(filterGroups = groups, isFilterLoading = false) }
         }
@@ -77,8 +82,6 @@ class CategoryViewModel @Inject constructor(
       }
 
       repository.getCategory(
-        type = _uiState.value.typeNormal,
-        value = _uiState.value.value,
         filters = _uiState.value.selectedFilters,
         page = page
       ).onSuccess { categoryPage ->

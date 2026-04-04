@@ -12,18 +12,13 @@ sealed class Screen(val route: String) {
       if (chapterId != null) "detail/$animeId?chapterId=$chapterId" else "detail/$animeId"
   }
 
-  data object Player : Screen("player/{animeId}/{chapId}/{play}/{hash}") {
-    fun createRoute(animeId: String, chapId: String, play: String, hash: String) =
-      "player/$animeId/$chapId/$play/$hash"
-  }
-
   data object Rankings : Screen("rankings?type={type}") {
     fun createRoute(type: String?) = "rankings?type=${type ?: ""}"
   }
 
   data object Schedule : Screen("schedule")
-  data object Category : Screen("category/{typeNormal}/{value}") {
-    fun createRoute(typeNormal: String, value: String) = "category/$typeNormal/$value"
+  data object Category : Screen("category/{filters}") {
+    fun createRoute(filters: String) = "category/$filters"
   }
 
   data object History : Screen("history")

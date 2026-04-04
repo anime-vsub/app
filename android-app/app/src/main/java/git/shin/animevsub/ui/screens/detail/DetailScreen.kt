@@ -87,6 +87,7 @@ import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
@@ -97,7 +98,7 @@ import git.shin.animevsub.ui.utils.shimmerEffect
 fun DetailScreen(
   onNavigateBack: () -> Unit,
   onNavigateToDetail: (String) -> Unit,
-  onNavigateToCategory: (String, String) -> Unit,
+  onNavigateToCategory: (List<SelectedFilter>) -> Unit,
   viewModel: DetailViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -311,10 +312,7 @@ fun DetailScreen(
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
                     modifier = Modifier.clickable {
-                      onNavigateToCategory(
-                        "tac-gia",
-                        detail.authors.first().id.removePrefix("/tac-gia/").trim('/')
-                      )
+                      onNavigateToCategory(detail.authors.first().filters)
                     })
 
                   Text(
@@ -335,7 +333,7 @@ fun DetailScreen(
                   style = NoPaddingTextStyle,
                   modifier = Modifier.clickable {
                     detail.studio?.let {
-                      onNavigateToCategory("studio", it)
+                      onNavigateToCategory(it.filters)
                     }
                   })
               }
@@ -352,7 +350,13 @@ fun DetailScreen(
                   QualityBadge(quality = detail.quality)
                 }
                 if (detail.yearOf != null) {
-                  Badge(text = detail.yearOf.toString(), textStyle = NoPaddingTextStyle)
+                  Badge(
+                    text = detail.yearOf.name,
+                    textStyle = NoPaddingTextStyle,
+                    modifier = Modifier.clickable {
+                      onNavigateToCategory(detail.yearOf.filters)
+                    }
+                  )
                 }
                 if (!detail.duration.isNullOrEmpty()) {
                   Badge(
@@ -367,10 +371,7 @@ fun DetailScreen(
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
                     modifier = Modifier.clickable {
-                      onNavigateToCategory(
-                        "quoc-gia",
-                        detail.countries.first().id.removePrefix("/quoc-gia/").trim('/')
-                      )
+                      onNavigateToCategory(detail.countries.first().filters)
                     })
                 }
               }
@@ -411,7 +412,7 @@ fun DetailScreen(
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
                     modifier = Modifier.clickable {
-                      onNavigateToCategory("season", it.id.removePrefix("/season/").trim('/'))
+                      onNavigateToCategory(it.filters)
                     })
                 }
               }
@@ -431,9 +432,7 @@ fun DetailScreen(
                     modifier = Modifier
                       .padding(vertical = 1.dp)
                       .clickable {
-                        onNavigateToCategory(
-                          "the-loai", genre.id.removePrefix("/the-loai/").trim('/')
-                        )
+                        onNavigateToCategory(genre.filters)
                       })
                 }
               }
@@ -688,7 +687,9 @@ fun DetailScreen(
         detail = uiState.detail!!,
         sheetState = detailSheetState,
         onDismissRequest = { showDetailSheet = false },
-        onNavigateToCategory = onNavigateToCategory
+        onNavigateToCategory = { categoryLink ->
+          onNavigateToCategory(categoryLink.filters)
+        }
       )
     }
 
