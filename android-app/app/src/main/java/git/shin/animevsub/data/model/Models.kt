@@ -25,6 +25,12 @@ data class CategoryLink(
   val filters: List<SelectedFilter> = emptyList()
 )
 
+@Serializable
+data class Season(
+  val id: String,
+  val name: String
+)
+
 /**
  * Represents a Season displayed on the UI.
  * Can be a real season from the API or a "Virtual Season" split from a very long season.
@@ -58,7 +64,7 @@ data class AnimeDetail(
   val duration: String?,
   val yearOf: CategoryLink?,
   val views: Int,
-  val season: List<CategoryLink>,
+  val season: List<Season>,
   val genre: List<CategoryLink>,
   val quality: String?,
   val authors: List<CategoryLink>,

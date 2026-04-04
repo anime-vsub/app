@@ -9,8 +9,9 @@ import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.DoubleRange
-import git.shin.animevsub.data.model.NamePath
+import git.shin.animevsub.data.model.CategoryLink
 import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.Season
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.WatchProgress
@@ -140,7 +141,7 @@ class DetailViewModel @Inject constructor(
     val counts = _uiState.value.chapterCounts
 
     val newList = mutableListOf<DisplaySeason>()
-    detail.season.forEach { realSeason ->
+    detail.season.forEach { realSeason: Season ->
       val count = counts[realSeason.id]
       if (count != null && count > 30) {
         // Split into 30-chapter segments
@@ -474,7 +475,7 @@ class DetailViewModel @Inject constructor(
     loadDetail(_uiState.value.animeId, _uiState.value.initialChapterId)
   }
 
-  fun parseFilters(namePath: NamePath): List<SelectedFilter> {
-    return repository.parseFiltersFromPath(namePath)
+  fun parseFilters(link: CategoryLink): List<SelectedFilter> {
+    return link.filters
   }
 }
