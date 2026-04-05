@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -143,6 +144,7 @@ fun AccountScreen(
                 color = TextPrimary,
                 fontSize = 18.sp,
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.SemiBold
               )
               Spacer(modifier = Modifier.height(4.dp))
@@ -150,7 +152,8 @@ fun AccountScreen(
                 text = user.email ?: user.username,
                 color = TextSecondary,
                 fontSize = 13.sp,
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
               )
             }
             Spacer(modifier = Modifier.width(8.dp))

@@ -19,6 +19,8 @@
     <string name="coming_soon">Sắp chiếu</string>
     <string name="last_updated">Mới cập nhật</string>
     <string name="today">Hôm nay</string>
+    <string name="yesterday">Hôm qua</string>
+    <string name="history_date_format">%1$d thg %2$d</string>
     <string name="tomorrow">Ngày mai</string>
     <string name="upcoming">Sắp chiếu</string>
     <string name="view_all">Xem tất cả</string>

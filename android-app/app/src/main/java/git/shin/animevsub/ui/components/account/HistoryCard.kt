@@ -70,7 +70,7 @@ fun HistoryCard(
           )
       ) {
         Column {
-          Spacer(modifier = Modifier.height(30.dp))
+          Spacer(modifier = Modifier.height(40.dp))
           if (item.dur > 0) {
             LinearProgressIndicator(
               progress = { (item.cur / item.dur).toFloat() },
@@ -87,7 +87,7 @@ fun HistoryCard(
       Text(
         text = "${formatDuration((item.cur * 1000).toLong())} / ${formatDuration((item.dur * 1000).toLong())}",
         color = Color.White,
-        fontSize = 10.sp,
+        fontSize = 12.sp,
         modifier = Modifier
           .align(Alignment.BottomEnd)
           .padding(end = 8.dp, bottom = 8.dp)

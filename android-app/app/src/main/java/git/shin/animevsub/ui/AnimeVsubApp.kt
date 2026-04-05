@@ -45,6 +45,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import git.shin.animevsub.ui.screens.history.HistoryScreen
+import git.shin.animevsub.ui.screens.login.LoginScreen
+import git.shin.animevsub.ui.screens.about.AboutScreen
+import git.shin.animevsub.ui.screens.follow.FollowScreen
+import git.shin.animevsub.ui.screens.account.AccountScreen
+import git.shin.animevsub.ui.screens.account.AccountViewModel
+import git.shin.animevsub.ui.screens.follow.FollowViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -326,10 +333,11 @@ fun AnimeVsubAppUI(
 
       // Placeholder screens
       composable(Screen.History.route) {
-        PlaceholderScreen(
-          title = stringResource(R.string.history),
-          icon = Icons.Default.History,
-          onNavigateBack = { navController.popBackStack() }
+        HistoryScreen(
+          onNavigateBack = { navController.popBackStack() },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          }
         )
       }
 
