@@ -61,6 +61,7 @@ import git.shin.animevsub.ui.screens.about.AboutScreen
 import git.shin.animevsub.ui.screens.account.AccountScreen
 import git.shin.animevsub.ui.screens.category.CategoryScreen
 import git.shin.animevsub.ui.screens.detail.DetailScreen
+import git.shin.animevsub.ui.screens.follow.FollowScreen
 import git.shin.animevsub.ui.screens.home.HomeScreen
 import git.shin.animevsub.ui.screens.login.LoginScreen
 import git.shin.animevsub.ui.screens.notification.NotificationScreen
@@ -333,10 +334,11 @@ fun AnimeVsubAppUI(
       }
 
       composable(Screen.Follow.route) {
-        PlaceholderScreen(
-          title = stringResource(R.string.follow),
-          icon = Icons.Default.Favorite,
-          onNavigateBack = { navController.popBackStack() }
+        FollowScreen(
+          onNavigateBack = { navController.popBackStack() },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          }
         )
       }
 

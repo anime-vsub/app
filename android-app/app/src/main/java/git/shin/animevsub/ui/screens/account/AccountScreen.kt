@@ -142,13 +142,15 @@ fun AccountScreen(
                 text = user.name,
                 color = TextPrimary,
                 fontSize = 18.sp,
+                maxLines = 1,
                 fontWeight = FontWeight.SemiBold
               )
               Spacer(modifier = Modifier.height(4.dp))
               Text(
                 text = user.email ?: user.username,
                 color = TextSecondary,
-                fontSize = 13.sp
+                fontSize = 13.sp,
+                maxLines = 1
               )
             }
             Spacer(modifier = Modifier.width(8.dp))
