@@ -10,7 +10,6 @@ import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.HomeData
-import git.shin.animevsub.data.model.CategoryLink
 import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ScheduleDay
@@ -143,6 +142,10 @@ class AnimeRepository @Inject constructor(
   // Notifications
   suspend fun getNotifications(): Result<NotificationData> = runCatching {
     api.getNotifications()
+  }
+
+  suspend fun onTrigger(trigger: git.shin.animevsub.data.model.Trigger): Result<Unit> = runCatching {
+    api.onTrigger(trigger)
   }
 
   // Follows

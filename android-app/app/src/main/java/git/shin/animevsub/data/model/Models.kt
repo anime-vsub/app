@@ -130,6 +130,12 @@ data class User(
 )
 
 @Serializable
+data class Trigger(
+  val id: String,
+  val extra: Map<String, String> = emptyMap()
+)
+
+@Serializable
 data class NotificationItem(
   val id: String,
   val image: String? = null,
@@ -139,8 +145,9 @@ data class NotificationItem(
   val description: String = "",
   val link: String = "",
   val animeId: String? = null,
-  val time: String = "",
-  val isRead: Boolean = false
+  val createdAt: Long? = null,
+  val isRead: Boolean = false,
+  val closeTrigger: Trigger? = null
 )
 
 data class NotificationData(

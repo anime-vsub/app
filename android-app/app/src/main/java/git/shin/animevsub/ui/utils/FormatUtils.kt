@@ -93,3 +93,41 @@ fun isToday(timestampMillis: Long): Boolean {
   return today.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
     today.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR)
 }
+
+fun parseTimeAgo(timeAgo: String?): Long? {
+  if (timeAgo == null) return null
+  val now = System.currentTimeMillis()
+  val regex = "(\\d+)\\s+(giây|phút|giờ|ngày|tuần|tháng|năm)".toRegex()
+  val match = regex.find(timeAgo) ?: return null
+
+  val value = match.groupValues[1].toLong()
+  val unit = match.groupValues[2]
+
+  val millis = when (unit) {
+    "giây" -> value * 1000
+    "phút" -> value * 60 * 1000
+    "giờ" -> value * 60 * 60 * 1000
+    "ngày" -> value * 24 * 60 * 60 * 1000
+    "tuần" -> value * 7 * 24 * 60 * 60 * 1000
+    "tháng" -> value * 30 * 24 * 60 * 60 * 1000
+    "năm" -> value * 365 * 24 * 60 * 60 * 1000
+    else -> 0L
+  }
+
+  return now - millis
+}
+
+fun formatTimeAgo(timestamp: Long?): String {
+  if (timestamp == null) return ""
+  val now = System.currentTimeMillis()
+  val diff = now - timestamp
+
+  return when {
+    diff < TimeUnit.MINUTES.toMillis(1) -> "Vừa xong"
+    diff < TimeUnit.HOURS.toMillis(1) -> "${diff / TimeUnit.MINUTES.toMillis(1)} phút trước"
+    diff < TimeUnit.DAYS.toMillis(1) -> "${diff / TimeUnit.HOURS.toMillis(1)} giờ trước"
+    diff < TimeUnit.DAYS.toMillis(30) -> "${diff / TimeUnit.DAYS.toMillis(1)} ngày trước"
+    diff < TimeUnit.DAYS.toMillis(365) -> "${diff / TimeUnit.DAYS.toMillis(30)} tháng trước"
+    else -> "${diff / TimeUnit.DAYS.toMillis(365)} năm trước"
+  }
+}
