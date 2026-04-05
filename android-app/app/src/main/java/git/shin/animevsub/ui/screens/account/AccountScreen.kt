@@ -42,6 +42,7 @@ import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.account.FollowHorizontalList
 import git.shin.animevsub.ui.components.account.HistoryHorizontalList
+import git.shin.animevsub.ui.components.account.PlaylistListSection
 import git.shin.animevsub.ui.components.account.MenuItem
 import git.shin.animevsub.ui.components.account.MenuSection
 import git.shin.animevsub.ui.components.account.SettingsToggle
@@ -181,15 +182,19 @@ fun AccountScreen(
 
     // Menu items
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-      MenuSection(title = stringResource(R.string.playlists)) {
-        MenuItem(
-          icon = Icons.AutoMirrored.Filled.PlaylistPlay,
-          label = stringResource(R.string.playlists),
-          onClick = onNavigateToPlaylists
+      if (uiState.isLoggedIn) {
+        PlaylistListSection(
+          playlists = uiState.playlists,
+          isLoading = uiState.isLoadingPlaylists,
+          error = uiState.playlistsError,
+          onRetry = { viewModel.refreshPlaylists() },
+          onItemClick = { playlist ->
+            onNavigateToPlaylists()
+          }
         )
-      }
 
-      Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+      }
 
       MenuSection(title = stringResource(R.string.settings)) {
         SettingsToggle(
@@ -201,21 +206,6 @@ fun AccountScreen(
           label = stringResource(R.string.auto_skip),
           checked = uiState.autoSkip,
           onCheckedChange = { viewModel.setAutoSkip(it) }
-        )
-        SettingsToggle(
-          label = stringResource(R.string.infinite_scroll),
-          checked = uiState.infiniteScroll,
-          onCheckedChange = { viewModel.setInfiniteScroll(it) }
-        )
-        SettingsToggle(
-          label = stringResource(R.string.movie_mode),
-          checked = uiState.movieMode,
-          onCheckedChange = { viewModel.setMovieMode(it) }
-        )
-        SettingsToggle(
-          label = stringResource(R.string.show_comments),
-          checked = uiState.showComments,
-          onCheckedChange = { viewModel.setShowComments(it) }
         )
       }
 

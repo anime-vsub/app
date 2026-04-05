@@ -145,7 +145,7 @@ fun AboutScreen(
 
       InfoCard(
         title = stringResource(R.string.license),
-        value = stringResource(R.string.mit_license)
+        value = "GNU-GPL v3"//stringResource(R.string.mit_license)
       )
 
       Spacer(modifier = Modifier.height(32.dp))

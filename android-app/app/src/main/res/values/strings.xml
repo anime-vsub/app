@@ -157,7 +157,7 @@
     <string name="version">Version %1$s</string>
     <string name="about_description">AnimeVsub is a free anime streaming application. Watch your favorite anime with Vietnamese subtitles.</string>
     <string name="developer">Developer</string>
-    <string name="developer_name">AnimeVsub Team</string>
+    <string name="developer_name">Tachibana Shin</string>
     <string name="source_code">Source Code</string>
     <string name="license">License</string>
     <string name="mit_license">MIT License</string>
@@ -165,13 +165,14 @@
     <string name="back">Back</string>
     <string name="million_suffix">M</string>
     <string name="thousand_suffix">K</string>
-    <string name="made_with_love">Made with ❤️ for anime fans</string>
+    <string name="made_with_love">Made with ❤️ for everyone</string>
 
     <!-- News -->
     <string name="news">News</string>
     <string name="no_news">No news available</string>
 
     <!-- Notification -->
+    <string name="no_playlists">No playlists found</string>
     <string name="no_notifications">No notifications</string>
     <string name="mark_read">Mark as read</string>
     <string name="no_history">No watch history</string>

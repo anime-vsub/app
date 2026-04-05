@@ -6,7 +6,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.HistoryItem
+import git.shin.animevsub.data.model.Playlist
 import git.shin.animevsub.data.repository.AnimeRepository
+import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,15 +29,19 @@ data class AccountUiState(
   val server: String = "DU",
   val histories: List<HistoryItem> = emptyList(),
   val follows: List<AnimeCard> = emptyList(),
+  val playlists: List<Playlist> = emptyList(),
   val isLoadingHistory: Boolean = false,
   val isLoadingFollows: Boolean = false,
+  val isLoadingPlaylists: Boolean = false,
   val historyError: String? = null,
   val followsError: String? = null,
+  val playlistsError: String? = null,
 )
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-  private val repository: AnimeRepository
+  private val repository: AnimeRepository,
+  private val playlistRepository: PlaylistRepository
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(AccountUiState())
@@ -49,6 +55,7 @@ class AccountViewModel @Inject constructor(
           if (isLoggedIn) {
             refreshHistory()
             refreshFollows()
+            refreshPlaylists()
           }
         }
       }
@@ -75,21 +82,6 @@ class AccountViewModel @Inject constructor(
       launch {
         repository.brightnessGesture.collect { v ->
           _uiState.value = _uiState.value.copy(brightnessGesture = v)
-        }
-      }
-      launch {
-        repository.movieMode.collect { v ->
-          _uiState.value = _uiState.value.copy(movieMode = v)
-        }
-      }
-      launch {
-        repository.showComments.collect { v ->
-          _uiState.value = _uiState.value.copy(showComments = v)
-        }
-      }
-      launch {
-        repository.infiniteScroll.collect { v ->
-          _uiState.value = _uiState.value.copy(infiniteScroll = v)
         }
       }
     }
@@ -121,6 +113,19 @@ class AccountViewModel @Inject constructor(
     }
   }
 
+  fun refreshPlaylists() {
+    viewModelScope.launch {
+      _uiState.value = _uiState.value.copy(isLoadingPlaylists = true, playlistsError = null)
+      playlistRepository.getPlaylists()
+        .onSuccess { list ->
+          _uiState.value = _uiState.value.copy(playlists = list, isLoadingPlaylists = false)
+        }
+        .onFailure { e ->
+          _uiState.value = _uiState.value.copy(isLoadingPlaylists = false, playlistsError = e.message)
+        }
+    }
+  }
+
   fun logout() {
     viewModelScope.launch {
       repository.logout()
@@ -128,7 +133,8 @@ class AccountViewModel @Inject constructor(
         isLoggedIn = false,
         user = null,
         histories = emptyList(),
-        follows = emptyList()
+        follows = emptyList(),
+        playlists = emptyList()
       )
     }
   }
@@ -147,17 +153,5 @@ class AccountViewModel @Inject constructor(
 
   fun setBrightnessGesture(value: Boolean) {
     viewModelScope.launch { repository.setBrightnessGesture(value) }
-  }
-
-  fun setMovieMode(value: Boolean) {
-    viewModelScope.launch { repository.setMovieMode(value) }
-  }
-
-  fun setShowComments(value: Boolean) {
-    viewModelScope.launch { repository.setShowComments(value) }
-  }
-
-  fun setInfiniteScroll(value: Boolean) {
-    viewModelScope.launch { repository.setInfiniteScroll(value) }
   }
 }

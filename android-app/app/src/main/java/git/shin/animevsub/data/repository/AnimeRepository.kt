@@ -129,17 +129,11 @@ class AnimeRepository @Inject constructor(
   val autoSkip = prefs.autoSkip
   val volumeGesture = prefs.volumeGesture
   val brightnessGesture = prefs.brightnessGesture
-  val movieMode = prefs.movieMode
-  val showComments = prefs.showComments
-  val infiniteScroll = prefs.infiniteScroll
 
   suspend fun setAutoNext(value: Boolean) = prefs.setAutoNext(value)
   suspend fun setAutoSkip(value: Boolean) = prefs.setAutoSkip(value)
   suspend fun setVolumeGesture(value: Boolean) = prefs.setVolumeGesture(value)
   suspend fun setBrightnessGesture(value: Boolean) = prefs.setBrightnessGesture(value)
-  suspend fun setMovieMode(value: Boolean) = prefs.setMovieMode(value)
-  suspend fun setShowComments(value: Boolean) = prefs.setShowComments(value)
-  suspend fun setInfiniteScroll(value: Boolean) = prefs.setInfiniteScroll(value)
 
   // Search History
   val searchHistory = prefs.searchHistory
