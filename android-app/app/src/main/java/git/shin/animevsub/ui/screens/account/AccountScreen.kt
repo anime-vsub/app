@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,10 +23,13 @@ import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,6 +58,7 @@ import git.shin.animevsub.ui.theme.ErrorColor
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountScreen(
   onNavigateToLogin: () -> Unit,
@@ -68,53 +73,100 @@ fun AccountScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
 
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .verticalScroll(rememberScrollState())
-      .background(DarkBackground)
-      .padding(bottom = 16.dp)
-  ) {
-    Spacer(modifier = Modifier.height(16.dp))
-
-    // Profile section
-    Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-      if (uiState.isLoggedIn && uiState.user != null) {
-        val user = uiState.user!!
-        Row(
-          verticalAlignment = Alignment.CenterVertically,
-          modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(DarkCard)
-            .padding(16.dp)
-        ) {
-          AsyncImage(
-            model = user.avatar,
-            contentDescription = user.name,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-              .size(60.dp)
-              .clip(CircleShape)
-              .background(DarkSurface)
+  Scaffold(
+    contentWindowInsets = WindowInsets(0, 0, 0, 0),
+    topBar = {
+      TopAppBar(
+        title = {
+          Text(
+            text = stringResource(R.string.nav_account),
+            color = TextPrimary,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold
           )
-          Spacer(modifier = Modifier.width(16.dp))
-          Column(modifier = Modifier.weight(1f)) {
-            Text(
-              text = user.name,
-              color = TextPrimary,
-              fontSize = 18.sp,
-              fontWeight = FontWeight.SemiBold
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-              text = user.email ?: user.username,
-              color = TextSecondary,
-              fontSize = 13.sp
+        },
+        actions = {
+          IconButton(onClick = onNavigateToSettings) {
+            Icon(
+              imageVector = Icons.Default.Settings,
+              contentDescription = stringResource(R.string.settings),
+              tint = TextPrimary
             )
           }
-        }
-      } else {
+          IconButton(onClick = onNavigateToAbout) {
+            Icon(
+              imageVector = Icons.Default.Info,
+              contentDescription = stringResource(R.string.about),
+              tint = TextPrimary
+            )
+          }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
+      )
+    },
+    containerColor = DarkBackground
+  ) { padding ->
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(padding)
+        .verticalScroll(rememberScrollState())
+        .padding(bottom = 16.dp)
+    ) {
+      Spacer(modifier = Modifier.height(8.dp))
+
+      // Profile section
+      Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+        if (uiState.isLoggedIn && uiState.user != null) {
+          val user = uiState.user!!
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+              .fillMaxWidth()
+              .clip(RoundedCornerShape(12.dp))
+              .background(DarkCard)
+              .padding(16.dp)
+          ) {
+            AsyncImage(
+              model = user.avatar,
+              contentDescription = user.name,
+              contentScale = ContentScale.Crop,
+              modifier = Modifier
+                .size(60.dp)
+                .clip(CircleShape)
+                .background(DarkSurface)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(modifier = Modifier.weight(1f)) {
+              Text(
+                text = user.name,
+                color = TextPrimary,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+              )
+              Spacer(modifier = Modifier.height(4.dp))
+              Text(
+                text = user.email ?: user.username,
+                color = TextSecondary,
+                fontSize = 13.sp
+              )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            IconButton(
+              onClick = { viewModel.logout() },
+              modifier = Modifier
+                .clip(CircleShape)
+                .background(ErrorColor.copy(alpha = 0.1f))
+            ) {
+              Icon(
+                imageVector = Icons.AutoMirrored.Filled.Logout,
+                contentDescription = stringResource(R.string.logout),
+                tint = ErrorColor,
+                modifier = Modifier.size(20.dp)
+              )
+            }
+          }
+        } else {
         // Login prompt
         Box(
           modifier = Modifier
@@ -192,73 +244,10 @@ fun AccountScreen(
             onNavigateToPlaylists()
           }
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-      }
-
-      MenuSection(title = stringResource(R.string.settings)) {
-        SettingsToggle(
-          label = stringResource(R.string.auto_next),
-          checked = uiState.autoNext,
-          onCheckedChange = { viewModel.setAutoNext(it) }
-        )
-        SettingsToggle(
-          label = stringResource(R.string.auto_skip),
-          checked = uiState.autoSkip,
-          onCheckedChange = { viewModel.setAutoSkip(it) }
-        )
-      }
-
-      Spacer(modifier = Modifier.height(16.dp))
-
-      MenuSection(title = stringResource(R.string.gesture_controls)) {
-        SettingsToggle(
-          label = stringResource(R.string.volume_gesture),
-          checked = uiState.volumeGesture,
-          onCheckedChange = { viewModel.setVolumeGesture(it) }
-        )
-        SettingsToggle(
-          label = stringResource(R.string.brightness_gesture),
-          checked = uiState.brightnessGesture,
-          onCheckedChange = { viewModel.setBrightnessGesture(it) }
-        )
-      }
-
-      Spacer(modifier = Modifier.height(16.dp))
-
-      MenuSection(title = stringResource(R.string.general)) {
-        MenuItem(
-          icon = Icons.Default.Settings,
-          label = stringResource(R.string.settings),
-          onClick = onNavigateToSettings
-        )
-        MenuItem(
-          icon = Icons.Default.Info,
-          label = stringResource(R.string.about),
-          onClick = onNavigateToAbout
-        )
-      }
-
-      // Logout button
-      if (uiState.isLoggedIn) {
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(
-          onClick = { viewModel.logout() },
-          colors = ButtonDefaults.buttonColors(containerColor = ErrorColor),
-          shape = RoundedCornerShape(8.dp),
-          modifier = Modifier.fillMaxWidth()
-        ) {
-          Icon(
-            imageVector = Icons.AutoMirrored.Filled.Logout,
-            contentDescription = null,
-            modifier = Modifier.size(18.dp)
-          )
-          Spacer(modifier = Modifier.width(8.dp))
-          Text(text = stringResource(R.string.logout))
-        }
       }
     }
 
     Spacer(modifier = Modifier.height(80.dp))
+    }
   }
 }

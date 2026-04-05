@@ -6,13 +6,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
@@ -57,6 +62,7 @@ import git.shin.animevsub.ui.screens.login.LoginScreen
 import git.shin.animevsub.ui.screens.notification.NotificationScreen
 import git.shin.animevsub.ui.screens.rankings.RankingsScreen
 import git.shin.animevsub.ui.screens.schedule.ScheduleScreen
+import git.shin.animevsub.ui.screens.settings.SettingsScreen
 import git.shin.animevsub.ui.screens.search.SearchScreen
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
@@ -298,7 +304,7 @@ fun AnimeVsubAppUI() {
       composable(Screen.History.route) {
         PlaceholderScreen(
           title = stringResource(R.string.history),
-          emoji = "📋",
+          icon = Icons.Default.History,
           onNavigateBack = { navController.popBackStack() }
         )
       }
@@ -306,15 +312,13 @@ fun AnimeVsubAppUI() {
       composable(Screen.Follow.route) {
         PlaceholderScreen(
           title = stringResource(R.string.follow),
-          emoji = "❤️",
+          icon = Icons.Default.Favorite,
           onNavigateBack = { navController.popBackStack() }
         )
       }
 
       composable(Screen.Settings.route) {
-        PlaceholderScreen(
-          title = stringResource(R.string.settings),
-          emoji = "⚙️",
+        SettingsScreen(
           onNavigateBack = { navController.popBackStack() }
         )
       }
@@ -322,7 +326,7 @@ fun AnimeVsubAppUI() {
       composable(Screen.Playlists.route) {
         PlaceholderScreen(
           title = stringResource(R.string.playlists),
-          emoji = "📂",
+          icon = Icons.AutoMirrored.Filled.PlaylistPlay,
           onNavigateBack = { navController.popBackStack() }
         )
       }
@@ -334,7 +338,7 @@ fun AnimeVsubAppUI() {
 @Composable
 private fun PlaceholderScreen(
   title: String,
-  emoji: String,
+  icon: androidx.compose.ui.graphics.vector.ImageVector,
   onNavigateBack: () -> Unit
 ) {
   Scaffold(
@@ -362,7 +366,12 @@ private fun PlaceholderScreen(
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center
     ) {
-      Text(text = emoji, fontSize = 64.sp)
+      Icon(
+        imageVector = icon,
+        contentDescription = null,
+        modifier = Modifier.size(64.dp),
+        tint = TextGrey
+      )
       Spacer(modifier = Modifier.height(16.dp))
       Text(
         text = title,

@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SentimentVeryDissatisfied
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,9 +34,11 @@ fun ErrorScreen(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center
   ) {
-    Text(
-      text = "😔",
-      fontSize = 48.sp
+    Icon(
+      imageVector = Icons.Default.SentimentVeryDissatisfied,
+      contentDescription = null,
+      modifier = Modifier.size(64.dp),
+      tint = TextSecondary
     )
     Spacer(modifier = Modifier.height(16.dp))
     Text(
