@@ -8,7 +8,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_search">Search</string>
     <string name="nav_news">News</string>
-    <string name="nav_notification">Notification</string>
+    <string name="nav_notification">Notif</string>
     <string name="nav_account">Me</string>
     <string name="account">Account</string>
     <string name="notifications">Notifications</string>

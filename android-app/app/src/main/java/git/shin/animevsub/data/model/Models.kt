@@ -150,6 +150,7 @@ data class NotificationItem(
   val closeTrigger: Trigger? = null
 )
 
+@Serializable
 data class NotificationData(
   val items: List<NotificationItem>, val max: Int
 )

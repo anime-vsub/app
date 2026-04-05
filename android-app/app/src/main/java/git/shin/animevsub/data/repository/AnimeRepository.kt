@@ -1,5 +1,6 @@
 package git.shin.animevsub.data.repository
 
+import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.AnimeDetail
@@ -22,10 +23,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,9 +40,37 @@ import javax.inject.Singleton
 class AnimeRepository @Inject constructor(
   private val api: AnimeApi,
   private val historyRepository: HistoryRepository,
-  private val prefs: PreferencesManager
+  private val prefs: PreferencesManager,
+  private val storage: ApiStorage,
+  private val json: Json
 ) {
   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+  private val _notifications = MutableStateFlow<NotificationData?>(null)
+  val notifications: StateFlow<NotificationData?> = _notifications.asStateFlow()
+
+  init {
+    repositoryScope.launch {
+      // Load cached notifications
+      storage.getString("cached_notifications").first()?.let { cached ->
+        try {
+          _notifications.value = json.decodeFromString<NotificationData>(cached)
+        } catch (e: Exception) {
+          e.printStackTrace()
+        }
+      }
+
+      // Sync notifications when logged in
+      isLoggedIn.collect { loggedIn ->
+        if (loggedIn) {
+          getNotifications()
+        } else {
+          _notifications.value = null
+          storage.set("cached_notifications", null)
+        }
+      }
+    }
+  }
 
   // Home
   suspend fun getHomePage(): Result<HomeData> = runCatching { api.getHomePage() }
@@ -141,7 +176,10 @@ class AnimeRepository @Inject constructor(
 
   // Notifications
   suspend fun getNotifications(): Result<NotificationData> = runCatching {
-    api.getNotifications()
+    val data = api.getNotifications()
+    _notifications.value = data
+    storage.set("cached_notifications", json.encodeToString(data))
+    data
   }
 
   suspend fun onTrigger(trigger: git.shin.animevsub.data.model.Trigger): Result<Unit> = runCatching {

@@ -40,12 +40,22 @@ class NotificationViewModel @Inject constructor(
 
   init {
     viewModelScope.launch {
+      repository.notifications.collect { data ->
+        _uiState.value = _uiState.value.copy(
+          data = data,
+          isLoading = false,
+          isRefreshing = false
+        )
+      }
+    }
+
+    viewModelScope.launch {
       repository.isLoggedIn.collect { loggedIn ->
         _uiState.value = _uiState.value.copy(isLoggedIn = loggedIn)
         if (loggedIn) {
           loadNotifications()
         } else {
-          _uiState.value = _uiState.value.copy(isLoading = false, data = null)
+          _uiState.value = _uiState.value.copy(isLoading = false)
         }
       }
     }
@@ -53,20 +63,14 @@ class NotificationViewModel @Inject constructor(
 
   fun loadNotifications(isRefreshing: Boolean = false) {
     viewModelScope.launch {
-      _uiState.value = _uiState.value.copy(
-        isLoading = !isRefreshing,
-        isRefreshing = isRefreshing,
-        error = null
-      )
+      if (!isRefreshing) {
+        _uiState.value = _uiState.value.copy(isLoading = true)
+      } else {
+        _uiState.value = _uiState.value.copy(isRefreshing = true)
+      }
+      _uiState.value = _uiState.value.copy(error = null)
+
       repository.getNotifications()
-        .onSuccess { data ->
-          _uiState.value = _uiState.value.copy(
-            isLoading = false,
-            isRefreshing = false,
-            data = data,
-            error = null
-          )
-        }
         .onFailure { e ->
           _uiState.value = _uiState.value.copy(
             isLoading = false,
