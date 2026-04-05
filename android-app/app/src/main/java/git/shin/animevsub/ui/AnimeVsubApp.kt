@@ -87,7 +87,7 @@ fun AnimeVsubAppUI(
   val currentDestination = navBackStackEntry?.destination
 
   val notificationUiState by notificationViewModel.uiState.collectAsState()
-  val unreadCount = notificationUiState.data?.items?.count { !it.isRead } ?: 0
+  val unreadCount = notificationUiState.data?.items?.size ?: 0
 
   val bottomNavItems = listOf(
     BottomNavItem(Screen.Home, R.string.nav_home, Icons.Filled.Home, Icons.Outlined.Home),

@@ -43,7 +43,6 @@ import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
-import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatTimeAgo
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,9 +120,9 @@ fun NotificationItemRow(
         Spacer(modifier = Modifier.height(2.dp))
         Text(
           text = notification.description.ifEmpty { notification.content },
-          color = if (notification.isRead) TextSecondary else TextPrimary,
+          color = TextPrimary,
           fontSize = 14.sp,
-          fontWeight = if (notification.isRead) FontWeight.Normal else FontWeight.Medium,
+          fontWeight = FontWeight.Medium,
           maxLines = 3,
           overflow = TextOverflow.Ellipsis
         )
@@ -140,15 +139,13 @@ fun NotificationItemRow(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.align(Alignment.Top)
       ) {
-        if (!notification.isRead) {
-          Box(
-            modifier = Modifier
-              .padding(top = 4.dp)
-              .size(10.dp)
-              .clip(CircleShape)
-              .background(AccentMain)
-          )
-        }
+//        Box(
+//          modifier = Modifier
+//            .padding(top = 4.dp)
+//            .size(10.dp)
+//            .clip(CircleShape)
+//            .background(AccentMain)
+//        )
 
         notification.closeTrigger?.let { trigger ->
           IconButton(

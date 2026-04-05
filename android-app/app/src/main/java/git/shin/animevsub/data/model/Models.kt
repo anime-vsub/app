@@ -146,7 +146,6 @@ data class NotificationItem(
   val link: String = "",
   val animeId: String? = null,
   val createdAt: Long? = null,
-  val isRead: Boolean = false,
   val closeTrigger: Trigger? = null
 )
 
