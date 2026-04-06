@@ -16,14 +16,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,7 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.R
+import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
@@ -43,8 +51,11 @@ import git.shin.animevsub.ui.theme.TextSecondary
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
-  onNavigateBack: () -> Unit
+  onNavigateBack: () -> Unit,
+  viewModel: AboutViewModel = hiltViewModel()
 ) {
+  val uiState by viewModel.uiState.collectAsState()
+
   Scaffold(
     topBar = {
       TopAppBar(
@@ -106,7 +117,7 @@ fun AboutScreen(
       Spacer(modifier = Modifier.height(8.dp))
 
       Text(
-        text = stringResource(R.string.version, "2.0.0"),
+        text = stringResource(R.string.version, BuildConfig.VERSION_NAME),
         color = TextSecondary,
         fontSize = 14.sp
       )
@@ -145,8 +156,22 @@ fun AboutScreen(
 
       InfoCard(
         title = stringResource(R.string.license),
-        value = "GNU-GPL v3"//stringResource(R.string.mit_license)
+        value = "GNU-GPL v3"
       )
+
+      Spacer(modifier = Modifier.height(24.dp))
+
+      if (uiState.isCheckingUpdate) {
+        CircularProgressIndicator(color = AccentMain, modifier = Modifier.size(24.dp))
+      } else {
+        Button(
+          onClick = { viewModel.checkUpdate() },
+          colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+          shape = RoundedCornerShape(8.dp)
+        ) {
+          Text(text = stringResource(R.string.check_update), color = TextPrimary)
+        }
+      }
 
       Spacer(modifier = Modifier.height(32.dp))
 
@@ -158,6 +183,20 @@ fun AboutScreen(
       )
 
       Spacer(modifier = Modifier.height(32.dp))
+    }
+  }
+
+  // Update Dialog
+  uiState.updateInfo?.let { info ->
+    if (info.isNewer) {
+      UpdateDialog(
+        info = info,
+        onDismiss = { viewModel.dismissUpdate() },
+        onConfirm = {
+          viewModel.downloadUpdate(info)
+          viewModel.dismissUpdate()
+        }
+      )
     }
   }
 }

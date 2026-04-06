@@ -213,4 +213,11 @@
     <string name="filter_group_format">Filter: %1$s</string>
     <string name="more">More</string>
     <string name="restored_progress">Restored watch progress %1$d:%2$02d</string>
+    <string name="check_update">Check for Update</string>
+    <string name="update_available">New Version Available</string>
+    <string name="update_message">A new version (%1$s) is available. Would you like to update now?</string>
+    <string name="update_now">Update Now</string>
+    <string name="no_update">Already on the latest version</string>
+    <string name="checking_update">Checking for updates…</string>
+    <string name="update_failed">Failed to check for updates</string>
 </resources>
