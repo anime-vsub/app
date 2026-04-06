@@ -22,6 +22,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -66,7 +69,8 @@ data class DetailUiState(
    */
   val activeDisplaySeasonId: String = "",
 
-  val chapterCounts: Map<String, Int> = emptyMap()
+  val chapterCounts: Map<String, Int> = emptyMap(),
+  val isFollowed: Boolean = false
 ) {
   val currentChapIndex: Int
     get() {
@@ -240,11 +244,16 @@ class DetailViewModel @Inject constructor(
             detailCache[animeId] = detail
             _uiState.update { it.copy(detail = detail, isLoading = false) }
             updateDisplaySeasons()
+            checkFollow()
           }
           .onFailure { e ->
             _uiState.update { it.copy(isLoading = false, error = e.message) }
           }
       }
+    }
+
+    if (detailCache.containsKey(animeId)) {
+      checkFollow()
     }
 
     chapterCache[animeId]?.let { cachedChapters ->
@@ -512,6 +521,31 @@ class DetailViewModel @Inject constructor(
 
   fun retry() {
     loadDetail(_uiState.value.animeId, _uiState.value.initialChapterId)
+  }
+
+  fun checkFollow() {
+    val animeId = _uiState.value.animeId
+    viewModelScope.launch {
+      repository.checkFollow(animeId).onSuccess { followed ->
+        _uiState.update { it.copy(isFollowed = followed) }
+      }
+    }
+  }
+
+  private val _uiEffect = MutableSharedFlow<String>()
+  val uiEffect: SharedFlow<String> = _uiEffect.asSharedFlow()
+
+  fun toggleFollow() {
+    val animeId = _uiState.value.animeId
+    val isFollowed = _uiState.value.isFollowed
+    viewModelScope.launch {
+      repository.toggleFollow(animeId, !isFollowed).onSuccess {
+        _uiState.update { it.copy(isFollowed = !isFollowed) }
+        _uiEffect.emit(if (!isFollowed) "FOLLOW_SUCCESS" else "UNFOLLOW_SUCCESS")
+      }.onFailure {
+        _uiEffect.emit("FOLLOW_ERROR")
+      }
+    }
   }
 
   fun parseFilters(link: CategoryLink): List<SelectedFilter> {

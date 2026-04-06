@@ -111,6 +111,10 @@
     <string name="password">Password</string>
     <string name="history">History</string>
     <string name="follow">Follow</string>
+    <string name="unfollowed">Unfollowed</string>
+    <string name="follow_error">An error occurred, please try again</string>
+    <string name="share_message">Watch %1$s at AnimeVsub: %2$s</string>
+    <string name="share_title">Share Movie</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="playlists">Playlists</string>

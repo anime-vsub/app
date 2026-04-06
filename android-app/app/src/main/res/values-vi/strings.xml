@@ -101,6 +101,11 @@
     <string name="password">Mật khẩu</string>
     <string name="history">Lịch sử</string>
     <string name="follow">Theo dõi</string>
+    <string name="followed">Đã theo dõi</string>
+    <string name="unfollowed">Đã bỏ theo dõi</string>
+    <string name="follow_error">Có lỗi xảy ra, vui lòng thử lại</string>
+    <string name="share_message">Xem phim %1$s tại AnimeVsub: %2$s</string>
+    <string name="share_title">Chia sẻ phim</string>
     <string name="settings">Cài đặt</string>
     <string name="about">Giới thiệu</string>
     <string name="playlists">Danh sách phát</string>

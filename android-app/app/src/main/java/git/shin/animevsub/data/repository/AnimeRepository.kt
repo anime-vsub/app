@@ -192,6 +192,14 @@ class AnimeRepository @Inject constructor(
     api.getFollows(page)
   }
 
+  suspend fun checkFollow(animeId: String): Result<Boolean> = runCatching {
+    api.checkFollow(animeId)
+  }
+
+  suspend fun toggleFollow(animeId: String, follow: Boolean): Result<Unit> = runCatching {
+    api.toggleFollow(animeId, follow)
+  }
+
   // History
   suspend fun getHistory(page: Int) = historyRepository.getHistory(page)
   suspend fun getWatchProgress(seasonId: String) = historyRepository.getWatchProgress(seasonId)

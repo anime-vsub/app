@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ fun ActionButton(
   icon: ImageVector,
   label: String,
   modifier: Modifier = Modifier,
+  iconTint: Color = TextPrimary,
   onClick: () -> Unit
 ) {
   Column(
@@ -34,9 +36,9 @@ fun ActionButton(
     modifier = modifier
       .clip(RoundedCornerShape(8.dp))
       .clickable { onClick() }
-      .padding(vertical = 8.dp)
+      .padding(vertical = 8.dp, horizontal = 4.dp)
   ) {
-    Icon(icon, null, tint = TextPrimary, modifier = Modifier.size(22.dp))
+    Icon(icon, null, tint = iconTint, modifier = Modifier.size(22.dp))
     Spacer(modifier = Modifier.height(4.dp))
 
     Text(

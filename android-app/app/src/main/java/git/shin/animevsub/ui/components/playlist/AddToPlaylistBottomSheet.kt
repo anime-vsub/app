@@ -98,7 +98,9 @@ fun AddToPlaylistBottomSheet(
         modifier = Modifier.padding(16.dp)
       )
 
-      LazyColumn {
+      LazyColumn(
+        modifier = Modifier.weight(1f, fill = false)
+      ) {
         items(uiState.playlists) { playlist ->
           val isChecked = uiState.playlistCheckedStates[playlist.id] ?: false
           Row(
@@ -166,29 +168,27 @@ fun AddToPlaylistBottomSheet(
             )
           }
         }
-
-        item {
-          ListItem(
-            headlineContent = {
-              Text(
-                stringResource(R.string.create_playlist),
-                color = AccentMain
-              )
-            },
-            leadingContent = {
-              Icon(
-                Icons.Default.Add,
-                contentDescription = null,
-                tint = AccentMain
-              )
-            },
-            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-            modifier = Modifier.clickable {
-              showCreateDialog = true
-            }
-          )
-        }
       }
+
+      ListItem(
+        headlineContent = {
+          Text(
+            stringResource(R.string.create_playlist),
+            color = AccentMain
+          )
+        },
+        leadingContent = {
+          Icon(
+            Icons.Default.Add,
+            contentDescription = null,
+            tint = AccentMain
+          )
+        },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+        modifier = Modifier.clickable {
+          showCreateDialog = true
+        }
+      )
     }
   }
 

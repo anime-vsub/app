@@ -1,6 +1,7 @@
 package git.shin.animevsub.ui.screens.detail
 
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,6 +35,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Share
@@ -110,6 +112,22 @@ fun DetailScreen(
   var showChapterSheet by remember { mutableStateOf(false) }
   var showAddToPlaylistSheet by remember { mutableStateOf(false) }
   val scope = rememberCoroutineScope()
+
+  val followSuccessMsg = stringResource(R.string.followed)
+  val unfollowSuccessMsg = stringResource(R.string.unfollowed)
+  val followErrorMsg = stringResource(R.string.follow_error)
+
+  LaunchedEffect(Unit) {
+    viewModel.uiEffect.collect { effect ->
+      val message = when (effect) {
+        "FOLLOW_SUCCESS" -> followSuccessMsg
+        "UNFOLLOW_SUCCESS" -> unfollowSuccessMsg
+        "FOLLOW_ERROR" -> followErrorMsg
+        else -> effect
+      }
+      snackbarHostState.showSnackbar(message)
+    }
+  }
 
   // List states for scrollingon
   val seasonListState = rememberLazyListState()
@@ -449,26 +467,43 @@ fun DetailScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
               ) {
                 ActionButton(
-                  icon = Icons.Default.BookmarkBorder,
-                  label = formatNumber(detail.follows),
+                  icon = if (uiState.isFollowed) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                  label = if (uiState.isFollowed) stringResource(R.string.followed) else stringResource(R.string.follow),
+                  iconTint = if (uiState.isFollowed) StarColor else TextPrimary,
                   modifier = Modifier
-                    .widthIn(min = 40.dp)
+                    .widthIn(min = 50.dp)
                     .wrapContentWidth(),
-                  onClick = { /* TODO: Implement Bookmark */ }
+                  onClick = { viewModel.toggleFollow() }
                 )
                 ActionButton(
                   icon = Icons.Default.Share,
                   label = stringResource(R.string.share),
                   modifier = Modifier
-                    .widthIn(min = 40.dp)
+                    .widthIn(min = 50.dp)
                     .wrapContentWidth(),
-                  onClick = { /* TODO: Implement Share */ }
+                  onClick = {
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                      type = "text/plain"
+                      val shareMessage = context.getString(
+                        R.string.share_message,
+                        detail.name,
+                        "https://github.com/anime-vsub/app"
+                      )
+                      putExtra(Intent.EXTRA_TEXT, shareMessage)
+                    }
+                    context.startActivity(
+                      Intent.createChooser(
+                        shareIntent,
+                        context.getString(R.string.share_title)
+                      )
+                    )
+                  }
                 )
                 ActionButton(
                   icon = Icons.AutoMirrored.Filled.PlaylistAdd,
                   label = stringResource(R.string.save_label),
                   modifier = Modifier
-                    .widthIn(min = 40.dp)
+                    .widthIn(min = 50.dp)
                     .wrapContentWidth(),
                   onClick = { showAddToPlaylistSheet = true }
                 )
