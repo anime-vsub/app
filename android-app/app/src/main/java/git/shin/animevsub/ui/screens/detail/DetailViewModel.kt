@@ -319,6 +319,7 @@ class DetailViewModel @Inject constructor(
         lastProgress = 0L
       )
     }
+    isInitialPlayback = true
 
     if (isNewSeason) {
       loadDetail(seasonId, chapter.id, isSwitchingSeason = true)
@@ -354,12 +355,12 @@ class DetailViewModel @Inject constructor(
   }
 
   private var lastUpdateJob: kotlinx.coroutines.Job? = null
+  private var isInitialPlayback = true
 
   fun updateHistory(currentPosMs: Long, durationMs: Long) {
     val currentPos = currentPosMs / 1000.0
     val duration = durationMs / 1000.0
     val state = _uiState.value
-    val detail = state.detail ?: return
     val chapter = state.currentChapter ?: return
 
     // Update local progress map for UI consistency (immediate)
@@ -372,15 +373,26 @@ class DetailViewModel @Inject constructor(
     // Throttle Supabase RPC calls: Only save every 10 seconds
     if (lastUpdateJob?.isActive == true) return
     lastUpdateJob = viewModelScope.launch {
+      if (isInitialPlayback) {
+        delay(8000) // Wait 8 seconds before first sync after restore
+        isInitialPlayback = false
+      }
+
+      // Re-fetch latest data from state to get the most recent position
+      val latestState = _uiState.value
+      val detail = latestState.detail ?: return@launch
+      val currentChapter = latestState.currentChapter ?: return@launch
+      val latestProgress = latestState.chapterProgress[currentChapter.id] ?: return@launch
+
       repository.setSingleProgress(
         name = detail.name,
         poster = detail.poster ?: detail.image ?: "",
-        seasonId = state.currentSeasonId,
-        seasonName = detail.season.find { it.id == state.currentSeasonId }?.name ?: "",
-        chapId = chapter.id,
-        chapName = chapter.name,
-        cur = currentPos,
-        dur = duration
+        seasonId = latestState.currentSeasonId,
+        seasonName = detail.season.find { it.id == latestState.currentSeasonId }?.name ?: "",
+        chapId = currentChapter.id,
+        chapName = currentChapter.name,
+        cur = latestProgress.cur,
+        dur = latestProgress.dur
       )
       delay(10000) // 10 second throttle
     }
