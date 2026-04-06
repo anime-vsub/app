@@ -121,6 +121,15 @@ fun DetailBottomSheet(
                 }
               })
             InfoRow(
+              label = stringResource(R.string.studio_label),
+              value = detail.studio?.name,
+              textStyle = SmallTextStyle,
+              onClick = {
+                detail.studio?.let {
+                  onNavigateToCategory(it)
+                }
+              })
+            InfoRow(
               label = stringResource(R.string.duration_label),
               value = detail.duration,
               textStyle = SmallTextStyle

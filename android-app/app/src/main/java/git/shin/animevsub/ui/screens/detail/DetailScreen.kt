@@ -328,12 +328,12 @@ fun DetailScreen(
                 Text(
                   text = stringResource(
                     R.string.studio_prefix,
-                    detail.studio ?: stringResource(R.string.unknown)
+                    detail.studio?.name ?: stringResource(R.string.unknown)
                   ),
-                  color = TextGrey,
+                  color = if (detail.studio != null) MainColor else TextGrey,
                   fontSize = 12.sp,
                   style = NoPaddingTextStyle,
-                  modifier = Modifier.clickable {
+                  modifier = Modifier.clickable(enabled = detail.studio != null) {
                     detail.studio?.let {
                       onNavigateToCategory(it.filters)
                     }
