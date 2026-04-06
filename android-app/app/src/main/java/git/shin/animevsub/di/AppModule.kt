@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.remote.AnimeApi
+import git.shin.animevsub.BuildConfig
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -26,8 +27,8 @@ object AppModule {
   @Singleton
   fun provideSupabaseClient(): SupabaseClient {
     return createSupabaseClient(
-      supabaseUrl = "https://ctwwltbkwksgnispcjmq.supabase.co",
-      supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0d3dsdGJrd2tzZ25pc3Bjam1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAxNjM5ODksImV4cCI6MjAzNTczOTk4OX0.Dva9EPqy4P0KFYLAGpFqFoMBH4I_yz0VWnGny0uA-8U"
+      supabaseUrl = BuildConfig.SUPABASE_URL,
+      supabaseKey = BuildConfig.SUPABASE_KEY
     ) {
       install(Postgrest)
       install(Auth)
