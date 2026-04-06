@@ -168,87 +168,87 @@ fun AccountScreen(
             }
           }
         } else {
-        // Login prompt
-        Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(DarkCard)
-            .clickable(onClick = onNavigateToLogin)
-            .padding(20.dp),
-          contentAlignment = Alignment.Center
-        ) {
-          Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-              imageVector = Icons.Default.AccountCircle,
-              contentDescription = null,
-              tint = AccentMain,
-              modifier = Modifier.size(48.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-              text = stringResource(R.string.login),
-              color = AccentMain,
-              fontSize = 16.sp,
-              fontWeight = FontWeight.SemiBold
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-              text = stringResource(R.string.login_required),
-              color = TextSecondary,
-              fontSize = 13.sp
-            )
+          // Login prompt
+          Box(
+            modifier = Modifier
+              .fillMaxWidth()
+              .clip(RoundedCornerShape(12.dp))
+              .background(DarkCard)
+              .clickable(onClick = onNavigateToLogin)
+              .padding(20.dp),
+            contentAlignment = Alignment.Center
+          ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+              Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = null,
+                tint = AccentMain,
+                modifier = Modifier.size(48.dp)
+              )
+              Spacer(modifier = Modifier.height(8.dp))
+              Text(
+                text = stringResource(R.string.login),
+                color = AccentMain,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+              )
+              Spacer(modifier = Modifier.height(4.dp))
+              Text(
+                text = stringResource(R.string.login_required),
+                color = TextSecondary,
+                fontSize = 13.sp
+              )
+            }
           }
         }
       }
-    }
 
-    if (uiState.isLoggedIn) {
-      Spacer(modifier = Modifier.height(24.dp))
-
-      HistoryHorizontalList(
-        histories = uiState.histories,
-        isLoading = uiState.isLoadingHistory,
-        error = uiState.historyError,
-        onHeaderClick = onNavigateToHistory,
-        onRetry = { viewModel.refreshHistory() },
-        onItemClick = { item ->
-          item.chapId?.let { chapId ->
-            onNavigateToPlayer(item.seasonId, chapId)
-          } ?: onNavigateToDetail(item.seasonId)
-        }
-      )
-
-      Spacer(modifier = Modifier.height(24.dp))
-
-      FollowHorizontalList(
-        follows = uiState.follows,
-        isLoading = uiState.isLoadingFollows,
-        error = uiState.followsError,
-        onHeaderClick = onNavigateToFollow,
-        onRetry = { viewModel.refreshFollows() },
-        onItemClick = { anime -> onNavigateToDetail(anime.animeId) }
-      )
-    }
-
-    Spacer(modifier = Modifier.height(24.dp))
-
-    // Menu items
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
       if (uiState.isLoggedIn) {
-        PlaylistListSection(
-          playlists = uiState.playlists,
-          isLoading = uiState.isLoadingPlaylists,
-          error = uiState.playlistsError,
-          onRetry = { viewModel.refreshPlaylists() },
-          onItemClick = { playlist ->
-            onNavigateToPlaylist(playlist.id.toString())
+        Spacer(modifier = Modifier.height(24.dp))
+
+        HistoryHorizontalList(
+          histories = uiState.histories,
+          isLoading = uiState.isLoadingHistory,
+          error = uiState.historyError,
+          onHeaderClick = onNavigateToHistory,
+          onRetry = { viewModel.refreshHistory() },
+          onItemClick = { item ->
+            item.chapId?.let { chapId ->
+              onNavigateToPlayer(item.seasonId, chapId)
+            } ?: onNavigateToDetail(item.seasonId)
           }
         )
-      }
-    }
 
-    Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+
+        FollowHorizontalList(
+          follows = uiState.follows,
+          isLoading = uiState.isLoadingFollows,
+          error = uiState.followsError,
+          onHeaderClick = onNavigateToFollow,
+          onRetry = { viewModel.refreshFollows() },
+          onItemClick = { anime -> onNavigateToDetail(anime.animeId) }
+        )
+      }
+
+      Spacer(modifier = Modifier.height(24.dp))
+
+      // Menu items
+      Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        if (uiState.isLoggedIn) {
+          PlaylistListSection(
+            playlists = uiState.playlists,
+            isLoading = uiState.isLoadingPlaylists,
+            error = uiState.playlistsError,
+            onRetry = { viewModel.refreshPlaylists() },
+            onItemClick = { playlist ->
+              onNavigateToPlaylist(playlist.id.toString())
+            }
+          )
+        }
+      }
+
+      Spacer(modifier = Modifier.height(80.dp))
     }
   }
 }

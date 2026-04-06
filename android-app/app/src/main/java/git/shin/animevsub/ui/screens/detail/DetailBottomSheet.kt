@@ -107,21 +107,27 @@ fun DetailBottomSheet(
               value = detail.countries.firstOrNull()?.name,
               textStyle = SmallTextStyle,
               onClick = detail.countries.firstOrNull()?.let {
-                if (it.filters.isNotEmpty()) { { onNavigateToCategory(it) } } else null
+                if (it.filters.isNotEmpty()) {
+                  { onNavigateToCategory(it) }
+                } else null
               })
             InfoRow(
               label = stringResource(R.string.year_label),
               value = detail.yearOf?.name,
               textStyle = SmallTextStyle,
               onClick = detail.yearOf?.let {
-                if (it.filters.isNotEmpty()) { { onNavigateToCategory(it) } } else null
+                if (it.filters.isNotEmpty()) {
+                  { onNavigateToCategory(it) }
+                } else null
               })
             InfoRow(
               label = stringResource(R.string.studio_label),
               value = detail.studio?.name,
               textStyle = SmallTextStyle,
               onClick = detail.studio?.let {
-                if (it.filters.isNotEmpty()) { { onNavigateToCategory(it) } } else null
+                if (it.filters.isNotEmpty()) {
+                  { onNavigateToCategory(it) }
+                } else null
               })
             InfoRow(
               label = stringResource(R.string.duration_label),

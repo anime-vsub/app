@@ -18,13 +18,13 @@ import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -496,21 +496,23 @@ class DetailViewModel @Inject constructor(
 
   suspend fun addToPlaylist(playlistId: Int): Result<Unit> {
     val detail = _uiState.value.detail ?: return Result.failure(Exception("Detail not found"))
-    val chapter = _uiState.value.currentChapter ?: return Result.failure(Exception("Chapter not found"))
+    val chapter =
+      _uiState.value.currentChapter ?: return Result.failure(Exception("Chapter not found"))
     return playlistRepository.addAnimeToPlaylist(
       id = playlistId,
       seasonId = _uiState.value.currentSeasonId,
-      seasonName = detail.season.find { it.id == _uiState.value.currentSeasonId }?.name ?: detail.name,
+      seasonName = detail.season.find { it.id == _uiState.value.currentSeasonId }?.name
+        ?: detail.name,
       name = detail.name,
       poster = detail.poster ?: detail.image ?: "",
       chapId = chapter.id,
       chapName = chapter.name
-    ).map { Unit }
+    ).map { }
   }
 
   suspend fun removeFromPlaylist(playlistId: Int): Result<Unit> {
     return playlistRepository.deleteAnimeFromPlaylist(playlistId, _uiState.value.currentSeasonId)
-      .map { Unit }
+      .map { }
   }
 
   fun createPlaylistAndAddAnime(name: String) {
@@ -521,7 +523,8 @@ class DetailViewModel @Inject constructor(
         playlistRepository.addAnimeToPlaylist(
           id = playlist.id,
           seasonId = _uiState.value.currentSeasonId,
-          seasonName = detail.season.find { it.id == _uiState.value.currentSeasonId }?.name ?: detail.name,
+          seasonName = detail.season.find { it.id == _uiState.value.currentSeasonId }?.name
+            ?: detail.name,
           name = detail.name,
           poster = detail.poster ?: detail.image ?: "",
           chapId = chapter.id,

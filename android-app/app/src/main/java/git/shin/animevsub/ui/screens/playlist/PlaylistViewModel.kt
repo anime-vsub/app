@@ -181,11 +181,11 @@ class PlaylistViewModel @Inject constructor(
       poster = item.poster,
       chapId = item.chapId,
       chapName = item.chapName
-    ).map { Unit }
+    ).map { }
   }
 
   suspend fun removeAnimeFromOtherPlaylist(targetPlaylistId: Int, seasonId: String): Result<Unit> {
-    return playlistRepository.deleteAnimeFromPlaylist(targetPlaylistId, seasonId).map { Unit }
+    return playlistRepository.deleteAnimeFromPlaylist(targetPlaylistId, seasonId).map { }
   }
 
   fun toggleEditName(editing: Boolean) {

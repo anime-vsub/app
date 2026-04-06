@@ -79,8 +79,8 @@ import git.shin.animevsub.ui.components.common.ActionButton
 import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.EpisodeItem
 import git.shin.animevsub.ui.components.player.VideoPlayer
-import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.components.playlist.AddToPlaylistBottomSheet
+import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.styles.NoPaddingTextStyle
 import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.AccentMain
@@ -111,7 +111,7 @@ fun DetailScreen(
   var showDetailSheet by remember { mutableStateOf(false) }
   var showChapterSheet by remember { mutableStateOf(false) }
   var showAddToPlaylistSheet by remember { mutableStateOf(false) }
-  val scope = rememberCoroutineScope()
+  rememberCoroutineScope()
 
   val followSuccessMsg = stringResource(R.string.followed)
   val unfollowSuccessMsg = stringResource(R.string.unfollowed)
@@ -468,7 +468,9 @@ fun DetailScreen(
               ) {
                 ActionButton(
                   icon = if (uiState.isFollowed) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                  label = if (uiState.isFollowed) stringResource(R.string.followed) else stringResource(R.string.follow),
+                  label = if (uiState.isFollowed) stringResource(R.string.followed) else stringResource(
+                    R.string.follow
+                  ),
                   iconTint = if (uiState.isFollowed) StarColor else TextPrimary,
                   modifier = Modifier
                     .widthIn(min = 50.dp)
