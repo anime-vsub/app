@@ -78,7 +78,7 @@ import git.shin.animevsub.ui.theme.TextSecondary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlaylistDetailScreen(
+fun PlaylistScreen(
   onNavigateBack: () -> Unit,
   onNavigateToDetail: (String) -> Unit,
   onNavigateToPlayer: (String, String) -> Unit,
@@ -509,7 +509,7 @@ fun PlaylistHeader(
           fontSize = 14.sp,
           maxLines = 5,
           overflow = TextOverflow.Ellipsis,
-          modifier = Modifier.weight(1f) name
+          modifier = Modifier.weight(1f)
         )
         Icon(
           Icons.Default.Edit,
@@ -645,7 +645,7 @@ fun PlaylistItemRow(
             append(" - ")
           }
 
-          append(stringResource(R.string.episode_label, item.chapName))
+          append(stringResource(R.string.episode_label, item.chapName ?: "unknown"))
         },
         color = TextGrey,
         fontSize = 13.sp

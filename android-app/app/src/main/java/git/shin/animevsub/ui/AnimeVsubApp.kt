@@ -1,15 +1,7 @@
 package git.shin.animevsub.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
@@ -22,24 +14,18 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -64,7 +50,7 @@ import git.shin.animevsub.ui.screens.home.HomeScreen
 import git.shin.animevsub.ui.screens.login.LoginScreen
 import git.shin.animevsub.ui.screens.notification.NotificationScreen
 import git.shin.animevsub.ui.screens.notification.NotificationViewModel
-import git.shin.animevsub.ui.screens.playlist.PlaylistDetailScreen
+import git.shin.animevsub.ui.screens.playlist.PlaylistScreen
 import git.shin.animevsub.ui.screens.rankings.RankingsScreen
 import git.shin.animevsub.ui.screens.schedule.ScheduleScreen
 import git.shin.animevsub.ui.screens.search.SearchScreen
@@ -244,9 +230,8 @@ fun AnimeVsubAppUI(
           onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
           onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
           onNavigateToAbout = { navController.navigate(Screen.About.route) },
-          onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) },
-          onNavigateToPlaylistDetail = { playlistId ->
-            navController.navigate(Screen.PlaylistDetail.createRoute(playlistId))
+          onNavigateToPlaylist = { playlistId ->
+            navController.navigate(Screen.Playlists.createRoute(playlistId))
           },
           onNavigateToDetail = { animeId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId))
@@ -328,7 +313,7 @@ fun AnimeVsubAppUI(
         )
       }
 
-      // Placeholder screens
+      // History screen
       composable(Screen.History.route) {
         HistoryScreen(
           onNavigateBack = { navController.popBackStack() },
@@ -353,21 +338,13 @@ fun AnimeVsubAppUI(
         )
       }
 
-      composable(Screen.Playlists.route) {
-        PlaceholderScreen(
-          title = stringResource(R.string.playlists),
-          icon = Icons.AutoMirrored.Filled.PlaylistPlay,
-          onNavigateBack = { navController.popBackStack() }
-        )
-      }
-
       composable(
-        route = Screen.PlaylistDetail.route,
+        route = Screen.Playlist.route,
         arguments = listOf(
           navArgument("playlistId") { type = NavType.StringType }
         )
       ) {
-        PlaylistDetailScreen(
+        PlaylistScreen(
           onNavigateBack = { navController.popBackStack() },
           onNavigateToDetail = { animeId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId))
@@ -380,58 +357,58 @@ fun AnimeVsubAppUI(
     }
   }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PlaceholderScreen(
-  title: String,
-  icon: androidx.compose.ui.graphics.vector.ImageVector,
-  onNavigateBack: () -> Unit
-) {
-  Scaffold(
-    topBar = {
-      TopAppBar(
-        title = { Text(text = title, color = TextPrimary) },
-        navigationIcon = {
-          IconButton(onClick = onNavigateBack) {
-            Icon(
-              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = stringResource(R.string.back),
-              tint = TextPrimary
-            )
-          }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
-      )
-    },
-    containerColor = DarkBackground
-  ) { padding ->
-    Column(
-      modifier = Modifier
-        .fillMaxSize()
-        .padding(padding),
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.Center
-    ) {
-      Icon(
-        imageVector = icon,
-        contentDescription = null,
-        modifier = Modifier.size(64.dp),
-        tint = TextGrey
-      )
-      Spacer(modifier = Modifier.height(16.dp))
-      Text(
-        text = title,
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        color = TextPrimary
-      )
-      Spacer(modifier = Modifier.height(8.dp))
-      Text(
-        text = stringResource(R.string.coming_soon_desc),
-        fontSize = 14.sp,
-        color = TextGrey
-      )
-    }
-  }
-}
+//
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//private fun PlaceholderScreen(
+//  title: String,
+//  icon: androidx.compose.ui.graphics.vector.ImageVector,
+//  onNavigateBack: () -> Unit
+//) {
+//  Scaffold(
+//    topBar = {
+//      TopAppBar(
+//        title = { Text(text = title, color = TextPrimary) },
+//        navigationIcon = {
+//          IconButton(onClick = onNavigateBack) {
+//            Icon(
+//              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+//              contentDescription = stringResource(R.string.back),
+//              tint = TextPrimary
+//            )
+//          }
+//        },
+//        colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
+//      )
+//    },
+//    containerColor = DarkBackground
+//  ) { padding ->
+//    Column(
+//      modifier = Modifier
+//        .fillMaxSize()
+//        .padding(padding),
+//      horizontalAlignment = Alignment.CenterHorizontally,
+//      verticalArrangement = Arrangement.Center
+//    ) {
+//      Icon(
+//        imageVector = icon,
+//        contentDescription = null,
+//        modifier = Modifier.size(64.dp),
+//        tint = TextGrey
+//      )
+//      Spacer(modifier = Modifier.height(16.dp))
+//      Text(
+//        text = title,
+//        fontSize = 20.sp,
+//        fontWeight = FontWeight.Bold,
+//        color = TextPrimary
+//      )
+//      Spacer(modifier = Modifier.height(8.dp))
+//      Text(
+//        text = stringResource(R.string.coming_soon_desc),
+//        fontSize = 14.sp,
+//        color = TextGrey
+//      )
+//    }
+//  }
+//}

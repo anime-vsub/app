@@ -63,8 +63,7 @@ fun AccountScreen(
   onNavigateToFollow: () -> Unit,
   onNavigateToSettings: () -> Unit,
   onNavigateToAbout: () -> Unit,
-  onNavigateToPlaylists: () -> Unit,
-  onNavigateToPlaylistDetail: (String) -> Unit,
+  onNavigateToPlaylist: (String) -> Unit,
   onNavigateToDetail: (String) -> Unit,
   onNavigateToPlayer: (String, String) -> Unit,
   viewModel: AccountViewModel = hiltViewModel()
@@ -243,7 +242,7 @@ fun AccountScreen(
           error = uiState.playlistsError,
           onRetry = { viewModel.refreshPlaylists() },
           onItemClick = { playlist ->
-            onNavigateToPlaylistDetail(playlist.id.toString())
+            onNavigateToPlaylist(playlist.id.toString())
           }
         )
       }
