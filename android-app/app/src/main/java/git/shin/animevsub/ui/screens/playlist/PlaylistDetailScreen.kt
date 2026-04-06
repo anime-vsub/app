@@ -21,15 +21,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,8 +69,6 @@ import git.shin.animevsub.R
 import git.shin.animevsub.data.model.PlaylistItem
 import git.shin.animevsub.ui.components.playlist.AddToPlaylistBottomSheet
 import git.shin.animevsub.ui.components.status.ErrorScreen
-import git.shin.animevsub.ui.components.status.LoadingScreen
-import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.DarkSurface
@@ -334,7 +331,12 @@ fun PlaylistDetailScreen(
         ) {
           ListItem(
             headlineContent = { Text(stringResource(R.string.add_to_other_playlist)) },
-            leadingContent = { Icon(Icons.AutoMirrored.Filled.PlaylistAdd, contentDescription = null) },
+            leadingContent = {
+              Icon(
+                Icons.AutoMirrored.Filled.PlaylistAdd,
+                contentDescription = null
+              )
+            },
             modifier = Modifier.clickable {
               showAddToPlaylistSheet = true
             }
@@ -507,7 +509,7 @@ fun PlaylistHeader(
           fontSize = 14.sp,
           maxLines = 5,
           overflow = TextOverflow.Ellipsis,
-          modifier = Modifier.weight(1f)
+          modifier = Modifier.weight(1f) name
         )
         Icon(
           Icons.Default.Edit,
@@ -637,8 +639,14 @@ fun PlaylistItemRow(
       )
       Spacer(modifier = Modifier.height(4.dp))
       Text(
-        text = if (item.seasonName.isNotBlank()) "${item.seasonName} - ${item.chapName ?: ""}"
-        else item.chapName ?: "",
+        text = buildString {
+          if (item.seasonName.isNotBlank()) {
+            append(item.seasonName)
+            append(" - ")
+          }
+
+          append(stringResource(R.string.episode_label, item.chapName))
+        },
         color = TextGrey,
         fontSize = 13.sp
       )
