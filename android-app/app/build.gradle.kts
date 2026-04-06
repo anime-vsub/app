@@ -28,6 +28,7 @@ android {
 
         buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("SUPABASE_URL") ?: ""}\"")
         buildConfigField("String", "SUPABASE_KEY", "\"${localProperties.getProperty("SUPABASE_KEY") ?: ""}\"")
+        buildConfigField("String", "ANIMEVIETSUB_HOSTNAME", "\"${localProperties.getProperty("ANIMEVIETSUB_HOSTNAME") ?: ""}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

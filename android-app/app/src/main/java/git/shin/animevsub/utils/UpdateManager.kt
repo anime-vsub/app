@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import androidx.core.content.FileProvider
+import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.model.GitHubRelease
 import git.shin.animevsub.data.model.UpdateInfo
@@ -23,7 +24,7 @@ import javax.inject.Singleton
 
 @Singleton
 class UpdateManager @Inject constructor(
-  private val context: Context,
+  @ApplicationContext private val context: Context,
   private val client: OkHttpClient,
   private val json: Json
 ) {
@@ -47,7 +48,6 @@ class UpdateManager @Inject constructor(
       val currentVersion = BuildConfig.VERSION_NAME
 
       val isNewer = isVersionNewer(latestVersion, currentVersion)
-      // Ưu tiên tìm app-release-signed.apk, nếu không lấy file apk bất kỳ
       val apkAsset = release.assets.find { it.name == "app-release-signed.apk" }
         ?: release.assets.find { it.name.endsWith(".apk") }
 
@@ -80,8 +80,8 @@ class UpdateManager @Inject constructor(
     if (destination.exists()) destination.delete()
 
     val request = DownloadManager.Request(Uri.parse(url))
-      .setTitle("Đang tải cập nhật AnimeVsub")
-      .setDescription("Phiên bản mới đang được tải xuống...")
+      .setTitle(context.getString(git.shin.animevsub.R.string.update_downloading_title))
+      .setDescription(context.getString(git.shin.animevsub.R.string.update_downloading_description))
       .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
       .setDestinationUri(Uri.fromFile(destination))
       .setAllowedOverMetered(true)

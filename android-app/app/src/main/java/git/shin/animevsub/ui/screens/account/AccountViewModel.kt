@@ -33,6 +33,7 @@ data class AccountUiState(
   val isLoadingHistory: Boolean = false,
   val isLoadingFollows: Boolean = false,
   val isLoadingPlaylists: Boolean = false,
+  val isCheckingUpdate: Boolean = false,
   val historyError: String? = null,
   val followsError: String? = null,
   val playlistsError: String? = null,
@@ -41,7 +42,8 @@ data class AccountUiState(
 @HiltViewModel
 class AccountViewModel @Inject constructor(
   private val repository: AnimeRepository,
-  private val playlistRepository: PlaylistRepository
+  private val playlistRepository: PlaylistRepository,
+  private val updateManager: git.shin.animevsub.utils.UpdateManager
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(AccountUiState())
@@ -188,5 +190,28 @@ class AccountViewModel @Inject constructor(
     val currentStates = _uiState.value.playlistCheckedStates.toMutableMap()
     currentStates[playlistId] = checked
     _uiState.value = _uiState.value.copy(playlistCheckedStates = currentStates)
+  }
+
+  fun checkForUpdate(onUpdateAvailable: (git.shin.animevsub.data.model.UpdateInfo) -> Unit, onNoUpdate: () -> Unit, onError: (String) -> Unit) {
+    viewModelScope.launch {
+      _uiState.value = _uiState.value.copy(isCheckingUpdate = true)
+      updateManager.checkForUpdate()
+        .onSuccess { updateInfo ->
+          _uiState.value = _uiState.value.copy(isCheckingUpdate = false)
+          if (updateInfo.isNewer) {
+            onUpdateAvailable(updateInfo)
+          } else {
+            onNoUpdate()
+          }
+        }
+        .onFailure { e ->
+          _uiState.value = _uiState.value.copy(isCheckingUpdate = false)
+          onError(e.message ?: "Unknown error")
+        }
+    }
+  }
+
+  fun downloadUpdate(info: git.shin.animevsub.data.model.UpdateInfo) {
+    updateManager.downloadAndInstall(info.downloadUrl, "AnimeVsub_v${info.version}.apk")
   }
 }

@@ -58,4 +58,6 @@
     <string name="player_settings">プレーヤー設定</string>
     <string name="auto_next">次のエピソードを自動再生</string>
     <string name="language_settings">言語</string>
+    <string name="update_downloading_title">AnimeVsubの更新をダウンロード中</string>
+    <string name="update_downloading_description">新しいバージョンをダウンロードしています…</string>
 </resources>

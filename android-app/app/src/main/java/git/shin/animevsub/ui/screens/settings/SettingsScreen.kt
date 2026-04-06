@@ -2,6 +2,7 @@ package git.shin.animevsub.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,7 @@ fun SettingsScreen(
   val uiState by viewModel.uiState.collectAsState()
 
   Scaffold(
+    contentWindowInsets = WindowInsets(0, 0, 0, 0),
     topBar = {
       TopAppBar(
         title = { Text(text = stringResource(R.string.settings), color = TextPrimary) },

@@ -185,4 +185,13 @@
     <string name="newest_added">Mới thêm</string>
     <string name="oldest_added">Cũ nhất</string>
     <string name="episode_label">Tập %1$s</string>
+    <string name="check_update">Kiểm tra cập nhật</string>
+    <string name="update_available">Có phiên bản mới</string>
+    <string name="update_message">Phiên bản mới (%1$s) đã sẵn sàng. Bạn có muốn cập nhật ngay không?</string>
+    <string name="update_now">Cập nhật ngay</string>
+    <string name="no_update">Bạn đang sử dụng phiên bản mới nhất</string>
+    <string name="checking_update">Đang kiểm tra cập nhật…</string>
+    <string name="update_failed">Lỗi khi kiểm tra cập nhật</string>
+    <string name="update_downloading_title">Đang tải cập nhật AnimeVsub</string>
+    <string name="update_downloading_description">Phiên bản mới đang được tải xuống…</string>
 </resources>

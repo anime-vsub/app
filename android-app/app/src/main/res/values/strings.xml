@@ -111,6 +111,7 @@
     <string name="password">Password</string>
     <string name="history">History</string>
     <string name="follow">Follow</string>
+    <string name="followed">Followed</string>
     <string name="unfollowed">Unfollowed</string>
     <string name="follow_error">An error occurred, please try again</string>
     <string name="share_message">Watch %1$s at AnimeVsub: %2$s</string>
@@ -220,4 +221,6 @@
     <string name="no_update">Already on the latest version</string>
     <string name="checking_update">Checking for updates…</string>
     <string name="update_failed">Failed to check for updates</string>
+    <string name="update_downloading_title">Downloading AnimeVsub update</string>
+    <string name="update_downloading_description">New version is being downloaded…</string>
 </resources>

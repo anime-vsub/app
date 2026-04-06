@@ -1,5 +1,6 @@
 package git.shin.animevsub.ui.screens.account
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -20,8 +21,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Update
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,10 +36,14 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,6 +55,7 @@ import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.account.FollowHorizontalList
 import git.shin.animevsub.ui.components.account.HistoryHorizontalList
 import git.shin.animevsub.ui.components.account.PlaylistListSection
+import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
@@ -69,6 +78,9 @@ fun AccountScreen(
   viewModel: AccountViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
+  val context = LocalContext.current
+
+  var showUpdateDialog by remember { mutableStateOf<git.shin.animevsub.data.model.UpdateInfo?>(null) }
 
   Scaffold(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -83,6 +95,34 @@ fun AccountScreen(
           )
         },
         actions = {
+          IconButton(
+            onClick = {
+              viewModel.checkForUpdate(
+                onUpdateAvailable = { showUpdateDialog = it },
+                onNoUpdate = {
+                  Toast.makeText(context, R.string.no_update, Toast.LENGTH_SHORT).show()
+                },
+                onError = {
+                  Toast.makeText(context, R.string.update_failed, Toast.LENGTH_SHORT).show()
+                }
+              )
+            },
+            enabled = !uiState.isCheckingUpdate
+          ) {
+            if (uiState.isCheckingUpdate) {
+              CircularProgressIndicator(
+                modifier = Modifier.size(20.dp),
+                color = AccentMain,
+                strokeWidth = 2.dp
+              )
+            } else {
+              Icon(
+                imageVector = Icons.Default.Update,
+                contentDescription = stringResource(R.string.check_update),
+                tint = TextPrimary
+              )
+            }
+          }
           IconButton(onClick = onNavigateToSettings) {
             Icon(
               imageVector = Icons.Default.Settings,
@@ -194,7 +234,7 @@ fun AccountScreen(
               )
               Spacer(modifier = Modifier.height(4.dp))
               Text(
-                text = stringResource(R.string.login_required),
+                text = stringResource(R.string.login_required, ""),
                 color = TextSecondary,
                 fontSize = 13.sp
               )
@@ -229,13 +269,11 @@ fun AccountScreen(
           onRetry = { viewModel.refreshFollows() },
           onItemClick = { anime -> onNavigateToDetail(anime.animeId) }
         )
-      }
 
-      Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-      // Menu items
-      Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        if (uiState.isLoggedIn) {
+        // Menu items
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
           PlaylistListSection(
             playlists = uiState.playlists,
             isLoading = uiState.isLoadingPlaylists,
@@ -250,5 +288,16 @@ fun AccountScreen(
 
       Spacer(modifier = Modifier.height(80.dp))
     }
+  }
+
+  showUpdateDialog?.let { info ->
+    UpdateDialog(
+      info = info,
+      onDismiss = { showUpdateDialog = null },
+      onConfirm = {
+        viewModel.downloadUpdate(info)
+        showUpdateDialog = null
+      }
+    )
   }
 }

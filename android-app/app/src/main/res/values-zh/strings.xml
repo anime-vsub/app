@@ -57,4 +57,6 @@
     <string name="player_settings">播放器设置</string>
     <string name="auto_next">自动播放下一集</string>
     <string name="language_settings">语言</string>
+    <string name="update_downloading_title">正在下载 AnimeVsub 更新</string>
+    <string name="update_downloading_description">新版本正在下载中…</string>
 </resources>
