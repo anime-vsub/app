@@ -53,6 +53,7 @@ class PreferencesManager(private val context: Context) {
   suspend fun setBrightnessGesture(value: Boolean) {
     context.dataStore.edit { it[BRIGHTNESS_GESTURE_KEY] = value }
   }
+
   suspend fun addSearchHistory(query: String) {
     context.dataStore.edit { preferences ->
       val currentHistory = searchHistory.first().toMutableList()

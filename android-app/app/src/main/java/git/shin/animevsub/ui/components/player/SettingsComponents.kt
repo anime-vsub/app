@@ -90,9 +90,11 @@ fun SettingsBottomSheetContent(
     onDismiss()
   }
 
-  Column(modifier = Modifier
-    .fillMaxWidth()
-    .padding(bottom = 32.dp)) {
+  Column(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(bottom = 32.dp)
+  ) {
     AnimatedContent(
       targetState = settingsSubMenu,
       transitionSpec = {

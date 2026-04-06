@@ -1,6 +1,5 @@
 package git.shin.animevsub.ui.components.anime
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.utils.shimmerEffect
 
 @Composable

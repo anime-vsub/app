@@ -5,17 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.AnimeDetail
+import git.shin.animevsub.data.model.CategoryLink
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.DoubleRange
-import git.shin.animevsub.data.model.CategoryLink
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.Season
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
+import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -77,6 +78,7 @@ data class DetailUiState(
 @HiltViewModel
 class DetailViewModel @Inject constructor(
   private val repository: AnimeRepository,
+  private val playlistRepository: PlaylistRepository,
   savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -468,6 +470,42 @@ class DetailViewModel @Inject constructor(
         loadServers(state.currentChapter)
       }
       loadSkipRange(state.currentChapter)
+    }
+  }
+
+  fun addToPlaylist(playlistId: Int) {
+    val detail = _uiState.value.detail ?: return
+    val chapter = _uiState.value.currentChapter ?: return
+    viewModelScope.launch {
+      playlistRepository.addAnimeToPlaylist(
+        id = playlistId,
+        seasonId = _uiState.value.currentSeasonId,
+        seasonName = detail.season.find { it.id == _uiState.value.currentSeasonId }?.name ?: detail.name,
+        name = detail.name,
+        poster = detail.poster ?: detail.image ?: "",
+        chapId = chapter.id,
+        chapName = chapter.name
+      ).onSuccess {
+        // Maybe update local state if needed, but the repository handles the call
+      }
+    }
+  }
+
+  fun createPlaylistAndAddAnime(name: String) {
+    val detail = _uiState.value.detail ?: return
+    val chapter = _uiState.value.currentChapter ?: return
+    viewModelScope.launch {
+      playlistRepository.createPlaylist(name, false).onSuccess { playlist ->
+        playlistRepository.addAnimeToPlaylist(
+          id = playlist.id,
+          seasonId = _uiState.value.currentSeasonId,
+          seasonName = detail.season.find { it.id == _uiState.value.currentSeasonId }?.name ?: detail.name,
+          name = detail.name,
+          poster = detail.poster ?: detail.image ?: "",
+          chapId = chapter.id,
+          chapName = chapter.name
+        )
+      }
     }
   }
 

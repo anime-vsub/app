@@ -11,13 +11,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
@@ -45,13 +42,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import git.shin.animevsub.ui.screens.history.HistoryScreen
-import git.shin.animevsub.ui.screens.login.LoginScreen
-import git.shin.animevsub.ui.screens.about.AboutScreen
-import git.shin.animevsub.ui.screens.follow.FollowScreen
-import git.shin.animevsub.ui.screens.account.AccountScreen
-import git.shin.animevsub.ui.screens.account.AccountViewModel
-import git.shin.animevsub.ui.screens.follow.FollowViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -69,20 +59,21 @@ import git.shin.animevsub.ui.screens.account.AccountScreen
 import git.shin.animevsub.ui.screens.category.CategoryScreen
 import git.shin.animevsub.ui.screens.detail.DetailScreen
 import git.shin.animevsub.ui.screens.follow.FollowScreen
+import git.shin.animevsub.ui.screens.history.HistoryScreen
 import git.shin.animevsub.ui.screens.home.HomeScreen
 import git.shin.animevsub.ui.screens.login.LoginScreen
 import git.shin.animevsub.ui.screens.notification.NotificationScreen
 import git.shin.animevsub.ui.screens.notification.NotificationViewModel
+import git.shin.animevsub.ui.screens.playlist.PlaylistDetailScreen
 import git.shin.animevsub.ui.screens.rankings.RankingsScreen
 import git.shin.animevsub.ui.screens.schedule.ScheduleScreen
-import git.shin.animevsub.ui.screens.settings.SettingsScreen
 import git.shin.animevsub.ui.screens.search.SearchScreen
+import git.shin.animevsub.ui.screens.settings.SettingsScreen
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
-import git.shin.animevsub.data.model.SelectedFilter
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -124,7 +115,8 @@ fun AnimeVsubAppUI(
       route == Screen.Settings.route ||
       route == Screen.About.route ||
       route == Screen.History.route ||
-      route == Screen.Follow.route
+      route == Screen.Follow.route ||
+      route.startsWith("playlist")
   } ?: false
 
   Scaffold(
@@ -225,7 +217,9 @@ fun AnimeVsubAppUI(
       composable(Screen.Schedule.route) {
         val isFromBottomNav = bottomNavItems.any { it.screen == Screen.Schedule }
         ScheduleScreen(
-          onNavigateBack = if (isFromBottomNav) null else { { navController.popBackStack() } },
+          onNavigateBack = if (isFromBottomNav) null else {
+            { navController.popBackStack() }
+          },
           onNavigateToDetail = { animeId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId))
           }
@@ -251,6 +245,9 @@ fun AnimeVsubAppUI(
           onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
           onNavigateToAbout = { navController.navigate(Screen.About.route) },
           onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) },
+          onNavigateToPlaylistDetail = { playlistId ->
+            navController.navigate(Screen.PlaylistDetail.createRoute(playlistId))
+          },
           onNavigateToDetail = { animeId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId))
           },
@@ -361,6 +358,23 @@ fun AnimeVsubAppUI(
           title = stringResource(R.string.playlists),
           icon = Icons.AutoMirrored.Filled.PlaylistPlay,
           onNavigateBack = { navController.popBackStack() }
+        )
+      }
+
+      composable(
+        route = Screen.PlaylistDetail.route,
+        arguments = listOf(
+          navArgument("playlistId") { type = NavType.StringType }
+        )
+      ) {
+        PlaylistDetailScreen(
+          onNavigateBack = { navController.popBackStack() },
+          onNavigateToDetail = { animeId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          },
+          onNavigateToPlayer = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+          }
         )
       }
     }

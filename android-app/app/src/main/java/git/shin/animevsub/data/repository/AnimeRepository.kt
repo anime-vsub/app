@@ -182,9 +182,10 @@ class AnimeRepository @Inject constructor(
     data
   }
 
-  suspend fun onTrigger(trigger: git.shin.animevsub.data.model.Trigger): Result<Unit> = runCatching {
-    api.onTrigger(trigger)
-  }
+  suspend fun onTrigger(trigger: git.shin.animevsub.data.model.Trigger): Result<Unit> =
+    runCatching {
+      api.onTrigger(trigger)
+    }
 
   // Follows
   suspend fun getFollows(page: Int = 1): Result<CategoryPage> = runCatching {
@@ -210,5 +211,6 @@ class AnimeRepository @Inject constructor(
     name, poster, seasonId, seasonName, chapId, chapName, cur, dur
   )
 
-  suspend fun getLastChapOfSeason(seasonId: String) = historyRepository.getLastChapOfSeason(seasonId)
+  suspend fun getLastChapOfSeason(seasonId: String) =
+    historyRepository.getLastChapOfSeason(seasonId)
 }

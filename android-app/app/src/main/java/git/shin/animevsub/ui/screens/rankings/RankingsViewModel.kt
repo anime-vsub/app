@@ -56,7 +56,12 @@ class RankingsViewModel @Inject constructor(
             _uiState.update { it.copy(selectedType = firstType) }
             loadRankings(firstType)
           } else if (types.isEmpty()) {
-            _uiState.update { it.copy(isLoading = false, errorRes = R.string.error_no_ranking_types) }
+            _uiState.update {
+              it.copy(
+                isLoading = false,
+                errorRes = R.string.error_no_ranking_types
+              )
+            }
           }
         }
         .onFailure { e ->
@@ -68,7 +73,14 @@ class RankingsViewModel @Inject constructor(
   }
 
   fun loadRankings(type: String) {
-    _uiState.update { it.copy(selectedType = type, isLoading = true, error = null, errorRes = null) }
+    _uiState.update {
+      it.copy(
+        selectedType = type,
+        isLoading = true,
+        error = null,
+        errorRes = null
+      )
+    }
     viewModelScope.launch {
       repository.getRankings(type)
         .onSuccess { items ->

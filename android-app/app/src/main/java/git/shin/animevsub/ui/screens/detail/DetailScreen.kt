@@ -38,11 +38,9 @@ import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -57,6 +55,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,6 +70,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
+import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.Badge
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.components.common.ActionButton
@@ -78,6 +78,7 @@ import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.EpisodeItem
 import git.shin.animevsub.ui.components.player.VideoPlayer
 import git.shin.animevsub.ui.components.status.ErrorScreen
+import git.shin.animevsub.ui.components.playlist.AddToPlaylistBottomSheet
 import git.shin.animevsub.ui.styles.NoPaddingTextStyle
 import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.AccentMain
@@ -87,7 +88,6 @@ import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
-import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
@@ -108,6 +108,8 @@ fun DetailScreen(
   val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   var showDetailSheet by remember { mutableStateOf(false) }
   var showChapterSheet by remember { mutableStateOf(false) }
+  var showAddToPlaylistSheet by remember { mutableStateOf(false) }
+  val scope = rememberCoroutineScope()
 
   // List states for scrollingon
   val seasonListState = rememberLazyListState()
@@ -468,7 +470,7 @@ fun DetailScreen(
                   modifier = Modifier
                     .widthIn(min = 40.dp)
                     .wrapContentWidth(),
-                  onClick = { /* TODO: Implement Save */ }
+                  onClick = { showAddToPlaylistSheet = true }
                 )
               }
             }
@@ -701,6 +703,17 @@ fun DetailScreen(
         onDismissRequest = { showChapterSheet = false },
         onSeasonClick = { viewModel.setActiveDisplaySeason(it) },
         onChapterClick = { chap, seasonId -> viewModel.playChapter(chap, seasonId) }
+      )
+    }
+
+    // Add to Playlist Bottom Sheet
+    if (showAddToPlaylistSheet) {
+      AddToPlaylistBottomSheet(
+        onDismissRequest = { showAddToPlaylistSheet = false },
+        onPlaylistSelected = { playlistId ->
+          viewModel.addToPlaylist(playlistId)
+          // You might want to show a snackbar here
+        }
       )
     }
   }

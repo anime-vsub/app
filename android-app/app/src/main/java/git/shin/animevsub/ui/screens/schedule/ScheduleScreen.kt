@@ -115,7 +115,8 @@ fun ScheduleScreen(
 
         else -> {
           if (uiState.days.isNotEmpty()) {
-            val pagerState = rememberPagerState(initialPage = uiState.selectedDay) { uiState.days.size }
+            val pagerState =
+              rememberPagerState(initialPage = uiState.selectedDay) { uiState.days.size }
             val scope = rememberCoroutineScope()
 
             // Sync pager with ViewModel

@@ -53,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeCard
+import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.anime.SkeletonCard
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.components.common.SectionHeader
@@ -62,7 +63,6 @@ import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
-import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.theme.TextPrimary
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue

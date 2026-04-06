@@ -3,16 +3,15 @@ package git.shin.animevsub.ui.screens.account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.HistoryItem
 import git.shin.animevsub.data.model.Playlist
+import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -105,7 +104,8 @@ class AccountViewModel @Inject constructor(
       _uiState.value = _uiState.value.copy(isLoadingFollows = true, followsError = null)
       repository.getFollows(1)
         .onSuccess { page ->
-          _uiState.value = _uiState.value.copy(follows = page.items.take(10), isLoadingFollows = false)
+          _uiState.value =
+            _uiState.value.copy(follows = page.items.take(10), isLoadingFollows = false)
         }
         .onFailure { e ->
           _uiState.value = _uiState.value.copy(isLoadingFollows = false, followsError = e.message)
@@ -121,7 +121,8 @@ class AccountViewModel @Inject constructor(
           _uiState.value = _uiState.value.copy(playlists = list, isLoadingPlaylists = false)
         }
         .onFailure { e ->
-          _uiState.value = _uiState.value.copy(isLoadingPlaylists = false, playlistsError = e.message)
+          _uiState.value =
+            _uiState.value.copy(isLoadingPlaylists = false, playlistsError = e.message)
         }
     }
   }
@@ -153,5 +154,19 @@ class AccountViewModel @Inject constructor(
 
   fun setBrightnessGesture(value: Boolean) {
     viewModelScope.launch { repository.setBrightnessGesture(value) }
+  }
+
+  fun createPlaylist(name: String, isPublic: Boolean = false) {
+    viewModelScope.launch {
+      _uiState.value = _uiState.value.copy(isLoadingPlaylists = true, playlistsError = null)
+      playlistRepository.createPlaylist(name, isPublic)
+        .onSuccess {
+          refreshPlaylists()
+        }
+        .onFailure { e ->
+          _uiState.value =
+            _uiState.value.copy(isLoadingPlaylists = false, playlistsError = e.message)
+        }
+    }
   }
 }

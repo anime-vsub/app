@@ -143,10 +143,12 @@ fun HorizontalAnimeList(
           Spacer(modifier = Modifier.height(4.dp))
 
           Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier
-              .size(8.dp)
-              .clip(CircleShape)
-              .background(Color.Gray))
+            Box(
+              modifier = Modifier
+                .size(8.dp)
+                .clip(CircleShape)
+                .background(Color.Gray)
+            )
           }
 
           Spacer(modifier = Modifier.height(4.dp))

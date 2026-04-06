@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -48,9 +47,6 @@ import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.account.FollowHorizontalList
 import git.shin.animevsub.ui.components.account.HistoryHorizontalList
 import git.shin.animevsub.ui.components.account.PlaylistListSection
-import git.shin.animevsub.ui.components.account.MenuItem
-import git.shin.animevsub.ui.components.account.MenuSection
-import git.shin.animevsub.ui.components.account.SettingsToggle
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
@@ -68,6 +64,7 @@ fun AccountScreen(
   onNavigateToSettings: () -> Unit,
   onNavigateToAbout: () -> Unit,
   onNavigateToPlaylists: () -> Unit,
+  onNavigateToPlaylistDetail: (String) -> Unit,
   onNavigateToDetail: (String) -> Unit,
   onNavigateToPlayer: (String, String) -> Unit,
   viewModel: AccountViewModel = hiltViewModel()
@@ -246,7 +243,7 @@ fun AccountScreen(
           error = uiState.playlistsError,
           onRetry = { viewModel.refreshPlaylists() },
           onItemClick = { playlist ->
-            onNavigateToPlaylists()
+            onNavigateToPlaylistDetail(playlist.id.toString())
           }
         )
       }

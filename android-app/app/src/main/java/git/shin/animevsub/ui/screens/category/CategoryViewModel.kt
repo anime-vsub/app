@@ -13,9 +13,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
 data class CategoryUiState(
   val isLoading: Boolean = true,

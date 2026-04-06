@@ -76,9 +76,7 @@ fun formatDayName(timestampMillis: Long): String {
 fun formatShortDayAndDate(timestampMillis: Long): Pair<String, String> {
   val date = Date(timestampMillis)
   val calendar = Calendar.getInstance().apply { time = date }
-  val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-
-  val shortDay = when (dayOfWeek) {
+  val shortDay = when (val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)) {
     Calendar.SUNDAY -> "CN"
     else -> "T$dayOfWeek"
   }

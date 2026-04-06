@@ -61,6 +61,7 @@
     <string name="save_label">Save</string>
     <string name="episodes_title">Episodes</string>
     <string name="total_episodes">%1$s episodes</string>
+    <string name="video_count">%1$s videos</string>
     <string name="full_series">Full series</string>
     <string name="recommended_for_you">Recommended for you</string>
     <string name="trailer_title">Trailer</string>
@@ -186,6 +187,18 @@
     <string name="playlist_name">Playlist Name</string>
     <string name="public_playlist">Public</string>
     <string name="empty_playlist">This playlist is empty</string>
+    <string name="delete_playlist">Delete Playlist</string>
+    <string name="rename_playlist">Rename Playlist</string>
+    <string name="edit_description">Edit Description</string>
+    <string name="update_success">Updated successfully</string>
+    <string name="delete_success">Deleted successfully</string>
+    <string name="remove_from_playlist">Remove from playlist</string>
+    <string name="add_to_other_playlist">Add to other playlist</string>
+    <string name="sort_by">Sort by</string>
+    <string name="newest_added">Newest added</string>
+    <string name="oldest_added">Oldest added</string>
+    <string name="playlist_not_found">Playlist not found</string>
+    <string name="confirm_delete_playlist">Are you sure you want to delete this playlist?</string>
 
     <!-- Category/Filter -->
     <string name="filter">Filter</string>

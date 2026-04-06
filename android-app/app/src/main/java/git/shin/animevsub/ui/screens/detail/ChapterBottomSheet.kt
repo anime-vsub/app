@@ -40,9 +40,11 @@ fun ChapterBottomSheet(
       .height(sheetHeight)
       .fillMaxWidth()
   ) {
-    Column(modifier = Modifier
-      .fillMaxWidth()
-      .fillMaxHeight()) {
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()
+    ) {
       EpisodeSelectorContent(
         displaySeasons = uiState.displaySeasons,
         activeDisplaySeasonId = uiState.activeDisplaySeasonId,

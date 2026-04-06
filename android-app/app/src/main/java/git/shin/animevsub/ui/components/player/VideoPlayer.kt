@@ -488,9 +488,11 @@ fun VideoPlayer(
         enter = fadeIn(),
         exit = fadeOut()
       ) {
-        Box(modifier = Modifier
-          .fillMaxSize()
-          .background(Color.Black.copy(alpha = 0.5f)))
+        Box(
+          modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.5f))
+        )
       }
 
       AnimatedVisibility(
@@ -507,9 +509,11 @@ fun VideoPlayer(
           IconButton(onClick = { if (isFullScreen) isFullScreen = false else onBack() }) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = Color.White)
           }
-          Column(modifier = Modifier
-            .weight(1f)
-            .padding(horizontal = 4.dp)) {
+          Column(
+            modifier = Modifier
+              .weight(1f)
+              .padding(horizontal = 4.dp)
+          ) {
             Text(
               text = title,
               color = Color.White,
@@ -661,9 +665,9 @@ fun VideoPlayer(
           text = skipNotificationText,
           secondsRemaining = skipRemainingSeconds,
           onSkip = {
-          exoPlayer.seekTo(skipTargetTime.toLong())
-          showSkipNotification = false
-        },
+            exoPlayer.seekTo(skipTargetTime.toLong())
+            showSkipNotification = false
+          },
           onClose = { showSkipNotification = false },
           modifier = Modifier
             .align(Alignment.BottomEnd)
@@ -779,9 +783,11 @@ fun VideoPlayer(
                   .height(24.dp),
                 contentAlignment = Alignment.Center
               ) {
-                Canvas(modifier = Modifier
-                  .fillMaxWidth()
-                  .height(3.dp)) {
+                Canvas(
+                  modifier = Modifier
+                    .fillMaxWidth()
+                    .height(3.dp)
+                ) {
                   val trackWidth = size.width
                   val trackH = size.height
                   val radius = trackH / 2
@@ -849,14 +855,14 @@ fun VideoPlayer(
                 PlayerControlSmallButton(
                   icon = Icons.AutoMirrored.Filled.PlaylistPlay,
                   onClick = {
-                    showEpisodeSideMenu = true; isControlsVisible = false;
+                    showEpisodeSideMenu = true; isControlsVisible = false
                   })
               }
               Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PlayerControlSmallButton(
                   icon = Icons.Default.Dns,
                   onClick = {
-                    showServerSideMenu = true; isControlsVisible = false;
+                    showServerSideMenu = true; isControlsVisible = false
                   })
                 Box {
                   PlayerControlSmallButton(

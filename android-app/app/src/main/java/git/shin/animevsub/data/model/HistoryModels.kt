@@ -18,13 +18,13 @@ data class HistoryItem(
 
 @Serializable
 data class WatchProgress(
-    val cur: Double,
-    val dur: Double,
-    val name: String? = null,
-    @SerialName("chap_id") val chapId: String? = null
+  val cur: Double,
+  val dur: Double,
+  val name: String? = null,
+  @SerialName("chap_id") val chapId: String? = null
 )
 
 @Serializable
 data class LastChapResponse(
-    @SerialName("chap_id") val chapId: String? = null
+  @SerialName("chap_id") val chapId: String? = null
 )
