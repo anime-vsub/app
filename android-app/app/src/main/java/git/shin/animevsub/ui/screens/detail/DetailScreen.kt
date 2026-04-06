@@ -310,10 +310,10 @@ fun DetailScreen(
 
                   Text(
                     text = detail.authors.first().name,
-                    color = MainColor,
+                    color = if (detail.authors.first().filters.isNotEmpty()) MainColor else TextPrimary,
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(enabled = detail.authors.first().filters.isNotEmpty()) {
                       onNavigateToCategory(detail.authors.first().filters)
                     })
 
@@ -330,10 +330,10 @@ fun DetailScreen(
                     R.string.studio_prefix,
                     detail.studio?.name ?: stringResource(R.string.unknown)
                   ),
-                  color = if (detail.studio != null) MainColor else TextGrey,
+                  color = if (detail.studio != null && detail.studio.filters.isNotEmpty()) MainColor else TextGrey,
                   fontSize = 12.sp,
                   style = NoPaddingTextStyle,
-                  modifier = Modifier.clickable(enabled = detail.studio != null) {
+                  modifier = Modifier.clickable(enabled = detail.studio != null && detail.studio.filters.isNotEmpty()) {
                     detail.studio?.let {
                       onNavigateToCategory(it.filters)
                     }
@@ -355,7 +355,7 @@ fun DetailScreen(
                   Badge(
                     text = detail.yearOf.name,
                     textStyle = NoPaddingTextStyle,
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(enabled = detail.yearOf.filters.isNotEmpty()) {
                       onNavigateToCategory(detail.yearOf.filters)
                     }
                   )
@@ -369,10 +369,10 @@ fun DetailScreen(
                 if (detail.countries.isNotEmpty()) {
                   Text(
                     text = detail.countries.first().name,
-                    color = MainColor,
+                    color = if (detail.countries.first().filters.isNotEmpty()) MainColor else TextPrimary,
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(enabled = detail.countries.first().filters.isNotEmpty()) {
                       onNavigateToCategory(detail.countries.first().filters)
                     })
                 }
@@ -410,10 +410,10 @@ fun DetailScreen(
 
                   Text(
                     text = it.name,
-                    color = MainColor,
+                    color = if (it.filters.isNotEmpty()) MainColor else TextPrimary,
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle,
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(enabled = it.filters.isNotEmpty()) {
                       onNavigateToCategory(it.filters)
                     })
                 }
@@ -428,12 +428,12 @@ fun DetailScreen(
                 detail.genre.forEach { genre ->
                   Text(
                     text = "#${genre.name}",
-                    color = MainColor,
+                    color = if (genre.filters.isNotEmpty()) MainColor else TextSecondary,
                     fontSize = 12.sp,
                     style = SmallTextStyle,
                     modifier = Modifier
                       .padding(vertical = 1.dp)
-                      .clickable {
+                      .clickable(enabled = genre.filters.isNotEmpty()) {
                         onNavigateToCategory(genre.filters)
                       })
                 }

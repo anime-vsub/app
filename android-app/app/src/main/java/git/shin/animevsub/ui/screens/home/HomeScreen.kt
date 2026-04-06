@@ -102,7 +102,8 @@ fun HomeScreen(
             items = data.carousel,
             onItemClick = { anime ->
               onNavigateToDetail(anime.animeId)
-            }
+            },
+            onNavigateToCategory = onNavigateToCategory
           )
         }
 
@@ -221,7 +222,8 @@ fun HomeScreen(
 @Composable
 private fun CarouselSection(
   items: List<AnimeCard>,
-  onItemClick: (AnimeCard) -> Unit
+  onItemClick: (AnimeCard) -> Unit,
+  onNavigateToCategory: (List<SelectedFilter>) -> Unit
 ) {
   val pagerState = rememberPagerState(pageCount = { items.size })
 
@@ -340,13 +342,21 @@ private fun CarouselSection(
 
           if (item.genre.isNotEmpty()) {
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-              text = item.genre.joinToString(", ") { it.name },
-              color = MainColor,
-              fontSize = 12.sp,
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis
-            )
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+              item.genre.forEachIndexed { index, genre ->
+                Text(
+                  text = genre.name + (if (index < item.genre.size - 1) "," else ""),
+                  color = if (genre.filters.isNotEmpty()) MainColor else Color.White.copy(alpha = 0.6f),
+                  fontSize = 12.sp,
+                  modifier = Modifier.clickable(enabled = genre.filters.isNotEmpty()) {
+                    onNavigateToCategory(genre.filters)
+                  }
+                )
+              }
+            }
           }
 
           if (!item.description.isNullOrEmpty()) {

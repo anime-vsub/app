@@ -106,28 +106,22 @@ fun DetailBottomSheet(
               label = stringResource(R.string.country_label),
               value = detail.countries.firstOrNull()?.name,
               textStyle = SmallTextStyle,
-              onClick = {
-                detail.countries.firstOrNull()?.let {
-                  onNavigateToCategory(it)
-                }
+              onClick = detail.countries.firstOrNull()?.let {
+                if (it.filters.isNotEmpty()) { { onNavigateToCategory(it) } } else null
               })
             InfoRow(
               label = stringResource(R.string.year_label),
               value = detail.yearOf?.name,
               textStyle = SmallTextStyle,
-              onClick = {
-                detail.yearOf?.let {
-                  onNavigateToCategory(it)
-                }
+              onClick = detail.yearOf?.let {
+                if (it.filters.isNotEmpty()) { { onNavigateToCategory(it) } } else null
               })
             InfoRow(
               label = stringResource(R.string.studio_label),
               value = detail.studio?.name,
               textStyle = SmallTextStyle,
-              onClick = {
-                detail.studio?.let {
-                  onNavigateToCategory(it)
-                }
+              onClick = detail.studio?.let {
+                if (it.filters.isNotEmpty()) { { onNavigateToCategory(it) } } else null
               })
             InfoRow(
               label = stringResource(R.string.duration_label),
@@ -165,12 +159,12 @@ fun DetailBottomSheet(
         detail.genre.forEach { genre ->
           Text(
             text = "#${genre.name}",
-            color = Color(0xFF00D639),
+            color = if (genre.filters.isNotEmpty()) Color(0xFF00D639) else TextSecondary,
             fontSize = 12.sp,
             modifier = Modifier
               .background(DarkCard, RoundedCornerShape(4.dp))
               .padding(horizontal = 8.dp, vertical = 4.dp)
-              .clickable {
+              .clickable(enabled = genre.filters.isNotEmpty()) {
                 onNavigateToCategory(genre)
               })
         }
