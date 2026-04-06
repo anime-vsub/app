@@ -168,4 +168,16 @@
     <string name="playlist_name">Tên danh sách phát</string>
     <string name="public_playlist">Công khai</string>
     <string name="empty_playlist">Danh sách phát trống</string>
+    <string name="added_to_playlist">Đã thêm vào %1$s</string>
+    <string name="removed_from_playlist">Đã xóa khỏi %1$s</string>
+    <string name="video_count">%1$d video</string>
+    <string name="add_to_other_playlist">Thêm vào playlist khác</string>
+    <string name="remove_from_playlist">Xóa khỏi playlist này</string>
+    <string name="rename_playlist">Đổi tên playlist</string>
+    <string name="edit_description">Sửa mô tả</string>
+    <string name="delete_playlist">Xóa playlist</string>
+    <string name="confirm_delete_playlist">Bạn có chắc chắn muốn xóa playlist này không?</string>
+    <string name="newest_added">Mới thêm</string>
+    <string name="oldest_added">Cũ nhất</string>
+    <string name="episode_label">Tập %1$s</string>
 </resources>

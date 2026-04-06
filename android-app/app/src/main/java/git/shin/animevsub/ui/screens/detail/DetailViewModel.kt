@@ -473,22 +473,23 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  fun addToPlaylist(playlistId: Int) {
-    val detail = _uiState.value.detail ?: return
-    val chapter = _uiState.value.currentChapter ?: return
-    viewModelScope.launch {
-      playlistRepository.addAnimeToPlaylist(
-        id = playlistId,
-        seasonId = _uiState.value.currentSeasonId,
-        seasonName = detail.season.find { it.id == _uiState.value.currentSeasonId }?.name ?: detail.name,
-        name = detail.name,
-        poster = detail.poster ?: detail.image ?: "",
-        chapId = chapter.id,
-        chapName = chapter.name
-      ).onSuccess {
-        // Maybe update local state if needed, but the repository handles the call
-      }
-    }
+  suspend fun addToPlaylist(playlistId: Int): Result<Unit> {
+    val detail = _uiState.value.detail ?: return Result.failure(Exception("Detail not found"))
+    val chapter = _uiState.value.currentChapter ?: return Result.failure(Exception("Chapter not found"))
+    return playlistRepository.addAnimeToPlaylist(
+      id = playlistId,
+      seasonId = _uiState.value.currentSeasonId,
+      seasonName = detail.season.find { it.id == _uiState.value.currentSeasonId }?.name ?: detail.name,
+      name = detail.name,
+      poster = detail.poster ?: detail.image ?: "",
+      chapId = chapter.id,
+      chapName = chapter.name
+    ).map { Unit }
+  }
+
+  suspend fun removeFromPlaylist(playlistId: Int): Result<Unit> {
+    return playlistRepository.deleteAnimeFromPlaylist(playlistId, _uiState.value.currentSeasonId)
+      .map { Unit }
   }
 
   fun createPlaylistAndAddAnime(name: String) {

@@ -172,18 +172,20 @@ class PlaylistViewModel @Inject constructor(
     }
   }
 
-  fun addToOtherPlaylist(targetPlaylistId: Int, item: PlaylistItem) {
-    viewModelScope.launch {
-      playlistRepository.addAnimeToPlaylist(
-        id = targetPlaylistId,
-        seasonId = item.seasonId,
-        seasonName = item.seasonName,
-        name = item.name,
-        poster = item.poster,
-        chapId = item.chapId,
-        chapName = item.chapName
-      )
-    }
+  suspend fun addToOtherPlaylist(targetPlaylistId: Int, item: PlaylistItem): Result<Unit> {
+    return playlistRepository.addAnimeToPlaylist(
+      id = targetPlaylistId,
+      seasonId = item.seasonId,
+      seasonName = item.seasonName,
+      name = item.name,
+      poster = item.poster,
+      chapId = item.chapId,
+      chapName = item.chapName
+    ).map { Unit }
+  }
+
+  suspend fun removeAnimeFromOtherPlaylist(targetPlaylistId: Int, seasonId: String): Result<Unit> {
+    return playlistRepository.deleteAnimeFromPlaylist(targetPlaylistId, seasonId).map { Unit }
   }
 
   fun toggleEditName(editing: Boolean) {

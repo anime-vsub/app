@@ -354,14 +354,17 @@ fun PlaylistScreen(
 
       if (showAddToPlaylistSheet) {
         AddToPlaylistBottomSheet(
+          animeId = selectedItemForMenu!!.seasonId,
           onDismissRequest = {
             showAddToPlaylistSheet = false
             selectedItemForMenu = null
           },
-          onPlaylistSelected = { playlistId ->
-            viewModel.addToOtherPlaylist(playlistId, selectedItemForMenu!!)
-            showAddToPlaylistSheet = false
-            selectedItemForMenu = null
+          onTogglePlaylist = { playlistId, checked ->
+            if (checked) {
+              viewModel.addToOtherPlaylist(playlistId, selectedItemForMenu!!)
+            } else {
+              viewModel.removeAnimeFromOtherPlaylist(playlistId, selectedItemForMenu!!.seasonId)
+            }
           }
         )
       }

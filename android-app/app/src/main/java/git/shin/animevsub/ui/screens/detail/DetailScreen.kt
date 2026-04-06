@@ -709,10 +709,14 @@ fun DetailScreen(
     // Add to Playlist Bottom Sheet
     if (showAddToPlaylistSheet) {
       AddToPlaylistBottomSheet(
+        animeId = uiState.currentSeasonId,
         onDismissRequest = { showAddToPlaylistSheet = false },
-        onPlaylistSelected = { playlistId ->
-          viewModel.addToPlaylist(playlistId)
-          // You might want to show a snackbar here
+        onTogglePlaylist = { playlistId, checked ->
+          if (checked) {
+            viewModel.addToPlaylist(playlistId)
+          } else {
+            viewModel.removeFromPlaylist(playlistId)
+          }
         }
       )
     }

@@ -29,6 +29,7 @@ data class AccountUiState(
   val histories: List<HistoryItem> = emptyList(),
   val follows: List<AnimeCard> = emptyList(),
   val playlists: List<Playlist> = emptyList(),
+  val playlistCheckedStates: Map<Int, Boolean> = emptyMap(),
   val isLoadingHistory: Boolean = false,
   val isLoadingFollows: Boolean = false,
   val isLoadingPlaylists: Boolean = false,
@@ -168,5 +169,24 @@ class AccountViewModel @Inject constructor(
             _uiState.value.copy(isLoadingPlaylists = false, playlistsError = e.message)
         }
     }
+  }
+
+  fun checkAnimeInPlaylists(animeId: String) {
+    viewModelScope.launch {
+      val playlistIds = _uiState.value.playlists.map { it.id }
+      if (playlistIds.isNotEmpty()) {
+        playlistRepository.hasAnimeOfPlaylists(playlistIds, animeId)
+          .onSuccess { results ->
+            val newState = playlistIds.zip(results).toMap()
+            _uiState.value = _uiState.value.copy(playlistCheckedStates = newState)
+          }
+      }
+    }
+  }
+
+  fun togglePlaylistChecked(playlistId: Int, checked: Boolean) {
+    val currentStates = _uiState.value.playlistCheckedStates.toMutableMap()
+    currentStates[playlistId] = checked
+    _uiState.value = _uiState.value.copy(playlistCheckedStates = currentStates)
   }
 }
