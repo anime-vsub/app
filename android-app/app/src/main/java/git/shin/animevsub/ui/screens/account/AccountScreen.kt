@@ -21,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Update
@@ -29,6 +28,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -143,161 +143,168 @@ fun AccountScreen(
     },
     containerColor = DarkBackground
   ) { padding ->
-    Column(
+    PullToRefreshBox(
+      isRefreshing = uiState.isRefreshing,
+      onRefresh = { viewModel.refresh() },
       modifier = Modifier
         .fillMaxSize()
         .padding(padding)
-        .verticalScroll(rememberScrollState())
-        .padding(bottom = 16.dp)
     ) {
-      Spacer(modifier = Modifier.height(8.dp))
+      Column(
+        modifier = Modifier
+          .fillMaxSize()
+          .verticalScroll(rememberScrollState())
+          .padding(bottom = 16.dp)
+      ) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-      // Profile section
-      Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-        if (uiState.isLoggedIn && uiState.user != null) {
-          val user = uiState.user!!
-          Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-              .fillMaxWidth()
-              .clip(RoundedCornerShape(12.dp))
-              .background(DarkCard)
-              .padding(16.dp)
-          ) {
-            AsyncImage(
-              model = user.avatar,
-              contentDescription = user.name,
-              contentScale = ContentScale.Crop,
+        // Profile section
+        Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+          if (uiState.isLoggedIn && uiState.user != null) {
+            val user = uiState.user!!
+            Row(
+              verticalAlignment = Alignment.CenterVertically,
               modifier = Modifier
-                .size(60.dp)
-                .clip(CircleShape)
-                .background(DarkSurface)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(modifier = Modifier.weight(1f)) {
-              Text(
-                text = user.name,
-                color = TextPrimary,
-                fontSize = 18.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                fontWeight = FontWeight.SemiBold
-              )
-              Spacer(modifier = Modifier.height(4.dp))
-              Text(
-                text = user.email ?: user.username,
-                color = TextSecondary,
-                fontSize = 13.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-              )
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            IconButton(
-              onClick = { viewModel.logout() },
-              modifier = Modifier
-                .clip(CircleShape)
-                .background(ErrorColor.copy(alpha = 0.1f))
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(DarkCard)
+                .padding(16.dp)
             ) {
-              Icon(
-                imageVector = Icons.AutoMirrored.Filled.Logout,
-                contentDescription = stringResource(R.string.logout),
-                tint = ErrorColor,
-                modifier = Modifier.size(20.dp)
+              AsyncImage(
+                model = user.avatar,
+                contentDescription = user.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                  .size(60.dp)
+                  .clip(CircleShape)
+                  .background(DarkSurface)
               )
+              Spacer(modifier = Modifier.width(16.dp))
+              Column(modifier = Modifier.weight(1f)) {
+                Text(
+                  text = user.name,
+                  color = TextPrimary,
+                  fontSize = 18.sp,
+                  maxLines = 1,
+                  overflow = TextOverflow.Ellipsis,
+                  fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                  text = user.email ?: user.username,
+                  color = TextSecondary,
+                  fontSize = 13.sp,
+                  maxLines = 1,
+                  overflow = TextOverflow.Ellipsis
+                )
+              }
+              Spacer(modifier = Modifier.width(8.dp))
+              IconButton(
+                onClick = { viewModel.logout() },
+                modifier = Modifier
+                  .clip(CircleShape)
+                  .background(ErrorColor.copy(alpha = 0.1f))
+              ) {
+                Icon(
+                  imageVector = Icons.AutoMirrored.Filled.Logout,
+                  contentDescription = stringResource(R.string.logout),
+                  tint = ErrorColor,
+                  modifier = Modifier.size(20.dp)
+                )
+              }
             }
-          }
-        } else {
-          // Login prompt
-          Box(
-            modifier = Modifier
-              .fillMaxWidth()
-              .clip(RoundedCornerShape(12.dp))
-              .background(DarkCard)
-              .clickable(onClick = onNavigateToLogin)
-              .padding(20.dp),
-            contentAlignment = Alignment.Center
-          ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-              Icon(
-                imageVector = Icons.Default.AccountCircle,
-                contentDescription = null,
-                tint = AccentMain,
-                modifier = Modifier.size(48.dp)
-              )
-              Spacer(modifier = Modifier.height(8.dp))
-              Text(
-                text = stringResource(R.string.login),
-                color = AccentMain,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold
-              )
-              Spacer(modifier = Modifier.height(4.dp))
-              Text(
-                text = stringResource(R.string.login_required, ""),
-                color = TextSecondary,
-                fontSize = 13.sp
-              )
+          } else {
+            // Login prompt
+            Box(
+              modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(DarkCard)
+                .clickable(onClick = onNavigateToLogin)
+                .padding(20.dp),
+              contentAlignment = Alignment.Center
+            ) {
+              Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                  imageVector = Icons.Default.AccountCircle,
+                  contentDescription = null,
+                  tint = AccentMain,
+                  modifier = Modifier.size(48.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                  text = stringResource(R.string.login),
+                  color = AccentMain,
+                  fontSize = 16.sp,
+                  fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                  text = stringResource(R.string.login_required, ""),
+                  color = TextSecondary,
+                  fontSize = 13.sp
+                )
+              }
             }
           }
         }
-      }
 
-      if (uiState.isLoggedIn) {
-        Spacer(modifier = Modifier.height(24.dp))
+        if (uiState.isLoggedIn) {
+          Spacer(modifier = Modifier.height(24.dp))
 
-        HistoryHorizontalList(
-          histories = uiState.histories,
-          isLoading = uiState.isLoadingHistory,
-          error = uiState.historyError,
-          onHeaderClick = onNavigateToHistory,
-          onRetry = { viewModel.refreshHistory() },
-          onItemClick = { item ->
-            item.chapId?.let { chapId ->
-              onNavigateToPlayer(item.seasonId, chapId)
-            } ?: onNavigateToDetail(item.seasonId)
-          }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        FollowHorizontalList(
-          follows = uiState.follows,
-          isLoading = uiState.isLoadingFollows,
-          error = uiState.followsError,
-          onHeaderClick = onNavigateToFollow,
-          onRetry = { viewModel.refreshFollows() },
-          onItemClick = { anime -> onNavigateToDetail(anime.animeId) }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Menu items
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-          PlaylistListSection(
-            playlists = uiState.playlists,
-            isLoading = uiState.isLoadingPlaylists,
-            error = uiState.playlistsError,
-            onRetry = { viewModel.refreshPlaylists() },
-            onItemClick = { playlist ->
-              onNavigateToPlaylist(playlist.id.toString())
+          HistoryHorizontalList(
+            histories = uiState.histories,
+            isLoading = uiState.isLoadingHistory,
+            error = uiState.historyError,
+            onHeaderClick = onNavigateToHistory,
+            onRetry = { viewModel.refreshHistory() },
+            onItemClick = { item ->
+              item.chapId?.let { chapId ->
+                onNavigateToPlayer(item.seasonId, chapId)
+              } ?: onNavigateToDetail(item.seasonId)
             }
           )
+
+          Spacer(modifier = Modifier.height(24.dp))
+
+          FollowHorizontalList(
+            follows = uiState.follows,
+            isLoading = uiState.isLoadingFollows,
+            error = uiState.followsError,
+            onHeaderClick = onNavigateToFollow,
+            onRetry = { viewModel.refreshFollows() },
+            onItemClick = { anime -> onNavigateToDetail(anime.animeId) }
+          )
+
+          Spacer(modifier = Modifier.height(24.dp))
+
+          // Menu items
+          Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            PlaylistListSection(
+              playlists = uiState.playlists,
+              isLoading = uiState.isLoadingPlaylists,
+              error = uiState.playlistsError,
+              onRetry = { viewModel.refreshPlaylists() },
+              onItemClick = { playlist ->
+                onNavigateToPlaylist(playlist.id.toString())
+              }
+            )
+          }
         }
-      }
 
-      Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(80.dp))
+      }
     }
-  }
 
-  showUpdateDialog?.let { info ->
-    UpdateDialog(
-      info = info,
-      onDismiss = { showUpdateDialog = null },
-      onConfirm = {
-        viewModel.downloadUpdate(info)
-        showUpdateDialog = null
-      }
-    )
+    showUpdateDialog?.let { info ->
+      UpdateDialog(
+        info = info,
+        onDismiss = { showUpdateDialog = null },
+        onConfirm = {
+          viewModel.downloadUpdate(info)
+          showUpdateDialog = null
+        }
+      )
+    }
   }
 }

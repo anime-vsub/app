@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 data class ScheduleUiState(
   val isLoading: Boolean = true,
+  val isRefreshing: Boolean = false,
   val days: List<ScheduleDay> = emptyList(),
   val error: String? = null,
   val selectedDay: Int = 0
@@ -29,6 +30,25 @@ class ScheduleViewModel @Inject constructor(
 
   init {
     loadSchedule()
+  }
+
+  fun refresh() {
+    viewModelScope.launch {
+      _uiState.value = _uiState.value.copy(isRefreshing = true)
+      repository.getSchedule()
+        .onSuccess { days ->
+          _uiState.value = _uiState.value.copy(
+            isRefreshing = false,
+            days = days
+          )
+        }
+        .onFailure { e ->
+          _uiState.value = _uiState.value.copy(
+            isRefreshing = false,
+            error = e.message
+          )
+        }
+    }
   }
 
   fun loadSchedule() {

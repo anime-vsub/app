@@ -15,6 +15,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -90,55 +91,60 @@ fun HistoryScreen(
     containerColor = DarkBackground
   ) { padding ->
     Box(modifier = Modifier.padding(padding)) {
-      when {
-        uiState.isLoading -> {
-          LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(10) { HistoryItemRowSkeleton() }
-          }
-        }
-
-        uiState.error != null && uiState.groupedItems.isEmpty() -> {
-          ErrorScreen(
-            error = uiState.error,
-            onRetry = { viewModel.retry() }
-          )
-        }
-
-        uiState.groupedItems.isEmpty() -> {
-          Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = androidx.compose.ui.Alignment.Center
-          ) {
-            Text(text = stringResource(R.string.no_history), color = TextGrey)
-          }
-        }
-
-        else -> {
-          LazyColumn(
-            state = listState,
-            modifier = Modifier.fillMaxSize()
-          ) {
-            uiState.groupedItems.forEach { (dateStr, items) ->
-              item {
-                HistoryDateHeader(dateStr)
-              }
-              items(items) { item ->
-                HistoryItemRow(
-                  item = item,
-                  onClick = { onNavigateToDetail(item.seasonId) }
-                )
-              }
+      PullToRefreshBox(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = { viewModel.refresh() }
+      ) {
+        when {
+          uiState.isLoading -> {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+              items(10) { HistoryItemRowSkeleton() }
             }
+          }
 
-            if (uiState.isLoadingMore) {
-              item {
-                Box(
-                  modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                  contentAlignment = androidx.compose.ui.Alignment.Center
-                ) {
-                  CircularProgressIndicator(modifier = Modifier.size(24.dp))
+          uiState.error != null && uiState.groupedItems.isEmpty() -> {
+            ErrorScreen(
+              error = uiState.error,
+              onRetry = { viewModel.retry() }
+            )
+          }
+
+          uiState.groupedItems.isEmpty() -> {
+            Box(
+              modifier = Modifier.fillMaxSize(),
+              contentAlignment = androidx.compose.ui.Alignment.Center
+            ) {
+              Text(text = stringResource(R.string.no_history), color = TextGrey)
+            }
+          }
+
+          else -> {
+            LazyColumn(
+              state = listState,
+              modifier = Modifier.fillMaxSize()
+            ) {
+              uiState.groupedItems.forEach { (dateStr, items) ->
+                item {
+                  HistoryDateHeader(dateStr)
+                }
+                items(items) { item ->
+                  HistoryItemRow(
+                    item = item,
+                    onClick = { onNavigateToDetail(item.seasonId) }
+                  )
+                }
+              }
+
+              if (uiState.isLoadingMore) {
+                item {
+                  Box(
+                    modifier = Modifier
+                      .fillMaxWidth()
+                      .padding(16.dp),
+                    contentAlignment = androidx.compose.ui.Alignment.Center
+                  ) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                  }
                 }
               }
             }

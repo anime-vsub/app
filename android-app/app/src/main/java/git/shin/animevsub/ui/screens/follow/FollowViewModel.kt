@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 data class FollowUiState(
   val isLoading: Boolean = true,
+  val isRefreshing: Boolean = false,
   val items: List<AnimeCard> = emptyList(),
   val error: String? = null,
   val currentPage: Int = 1,
@@ -33,10 +34,14 @@ class FollowViewModel @Inject constructor(
     loadPage(1)
   }
 
-  fun loadPage(page: Int) {
+  fun loadPage(page: Int, isRefreshing: Boolean = false) {
     viewModelScope.launch {
       if (page == 1) {
-        _uiState.update { it.copy(isLoading = true, error = null) }
+        if (isRefreshing) {
+          _uiState.update { it.copy(isRefreshing = true, error = null) }
+        } else {
+          _uiState.update { it.copy(isLoading = true, error = null) }
+        }
       } else {
         _uiState.update { it.copy(isLoadingMore = true) }
       }
@@ -46,6 +51,7 @@ class FollowViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               isLoading = false,
+              isRefreshing = false,
               isLoadingMore = false,
               items = if (page == 1) categoryPage.items else it.items + categoryPage.items,
               currentPage = page,
@@ -58,12 +64,17 @@ class FollowViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               isLoading = false,
+              isRefreshing = false,
               isLoadingMore = false,
               error = e.message
             )
           }
         }
     }
+  }
+
+  fun refresh() {
+    loadPage(1, isRefreshing = true)
   }
 
   fun loadMore() {

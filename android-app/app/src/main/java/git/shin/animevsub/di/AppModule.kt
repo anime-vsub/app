@@ -6,10 +6,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.remote.AnimeApi
-import git.shin.animevsub.BuildConfig
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth

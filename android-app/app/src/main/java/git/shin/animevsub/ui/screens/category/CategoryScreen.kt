@@ -29,6 +29,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -105,7 +106,7 @@ fun CategoryScreen(
               }) {
                 Icon(
                   imageVector = Icons.Default.FilterList,
-                  contentDescription = "Filter",
+                  contentDescription = stringResource(R.string.filter),
                   tint = if (uiState.selectedFilters.isNotEmpty()) AccentMain else TextPrimary
                 )
               }
@@ -126,23 +127,28 @@ fun CategoryScreen(
     containerColor = DarkBackground
   ) { padding ->
     Box(modifier = Modifier.padding(padding)) {
-      when {
-        uiState.isLoading -> GridLoadingSkeleton()
-        uiState.error != null && uiState.items.isEmpty() -> {
-          ErrorScreen(
-            error = uiState.error,
-            onRetry = { viewModel.retry() }
-          )
-        }
+      PullToRefreshBox(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = { viewModel.refresh() }
+      ) {
+        when {
+          uiState.isLoading -> GridLoadingSkeleton()
+          uiState.error != null && uiState.items.isEmpty() -> {
+            ErrorScreen(
+              error = uiState.error,
+              onRetry = { viewModel.retry() }
+            )
+          }
 
-        else -> {
-          VerticalGridAnimeList(
-            items = uiState.items,
-            onItemClick = { onNavigateToDetail(it.animeId) },
-            state = gridState,
-            isLoadingMore = uiState.isLoadingMore,
-            onLoadMore = { viewModel.loadMore() }
-          )
+          else -> {
+            VerticalGridAnimeList(
+              items = uiState.items,
+              onItemClick = { onNavigateToDetail(it.animeId) },
+              state = gridState,
+              isLoadingMore = uiState.isLoadingMore,
+              onLoadMore = { viewModel.loadMore() }
+            )
+          }
         }
       }
     }
@@ -246,7 +252,7 @@ fun FilterBottomSheet(
         .verticalScroll(rememberScrollState())
     ) {
       Text(
-        text = "Bộ lọc: ${group.name}",
+        text = stringResource(R.string.filter_group_format, group.name),
         color = TextPrimary,
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,

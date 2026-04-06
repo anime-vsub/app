@@ -77,18 +77,22 @@ class SearchViewModel @Inject constructor(
     }
   }
 
-  fun onSearch(query: String) {
+  fun onSearch(query: String, isRefreshing: Boolean = false) {
     if (query.isBlank()) return
     searchJob?.cancel()
 
-    _uiState.value = _uiState.value.copy(
-      query = query,
-      isSearching = true,
-      isLoading = true,
-      suggestions = emptyList(),
-      searchResults = emptyList(),
-      currentPage = 1
-    )
+    if (isRefreshing) {
+      _uiState.value = _uiState.value.copy(isRefreshing = true)
+    } else {
+      _uiState.value = _uiState.value.copy(
+        query = query,
+        isSearching = true,
+        isLoading = true,
+        suggestions = emptyList(),
+        searchResults = emptyList(),
+        currentPage = 1
+      )
+    }
 
     viewModelScope.launch {
       repository.addSearchHistory(query)
@@ -98,19 +102,26 @@ class SearchViewModel @Inject constructor(
       repository.search(query, 1)
         .onSuccess { page ->
           _uiState.value = _uiState.value.copy(
+            isRefreshing = false,
             searchResults = page.items,
             totalPages = page.totalPages,
             isLoading = false,
-            error = null
+            error = null,
+            currentPage = 1
           )
         }
         .onFailure { e ->
           _uiState.value = _uiState.value.copy(
+            isRefreshing = false,
             isLoading = false,
             error = e.message
           )
         }
     }
+  }
+
+  fun refresh() {
+    onSearch(_uiState.value.query, isRefreshing = true)
   }
 
   fun loadMore() {

@@ -48,6 +48,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -166,370 +167,376 @@ fun DetailScreen(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
     snackbarHost = { SnackbarHost(snackbarHostState) }
   ) { innerPadding ->
-    Column(
+    PullToRefreshBox(
+      isRefreshing = uiState.isRefreshing,
+      onRefresh = { viewModel.refresh() },
       modifier = Modifier
         .fillMaxSize()
         .padding(top = innerPadding.calculateTopPadding())
     ) {
-      val detail = uiState.detail
-
-      // Player Area (Fixed at top)
-      Box(
-        modifier = Modifier
-          .fillMaxWidth()
-          .aspectRatio(16f / 9f)
-          .background(Color.Black)
-      ) {
-        if (detail != null && uiState.currentChapter?.id == "0" && !detail.trailer.isNullOrEmpty()) {
-          // Trailer Embed mode
-          AndroidView(
-            factory = { ctx ->
-              android.webkit.WebView(ctx).apply {
-                settings.javaScriptEnabled = true
-                settings.loadWithOverviewMode = true
-                settings.useWideViewPort = true
-                webViewClient = android.webkit.WebViewClient()
-                loadUrl(detail.trailer)
-              }
-            },
-            modifier = Modifier.fillMaxSize()
-          )
-          IconButton(
-            onClick = onNavigateBack,
-          ) {
-            Icon(
-              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = null,
-              tint = Color.White
-            )
-          }
-        } else {
-          // Player mode (handles loading detail, loading link, and errors)
-          val currentChap = uiState.chapterData?.chaps?.getOrNull(uiState.currentChapIndex)
-          VideoPlayer(
-            playerData = uiState.playerData,
-            poster = detail?.poster ?: detail?.image,
-            title = detail?.name ?: "",
-            subtitle = currentChap?.name ?: "",
-            isLoading = uiState.isPlayerLoading || uiState.isLoading,
-            errorMessage = uiState.playerError,
-            introRange = uiState.introRange,
-            outroRange = uiState.outroRange,
-            autoNextEnabled = uiState.autoNext,
-            hasNextEpisode = uiState.currentChapIndex + 1 < (uiState.chapterData?.chaps?.size ?: 0),
-            onBack = onNavigateBack,
-            onReload = { viewModel.retryPlayer() },
-            onNextEpisode = { viewModel.playNext() },
-            onVideoEnded = {
-              if (uiState.autoNext) {
-                viewModel.playNext()
-              }
-            },
-            servers = uiState.servers,
-            currentServer = uiState.currentServer,
-            onServerSelected = { viewModel.selectServer(it) },
-            displaySeasons = uiState.displaySeasons,
-            activeDisplaySeasonId = uiState.activeDisplaySeasonId,
-            onSeasonSelected = { viewModel.setActiveDisplaySeason(it) },
-            episodes = uiState.chapterData?.chaps ?: emptyList(),
-            currentEpisode = uiState.currentChapter,
-            onEpisodeSelected = { chap, seasonId -> viewModel.playChapter(chap, seasonId) },
-            initialPosition = uiState.lastProgress,
-            onProgressUpdate = { cur, dur -> viewModel.updateHistory(cur, dur) },
-            chapterProgress = uiState.chapterProgress,
-            modifier = Modifier.fillMaxSize()
-          )
-        }
-      }
-
-      // Scrollable Content
       Column(
         modifier = Modifier
-          .fillMaxWidth()
-          .weight(1f)
-          .verticalScroll(rememberScrollState())
+          .fillMaxSize()
       ) {
-        if (uiState.error != null) {
-          ErrorScreen(
-            error = uiState.error,
-            onRetry = { viewModel.retry() },
-            modifier = Modifier
-              .fillMaxSize()
-              .padding(32.dp)
-          )
-        } else if (uiState.isLoading && detail == null) {
-          DetailSkeleton()
-        } else if (detail != null) {
-          // Info Block (Clickable to open sheet)
-          Column(
-            modifier = Modifier
-              .fillMaxWidth()
-              .clickable { showDetailSheet = true }
-              .padding(horizontal = 16.dp, vertical = 8.dp)) {
-            Row(
-              modifier = Modifier.fillMaxWidth(),
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.SpaceBetween
+        val detail = uiState.detail
+
+        // Player Area (Fixed at top)
+        Box(
+          modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(16f / 9f)
+            .background(Color.Black)
+        ) {
+          if (detail != null && uiState.currentChapter?.id == "0" && !detail.trailer.isNullOrEmpty()) {
+            // Trailer Embed mode
+            AndroidView(
+              factory = { ctx ->
+                android.webkit.WebView(ctx).apply {
+                  settings.javaScriptEnabled = true
+                  settings.loadWithOverviewMode = true
+                  settings.useWideViewPort = true
+                  webViewClient = android.webkit.WebViewClient()
+                  loadUrl(detail.trailer)
+                }
+              },
+              modifier = Modifier.fillMaxSize()
+            )
+            IconButton(
+              onClick = onNavigateBack,
             ) {
-              Text(
-                text = detail.name,
-                color = TextPrimary,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                style = NoPaddingTextStyle,
+              Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null,
+                tint = Color.White
               )
-              Icon(Icons.Default.ChevronRight, null, tint = TextGrey)
             }
-
-            Row(
-              modifier = Modifier.padding(top = 2.dp),
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-
-              Text(
-                text = stringResource(R.string.views_count, formatNumber(detail.views)),
-                color = TextGrey,
-                fontSize = 12.sp,
-                style = NoPaddingTextStyle
-              )
-
-              uiState.chapterData?.update?.let { update ->
-                Text(
-                  text = " • ",
-                  color = TextGrey,
-                  fontSize = 12.sp,
-                  style = NoPaddingTextStyle
-                )
-
-                Text(
-                  text = formatScheduleUpdate(update),
-                  color = AccentMain,
-                  fontSize = 12.sp,
-                  style = NoPaddingTextStyle
-                )
-              }
-            }
+          } else {
+            // Player mode (handles loading detail, loading link, and errors)
+            val currentChap = uiState.chapterData?.chaps?.getOrNull(uiState.currentChapIndex)
+            VideoPlayer(
+              playerData = uiState.playerData,
+              poster = detail?.poster ?: detail?.image,
+              title = detail?.name ?: "",
+              subtitle = currentChap?.name ?: "",
+              isLoading = uiState.isPlayerLoading || uiState.isLoading,
+              errorMessage = uiState.playerError,
+              introRange = uiState.introRange,
+              outroRange = uiState.outroRange,
+              autoNextEnabled = uiState.autoNext,
+              hasNextEpisode = uiState.currentChapIndex + 1 < (uiState.chapterData?.chaps?.size
+                ?: 0),
+              onBack = onNavigateBack,
+              onReload = { viewModel.retryPlayer() },
+              onNextEpisode = { viewModel.playNext() },
+              onVideoEnded = {
+                if (uiState.autoNext) {
+                  viewModel.playNext()
+                }
+              },
+              servers = uiState.servers,
+              currentServer = uiState.currentServer,
+              onServerSelected = { viewModel.selectServer(it) },
+              displaySeasons = uiState.displaySeasons,
+              activeDisplaySeasonId = uiState.activeDisplaySeasonId,
+              onSeasonSelected = { viewModel.setActiveDisplaySeason(it) },
+              episodes = uiState.chapterData?.chaps ?: emptyList(),
+              currentEpisode = uiState.currentChapter,
+              onEpisodeSelected = { chap, seasonId -> viewModel.playChapter(chap, seasonId) },
+              initialPosition = uiState.lastProgress,
+              onProgressUpdate = { cur, dur -> viewModel.updateHistory(cur, dur) },
+              chapterProgress = uiState.chapterProgress,
+              modifier = Modifier.fillMaxSize()
+            )
           }
+        }
 
-          Column(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-              // Author and Studio Section
-              Row(verticalAlignment = Alignment.CenterVertically) {
-                if (detail.authors.isNotEmpty()) {
-                  Text(
-                    text = stringResource(R.string.author_label) + " ",
-                    color = TextGrey,
-                    fontSize = 12.sp,
-                    style = NoPaddingTextStyle,
-                  )
-
-                  Text(
-                    text = detail.authors.first().name,
-                    color = if (detail.authors.first().filters.isNotEmpty()) MainColor else TextPrimary,
-                    fontSize = 12.sp,
-                    style = NoPaddingTextStyle,
-                    modifier = Modifier.clickable(enabled = detail.authors.first().filters.isNotEmpty()) {
-                      onNavigateToCategory(detail.authors.first().filters)
-                    })
-
-                  Text(
-                    text = " | ",
-                    color = TextGrey,
-                    fontSize = 12.sp,
-                    style = NoPaddingTextStyle
-                  )
-                }
-
-                Text(
-                  text = stringResource(
-                    R.string.studio_prefix,
-                    detail.studio?.name ?: stringResource(R.string.unknown)
-                  ),
-                  color = if (detail.studio != null && detail.studio.filters.isNotEmpty()) MainColor else TextGrey,
-                  fontSize = 12.sp,
-                  style = NoPaddingTextStyle,
-                  modifier = Modifier.clickable(enabled = detail.studio != null && detail.studio.filters.isNotEmpty()) {
-                    detail.studio?.let {
-                      onNavigateToCategory(it.filters)
-                    }
-                  })
-              }
-
-              Spacer(modifier = Modifier.height(8.dp))
-
-              // Badges row
-              FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-              ) {
-                if (!detail.quality.isNullOrEmpty()) {
-                  QualityBadge(quality = detail.quality)
-                }
-                if (detail.yearOf != null) {
-                  Badge(
-                    text = detail.yearOf.name,
-                    textStyle = NoPaddingTextStyle,
-                    modifier = Modifier.clickable(enabled = detail.yearOf.filters.isNotEmpty()) {
-                      onNavigateToCategory(detail.yearOf.filters)
-                    }
-                  )
-                }
-                if (!detail.duration.isNullOrEmpty()) {
-                  Badge(
-                    text = stringResource(R.string.updated_to_episode, detail.duration),
-                    textStyle = NoPaddingTextStyle
-                  )
-                }
-                if (detail.countries.isNotEmpty()) {
-                  Text(
-                    text = detail.countries.first().name,
-                    color = if (detail.countries.first().filters.isNotEmpty()) MainColor else TextPrimary,
-                    fontSize = 12.sp,
-                    style = NoPaddingTextStyle,
-                    modifier = Modifier.clickable(enabled = detail.countries.first().filters.isNotEmpty()) {
-                      onNavigateToCategory(detail.countries.first().filters)
-                    })
-                }
-              }
-
-              // Rating info (Stars on new line)
+        // Scrollable Content
+        Column(
+          modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f)
+            .verticalScroll(rememberScrollState())
+        ) {
+          if (uiState.error != null) {
+            ErrorScreen(
+              error = uiState.error,
+              onRetry = { viewModel.retry() },
+              modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp)
+            )
+          } else if (uiState.isLoading && detail == null) {
+            DetailSkeleton()
+          } else if (detail != null) {
+            // Info Block (Clickable to open sheet)
+            Column(
+              modifier = Modifier
+                .fillMaxWidth()
+                .clickable { showDetailSheet = true }
+                .padding(horizontal = 16.dp, vertical = 8.dp)) {
               Row(
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 8.dp)
+                horizontalArrangement = Arrangement.SpaceBetween
               ) {
                 Text(
-                  text = detail.rate.toString(),
+                  text = detail.name,
                   color = TextPrimary,
-                  fontSize = 12.sp,
+                  fontSize = 17.sp,
                   fontWeight = FontWeight.Bold,
-                  style = NoPaddingTextStyle
+                  modifier = Modifier.weight(1f),
+                  maxLines = 2,
+                  overflow = TextOverflow.Ellipsis,
+                  style = NoPaddingTextStyle,
                 )
-                Icon(Icons.Default.Star, null, tint = StarColor, modifier = Modifier.size(14.dp))
+                Icon(Icons.Default.ChevronRight, null, tint = TextGrey)
+              }
 
-                Spacer(modifier = Modifier.width(8.dp))
+              Row(
+                modifier = Modifier.padding(top = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+              ) {
 
                 Text(
-                  text = stringResource(R.string.rating_count, formatNumber(detail.countRate)),
+                  text = stringResource(R.string.views_count, formatNumber(detail.views)),
                   color = TextGrey,
                   fontSize = 12.sp,
-                  style = NoPaddingTextStyle,
+                  style = NoPaddingTextStyle
                 )
-                detail.seasonOf?.let {
+
+                uiState.chapterData?.update?.let { update ->
                   Text(
-                    text = " | ",
+                    text = " • ",
                     color = TextGrey,
                     fontSize = 12.sp,
                     style = NoPaddingTextStyle
                   )
 
                   Text(
-                    text = it.name,
-                    color = if (it.filters.isNotEmpty()) MainColor else TextPrimary,
+                    text = formatScheduleUpdate(update),
+                    color = AccentMain,
                     fontSize = 12.sp,
-                    style = NoPaddingTextStyle,
-                    modifier = Modifier.clickable(enabled = it.filters.isNotEmpty()) {
-                      onNavigateToCategory(it.filters)
-                    })
+                    style = NoPaddingTextStyle
+                  )
                 }
               }
+            }
 
-              Spacer(modifier = Modifier.height(8.dp))
+            Column(modifier = Modifier.fillMaxWidth()) {
+              Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                // Author and Studio Section
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                  if (detail.authors.isNotEmpty()) {
+                    Text(
+                      text = stringResource(R.string.author_label) + " ",
+                      color = TextGrey,
+                      fontSize = 12.sp,
+                      style = NoPaddingTextStyle,
+                    )
 
-              // Tags/Genres
-              FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-              ) {
-                detail.genre.forEach { genre ->
-                  Text(
-                    text = "#${genre.name}",
-                    color = if (genre.filters.isNotEmpty()) MainColor else TextSecondary,
-                    fontSize = 12.sp,
-                    style = SmallTextStyle,
-                    modifier = Modifier
-                      .padding(vertical = 1.dp)
-                      .clickable(enabled = genre.filters.isNotEmpty()) {
-                        onNavigateToCategory(genre.filters)
+                    Text(
+                      text = detail.authors.first().name,
+                      color = if (detail.authors.first().filters.isNotEmpty()) MainColor else TextPrimary,
+                      fontSize = 12.sp,
+                      style = NoPaddingTextStyle,
+                      modifier = Modifier.clickable(enabled = detail.authors.first().filters.isNotEmpty()) {
+                        onNavigateToCategory(detail.authors.first().filters)
                       })
-                }
-              }
 
-              Spacer(modifier = Modifier.height(12.dp))
-
-              // Action Buttons
-              Row(
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-              ) {
-                ActionButton(
-                  icon = if (uiState.isFollowed) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                  label = if (uiState.isFollowed) stringResource(R.string.followed) else stringResource(
-                    R.string.follow
-                  ),
-                  iconTint = if (uiState.isFollowed) StarColor else TextPrimary,
-                  modifier = Modifier
-                    .widthIn(min = 50.dp)
-                    .wrapContentWidth(),
-                  onClick = { viewModel.toggleFollow() }
-                )
-                ActionButton(
-                  icon = Icons.Default.Share,
-                  label = stringResource(R.string.share),
-                  modifier = Modifier
-                    .widthIn(min = 50.dp)
-                    .wrapContentWidth(),
-                  onClick = {
-                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                      type = "text/plain"
-                      val shareMessage = context.getString(
-                        R.string.share_message,
-                        detail.name,
-                        "https://github.com/anime-vsub/app"
-                      )
-                      putExtra(Intent.EXTRA_TEXT, shareMessage)
-                    }
-                    context.startActivity(
-                      Intent.createChooser(
-                        shareIntent,
-                        context.getString(R.string.share_title)
-                      )
+                    Text(
+                      text = " | ",
+                      color = TextGrey,
+                      fontSize = 12.sp,
+                      style = NoPaddingTextStyle
                     )
                   }
-                )
-                ActionButton(
-                  icon = Icons.AutoMirrored.Filled.PlaylistAdd,
-                  label = stringResource(R.string.save_label),
-                  modifier = Modifier
-                    .widthIn(min = 50.dp)
-                    .wrapContentWidth(),
-                  onClick = { showAddToPlaylistSheet = true }
-                )
-              }
-            }
 
-            // Server Section
-            if (uiState.servers.size >= 2) {
-              Text(
-                text = stringResource(R.string.server_label),
-                color = TextPrimary,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-              )
-              LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp)
-              ) {
-                items(uiState.servers) { server ->
-                  val isSelected = server == uiState.currentServer
-                  Box(
+                  Text(
+                    text = stringResource(
+                      R.string.studio_prefix,
+                      detail.studio?.name ?: stringResource(R.string.unknown)
+                    ),
+                    color = if (detail.studio != null && detail.studio.filters.isNotEmpty()) MainColor else TextGrey,
+                    fontSize = 12.sp,
+                    style = NoPaddingTextStyle,
+                    modifier = Modifier.clickable(enabled = detail.studio != null && detail.studio.filters.isNotEmpty()) {
+                      detail.studio?.let {
+                        onNavigateToCategory(it.filters)
+                      }
+                    })
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Badges row
+                FlowRow(
+                  horizontalArrangement = Arrangement.spacedBy(8.dp),
+                  verticalArrangement = Arrangement.spacedBy(8.dp),
+                  modifier = Modifier.fillMaxWidth()
+                ) {
+                  if (!detail.quality.isNullOrEmpty()) {
+                    QualityBadge(quality = detail.quality)
+                  }
+                  if (detail.yearOf != null) {
+                    Badge(
+                      text = detail.yearOf.name,
+                      textStyle = NoPaddingTextStyle,
+                      modifier = Modifier.clickable(enabled = detail.yearOf.filters.isNotEmpty()) {
+                        onNavigateToCategory(detail.yearOf.filters)
+                      }
+                    )
+                  }
+                  if (!detail.duration.isNullOrEmpty()) {
+                    Badge(
+                      text = stringResource(R.string.updated_to_episode, detail.duration),
+                      textStyle = NoPaddingTextStyle
+                    )
+                  }
+                  if (detail.countries.isNotEmpty()) {
+                    Text(
+                      text = detail.countries.first().name,
+                      color = if (detail.countries.first().filters.isNotEmpty()) MainColor else TextPrimary,
+                      fontSize = 12.sp,
+                      style = NoPaddingTextStyle,
+                      modifier = Modifier.clickable(enabled = detail.countries.first().filters.isNotEmpty()) {
+                        onNavigateToCategory(detail.countries.first().filters)
+                      })
+                  }
+                }
+
+                // Rating info (Stars on new line)
+                Row(
+                  verticalAlignment = Alignment.CenterVertically,
+                  modifier = Modifier.padding(top = 8.dp)
+                ) {
+                  Text(
+                    text = detail.rate.toString(),
+                    color = TextPrimary,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    style = NoPaddingTextStyle
+                  )
+                  Icon(Icons.Default.Star, null, tint = StarColor, modifier = Modifier.size(14.dp))
+
+                  Spacer(modifier = Modifier.width(8.dp))
+
+                  Text(
+                    text = stringResource(R.string.rating_count, formatNumber(detail.countRate)),
+                    color = TextGrey,
+                    fontSize = 12.sp,
+                    style = NoPaddingTextStyle,
+                  )
+                  detail.seasonOf?.let {
+                    Text(
+                      text = " | ",
+                      color = TextGrey,
+                      fontSize = 12.sp,
+                      style = NoPaddingTextStyle
+                    )
+
+                    Text(
+                      text = it.name,
+                      color = if (it.filters.isNotEmpty()) MainColor else TextPrimary,
+                      fontSize = 12.sp,
+                      style = NoPaddingTextStyle,
+                      modifier = Modifier.clickable(enabled = it.filters.isNotEmpty()) {
+                        onNavigateToCategory(it.filters)
+                      })
+                  }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Tags/Genres
+                FlowRow(
+                  horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                  detail.genre.forEach { genre ->
+                    Text(
+                      text = "#${genre.name}",
+                      color = if (genre.filters.isNotEmpty()) MainColor else TextSecondary,
+                      fontSize = 12.sp,
+                      style = SmallTextStyle,
+                      modifier = Modifier
+                        .padding(vertical = 1.dp)
+                        .clickable(enabled = genre.filters.isNotEmpty()) {
+                          onNavigateToCategory(genre.filters)
+                        })
+                  }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Action Buttons
+                Row(
+                  modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                  horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                  ActionButton(
+                    icon = if (uiState.isFollowed) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                    label = if (uiState.isFollowed) stringResource(R.string.followed) else stringResource(
+                      R.string.follow
+                    ),
+                    iconTint = if (uiState.isFollowed) StarColor else TextPrimary,
                     modifier = Modifier
+                      .widthIn(min = 50.dp)
+                      .wrapContentWidth(),
+                    onClick = { viewModel.toggleFollow() }
+                  )
+                  ActionButton(
+                    icon = Icons.Default.Share,
+                    label = stringResource(R.string.share),
+                    modifier = Modifier
+                      .widthIn(min = 50.dp)
+                      .wrapContentWidth(),
+                    onClick = {
+                      val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        val shareMessage = context.getString(
+                          R.string.share_message,
+                          detail.name,
+                          "https://github.com/anime-vsub/app"
+                        )
+                        putExtra(Intent.EXTRA_TEXT, shareMessage)
+                      }
+                      context.startActivity(
+                        Intent.createChooser(
+                          shareIntent,
+                          context.getString(R.string.share_title)
+                        )
+                      )
+                    }
+                  )
+                  ActionButton(
+                    icon = Icons.AutoMirrored.Filled.PlaylistAdd,
+                    label = stringResource(R.string.save_label),
+                    modifier = Modifier
+                      .widthIn(min = 50.dp)
+                      .wrapContentWidth(),
+                    onClick = { showAddToPlaylistSheet = true }
+                  )
+                }
+              }
+
+              // Server Section
+              if (uiState.servers.size >= 2) {
+                Text(
+                  text = stringResource(R.string.server_label),
+                  color = TextPrimary,
+                  fontSize = 16.sp,
+                  fontWeight = FontWeight.Bold,
+                  modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                LazyRow(
+                  modifier = Modifier.fillMaxWidth(),
+                  horizontalArrangement = Arrangement.spacedBy(8.dp),
+                  contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                  items(uiState.servers) { server ->
+                    val isSelected = server == uiState.currentServer
+                    val boxModifier = Modifier
                       .height(36.dp)
                       .clip(RoundedCornerShape(4.dp))
                       .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
@@ -538,185 +545,190 @@ fun DetailScreen(
                         color = if (isSelected) MainColor else Color.Transparent,
                         shape = RoundedCornerShape(4.dp)
                       )
-                      .clickable { viewModel.selectServer(server) },
-                    contentAlignment = Alignment.Center
-                  ) {
-                    Text(
-                      text = server.name,
-                      modifier = Modifier.padding(horizontal = 12.dp),
-                      color = if (isSelected) MainColor else TextPrimary,
-                      fontSize = 13.sp,
-                      fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                    )
+                      .clickable { viewModel.selectServer(server) }
+
+                    Box(
+                      modifier = boxModifier,
+                      contentAlignment = Alignment.Center
+                    ) {
+                      Text(
+                        text = server.name,
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        color = if (isSelected) MainColor else TextPrimary,
+                        fontSize = 13.sp,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                      )
+                    }
                   }
                 }
               }
-            }
 
-            // Episode Section Header
-            Row(
-              modifier = Modifier
-                .fillMaxWidth()
-                .clickable { showChapterSheet = true }
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-              horizontalArrangement = Arrangement.SpaceBetween,
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-              Text(
-                text = stringResource(R.string.episodes),
-                color = TextPrimary,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-              )
-              Icon(
-                imageVector = Icons.Default.ChevronRight,
-                contentDescription = null,
-                tint = TextGrey,
-                modifier = Modifier.size(20.dp)
-              )
-            }
-
-            // Episode List (Horizontal)
-            if (uiState.isChaptersLoading) {
-              ChapterSkeleton()
-            } else if (uiState.chaptersError != null) {
-              Column(
+              // Episode Section Header
+              Row(
                 modifier = Modifier
                   .fillMaxWidth()
-                  .padding(vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                  .clickable { showChapterSheet = true }
+                  .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
               ) {
                 Text(
-                  text = uiState.chaptersError ?: stringResource(R.string.error_loading_episodes),
-                  color = TextSecondary,
-                  fontSize = 13.sp
+                  text = stringResource(R.string.episodes),
+                  color = TextPrimary,
+                  fontSize = 16.sp,
+                  fontWeight = FontWeight.Bold
                 )
-                TextButton(onClick = { viewModel.retry() }) {
-                  Text(stringResource(R.string.retry), color = AccentMain)
+                Icon(
+                  imageVector = Icons.Default.ChevronRight,
+                  contentDescription = null,
+                  tint = TextGrey,
+                  modifier = Modifier.size(20.dp)
+                )
+              }
+
+              // Episode List (Horizontal)
+              if (uiState.isChaptersLoading) {
+                ChapterSkeleton()
+              } else if (uiState.chaptersError != null) {
+                Column(
+                  modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                  horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                  Text(
+                    text = uiState.chaptersError ?: stringResource(R.string.error_loading_episodes),
+                    color = TextSecondary,
+                    fontSize = 13.sp
+                  )
+                  TextButton(onClick = { viewModel.retry() }) {
+                    Text(stringResource(R.string.retry), color = AccentMain)
+                  }
+                }
+              } else {
+                val chapterData = uiState.chapterData
+                if (chapterData != null && chapterData.chaps.isNotEmpty()) {
+                  val activeSeason =
+                    uiState.displaySeasons.find { it.id == uiState.activeDisplaySeasonId }
+                  val displayChaps = if (activeSeason?.range != null) {
+                    chapterData.chaps.slice(activeSeason.range.filter { it < chapterData.chaps.size })
+                  } else {
+                    chapterData.chaps
+                  }
+
+                  LazyRow(
+                    state = currentChapterListState,
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                  ) {
+                    items(displayChaps.size) { index ->
+                      val chap = displayChaps[index]
+                      val originalIndex =
+                        if (activeSeason?.range != null) activeSeason.range.first + index else index
+                      val isSelected =
+                        originalIndex == uiState.currentChapIndex && uiState.currentSeasonId == (activeSeason?.realId
+                          ?: uiState.currentSeasonId)
+
+                      val progress = uiState.chapterProgress[chap.id]
+
+                      EpisodeItem(
+                        chap = chap,
+                        isSelected = isSelected,
+                        progress = progress,
+                        onClick = {
+                          viewModel.playChapter(
+                            chap,
+                            activeSeason?.realId ?: uiState.currentSeasonId
+                          )
+                        }
+                      )
+                    }
+                  }
+                } else {
+                  Text(
+                    text = stringResource(R.string.no_episodes),
+                    color = TextSecondary,
+                    fontSize = 13.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                  )
                 }
               }
-            } else {
-              val chapterData = uiState.chapterData
-              if (chapterData != null && chapterData.chaps.isNotEmpty()) {
-                val activeSeason =
-                  uiState.displaySeasons.find { it.id == uiState.activeDisplaySeasonId }
-                val displayChaps = if (activeSeason?.range != null) {
-                  chapterData.chaps.slice(activeSeason.range.filter { it < chapterData.chaps.size })
-                } else {
-                  chapterData.chaps
+
+              // Seasons
+              if (uiState.displaySeasons.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Find current season index for scrolling
+                val currentSeasonIndex = uiState.displaySeasons.indexOfFirst {
+                  it.id == uiState.activeDisplaySeasonId
+                }
+
+                LaunchedEffect(currentSeasonIndex) {
+                  if (currentSeasonIndex >= 0) {
+                    seasonListState.animateScrollToItem(currentSeasonIndex)
+                  }
                 }
 
                 LazyRow(
-                  state = currentChapterListState,
+                  state = seasonListState,
                   modifier = Modifier.fillMaxWidth(),
                   horizontalArrangement = Arrangement.spacedBy(8.dp),
                   contentPadding = PaddingValues(horizontal = 16.dp)
                 ) {
-                  items(displayChaps.size) { index ->
-                    val chap = displayChaps[index]
-                    val originalIndex =
-                      if (activeSeason?.range != null) activeSeason.range.first + index else index
-                    val isSelected =
-                      originalIndex == uiState.currentChapIndex && uiState.currentSeasonId == (activeSeason?.realId
-                        ?: uiState.currentSeasonId)
+                  items(uiState.displaySeasons) { season ->
+                    val isCurrent = season.id == uiState.activeDisplaySeasonId
 
-                    val progress = uiState.chapterProgress[chap.id]
-
-                    EpisodeItem(
-                      chap = chap,
-                      isSelected = isSelected,
-                      progress = progress,
-                      onClick = {
-                        viewModel.playChapter(
-                          chap,
-                          activeSeason?.realId ?: uiState.currentSeasonId
+                    Box(
+                      modifier = Modifier
+                        .widthIn(min = 100.dp)
+                        .height(36.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(if (isCurrent) MainColor.copy(alpha = 0.15f) else DarkCard)
+                        .border(
+                          width = if (isCurrent) 1.5.dp else 1.dp,
+                          color = if (isCurrent) MainColor else Color.Transparent,
+                          shape = RoundedCornerShape(4.dp)
                         )
-                      }
-                    )
+                        .clickable {
+                          viewModel.setActiveDisplaySeason(season.id)
+                        }, contentAlignment = Alignment.Center
+                    ) {
+                      Text(
+                        text = season.name,
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        color = if (isCurrent) MainColor else TextSecondary,
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal
+                      )
+                    }
                   }
                 }
-              } else {
-                Text(
-                  text = stringResource(R.string.no_episodes),
-                  color = TextSecondary,
-                  fontSize = 13.sp,
-                  modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
               }
             }
 
-            // Seasons
-            if (uiState.displaySeasons.isNotEmpty()) {
+            // Related
+            if (detail.related.isNotEmpty()) {
               Spacer(modifier = Modifier.height(16.dp))
 
-              // Find current season index for scrolling
-              val currentSeasonIndex = uiState.displaySeasons.indexOfFirst {
-                it.id == uiState.activeDisplaySeasonId
-              }
-
-              LaunchedEffect(currentSeasonIndex) {
-                if (currentSeasonIndex >= 0) {
-                  seasonListState.animateScrollToItem(currentSeasonIndex)
-                }
-              }
-
-              LazyRow(
-                state = seasonListState,
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp)
-              ) {
-                items(uiState.displaySeasons) { season ->
-                  val isCurrent = season.id == uiState.activeDisplaySeasonId
-
-                  Box(
-                    modifier = Modifier
-                      .widthIn(min = 100.dp)
-                      .height(36.dp)
-                      .clip(RoundedCornerShape(4.dp))
-                      .background(if (isCurrent) MainColor.copy(alpha = 0.15f) else DarkCard)
-                      .border(
-                        width = if (isCurrent) 1.5.dp else 1.dp,
-                        color = if (isCurrent) MainColor else Color.Transparent,
-                        shape = RoundedCornerShape(4.dp)
-                      )
-                      .clickable {
-                        viewModel.setActiveDisplaySeason(season.id)
-                      }, contentAlignment = Alignment.Center
-                  ) {
-                    Text(
-                      text = season.name,
-                      modifier = Modifier.padding(horizontal = 12.dp),
-                      color = if (isCurrent) MainColor else TextSecondary,
-                      fontSize = 12.sp,
-                      maxLines = 1,
-                      overflow = TextOverflow.Ellipsis,
-                      fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal
-                    )
-                  }
-                }
-              }
+              Text(
+                text = stringResource(R.string.recommended_for_you),
+                color = TextPrimary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 16.dp)
+              )
+              Spacer(modifier = Modifier.height(8.dp))
+              GridAnimeList(
+                items = detail.related,
+                onItemClick = { anime -> onNavigateToDetail(anime.animeId) })
             }
           }
 
-          // Related
-          if (detail.related.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-              text = stringResource(R.string.recommended_for_you),
-              color = TextPrimary,
-              fontSize = 16.sp,
-              fontWeight = FontWeight.Bold,
-              modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            GridAnimeList(
-              items = detail.related, onItemClick = { anime -> onNavigateToDetail(anime.animeId) })
-          }
+          Spacer(modifier = Modifier.height(50.dp))
         }
-
-        Spacer(modifier = Modifier.height(50.dp))
       }
     }
 

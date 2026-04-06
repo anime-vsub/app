@@ -185,6 +185,13 @@
     <string name="newest_added">Mới thêm</string>
     <string name="oldest_added">Cũ nhất</string>
     <string name="episode_label">Tập %1$s</string>
+
+    <!-- Category/Filter -->
+    <string name="filter">Bộ lọc</string>
+    <string name="filters">Bộ lọc</string>
+    <string name="filter_title">Bộ lọc</string>
+    <string name="filter_group_format">Bộ lọc: %1$s</string>
+
     <string name="check_update">Kiểm tra cập nhật</string>
     <string name="update_available">Có phiên bản mới</string>
     <string name="update_message">Phiên bản mới (%1$s) đã sẵn sàng. Bạn có muốn cập nhật ngay không?</string>

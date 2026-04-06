@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -78,141 +79,162 @@ fun HomeScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
 
-  when {
-    uiState.isLoading -> HomeLoadingSkeleton()
-    uiState.error != null && uiState.data == null -> {
-      ErrorScreen(
-        error = uiState.error,
-        onRetry = { viewModel.loadHomePage() }
-      )
-    }
-
-    uiState.data != null -> {
-      val data = uiState.data!!
-      val hotUpdateListState = rememberLazyListState()
-
-      Column(
-        modifier = Modifier
-          .fillMaxSize()
-          .verticalScroll(rememberScrollState())
-      ) {
-        // Carousel (No padding, no corner radius)
-        if (data.carousel.isNotEmpty()) {
-          CarouselSection(
-            items = data.carousel,
-            onItemClick = { anime ->
-              onNavigateToDetail(anime.animeId)
-            },
-            onNavigateToCategory = onNavigateToCategory
-          )
-        }
-
-        // Quick links
-        QuickLinksRow(
-          onCatalogClick = {
-            onNavigateToCategory(listOf(SelectedFilter("danh-sach", "all", "Tất cả")))
-          },
-          onScheduleClick = onNavigateToSchedule,
-          onRankingsClick = { onNavigateToRankings(null) }
+  PullToRefreshBox(
+    isRefreshing = uiState.isRefreshing,
+    onRefresh = { viewModel.refresh() }
+  ) {
+    when {
+      uiState.isLoading -> HomeLoadingSkeleton()
+      uiState.error != null && uiState.data == null -> {
+        ErrorScreen(
+          error = uiState.error,
+          onRetry = { viewModel.loadHomePage() }
         )
+      }
 
-        // This Season
-        if (data.thisSeason.isNotEmpty()) {
-          SectionHeader(
-            title = stringResource(R.string.this_season),
-            onViewAll = {
-              onNavigateToCategory(listOf(SelectedFilter("danh-sach", "anime-moi", "Mới cập nhật")))
-            }
-          )
-          HorizontalAnimeList(
-            items = data.thisSeason,
-            onItemClick = { anime ->
-              onNavigateToDetail(anime.animeId)
-            }
-          )
-        }
+      uiState.data != null -> {
+        val data = uiState.data!!
+        val hotUpdateListState = rememberLazyListState()
 
-        // Nominated (Grid)
-        if (data.nominate.isNotEmpty()) {
-          Spacer(modifier = Modifier.height(16.dp))
-          SectionHeader(
-            title = stringResource(R.string.nominate),
-            onViewAll = { onNavigateToRankings(null) }
-          )
-          GridAnimeList(
-            items = data.nominate,
-            onItemClick = { anime ->
-              onNavigateToDetail(anime.animeId)
-            }
-          )
-        }
+        Column(
+          modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+        ) {
+          // Carousel (No padding, no corner radius)
+          if (data.carousel.isNotEmpty()) {
+            CarouselSection(
+              items = data.carousel,
+              onItemClick = { anime ->
+                onNavigateToDetail(anime.animeId)
+              },
+              onNavigateToCategory = onNavigateToCategory
+            )
+          }
 
-        // Top / Hot Update
-        if (data.hotUpdate.isNotEmpty()) {
-          Spacer(modifier = Modifier.height(16.dp))
-          SectionHeader(
-            title = stringResource(R.string.top),
-            onViewAll = { onNavigateToRankings(null) }
-          )
-          HorizontalAnimeList(
-            items = data.hotUpdate,
-            state = hotUpdateListState,
-            showRating = true,
-            onItemClick = { anime ->
-              onNavigateToDetail(anime.animeId)
+          // Quick links
+          QuickLinksRow(
+            onCatalogClick = {
+              onNavigateToCategory(listOf(SelectedFilter("danh-sach", "all", "Tất cả")))
             },
-            showTrending = true
+            onScheduleClick = onNavigateToSchedule,
+            onRankingsClick = { onNavigateToRankings(null) }
           )
-        }
 
-        // Coming Soon / Pre-release
-        if (data.preRelease.isNotEmpty()) {
-          val preReleaseListState = rememberLazyListState()
-
-          Spacer(modifier = Modifier.height(16.dp))
-          SectionHeader(
-            title = stringResource(R.string.coming_soon),
-            onViewAll = {
-              onNavigateToCategory(
-                listOf(
-                  SelectedFilter(
-                    "danh-sach",
-                    "anime-sap-chieu",
-                    "Sắp chiếu"
+          // This Season
+          if (data.thisSeason.isNotEmpty()) {
+            SectionHeader(
+              title = stringResource(R.string.this_season),
+              onViewAll = {
+                onNavigateToCategory(
+                  listOf(
+                    SelectedFilter(
+                      "danh-sach",
+                      "anime-moi",
+                      "Mới cập nhật"
+                    )
                   )
                 )
-              )
-            }
-          )
+              }
+            )
+            HorizontalAnimeList(
+              items = data.thisSeason,
+              onItemClick = { anime ->
+                onNavigateToDetail(anime.animeId)
+              }
+            )
+          }
 
-          HorizontalAnimeList(
-            items = data.preRelease,
-            state = preReleaseListState,
-            showTimeline = true,
-            onItemClick = { anime ->
-              onNavigateToDetail(anime.animeId)
-            }
-          )
+          // Nominated (Grid)
+          if (data.nominate.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            SectionHeader(
+              title = stringResource(R.string.nominate),
+              onViewAll = { onNavigateToRankings(null) }
+            )
+            GridAnimeList(
+              items = data.nominate,
+              onItemClick = { anime ->
+                onNavigateToDetail(anime.animeId)
+              }
+            )
+          }
+
+          // Top / Hot Update
+          if (data.hotUpdate.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            SectionHeader(
+              title = stringResource(R.string.top),
+              onViewAll = { onNavigateToRankings(null) }
+            )
+            HorizontalAnimeList(
+              items = data.hotUpdate,
+              state = hotUpdateListState,
+              showRating = true,
+              onItemClick = { anime ->
+                onNavigateToDetail(anime.animeId)
+              },
+              showTrending = true
+            )
+          }
+
+          // Coming Soon / Pre-release
+          if (data.preRelease.isNotEmpty()) {
+            val preReleaseListState = rememberLazyListState()
+
+            Spacer(modifier = Modifier.height(16.dp))
+            SectionHeader(
+              title = stringResource(R.string.coming_soon),
+              onViewAll = {
+                onNavigateToCategory(
+                  listOf(
+                    SelectedFilter(
+                      "danh-sach",
+                      "anime-sap-chieu",
+                      "Sắp chiếu"
+                    )
+                  )
+                )
+              }
+            )
+
+            HorizontalAnimeList(
+              items = data.preRelease,
+              state = preReleaseListState,
+              showTimeline = true,
+              onItemClick = { anime ->
+                onNavigateToDetail(anime.animeId)
+              }
+            )
+          }
+
+          // Last Updated (Grid)
+          if (data.lastUpdate.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            SectionHeader(
+              title = stringResource(R.string.last_updated),
+              onViewAll = {
+                onNavigateToCategory(
+                  listOf(
+                    SelectedFilter(
+                      "danh-sach",
+                      "anime-moi",
+                      "Mới cập nhật"
+                    )
+                  )
+                )
+              }
+            )
+            GridAnimeList(
+              items = data.lastUpdate,
+              onItemClick = { anime ->
+                onNavigateToDetail(anime.animeId)
+              }
+            )
+          }
+
+          Spacer(modifier = Modifier.height(80.dp))
         }
-
-        // Last Updated (Grid)
-        if (data.lastUpdate.isNotEmpty()) {
-          Spacer(modifier = Modifier.height(16.dp))
-          SectionHeader(
-            title = stringResource(R.string.last_updated),
-            onViewAll = {
-              onNavigateToCategory(listOf(SelectedFilter("danh-sach", "anime-moi", "Mới cập nhật")))
-            }
-          )
-          GridAnimeList(
-            items = data.lastUpdate,
-            onItemClick = { anime ->
-              onNavigateToDetail(anime.animeId)
-            }
-          )
-        }
-
-        Spacer(modifier = Modifier.height(80.dp))
       }
     }
   }

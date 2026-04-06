@@ -12,6 +12,7 @@ import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,6 +38,7 @@ data class AccountUiState(
   val historyError: String? = null,
   val followsError: String? = null,
   val playlistsError: String? = null,
+  val isRefreshing: Boolean = false
 )
 
 @HiltViewModel
@@ -86,6 +88,45 @@ class AccountViewModel @Inject constructor(
           _uiState.value = _uiState.value.copy(brightnessGesture = v)
         }
       }
+    }
+  }
+
+  fun refresh() {
+    viewModelScope.launch {
+      _uiState.update { it.copy(isRefreshing = true) }
+      if (_uiState.value.isLoggedIn) {
+        val historyJob = launch {
+          repository.getHistory(1)
+            .onSuccess { list ->
+              _uiState.update { it.copy(histories = list.take(10), historyError = null) }
+            }
+            .onFailure { e ->
+              _uiState.update { it.copy(historyError = e.message) }
+            }
+        }
+        val followsJob = launch {
+          repository.getFollows(1)
+            .onSuccess { page ->
+              _uiState.update { it.copy(follows = page.items.take(10), followsError = null) }
+            }
+            .onFailure { e ->
+              _uiState.update { it.copy(followsError = e.message) }
+            }
+        }
+        val playlistJob = launch {
+          playlistRepository.getPlaylists()
+            .onSuccess { list ->
+              _uiState.update { it.copy(playlists = list, playlistsError = null) }
+            }
+            .onFailure { e ->
+              _uiState.update { it.copy(playlistsError = e.message) }
+            }
+        }
+        historyJob.join()
+        followsJob.join()
+        playlistJob.join()
+      }
+      _uiState.update { it.copy(isRefreshing = false) }
     }
   }
 
@@ -192,7 +233,11 @@ class AccountViewModel @Inject constructor(
     _uiState.value = _uiState.value.copy(playlistCheckedStates = currentStates)
   }
 
-  fun checkForUpdate(onUpdateAvailable: (git.shin.animevsub.data.model.UpdateInfo) -> Unit, onNoUpdate: () -> Unit, onError: (String) -> Unit) {
+  fun checkForUpdate(
+    onUpdateAvailable: (git.shin.animevsub.data.model.UpdateInfo) -> Unit,
+    onNoUpdate: () -> Unit,
+    onError: (String) -> Unit
+  ) {
     viewModelScope.launch {
       _uiState.value = _uiState.value.copy(isCheckingUpdate = true)
       updateManager.checkForUpdate()

@@ -31,6 +31,7 @@ import javax.inject.Inject
 
 data class DetailUiState(
   val isLoading: Boolean = true,
+  val isRefreshing: Boolean = false,
   val detail: AnimeDetail? = null,
   val chapterData: ChapterData? = null,
   val isChaptersLoading: Boolean = false,
@@ -531,6 +532,34 @@ class DetailViewModel @Inject constructor(
           chapName = chapter.name
         )
       }
+    }
+  }
+
+  fun refresh() {
+    viewModelScope.launch {
+      _uiState.update { it.copy(isRefreshing = true) }
+      val animeId = _uiState.value.animeId
+      val currentSeasonId = _uiState.value.currentSeasonId
+
+      // Reload detail
+      repository.getAnimeDetail(animeId)
+        .onSuccess { detail ->
+          detailCache[animeId] = detail
+          _uiState.update { it.copy(detail = detail) }
+          updateDisplaySeasons()
+          checkFollow()
+        }
+
+      // Reload chapters for current season
+      repository.getChapters(currentSeasonId)
+        .onSuccess { chapterData ->
+          chapterCache[currentSeasonId] = chapterData
+          _uiState.update { it.copy(chapterData = chapterData) }
+          updateChapterCount(currentSeasonId, chapterData.chaps.size)
+          loadAllChapterProgress(currentSeasonId)
+        }
+
+      _uiState.update { it.copy(isRefreshing = false) }
     }
   }
 

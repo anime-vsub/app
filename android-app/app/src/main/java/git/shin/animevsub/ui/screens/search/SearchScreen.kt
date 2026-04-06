@@ -24,8 +24,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -58,6 +60,7 @@ import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
   onNavigateToDetail: (String) -> Unit,
@@ -125,17 +128,22 @@ fun SearchScreen(
     // Content
     Box(modifier = Modifier.fillMaxSize()) {
       if (uiState.isSearching) {
-        if (uiState.isLoading && uiState.searchResults.isEmpty()) {
-          GridLoadingSkeleton()
-        } else {
-          VerticalGridAnimeList(
-            items = uiState.searchResults,
-            onItemClick = { onNavigateToDetail(it.animeId) },
-            isLoadingMore = uiState.isLoading && uiState.searchResults.isNotEmpty(),
-            onLoadMore = { viewModel.loadMore() },
-            contentPadding = PaddingValues(16.dp),
-            state = rememberLazyGridState()
-          )
+        PullToRefreshBox(
+          isRefreshing = uiState.isRefreshing,
+          onRefresh = { viewModel.refresh() }
+        ) {
+          if (uiState.isLoading && uiState.searchResults.isEmpty()) {
+            GridLoadingSkeleton()
+          } else {
+            VerticalGridAnimeList(
+              items = uiState.searchResults,
+              onItemClick = { onNavigateToDetail(it.animeId) },
+              isLoadingMore = uiState.isLoading && uiState.searchResults.isNotEmpty(),
+              onLoadMore = { viewModel.loadMore() },
+              contentPadding = PaddingValues(16.dp),
+              state = rememberLazyGridState()
+            )
+          }
         }
       } else if (uiState.query.isEmpty()) {
         // Show search history

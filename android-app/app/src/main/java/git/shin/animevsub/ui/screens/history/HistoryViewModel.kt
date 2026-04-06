@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 data class HistoryUiState(
   val isLoading: Boolean = true,
+  val isRefreshing: Boolean = false,
   val groupedItems: Map<String, List<HistoryItem>> = emptyMap(),
   val error: String? = null,
   val currentPage: Int = 1,
@@ -37,10 +38,14 @@ class HistoryViewModel @Inject constructor(
     loadHistory(1)
   }
 
-  fun loadHistory(page: Int) {
+  fun loadHistory(page: Int, isRefreshing: Boolean = false) {
     viewModelScope.launch {
       if (page == 1) {
-        _uiState.update { it.copy(isLoading = true, error = null) }
+        if (isRefreshing) {
+          _uiState.update { it.copy(isRefreshing = true, error = null) }
+        } else {
+          _uiState.update { it.copy(isLoading = true, error = null) }
+        }
         allItems.clear()
       } else {
         _uiState.update { it.copy(isLoadingMore = true) }
@@ -53,6 +58,7 @@ class HistoryViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               isLoading = false,
+              isRefreshing = false,
               isLoadingMore = false,
               groupedItems = grouped,
               currentPage = page,
@@ -65,12 +71,17 @@ class HistoryViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               isLoading = false,
+              isRefreshing = false,
               isLoadingMore = false,
               error = e.message
             )
           }
         }
     }
+  }
+
+  fun refresh() {
+    loadHistory(1, isRefreshing = true)
   }
 
   private fun groupItems(items: List<HistoryItem>): Map<String, List<HistoryItem>> {

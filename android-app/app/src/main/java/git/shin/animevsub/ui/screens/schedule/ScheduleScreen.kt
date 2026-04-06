@@ -33,6 +33,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -102,101 +103,108 @@ fun ScheduleScreen(
     },
     containerColor = DarkBackground
   ) { padding ->
-    Column(
+    PullToRefreshBox(
+      isRefreshing = uiState.isRefreshing,
+      onRefresh = { viewModel.refresh() },
       modifier = Modifier
         .fillMaxSize()
         .padding(padding)
     ) {
-      when {
-        uiState.isLoading -> ScheduleLoadingSkeleton()
-        uiState.error != null -> {
-          ErrorScreen(error = uiState.error, onRetry = { viewModel.loadSchedule() })
-        }
+      Column(
+        modifier = Modifier
+          .fillMaxSize()
+      ) {
+        when {
+          uiState.isLoading -> ScheduleLoadingSkeleton()
+          uiState.error != null -> {
+            ErrorScreen(error = uiState.error, onRetry = { viewModel.loadSchedule() })
+          }
 
-        else -> {
-          if (uiState.days.isNotEmpty()) {
-            val pagerState =
-              rememberPagerState(initialPage = uiState.selectedDay) { uiState.days.size }
-            val scope = rememberCoroutineScope()
+          else -> {
+            if (uiState.days.isNotEmpty()) {
+              val pagerState =
+                rememberPagerState(initialPage = uiState.selectedDay) { uiState.days.size }
+              val scope = rememberCoroutineScope()
 
-            // Sync pager with ViewModel
-            LaunchedEffect(pagerState.currentPage) {
-              if (pagerState.currentPage != uiState.selectedDay) {
-                viewModel.selectDay(pagerState.currentPage)
+              // Sync pager with ViewModel
+              LaunchedEffect(pagerState.currentPage) {
+                if (pagerState.currentPage != uiState.selectedDay) {
+                  viewModel.selectDay(pagerState.currentPage)
+                }
               }
-            }
 
-            // Sync pager when selectedDay changes in ViewModel (e.g. initial load)
-            LaunchedEffect(uiState.selectedDay) {
-              if (uiState.selectedDay != pagerState.currentPage) {
-                pagerState.animateScrollToPage(uiState.selectedDay)
+              // Sync pager when selectedDay changes in ViewModel (e.g. initial load)
+              LaunchedEffect(uiState.selectedDay) {
+                if (uiState.selectedDay != pagerState.currentPage) {
+                  pagerState.animateScrollToPage(uiState.selectedDay)
+                }
               }
-            }
 
-            ScrollableTabRow(
-              selectedTabIndex = pagerState.currentPage,
-              containerColor = DarkBackground,
-              contentColor = AccentMain,
-              edgePadding = 16.dp,
-              divider = {},
-              indicator = { tabPositions ->
-                if (pagerState.currentPage < tabPositions.size) {
-                  TabRowDefaults.SecondaryIndicator(
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                    color = AccentMain,
-                    height = 2.dp
+              ScrollableTabRow(
+                selectedTabIndex = pagerState.currentPage,
+                containerColor = DarkBackground,
+                contentColor = AccentMain,
+                edgePadding = 16.dp,
+                divider = {},
+                indicator = { tabPositions ->
+                  if (pagerState.currentPage < tabPositions.size) {
+                    TabRowDefaults.SecondaryIndicator(
+                      modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                      color = AccentMain,
+                      height = 2.dp
+                    )
+                  }
+                }
+              ) {
+                uiState.days.forEachIndexed { index, day ->
+                  val isTodayDay = isToday(day.date)
+                  val (shortDay, dateStr) = formatShortDayAndDate(day.date)
+                  val isSelected = pagerState.currentPage == index
+
+                  Tab(
+                    selected = isSelected,
+                    onClick = {
+                      scope.launch {
+                        pagerState.animateScrollToPage(index)
+                      }
+                    },
+                    modifier = Modifier.widthIn(min = 0.dp),
+                    text = {
+                      Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                      ) {
+                        Text(
+                          text = shortDay,
+                          color = if (isSelected) AccentMain
+                          else if (isTodayDay) AccentMainLight
+                          else TextGrey,
+                          fontWeight = if (isSelected || isTodayDay) FontWeight.Bold else FontWeight.Normal,
+                          fontSize = 14.sp
+                        )
+                        Text(
+                          text = dateStr,
+                          color = if (isSelected) AccentMain
+                          else if (isTodayDay) AccentMainLight
+                          else TextGrey,
+                          fontSize = 10.sp
+                        )
+                      }
+                    }
                   )
                 }
               }
-            ) {
-              uiState.days.forEachIndexed { index, day ->
-                val isTodayDay = isToday(day.date)
-                val (shortDay, dateStr) = formatShortDayAndDate(day.date)
-                val isSelected = pagerState.currentPage == index
 
-                Tab(
-                  selected = isSelected,
-                  onClick = {
-                    scope.launch {
-                      pagerState.animateScrollToPage(index)
-                    }
-                  },
-                  modifier = Modifier.widthIn(min = 0.dp),
-                  text = {
-                    Column(
-                      horizontalAlignment = Alignment.CenterHorizontally,
-                      modifier = Modifier.padding(vertical = 4.dp)
-                    ) {
-                      Text(
-                        text = shortDay,
-                        color = if (isSelected) AccentMain
-                        else if (isTodayDay) AccentMainLight
-                        else TextGrey,
-                        fontWeight = if (isSelected || isTodayDay) FontWeight.Bold else FontWeight.Normal,
-                        fontSize = 14.sp
-                      )
-                      Text(
-                        text = dateStr,
-                        color = if (isSelected) AccentMain
-                        else if (isTodayDay) AccentMainLight
-                        else TextGrey,
-                        fontSize = 10.sp
-                      )
-                    }
-                  }
+              HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.weight(1f)
+              ) { pageIndex ->
+                val dayData = uiState.days[pageIndex]
+                ScheduleDayList(
+                  dayData = dayData,
+                  onNavigateToDetail = onNavigateToDetail
                 )
               }
-            }
-
-            HorizontalPager(
-              state = pagerState,
-              modifier = Modifier.weight(1f)
-            ) { pageIndex ->
-              val dayData = uiState.days[pageIndex]
-              ScheduleDayList(
-                dayData = dayData,
-                onNavigateToDetail = onNavigateToDetail
-              )
             }
           }
         }

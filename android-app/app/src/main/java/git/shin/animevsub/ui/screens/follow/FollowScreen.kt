@@ -9,6 +9,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -65,23 +66,28 @@ fun FollowScreen(
     containerColor = DarkBackground
   ) { padding ->
     Box(modifier = Modifier.padding(padding)) {
-      when {
-        uiState.isLoading -> GridLoadingSkeleton()
-        uiState.error != null && uiState.items.isEmpty() -> {
-          ErrorScreen(
-            error = uiState.error,
-            onRetry = { viewModel.retry() }
-          )
-        }
+      PullToRefreshBox(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = { viewModel.refresh() }
+      ) {
+        when {
+          uiState.isLoading -> GridLoadingSkeleton()
+          uiState.error != null && uiState.items.isEmpty() -> {
+            ErrorScreen(
+              error = uiState.error,
+              onRetry = { viewModel.retry() }
+            )
+          }
 
-        else -> {
-          VerticalGridAnimeList(
-            items = uiState.items,
-            onItemClick = { onNavigateToDetail(it.animeId) },
-            state = gridState,
-            isLoadingMore = uiState.isLoadingMore,
-            onLoadMore = { viewModel.loadMore() }
-          )
+          else -> {
+            VerticalGridAnimeList(
+              items = uiState.items,
+              onItemClick = { onNavigateToDetail(it.animeId) },
+              state = gridState,
+              isLoadingMore = uiState.isLoadingMore,
+              onLoadMore = { viewModel.loadMore() }
+            )
+          }
         }
       }
     }

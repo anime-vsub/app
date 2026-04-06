@@ -26,7 +26,8 @@ data class CategoryUiState(
   val isLoadingMore: Boolean = false,
   val filterGroups: List<FilterGroup> = emptyList(),
   val selectedFilters: List<SelectedFilter> = emptyList(),
-  val isFilterLoading: Boolean = false
+  val isFilterLoading: Boolean = false,
+  val isRefreshing: Boolean = false
 )
 
 @HiltViewModel
@@ -72,10 +73,14 @@ class CategoryViewModel @Inject constructor(
     }
   }
 
-  fun loadPage(page: Int) {
+  fun loadPage(page: Int, isRefreshing: Boolean = false) {
     viewModelScope.launch {
       if (page == 1) {
-        _uiState.update { it.copy(isLoading = true, error = null) }
+        if (isRefreshing) {
+          _uiState.update { it.copy(isRefreshing = true, error = null) }
+        } else {
+          _uiState.update { it.copy(isLoading = true, error = null) }
+        }
       } else {
         _uiState.update { it.copy(isLoadingMore = true) }
       }
@@ -89,6 +94,7 @@ class CategoryViewModel @Inject constructor(
         _uiState.update {
           it.copy(
             isLoading = false,
+            isRefreshing = false,
             isLoadingMore = false,
             items = newItems,
             currentPage = page,
@@ -101,12 +107,17 @@ class CategoryViewModel @Inject constructor(
         _uiState.update {
           it.copy(
             isLoading = false,
+            isRefreshing = false,
             isLoadingMore = false,
             error = e.message
           )
         }
       }
     }
+  }
+
+  fun refresh() {
+    loadPage(1, isRefreshing = true)
   }
 
   fun updateFilter(filter: SelectedFilter) {
