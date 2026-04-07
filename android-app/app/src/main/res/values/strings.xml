@@ -100,7 +100,10 @@
     <string name="feedback">Feedback</string>
     <string name="skip_intro">Skip Intro</string>
     <string name="skip_outro">Skip Outro</string>
-    <string name="seconds_remaining">%1$d seconds</string>
+    <plurals name="seconds_remaining">
+        <item quantity="one">%1$d second</item>
+        <item quantity="other">%1$d seconds</item>
+    </plurals>
     <string name="brightness">Brightness</string>
     <string name="volume">Volume</string>
 
@@ -193,7 +196,10 @@
     <string name="empty_playlist">This playlist is empty</string>
     <string name="added_to_playlist">Added to %1$s</string>
     <string name="removed_from_playlist">Removed from %1$s</string>
-    <string name="video_count">%1$d videos</string>
+    <plurals name="video_count">
+        <item quantity="one">%1$d video</item>
+        <item quantity="other">%1$d videos</item>
+    </plurals>
     <string name="delete_playlist">Delete Playlist</string>
     <string name="rename_playlist">Rename Playlist</string>
     <string name="edit_description">Edit Description</string>

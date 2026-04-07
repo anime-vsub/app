@@ -3,11 +3,15 @@
     <string name="app_name">AnimeVsub</string>
 
     <!-- Bottom Navigation -->
+    <string name="home">Trang chủ</string>
+    <string name="search">Tìm kiếm</string>
     <string name="nav_home">Trang chủ</string>
     <string name="nav_search">Tìm kiếm</string>
     <string name="nav_news">Tin tức</string>
     <string name="nav_notification">Thông báo</string>
     <string name="nav_account">Tôi</string>
+    <string name="account">Tài khoản</string>
+    <string name="notifications">Thông báo</string>
 
     <!-- Home -->
     <string name="catalog">Mục lục</string>
@@ -47,6 +51,8 @@
     <string name="duration_label">Thời lượng</string>
     <string name="watch_now">Xem ngay</string>
     <string name="add_to_playlist">Thêm vào danh sách phát</string>
+    <string name="episode_label">Tập %1$s</string>
+    <string name="ep_label">Tập %1$s</string>
     <string name="views_count">%1$s lượt xem</string>
     <string name="author_label">Tác giả</string>
     <string name="studio_prefix">Sản xuất bởi %1$s</string>
@@ -74,6 +80,7 @@
     <string name="search_episode_hint">Tìm tên tập hoặc số tập…</string>
     <string name="no_episodes_found">Không tìm thấy tập phim nào</string>
     <string name="error_loading_episodes">Lỗi tải tập phim</string>
+    <string name="release_time_format">Bắt đầu lúc %1$s</string>
 
     <!-- Player -->
     <string name="server_high">Cao</string>
@@ -81,6 +88,9 @@
     <string name="server_label">Máy chủ phát</string>
     <string name="next_episode">Tập tiếp theo</string>
     <string name="previous_episode">Tập trước</string>
+    <string name="next_ep">Tiếp</string>
+    <string name="previous_ep">Trước</string>
+    <string name="now_playing">Đang phát</string>
     <string name="playback_speed">Tốc độ phát</string>
     <string name="quality">Chất lượng phát</string>
     <string name="auto_next_hint">Sắp chuyển tập tiếp theo…</string>
@@ -90,7 +100,9 @@
     <string name="feedback">Phản hồi</string>
     <string name="skip_intro">Bỏ qua Opening</string>
     <string name="skip_outro">Bỏ qua Ending</string>
-    <string name="seconds_remaining">%1$d giây</string>
+    <plurals name="seconds_remaining">
+        <item quantity="other">%1$d giây</item>
+    </plurals>
     <string name="brightness">Độ sáng</string>
     <string name="volume">Âm lượng</string>
 
@@ -111,7 +123,9 @@
     <string name="playlists">Danh sách phát</string>
     <string name="edit_profile">Sửa hồ sơ</string>
     <string name="change_password">Đổi mật khẩu</string>
-    <string name="login_required">Cần đăng nhập để %1$s</string>
+    <string name="login_required">Cần đăng nhập để sử dụng tính năng này</string>
+    <string name="personal">Cá nhân</string>
+    <string name="general">Chung</string>
     <string name="login_note">Để đăng ký hoặc khôi phục mật khẩu, vui lòng truy cập website của chúng tôi.</string>
 
     <!-- Settings -->
@@ -127,11 +141,16 @@
     <string name="brightness_gesture">Vuốt để chỉnh độ sáng</string>
 
     <!-- Rankings -->
+    <string name="ranking_day">Ngày</string>
+    <string name="ranking_month">Tháng</string>
+    <string name="ranking_season">Mùa</string>
+    <string name="ranking_year">Năm</string>
     <string name="rank_day">Ngày</string>
     <string name="rank_month">Tháng</string>
     <string name="rank_season">Mùa</string>
     <string name="rank_year">Năm</string>
     <string name="rank_voted">Bình chọn nhiều</string>
+    <string name="error_no_ranking_types">Không tìm thấy loại bảng xếp hạng</string>
 
     <!-- General -->
     <string name="retry">Thử lại</string>
@@ -147,7 +166,7 @@
     <string name="version">Phiên bản %1$s</string>
     <string name="about_description">AnimeVsub là ứng dụng xem phim anime miễn phí. Xem anime yêu thích của bạn với phụ đề tiếng Việt.</string>
     <string name="developer">Nhà phát triển</string>
-    <string name="developer_name">Đội ngũ AnimeVsub</string>
+    <string name="developer_name">Tachibana Shin</string>
     <string name="source_code">Mã nguồn</string>
     <string name="license">Giấy phép</string>
     <string name="mit_license">Giấy phép MIT</string>
@@ -158,10 +177,11 @@
     <string name="made_with_love">Được làm với ❤️ cho người hâm mộ anime</string>
 
     <!-- News -->
-    <string name="news">Lịch chiếu phim</string>
+    <string name="news">Tin tức</string>
     <string name="no_news">Không có tin tức</string>
 
     <!-- Notification -->
+    <string name="no_playlists">Không tìm thấy danh sách phát</string>
     <string name="no_notifications">Không có thông báo</string>
     <string name="mark_read">Đánh dấu đã đọc</string>
     <string name="no_history">Chưa có lịch sử xem</string>
@@ -175,23 +195,29 @@
     <string name="empty_playlist">Danh sách phát trống</string>
     <string name="added_to_playlist">Đã thêm vào %1$s</string>
     <string name="removed_from_playlist">Đã xóa khỏi %1$s</string>
-    <string name="video_count">%1$d video</string>
-    <string name="add_to_other_playlist">Thêm vào playlist khác</string>
-    <string name="remove_from_playlist">Xóa khỏi playlist này</string>
+    <plurals name="video_count">
+        <item quantity="other">%1$d video</item>
+    </plurals>
+    <string name="delete_playlist">Xóa playlist</string>
     <string name="rename_playlist">Đổi tên playlist</string>
     <string name="edit_description">Sửa mô tả</string>
-    <string name="delete_playlist">Xóa playlist</string>
-    <string name="confirm_delete_playlist">Bạn có chắc chắn muốn xóa playlist này không?</string>
+    <string name="update_success">Cập nhật thành công</string>
+    <string name="delete_success">Xóa thành công</string>
+    <string name="remove_from_playlist">Xóa khỏi playlist này</string>
+    <string name="add_to_other_playlist">Thêm vào playlist khác</string>
+    <string name="sort_by">Sắp xếp theo</string>
     <string name="newest_added">Mới thêm</string>
     <string name="oldest_added">Cũ nhất</string>
-    <string name="episode_label">Tập %1$s</string>
+    <string name="playlist_not_found">Không tìm thấy playlist</string>
+    <string name="confirm_delete_playlist">Bạn có chắc chắn muốn xóa playlist này không?</string>
 
     <!-- Category/Filter -->
     <string name="filter">Bộ lọc</string>
     <string name="filters">Bộ lọc</string>
     <string name="filter_title">Bộ lọc</string>
     <string name="filter_group_format">Bộ lọc: %1$s</string>
-
+    <string name="more">Thêm</string>
+    <string name="restored_progress">Đã khôi phục tiến trình xem %1$d:%2$02d</string>
     <string name="check_update">Kiểm tra cập nhật</string>
     <string name="update_available">Có phiên bản mới</string>
     <string name="update_message">Phiên bản mới (%1$s) đã sẵn sàng. Bạn có muốn cập nhật ngay không?</string>

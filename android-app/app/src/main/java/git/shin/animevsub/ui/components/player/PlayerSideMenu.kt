@@ -37,8 +37,8 @@ import git.shin.animevsub.ui.theme.DarkSurface
 fun PlayerSideMenu(
   visible: Boolean,
   onDismiss: () -> Unit,
-  title: String? = null,
   modifier: Modifier = Modifier,
+  title: String? = null,
   content: @Composable () -> Unit
 ) {
   val context = LocalContext.current

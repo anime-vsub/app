@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -107,7 +108,7 @@ fun SkipNotification(
           fontWeight = FontWeight.Bold
         )
         Text(
-          text = stringResource(R.string.seconds_remaining, secondsRemaining),
+          text = pluralStringResource(R.plurals.seconds_remaining, secondsRemaining, secondsRemaining),
           color = Color.White.copy(alpha = 0.5f),
           fontSize = 12.sp
         )

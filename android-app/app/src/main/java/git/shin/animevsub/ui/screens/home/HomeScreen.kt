@@ -66,6 +66,7 @@ import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextPrimary
 import kotlinx.coroutines.delay
+import java.util.Locale
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -339,7 +340,7 @@ private fun CarouselSection(
               )
               Spacer(modifier = Modifier.width(4.dp))
               Text(
-                text = String.format("%.1f", item.rate),
+                text = String.format(Locale.US, "%.1f", item.rate),
                 color = Color.White,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold

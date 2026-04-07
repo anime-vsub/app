@@ -247,7 +247,7 @@ private fun ScheduleDayList(
       groupedItems.forEach { (time, items) ->
         val itemHour = try {
           time.split(":")[0].toInt()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
           -1
         }
         val isCurrentHour = itemHour == currentHour && isToday(dayData.date)

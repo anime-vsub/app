@@ -60,6 +60,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -484,7 +485,7 @@ fun PlaylistHeader(
 
       // Info
       Text(
-        text = stringResource(R.string.video_count, playlist.movieCount),
+        text = pluralStringResource(R.plurals.video_count, playlist.movieCount, playlist.movieCount),
         color = TextGrey,
         fontSize = 14.sp
       )

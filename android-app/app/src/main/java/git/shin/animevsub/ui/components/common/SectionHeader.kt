@@ -22,8 +22,8 @@ import git.shin.animevsub.ui.theme.TextPrimary
 @Composable
 fun SectionHeader(
   title: String,
-  onViewAll: (() -> Unit)? = null,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  onViewAll: (() -> Unit)? = null
 ) {
   Row(
     modifier = modifier

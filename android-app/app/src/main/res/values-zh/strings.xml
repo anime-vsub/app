@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AnimeVsub</string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">首页</string>
+    <string name="search">搜索</string>
     <string name="nav_home">首页</string>
     <string name="nav_search">搜索</string>
     <string name="nav_news">新闻</string>
     <string name="nav_notification">通知</string>
     <string name="nav_account">我的</string>
+    <string name="account">账号</string>
+    <string name="notifications">通知</string>
+
+    <!-- Home -->
     <string name="catalog">目录</string>
     <string name="schedule">播出时间</string>
     <string name="rankings">排行榜</string>
@@ -15,12 +23,20 @@
     <string name="coming_soon">即将上映</string>
     <string name="last_updated">最近更新</string>
     <string name="today">今天</string>
+    <string name="yesterday">昨天</string>
+    <string name="history_date_format">%1$d/%2$d</string>
     <string name="tomorrow">明天</string>
+    <string name="upcoming">即将上映</string>
     <string name="view_all">查看全部</string>
+
+    <!-- Search -->
     <string name="search_hint">搜索动漫…</string>
     <string name="search_history">搜索历史</string>
     <string name="clear_history">清除</string>
     <string name="no_results">未找到结果</string>
+    <string name="view_all_results">查看所有结果</string>
+
+    <!-- Detail -->
     <string name="episodes">剧集</string>
     <string name="description">简介</string>
     <string name="related">相关</string>
@@ -35,28 +51,180 @@
     <string name="duration_label">时长</string>
     <string name="watch_now">立即观看</string>
     <string name="add_to_playlist">添加到播放列表</string>
+    <string name="episode_label">第 %1$s 集</string>
+    <string name="ep_label">第 %1$s 集</string>
+    <string name="views_count">%1$s 次观看</string>
+    <string name="author_label">作者</string>
+    <string name="studio_prefix">制作: %1$s</string>
+    <string name="rating_count">%1$s 条评分</string>
+    <string name="share">分享</string>
+    <string name="save_label">保存</string>
+    <string name="episodes_title">剧集</string>
+    <string name="total_episodes">%1$s 集</string>
+    <string name="full_series">全集</string>
+    <string name="recommended_for_you">为你推荐</string>
+    <string name="trailer_title">预告片</string>
+    <string name="other_name">别名</string>
+    <string name="updated_to_episode">更新至第 %1$s 集</string>
+    <string name="no_episodes">暂无剧集</string>
+    <string name="unknown">未知</string>
+    <string name="schedule_update_format">新剧集: %1$s %2$s %3$s</string>
+    <string name="today_text">今天</string>
+    <string name="sunday_text">星期日</string>
+    <string name="day_of_week_format">在 %1$s</string>
+    <string name="next_week_text">下周</string>
+    <string name="this_week_text">本周</string>
+    <string name="season_list">季度列表</string>
+    <string name="select_episode">选择剧集</string>
+    <string name="toggle_view_mode">切换视图模式</string>
+    <string name="search_episode_hint">搜索剧集…</string>
+    <string name="no_episodes_found">未找到剧集</string>
+    <string name="error_loading_episodes">加载剧集时出错</string>
+    <string name="release_time_format">%1$s 开始</string>
+
+    <!-- Player -->
+    <string name="server_high">高清</string>
+    <string name="server_low">普清</string>
+    <string name="server_label">服务器</string>
+    <string name="next_episode">下一集</string>
+    <string name="previous_episode">上一集</string>
+    <string name="next_ep">下一集</string>
+    <string name="previous_ep">上一集</string>
+    <string name="now_playing">正在播放</string>
+    <string name="playback_speed">播放速度</string>
+    <string name="quality">画质</string>
+    <string name="auto_next_hint">即将自动播放下一集…</string>
+    <string name="auto_next_now_playing">正在播放下一集: %1$s</string>
+    <string name="playback_speed_changed">播放速度: %1$sx</string>
+    <string name="report_bug">反馈问题</string>
+    <string name="feedback">反馈</string>
+    <string name="skip_intro">跳过片头</string>
+    <string name="skip_outro">跳过片尾</string>
+    <plurals name="seconds_remaining">
+        <item quantity="other">%1$d 秒后</item>
+    </plurals>
+    <string name="brightness">亮度</string>
+    <string name="volume">音量</string>
+
+    <!-- Account -->
     <string name="login">登录</string>
-    <string name="logout">退出</string>
+    <string name="logout">退出登录</string>
     <string name="email">邮箱</string>
     <string name="password">密码</string>
     <string name="history">历史</string>
     <string name="follow">关注</string>
+    <string name="followed">已关注</string>
+    <string name="unfollowed">取消关注</string>
+    <string name="follow_error">发生错误，请重试</string>
+    <string name="share_message">正在 AnimeVsub 观看 %1$s: %2$s</string>
+    <string name="share_title">分享影片</string>
     <string name="settings">设置</string>
     <string name="about">关于</string>
     <string name="playlists">播放列表</string>
-    <string name="retry">重试</string>
-    <string name="error_occurred">发生错误</string>
-    <string name="loading">加载中…</string>
-    <string name="cancel">取消</string>
-    <string name="ok">确定</string>
+    <string name="edit_profile">编辑个人资料</string>
+    <string name="change_password">修改密码</string>
+    <string name="login_required">请登录以使用此功能</string>
+    <string name="personal">个人</string>
+    <string name="general">常规</string>
+    <string name="login_note">如需注册或重置密码，请访问我们的网站。</string>
+
+    <!-- Settings -->
+    <string name="player_settings">播放器设置</string>
+    <string name="auto_next">自动播放下一集</string>
+    <string name="auto_skip">自动跳过片头/片尾</string>
+    <string name="language_settings">语言</string>
+    <string name="infinite_scroll">无限滚动</string>
+    <string name="movie_mode">电影模式</string>
+    <string name="show_comments">显示评论</string>
+    <string name="gesture_controls">手势控制</string>
+    <string name="volume_gesture">滑动调节音量</string>
+    <string name="brightness_gesture">滑动调节亮度</string>
+
+    <!-- Rankings -->
+    <string name="ranking_day">日</string>
+    <string name="ranking_month">月</string>
+    <string name="ranking_season">季</string>
+    <string name="ranking_year">年</string>
     <string name="rank_day">日</string>
     <string name="rank_month">月</string>
     <string name="rank_season">季</string>
     <string name="rank_year">年</string>
     <string name="rank_voted">投票最多</string>
-    <string name="player_settings">播放器设置</string>
-    <string name="auto_next">自动播放下一集</string>
-    <string name="language_settings">语言</string>
+    <string name="error_no_ranking_types">未找到排行榜类型</string>
+
+    <!-- General -->
+    <string name="retry">重试</string>
+    <string name="error_occurred">发生错误</string>
+    <string name="language_label_short">语言</string>
+    <string name="loading">加载中…</string>
+    <string name="no_internet">无网络连接</string>
+    <string name="cancel">取消</string>
+    <string name="ok">确定</string>
+    <string name="save">保存</string>
+    <string name="delete">删除</string>
+    <string name="create">创建</string>
+    <string name="version">版本 %1$s</string>
+    <string name="about_description">AnimeVsub 是一款免费的动漫流媒体应用。观看带越南语字幕的您最喜爱的动漫。</string>
+    <string name="developer">开发者</string>
+    <string name="developer_name">Tachibana Shin</string>
+    <string name="source_code">源代码</string>
+    <string name="license">许可证</string>
+    <string name="mit_license">MIT 许可证</string>
+    <string name="coming_soon_desc">即将推出…</string>
+    <string name="back">返回</string>
+    <string name="million_suffix">M</string>
+    <string name="thousand_suffix">K</string>
+    <string name="made_with_love">Made with ❤️ for everyone</string>
+
+    <!-- News -->
+    <string name="news">新闻</string>
+    <string name="no_news">暂无新闻</string>
+
+    <!-- Notification -->
+    <string name="no_playlists">未找到播放列表</string>
+    <string name="no_notifications">暂无通知</string>
+    <string name="mark_read">标记为已读</string>
+    <string name="no_history">暂无播放历史</string>
+    <string name="no_follows">暂无关注的动漫</string>
+    <string name="history_subtitle">%1$s 第 %2$s 集</string>
+
+    <!-- Playlist -->
+    <string name="create_playlist">创建播放列表</string>
+    <string name="playlist_name">播放列表名称</string>
+    <string name="public_playlist">公开</string>
+    <string name="empty_playlist">此播放列表为空</string>
+    <string name="added_to_playlist">已添加到 %1$s</string>
+    <string name="removed_from_playlist">已从 %1$s 中移除</string>
+    <plurals name="video_count">
+        <item quantity="other">%1$d 个视频</item>
+    </plurals>
+    <string name="delete_playlist">删除播放列表</string>
+    <string name="rename_playlist">重命名播放列表</string>
+    <string name="edit_description">编辑描述</string>
+    <string name="update_success">更新成功</string>
+    <string name="delete_success">删除成功</string>
+    <string name="remove_from_playlist">从播放列表中移除</string>
+    <string name="add_to_other_playlist">添加到其他播放列表</string>
+    <string name="sort_by">排序方式</string>
+    <string name="newest_added">最新添加</string>
+    <string name="oldest_added">最早添加</string>
+    <string name="playlist_not_found">未找到播放列表</string>
+    <string name="confirm_delete_playlist">您确定要删除此播放列表吗？</string>
+
+    <!-- Category/Filter -->
+    <string name="filter">筛选</string>
+    <string name="filters">筛选</string>
+    <string name="filter_title">筛选</string>
+    <string name="filter_group_format">筛选: %1$s</string>
+    <string name="more">更多</string>
+    <string name="restored_progress">已恢复播放进度 %1$d:%2$02d</string>
+    <string name="check_update">检查更新</string>
+    <string name="update_available">发现新版本</string>
+    <string name="update_message">有新版本 (%1$s) 可用。是否立即更新？</string>
+    <string name="update_now">立即更新</string>
+    <string name="no_update">当前已是最新版本</string>
+    <string name="checking_update">正在检查更新…</string>
+    <string name="update_failed">检查更新失败</string>
     <string name="update_downloading_title">正在下载 AnimeVsub 更新</string>
     <string name="update_downloading_description">新版本正在下载中…</string>
 </resources>
