@@ -88,7 +88,7 @@ fun HistoryItemRow(
       Spacer(modifier = Modifier.height(4.dp))
 
       Text(
-        text = stringResource(R.string.history_subtitle, item.seasonName, item.chapName ?: ""),
+        text = item.seasonName + stringResource(R.string.episode_label, item.chapName ?: ""),
         color = TextGrey,
         fontSize = 13.sp,
         maxLines = 1,

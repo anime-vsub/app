@@ -89,14 +89,13 @@ fun SkipNotification(
 ) {
   Box(
     modifier = modifier
-      .clip(RoundedCornerShape(8.dp))
-      .background(Color.Black.copy(alpha = 0.85f))
-      .border(1.dp, MainColor.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
-      .padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+      .clip(RoundedCornerShape(16.dp))
+      .background(Color.Black.copy(alpha = 0.7f))
+      .padding(start = 8.dp, end = 2.dp, top = 2.dp, bottom = 2.dp)
   ) {
     Row(
       verticalAlignment = Alignment.CenterVertically,
-      horizontalArrangement = Arrangement.spacedBy(12.dp)
+      horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
       Column(
         modifier = Modifier.clickable(onClick = onSkip)
@@ -104,30 +103,31 @@ fun SkipNotification(
         Text(
           text = text,
           color = Color.White,
-          fontSize = 15.sp,
-          fontWeight = FontWeight.Bold
+          fontSize = 12.sp,
+          fontWeight = FontWeight.Bold,
+          lineHeight = 12.sp
         )
         Text(
           text = pluralStringResource(R.plurals.seconds_remaining, secondsRemaining, secondsRemaining),
           color = Color.White.copy(alpha = 0.5f),
-          fontSize = 12.sp
+          fontSize = 10.sp
         )
       }
       Box(
         modifier = Modifier
           .width(1.dp)
-          .height(32.dp)
+          .height(24.dp)
           .background(Color.White.copy(alpha = 0.2f))
       )
       IconButton(
         onClick = onClose,
-        modifier = Modifier.size(32.dp)
+        modifier = Modifier.size(28.dp)
       ) {
         Icon(
           imageVector = Icons.Default.Close,
           contentDescription = "Close",
           tint = Color.White,
-          modifier = Modifier.size(20.dp)
+          modifier = Modifier.size(16.dp)
         )
       }
     }
@@ -142,8 +142,8 @@ fun GestureIndicator(
 ) {
   Column(
     modifier = modifier
-      .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
-      .padding(16.dp),
+      .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(4.dp))
+      .padding(8.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center
   ) {
@@ -151,13 +151,13 @@ fun GestureIndicator(
       imageVector = icon,
       contentDescription = null,
       tint = Color.White,
-      modifier = Modifier.size(32.dp)
+      modifier = Modifier.size(28.dp)
     )
-    Spacer(modifier = Modifier.height(8.dp))
+    Spacer(modifier = Modifier.height(4.dp))
     Text(
       text = text,
       color = Color.White,
-      fontSize = 14.sp,
+      fontSize = 12.sp,
       fontWeight = FontWeight.Medium
     )
   }
@@ -213,13 +213,13 @@ fun SeekIndicator(
         imageVector = if (isForward) Icons.Default.FastForward else Icons.Default.FastRewind,
         contentDescription = null,
         tint = Color.White,
-        modifier = Modifier.size(48.dp)
+        modifier = Modifier.size(32.dp)
       )
-      Spacer(modifier = Modifier.height(8.dp))
+      Spacer(modifier = Modifier.height(4.dp))
       Text(
         text = if (isForward) "+10s" else "-10s",
         color = Color.White,
-        fontSize = 16.sp,
+        fontSize = 12.sp,
         fontWeight = FontWeight.Bold
       )
     }

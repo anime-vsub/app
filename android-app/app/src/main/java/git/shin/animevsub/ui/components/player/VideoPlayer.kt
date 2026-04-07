@@ -644,13 +644,13 @@ fun VideoPlayer(
         Box(
           modifier = Modifier
             .align(Alignment.Center)
-            .background(Color.Black.copy(alpha = 0.8f), RoundedCornerShape(6.dp))
-            .padding(horizontal = 12.dp, vertical = 6.dp)
+            .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(4.dp))
+            .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
           Text(
             text = formatDuration(dragTime),
             color = Color.White,
-            fontSize = 18.sp,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Bold
           )
         }
@@ -675,7 +675,7 @@ fun VideoPlayer(
             .align(Alignment.BottomEnd)
             .padding(
               end = if (isFullScreen) 32.dp else 16.dp,
-              bottom = if (isFullScreen) 100.dp else 70.dp
+              bottom = if (isFullScreen) 24.dp else 12.dp
             )
         )
       }
@@ -688,27 +688,27 @@ fun VideoPlayer(
           .align(Alignment.BottomStart)
           .padding(
             start = if (isFullScreen) 32.dp else 16.dp,
-            bottom = if (isFullScreen) 100.dp else 70.dp
+            bottom = if (isFullScreen) 24.dp else 12.dp
           )
       ) {
         Box(
           modifier = Modifier
             .clip(RoundedCornerShape(4.dp))
-            .background(Color.Black.copy(alpha = 0.8f))
+            .background(Color.Black.copy(alpha = 0.7f))
             .border(1.dp, MainColor.copy(alpha = 0.5f), RoundedCornerShape(4.dp))
             .clickable(enabled = isNotificationClickable) {
               showNotification = false; isNotificationClickable = false; isAutoNexting =
               false; onNextEpisode()
             }
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
           Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(notificationIcon, null, tint = MainColor, modifier = Modifier.size(18.dp))
-            Spacer(modifier = Modifier.width(8.dp))
+            Icon(notificationIcon, null, tint = MainColor, modifier = Modifier.size(12.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             Text(
               text = notificationText,
               color = Color.White,
-              fontSize = 13.sp,
+              fontSize = 11.sp,
               fontWeight = FontWeight.Medium
             )
           }

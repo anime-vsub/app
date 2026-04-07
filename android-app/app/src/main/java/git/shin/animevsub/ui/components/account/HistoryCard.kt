@@ -104,7 +104,7 @@ fun HistoryCard(
       overflow = TextOverflow.Ellipsis,
     )
     Text(
-      text = stringResource(R.string.history_subtitle, item.seasonName, item.chapName ?: ""),
+      text = item.seasonName + stringResource(R.string.episode_label, item.chapName ?: ""),
       color = TextGrey,
       fontSize = 12.sp,
       maxLines = 1,

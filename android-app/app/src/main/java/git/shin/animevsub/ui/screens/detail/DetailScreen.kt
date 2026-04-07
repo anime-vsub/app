@@ -480,9 +480,7 @@ fun DetailScreen(
                 ) {
                   ActionButton(
                     icon = if (uiState.isFollowed) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                    label = if (uiState.isFollowed) stringResource(R.string.followed) else stringResource(
-                      R.string.follow
-                    ),
+                    label = formatNumber(detail.follows + (if (uiState.isFollowed) 1 else 0)),
                     iconTint = if (uiState.isFollowed) StarColor else TextPrimary,
                     modifier = Modifier
                       .widthIn(min = 50.dp)
