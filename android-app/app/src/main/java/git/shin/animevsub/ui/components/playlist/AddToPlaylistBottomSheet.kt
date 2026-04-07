@@ -145,7 +145,11 @@ fun AddToPlaylistBottomSheet(
                 overflow = TextOverflow.Ellipsis
               )
               Text(
-                text = pluralStringResource(R.plurals.video_count, playlist.movieCount, playlist.movieCount),
+                text = pluralStringResource(
+                  R.plurals.video_count,
+                  playlist.movieCount,
+                  playlist.movieCount
+                ),
                 color = TextSecondary,
                 fontSize = 12.sp
               )

@@ -485,7 +485,11 @@ fun PlaylistHeader(
 
       // Info
       Text(
-        text = pluralStringResource(R.plurals.video_count, playlist.movieCount, playlist.movieCount),
+        text = pluralStringResource(
+          R.plurals.video_count,
+          playlist.movieCount,
+          playlist.movieCount
+        ),
         color = TextGrey,
         fontSize = 14.sp
       )

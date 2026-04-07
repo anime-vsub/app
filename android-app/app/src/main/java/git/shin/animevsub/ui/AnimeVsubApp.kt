@@ -60,7 +60,6 @@ import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Composable

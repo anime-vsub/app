@@ -815,8 +815,10 @@ fun VideoPlayer(
                   )
                   introRange?.let { range ->
                     if (duration > 0) {
-                      val start = (range.first.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
-                      val end = (range.last.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
+                      val start =
+                        (range.first.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
+                      val end =
+                        (range.last.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
                       drawRect(
                         color = Color(0xFF2196F3),
                         topLeft = Offset(start, 0f),
@@ -826,8 +828,10 @@ fun VideoPlayer(
                   }
                   outroRange?.let { range ->
                     if (duration > 0) {
-                      val start = (range.first.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
-                      val end = (range.last.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
+                      val start =
+                        (range.first.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
+                      val end =
+                        (range.last.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
                       drawRect(
                         color = Color(0xFF2196F3),
                         topLeft = Offset(start, 0f),

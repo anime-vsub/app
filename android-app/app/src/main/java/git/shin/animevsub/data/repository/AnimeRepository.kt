@@ -7,7 +7,6 @@ import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.CategoryPage
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
-import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.HomeData
@@ -32,7 +31,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
