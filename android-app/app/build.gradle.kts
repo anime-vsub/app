@@ -28,8 +28,6 @@ android {
 
         buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("SUPABASE_URL") ?: ""}\"")
         buildConfigField("String", "SUPABASE_KEY", "\"${localProperties.getProperty("SUPABASE_KEY") ?: ""}\"")
-        buildConfigField("String", "ANIMEVIETSUB_HOSTNAME", "\"${localProperties.getProperty("ANIMEVIETSUB_HOSTNAME") ?: ""}\"")
-        buildConfigField("String", "OPEND_ANIME", "\"${localProperties.getProperty("OPEND_ANIME") ?: ""}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -79,16 +77,16 @@ dependencies {
     implementation("androidx.compose.foundation:foundation")
 
     // Activity & Lifecycle
-    implementation("androidx.activity:activity-compose:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.activity:activity-compose:1.13.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.8.8")
+    implementation("androidx.navigation:navigation-compose:2.9.7")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.54")
-    kapt("com.google.dagger:hilt-android-compiler:2.54")
+    implementation("com.google.dagger:hilt-android:2.59.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.59.2")
     kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
@@ -105,14 +103,14 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.2.1")
 
     // Media3 ExoPlayer
-    implementation("androidx.media3:media3-exoplayer:1.5.1")
-    implementation("androidx.media3:media3-exoplayer-hls:1.5.1")
-    implementation("androidx.media3:media3-ui:1.5.1")
+    implementation("androidx.media3:media3-exoplayer:1.10.0")
+    implementation("androidx.media3:media3-exoplayer-hls:1.10.0")
+    implementation("androidx.media3:media3-ui:1.10.0")
 
     // Supabase
     implementation("io.github.jan-tennert.supabase:postgrest-kt:2.6.1")
     implementation("io.github.jan-tennert.supabase:gotrue-kt:2.6.1")
-    implementation("io.ktor:ktor-client-okhttp:2.3.13")
+    implementation("io.ktor:ktor-client-okhttp:3.4.2")
 
     // JSON
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
@@ -128,7 +126,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-placeholder-material:0.36.0")
 
     // Core
-    implementation("androidx.core:core-ktx:1.15.0")
+    implementation("androidx.core:core-ktx:1.18.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
