@@ -48,6 +48,7 @@ data class DetailUiState(
   val autoSkip: Boolean = false,
   val introRange: DoubleRange? = null,
   val outroRange: DoubleRange? = null,
+  val episodeNameFromApi: String? = null,
   val lastProgress: Long = 0,
   val chapterProgress: Map<String, WatchProgress> = emptyMap(),
 
@@ -312,6 +313,7 @@ class DetailViewModel @Inject constructor(
         currentSeasonId = seasonId,
         introRange = null,
         outroRange = null,
+        episodeNameFromApi = null,
         servers = emptyList(),
         currentServer = null,
         playerData = null,
@@ -398,13 +400,15 @@ class DetailViewModel @Inject constructor(
   }
 
   private fun loadSkipRange(chapter: ChapterInfo) {
+    val detail = _uiState.value.detail ?: return
     viewModelScope.launch {
-      repository.getSkipRange(chapter)
-        .onSuccess { (intro, outro) ->
+      repository.getSkipRange(detail, chapter)
+        .onSuccess { result ->
           _uiState.update {
             it.copy(
-              introRange = intro,
-              outroRange = outro
+              introRange = result?.intro,
+              outroRange = result?.outro,
+              episodeNameFromApi = result?.episodeName
             )
           }
         }

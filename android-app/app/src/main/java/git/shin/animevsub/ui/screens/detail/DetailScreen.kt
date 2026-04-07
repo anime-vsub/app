@@ -219,7 +219,9 @@ fun DetailScreen(
               playerData = uiState.playerData,
               poster = detail?.poster ?: detail?.image,
               title = detail?.name ?: "",
-              subtitle = currentChap?.name ?: "",
+              subtitle = currentChap?.name?.let {
+                if (uiState.episodeNameFromApi != null) "$it - ${uiState.episodeNameFromApi}" else it
+              } ?: "",
               isLoading = uiState.isPlayerLoading || uiState.isLoading,
               errorMessage = uiState.playerError,
               introRange = uiState.introRange,

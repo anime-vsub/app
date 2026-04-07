@@ -194,3 +194,10 @@ data class DoubleRange(
   operator fun contains(value: Double): Boolean = value in start..end
   operator fun contains(value: Long): Boolean = value.toDouble() in start..end
 }
+
+@Serializable
+data class InOutroEpisode(
+  val intro: DoubleRange,
+  val outro: DoubleRange,
+  val episodeName: String? = null
+)

@@ -285,26 +285,26 @@ fun VideoPlayer(
   }
 
   LaunchedEffect(currentTime, introRange, outroRange, autoSkipEnabled) {
-    val currentMillis = currentTime
-    if (introRange != null && currentMillis in introRange) {
-      if (autoSkipEnabled) exoPlayer.seekTo((introRange.last + 1).toLong())
+    val currentSeconds = currentTime / 1000.0
+    if (introRange != null && currentSeconds in introRange) {
+      if (autoSkipEnabled) exoPlayer.seekTo(((introRange.last + 0.1) * 1000).toLong())
       else if (!showSkipNotification) {
         skipNotificationText = context.getString(R.string.skip_intro)
-        skipTargetTime = introRange.last + 1
+        skipTargetTime = (introRange.last + 0.1) * 1000
         showSkipNotification = true
       }
       if (showSkipNotification) skipRemainingSeconds =
-        ((introRange.last - currentMillis) / 1000).toInt().coerceAtLeast(0)
-    } else if (outroRange != null && currentMillis in outroRange) {
+        (introRange.last - currentSeconds).toInt().coerceAtLeast(0)
+    } else if (outroRange != null && currentSeconds in outroRange) {
       if (autoSkipEnabled) {
         if (hasNextEpisode) onNextEpisode() else exoPlayer.pause()
       } else if (!showSkipNotification) {
         skipNotificationText = context.getString(R.string.skip_outro)
-        skipTargetTime = outroRange.last + 1
+        skipTargetTime = (outroRange.last + 0.1) * 1000
         showSkipNotification = true
       }
       if (showSkipNotification) skipRemainingSeconds =
-        ((outroRange.last - currentMillis) / 1000).toInt().coerceAtLeast(0)
+        (outroRange.last - currentSeconds).toInt().coerceAtLeast(0)
     } else showSkipNotification = false
   }
 
@@ -527,7 +527,7 @@ fun VideoPlayer(
             )
             if (subtitle.isNotEmpty()) {
               Text(
-                text = stringResource(id = R.string.ep_label, subtitle),
+                text = stringResource(id = R.string.episode_label, subtitle),
                 color = Color.White.copy(alpha = 0.7f),
                 fontSize = if (isFullScreen) 16.sp else 13.sp,
                 maxLines = 1,
@@ -815,8 +815,8 @@ fun VideoPlayer(
                   )
                   introRange?.let { range ->
                     if (duration > 0) {
-                      val start = (range.first.toFloat() / duration).coerceIn(0f, 1f) * trackWidth
-                      val end = (range.last.toFloat() / duration).coerceIn(0f, 1f) * trackWidth
+                      val start = (range.first.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
+                      val end = (range.last.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
                       drawRect(
                         color = Color(0xFF2196F3),
                         topLeft = Offset(start, 0f),
@@ -826,8 +826,8 @@ fun VideoPlayer(
                   }
                   outroRange?.let { range ->
                     if (duration > 0) {
-                      val start = (range.first.toFloat() / duration).coerceIn(0f, 1f) * trackWidth
-                      val end = (range.last.toFloat() / duration).coerceIn(0f, 1f) * trackWidth
+                      val start = (range.first.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
+                      val end = (range.last.toFloat() * 1000 / duration).coerceIn(0f, 1f) * trackWidth
                       drawRect(
                         color = Color(0xFF2196F3),
                         topLeft = Offset(start, 0f),

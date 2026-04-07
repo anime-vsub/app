@@ -11,6 +11,7 @@ import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.HomeData
+import git.shin.animevsub.data.model.InOutroEpisode
 import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ScheduleDay
@@ -131,10 +132,12 @@ class AnimeRepository @Inject constructor(
     }
 
   // Skip Range
-  suspend fun getSkipRange(chapter: ChapterInfo): Result<Pair<DoubleRange?, DoubleRange?>> =
-    runCatching {
-      api.getSkipRange(chapter)
-    }
+  suspend fun getSkipRange(
+    detail: AnimeDetail,
+    chapter: ChapterInfo
+  ): Result<InOutroEpisode?> = runCatching {
+    api.getEpisodeSkip(detail, chapter)
+  }
 
   // Auth
   val user: Flow<User?> = api.getUser()
