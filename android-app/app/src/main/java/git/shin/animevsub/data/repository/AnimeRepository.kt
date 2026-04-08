@@ -257,11 +257,10 @@ class AnimeRepository @Inject constructor(
   }
 
   suspend fun toggleFollow(animeId: String, follow: Boolean): Result<Unit> = runCatching {
-    val result = api.toggleFollow(animeId, follow)
+    api.toggleFollow(animeId, follow)
     analytics.logEvent(if (follow) "follow_anime" else "unfollow_anime") {
       param(FirebaseAnalytics.Param.ITEM_ID, animeId)
     }
-    result
   }
 
   // History
