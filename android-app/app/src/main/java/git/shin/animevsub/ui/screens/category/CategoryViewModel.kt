@@ -44,6 +44,7 @@ class CategoryViewModel @Inject constructor(
     val filters = try {
       Json.decodeFromString<List<SelectedFilter>>(filtersJson)
     } catch (e: Exception) {
+      print(e)
       emptyList()
     }
 

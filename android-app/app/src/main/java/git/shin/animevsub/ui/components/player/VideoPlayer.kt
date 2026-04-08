@@ -202,7 +202,7 @@ fun VideoPlayer(
         override fun onPlaybackStateChanged(playbackState: Int) {
           isBuffering = playbackState == Player.STATE_BUFFERING
           if (playbackState == Player.STATE_ENDED && autoNextEnabled) {
-            if (autoNextEnabled && hasNextEpisode) isAutoNexting = true
+            if (hasNextEpisode) isAutoNexting = true
             onVideoEnded()
           }
         }

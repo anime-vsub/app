@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,7 +56,7 @@ class AnimeRepository @Inject constructor(
         try {
           _notifications.value = json.decodeFromString<NotificationData>(cached)
         } catch (e: Exception) {
-          e.printStackTrace()
+          print(e)
         }
       }
 

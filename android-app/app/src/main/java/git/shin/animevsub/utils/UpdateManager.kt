@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Environment
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.model.GitHubRelease
@@ -40,8 +41,7 @@ class UpdateManager @Inject constructor(
       val response = client.newCall(request).execute()
       if (!response.isSuccessful) return@withContext Result.failure(Exception("Failed to fetch release: ${response.code}"))
 
-      val body =
-        response.body?.string() ?: return@withContext Result.failure(Exception("Empty body"))
+      val body = response.body.string()
       val release = json.decodeFromString<GitHubRelease>(body)
 
       val latestVersion = release.tagName.removePrefix("v")
@@ -79,7 +79,7 @@ class UpdateManager @Inject constructor(
     val destination = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
     if (destination.exists()) destination.delete()
 
-    val request = DownloadManager.Request(Uri.parse(url))
+    val request = DownloadManager.Request(url.toUri())
       .setTitle(context.getString(git.shin.animevsub.R.string.update_downloading_title))
       .setDescription(context.getString(git.shin.animevsub.R.string.update_downloading_description))
       .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
@@ -98,6 +98,7 @@ class UpdateManager @Inject constructor(
           try {
             context.unregisterReceiver(this)
           } catch (e: Exception) {
+            print(e)
             // Already unregistered
           }
         }

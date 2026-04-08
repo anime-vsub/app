@@ -151,15 +151,8 @@ data class NotificationItem(
 
 @Serializable
 data class NotificationData(
-  val items: List<NotificationItem>, val max: Int
-)
-
-data class NewsItem(
-  val title: String,
-  val link: String,
-  val description: String?,
-  val pubDate: String?,
-  val image: String?
+  val items: List<NotificationItem>,
+  val max: Int
 )
 
 @Serializable

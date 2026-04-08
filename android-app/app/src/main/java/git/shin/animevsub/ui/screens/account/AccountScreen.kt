@@ -240,7 +240,7 @@ fun AccountScreen(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                  text = stringResource(R.string.login_required, ""),
+                  text = stringResource(R.string.login_required),
                   color = TextSecondary,
                   fontSize = 13.sp
                 )

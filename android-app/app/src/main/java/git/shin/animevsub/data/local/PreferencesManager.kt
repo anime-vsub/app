@@ -10,6 +10,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -33,6 +35,7 @@ class PreferencesManager(private val context: Context) {
     try {
       Json.decodeFromString<List<String>>(json)
     } catch (e: Exception) {
+      print(e)
       emptyList()
     }
   }
@@ -61,7 +64,7 @@ class PreferencesManager(private val context: Context) {
       if (currentHistory.size > 10) {
         currentHistory.removeAt(0)
       }
-      preferences[SEARCH_HISTORY_KEY] = Json.encodeToString(currentHistory)
+      preferences[SEARCH_HISTORY_KEY] = Json.encodeToString(currentHistory.toList())
     }
   }
 

@@ -89,6 +89,7 @@ class HistoryViewModel @Inject constructor(
       val date = try {
         ZonedDateTime.parse(item.createdAt).toLocalDate()
       } catch (e: Exception) {
+        print(e)
         LocalDate.now()
       }
       date.toString() // Store as ISO string for key, will format in UI
