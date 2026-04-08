@@ -13,6 +13,7 @@ import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.remote.AnimeApi
+import git.shin.animevsub.utils.CloudflareManager
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -63,8 +64,19 @@ object AppModule {
 
   @Provides
   @Singleton
-  fun provideAnimeApi(client: OkHttpClient, json: Json, apiStorage: ApiStorage): AnimeApi {
-    return AnimeApi(client, json, apiStorage)
+  fun provideAnimeApi(
+    client: OkHttpClient,
+    json: Json,
+    apiStorage: ApiStorage,
+    cloudflareManager: CloudflareManager
+  ): AnimeApi {
+    return AnimeApi(client, json, apiStorage, cloudflareManager)
+  }
+
+  @Provides
+  @Singleton
+  fun provideCloudflareManager(apiStorage: ApiStorage): CloudflareManager {
+    return CloudflareManager(apiStorage)
   }
 
   @Provides
