@@ -21,14 +21,18 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -67,9 +71,19 @@ import kotlinx.serialization.json.Json
 fun AnimeVsubAppUI(
   notificationViewModel: NotificationViewModel = hiltViewModel()
 ) {
+  val context = LocalContext.current
   val navController = rememberNavController()
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
+
+  LaunchedEffect(currentDestination) {
+    currentDestination?.route?.let { route ->
+      FirebaseAnalytics.getInstance(context).logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+        param(FirebaseAnalytics.Param.SCREEN_NAME, route)
+        param(FirebaseAnalytics.Param.SCREEN_CLASS, "AnimeVsubAppUI")
+      }
+    }
+  }
 
   val notificationUiState by notificationViewModel.uiState.collectAsState()
   val unreadCount = notificationUiState.data?.items?.size ?: 0

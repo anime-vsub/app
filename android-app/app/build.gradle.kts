@@ -7,6 +7,7 @@ plugins {
   kotlin("kapt")
   id("org.jetbrains.kotlin.plugin.compose")
   kotlin("plugin.serialization")
+  id("com.google.gms.google-services")
 }
 
 android {
@@ -122,6 +123,10 @@ dependencies {
 
   // JSON
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+  // Firebase
+  implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+  implementation("com.google.firebase:firebase-analytics")
 
   // Coroutines
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")

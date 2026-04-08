@@ -1,5 +1,7 @@
 package git.shin.animevsub.data.repository
 
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.AnimeCard
@@ -40,7 +42,8 @@ class AnimeRepository @Inject constructor(
   private val historyRepository: HistoryRepository,
   private val prefs: PreferencesManager,
   private val storage: ApiStorage,
-  private val json: Json
+  private val json: Json,
+  private val analytics: FirebaseAnalytics
 ) {
   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -74,12 +77,21 @@ class AnimeRepository @Inject constructor(
 
   // Detail
   suspend fun getAnimeDetail(animeId: String): Result<AnimeDetail> = runCatching {
-    api.getAnimeDetail(animeId)
+    val result = api.getAnimeDetail(animeId)
+    analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM) {
+      param(FirebaseAnalytics.Param.ITEM_ID, animeId)
+      param(FirebaseAnalytics.Param.ITEM_CATEGORY, "anime")
+    }
+    result
   }
 
   // Chapters
   suspend fun getChapters(animeId: String): Result<ChapterData> = runCatching {
-    api.getChapters(animeId)
+    val result = api.getChapters(animeId)
+    analytics.logEvent("view_chapters") {
+      param(FirebaseAnalytics.Param.ITEM_ID, animeId)
+    }
+    result
   }
 
   // Rankings
@@ -88,12 +100,20 @@ class AnimeRepository @Inject constructor(
   }
 
   suspend fun getRankings(type: String): Result<List<AnimeCard>> = runCatching {
-    api.getRankings(type)
+    val result = api.getRankings(type)
+    analytics.logEvent("view_rankings") {
+      param("ranking_type", type)
+    }
+    result
   }
 
   // Schedule
   suspend fun getSchedule(): Result<List<ScheduleDay>> = runCatching {
-    api.getSchedule()
+    val result = api.getSchedule()
+    analytics.logEvent("view_schedule") {
+      param("action", "refresh")
+    }
+    result
   }
 
   // Search
@@ -102,6 +122,9 @@ class AnimeRepository @Inject constructor(
   }
 
   suspend fun search(keyword: String, page: Int = 1): Result<CategoryPage> = runCatching {
+    analytics.logEvent(FirebaseAnalytics.Event.SEARCH) {
+      param(FirebaseAnalytics.Param.SEARCH_TERM, keyword)
+    }
     api.search(keyword, page)
   }
 
@@ -110,7 +133,12 @@ class AnimeRepository @Inject constructor(
     filters: List<SelectedFilter>,
     page: Int = 1
   ): Result<CategoryPage> = runCatching {
-    api.getCategory(filters, page)
+    val result = api.getCategory(filters, page)
+    analytics.logEvent("view_category") {
+      param("filters", filters.joinToString { it.name })
+      param("page", page.toLong())
+    }
+    result
   }
 
   suspend fun getFilters(filters: List<SelectedFilter>): Result<List<FilterGroup>> = runCatching {
@@ -124,7 +152,13 @@ class AnimeRepository @Inject constructor(
 
   suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerData> =
     runCatching {
-      api.getPlayerLink(server)
+      val result = api.getPlayerLink(server)
+      analytics.logEvent("play_video") {
+        param(FirebaseAnalytics.Param.ITEM_ID, chapter.id)
+        param(FirebaseAnalytics.Param.ITEM_NAME, chapter.name)
+        param("server_name", server.name)
+      }
+      result
     }
 
   // Skip Range
@@ -150,6 +184,10 @@ class AnimeRepository @Inject constructor(
   suspend fun login(email: String, password: String): Result<User> = runCatching {
     val user = api.login(email, password)
     historyRepository.upsertUser(user)
+    analytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
+      param(FirebaseAnalytics.Param.METHOD, "email")
+    }
+    analytics.setUserId(user.username)
     user
   }
 
@@ -196,7 +234,11 @@ class AnimeRepository @Inject constructor(
   }
 
   suspend fun toggleFollow(animeId: String, follow: Boolean): Result<Unit> = runCatching {
-    api.toggleFollow(animeId, follow)
+    val result = api.toggleFollow(animeId, follow)
+    analytics.logEvent(if (follow) "follow_anime" else "unfollow_anime") {
+      param(FirebaseAnalytics.Param.ITEM_ID, animeId)
+    }
+    result
   }
 
   // History
