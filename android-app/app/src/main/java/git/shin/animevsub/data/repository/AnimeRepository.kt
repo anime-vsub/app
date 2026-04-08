@@ -47,7 +47,6 @@ class AnimeRepository @Inject constructor(
   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
   private val _notifications = MutableStateFlow<NotificationData?>(null)
-  val notifications: StateFlow<NotificationData?> = _notifications.asStateFlow()
 
   init {
     repositoryScope.launch {
@@ -220,7 +219,7 @@ class AnimeRepository @Inject constructor(
   ) = historyRepository.setSingleProgress(
     name, poster, seasonId, seasonName, chapId, chapName, cur, dur
   )
-
-  suspend fun getLastChapOfSeason(seasonId: String) =
-    historyRepository.getLastChapOfSeason(seasonId)
+//
+//  suspend fun getLastChapOfSeason(seasonId: String) =
+//    historyRepository.getLastChapOfSeason(seasonId)
 }

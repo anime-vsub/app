@@ -45,9 +45,8 @@ class UpdateManager @Inject constructor(
       val release = json.decodeFromString<GitHubRelease>(body)
 
       val latestVersion = release.tagName.removePrefix("v")
-      val currentVersion = BuildConfig.VERSION_NAME
 
-      val isNewer = isVersionNewer(latestVersion, currentVersion)
+      val isNewer = isVersionNewer(latestVersion)
       val apkAsset = release.assets.find { it.name == "app-release-signed.apk" }
         ?: release.assets.find { it.name.endsWith(".apk") }
 
@@ -64,9 +63,9 @@ class UpdateManager @Inject constructor(
     }
   }
 
-  private fun isVersionNewer(latest: String, current: String): Boolean {
+  private fun isVersionNewer(latest: String): Boolean {
     val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
-    val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
+    val currentParts = BuildConfig.VERSION_NAME.split(".").mapNotNull { it.toIntOrNull() }
 
     for (i in 0 until minOf(latestParts.size, currentParts.size)) {
       if (latestParts[i] > currentParts[i]) return true
