@@ -34,6 +34,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,6 +80,17 @@ fun AccountScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val context = LocalContext.current
+
+  LaunchedEffect(Unit) {
+    viewModel.uiEvent.collect { event ->
+      when (event) {
+        is git.shin.animevsub.data.repository.AnimeRepository.AuthEvent.PromptForAction -> {
+          // MainActivity handles this by showing a dialog, so we can optionally show a toast or do nothing here
+          Toast.makeText(context, R.string.session_expired, Toast.LENGTH_LONG).show()
+        }
+      }
+    }
+  }
 
   var showUpdateDialog by remember { mutableStateOf<git.shin.animevsub.data.model.UpdateInfo?>(null) }
 
@@ -160,7 +172,18 @@ fun AccountScreen(
 
         // Profile section
         Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-          if (uiState.isLoggedIn && uiState.user != null) {
+          if (!uiState.isAuthReady) {
+            Box(
+              modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(DarkCard),
+              contentAlignment = Alignment.Center
+            ) {
+              CircularProgressIndicator(color = AccentMain)
+            }
+          } else if (uiState.isLoggedIn && uiState.user != null) {
             val user = uiState.user!!
             Row(
               verticalAlignment = Alignment.CenterVertically,
@@ -200,7 +223,7 @@ fun AccountScreen(
               }
               Spacer(modifier = Modifier.width(8.dp))
               IconButton(
-                onClick = { viewModel.logout() },
+                onClick = { viewModel.performLogout() },
                 modifier = Modifier
                   .clip(CircleShape)
                   .background(ErrorColor.copy(alpha = 0.1f))

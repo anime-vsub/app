@@ -12,8 +12,10 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -24,6 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -31,8 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.logEvent
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -41,11 +44,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import git.shin.animevsub.R
+import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.ui.navigation.BottomNavItem
 import git.shin.animevsub.ui.navigation.Screen
 import git.shin.animevsub.ui.screens.about.AboutScreen
 import git.shin.animevsub.ui.screens.account.AccountScreen
+import git.shin.animevsub.ui.screens.account.AccountViewModel
 import git.shin.animevsub.ui.screens.category.CategoryScreen
 import git.shin.animevsub.ui.screens.detail.DetailScreen
 import git.shin.animevsub.ui.screens.follow.FollowScreen
@@ -69,12 +76,27 @@ import kotlinx.serialization.json.Json
 
 @Composable
 fun AnimeVsubAppUI(
-  notificationViewModel: NotificationViewModel = hiltViewModel()
+  animeRepository: AnimeRepository,
+  notificationViewModel: NotificationViewModel = hiltViewModel(),
+  accountViewModel: AccountViewModel = hiltViewModel()
 ) {
   val context = LocalContext.current
   val navController = rememberNavController()
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
+
+  var showAuthPrompt by remember { mutableStateOf(false) }
+
+  LaunchedEffect(Unit) {
+    // Collect AuthEvents globally
+    animeRepository.authEvent.collect { event ->
+      when (event) {
+        AnimeRepository.AuthEvent.PromptForAction -> {
+          showAuthPrompt = true
+        }
+      }
+    }
+  }
 
   LaunchedEffect(currentDestination) {
     currentDestination?.route?.let { route ->
@@ -369,60 +391,33 @@ fun AnimeVsubAppUI(
         )
       }
     }
+
+    if (showAuthPrompt) {
+      AlertDialog(
+        onDismissRequest = { showAuthPrompt = false },
+        title = { Text(stringResource(id = R.string.authentication_prompt_title)) },
+        text = { Text(stringResource(id = R.string.authentication_prompt_message)) },
+        confirmButton = {
+          Button(
+            onClick = {
+              showAuthPrompt = false
+              accountViewModel.retryAuth()
+            }
+          ) {
+            Text(stringResource(id = R.string.retry))
+          }
+        },
+        dismissButton = {
+          Button(
+            onClick = {
+              showAuthPrompt = false
+              accountViewModel.performLogout()
+            }
+          ) {
+            Text(stringResource(id = R.string.logout))
+          }
+        }
+      )
+    }
   }
 }
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//private fun PlaceholderScreen(
-//  title: String,
-//  icon: androidx.compose.ui.graphics.vector.ImageVector,
-//  onNavigateBack: () -> Unit
-//) {
-//  Scaffold(
-//    topBar = {
-//      TopAppBar(
-//        title = { Text(text = title, color = TextPrimary) },
-//        navigationIcon = {
-//          IconButton(onClick = onNavigateBack) {
-//            Icon(
-//              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//              contentDescription = stringResource(R.string.back),
-//              tint = TextPrimary
-//            )
-//          }
-//        },
-//        colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
-//      )
-//    },
-//    containerColor = DarkBackground
-//  ) { padding ->
-//    Column(
-//      modifier = Modifier
-//        .fillMaxSize()
-//        .padding(padding),
-//      horizontalAlignment = Alignment.CenterHorizontally,
-//      verticalArrangement = Arrangement.Center
-//    ) {
-//      Icon(
-//        imageVector = icon,
-//        contentDescription = null,
-//        modifier = Modifier.size(64.dp),
-//        tint = TextGrey
-//      )
-//      Spacer(modifier = Modifier.height(16.dp))
-//      Text(
-//        text = title,
-//        fontSize = 20.sp,
-//        fontWeight = FontWeight.Bold,
-//        color = TextPrimary
-//      )
-//      Spacer(modifier = Modifier.height(8.dp))
-//      Text(
-//        text = stringResource(R.string.coming_soon_desc),
-//        fontSize = 14.sp,
-//        color = TextGrey
-//      )
-//    }
-//  }
-//}

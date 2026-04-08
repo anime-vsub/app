@@ -24,7 +24,8 @@ data class NotificationUiState(
   val isRefreshing: Boolean = false,
   val data: NotificationData? = null,
   val error: String? = null,
-  val isLoggedIn: Boolean = false
+  val isLoggedIn: Boolean = false,
+  val isAuthReady: Boolean = false
 )
 
 @HiltViewModel
@@ -40,12 +41,15 @@ class NotificationViewModel @Inject constructor(
 
   init {
     viewModelScope.launch {
-      repository.isLoggedIn.collect { loggedIn ->
-        _uiState.value = _uiState.value.copy(isLoggedIn = loggedIn)
-        if (loggedIn) {
-          loadNotifications()
-        } else {
-          _uiState.value = _uiState.value.copy(isLoading = false, data = null)
+
+      launch {
+        repository.isLoggedIn.collect { loggedIn ->
+          _uiState.value = _uiState.value.copy(isLoggedIn = loggedIn, isAuthReady = true)
+          if (loggedIn) {
+            loadNotifications()
+          } else {
+            _uiState.value = _uiState.value.copy(isLoading = false, data = null)
+          }
         }
       }
     }

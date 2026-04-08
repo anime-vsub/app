@@ -25,7 +25,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -49,6 +51,9 @@ class AnimeRepository @Inject constructor(
 
   private val _notifications = MutableStateFlow<NotificationData?>(null)
 
+  private val _authEvent = MutableSharedFlow<AuthEvent>(extraBufferCapacity = 1)
+  val authEvent = _authEvent.asSharedFlow()
+
   init {
     repositoryScope.launch {
       // Load cached notifications
@@ -60,16 +65,34 @@ class AnimeRepository @Inject constructor(
         }
       }
 
-      // Sync notifications when logged in
+      // Sync notifications and refresh user when logged in
       isLoggedIn.collect { loggedIn ->
         if (loggedIn) {
-          getNotifications()
+          launch { getNotifications() }
+          launch { refreshUser() }
         } else {
           _notifications.value = null
           storage.set("cached_notifications", null)
         }
       }
     }
+  }
+
+  suspend fun refreshUser(): Result<User> = runCatching {
+    try {
+      val user = api.refreshUser()
+      historyRepository.upsertUser(user)
+      user
+    } catch (e: Exception) {
+      if (e !is java.io.IOException && e.message?.contains("Không thể lấy thông tin") == true) {
+        _authEvent.tryEmit(AuthEvent.PromptForAction)
+      }
+      throw e
+    }
+  }
+
+  sealed class AuthEvent {
+    object PromptForAction : AuthEvent()
   }
 
   // Home

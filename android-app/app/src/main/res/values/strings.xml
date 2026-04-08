@@ -229,4 +229,16 @@
     <string name="update_failed">Failed to check for updates</string>
     <string name="update_downloading_title">Downloading AnimeVsub update</string>
     <string name="update_downloading_description">New version is being downloaded…</string>
+    <string name="session_expired">Session expired. Please login again.</string>
+
+    <!-- Cloudflare -->
+    <string name="cloudflare_bypass_title">Cloudflare Bypass</string>
+    <string name="close">Close</string>
+    <string name="reload">Reload</string>
+    <string name="forward">Forward</string>
+
+    <!-- Main Activity -->
+    <string name="authentication_prompt_title">Authentication</string>
+    <string name="authentication_prompt_message">Your session may have expired. Do you want to retry
+          or log out?</string>
 </resources>

@@ -88,7 +88,14 @@ fun NotificationScreen(
         .fillMaxSize()
         .padding(padding)
     ) {
-      if (!uiState.isLoggedIn) {
+      if (!uiState.isAuthReady) {
+        Box(
+          modifier = Modifier.fillMaxSize(),
+          contentAlignment = Alignment.Center
+        ) {
+          NotificationListSkeleton()
+        }
+      } else if (!uiState.isLoggedIn) {
         Box(
           modifier = Modifier.fillMaxSize(),
           contentAlignment = Alignment.Center

@@ -18,6 +18,7 @@ import javax.inject.Inject
 
 data class AccountUiState(
   val isLoggedIn: Boolean = false,
+  val isAuthReady: Boolean = false,
   val user: User? = null,
   val autoNext: Boolean = true,
   val autoSkip: Boolean = false,
@@ -51,11 +52,15 @@ class AccountViewModel @Inject constructor(
   private val _uiState = MutableStateFlow(AccountUiState())
   val uiState: StateFlow<AccountUiState> = _uiState.asStateFlow()
 
+  val uiEvent = repository.authEvent
+
+
   init {
     viewModelScope.launch {
+
       launch {
         repository.isLoggedIn.collect { isLoggedIn ->
-          _uiState.value = _uiState.value.copy(isLoggedIn = isLoggedIn)
+          _uiState.update { it.copy(isLoggedIn = isLoggedIn, isAuthReady = true) }
           if (isLoggedIn) {
             refreshHistory()
             refreshFollows()
@@ -171,16 +176,24 @@ class AccountViewModel @Inject constructor(
     }
   }
 
-  fun logout() {
+  fun performLogout() {
     viewModelScope.launch {
       repository.logout()
-      _uiState.value = _uiState.value.copy(
-        isLoggedIn = false,
-        user = null,
-        histories = emptyList(),
-        follows = emptyList(),
-        playlists = emptyList()
-      )
+      _uiState.update {
+        it.copy(
+          isLoggedIn = false,
+          user = null,
+          histories = emptyList(),
+          follows = emptyList(),
+          playlists = emptyList()
+        )
+      }
+    }
+  }
+
+  fun retryAuth() {
+    viewModelScope.launch {
+      repository.refreshUser()
     }
   }
 

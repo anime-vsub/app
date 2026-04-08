@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import git.shin.animevsub.data.model.UpdateInfo
+import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.ui.AnimeVsubAppUI
 import git.shin.animevsub.ui.components.dialogs.CloudflareBypassDialog
 import git.shin.animevsub.ui.components.dialogs.UpdateDialog
@@ -32,6 +32,9 @@ class MainActivity : ComponentActivity() {
   @Inject
   lateinit var cloudflareManager: CloudflareManager
 
+  @Inject
+  lateinit var animeRepository: AnimeRepository
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
@@ -39,7 +42,7 @@ class MainActivity : ComponentActivity() {
       val updateInfo = remember { mutableStateOf<UpdateInfo?>(null) }
       val bypassUrl by cloudflareManager.bypassUrl.collectAsState()
 
-      LaunchedEffect(Unit) {
+      androidx.compose.runtime.LaunchedEffect(Unit) {
         updateManager.checkForUpdate().onSuccess { info ->
           if (info.isNewer) {
             updateInfo.value = info
@@ -49,7 +52,9 @@ class MainActivity : ComponentActivity() {
 
       AnimeVsubTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-          AnimeVsubAppUI()
+          AnimeVsubAppUI(
+            animeRepository = animeRepository
+          )
 
           updateInfo.value?.let { info ->
             UpdateDialog(
