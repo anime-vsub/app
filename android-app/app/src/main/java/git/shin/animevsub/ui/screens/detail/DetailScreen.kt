@@ -135,6 +135,9 @@ fun DetailScreen(
   val unfollowSuccessMsg = stringResource(R.string.unfollowed)
   val followErrorMsg = stringResource(R.string.follow_error)
 
+  val reportSuccessMsg = stringResource(R.string.report_success)
+  val reportErrorMsg = stringResource(R.string.report_error)
+
   val loginRequiredMsg = stringResource(R.string.login_required)
 
   LaunchedEffect(Unit) {
@@ -145,6 +148,8 @@ fun DetailScreen(
             "FOLLOW_SUCCESS" -> followSuccessMsg
             "UNFOLLOW_SUCCESS" -> unfollowSuccessMsg
             "FOLLOW_ERROR" -> followErrorMsg
+            "REPORT_SUCCESS" -> reportSuccessMsg
+            "REPORT_ERROR" -> reportErrorMsg
             else -> effect.message
           }
           snackbarHostState.showSnackbar(message)
@@ -211,7 +216,7 @@ fun DetailScreen(
         onReply = { parentId, content -> viewModel.postComment(content, parentId = parentId) },
         onDelete = { id, parentId -> viewModel.deleteComment(id, parentId) },
         onEdit = { id, content -> viewModel.editComment(id, content) },
-        onReport = { id -> viewModel.reportComment(id) },
+        onTrigger = { trigger -> viewModel.onCommentTrigger(trigger) },
         currentUserId = uiState.currentUser?.username.hashCode(),
         replies = uiState.replies,
         repliesHasMore = uiState.repliesHasMore,
@@ -219,10 +224,12 @@ fun DetailScreen(
         onPostComment = { content -> viewModel.postComment(content) },
         isPosting = uiState.isPostingComment,
         currentUserAvatar = uiState.currentUser?.avatar,
+        sort = uiState.commentSort,
+        sortOptions = uiState.commentSortOptions,
+        onSortChange = { viewModel.updateCommentSort(it) },
         modifier = Modifier
           .fillMaxWidth()
           .height(sheetHeight)
-          .verticalScroll(rememberScrollState())
       )
     },
     sheetPeekHeight = 0.dp,
@@ -816,7 +823,7 @@ fun DetailScreen(
               }
 
               val previewComment =
-                uiState.comments.firstOrNull { it.isPinned == 0 && it.isGlobalPinned == 0 }
+                uiState.comments.firstOrNull { !it.isPinned && !it.isGlobalPinned }
 
               Spacer(modifier = Modifier.height(8.dp))
               Row(verticalAlignment = Alignment.CenterVertically) {

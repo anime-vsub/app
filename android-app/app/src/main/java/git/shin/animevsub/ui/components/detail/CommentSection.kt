@@ -12,11 +12,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,8 +33,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.Comment
+import git.shin.animevsub.data.model.FilterOption
+import git.shin.animevsub.data.model.Trigger
+import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.ui.theme.TextGrey
 
 @Composable
@@ -47,22 +60,30 @@ fun CommentSection(
   isLoading: Boolean,
   hasMore: Boolean,
   onLoadMore: () -> Unit,
-  onVote: (String, Int) -> Unit,
+  onVote: (String, VoteType) -> Unit,
   onReply: (String, String) -> Unit,
   onDelete: (String, String) -> Unit,
   onEdit: (String, String) -> Unit,
-  onReport: (String) -> Unit,
+  onTrigger: (Trigger) -> Unit,
   currentUserId: Int?,
   replies: Map<String, List<Comment>>,
   repliesHasMore: Map<String, Boolean>,
   onLoadReplies: (String, Boolean) -> Unit,
   onPostComment: (String) -> Unit,
   isPosting: Boolean,
+  modifier: Modifier = Modifier,
   currentUserAvatar: String? = null,
-  modifier: Modifier = Modifier
+  sort: FilterOption? = null,
+  sortOptions: List<FilterOption> = emptyList(),
+  onSortChange: (FilterOption) -> Unit
 ) {
+  var showSortMenu by remember { mutableStateOf(false) }
+
   Column(modifier = modifier.padding(16.dp)) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
       Text(
         text = stringResource(R.string.comments_title),
         style = MaterialTheme.typography.titleMedium,
@@ -75,6 +96,53 @@ fun CommentSection(
         style = MaterialTheme.typography.bodyMedium,
         color = Color.Gray
       )
+
+      Spacer(modifier = Modifier.weight(1f))
+
+      Box {
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .clickable { showSortMenu = true }
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+          Icon(
+            imageVector = Icons.Default.Sort,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(18.dp)
+          )
+          Spacer(modifier = Modifier.width(4.dp))
+          Text(
+            text = sort?.name ?: sortOptions[0].name,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Medium
+          )
+        }
+
+        DropdownMenu(
+          expanded = showSortMenu,
+          onDismissRequest = { showSortMenu = false },
+          modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+        ) {
+          sortOptions.forEach { option ->
+            DropdownMenuItem(
+              text = {
+                Text(
+                  text = option.name,
+                  fontSize = 14.sp
+                )
+              },
+              onClick = {
+                onSortChange(option)
+                showSortMenu = false
+              }
+            )
+          }
+        }
+      }
     }
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -103,7 +171,7 @@ fun CommentSection(
         onReply = onReply,
         onDelete = onDelete,
         onEdit = onEdit,
-        onReport = onReport,
+        onTrigger = onTrigger,
         isMine = comment.userId == currentUserId,
         replies = replies[comment.id] ?: emptyList(),
         hasMoreReplies = repliesHasMore[comment.id]

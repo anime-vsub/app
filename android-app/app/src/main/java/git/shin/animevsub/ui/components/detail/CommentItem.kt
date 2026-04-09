@@ -52,6 +52,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.Comment
+import git.shin.animevsub.data.model.Trigger
+import git.shin.animevsub.data.model.VoteType
 import java.util.Calendar
 import java.util.Date
 
@@ -130,11 +132,11 @@ fun CommentContent(
 @Composable
 fun CommentItem(
   comment: Comment,
-  onVote: (String, Int) -> Unit,
+  onVote: (String, VoteType) -> Unit,
   onReply: (String, String) -> Unit,
   onDelete: (String, String) -> Unit,
   onEdit: (String, String) -> Unit,
-  onReport: (String) -> Unit,
+  onTrigger: (Trigger) -> Unit,
   replies: List<Comment>,
   hasMoreReplies: Boolean,
   onLoadReplies: (Boolean) -> Unit,
@@ -179,7 +181,7 @@ fun CommentItem(
           style = MaterialTheme.typography.bodySmall,
           color = Color.Gray
         )
-        if (comment.isPinned == 1 || comment.isGlobalPinned == 1) {
+        if (comment.isPinned || comment.isGlobalPinned) {
           Spacer(modifier = Modifier.width(8.dp))
           Icon(
             imageVector = Icons.Default.PushPin,
@@ -189,7 +191,7 @@ fun CommentItem(
           )
           Spacer(modifier = Modifier.width(4.dp))
           Text(
-            text = stringResource(if (comment.isGlobalPinned == 1) R.string.global_pinned else R.string.pinned),
+            text = stringResource(if (comment.isGlobalPinned) R.string.global_pinned else R.string.pinned),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
@@ -218,21 +220,16 @@ fun CommentItem(
                   showMenu = false
                 }
               )
+            }
+            comment.triggers.forEach { trigger ->
               DropdownMenuItem(
-                text = { Text(stringResource(R.string.delete)) },
+                text = { Text(trigger.name ?: trigger.id) },
                 onClick = {
-                  onDelete(comment.id, comment.parentId ?: "0")
+                  onTrigger(trigger)
                   showMenu = false
                 }
               )
             }
-            DropdownMenuItem(
-              text = { Text(stringResource(R.string.report)) },
-              onClick = {
-                onReport(comment.id)
-                showMenu = false
-              }
-            )
           }
         }
       }
@@ -267,11 +264,11 @@ fun CommentItem(
       Spacer(modifier = Modifier.height(8.dp))
 
       Row(verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = { onVote(comment.id, 1) }, modifier = Modifier.size(24.dp)) {
+        IconButton(onClick = { onVote(comment.id, VoteType.UP) }, modifier = Modifier.size(24.dp)) {
           Icon(
-            imageVector = if (comment.userVote == 1) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
+            imageVector = if (comment.userVote == VoteType.UP) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
             contentDescription = "Like",
-            tint = if (comment.userVote == 1) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+            tint = if (comment.userVote == VoteType.UP) MaterialTheme.colorScheme.primary else LocalContentColor.current,
             modifier = Modifier.size(18.dp)
           )
         }
@@ -284,11 +281,14 @@ fun CommentItem(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        IconButton(onClick = { onVote(comment.id, -1) }, modifier = Modifier.size(24.dp)) {
+        IconButton(
+          onClick = { onVote(comment.id, VoteType.DOWN) },
+          modifier = Modifier.size(24.dp)
+        ) {
           Icon(
-            imageVector = if (comment.userVote == -1) Icons.Filled.ThumbDown else Icons.Outlined.ThumbDown,
+            imageVector = if (comment.userVote == VoteType.DOWN) Icons.Filled.ThumbDown else Icons.Outlined.ThumbDown,
             contentDescription = "Dislike",
-            tint = if (comment.userVote == -1) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+            tint = if (comment.userVote == VoteType.DOWN) MaterialTheme.colorScheme.primary else LocalContentColor.current,
             modifier = Modifier.size(18.dp)
           )
         }
@@ -328,7 +328,7 @@ fun CommentItem(
             onReply = onReply,
             onDelete = onDelete,
             onEdit = onEdit,
-            onReport = onReport,
+            onTrigger = onTrigger,
             isMine = reply.userId == currentUserId,
             replies = emptyList<Comment>(),
             hasMoreReplies = false,

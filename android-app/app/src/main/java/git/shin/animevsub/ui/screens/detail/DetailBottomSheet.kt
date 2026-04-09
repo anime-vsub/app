@@ -145,7 +145,7 @@ fun DetailBottomSheet(
               append("${stringResource(R.string.other_name)}: ")
             }
             withStyle(style = SpanStyle(color = TextPrimary)) {
-              append(detail.othername!!)
+              append(detail.othername)
             }
           },
           fontSize = 14.sp,
@@ -213,7 +213,7 @@ fun DetailBottomSheet(
                 settings.useWideViewPort = true
                 webViewClient = android.webkit.WebViewClient()
               }
-              webView.loadUrl(detail.trailer!!)
+              webView.loadUrl(detail.trailer)
               webView
             }, modifier = Modifier.fillMaxSize()
           )

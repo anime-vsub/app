@@ -10,9 +10,12 @@ import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.Comment
 import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.DoubleRange
+import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.Season
 import git.shin.animevsub.data.model.ServerInfo
+import git.shin.animevsub.data.model.Trigger
+import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
@@ -82,7 +85,8 @@ data class DetailUiState(
   val isCommentsLoading: Boolean = false,
   val hasMoreComments: Boolean = false,
   val commentsOffset: Int = 0,
-  val commentSort: String = "newest",
+  val commentSort: FilterOption? = null,
+  val commentSortOptions: List<FilterOption> = emptyList(),
   val replies: Map<String, List<Comment>> = emptyMap(),
   val repliesOffset: Map<String, Int> = emptyMap(),
   val repliesHasMore: Map<String, Boolean> = emptyMap(),
@@ -136,6 +140,21 @@ class DetailViewModel @Inject constructor(
           autoNext = autoNext,
           autoSkip = autoSkip
         )
+      }
+    }
+
+    loadCommentSortOptions()
+  }
+
+  private fun loadCommentSortOptions() {
+    viewModelScope.launch {
+      repository.getCommentSortOptions().onSuccess { options ->
+        _uiState.update {
+          it.copy(
+            commentSortOptions = options,
+            commentSort = options.firstOrNull()
+          )
+        }
       }
     }
   }
@@ -426,7 +445,7 @@ class DetailViewModel @Inject constructor(
   private fun loadSkipRange(chapter: ChapterInfo) {
     val detail = _uiState.value.detail ?: return
     viewModelScope.launch {
-      repository.getSkipRange(detail, chapter)
+      repository.getSkipRange(_uiState.value.animeId, detail, chapter)
         .onSuccess { result ->
           _uiState.update {
             it.copy(
@@ -649,6 +668,7 @@ class DetailViewModel @Inject constructor(
 
   fun loadComments(append: Boolean = false) {
     val filmId = _uiState.value.animeId
+    val anime = _uiState.value.detail ?: return
     val sort = _uiState.value.commentSort
     val offset = if (append) _uiState.value.commentsOffset else 0
 
@@ -657,7 +677,7 @@ class DetailViewModel @Inject constructor(
     _uiState.update { it.copy(isCommentsLoading = true, commentError = null) }
 
     viewModelScope.launch {
-      repository.getComments(filmId, sort, offset)
+      repository.getComments(filmId, anime, sort, offset)
         .onSuccess { response ->
           _uiState.update { state ->
             val newList = if (append) state.comments + response.comments else response.comments
@@ -740,7 +760,7 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  fun voteComment(commentId: String, voteType: Int) {
+  fun voteComment(commentId: String, voteType: VoteType) {
     if (!checkLogin()) return
     viewModelScope.launch {
       repository.voteComment(commentId, voteType)
@@ -801,7 +821,7 @@ class DetailViewModel @Inject constructor(
                 if (c.id == commentId) {
                   c.copy(
                     content = content,
-                    isSpoiler = if (isSpoiler) 1 else 0,
+                    isSpoiler = isSpoiler,
                     editedAt = System.currentTimeMillis() / 1000
                   )
                 } else c
@@ -816,24 +836,43 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  fun reportComment(commentId: String) {
+  fun onCommentTrigger(trigger: Trigger, parentId: String = "0") {
     if (!checkLogin()) return
     viewModelScope.launch {
-      repository.reportComment(commentId)
-        .onSuccess { response ->
-          if (response.success) {
-            _uiEffect.emit(DetailUiEffect.ShowSnackbar("Đã gửi báo cáo vi phạm"))
+      repository.onTrigger(trigger)
+        .onSuccess {
+          when (trigger.id) {
+            "delete_comment" -> {
+              val commentId = trigger.extra["comment_id"] ?: return@onSuccess
+              _uiState.update { state ->
+                if (parentId == "0") {
+                  state.copy(
+                    comments = state.comments.filter { it.id != commentId },
+                    totalComments = state.totalComments - 1
+                  )
+                } else {
+                  val currentReplies = state.replies[parentId] ?: emptyList()
+                  state.copy(
+                    replies = state.replies + (parentId to currentReplies.filter { it.id != commentId })
+                  )
+                }
+              }
+            }
+
+            "report_comment" -> {
+              _uiEffect.emit(DetailUiEffect.ShowSnackbar("REPORT_SUCCESS"))
+            }
           }
         }
         .onFailure { e ->
-          _uiEffect.emit(DetailUiEffect.ShowSnackbar(e.message ?: "Lỗi khi gửi báo cáo"))
+          _uiEffect.emit(DetailUiEffect.ShowSnackbar(e.message ?: "ACTION_ERROR"))
         }
     }
   }
 
-  fun updateCommentSort(sort: String) {
-    if (_uiState.value.commentSort == sort) return
-    _uiState.update { it.copy(commentSort = sort) }
+  fun updateCommentSort(sort: FilterOption) {
+    if (_uiState.value.commentSort?.id == sort.id) return
+    _uiState.update { it.copy(commentSort = sort, comments = emptyList(), commentsOffset = 0) }
     loadComments()
   }
 }

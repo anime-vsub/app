@@ -26,6 +26,7 @@ import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
+import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.remote.AnimeApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -128,6 +129,10 @@ class AnimeRepository @Inject constructor(
     api.getRankingTypes()
   }
 
+  suspend fun getCommentSortOptions(): Result<List<FilterOption>> = runCatching {
+    api.getCommentSortOptions()
+  }
+
   suspend fun getRankings(type: String): Result<List<AnimeCard>> = runCatching {
     val result = api.getRankings(type)
     analytics.logEvent("view_rankings") {
@@ -192,10 +197,11 @@ class AnimeRepository @Inject constructor(
 
   // Skip Range
   suspend fun getSkipRange(
+    animeId: String,
     detail: AnimeDetail,
     chapter: ChapterInfo
   ): Result<InOutroEpisode?> = runCatching {
-    api.getEpisodeSkip(detail, chapter)
+    api.getEpisodeSkip(animeId, detail, chapter)
   }
 
   // Auth
@@ -272,16 +278,16 @@ class AnimeRepository @Inject constructor(
   // Comments
   suspend fun getComments(
     filmId: String,
-    sort: String = "newest",
-    offset: Int = 0,
-    pageUrl: String? = null
+    anime: AnimeDetail,
+    sort: FilterOption?,
+    offset: Int = 0
   ): Result<CommentResponse> = runCatching {
-    api.getComments(filmId, sort, offset, pageUrl)
+    api.getComments(filmId, anime, sort, offset)
   }
 
   suspend fun getReplies(
     commentId: String,
-    sort: String = "newest",
+    sort: FilterOption?,
     offset: Int = 0
   ): Result<ReplyResponse> = runCatching {
     api.getReplies(commentId, sort, offset)
@@ -298,7 +304,8 @@ class AnimeRepository @Inject constructor(
     api.postComment(filmId, content, isSpoiler, episodeId, parentId, threadKey)
   }
 
-  suspend fun voteComment(commentId: String, voteType: Int): Result<VoteResponse> = runCatching {
+  suspend fun voteComment(commentId: String, voteType: VoteType): Result<VoteResponse> =
+    runCatching {
     api.voteComment(commentId, voteType)
   }
 

@@ -57,7 +57,6 @@ data class AnimeDetail(
   val othername: String?,
   val image: String?,
   val poster: String?,
-  val pathToView: String?,
   val description: String,
   val rate: Int,
   val countRate: Int,
@@ -74,7 +73,8 @@ data class AnimeDetail(
   val studio: CategoryLink?,
   val seasonOf: CategoryLink?,
   val trailer: String?,
-  val related: List<AnimeCard>
+  val related: List<AnimeCard>,
+  val extra: Map<String, String> = emptyMap()
 )
 
 @Serializable
@@ -132,6 +132,7 @@ data class User(
 @Serializable
 data class Trigger(
   val id: String,
+  val name: String? = null,
   val extra: Map<String, String> = emptyMap()
 )
 

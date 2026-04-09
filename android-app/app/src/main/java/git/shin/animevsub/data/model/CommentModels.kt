@@ -1,30 +1,35 @@
 package git.shin.animevsub.data.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+@Serializable
+enum class VoteType {
+  UP, DOWN, NONE
+}
 
 @Serializable
 data class Comment(
   val id: String,
-  @SerialName("user_id") val userId: Int,
-  @SerialName("user_name") val userName: String,
-  @SerialName("user_avatar") val userAvatar: String,
+  val userId: Int,
+  val userName: String,
+  val userAvatar: String,
   val content: String,
-  @SerialName("is_spoiler") val isSpoiler: Int = 0,
-  @SerialName("is_pending") val isPending: Int = 0,
-  @SerialName("is_pinned") val isPinned: Int = 0,
-  @SerialName("is_global_pinned") val isGlobalPinned: Int = 0,
-  @SerialName("created_at") val createdAt: Long,
-  @SerialName("edited_at") val editedAt: Long? = null,
-  @SerialName("votes_up") val votesUp: Int = 0,
-  @SerialName("votes_down") val votesDown: Int = 0,
-  @SerialName("replies_count") val repliesCount: Int = 0,
-  @SerialName("user_vote") val userVote: Int = 0, // 1: up, -1: down, 0: none
+  val isSpoiler: Boolean = false,
+  val isPending: Boolean = false,
+  val isPinned: Boolean = false,
+  val isGlobalPinned: Boolean = false,
+  val createdAt: Long,
+  val editedAt: Long? = null,
+  val votesUp: Int = 0,
+  val votesDown: Int = 0,
+  val repliesCount: Int = 0,
+  val userVote: VoteType = VoteType.NONE,
   val badges: List<CommentBadge> = emptyList(),
-  @SerialName("thread_key") val threadKey: String? = null,
-  @SerialName("parent_id") val parentId: String? = null,
-  @SerialName("is_hidden") val isHidden: Int = 0,
-  @SerialName("hide_reason") val hideReason: String? = null
+  val threadKey: String? = null,
+  val parentId: String? = null,
+  val isHidden: Boolean = false,
+  val hideReason: String? = null,
+  val triggers: List<Trigger> = emptyList()
 )
 
 @Serializable
@@ -40,7 +45,7 @@ data class CommentResponse(
   val comments: List<Comment> = emptyList(),
   val total: Int = 0,
   val offset: Int = 0,
-  @SerialName("has_more") val hasMore: Boolean = false,
+  val hasMore: Boolean = false,
   val error: String? = null
 )
 
@@ -50,7 +55,7 @@ data class ReplyResponse(
   val replies: List<Comment> = emptyList(),
   val total: Int = 0,
   val offset: Int = 0,
-  @SerialName("has_more") val hasMore: Boolean = false,
+  val hasMore: Boolean = false,
   val error: String? = null
 )
 
@@ -66,8 +71,8 @@ data class PostCommentResponse(
 @Serializable
 data class VoteResponse(
   val success: Boolean,
-  @SerialName("votes_up") val votesUp: Int = 0,
-  @SerialName("votes_down") val votesDown: Int = 0,
+  val votesUp: Int = 0,
+  val votesDown: Int = 0,
   val error: String? = null
 )
 
@@ -75,8 +80,8 @@ data class VoteResponse(
 data class EditCommentResponse(
   val success: Boolean,
   val content: String? = null,
-  @SerialName("is_spoiler") val isSpoiler: Int = 0,
-  @SerialName("edited_at") val editedAt: Long? = null,
+  val isSpoiler: Boolean = false,
+  val editedAt: Long? = null,
   val pending: Boolean = false,
   val error: String? = null
 )

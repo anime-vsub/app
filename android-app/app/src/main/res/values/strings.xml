@@ -249,6 +249,8 @@
     <string name="edit">Edit</string>
     <string name="edited">edited</string>
     <string name="report">Report</string>
+    <string name="report_success">Reported successfully</string>
+    <string name="report_error">Failed to report</string>
     <string name="pinned">Pinned</string>
     <string name="global_pinned">Pinned</string>
 

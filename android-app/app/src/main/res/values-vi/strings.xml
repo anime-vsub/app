@@ -244,6 +244,10 @@
     <string name="hours_ago">%1$d giờ trước</string>
     <string name="days_ago">%1$d ngày trước</string>
     <string name="reply_label">Trả lời</string>
+    <string name="report">Báo cáo</string>
+    <string name="report_success">Báo cáo thành công</string>
+    <string name="report_error">Gửi báo cáo thất bại</string>
+    <string name="pinned">Đã ghim</string>
 
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">Vượt qua Cloudflare</string>

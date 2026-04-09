@@ -244,6 +244,10 @@
     <string name="hours_ago">%1$d 時間前</string>
     <string name="days_ago">%1$d 日前</string>
     <string name="reply_label">返信</string>
+    <string name="report">報告</string>
+    <string name="report_success">報告しました</string>
+    <string name="report_error">報告に失敗しました</string>
+    <string name="pinned">固定済み</string>
 
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">Cloudflareをバイパス</string>

@@ -244,6 +244,10 @@
     <string name="hours_ago">%1$d 小时前</string>
     <string name="days_ago">%1$d 天前</string>
     <string name="reply_label">回复</string>
+    <string name="report">举报</string>
+    <string name="report_success">举报成功</string>
+    <string name="report_error">举报失败</string>
+    <string name="pinned">已置顶</string>
 
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">绕过 Cloudflare</string>
