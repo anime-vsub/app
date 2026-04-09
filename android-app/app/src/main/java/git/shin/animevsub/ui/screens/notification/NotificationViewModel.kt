@@ -3,6 +3,7 @@ package git.shin.animevsub.ui.screens.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import git.shin.animevsub.R
 import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.repository.AnimeRepository
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class NotificationUiEvent {
-  data class ShowToast(val message: String) : NotificationUiEvent()
+  data class ShowToast(val messageRes: Int? = null, val message: String? = null) : NotificationUiEvent()
 }
 
 data class NotificationUiState(
@@ -104,7 +105,10 @@ class NotificationViewModel @Inject constructor(
         .onFailure { e ->
           // Rollback
           _uiState.value = _uiState.value.copy(data = previousData)
-          _uiEvent.emit(NotificationUiEvent.ShowToast(e.message ?: "Có lỗi xảy ra"))
+          _uiEvent.emit(
+            if (e.message != null) NotificationUiEvent.ShowToast(message = e.message)
+            else NotificationUiEvent.ShowToast(messageRes = R.string.error_occurred)
+          )
         }
     }
   }

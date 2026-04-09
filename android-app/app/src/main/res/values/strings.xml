@@ -170,6 +170,8 @@
     <string name="developer_name">Tachibana Shin</string>
     <string name="source_code">Source Code</string>
     <string name="license">License</string>
+    <string name="category">Category</string>
+    <string name="no_servers_found">No servers found</string>
     <string name="mit_license">MIT License</string>
     <string name="coming_soon_desc">Coming soon…</string>
     <string name="back">Back</string>
@@ -245,6 +247,8 @@
     <string name="minutes_ago">%1$d minutes ago</string>
     <string name="hours_ago">%1$d hours ago</string>
     <string name="days_ago">%1$d days ago</string>
+    <string name="months_ago">%1$d months ago</string>
+    <string name="years_ago">%1$d years ago</string>
     <string name="reply_label">Reply</string>
     <string name="edit">Edit</string>
     <string name="edited">edited</string>

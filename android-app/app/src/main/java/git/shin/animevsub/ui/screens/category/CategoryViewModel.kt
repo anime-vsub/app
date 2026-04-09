@@ -51,7 +51,7 @@ class CategoryViewModel @Inject constructor(
     _uiState.update {
       it.copy(
         selectedFilters = filters,
-        title = filters.firstOrNull()?.name ?: "Danh mục"
+        title = filters.firstOrNull()?.name ?: "Category"
       )
     }
     loadPage(1)

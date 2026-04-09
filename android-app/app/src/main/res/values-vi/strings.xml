@@ -169,6 +169,8 @@
     <string name="developer_name">Tachibana Shin</string>
     <string name="source_code">Mã nguồn</string>
     <string name="license">Giấy phép</string>
+    <string name="category">Danh mục</string>
+    <string name="no_servers_found">Không tìm thấy server nào</string>
     <string name="mit_license">Giấy phép MIT</string>
     <string name="coming_soon_desc">Sắp ra mắt…</string>
     <string name="back">Quay lại</string>
@@ -243,6 +245,8 @@
     <string name="minutes_ago">%1$d phút trước</string>
     <string name="hours_ago">%1$d giờ trước</string>
     <string name="days_ago">%1$d ngày trước</string>
+    <string name="months_ago">%1$d tháng trước</string>
+    <string name="years_ago">%1$d năm trước</string>
     <string name="reply_label">Trả lời</string>
     <string name="report">Báo cáo</string>
     <string name="report_success">Báo cáo thành công</string>

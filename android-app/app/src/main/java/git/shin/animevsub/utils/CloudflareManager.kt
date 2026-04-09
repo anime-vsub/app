@@ -3,10 +3,15 @@ package git.shin.animevsub.utils
 import android.webkit.CookieManager
 import git.shin.animevsub.data.local.ApiStorage
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -101,5 +106,43 @@ class CloudflareManager @Inject constructor(
 
   fun cancelBypass() {
     currentDeferred?.complete(false)
+  }
+
+  suspend fun fetch(
+    client: OkHttpClient,
+    request: Request,
+    retryCount: Int = 0
+  ): Response = withContext(Dispatchers.IO) {
+    val builder = request.newBuilder()
+    val currentCookie = storage.get("user_cookie")
+    if (!currentCookie.isNullOrEmpty() && request.header("Cookie") == null) {
+      builder.header("Cookie", currentCookie)
+    }
+
+    val response = client.newCall(builder.build()).execute()
+    mergeCookies(response.headers("Set-Cookie"))
+
+    // Check for Cloudflare Challenge by peeking the body to avoid consuming the original stream
+    val peekBody = response.peekBody(1024 * 100).string() // Check within the first 100KB
+
+    if (isCloudflareChallenge(response, peekBody)) {
+      if (retryCount < 1) {
+        response.close()
+        if (startBypass(request.url.toString())) {
+          return@withContext fetch(client, request, retryCount + 1)
+        }
+      }
+    }
+
+    response
+  }
+
+  private fun isCloudflareChallenge(response: Response, body: String): Boolean {
+    val hasCfHeaders = response.code in 403..503 || body.contains("cf-challenge") || body.contains("ray-id")
+    val hasKeywords = body.contains("<title>Just a moment...</title>") ||
+                      body.contains("Xác Minh An Toàn") || // Safe Verification
+                      body.contains("cf-browser-verification")
+
+    return hasCfHeaders && hasKeywords
   }
 }

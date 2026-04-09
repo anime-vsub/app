@@ -471,7 +471,7 @@ class DetailViewModel @Inject constructor(
             _uiState.update {
               it.copy(
                 isPlayerLoading = false,
-                playerError = "Không tìm thấy server nào"
+                playerError = "No servers found"
               )
             }
           }

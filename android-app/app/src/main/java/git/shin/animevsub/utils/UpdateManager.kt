@@ -27,7 +27,8 @@ import javax.inject.Singleton
 class UpdateManager @Inject constructor(
   @ApplicationContext private val context: Context,
   private val client: OkHttpClient,
-  private val json: Json
+  private val json: Json,
+  private val cloudflareManager: CloudflareManager
 ) {
   private val GITHUB_REPO = "anime-vsub/app"
 
@@ -38,7 +39,7 @@ class UpdateManager @Inject constructor(
         .header("Accept", "application/vnd.github.v3+json")
         .build()
 
-      val response = client.newCall(request).execute()
+      val response = cloudflareManager.fetch(client, request)
       if (!response.isSuccessful) return@withContext Result.failure(Exception("Failed to fetch release: ${response.code}"))
 
       val body = response.body.string()

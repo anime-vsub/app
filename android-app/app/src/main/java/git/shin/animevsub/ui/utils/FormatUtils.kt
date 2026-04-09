@@ -69,7 +69,7 @@ fun formatTime(timestampMillis: Long): String {
 
 fun formatDayName(timestampMillis: Long): String {
   val date = Date(timestampMillis)
-  val sdf = SimpleDateFormat("EEEE", Locale("vi", "VN"))
+  val sdf = SimpleDateFormat("EEEE", Locale.getDefault())
   return sdf.format(date).replaceFirstChar { it.uppercase() }
 }
 
@@ -115,17 +115,34 @@ fun parseTimeAgo(timeAgo: String?): Long? {
   return now - millis
 }
 
+@Composable
 fun formatTimeAgo(timestamp: Long?): String {
   if (timestamp == null) return ""
   val now = System.currentTimeMillis()
   val diff = now - timestamp
 
   return when {
-    diff < TimeUnit.MINUTES.toMillis(1) -> "Vừa xong"
-    diff < TimeUnit.HOURS.toMillis(1) -> "${diff / TimeUnit.MINUTES.toMillis(1)} phút trước"
-    diff < TimeUnit.DAYS.toMillis(1) -> "${diff / TimeUnit.HOURS.toMillis(1)} giờ trước"
-    diff < TimeUnit.DAYS.toMillis(30) -> "${diff / TimeUnit.DAYS.toMillis(1)} ngày trước"
-    diff < TimeUnit.DAYS.toMillis(365) -> "${diff / TimeUnit.DAYS.toMillis(30)} tháng trước"
-    else -> "${diff / TimeUnit.DAYS.toMillis(365)} năm trước"
+    diff < TimeUnit.MINUTES.toMillis(1) -> stringResource(R.string.just_now)
+    diff < TimeUnit.HOURS.toMillis(1) -> stringResource(
+      R.string.minutes_ago,
+      diff / TimeUnit.MINUTES.toMillis(1)
+    )
+
+    diff < TimeUnit.DAYS.toMillis(1) -> stringResource(
+      R.string.hours_ago,
+      diff / TimeUnit.HOURS.toMillis(1)
+    )
+
+    diff < TimeUnit.DAYS.toMillis(30) -> stringResource(
+      R.string.days_ago,
+      diff / TimeUnit.DAYS.toMillis(1)
+    )
+
+    diff < TimeUnit.DAYS.toMillis(365) -> stringResource(
+      R.string.months_ago,
+      diff / TimeUnit.DAYS.toMillis(30)
+    )
+
+    else -> stringResource(R.string.years_ago, diff / TimeUnit.DAYS.toMillis(365))
   }
 }
