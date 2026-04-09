@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -82,7 +84,11 @@ fun CloudflareBypassDialog(
     Surface(
       modifier = Modifier.fillMaxSize(),
     ) {
-      Column(modifier = Modifier.fillMaxSize()) {
+      Column(
+        modifier = Modifier
+          .fillMaxSize()
+          .statusBarsPadding()
+      ) {
         AndroidView(
           factory = { webView },
           modifier = Modifier.weight(1f)
@@ -91,7 +97,9 @@ fun CloudflareBypassDialog(
         HorizontalDivider()
 
         Row(
-          modifier = Modifier.fillMaxWidth(),
+          modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding(),
         ) {
           IconButton(onClick = { onResult(webView.url) }) {
             Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
