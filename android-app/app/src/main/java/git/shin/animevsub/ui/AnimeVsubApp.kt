@@ -298,6 +298,9 @@ fun AnimeVsubAppUI(
           onNavigateToCategory = { filters ->
             val filtersJson = Json.encodeToString(filters)
             navController.navigate(Screen.Category.createRoute(filtersJson))
+          },
+          onNavigateToLogin = {
+            navController.navigate(Screen.Login.route)
           }
         )
       }

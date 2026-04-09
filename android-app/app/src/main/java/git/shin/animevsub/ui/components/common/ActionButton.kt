@@ -28,6 +28,7 @@ fun ActionButton(
   label: String,
   modifier: Modifier = Modifier,
   iconTint: Color = TextPrimary,
+  enabled: Boolean = true,
   onClick: () -> Unit
 ) {
   Column(
@@ -35,15 +36,20 @@ fun ActionButton(
     verticalArrangement = Arrangement.Center,
     modifier = modifier
       .clip(RoundedCornerShape(8.dp))
-      .clickable { onClick() }
+      .clickable(enabled = enabled) { onClick() }
       .padding(vertical = 8.dp, horizontal = 4.dp)
   ) {
-    Icon(icon, null, tint = iconTint, modifier = Modifier.size(22.dp))
+    Icon(
+      icon,
+      null,
+      tint = if (enabled) iconTint else iconTint.copy(alpha = 0.38f),
+      modifier = Modifier.size(22.dp)
+    )
     Spacer(modifier = Modifier.height(4.dp))
 
     Text(
       text = label,
-      color = TextSecondary,
+      color = if (enabled) TextSecondary else TextSecondary.copy(alpha = 0.38f),
       fontSize = 11.sp,
       maxLines = 1,
       overflow = TextOverflow.Ellipsis

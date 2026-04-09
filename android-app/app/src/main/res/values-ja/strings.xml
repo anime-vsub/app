@@ -229,6 +229,22 @@
     <string name="update_downloading_description">新しいバージョンをダウンロードしています…</string>
     <string name="session_expired">セッションの期限が切れました。もう一度ログインしてください。</string>
 
+    <!-- Comments -->
+    <string name="comments_title">コメント</string>
+    <string name="comment_hint">コメントを書く…</string>
+    <string name="reply_hint">%1$s に返信する…</string>
+    <string name="post_comment">投稿</string>
+    <string name="cancel_comment">キャンセル</string>
+    <string name="view_replies">%1$d 件の返信を表示</string>
+    <string name="view_more_replies">さらに返信を表示</string>
+    <string name="view_more_comments">さらにコメントを表示</string>
+    <string name="no_comments">まだコメントがありません。最初のコメントを書きましょう！</string>
+    <string name="just_now">たった今</string>
+    <string name="minutes_ago">%1$d 分前</string>
+    <string name="hours_ago">%1$d 時間前</string>
+    <string name="days_ago">%1$d 日前</string>
+    <string name="reply_label">返信</string>
+
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">Cloudflareをバイパス</string>
     <string name="close">閉じる</string>

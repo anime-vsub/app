@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
+import git.shin.animevsub.data.model.Comment
 import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.PlayerData
@@ -70,7 +71,23 @@ data class DetailUiState(
   val activeDisplaySeasonId: String = "",
 
   val chapterCounts: Map<String, Int> = emptyMap(),
-  val isFollowed: Boolean = false
+  val isFollowed: Boolean = false,
+
+  // User state
+  val currentUser: git.shin.animevsub.data.model.User? = null,
+
+  // Comments state
+  val comments: List<Comment> = emptyList(),
+  val totalComments: Int = 0,
+  val isCommentsLoading: Boolean = false,
+  val hasMoreComments: Boolean = false,
+  val commentsOffset: Int = 0,
+  val commentSort: String = "newest",
+  val replies: Map<String, List<Comment>> = emptyMap(),
+  val repliesOffset: Map<String, Int> = emptyMap(),
+  val repliesHasMore: Map<String, Boolean> = emptyMap(),
+  val isPostingComment: Boolean = false,
+  val commentError: String? = null
 ) {
   val currentChapIndex: Int
     get() {
@@ -104,6 +121,12 @@ class DetailViewModel @Inject constructor(
       )
     }
     loadDetail(animeId, chapterId)
+
+    viewModelScope.launch {
+      repository.user.collect { user ->
+        _uiState.update { it.copy(currentUser = user) }
+      }
+    }
 
     viewModelScope.launch {
       val autoNext = repository.autoNext.first()
@@ -359,6 +382,7 @@ class DetailViewModel @Inject constructor(
   private var isInitialPlayback = true
 
   fun updateHistory(currentPosMs: Long, durationMs: Long) {
+    if (_uiState.value.currentUser == null) return
     val currentPos = currentPosMs / 1000.0
     val duration = durationMs / 1000.0
     val state = _uiState.value
@@ -498,6 +522,7 @@ class DetailViewModel @Inject constructor(
   }
 
   suspend fun addToPlaylist(playlistId: Int): Result<Unit> {
+    if (!checkLogin()) return Result.failure(Exception("Login required"))
     val detail = _uiState.value.detail ?: return Result.failure(Exception("Detail not found"))
     val chapter =
       _uiState.value.currentChapter ?: return Result.failure(Exception("Chapter not found"))
@@ -514,6 +539,7 @@ class DetailViewModel @Inject constructor(
   }
 
   suspend fun removeFromPlaylist(playlistId: Int): Result<Unit> {
+    if (!checkLogin()) return Result.failure(Exception("Login required"))
     return playlistRepository.deleteAnimeFromPlaylist(playlistId, _uiState.value.currentSeasonId)
       .map { }
   }
@@ -578,19 +604,236 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  private val _uiEffect = MutableSharedFlow<String>()
-  val uiEffect: SharedFlow<String> = _uiEffect.asSharedFlow()
+  private val _uiEffect = MutableSharedFlow<DetailUiEffect>()
+  val uiEffect: SharedFlow<DetailUiEffect> = _uiEffect.asSharedFlow()
+
+  sealed class DetailUiEffect {
+    data class ShowSnackbar(val message: String) : DetailUiEffect()
+    data object RequireLogin : DetailUiEffect()
+    data object OpenPlaylistSheet : DetailUiEffect()
+  }
+
+  private fun checkLogin(): Boolean {
+    if (_uiState.value.currentUser == null) {
+      viewModelScope.launch {
+        _uiEffect.emit(DetailUiEffect.RequireLogin)
+      }
+      return false
+    }
+    return true
+  }
+
+  fun onSaveClick() {
+    if (checkLogin()) {
+      viewModelScope.launch {
+        _uiEffect.emit(DetailUiEffect.OpenPlaylistSheet)
+      }
+    }
+  }
 
   fun toggleFollow() {
+    if (!checkLogin()) return
     val animeId = _uiState.value.animeId
     val isFollowed = _uiState.value.isFollowed
     viewModelScope.launch {
       repository.toggleFollow(animeId, !isFollowed).onSuccess {
         _uiState.update { it.copy(isFollowed = !isFollowed) }
-        _uiEffect.emit(if (!isFollowed) "FOLLOW_SUCCESS" else "UNFOLLOW_SUCCESS")
+        _uiEffect.emit(DetailUiEffect.ShowSnackbar(if (!isFollowed) "FOLLOW_SUCCESS" else "UNFOLLOW_SUCCESS"))
       }.onFailure {
-        _uiEffect.emit("FOLLOW_ERROR")
+        _uiEffect.emit(DetailUiEffect.ShowSnackbar("FOLLOW_ERROR"))
       }
     }
+  }
+
+  // ======== Comment Logic ========
+
+  fun loadComments(append: Boolean = false) {
+    val filmId = _uiState.value.animeId
+    val sort = _uiState.value.commentSort
+    val offset = if (append) _uiState.value.commentsOffset else 0
+
+    if (_uiState.value.isCommentsLoading && !append) return
+
+    _uiState.update { it.copy(isCommentsLoading = true, commentError = null) }
+
+    viewModelScope.launch {
+      repository.getComments(filmId, sort, offset)
+        .onSuccess { response ->
+          _uiState.update { state ->
+            val newList = if (append) state.comments + response.comments else response.comments
+            state.copy(
+              comments = newList,
+              totalComments = response.total,
+              commentsOffset = response.offset,
+              hasMoreComments = response.hasMore,
+              isCommentsLoading = false
+            )
+          }
+        }
+        .onFailure { e ->
+          _uiState.update { it.copy(isCommentsLoading = false, commentError = e.message) }
+        }
+    }
+  }
+
+  fun loadMoreComments() {
+    if (_uiState.value.hasMoreComments) {
+      loadComments(append = true)
+    }
+  }
+
+  fun loadReplies(commentId: String, append: Boolean = false) {
+    val sort = _uiState.value.commentSort
+    val offset = if (append) _uiState.value.repliesOffset[commentId] ?: 0 else 0
+
+    viewModelScope.launch {
+      repository.getReplies(commentId, sort, offset)
+        .onSuccess { response ->
+          _uiState.update { state ->
+            val currentReplies = state.replies[commentId] ?: emptyList()
+            val newList = if (append) currentReplies + response.replies else response.replies
+            state.copy(
+              replies = state.replies + (commentId to newList),
+              repliesOffset = state.repliesOffset + (commentId to response.offset),
+              repliesHasMore = state.repliesHasMore + (commentId to response.hasMore)
+            )
+          }
+        }
+    }
+  }
+
+  fun postComment(content: String, isSpoiler: Boolean = false, parentId: String = "0") {
+    if (!checkLogin()) return
+    if (content.isBlank()) return
+    val filmId = _uiState.value.animeId
+    val episodeId = _uiState.value.currentChapter?.id
+    val threadKey = _uiState.value.currentChapter?.name ?: _uiState.value.animeId
+
+    _uiState.update { it.copy(isPostingComment = true) }
+
+    viewModelScope.launch {
+      repository.postComment(filmId, content, isSpoiler, episodeId, parentId, threadKey)
+        .onSuccess { response ->
+          if (response.success && response.comment != null) {
+            _uiState.update { state ->
+              if (parentId == "0") {
+                state.copy(
+                  comments = listOf(response.comment) + state.comments,
+                  totalComments = response.total ?: (state.totalComments + 1),
+                  isPostingComment = false
+                )
+              } else {
+                val currentReplies = state.replies[parentId] ?: emptyList()
+                state.copy(
+                  replies = state.replies + (parentId to (currentReplies + response.comment)),
+                  isPostingComment = false
+                )
+              }
+            }
+          } else {
+            _uiState.update { it.copy(isPostingComment = false, commentError = response.error) }
+          }
+        }
+        .onFailure { e ->
+          _uiState.update { it.copy(isPostingComment = false, commentError = e.message) }
+        }
+    }
+  }
+
+  fun voteComment(commentId: String, voteType: Int) {
+    if (!checkLogin()) return
+    viewModelScope.launch {
+      repository.voteComment(commentId, voteType)
+        .onSuccess { response ->
+          if (response.success) {
+            _uiState.update { state ->
+              val updateComment: (Comment) -> Comment = { c ->
+                if (c.id == commentId) {
+                  c.copy(
+                    votesUp = response.votesUp,
+                    votesDown = response.votesDown,
+                    userVote = voteType
+                  )
+                } else c
+              }
+              state.copy(
+                comments = state.comments.map(updateComment),
+                replies = state.replies.mapValues { it.value.map(updateComment) }
+              )
+            }
+          }
+        }
+    }
+  }
+
+  fun deleteComment(commentId: String, parentId: String = "0") {
+    if (!checkLogin()) return
+    viewModelScope.launch {
+      repository.deleteComment(commentId)
+        .onSuccess { response ->
+          if (response.success) {
+            _uiState.update { state ->
+              if (parentId == "0") {
+                state.copy(
+                  comments = state.comments.filter { it.id != commentId },
+                  totalComments = response.total ?: (state.totalComments - 1)
+                )
+              } else {
+                val currentReplies = state.replies[parentId] ?: emptyList()
+                state.copy(
+                  replies = state.replies + (parentId to currentReplies.filter { it.id != commentId })
+                )
+              }
+            }
+          }
+        }
+    }
+  }
+
+  fun editComment(commentId: String, content: String, isSpoiler: Boolean = false) {
+    if (!checkLogin()) return
+    viewModelScope.launch {
+      repository.editComment(commentId, content, isSpoiler)
+        .onSuccess { response ->
+          if (response.success) {
+            _uiState.update { state ->
+              val updateComment: (Comment) -> Comment = { c ->
+                if (c.id == commentId) {
+                  c.copy(
+                    content = content,
+                    isSpoiler = if (isSpoiler) 1 else 0,
+                    editedAt = System.currentTimeMillis() / 1000
+                  )
+                } else c
+              }
+              state.copy(
+                comments = state.comments.map(updateComment),
+                replies = state.replies.mapValues { it.value.map(updateComment) }
+              )
+            }
+          }
+        }
+    }
+  }
+
+  fun reportComment(commentId: String) {
+    if (!checkLogin()) return
+    viewModelScope.launch {
+      repository.reportComment(commentId)
+        .onSuccess { response ->
+          if (response.success) {
+            _uiEffect.emit(DetailUiEffect.ShowSnackbar("Đã gửi báo cáo vi phạm"))
+          }
+        }
+        .onFailure { e ->
+          _uiEffect.emit(DetailUiEffect.ShowSnackbar(e.message ?: "Lỗi khi gửi báo cáo"))
+        }
+    }
+  }
+
+  fun updateCommentSort(sort: String) {
+    if (_uiState.value.commentSort == sort) return
+    _uiState.update { it.copy(commentSort = sort) }
+    loadComments()
   }
 }

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,17 +38,20 @@ import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -65,6 +67,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -73,11 +77,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.Badge
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.components.common.ActionButton
+import git.shin.animevsub.ui.components.detail.CommentSection
 import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.EpisodeItem
 import git.shin.animevsub.ui.components.player.VideoPlayer
@@ -88,6 +94,7 @@ import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
+import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextGrey
@@ -96,6 +103,7 @@ import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.shimmerEffect
+import kotlinx.coroutines.launch
 
 @SuppressLint("SetJavaScriptEnabled")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -104,6 +112,7 @@ fun DetailScreen(
   onNavigateBack: () -> Unit,
   onNavigateToDetail: (String) -> Unit,
   onNavigateToCategory: (List<SelectedFilter>) -> Unit,
+  onNavigateToLogin: () -> Unit,
   viewModel: DetailViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -111,24 +120,45 @@ fun DetailScreen(
   val snackbarHostState = remember { SnackbarHostState() }
   val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  val scaffoldState = rememberBottomSheetScaffoldState()
   var showDetailSheet by remember { mutableStateOf(false) }
   var showChapterSheet by remember { mutableStateOf(false) }
   var showAddToPlaylistSheet by remember { mutableStateOf(false) }
-  rememberCoroutineScope()
+  val scope = rememberCoroutineScope()
+
+  val configuration = LocalConfiguration.current
+  val screenWidth = configuration.screenWidthDp.dp
+  val videoHeight = screenWidth * 9 / 16
+  val sheetHeight = configuration.screenHeightDp.dp - videoHeight
 
   val followSuccessMsg = stringResource(R.string.followed)
   val unfollowSuccessMsg = stringResource(R.string.unfollowed)
   val followErrorMsg = stringResource(R.string.follow_error)
 
+  val loginRequiredMsg = stringResource(R.string.login_required)
+
   LaunchedEffect(Unit) {
     viewModel.uiEffect.collect { effect ->
-      val message = when (effect) {
-        "FOLLOW_SUCCESS" -> followSuccessMsg
-        "UNFOLLOW_SUCCESS" -> unfollowSuccessMsg
-        "FOLLOW_ERROR" -> followErrorMsg
-        else -> effect
+      when (effect) {
+        is DetailViewModel.DetailUiEffect.ShowSnackbar -> {
+          val message = when (effect.message) {
+            "FOLLOW_SUCCESS" -> followSuccessMsg
+            "UNFOLLOW_SUCCESS" -> unfollowSuccessMsg
+            "FOLLOW_ERROR" -> followErrorMsg
+            else -> effect.message
+          }
+          snackbarHostState.showSnackbar(message)
+        }
+
+        is DetailViewModel.DetailUiEffect.RequireLogin -> {
+          snackbarHostState.showSnackbar(loginRequiredMsg)
+          onNavigateToLogin()
+        }
+
+        is DetailViewModel.DetailUiEffect.OpenPlaylistSheet -> {
+          showAddToPlaylistSheet = true
+        }
       }
-      snackbarHostState.showSnackbar(message)
     }
   }
 
@@ -164,9 +194,41 @@ fun DetailScreen(
     }
   }
 
-  Scaffold(
+  LaunchedEffect(uiState.animeId) {
+    viewModel.loadComments()
+  }
+
+  BottomSheetScaffold(
+    scaffoldState = scaffoldState,
+    sheetContent = {
+      CommentSection(
+        comments = uiState.comments,
+        totalComments = uiState.totalComments,
+        isLoading = uiState.isCommentsLoading,
+        hasMore = uiState.hasMoreComments,
+        onLoadMore = { viewModel.loadMoreComments() },
+        onVote = { id, vote -> viewModel.voteComment(id, vote) },
+        onReply = { parentId, content -> viewModel.postComment(content, parentId = parentId) },
+        onDelete = { id, parentId -> viewModel.deleteComment(id, parentId) },
+        onEdit = { id, content -> viewModel.editComment(id, content) },
+        onReport = { id -> viewModel.reportComment(id) },
+        currentUserId = uiState.currentUser?.username.hashCode(),
+        replies = uiState.replies,
+        repliesHasMore = uiState.repliesHasMore,
+        onLoadReplies = { id, append -> viewModel.loadReplies(id, append) },
+        onPostComment = { content -> viewModel.postComment(content) },
+        isPosting = uiState.isPostingComment,
+        currentUserAvatar = uiState.currentUser?.avatar,
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(sheetHeight)
+          .verticalScroll(rememberScrollState())
+      )
+    },
+    sheetPeekHeight = 0.dp,
+    sheetContainerColor = DarkSurface,
+    sheetDragHandle = { git.shin.animevsub.ui.components.detail.BottomSheetDragHandle() },
     containerColor = DarkBackground,
-    contentWindowInsets = WindowInsets(0, 0, 0, 0),
     snackbarHost = { SnackbarHost(snackbarHostState) }
   ) { innerPadding ->
     PullToRefreshBox(
@@ -517,7 +579,7 @@ fun DetailScreen(
                     modifier = Modifier
                       .widthIn(min = 50.dp)
                       .wrapContentWidth(),
-                    onClick = { showAddToPlaylistSheet = true }
+                    onClick = { viewModel.onSaveClick() }
                   )
                 }
               }
@@ -711,6 +773,72 @@ fun DetailScreen(
               }
             }
 
+            // Comment Preview (YouTube-style)
+            Spacer(modifier = Modifier.height(16.dp))
+            Column(
+              modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .clickable {
+                  scope.launch {
+                    scaffoldState.bottomSheetState.expand()
+                  }
+                }
+                .padding(12.dp)
+            ) {
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+              ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                  Text(
+                    text = stringResource(R.string.comments_title),
+                    color = TextPrimary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                  )
+                  Spacer(modifier = Modifier.width(8.dp))
+                  Text(
+                    text = "${uiState.totalComments}",
+                    color = TextSecondary,
+                    fontSize = 12.sp
+                  )
+                }
+                Icon(
+                  imageVector = Icons.Default.KeyboardArrowDown,
+                  contentDescription = null,
+                  tint = TextSecondary,
+                  modifier = Modifier.size(20.dp)
+                )
+              }
+
+              val previewComment =
+                uiState.comments.firstOrNull { it.isPinned == 0 && it.isGlobalPinned == 0 }
+
+              Spacer(modifier = Modifier.height(8.dp))
+              Row(verticalAlignment = Alignment.CenterVertically) {
+                AsyncImage(
+                  model = previewComment?.userAvatar ?: uiState.currentUser?.avatar,
+                  contentDescription = null,
+                  modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape),
+                  contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                  text = previewComment?.content ?: stringResource(R.string.comment_hint),
+                  color = if (previewComment != null) TextPrimary else TextSecondary,
+                  fontSize = 13.sp,
+                  maxLines = 2,
+                  overflow = TextOverflow.Ellipsis
+                )
+              }
+            }
+
             // Related
             if (detail.related.isNotEmpty()) {
               Spacer(modifier = Modifier.height(16.dp))
@@ -757,7 +885,6 @@ fun DetailScreen(
       )
     }
 
-    // Add to Playlist Bottom Sheet
     if (showAddToPlaylistSheet) {
       AddToPlaylistBottomSheet(
         animeId = uiState.currentSeasonId,

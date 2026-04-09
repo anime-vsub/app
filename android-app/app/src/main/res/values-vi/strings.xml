@@ -229,6 +229,22 @@
     <string name="update_downloading_description">Phiên bản mới đang được tải xuống…</string>
     <string name="session_expired">Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.</string>
 
+    <!-- Comments -->
+    <string name="comments_title">Bình luận</string>
+    <string name="comment_hint">Viết bình luận…</string>
+    <string name="reply_hint">Trả lời %1$s…</string>
+    <string name="post_comment">Gửi</string>
+    <string name="cancel_comment">Hủy</string>
+    <string name="view_replies">Xem %1$d phản hồi</string>
+    <string name="view_more_replies">Xem thêm phản hồi</string>
+    <string name="view_more_comments">Xem thêm bình luận</string>
+    <string name="no_comments">Chưa có bình luận nào. Hãy là người đầu tiên!</string>
+    <string name="just_now">Vừa xong</string>
+    <string name="minutes_ago">%1$d phút trước</string>
+    <string name="hours_ago">%1$d giờ trước</string>
+    <string name="days_ago">%1$d ngày trước</string>
+    <string name="reply_label">Trả lời</string>
+
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">Vượt qua Cloudflare</string>
     <string name="close">Đóng</string>

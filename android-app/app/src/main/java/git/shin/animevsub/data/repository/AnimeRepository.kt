@@ -4,22 +4,28 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
+import git.shin.animevsub.data.model.ActionResponse
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.CategoryPage
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
+import git.shin.animevsub.data.model.CommentResponse
+import git.shin.animevsub.data.model.EditCommentResponse
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.HomeData
 import git.shin.animevsub.data.model.InOutroEpisode
 import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.PostCommentResponse
+import git.shin.animevsub.data.model.ReplyResponse
 import git.shin.animevsub.data.model.ScheduleDay
 import git.shin.animevsub.data.model.SearchSuggestion
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.User
+import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.remote.AnimeApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -261,6 +267,55 @@ class AnimeRepository @Inject constructor(
     analytics.logEvent(if (follow) "follow_anime" else "unfollow_anime") {
       param(FirebaseAnalytics.Param.ITEM_ID, animeId)
     }
+  }
+
+  // Comments
+  suspend fun getComments(
+    filmId: String,
+    sort: String = "newest",
+    offset: Int = 0,
+    pageUrl: String? = null
+  ): Result<CommentResponse> = runCatching {
+    api.getComments(filmId, sort, offset, pageUrl)
+  }
+
+  suspend fun getReplies(
+    commentId: String,
+    sort: String = "newest",
+    offset: Int = 0
+  ): Result<ReplyResponse> = runCatching {
+    api.getReplies(commentId, sort, offset)
+  }
+
+  suspend fun postComment(
+    filmId: String,
+    content: String,
+    isSpoiler: Boolean = false,
+    episodeId: String? = null,
+    parentId: String = "0",
+    threadKey: String? = null
+  ): Result<PostCommentResponse> = runCatching {
+    api.postComment(filmId, content, isSpoiler, episodeId, parentId, threadKey)
+  }
+
+  suspend fun voteComment(commentId: String, voteType: Int): Result<VoteResponse> = runCatching {
+    api.voteComment(commentId, voteType)
+  }
+
+  suspend fun editComment(
+    commentId: String,
+    content: String,
+    isSpoiler: Boolean
+  ): Result<EditCommentResponse> = runCatching {
+    api.editComment(commentId, content, isSpoiler)
+  }
+
+  suspend fun deleteComment(commentId: String): Result<ActionResponse> = runCatching {
+    api.deleteComment(commentId)
+  }
+
+  suspend fun reportComment(commentId: String): Result<ActionResponse> = runCatching {
+    api.reportComment(commentId)
   }
 
   // History

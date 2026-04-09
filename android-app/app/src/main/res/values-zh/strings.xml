@@ -229,6 +229,22 @@
     <string name="update_downloading_description">新版本正在下载中…</string>
     <string name="session_expired">会话已过期，请重新登录。</string>
 
+    <!-- Comments -->
+    <string name="comments_title">评论</string>
+    <string name="comment_hint">写评论…</string>
+    <string name="reply_hint">回复 %1$s…</string>
+    <string name="post_comment">发布</string>
+    <string name="cancel_comment">取消</string>
+    <string name="view_replies">查看 %1$d 条回复</string>
+    <string name="view_more_replies">查看更多回复</string>
+    <string name="view_more_comments">查看更多评论</string>
+    <string name="no_comments">暂无评论。来发表第一条评论吧！</string>
+    <string name="just_now">刚刚</string>
+    <string name="minutes_ago">%1$d 分钟前</string>
+    <string name="hours_ago">%1$d 小时前</string>
+    <string name="days_ago">%1$d 天前</string>
+    <string name="reply_label">回复</string>
+
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">绕过 Cloudflare</string>
     <string name="close">关闭</string>

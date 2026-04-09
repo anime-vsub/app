@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -60,20 +59,17 @@ fun DetailBottomSheet(
   onDismissRequest: () -> Unit,
   onNavigateToCategory: (CategoryLink) -> Unit
 ) {
-  val configuration = LocalConfiguration.current
-  val screenWidth = configuration.screenWidthDp.dp
-  val videoHeight = screenWidth * 9 / 16
-  val sheetHeight = configuration.screenHeightDp.dp - videoHeight
+//  val configuration = LocalConfiguration.current
+//  val screenWidth = configuration.screenWidthDp.dp
+//  val videoHeight = screenWidth * 9 / 16
+//  val sheetHeight = configuration.screenHeightDp.dp - videoHeight
 
   ModalBottomSheet(
     onDismissRequest = onDismissRequest,
     sheetState = sheetState,
     containerColor = DarkSurface,
-    modifier = Modifier
-      .height(sheetHeight)
-      .fillMaxWidth(),
-
-    dragHandle = { BottomSheetDefaults.DragHandle(color = TextGrey) }) {
+    dragHandle = { BottomSheetDefaults.DragHandle(color = TextGrey) }
+  ) {
     Column(
       modifier = Modifier
         .fillMaxWidth()

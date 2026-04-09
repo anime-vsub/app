@@ -231,6 +231,27 @@
     <string name="update_downloading_description">New version is being downloaded…</string>
     <string name="session_expired">Session expired. Please login again.</string>
 
+    <!-- Comments -->
+    <string name="comments_title">Comments</string>
+    <string name="comment_hint">Write a comment…</string>
+    <string name="reply_hint">Reply to %1$s…</string>
+    <string name="post_comment">Post</string>
+    <string name="cancel_comment">Cancel</string>
+    <string name="view_replies">View %1$d replies</string>
+    <string name="view_more_replies">View more replies</string>
+    <string name="view_more_comments">View more comments</string>
+    <string name="no_comments">No comments yet. Be the first to comment!</string>
+    <string name="just_now">Just now</string>
+    <string name="minutes_ago">%1$d minutes ago</string>
+    <string name="hours_ago">%1$d hours ago</string>
+    <string name="days_ago">%1$d days ago</string>
+    <string name="reply_label">Reply</string>
+    <string name="edit">Edit</string>
+    <string name="edited">edited</string>
+    <string name="report">Report</string>
+    <string name="pinned">Pinned</string>
+    <string name="global_pinned">Pinned</string>
+
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">Cloudflare Bypass</string>
     <string name="close">Close</string>
