@@ -1,6 +1,7 @@
 package git.shin.animevsub.data.model
 
 import kotlinx.serialization.Serializable
+import java.time.Instant
 
 @Serializable
 data class AnimeCard(
@@ -146,14 +147,9 @@ data class NotificationItem(
   val description: String = "",
   val link: String = "",
   val animeId: String? = null,
-  val createdAt: Long? = null,
+  val chapId: String? = null,
+  @Serializable(with = InstantSerializer::class) val createdAt: Instant? = null,
   val closeTrigger: Trigger? = null
-)
-
-@Serializable
-data class NotificationData(
-  val items: List<NotificationItem>,
-  val max: Int
 )
 
 @Serializable

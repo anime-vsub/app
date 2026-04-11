@@ -22,6 +22,8 @@ class PreferencesManager(private val context: Context) {
     private val VOLUME_GESTURE_KEY = booleanPreferencesKey("volume_gesture")
     private val BRIGHTNESS_GESTURE_KEY = booleanPreferencesKey("brightness_gesture")
     private val SEARCH_HISTORY_KEY = stringPreferencesKey("search_history")
+    private val AUTO_SYNC_NOTIFY_KEY = booleanPreferencesKey("auto_sync_notify")
+    private val COOKIES_KEY = stringPreferencesKey("cookies")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -29,6 +31,17 @@ class PreferencesManager(private val context: Context) {
   val volumeGesture: Flow<Boolean> = context.dataStore.data.map { it[VOLUME_GESTURE_KEY] ?: true }
   val brightnessGesture: Flow<Boolean> =
     context.dataStore.data.map { it[BRIGHTNESS_GESTURE_KEY] ?: true }
+  val autoSyncNotify: Flow<Boolean> =
+    context.dataStore.data.map { it[AUTO_SYNC_NOTIFY_KEY] ?: false }
+  val cookies: Flow<Map<String, String>> = context.dataStore.data.map { preferences ->
+    val json = preferences[COOKIES_KEY] ?: return@map emptyMap()
+    try {
+      Json.decodeFromString<Map<String, String>>(json)
+    } catch (e: Exception) {
+      emptyMap()
+    }
+  }
+
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
     try {
@@ -53,6 +66,22 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setBrightnessGesture(value: Boolean) {
     context.dataStore.edit { it[BRIGHTNESS_GESTURE_KEY] = value }
+  }
+
+  suspend fun setAutoSyncNotify(value: Boolean) {
+    context.dataStore.edit { it[AUTO_SYNC_NOTIFY_KEY] = value }
+  }
+
+  suspend fun setCookies(host: String, cookie: String) {
+    context.dataStore.edit { preferences ->
+      val currentCookies = cookies.first().toMutableMap()
+      currentCookies[host] = cookie
+      preferences[COOKIES_KEY] = Json.encodeToString(currentCookies.toMap())
+    }
+  }
+
+  suspend fun getCookie(host: String): String? {
+    return cookies.first()[host]
   }
 
   suspend fun addSearchHistory(query: String) {

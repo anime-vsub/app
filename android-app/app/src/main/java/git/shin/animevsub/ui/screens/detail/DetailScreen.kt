@@ -214,7 +214,6 @@ fun DetailScreen(
         onLoadMore = { viewModel.loadMoreComments() },
         onVote = { id, vote -> viewModel.voteComment(id, vote) },
         onReply = { parentId, content -> viewModel.postComment(content, parentId = parentId) },
-        onDelete = { id, parentId -> viewModel.deleteComment(id, parentId) },
         onEdit = { id, content -> viewModel.editComment(id, content) },
         onTrigger = { trigger -> viewModel.onCommentTrigger(trigger) },
         currentUserId = uiState.currentUser?.username.hashCode(),

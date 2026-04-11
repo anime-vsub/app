@@ -1,7 +1,12 @@
 package git.shin.animevsub.utils
 
+import android.os.Handler
+import android.os.Looper
 import android.webkit.CookieManager
-import git.shin.animevsub.data.local.ApiStorage
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import git.shin.animevsub.data.local.PreferencesManager
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +22,8 @@ import javax.inject.Singleton
 
 @Singleton
 class CloudflareManager @Inject constructor(
-  private val storage: ApiStorage
+  private val preferencesManager: PreferencesManager,
+  @dagger.hilt.android.qualifiers.ApplicationContext private val context: android.content.Context
 ) {
   private val _bypassUrl = MutableStateFlow<String?>(null)
   val bypassUrl = _bypassUrl.asStateFlow()
@@ -25,7 +31,16 @@ class CloudflareManager @Inject constructor(
   private val mutex = Mutex()
   private var currentDeferred: CompletableDeferred<Boolean>? = null
 
+  private val userAgent =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+
   suspend fun startBypass(url: String): Boolean {
+    // Try headless first
+    if (tryHeadlessBypass(url)) {
+      return true
+    }
+
+    // Fallback to dialog if headless fails
     val deferred = mutex.withLock {
       if (_bypassUrl.value != null) {
         currentDeferred
@@ -48,64 +63,95 @@ class CloudflareManager @Inject constructor(
     return success
   }
 
-  suspend fun onBypassCompleted(url: String) {
-    val cookies = CookieManager.getInstance().getCookie(url)
-    if (cookies != null) {
-      mergeCookies(cookies)
-      currentDeferred?.complete(true)
-    } else {
-      currentDeferred?.complete(false)
-    }
-  }
+  private suspend fun tryHeadlessBypass(url: String): Boolean = withContext(Dispatchers.Main) {
+    val deferred = CompletableDeferred<Boolean>()
+    val handler = Handler(Looper.getMainLooper())
 
-  /**
-   * Merge new cookies into the store.
-   * @param newCookies Can be a string like "a=1; b=2" (from WebView)
-   * or a list of "Set-Cookie" headers from the server.
-   */
-  suspend fun mergeCookies(newCookies: Any?) {
-    if (newCookies == null) return
+    val webView = WebView(context).apply {
+      settings.javaScriptEnabled = true
+      settings.domStorageEnabled = true
+      settings.userAgentString = userAgent
 
-    val currentCookies = storage.get("user_cookie") ?: ""
-    val cookieMap = mutableMapOf<String, String>()
+      webViewClient = object : WebViewClient() {
+        private var checkJob: Runnable? = null
 
-    // Parse current cookies
-    parseCookieString(currentCookies, cookieMap)
+        override fun onPageFinished(view: WebView?, url: String?) {
+          super.onPageFinished(view, url)
+          scheduleCheck(view)
+        }
 
-    when (newCookies) {
-      is String -> {
-        // Parse from string (usually WebView.getCookie)
-        parseCookieString(newCookies, cookieMap)
-      }
-
-      is List<*> -> {
-        // Parse from Set-Cookie headers list
-        newCookies.filterIsInstance<String>().forEach { header ->
-          // Set-Cookie: name=value; Path=/; HttpOnly -> only get name=value
-          val cookiePart = header.split(";")[0]
-          val parts = cookiePart.split("=", limit = 2)
-          if (parts.size == 2) {
-            cookieMap[parts[0].trim()] = parts[1].trim()
+        private fun scheduleCheck(view: WebView?) {
+          checkJob?.let { handler.removeCallbacks(it) }
+          val runnable = object : Runnable {
+            override fun run() {
+              view?.evaluateJavascript(
+                "(function() { " +
+                  "return document.title.includes('Just a moment') || " +
+                  "document.body.innerText.includes('cf-challenge') || " +
+                  "document.body.innerText.includes('ray-id'); " +
+                  "})()"
+              ) { result ->
+                if (result == "false") {
+                  deferred.complete(true)
+                } else {
+                  // Still challenging, wait more or it might be stuck
+                  handler.postDelayed(this, 2000)
+                }
+              }
+            }
           }
+          checkJob = runnable
+          handler.postDelayed(runnable, 2000)
+        }
+
+        override fun shouldOverrideUrlLoading(
+          view: WebView?,
+          request: WebResourceRequest?
+        ): Boolean {
+          return false
         }
       }
     }
 
-    val merged = cookieMap.map { "${it.key}=${it.value}" }.joinToString("; ")
-    storage.set("user_cookie", merged)
+    webView.loadUrl(url)
+
+    // Timeout for headless
+    handler.postDelayed({
+      if (!deferred.isCompleted) {
+        deferred.complete(false)
+      }
+    }, 15000)
+
+    val result = try {
+      deferred.await()
+    } catch (e: Exception) {
+      false
+    } finally {
+      webView.stopLoading()
+      webView.destroy()
+    }
+    result
   }
 
-  private fun parseCookieString(s: String, map: MutableMap<String, String>) {
-    s.split(";").forEach {
-      val parts = it.split("=", limit = 2)
-      if (parts.size == 2) {
-        map[parts[0].trim()] = parts[1].trim()
-      }
-    }
+  suspend fun onBypassCompleted(url: String) {
+    currentDeferred?.complete(true)
   }
 
   fun cancelBypass() {
     currentDeferred?.complete(false)
+  }
+
+  suspend fun clearCookies(url: String) = withContext(Dispatchers.Main) {
+    val cookieManager = CookieManager.getInstance()
+    val cookieString = cookieManager.getCookie(url)
+    if (cookieString != null) {
+      val cookies = cookieString.split(";")
+      for (cookie in cookies) {
+        val cookieName = cookie.split("=").firstOrNull()?.trim() ?: continue
+        cookieManager.setCookie(url, "$cookieName=; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+      }
+      cookieManager.flush()
+    }
   }
 
   suspend fun fetch(
@@ -113,14 +159,7 @@ class CloudflareManager @Inject constructor(
     request: Request,
     retryCount: Int = 0
   ): Response = withContext(Dispatchers.IO) {
-    val builder = request.newBuilder()
-    val currentCookie = storage.get("user_cookie")
-    if (!currentCookie.isNullOrEmpty() && request.header("Cookie") == null) {
-      builder.header("Cookie", currentCookie)
-    }
-
-    val response = client.newCall(builder.build()).execute()
-    mergeCookies(response.headers("Set-Cookie"))
+    val response = client.newCall(request).execute()
 
     // Check for Cloudflare Challenge by peeking the body to avoid consuming the original stream
     val peekBody = response.peekBody(1024 * 100).string() // Check within the first 100KB

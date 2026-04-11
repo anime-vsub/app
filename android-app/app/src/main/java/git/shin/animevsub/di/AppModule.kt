@@ -59,6 +59,7 @@ object AppModule {
       .writeTimeout(30, TimeUnit.SECONDS)
       .followRedirects(true)
       .followSslRedirects(true)
+      .cookieJar(git.shin.animevsub.data.remote.WebViewCookieJar())
       .build()
   }
 
@@ -68,15 +69,19 @@ object AppModule {
     client: OkHttpClient,
     json: Json,
     apiStorage: ApiStorage,
-    cloudflareManager: CloudflareManager
+    cloudflareManager: CloudflareManager,
+    preferencesManager: PreferencesManager
   ): AnimeApi {
-    return AnimeApi(client, json, apiStorage, cloudflareManager)
+    return AnimeApi(client, json, apiStorage, cloudflareManager, preferencesManager)
   }
 
   @Provides
   @Singleton
-  fun provideCloudflareManager(apiStorage: ApiStorage): CloudflareManager {
-    return CloudflareManager(apiStorage)
+  fun provideCloudflareManager(
+    preferencesManager: PreferencesManager,
+    @ApplicationContext context: Context
+  ): CloudflareManager {
+    return CloudflareManager(preferencesManager, context)
   }
 
   @Provides

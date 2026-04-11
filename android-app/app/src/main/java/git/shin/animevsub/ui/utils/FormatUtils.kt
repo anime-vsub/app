@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import git.shin.animevsub.R
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -92,7 +93,7 @@ fun isToday(timestampMillis: Long): Boolean {
     today.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR)
 }
 
-fun parseTimeAgo(timeAgo: String?): Long? {
+fun parseTimeAgo(timeAgo: String?): Instant? {
   if (timeAgo == null) return null
   val now = System.currentTimeMillis()
   val regex = "(\\d+)\\s+(giây|phút|giờ|ngày|tuần|tháng|năm)".toRegex()
@@ -112,13 +113,14 @@ fun parseTimeAgo(timeAgo: String?): Long? {
     else -> 0L
   }
 
-  return now - millis
+  return Instant.ofEpochMilli(now - millis)
 }
 
 @Composable
-fun formatTimeAgo(timestamp: Long?): String {
-  if (timestamp == null) return ""
+fun formatTimeAgo(instant: Instant?): String {
+  if (instant == null) return ""
   val now = System.currentTimeMillis()
+  val timestamp = instant.toEpochMilli()
   val diff = now - timestamp
 
   return when {

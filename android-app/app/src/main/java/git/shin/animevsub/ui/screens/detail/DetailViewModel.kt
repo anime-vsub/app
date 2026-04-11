@@ -786,30 +786,6 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  fun deleteComment(commentId: String, parentId: String = "0") {
-    if (!checkLogin()) return
-    viewModelScope.launch {
-      repository.deleteComment(commentId)
-        .onSuccess { response ->
-          if (response.success) {
-            _uiState.update { state ->
-              if (parentId == "0") {
-                state.copy(
-                  comments = state.comments.filter { it.id != commentId },
-                  totalComments = response.total ?: (state.totalComments - 1)
-                )
-              } else {
-                val currentReplies = state.replies[parentId] ?: emptyList()
-                state.copy(
-                  replies = state.replies + (parentId to currentReplies.filter { it.id != commentId })
-                )
-              }
-            }
-          }
-        }
-    }
-  }
-
   fun editComment(commentId: String, content: String, isSpoiler: Boolean = false) {
     if (!checkLogin()) return
     viewModelScope.launch {

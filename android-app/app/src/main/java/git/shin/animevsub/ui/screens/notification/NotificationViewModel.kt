@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.R
+import git.shin.animevsub.data.model.DbNotificationCount
+import git.shin.animevsub.data.model.DbNotificationItem
 import git.shin.animevsub.data.model.NotificationData
-import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.repository.AnimeRepository
+import git.shin.animevsub.data.repository.NotificationDatabaseRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,14 +26,21 @@ data class NotificationUiState(
   val isLoading: Boolean = true,
   val isRefreshing: Boolean = false,
   val data: NotificationData? = null,
+  val dbNotifications: List<DbNotificationItem> = emptyList(),
+  val dbNotificationCount: DbNotificationCount? = null,
+  val isSyncing: Boolean = false,
   val error: String? = null,
   val isLoggedIn: Boolean = false,
-  val isAuthReady: Boolean = false
+  val isAuthReady: Boolean = false,
+  val dbPage: Int = 1,
+  val hasMoreDb: Boolean = true,
+  val autoSync: Boolean = false
 )
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-  private val repository: AnimeRepository
+  private val repository: AnimeRepository,
+  private val notificationDbRepository: NotificationDatabaseRepository
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(NotificationUiState())
@@ -42,15 +51,44 @@ class NotificationViewModel @Inject constructor(
 
   init {
     viewModelScope.launch {
-
       launch {
         repository.isLoggedIn.collect { loggedIn ->
           _uiState.value = _uiState.value.copy(isLoggedIn = loggedIn, isAuthReady = true)
           if (loggedIn) {
             loadNotifications()
+            loadDbNotifications(isRefreshing = true)
           } else {
-            _uiState.value = _uiState.value.copy(isLoading = false, data = null)
+            _uiState.value = _uiState.value.copy(
+              isLoading = false,
+              data = null,
+              dbNotifications = emptyList(),
+              dbNotificationCount = null
+            )
           }
+        }
+      }
+
+      launch {
+        repository.notifications.collect { data ->
+          _uiState.value = _uiState.value.copy(data = data)
+        }
+      }
+
+      launch {
+        notificationDbRepository.dbNotifications.collect { items ->
+          _uiState.value = _uiState.value.copy(dbNotifications = items)
+        }
+      }
+
+      launch {
+        notificationDbRepository.dbNotificationCount.collect { count ->
+          _uiState.value = _uiState.value.copy(dbNotificationCount = count)
+        }
+      }
+
+      launch {
+        repository.autoSyncNotify.collect { enabled ->
+          _uiState.value = _uiState.value.copy(autoSync = enabled)
         }
       }
     }
@@ -64,11 +102,10 @@ class NotificationViewModel @Inject constructor(
         error = null
       )
       repository.getNotifications()
-        .onSuccess { data ->
+        .onSuccess {
           _uiState.value = _uiState.value.copy(
             isLoading = false,
             isRefreshing = false,
-            data = data,
             error = null
           )
         }
@@ -82,34 +119,61 @@ class NotificationViewModel @Inject constructor(
     }
   }
 
+  fun loadDbNotifications(isRefreshing: Boolean = false) {
+    viewModelScope.launch {
+      val currentPage = if (isRefreshing) 1 else _uiState.value.dbPage
+      notificationDbRepository.queryNotify(currentPage)
+        .onSuccess { items ->
+          val newItems = if (isRefreshing) items else _uiState.value.dbNotifications + items
+          _uiState.value = _uiState.value.copy(
+            dbNotifications = newItems,
+            dbPage = currentPage + 1,
+            hasMoreDb = items.isNotEmpty()
+          )
+        }
+    }
+  }
+
+  fun startSync() {
+    viewModelScope.launch {
+      repository.startSyncNotifications()
+    }
+  }
+
   fun refresh() {
     loadNotifications(isRefreshing = true)
+    loadDbNotifications(isRefreshing = true)
   }
 
   fun retry() {
     loadNotifications()
+    loadDbNotifications()
   }
 
-  fun onTrigger(trigger: Trigger) {
-    val previousData = _uiState.value.data ?: return
-    val currentItems = previousData.items
-
-    // Optimistic Update
-    val newList = currentItems.filter { it.closeTrigger != trigger }
-    _uiState.value = _uiState.value.copy(
-      data = previousData.copy(items = newList)
-    )
-
+  fun onTrigger(trigger: git.shin.animevsub.data.model.Trigger) {
     viewModelScope.launch {
       repository.onTrigger(trigger)
         .onFailure { e ->
-          // Rollback
-          _uiState.value = _uiState.value.copy(data = previousData)
           _uiEvent.emit(
             if (e.message != null) NotificationUiEvent.ShowToast(message = e.message)
             else NotificationUiEvent.ShowToast(messageRes = R.string.error_occurred)
           )
         }
+    }
+  }
+
+  fun deleteDbNotification(season: String, chapId: String? = null) {
+    viewModelScope.launch {
+      notificationDbRepository.deleteNotify(season, chapId)
+        .onFailure { e ->
+          _uiEvent.emit(NotificationUiEvent.ShowToast(message = e.message))
+        }
+    }
+  }
+
+  fun setAutoSync(enabled: Boolean) {
+    viewModelScope.launch {
+      repository.setAutoSyncNotify(enabled)
     }
   }
 }

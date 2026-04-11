@@ -258,4 +258,7 @@
     <string name="close">Đóng</string>
     <string name="reload">Tải lại</string>
     <string name="forward">Tiếp theo</string>
+    <string name="stop">Dừng</string>
+    <string name="done">Xong</string>
+    <string name="login_not_success">Đăng nhập chưa thành công. Vui lòng thử lại sau khi đã đăng nhập trên website.</string>
 </resources>

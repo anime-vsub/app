@@ -263,6 +263,9 @@
     <string name="close">Close</string>
     <string name="reload">Reload</string>
     <string name="forward">Forward</string>
+    <string name="stop">Stop</string>
+    <string name="done">Done</string>
+    <string name="login_not_success">Login was not successful. Please try again after logging in on the website.</string>
 
     <!-- Main Activity -->
     <string name="authentication_prompt_title">Authentication</string>

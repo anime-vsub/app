@@ -84,7 +84,9 @@ fun ScheduleScreen(
         title = {
           Text(
             text = stringResource(R.string.schedule),
-            color = TextPrimary
+            color = TextPrimary,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold,
           )
         },
         navigationIcon = {

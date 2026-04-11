@@ -62,7 +62,6 @@ fun CommentSection(
   onLoadMore: () -> Unit,
   onVote: (String, VoteType) -> Unit,
   onReply: (String, String) -> Unit,
-  onDelete: (String, String) -> Unit,
   onEdit: (String, String) -> Unit,
   onTrigger: (Trigger) -> Unit,
   currentUserId: Int?,
@@ -115,7 +114,7 @@ fun CommentSection(
           )
           Spacer(modifier = Modifier.width(4.dp))
           Text(
-            text = sort?.name ?: sortOptions[0].name,
+            text = sort?.name ?: sortOptions.firstOrNull()?.name ?: "",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Medium
@@ -169,7 +168,6 @@ fun CommentSection(
         comment = comment,
         onVote = onVote,
         onReply = onReply,
-        onDelete = onDelete,
         onEdit = onEdit,
         onTrigger = onTrigger,
         isMine = comment.userId == currentUserId,

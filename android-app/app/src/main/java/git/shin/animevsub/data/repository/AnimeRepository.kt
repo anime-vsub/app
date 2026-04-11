@@ -4,7 +4,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
-import git.shin.animevsub.data.model.ActionResponse
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.CategoryPage
@@ -24,6 +23,7 @@ import git.shin.animevsub.data.model.ScheduleDay
 import git.shin.animevsub.data.model.SearchSuggestion
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.model.ServerInfo
+import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -49,6 +50,7 @@ import javax.inject.Singleton
 class AnimeRepository @Inject constructor(
   private val api: AnimeApi,
   private val historyRepository: HistoryRepository,
+  private val notificationDbRepository: NotificationDatabaseRepository,
   private val prefs: PreferencesManager,
   private val storage: ApiStorage,
   private val json: Json,
@@ -57,6 +59,7 @@ class AnimeRepository @Inject constructor(
   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
   private val _notifications = MutableStateFlow<NotificationData?>(null)
+  val notifications = _notifications.asStateFlow()
 
   private val _authEvent = MutableSharedFlow<AuthEvent>(extraBufferCapacity = 1)
   val authEvent = _authEvent.asSharedFlow()
@@ -77,9 +80,13 @@ class AnimeRepository @Inject constructor(
         if (loggedIn) {
           launch { getNotifications() }
           launch { refreshUser() }
+          if (prefs.autoSyncNotify.first()) {
+            launch { startSyncNotifications() }
+          }
         } else {
           _notifications.value = null
           storage.set("cached_notifications", null)
+          notificationDbRepository.clear()
         }
       }
     }
@@ -216,15 +223,17 @@ class AnimeRepository @Inject constructor(
     }
   val isLoggedIn: Flow<Boolean> = user.map { it != null }
 
-  suspend fun login(email: String, password: String): Result<User> = runCatching {
-    val user = api.login(email, password)
-    historyRepository.upsertUser(user)
-    analytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
-      param(FirebaseAnalytics.Param.METHOD, "email")
-    }
-    analytics.setUserId(user.username)
-    user
-  }
+  val loginUrl: String = AnimeApi.LOGIN_URL
+
+//  suspend fun login(email: String, password: String): Result<User> = runCatching {
+//    val user = api.login(email, password)
+//    historyRepository.upsertUser(user)
+//    analytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
+//      param(FirebaseAnalytics.Param.METHOD, "email")
+//    }
+//    analytics.setUserId(user.username)
+//    user
+//  }
 
   suspend fun logout() {
     api.logout()
@@ -235,11 +244,14 @@ class AnimeRepository @Inject constructor(
   val autoSkip = prefs.autoSkip
   val volumeGesture = prefs.volumeGesture
   val brightnessGesture = prefs.brightnessGesture
+  val autoSyncNotify = prefs.autoSyncNotify
 
   suspend fun setAutoNext(value: Boolean) = prefs.setAutoNext(value)
   suspend fun setAutoSkip(value: Boolean) = prefs.setAutoSkip(value)
   suspend fun setVolumeGesture(value: Boolean) = prefs.setVolumeGesture(value)
   suspend fun setBrightnessGesture(value: Boolean) = prefs.setBrightnessGesture(value)
+
+  suspend fun setAutoSyncNotify(value: Boolean) = prefs.setAutoSyncNotify(value)
 
   // Search History
   val searchHistory = prefs.searchHistory
@@ -251,10 +263,24 @@ class AnimeRepository @Inject constructor(
     val data = api.getNotifications()
     _notifications.value = data
     storage.set("cached_notifications", json.encodeToString(data))
+    notificationDbRepository.getCountNotify()
+
+    if (prefs.autoSyncNotify.first() && !notificationDbRepository.isSyncing.value) {
+      repositoryScope.launch {
+        startSyncNotifications()
+      }
+    }
+
     data
   }
 
-  suspend fun onTrigger(trigger: git.shin.animevsub.data.model.Trigger): Result<Unit> =
+  suspend fun startSyncNotifications(): Result<Unit> =
+    notificationDbRepository.startSync(
+      getApiNotifications = { getNotifications() },
+      onTrigger = { onTrigger(it) }
+    )
+
+  suspend fun onTrigger(trigger: Trigger): Result<Unit> =
     runCatching {
       api.onTrigger(trigger)
     }
@@ -317,14 +343,6 @@ class AnimeRepository @Inject constructor(
     api.editComment(commentId, content, isSpoiler)
   }
 
-  suspend fun deleteComment(commentId: String): Result<ActionResponse> = runCatching {
-    api.deleteComment(commentId)
-  }
-
-  suspend fun reportComment(commentId: String): Result<ActionResponse> = runCatching {
-    api.reportComment(commentId)
-  }
-
   // History
   suspend fun getHistory(page: Int) = historyRepository.getHistory(page)
   suspend fun getWatchProgress(seasonId: String) = historyRepository.getWatchProgress(seasonId)
@@ -343,7 +361,4 @@ class AnimeRepository @Inject constructor(
   ) = historyRepository.setSingleProgress(
     name, poster, seasonId, seasonName, chapId, chapName, cur, dur
   )
-//
-//  suspend fun getLastChapOfSeason(seasonId: String) =
-//    historyRepository.getLastChapOfSeason(seasonId)
 }
