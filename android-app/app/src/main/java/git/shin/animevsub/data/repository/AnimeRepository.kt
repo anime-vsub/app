@@ -27,7 +27,7 @@ import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
-import git.shin.animevsub.data.remote.AnimeApi
+import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

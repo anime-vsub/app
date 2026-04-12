@@ -8,7 +8,7 @@ import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.model.NotificationItem
 import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.User
-import git.shin.animevsub.data.remote.AnimeApi
+import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc

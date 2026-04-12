@@ -6,7 +6,7 @@ import git.shin.animevsub.data.model.PlaylistHasMovieResponse
 import git.shin.animevsub.data.model.PlaylistItem
 import git.shin.animevsub.data.model.PlaylistPosterResponse
 import git.shin.animevsub.data.model.User
-import git.shin.animevsub.data.remote.AnimeApi
+import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc

@@ -40,7 +40,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeCard
-import git.shin.animevsub.data.remote.AnimeApi
+import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.StarColor

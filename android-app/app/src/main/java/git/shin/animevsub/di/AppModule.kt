@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
-import git.shin.animevsub.data.remote.AnimeApi
+import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import git.shin.animevsub.utils.CloudflareManager
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
