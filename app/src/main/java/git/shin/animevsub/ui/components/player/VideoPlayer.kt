@@ -166,7 +166,7 @@ fun VideoPlayer(
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
   var isFullScreen by remember { mutableStateOf(false) }
-  var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
+//  var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
   var playbackSpeed by remember { mutableFloatStateOf(1f) }
 
   var showEpisodeSideMenu by remember { mutableStateOf(false) }
@@ -211,9 +211,9 @@ fun VideoPlayer(
           isPlaying = playWhenReady
         }
 
-        override fun onRenderedFirstFrame() {
-          isFirstFrameRendered = true
-        }
+//        override fun onRenderedFirstFrame() {
+//          isFirstFrameRendered = true
+//        }
 
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
           playbackSpeed = playbackParameters.speed
@@ -269,20 +269,20 @@ fun VideoPlayer(
       showNotification = false
     }
   }
-
-  LaunchedEffect(playbackSpeed) {
-    if (isFirstFrameRendered) {
-      notificationText = context.getString(
-        R.string.playback_speed_changed,
-        if (playbackSpeed % 1.0f == 0.0f) playbackSpeed.toInt() else playbackSpeed
-      )
-      notificationIcon = Icons.Default.Speed
-      isNotificationClickable = false
-      showNotification = true
-      delay(2000)
-      showNotification = false
-    }
-  }
+//
+//  LaunchedEffect(playbackSpeed) {
+//    if (isFirstFrameRendered) {
+//      notificationText = context.getString(
+//        R.string.playback_speed_changed,
+//        if (playbackSpeed % 1.0f == 0.0f) playbackSpeed.toInt() else playbackSpeed
+//      )
+//      notificationIcon = Icons.Default.Speed
+//      isNotificationClickable = false
+//      showNotification = true
+//      delay(2000)
+//      showNotification = false
+//    }
+//  }
 
   LaunchedEffect(currentTime, introRange, outroRange, autoSkipEnabled) {
     val currentSeconds = currentTime / 1000.0
@@ -475,7 +475,7 @@ fun VideoPlayer(
         player = exoPlayer; useController = false
       }
     }, modifier = Modifier.fillMaxSize())
-    if (!isFirstFrameRendered && !poster.isNullOrEmpty()) {
+    if (playerData == null && !poster.isNullOrEmpty()) {
       AsyncImage(
         model = poster,
         contentDescription = null,
@@ -675,7 +675,7 @@ fun VideoPlayer(
             .align(Alignment.BottomEnd)
             .padding(
               end = if (isFullScreen) 32.dp else 16.dp,
-              bottom = if (isFullScreen) 24.dp else 12.dp
+              bottom = if (isFullScreen) 32.dp else 24.dp
             )
         )
       }
@@ -688,14 +688,13 @@ fun VideoPlayer(
           .align(Alignment.BottomStart)
           .padding(
             start = if (isFullScreen) 32.dp else 16.dp,
-            bottom = if (isFullScreen) 24.dp else 12.dp
+            bottom = if (isFullScreen) 32.dp else 24.dp
           )
       ) {
         Box(
           modifier = Modifier
             .clip(RoundedCornerShape(4.dp))
             .background(Color.Black.copy(alpha = 0.7f))
-            .border(1.dp, MainColor.copy(alpha = 0.5f), RoundedCornerShape(4.dp))
             .clickable(enabled = isNotificationClickable) {
               showNotification = false; isNotificationClickable = false; isAutoNexting =
               false; onNextEpisode()

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -71,7 +72,7 @@ fun CategoryScreen(
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val gridState = rememberLazyGridState()
-  var selectedGroupForSheet by remember { mutableStateOf<FilterGroup?>(null) }
+  var showFilterSheet by remember { mutableStateOf(false) }
 
   Scaffold(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -99,11 +100,7 @@ fun CategoryScreen(
           },
           actions = {
             if (uiState.filterGroups.isNotEmpty()) {
-              IconButton(onClick = {
-                if (uiState.filterGroups.isNotEmpty()) {
-                  selectedGroupForSheet = uiState.filterGroups[0]
-                }
-              }) {
+              IconButton(onClick = { showFilterSheet = true }) {
                 Icon(
                   imageVector = Icons.Default.FilterList,
                   contentDescription = stringResource(R.string.filter),
@@ -119,7 +116,7 @@ fun CategoryScreen(
           FilterActionRow(
             groups = uiState.filterGroups,
             selectedFilters = uiState.selectedFilters,
-            onGroupClick = { group -> selectedGroupForSheet = group }
+            onGroupClick = { showFilterSheet = true }
           )
         }
       }
@@ -154,11 +151,11 @@ fun CategoryScreen(
     }
   }
 
-  selectedGroupForSheet?.let { group ->
-    FilterBottomSheet(
-      group = group,
+  if (showFilterSheet) {
+    FiltersBottomSheet(
+      groups = uiState.filterGroups,
       selectedFilters = uiState.selectedFilters,
-      onDismiss = { selectedGroupForSheet = null },
+      onDismiss = { showFilterSheet = false },
       onUpdateFilter = { viewModel.updateFilter(it) }
     )
   }
@@ -195,7 +192,7 @@ private fun FilterActionRow(
         label = {
           Text(
             text = labelText,
-            fontSize = 12.sp,
+            fontSize = 14.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
           )
@@ -230,8 +227,8 @@ private fun FilterActionRow(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun FilterBottomSheet(
-  group: FilterGroup,
+fun FiltersBottomSheet(
+  groups: List<FilterGroup>,
   selectedFilters: List<SelectedFilter>,
   onDismiss: () -> Unit,
   onUpdateFilter: (SelectedFilter) -> Unit
@@ -247,83 +244,95 @@ fun FilterBottomSheet(
     Column(
       modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight(0.6f)
+        .fillMaxHeight(0.8f)
         .padding(bottom = 32.dp)
         .verticalScroll(rememberScrollState())
     ) {
       Text(
-        text = stringResource(R.string.filter_group_format, group.name),
+        text = stringResource(R.string.filter),
         color = TextPrimary,
-        fontSize = 18.sp,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(16.dp)
       )
 
-      Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        FlowRow(
-          modifier = Modifier.fillMaxWidth(),
-          horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-          group.options.forEach { option ->
-            val filterInList =
-              selectedFilters.find { it.id == option.id && it.groupId == group.id }
-            val isSelected = filterInList?.include == true
-            val isExcluded = filterInList?.exclude == true
+      groups.forEach { group ->
+        Column(modifier = Modifier.padding(bottom = 16.dp)) {
+          Text(
+            text = group.name,
+            color = AccentMain,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+          )
 
-            FilterChip(
-              selected = isSelected || isExcluded,
-              onClick = {
-                val newFilter = when {
-                  !isSelected && !isExcluded -> SelectedFilter(
-                    group.id,
-                    option.id,
-                    option.name,
-                    include = true,
-                    exclude = false
-                  )
+          FlowRow(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+          ) {
+            group.options.forEach { option ->
+              val filterInList =
+                selectedFilters.find { it.id == option.id && it.groupId == group.id }
+              val isSelected = filterInList?.include == true
+              val isExcluded = filterInList?.exclude == true
 
-                  isSelected -> SelectedFilter(
-                    group.id,
-                    option.id,
-                    option.name,
-                    include = false,
-                    exclude = true
-                  )
-
-                  else -> SelectedFilter(
-                    group.id,
-                    option.id,
-                    option.name,
-                    include = false,
-                    exclude = false
-                  )
-                }
-                onUpdateFilter(newFilter)
-              },
-              label = {
-                Text(
-                  text = (if (isExcluded) "!" else "") + option.name,
-                  fontSize = 12.sp
-                )
-              },
-              colors = FilterChipDefaults.filterChipColors(
-                containerColor = DarkCard,
-                labelColor = TextSecondary,
-                selectedContainerColor = if (isExcluded) Color.Red.copy(alpha = 0.2f) else AccentMain.copy(
-                  alpha = 0.2f
-                ),
-                selectedLabelColor = if (isExcluded) Color.Red else AccentMain
-              ),
-              border = FilterChipDefaults.filterChipBorder(
-                enabled = true,
+              FilterChip(
                 selected = isSelected || isExcluded,
-                borderColor = Color.Transparent,
-                selectedBorderColor = if (isExcluded) Color.Red else AccentMain,
-                borderWidth = 1.dp,
-                selectedBorderWidth = 1.dp
-              ),
-              shape = RoundedCornerShape(16.dp)
-            )
+                onClick = {
+                  val newFilter = when {
+                    !isSelected && !isExcluded -> SelectedFilter(
+                      group.id,
+                      option.id,
+                      option.name,
+                      include = true,
+                      exclude = false
+                    )
+
+                    isSelected -> SelectedFilter(
+                      group.id,
+                      option.id,
+                      option.name,
+                      include = false,
+                      exclude = true
+                    )
+
+                    else -> SelectedFilter(
+                      group.id,
+                      option.id,
+                      option.name,
+                      include = false,
+                      exclude = false
+                    )
+                  }
+                  onUpdateFilter(newFilter)
+                },
+                label = {
+                  Text(
+                    text = (if (isExcluded) "!" else "") + option.name,
+                    fontSize = 12.sp
+                  )
+                },
+                colors = FilterChipDefaults.filterChipColors(
+                  containerColor = DarkCard,
+                  labelColor = TextSecondary,
+                  selectedContainerColor = if (isExcluded) Color.Red.copy(alpha = 0.2f) else AccentMain.copy(
+                    alpha = 0.2f
+                  ),
+                  selectedLabelColor = if (isExcluded) Color.Red else AccentMain
+                ),
+                border = FilterChipDefaults.filterChipBorder(
+                  enabled = true,
+                  selected = isSelected || isExcluded,
+                  borderColor = Color.Transparent,
+                  selectedBorderColor = if (isExcluded) Color.Red else AccentMain,
+                  borderWidth = 1.dp,
+                  selectedBorderWidth = 1.dp
+                ),
+                shape = RoundedCornerShape(16.dp)
+              )
+            }
           }
         }
       }
