@@ -349,6 +349,9 @@ class AnimeRepository @Inject constructor(
   suspend fun getSingleProgress(seasonId: String, chapId: String) =
     historyRepository.getSingleProgress(seasonId, chapId)
 
+  suspend fun getLastChapOfSeason(seasonId: String) =
+    historyRepository.getLastChapOfSeason(seasonId)
+
   suspend fun setSingleProgress(
     name: String,
     poster: String,

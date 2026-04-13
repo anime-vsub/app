@@ -33,7 +33,7 @@ import git.shin.animevsub.ui.theme.TextPrimary
 @Composable
 fun FollowScreen(
   onNavigateBack: () -> Unit,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   viewModel: FollowViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -82,7 +82,7 @@ fun FollowScreen(
           else -> {
             VerticalGridAnimeList(
               items = uiState.items,
-              onItemClick = { onNavigateToDetail(it.animeId) },
+              onItemClick = { onNavigateToDetail(it.animeId, it.lastEpisode?.id) },
               state = gridState,
               isLoadingMore = uiState.isLoadingMore,
               onLoadMore = { viewModel.loadMore() }

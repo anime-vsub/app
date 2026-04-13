@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +25,7 @@ class PreferencesManager(private val context: Context) {
     private val SEARCH_HISTORY_KEY = stringPreferencesKey("search_history")
     private val AUTO_SYNC_NOTIFY_KEY = booleanPreferencesKey("auto_sync_notify")
     private val COOKIES_KEY = stringPreferencesKey("cookies")
+    private val LAST_ACTIVE_CHECK_KEY = longPreferencesKey("last_active_check")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -50,6 +52,12 @@ class PreferencesManager(private val context: Context) {
       print(e)
       emptyList()
     }
+  }
+
+  val lastActiveCheck: Flow<Long> = context.dataStore.data.map { it[LAST_ACTIVE_CHECK_KEY] ?: 0L }
+
+  suspend fun setLastActiveCheck(value: Long) {
+    context.dataStore.edit { it[LAST_ACTIVE_CHECK_KEY] = value }
   }
 
   suspend fun setAutoNext(value: Boolean) {

@@ -45,7 +45,7 @@ import java.time.LocalDate
 @Composable
 fun HistoryScreen(
   onNavigateBack: () -> Unit,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   viewModel: HistoryViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -130,7 +130,7 @@ fun HistoryScreen(
                 items(items) { item ->
                   HistoryItemRow(
                     item = item,
-                    onClick = { onNavigateToDetail(item.seasonId) }
+                    onClick = { onNavigateToDetail(item.seasonId, item.chapId) }
                   )
                 }
               }

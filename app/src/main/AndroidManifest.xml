@@ -30,7 +30,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
+            android:supportsPictureInPicture="true"
             android:theme="@style/Theme.AnimeVsub">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

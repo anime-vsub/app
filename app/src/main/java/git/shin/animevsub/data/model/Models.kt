@@ -59,7 +59,7 @@ data class AnimeDetail(
   val image: String?,
   val poster: String?,
   val description: String,
-  val rate: Int,
+  val rate: Double,
   val countRate: Int,
   val duration: String?,
   val yearOf: CategoryLink?,

@@ -45,7 +45,6 @@ import androidx.compose.material.icons.filled.Replay10
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SlowMotionVideo
-import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -154,7 +153,10 @@ fun VideoPlayer(
   onEpisodeSelected: (ChapterInfo, String) -> Unit,
   initialPosition: Long = 0L,
   onProgressUpdate: (Long, Long) -> Unit,
-  chapterProgress: Map<String, WatchProgress>
+  chapterProgress: Map<String, WatchProgress>,
+  isFullScreen: Boolean = false,
+  onFullScreenChange: (Boolean) -> Unit,
+  isInPipMode: Boolean = false
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
@@ -165,7 +167,6 @@ fun VideoPlayer(
 
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
-  var isFullScreen by remember { mutableStateOf(false) }
 //  var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
   var playbackSpeed by remember { mutableFloatStateOf(1f) }
 
@@ -428,7 +429,8 @@ fun VideoPlayer(
     modifier = (if (isFullScreen) Modifier.fillMaxSize() else modifier)
       .background(Color.Black)
       .clipToBounds()
-      .pointerInput(volumeGestureEnabled, brightnessGestureEnabled) {
+      .pointerInput(volumeGestureEnabled, brightnessGestureEnabled, isInPipMode) {
+        if (isInPipMode) return@pointerInput
         val activity = findActivity(context)
         detectVerticalDragGestures(
           onDragStart = { showGestureIndicator = true },
@@ -456,7 +458,8 @@ fun VideoPlayer(
           }
         )
       }
-      .pointerInput(Unit) {
+      .pointerInput(isInPipMode) {
+        if (isInPipMode) return@pointerInput
         detectTapGestures(
           onTap = { isControlsVisible = !isControlsVisible },
           onDoubleTap = { offset ->
@@ -486,7 +489,7 @@ fun VideoPlayer(
 
     Box(modifier = Modifier.fillMaxSize()) {
       AnimatedVisibility(
-        visible = isControlsVisible && errorMessage == null,
+        visible = isControlsVisible && errorMessage == null && !isInPipMode,
         enter = fadeIn(),
         exit = fadeOut()
       ) {
@@ -498,7 +501,7 @@ fun VideoPlayer(
       }
 
       AnimatedVisibility(
-        visible = isControlsVisible && !isDragging,
+        visible = isControlsVisible && !isDragging && !isInPipMode,
         enter = fadeIn() + slideInVertically { -it },
         exit = fadeOut() + slideOutVertically { -it }) {
         Row(
@@ -508,7 +511,7 @@ fun VideoPlayer(
             .padding(horizontal = 8.dp, vertical = 2.dp),
           verticalAlignment = Alignment.CenterVertically
         ) {
-          IconButton(onClick = { if (isFullScreen) isFullScreen = false else onBack() }) {
+          IconButton(onClick = { if (isFullScreen) onFullScreenChange(false) else onBack() }) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = Color.White)
           }
           Column(
@@ -586,7 +589,7 @@ fun VideoPlayer(
           )
         }
         AnimatedVisibility(
-          visible = isControlsVisible && !isDragging,
+          visible = isControlsVisible && !isDragging && !isInPipMode,
           enter = fadeIn(),
           exit = fadeOut(),
           modifier = Modifier.align(Alignment.Center)
@@ -715,7 +718,7 @@ fun VideoPlayer(
       }
 
       AnimatedVisibility(
-        visible = isControlsVisible && errorMessage == null,
+        visible = isControlsVisible && errorMessage == null && !isInPipMode,
         enter = fadeIn() + slideInVertically { it },
         exit = fadeOut() + slideOutVertically { it },
         modifier = Modifier.align(Alignment.BottomCenter)
@@ -742,7 +745,7 @@ fun VideoPlayer(
                 fontSize = if (isFullScreen) 16.sp else 13.sp
               )
               IconButton(
-                onClick = { isFullScreen = !isFullScreen },
+                onClick = { onFullScreenChange(!isFullScreen) },
                 modifier = Modifier.size(28.dp)
               ) {
                 Icon(

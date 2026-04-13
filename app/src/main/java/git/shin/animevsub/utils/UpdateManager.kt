@@ -31,6 +31,28 @@ class UpdateManager @Inject constructor(
   private val cloudflareManager: CloudflareManager
 ) {
   private val GITHUB_REPO = "anime-vsub/app"
+  private val ACTIVE_CHECK_URL =
+    "https://raw.githubusercontent.com/anime-vsub/app/refs/heads/main/native-active"
+
+  suspend fun checkAppActive(): Result<Boolean> = withContext(Dispatchers.IO) {
+    try {
+      val request = Request.Builder()
+        .url(ACTIVE_CHECK_URL)
+        .build()
+
+      val response = client.newCall(request).execute()
+      if (response.isSuccessful) {
+        val body = response.body.string().trim()
+        Result.success(body.isEmpty())
+      } else {
+        Result.success(false)
+      }
+    } catch (e: Exception) {
+      // In case of network error, we might want to allow the app to run if it was previously checked
+      // or block it. Usually, maintenance check should be resilient.
+      Result.failure(e)
+    }
+  }
 
   suspend fun checkForUpdate(): Result<UpdateInfo> = withContext(Dispatchers.IO) {
     try {

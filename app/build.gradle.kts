@@ -4,10 +4,11 @@ plugins {
   id("com.android.application")
   id("org.jetbrains.kotlin.android")
   id("com.google.dagger.hilt.android")
-  kotlin("kapt")
+  id("com.google.devtools.ksp")
   id("org.jetbrains.kotlin.plugin.compose")
   kotlin("plugin.serialization")
   id("com.google.gms.google-services")
+  id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -95,8 +96,7 @@ dependencies {
 
   // Hilt
   implementation("com.google.dagger:hilt-android:2.54")
-  kapt("com.google.dagger:hilt-android-compiler:2.54")
-  kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
+  ksp("com.google.dagger:hilt-android-compiler:2.54")
   implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
   // Network
@@ -149,6 +149,3 @@ dependencies {
   debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
-kapt {
-  correctErrorTypes = true
-}

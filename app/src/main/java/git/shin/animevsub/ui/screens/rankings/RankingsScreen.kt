@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RankingsScreen(
   onNavigateBack: () -> Unit,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   viewModel: RankingsViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -162,7 +162,7 @@ fun RankingsScreen(
 @Composable
 private fun RankingsListContent(
   uiState: RankingsUiState,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   onRetry: () -> Unit
 ) {
   when {
@@ -185,7 +185,7 @@ private fun RankingsListContent(
             rank = index + 1,
             item = item,
             onClick = {
-              onNavigateToDetail(item.animeId)
+              onNavigateToDetail(item.animeId, item.lastEpisode?.id)
             }
           )
         }

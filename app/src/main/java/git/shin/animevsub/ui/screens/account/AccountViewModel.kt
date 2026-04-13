@@ -57,41 +57,47 @@ class AccountViewModel @Inject constructor(
 
   init {
     viewModelScope.launch {
-
-      launch {
-        repository.isLoggedIn.collect { isLoggedIn ->
-          _uiState.update { it.copy(isLoggedIn = isLoggedIn, isAuthReady = true) }
-          if (isLoggedIn) {
-            refreshHistory()
-            refreshFollows()
-            refreshPlaylists()
+      repository.isLoggedIn.collect { isLoggedIn ->
+        _uiState.update { it.copy(isLoggedIn = isLoggedIn, isAuthReady = true) }
+        if (isLoggedIn) {
+          refreshHistory()
+          refreshFollows()
+          refreshPlaylists()
+        } else {
+          _uiState.update {
+            it.copy(
+              user = null,
+              histories = emptyList(),
+              follows = emptyList(),
+              playlists = emptyList()
+            )
           }
         }
       }
-      launch {
-        repository.user.collect { user ->
-          _uiState.value = _uiState.value.copy(user = user)
-        }
+    }
+    viewModelScope.launch {
+      repository.user.collect { user ->
+        _uiState.update { it.copy(user = user) }
       }
-      launch {
-        repository.autoNext.collect { v ->
-          _uiState.value = _uiState.value.copy(autoNext = v)
-        }
+    }
+    viewModelScope.launch {
+      repository.autoNext.collect { v ->
+        _uiState.update { it.copy(autoNext = v) }
       }
-      launch {
-        repository.autoSkip.collect { v ->
-          _uiState.value = _uiState.value.copy(autoSkip = v)
-        }
+    }
+    viewModelScope.launch {
+      repository.autoSkip.collect { v ->
+        _uiState.update { it.copy(autoSkip = v) }
       }
-      launch {
-        repository.volumeGesture.collect { v ->
-          _uiState.value = _uiState.value.copy(volumeGesture = v)
-        }
+    }
+    viewModelScope.launch {
+      repository.volumeGesture.collect { v ->
+        _uiState.update { it.copy(volumeGesture = v) }
       }
-      launch {
-        repository.brightnessGesture.collect { v ->
-          _uiState.value = _uiState.value.copy(brightnessGesture = v)
-        }
+    }
+    viewModelScope.launch {
+      repository.brightnessGesture.collect { v ->
+        _uiState.update { it.copy(brightnessGesture = v) }
       }
     }
   }

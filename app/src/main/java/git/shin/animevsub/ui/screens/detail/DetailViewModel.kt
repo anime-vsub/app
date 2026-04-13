@@ -279,6 +279,8 @@ class DetailViewModel @Inject constructor(
     detailCache[animeId]?.let { cachedDetail ->
       _uiState.update { it.copy(detail = cachedDetail, isLoading = false) }
       updateDisplaySeasons()
+      checkFollow()
+      loadComments(animeDetail = cachedDetail)
     } ?: run {
       viewModelScope.launch {
         repository.getAnimeDetail(animeId)
@@ -287,6 +289,7 @@ class DetailViewModel @Inject constructor(
             _uiState.update { it.copy(detail = detail, isLoading = false) }
             updateDisplaySeasons()
             checkFollow()
+            loadComments(animeDetail = detail)
           }
           .onFailure { e ->
             _uiState.update { it.copy(isLoading = false, error = e.message) }
@@ -294,15 +297,13 @@ class DetailViewModel @Inject constructor(
       }
     }
 
-    if (detailCache.containsKey(animeId)) {
-      checkFollow()
-    }
-
     chapterCache[animeId]?.let { cachedChapters ->
       _uiState.update { it.copy(chapterData = cachedChapters, isChaptersLoading = false) }
       updateChapterCount(animeId, cachedChapters.chaps.size)
       if (!isSwitchingSeason) {
-        handleInitialChapter(cachedChapters, targetChapterId)
+        viewModelScope.launch {
+          handleInitialChapter(cachedChapters, targetChapterId)
+        }
       }
     } ?: run {
       viewModelScope.launch {
@@ -322,13 +323,26 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  private fun handleInitialChapter(chapterData: ChapterData, targetChapterId: String?) {
+  private suspend fun handleInitialChapter(chapterData: ChapterData, targetChapterId: String?) {
     if (chapterData.chaps.isNotEmpty()) {
-      val chapterToPlay = if (targetChapterId != null) {
-        chapterData.chaps.find { it.id == targetChapterId } ?: chapterData.chaps.first()
+      val foundChapter = if (targetChapterId != null) {
+        chapterData.chaps.find { it.id == targetChapterId }
       } else {
-        chapterData.chaps.first()
+        null
       }
+
+      val chapterToPlay = if (foundChapter != null) {
+        foundChapter
+      } else {
+        // ID doesn't exist or no target ID provided, check watch history for "Continue Watching"
+        val lastChapId = repository.getLastChapOfSeason(_uiState.value.animeId).getOrNull()
+        if (lastChapId != null) {
+          chapterData.chaps.find { it.id == lastChapId } ?: chapterData.chaps.first()
+        } else {
+          chapterData.chaps.first()
+        }
+      }
+
       playChapter(chapterToPlay, _uiState.value.animeId)
     }
   }
@@ -595,6 +609,7 @@ class DetailViewModel @Inject constructor(
           _uiState.update { it.copy(detail = detail) }
           updateDisplaySeasons()
           checkFollow()
+          loadComments()
         }
 
       // Reload chapters for current season
@@ -666,9 +681,9 @@ class DetailViewModel @Inject constructor(
 
   // ======== Comment Logic ========
 
-  fun loadComments(append: Boolean = false) {
+  fun loadComments(append: Boolean = false, animeDetail: AnimeDetail? = null) {
     val filmId = _uiState.value.animeId
-    val anime = _uiState.value.detail ?: return
+    val anime = animeDetail ?: _uiState.value.detail ?: return
     val sort = _uiState.value.commentSort
     val offset = if (append) _uiState.value.commentsOffset else 0
 

@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -53,42 +54,44 @@ class NotificationViewModel @Inject constructor(
     viewModelScope.launch {
       launch {
         repository.isLoggedIn.collect { loggedIn ->
-          _uiState.value = _uiState.value.copy(isLoggedIn = loggedIn, isAuthReady = true)
+          _uiState.update { it.copy(isLoggedIn = loggedIn, isAuthReady = true) }
           if (loggedIn) {
             loadNotifications()
             loadDbNotifications(isRefreshing = true)
           } else {
-            _uiState.value = _uiState.value.copy(
-              isLoading = false,
-              data = null,
-              dbNotifications = emptyList(),
-              dbNotificationCount = null
-            )
+            _uiState.update {
+              it.copy(
+                isLoading = false,
+                data = null,
+                dbNotifications = emptyList(),
+                dbNotificationCount = null
+              )
+            }
           }
         }
       }
 
       launch {
         repository.notifications.collect { data ->
-          _uiState.value = _uiState.value.copy(data = data)
+          _uiState.update { it.copy(data = data) }
         }
       }
 
       launch {
         notificationDbRepository.dbNotifications.collect { items ->
-          _uiState.value = _uiState.value.copy(dbNotifications = items)
+          _uiState.update { it.copy(dbNotifications = items) }
         }
       }
 
       launch {
         notificationDbRepository.dbNotificationCount.collect { count ->
-          _uiState.value = _uiState.value.copy(dbNotificationCount = count)
+          _uiState.update { it.copy(dbNotificationCount = count) }
         }
       }
 
       launch {
         repository.autoSyncNotify.collect { enabled ->
-          _uiState.value = _uiState.value.copy(autoSync = enabled)
+          _uiState.update { it.copy(autoSync = enabled) }
         }
       }
     }
@@ -96,25 +99,31 @@ class NotificationViewModel @Inject constructor(
 
   fun loadNotifications(isRefreshing: Boolean = false) {
     viewModelScope.launch {
-      _uiState.value = _uiState.value.copy(
-        isLoading = !isRefreshing,
-        isRefreshing = isRefreshing,
-        error = null
-      )
+      _uiState.update {
+        it.copy(
+          isLoading = !isRefreshing,
+          isRefreshing = isRefreshing,
+          error = null
+        )
+      }
       repository.getNotifications()
         .onSuccess {
-          _uiState.value = _uiState.value.copy(
-            isLoading = false,
-            isRefreshing = false,
-            error = null
-          )
+          _uiState.update {
+            it.copy(
+              isLoading = false,
+              isRefreshing = false,
+              error = null
+            )
+          }
         }
         .onFailure { e ->
-          _uiState.value = _uiState.value.copy(
-            isLoading = false,
-            isRefreshing = false,
-            error = e.message
-          )
+          _uiState.update {
+            it.copy(
+              isLoading = false,
+              isRefreshing = false,
+              error = e.message
+            )
+          }
         }
     }
   }
@@ -124,12 +133,13 @@ class NotificationViewModel @Inject constructor(
       val currentPage = if (isRefreshing) 1 else _uiState.value.dbPage
       notificationDbRepository.queryNotify(currentPage)
         .onSuccess { items ->
-          val newItems = if (isRefreshing) items else _uiState.value.dbNotifications + items
-          _uiState.value = _uiState.value.copy(
-            dbNotifications = newItems,
-            dbPage = currentPage + 1,
-            hasMoreDb = items.isNotEmpty()
-          )
+          // Repo handles list merging now, we just update pagination state
+          _uiState.update {
+            it.copy(
+              dbPage = if (items.isEmpty()) currentPage else currentPage + 1,
+              hasMoreDb = items.isNotEmpty()
+            )
+          }
         }
     }
   }

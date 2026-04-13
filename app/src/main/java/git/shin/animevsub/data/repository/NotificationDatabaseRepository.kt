@@ -74,6 +74,13 @@ class NotificationDatabaseRepository @Inject constructor(
       val items = response.decodeList<DbNotificationItem>().map {
         it.copy(image = it.image?.let { img -> AnimeApi.decodeURI(img) })
       }
+
+      if (page == 1) {
+        _dbNotifications.value = items
+      } else {
+        _dbNotifications.value = (_dbNotifications.value + items).distinctBy { it.season }
+      }
+
       items
     }
 

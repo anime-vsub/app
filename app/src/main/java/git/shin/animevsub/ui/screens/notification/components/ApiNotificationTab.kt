@@ -1,5 +1,6 @@
 package git.shin.animevsub.ui.screens.notification.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,7 +21,7 @@ import git.shin.animevsub.ui.screens.notification.NotificationUiState
 fun ApiNotificationTab(
   uiState: NotificationUiState,
   onRefresh: () -> Unit,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   onTrigger: (Trigger) -> Unit,
   onRetry: () -> Unit
 ) {
@@ -43,15 +44,17 @@ fun ApiNotificationTab(
         contentPadding = PaddingValues(bottom = 16.dp),
       ) {
         items(items, key = { "api_${it.id}" }) { notification ->
-          NotificationItemRow(
-            notification = notification,
-            onClick = {
-              notification.animeId?.let { id -> onNavigateToDetail(id) }
-            },
-            onClose = { trigger ->
-              onTrigger(trigger)
-            }
-          )
+          Column(modifier = Modifier.animateItem()) {
+            NotificationItemRow(
+              notification = notification,
+              onClick = {
+                notification.animeId?.let { id -> onNavigateToDetail(id, null) }
+              },
+              onClose = { trigger ->
+                onTrigger(trigger)
+              }
+            )
+          }
         }
       }
     }

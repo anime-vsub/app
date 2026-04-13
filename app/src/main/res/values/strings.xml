@@ -271,4 +271,6 @@
     <string name="authentication_prompt_title">Authentication</string>
     <string name="authentication_prompt_message">Your session may have expired. Do you want to retry
           or log out?</string>
+    <string name="app_inactive_title">Maintenance</string>
+    <string name="app_inactive_message">The application is currently unavailable. Please check back later.</string>
 </resources>

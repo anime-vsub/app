@@ -83,8 +83,7 @@ import git.shin.animevsub.ui.theme.TextSecondary
 @Composable
 fun PlaylistScreen(
   onNavigateBack: () -> Unit,
-  onNavigateToDetail: (String) -> Unit,
-  onNavigateToPlayer: (String, String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   viewModel: PlaylistViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -225,11 +224,7 @@ fun PlaylistScreen(
               PlaylistItemRow(
                 item = item,
                 onClick = {
-                  if (item.chapId != null) {
-                    onNavigateToPlayer(item.seasonId, item.chapId)
-                  } else {
-                    onNavigateToDetail(item.seasonId)
-                  }
+                  onNavigateToDetail(item.seasonId, item.chapId)
                 },
                 onMenuClick = { selectedItemForMenu = item }
               )

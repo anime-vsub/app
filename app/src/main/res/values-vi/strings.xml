@@ -8,7 +8,7 @@
     <string name="nav_home">Trang chủ</string>
     <string name="nav_search">Tìm kiếm</string>
     <string name="nav_news">Tin tức</string>
-    <string name="nav_notification">Thông báo</string>
+    <string name="nav_notification">Th.báo</string>
     <string name="nav_account">Tôi</string>
     <string name="account">Tài khoản</string>
     <string name="notifications">Thông báo</string>
@@ -248,10 +248,13 @@
     <string name="months_ago">%1$d tháng trước</string>
     <string name="years_ago">%1$d năm trước</string>
     <string name="reply_label">Trả lời</string>
+    <string name="edit">Chỉnh sửa</string>
+    <string name="edited">đã chỉnh sửa</string>
     <string name="report">Báo cáo</string>
     <string name="report_success">Báo cáo thành công</string>
     <string name="report_error">Gửi báo cáo thất bại</string>
     <string name="pinned">Đã ghim</string>
+    <string name="global_pinned">Đã ghim</string>
 
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">Vượt qua Cloudflare</string>
@@ -261,4 +264,10 @@
     <string name="stop">Dừng</string>
     <string name="done">Xong</string>
     <string name="login_not_success">Đăng nhập chưa thành công. Vui lòng thử lại sau khi đã đăng nhập trên website.</string>
+
+    <!-- Main Activity -->
+    <string name="authentication_prompt_title">Xác thực</string>
+    <string name="authentication_prompt_message">Phiên làm việc của bạn có thể đã hết hạn. Bạn có muốn thử lại hoặc đăng xuất không?</string>
+    <string name="app_inactive_title">Bảo trì</string>
+    <string name="app_inactive_message">Ứng dụng hiện đang tạm ngưng hoạt động. Vui lòng quay lại sau.</string>
 </resources>

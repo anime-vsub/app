@@ -244,18 +244,26 @@
     <string name="hours_ago">%1$d 小时前</string>
     <string name="days_ago">%1$d 天前</string>
     <string name="reply_label">回复</string>
+    <string name="edit">编辑</string>
+    <string name="edited">已编辑</string>
     <string name="report">举报</string>
     <string name="report_success">举报成功</string>
     <string name="report_error">举报失败</string>
     <string name="pinned">已置顶</string>
+    <string name="global_pinned">已置顶</string>
 
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">绕过 Cloudflare</string>
     <string name="close">关闭</string>
     <string name="reload">刷新</string>
     <string name="forward">前进</string>
+    <string name="stop">停止</string>
+    <string name="done">完成</string>
+    <string name="login_not_success">登录失败。请在网站登录后重试。</string>
 
     <!-- Main Activity -->
     <string name="authentication_prompt_title">身份验证</string>
     <string name="authentication_prompt_message">您的会话可能已过期。您想重试还是退出登录？</string>
+    <string name="app_inactive_title">系统维护</string>
+    <string name="app_inactive_message">应用目前不可用。请稍后再试。</string>
 </resources>

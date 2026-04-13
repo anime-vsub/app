@@ -69,10 +69,9 @@ object AppModule {
     client: OkHttpClient,
     json: Json,
     apiStorage: ApiStorage,
-    cloudflareManager: CloudflareManager,
-    preferencesManager: PreferencesManager
+    cloudflareManager: CloudflareManager
   ): AnimeApi {
-    return AnimeApi(client, json, apiStorage, cloudflareManager, preferencesManager)
+    return AnimeApi(client, json, apiStorage, cloudflareManager)
   }
 
   @Provides

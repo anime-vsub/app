@@ -74,8 +74,7 @@ fun AccountScreen(
   onNavigateToSettings: () -> Unit,
   onNavigateToAbout: () -> Unit,
   onNavigateToPlaylist: (String) -> Unit,
-  onNavigateToDetail: (String) -> Unit,
-  onNavigateToPlayer: (String, String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   viewModel: AccountViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -282,9 +281,7 @@ fun AccountScreen(
             onHeaderClick = onNavigateToHistory,
             onRetry = { viewModel.refreshHistory() },
             onItemClick = { item ->
-              item.chapId?.let { chapId ->
-                onNavigateToPlayer(item.seasonId, chapId)
-              } ?: onNavigateToDetail(item.seasonId)
+              onNavigateToDetail(item.seasonId, item.chapId)
             }
           )
 
@@ -296,7 +293,7 @@ fun AccountScreen(
             error = uiState.followsError,
             onHeaderClick = onNavigateToFollow,
             onRetry = { viewModel.refreshFollows() },
-            onItemClick = { anime -> onNavigateToDetail(anime.animeId) }
+            onItemClick = { anime -> onNavigateToDetail(anime.animeId, null) }
           )
 
           Spacer(modifier = Modifier.height(24.dp))

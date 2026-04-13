@@ -30,7 +30,7 @@ import git.shin.animevsub.ui.components.status.ErrorScreen
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   onNavigateToCategory: (List<SelectedFilter>) -> Unit,
   onNavigateToRankings: (String?) -> Unit,
   onNavigateToSchedule: () -> Unit,
@@ -65,7 +65,7 @@ fun HomeScreen(
             CarouselSection(
               items = data.carousel,
               onItemClick = { anime ->
-                onNavigateToDetail(anime.animeId)
+                onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               },
               onNavigateToCategory = onNavigateToCategory
             )
@@ -99,7 +99,7 @@ fun HomeScreen(
             HorizontalAnimeList(
               items = data.thisSeason,
               onItemClick = { anime ->
-                onNavigateToDetail(anime.animeId)
+                onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               }
             )
           }
@@ -114,7 +114,7 @@ fun HomeScreen(
             GridAnimeList(
               items = data.nominate,
               onItemClick = { anime ->
-                onNavigateToDetail(anime.animeId)
+                onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               }
             )
           }
@@ -131,7 +131,7 @@ fun HomeScreen(
               state = hotUpdateListState,
               showRating = true,
               onItemClick = { anime ->
-                onNavigateToDetail(anime.animeId)
+                onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               },
               showTrending = true
             )
@@ -162,7 +162,7 @@ fun HomeScreen(
               state = preReleaseListState,
               showTimeline = true,
               onItemClick = { anime ->
-                onNavigateToDetail(anime.animeId)
+                onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               }
             )
           }
@@ -187,7 +187,7 @@ fun HomeScreen(
             GridAnimeList(
               items = data.lastUpdate,
               onItemClick = { anime ->
-                onNavigateToDetail(anime.animeId)
+                onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               }
             )
           }

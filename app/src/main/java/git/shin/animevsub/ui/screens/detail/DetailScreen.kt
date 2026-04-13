@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
+import android.os.Build
+import android.util.Rational
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -78,6 +82,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import git.shin.animevsub.MainActivity
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.Badge
@@ -110,10 +115,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun DetailScreen(
   onNavigateBack: () -> Unit,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   onNavigateToCategory: (List<SelectedFilter>) -> Unit,
   onNavigateToLogin: () -> Unit,
-  viewModel: DetailViewModel = hiltViewModel()
+  viewModel: DetailViewModel = hiltViewModel(),
+  isInPipMode: Boolean = false
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val context = LocalContext.current
@@ -124,12 +130,34 @@ fun DetailScreen(
   var showDetailSheet by remember { mutableStateOf(false) }
   var showChapterSheet by remember { mutableStateOf(false) }
   var showAddToPlaylistSheet by remember { mutableStateOf(false) }
+  var isFullScreen by remember { mutableStateOf(false) }
   val scope = rememberCoroutineScope()
 
   val configuration = LocalConfiguration.current
+  val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+  val isLandscapeUI = isLandscape && !isFullScreen && !isInPipMode
   val screenWidth = configuration.screenWidthDp.dp
-  val videoHeight = screenWidth * 9 / 16
-  val sheetHeight = configuration.screenHeightDp.dp - videoHeight
+  val videoHeight = if (isLandscapeUI) configuration.screenHeightDp.dp else screenWidth * 9 / 16
+  val sheetHeight =
+    if (isLandscapeUI) configuration.screenHeightDp.dp else configuration.screenHeightDp.dp - videoHeight
+
+  LaunchedEffect(uiState.playerData, isFullScreen) {
+    val activity = context as? MainActivity ?: return@LaunchedEffect
+    if (uiState.playerData != null) {
+      activity.updatePipParams { builder ->
+        builder.setAspectRatio(Rational(16, 9))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          builder.setAutoEnterEnabled(true)
+        }
+      }
+    } else {
+      activity.updatePipParams { builder ->
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          builder.setAutoEnterEnabled(false)
+        }
+      }
+    }
+  }
 
   val followSuccessMsg = stringResource(R.string.followed)
   val unfollowSuccessMsg = stringResource(R.string.unfollowed)
@@ -199,62 +227,73 @@ fun DetailScreen(
     }
   }
 
-  LaunchedEffect(uiState.animeId) {
-    viewModel.loadComments()
+  LaunchedEffect(uiState.animeId, uiState.detail) {
+    if (uiState.detail != null) {
+      viewModel.loadComments()
+    }
+  }
+
+  LaunchedEffect(isFullScreen) {
+    if (isFullScreen) {
+      showDetailSheet = false
+      showChapterSheet = false
+      showAddToPlaylistSheet = false
+      scaffoldState.bottomSheetState.partialExpand()
+    }
   }
 
   BottomSheetScaffold(
     scaffoldState = scaffoldState,
     sheetContent = {
-      CommentSection(
-        comments = uiState.comments,
-        totalComments = uiState.totalComments,
-        isLoading = uiState.isCommentsLoading,
-        hasMore = uiState.hasMoreComments,
-        onLoadMore = { viewModel.loadMoreComments() },
-        onVote = { id, vote -> viewModel.voteComment(id, vote) },
-        onReply = { parentId, content -> viewModel.postComment(content, parentId = parentId) },
-        onEdit = { id, content -> viewModel.editComment(id, content) },
-        onTrigger = { trigger -> viewModel.onCommentTrigger(trigger) },
-        currentUserId = uiState.currentUser?.username.hashCode(),
-        replies = uiState.replies,
-        repliesHasMore = uiState.repliesHasMore,
-        onLoadReplies = { id, append -> viewModel.loadReplies(id, append) },
-        onPostComment = { content -> viewModel.postComment(content) },
-        isPosting = uiState.isPostingComment,
-        currentUserAvatar = uiState.currentUser?.avatar,
-        sort = uiState.commentSort,
-        sortOptions = uiState.commentSortOptions,
-        onSortChange = { viewModel.updateCommentSort(it) },
-        modifier = Modifier
-          .fillMaxWidth()
-          .height(sheetHeight)
-      )
+      if (!isLandscapeUI && !isFullScreen) {
+        CommentSection(
+          comments = uiState.comments,
+          totalComments = uiState.totalComments,
+          isLoading = uiState.isCommentsLoading,
+          hasMore = uiState.hasMoreComments,
+          onLoadMore = { viewModel.loadMoreComments() },
+          onVote = { id, vote -> viewModel.voteComment(id, vote) },
+          onReply = { parentId, content -> viewModel.postComment(content, parentId = parentId) },
+          onEdit = { id, content -> viewModel.editComment(id, content) },
+          onTrigger = { trigger -> viewModel.onCommentTrigger(trigger) },
+          currentUserId = uiState.currentUser?.username.hashCode(),
+          replies = uiState.replies,
+          repliesHasMore = uiState.repliesHasMore,
+          onLoadReplies = { id, append -> viewModel.loadReplies(id, append) },
+          onPostComment = { content -> viewModel.postComment(content) },
+          isPosting = uiState.isPostingComment,
+          currentUserAvatar = uiState.currentUser?.avatar,
+          sort = uiState.commentSort,
+          sortOptions = uiState.commentSortOptions,
+          onSortChange = { viewModel.updateCommentSort(it) },
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(sheetHeight)
+        )
+      }
     },
     sheetPeekHeight = 0.dp,
     sheetContainerColor = DarkSurface,
-    sheetDragHandle = { git.shin.animevsub.ui.components.detail.BottomSheetDragHandle() },
+    sheetDragHandle = {
+      if (!isLandscapeUI && !isFullScreen) {
+        git.shin.animevsub.ui.components.detail.BottomSheetDragHandle()
+      }
+    },
     containerColor = DarkBackground,
     snackbarHost = { SnackbarHost(snackbarHostState) }
   ) { innerPadding ->
     PullToRefreshBox(
       isRefreshing = uiState.isRefreshing,
-      onRefresh = { viewModel.refresh() },
+      onRefresh = { if (!isFullScreen) viewModel.refresh() },
       modifier = Modifier
         .fillMaxSize()
-        .padding(top = innerPadding.calculateTopPadding())
+        .padding(top = if (isFullScreen) 0.dp else innerPadding.calculateTopPadding())
     ) {
-      Column(
-        modifier = Modifier
-          .fillMaxSize()
-      ) {
-        val detail = uiState.detail
+      val detail = uiState.detail
 
-        // Player Area (Fixed at top)
+      val playerArea = @Composable { modifier: Modifier ->
         Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(16f / 9f)
+          modifier = modifier
             .background(Color.Black)
         ) {
           if (detail != null && uiState.currentChapter?.id == "0" && !detail.trailer.isNullOrEmpty()) {
@@ -317,16 +356,18 @@ fun DetailScreen(
               initialPosition = uiState.lastProgress,
               onProgressUpdate = { cur, dur -> viewModel.updateHistory(cur, dur) },
               chapterProgress = uiState.chapterProgress,
+              isFullScreen = isFullScreen,
+              onFullScreenChange = { isFullScreen = it },
+              isInPipMode = isInPipMode,
               modifier = Modifier.fillMaxSize()
             )
           }
         }
+      }
 
-        // Scrollable Content
+      val scrollableContent = @Composable { modifier: Modifier ->
         Column(
-          modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f)
+          modifier = modifier
             .verticalScroll(rememberScrollState())
         ) {
           if (uiState.error != null) {
@@ -372,7 +413,7 @@ fun DetailScreen(
                 Text(
                   text = stringResource(R.string.views_count, formatNumber(detail.views)),
                   color = TextGrey,
-                  fontSize = 12.sp,
+                  fontSize = 14.sp,
                   style = NoPaddingTextStyle
                 )
 
@@ -380,14 +421,14 @@ fun DetailScreen(
                   Text(
                     text = " • ",
                     color = TextGrey,
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     style = NoPaddingTextStyle
                   )
 
                   Text(
                     text = formatScheduleUpdate(update),
                     color = AccentMain,
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     style = NoPaddingTextStyle
                   )
                 }
@@ -402,14 +443,14 @@ fun DetailScreen(
                     Text(
                       text = stringResource(R.string.author_label) + " ",
                       color = TextGrey,
-                      fontSize = 12.sp,
+                      fontSize = 14.sp,
                       style = NoPaddingTextStyle,
                     )
 
                     Text(
                       text = detail.authors.first().name,
                       color = if (detail.authors.first().filters.isNotEmpty()) MainColor else TextPrimary,
-                      fontSize = 12.sp,
+                      fontSize = 14.sp,
                       style = NoPaddingTextStyle,
                       modifier = Modifier.clickable(enabled = detail.authors.first().filters.isNotEmpty()) {
                         onNavigateToCategory(detail.authors.first().filters)
@@ -418,7 +459,7 @@ fun DetailScreen(
                     Text(
                       text = " | ",
                       color = TextGrey,
-                      fontSize = 12.sp,
+                      fontSize = 14.sp,
                       style = NoPaddingTextStyle
                     )
                   }
@@ -429,7 +470,7 @@ fun DetailScreen(
                       detail.studio?.name ?: stringResource(R.string.unknown)
                     ),
                     color = if (detail.studio != null && detail.studio.filters.isNotEmpty()) MainColor else TextGrey,
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     style = NoPaddingTextStyle,
                     modifier = Modifier.clickable(enabled = detail.studio != null && detail.studio.filters.isNotEmpty()) {
                       detail.studio?.let {
@@ -468,7 +509,7 @@ fun DetailScreen(
                     Text(
                       text = detail.countries.first().name,
                       color = if (detail.countries.first().filters.isNotEmpty()) MainColor else TextPrimary,
-                      fontSize = 12.sp,
+                      fontSize = 14.sp,
                       style = NoPaddingTextStyle,
                       modifier = Modifier.clickable(enabled = detail.countries.first().filters.isNotEmpty()) {
                         onNavigateToCategory(detail.countries.first().filters)
@@ -484,7 +525,7 @@ fun DetailScreen(
                   Text(
                     text = detail.rate.toString(),
                     color = TextPrimary,
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     style = NoPaddingTextStyle
                   )
@@ -495,21 +536,21 @@ fun DetailScreen(
                   Text(
                     text = stringResource(R.string.rating_count, formatNumber(detail.countRate)),
                     color = TextGrey,
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     style = NoPaddingTextStyle,
                   )
                   detail.seasonOf?.let {
                     Text(
                       text = " | ",
                       color = TextGrey,
-                      fontSize = 12.sp,
+                      fontSize = 14.sp,
                       style = NoPaddingTextStyle
                     )
 
                     Text(
                       text = it.name,
                       color = if (it.filters.isNotEmpty()) MainColor else TextPrimary,
-                      fontSize = 12.sp,
+                      fontSize = 14.sp,
                       style = NoPaddingTextStyle,
                       modifier = Modifier.clickable(enabled = it.filters.isNotEmpty()) {
                         onNavigateToCategory(it.filters)
@@ -527,14 +568,14 @@ fun DetailScreen(
                     Text(
                       text = "#${genre.name}",
                       color = if (genre.filters.isNotEmpty()) MainColor else TextSecondary,
-                      fontSize = 12.sp,
+                      fontSize = 14.sp,
                       style = SmallTextStyle,
                       modifier = Modifier
                         .padding(vertical = 1.dp)
                         .clickable(enabled = genre.filters.isNotEmpty()) {
                           onNavigateToCategory(genre.filters)
                         })
-                  }
+                }
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -768,7 +809,7 @@ fun DetailScreen(
                         text = season.name,
                         modifier = Modifier.padding(horizontal = 12.dp),
                         color = if (isCurrent) MainColor else TextSecondary,
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal
@@ -780,68 +821,70 @@ fun DetailScreen(
             }
 
             // Comment Preview (YouTube-style)
-            Spacer(modifier = Modifier.height(16.dp))
-            Column(
-              modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable {
-                  scope.launch {
-                    scaffoldState.bottomSheetState.expand()
+            if (!isLandscapeUI) {
+              Spacer(modifier = Modifier.height(16.dp))
+              Column(
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .padding(horizontal = 16.dp)
+                  .clip(RoundedCornerShape(12.dp))
+                  .background(MaterialTheme.colorScheme.surfaceVariant)
+                  .clickable {
+                    scope.launch {
+                      scaffoldState.bottomSheetState.expand()
+                    }
                   }
-                }
-                .padding(12.dp)
-            ) {
-              Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                  .padding(12.dp)
               ) {
+                Row(
+                  verticalAlignment = Alignment.CenterVertically,
+                  horizontalArrangement = Arrangement.SpaceBetween,
+                  modifier = Modifier.fillMaxWidth()
+                ) {
+                  Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                      text = stringResource(R.string.comments_title),
+                      color = TextPrimary,
+                      fontSize = 14.sp,
+                      fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                      text = "${uiState.totalComments}",
+                      color = TextSecondary,
+                      fontSize = 14.sp
+                    )
+                  }
+                  Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = TextSecondary,
+                    modifier = Modifier.size(20.dp)
+                  )
+                }
+
+                val previewComment =
+                  uiState.comments.firstOrNull { !it.isPinned && !it.isGlobalPinned }
+
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                  Text(
-                    text = stringResource(R.string.comments_title),
-                    color = TextPrimary,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
+                  AsyncImage(
+                    model = previewComment?.userAvatar ?: uiState.currentUser?.avatar,
+                    contentDescription = null,
+                    modifier = Modifier
+                      .size(24.dp)
+                      .clip(CircleShape),
+                    contentScale = ContentScale.Crop
                   )
                   Spacer(modifier = Modifier.width(8.dp))
                   Text(
-                    text = "${uiState.totalComments}",
-                    color = TextSecondary,
-                    fontSize = 12.sp
+                    text = previewComment?.content ?: stringResource(R.string.comment_hint),
+                    color = if (previewComment != null) TextPrimary else TextSecondary,
+                    fontSize = 13.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                   )
                 }
-                Icon(
-                  imageVector = Icons.Default.KeyboardArrowDown,
-                  contentDescription = null,
-                  tint = TextSecondary,
-                  modifier = Modifier.size(20.dp)
-                )
-              }
-
-              val previewComment =
-                uiState.comments.firstOrNull { !it.isPinned && !it.isGlobalPinned }
-
-              Spacer(modifier = Modifier.height(8.dp))
-              Row(verticalAlignment = Alignment.CenterVertically) {
-                AsyncImage(
-                  model = previewComment?.userAvatar ?: uiState.currentUser?.avatar,
-                  contentDescription = null,
-                  modifier = Modifier
-                    .size(24.dp)
-                    .clip(CircleShape),
-                  contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                  text = previewComment?.content ?: stringResource(R.string.comment_hint),
-                  color = if (previewComment != null) TextPrimary else TextSecondary,
-                  fontSize = 13.sp,
-                  maxLines = 2,
-                  overflow = TextOverflow.Ellipsis
-                )
               }
             }
 
@@ -859,11 +902,73 @@ fun DetailScreen(
               Spacer(modifier = Modifier.height(8.dp))
               GridAnimeList(
                 items = detail.related,
-                onItemClick = { anime -> onNavigateToDetail(anime.animeId) })
+                columns = if (isLandscapeUI) 2 else 3,
+                onItemClick = { anime -> onNavigateToDetail(anime.animeId, anime.lastEpisode?.id) })
             }
           }
 
+          if (isLandscapeUI) {
+            CommentSection(
+              comments = uiState.comments,
+              totalComments = uiState.totalComments,
+              isLoading = uiState.isCommentsLoading,
+              hasMore = uiState.hasMoreComments,
+              onLoadMore = { viewModel.loadMoreComments() },
+              onVote = { id, vote -> viewModel.voteComment(id, vote) },
+              onReply = { parentId, content ->
+                viewModel.postComment(
+                  content,
+                  parentId = parentId
+                )
+              },
+              onEdit = { id, content -> viewModel.editComment(id, content) },
+              onTrigger = { trigger -> viewModel.onCommentTrigger(trigger) },
+              currentUserId = uiState.currentUser?.username.hashCode(),
+              replies = uiState.replies,
+              repliesHasMore = uiState.repliesHasMore,
+              onLoadReplies = { id, append -> viewModel.loadReplies(id, append) },
+              onPostComment = { content -> viewModel.postComment(content) },
+              isPosting = uiState.isPostingComment,
+              currentUserAvatar = uiState.currentUser?.avatar,
+              sort = uiState.commentSort,
+              sortOptions = uiState.commentSortOptions,
+              onSortChange = { viewModel.updateCommentSort(it) },
+              modifier = Modifier
+                .fillMaxWidth()
+            )
+          }
+
           Spacer(modifier = Modifier.height(50.dp))
+        }
+      }
+
+      if (isFullScreen) {
+        playerArea(Modifier.fillMaxSize())
+      } else if (isLandscapeUI) {
+        Row(modifier = Modifier.fillMaxSize()) {
+          playerArea(
+            Modifier
+              .weight(0.6f)
+              .fillMaxHeight()
+          )
+          scrollableContent(
+            Modifier
+              .weight(0.4f)
+              .fillMaxHeight()
+          )
+        }
+      } else {
+        Column(modifier = Modifier.fillMaxSize()) {
+          playerArea(
+            Modifier
+              .fillMaxWidth()
+              .aspectRatio(16f / 9f)
+          )
+          scrollableContent(
+            Modifier
+              .weight(1f)
+              .fillMaxWidth()
+          )
         }
       }
     }

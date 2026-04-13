@@ -72,7 +72,7 @@ import java.util.Calendar
 @Composable
 fun ScheduleScreen(
   onNavigateBack: (() -> Unit)? = null,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   viewModel: ScheduleViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -218,7 +218,7 @@ fun ScheduleScreen(
 @Composable
 private fun ScheduleDayList(
   dayData: ScheduleDay,
-  onNavigateToDetail: (String) -> Unit
+  onNavigateToDetail: (String, String?) -> Unit
 ) {
   val currentHour = remember { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
   val groupedItems = remember(dayData) {
@@ -269,7 +269,7 @@ private fun ScheduleDayList(
             modifier = Modifier
               .fillMaxWidth()
               .clickable {
-                onNavigateToDetail(item.animeId)
+                onNavigateToDetail(item.animeId, item.lastEpisode?.id)
               }
               .padding(horizontal = 16.dp, vertical = 4.dp),
             verticalAlignment = Alignment.Top

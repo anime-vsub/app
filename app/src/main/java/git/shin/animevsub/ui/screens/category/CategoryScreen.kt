@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -67,7 +66,7 @@ import git.shin.animevsub.ui.theme.TextSecondary
 @Composable
 fun CategoryScreen(
   onNavigateBack: () -> Unit,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   viewModel: CategoryViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -140,7 +139,7 @@ fun CategoryScreen(
           else -> {
             VerticalGridAnimeList(
               items = uiState.items,
-              onItemClick = { onNavigateToDetail(it.animeId) },
+              onItemClick = { onNavigateToDetail(it.animeId, it.lastEpisode?.id) },
               state = gridState,
               isLoadingMore = uiState.isLoadingMore,
               onLoadMore = { viewModel.loadMore() }

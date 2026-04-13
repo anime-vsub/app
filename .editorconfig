@@ -1,0 +1,15 @@
+[*.{kt,kts}]
+ktlint_code_style = android_studio
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_max-line-length = disabled
+indent_size = 2
+continuation_indent_size = 2
+kotlin_imports_layout = idea
+ij_kotlin_allow_trailing_comma = false
+ij_kotlin_allow_trailing_comma_on_call_site = false
+ktlint_standard_function-signature = disabled
+ktlint_standard_function-literal = disabled
+ktlint_standard_parameter-list-wrapping = disabled
+ktlint_standard_argument-list-wrapping = disabled
+ktlint_standard_method-parameter-line-break = disabled
+ij_kotlin_line_break_after_multiline_set_or_entry = false

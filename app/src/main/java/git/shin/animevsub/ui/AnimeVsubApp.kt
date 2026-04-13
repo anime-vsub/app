@@ -28,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,7 +53,6 @@ import git.shin.animevsub.ui.navigation.BottomNavItem
 import git.shin.animevsub.ui.navigation.Screen
 import git.shin.animevsub.ui.screens.about.AboutScreen
 import git.shin.animevsub.ui.screens.account.AccountScreen
-import git.shin.animevsub.ui.screens.account.AccountViewModel
 import git.shin.animevsub.ui.screens.category.CategoryScreen
 import git.shin.animevsub.ui.screens.detail.DetailScreen
 import git.shin.animevsub.ui.screens.follow.FollowScreen
@@ -71,6 +71,7 @@ import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -78,9 +79,10 @@ import kotlinx.serialization.json.Json
 fun AnimeVsubAppUI(
   animeRepository: AnimeRepository,
   notificationViewModel: NotificationViewModel = hiltViewModel(),
-  accountViewModel: AccountViewModel = hiltViewModel()
+  isInPipMode: Boolean = false
 ) {
   val context = LocalContext.current
+  val scope = rememberCoroutineScope()
   val navController = rememberNavController()
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
@@ -211,13 +213,13 @@ fun AnimeVsubAppUI(
     NavHost(
       navController = navController,
       startDestination = Screen.Home.route,
-      modifier = Modifier.padding(innerPadding)
+      modifier = if (isInPipMode) Modifier else Modifier.padding(innerPadding)
     ) {
       // Bottom nav destinations
       composable(Screen.Home.route) {
         HomeScreen(
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           },
           onNavigateToCategory = { filters ->
             val filtersJson = Json.encodeToString(filters)
@@ -234,8 +236,8 @@ fun AnimeVsubAppUI(
 
       composable(Screen.Search.route) {
         SearchScreen(
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           }
         )
       }
@@ -246,16 +248,16 @@ fun AnimeVsubAppUI(
           onNavigateBack = if (isFromBottomNav) null else {
             { navController.popBackStack() }
           },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           }
         )
       }
 
       composable(Screen.Notification.route) {
         NotificationScreen(
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           },
           onNavigateToLogin = {
             navController.navigate(Screen.Login.route)
@@ -273,10 +275,7 @@ fun AnimeVsubAppUI(
           onNavigateToPlaylist = { playlistId ->
             navController.navigate(Screen.Playlist.createRoute(playlistId))
           },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-          },
-          onNavigateToPlayer = { animeId, chapterId ->
+          onNavigateToDetail = { animeId, chapterId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           }
         )
@@ -296,8 +295,8 @@ fun AnimeVsubAppUI(
       ) {
         DetailScreen(
           onNavigateBack = { navController.popBackStack() },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           },
           onNavigateToCategory = { filters ->
             val filtersJson = Json.encodeToString(filters)
@@ -305,7 +304,8 @@ fun AnimeVsubAppUI(
           },
           onNavigateToLogin = {
             navController.navigate(Screen.Login.route)
-          }
+          },
+          isInPipMode = isInPipMode
         )
       }
 
@@ -321,8 +321,8 @@ fun AnimeVsubAppUI(
       ) {
         RankingsScreen(
           onNavigateBack = { navController.popBackStack() },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           }
         )
       }
@@ -336,8 +336,8 @@ fun AnimeVsubAppUI(
       ) {
         CategoryScreen(
           onNavigateBack = { navController.popBackStack() },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           }
         )
       }
@@ -360,8 +360,8 @@ fun AnimeVsubAppUI(
       composable(Screen.History.route) {
         HistoryScreen(
           onNavigateBack = { navController.popBackStack() },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           }
         )
       }
@@ -369,8 +369,8 @@ fun AnimeVsubAppUI(
       composable(Screen.Follow.route) {
         FollowScreen(
           onNavigateBack = { navController.popBackStack() },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+          onNavigateToDetail = { animeId, chapterId ->
+            navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           }
         )
       }
@@ -389,10 +389,7 @@ fun AnimeVsubAppUI(
       ) {
         PlaylistScreen(
           onNavigateBack = { navController.popBackStack() },
-          onNavigateToDetail = { animeId ->
-            navController.navigate(Screen.AnimeDetail.createRoute(animeId))
-          },
-          onNavigateToPlayer = { animeId, chapterId ->
+          onNavigateToDetail = { animeId, chapterId ->
             navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
           }
         )
@@ -408,7 +405,9 @@ fun AnimeVsubAppUI(
           Button(
             onClick = {
               showAuthPrompt = false
-              accountViewModel.retryAuth()
+              scope.launch {
+                animeRepository.refreshUser()
+              }
             }
           ) {
             Text(stringResource(id = R.string.retry))
@@ -418,7 +417,9 @@ fun AnimeVsubAppUI(
           Button(
             onClick = {
               showAuthPrompt = false
-              accountViewModel.performLogout()
+              scope.launch {
+                animeRepository.logout()
+              }
             }
           ) {
             Text(stringResource(id = R.string.logout))

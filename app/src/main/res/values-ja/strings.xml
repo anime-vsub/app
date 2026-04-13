@@ -244,18 +244,26 @@
     <string name="hours_ago">%1$d 時間前</string>
     <string name="days_ago">%1$d 日前</string>
     <string name="reply_label">返信</string>
+    <string name="edit">編集</string>
+    <string name="edited">編集済み</string>
     <string name="report">報告</string>
     <string name="report_success">報告しました</string>
     <string name="report_error">報告に失敗しました</string>
     <string name="pinned">固定済み</string>
+    <string name="global_pinned">固定済み</string>
 
     <!-- Cloudflare -->
     <string name="cloudflare_bypass_title">Cloudflareをバイパス</string>
     <string name="close">閉じる</string>
     <string name="reload">再読み込み</string>
     <string name="forward">進む</string>
+    <string name="stop">停止</string>
+    <string name="done">完了</string>
+    <string name="login_not_success">ログインに失敗しました。ウェブサイトでログインしてからもう一度お試しください。</string>
 
     <!-- Main Activity -->
     <string name="authentication_prompt_title">認証</string>
     <string name="authentication_prompt_message">セッションが切れた可能性があります。再試行しますか？それともログアウトしますか？</string>
+    <string name="app_inactive_title">メンテナンス中</string>
+    <string name="app_inactive_message">現在、アプリをご利用いただけません。後でもう一度ご確認ください。</string>
 </resources>

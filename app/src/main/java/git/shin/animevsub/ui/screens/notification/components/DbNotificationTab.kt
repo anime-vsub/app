@@ -1,5 +1,6 @@
 package git.shin.animevsub.ui.screens.notification.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,7 +29,7 @@ fun DbNotificationTab(
   uiState: NotificationUiState,
   onRefresh: () -> Unit,
   onLoadMore: () -> Unit,
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   onDelete: (String, String?) -> Unit
 ) {
   val listState = rememberLazyListState()
@@ -60,20 +61,22 @@ fun DbNotificationTab(
         contentPadding = PaddingValues(bottom = 16.dp),
       ) {
         items(items, key = { "db_${it.season}" }) { item ->
-          DbNotificationItemRow(
-            item = item,
-            onClick = { season, chapId ->
-              onNavigateToDetail(season)
-            },
-            onDelete = { season, chapId ->
-              onDelete(season, chapId)
-            }
-          )
-          HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            thickness = 0.5.dp,
-            color = DarkSurface
-          )
+          Column(modifier = Modifier.animateItem()) {
+            DbNotificationItemRow(
+              item = item,
+              onClick = { season, chapId ->
+                onNavigateToDetail(season, chapId)
+              },
+              onDelete = { season, chapId ->
+                onDelete(season, chapId)
+              }
+            )
+            HorizontalDivider(
+              modifier = Modifier.padding(horizontal = 16.dp),
+              thickness = 0.5.dp,
+              color = DarkSurface
+            )
+          }
         }
 
         if (uiState.hasMoreDb) {

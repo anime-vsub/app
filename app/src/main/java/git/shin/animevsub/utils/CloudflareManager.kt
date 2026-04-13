@@ -177,11 +177,19 @@ class CloudflareManager @Inject constructor(
   }
 
   private fun isCloudflareChallenge(response: Response, body: String): Boolean {
-    val hasCfHeaders = response.code in 403..503 || body.contains("cf-challenge") || body.contains("ray-id")
+    val hasCfHeaders =
+      response.code in 403..503 && (body.contains("cf-challenge") || body.contains("ray-id"))
     val hasKeywords = body.contains("<title>Just a moment...</title>") ||
                       body.contains("Xác Minh An Toàn") || // Safe Verification
-                      body.contains("cf-browser-verification")
+      body.contains("cf-browser-verification") ||
+      body.contains("Lỗi Server")
 
-    return hasCfHeaders && hasKeywords
+    // Detection for empty title with JS redirect (Anti-bot JS challenge)
+    val isJsRedirect = (body.contains("window.location") ||
+                        body.contains("location.replace") ||
+                        body.contains("location.href")) &&
+                       (body.contains("<title></title>") || !body.contains("<title>"))
+
+    return hasCfHeaders || hasKeywords || isJsRedirect
   }
 }

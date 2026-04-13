@@ -63,7 +63,7 @@ import git.shin.animevsub.ui.theme.TextSecondary
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   viewModel: SearchViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -137,7 +137,7 @@ fun SearchScreen(
           } else {
             VerticalGridAnimeList(
               items = uiState.searchResults,
-              onItemClick = { onNavigateToDetail(it.animeId) },
+              onItemClick = { onNavigateToDetail(it.animeId, null) },
               isLoadingMore = uiState.isLoading && uiState.searchResults.isNotEmpty(),
               onLoadMore = { viewModel.loadMore() },
               contentPadding = PaddingValues(16.dp),
@@ -158,7 +158,7 @@ fun SearchScreen(
         // Show suggestions
         SearchSuggestionsList(
           suggestions = uiState.suggestions,
-          onSuggestionClick = { onNavigateToDetail(it.animeId) },
+          onSuggestionClick = { onNavigateToDetail(it.animeId, null) },
           onFullSearch = {
             viewModel.onSearch(uiState.query)
             focusManager.clearFocus()

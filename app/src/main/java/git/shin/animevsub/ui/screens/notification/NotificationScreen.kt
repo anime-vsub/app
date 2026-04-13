@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationScreen(
-  onNavigateToDetail: (String) -> Unit,
+  onNavigateToDetail: (String, String?) -> Unit,
   onNavigateToLogin: () -> Unit,
   viewModel: NotificationViewModel = hiltViewModel()
 ) {
