@@ -1,6 +1,9 @@
 package git.shin.animevsub.ui.components.player
 
+import android.content.Context
+import android.media.AudioManager
 import android.content.pm.ActivityInfo
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -156,7 +159,8 @@ fun VideoPlayer(
   chapterProgress: Map<String, WatchProgress>,
   isFullScreen: Boolean = false,
   onFullScreenChange: (Boolean) -> Unit,
-  isInPipMode: Boolean = false
+  isInPipMode: Boolean = false,
+  onPlayingStateChange: (Boolean) -> Unit = {}
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
@@ -164,6 +168,7 @@ fun VideoPlayer(
   val volumeGestureEnabled by preferencesManager.volumeGesture.collectAsState(initial = true)
   val brightnessGestureEnabled by preferencesManager.brightnessGesture.collectAsState(initial = true)
   val autoSkipEnabled by preferencesManager.autoSkip.collectAsState(initial = false)
+  val syncMode by preferencesManager.syncMode.collectAsState(initial = 0)
 
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
@@ -210,6 +215,7 @@ fun VideoPlayer(
 
         override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
           isPlaying = playWhenReady
+          onPlayingStateChange(playWhenReady)
         }
 
 //        override fun onRenderedFirstFrame() {
@@ -364,7 +370,10 @@ fun VideoPlayer(
     }
   }
 
-  LaunchedEffect(playerData, initialPosition) {
+  // Track the current URI to avoid reloading the same content
+  var loadedUri by remember { mutableStateOf<android.net.Uri?>(null) }
+
+  LaunchedEffect(playerData) {
     if (playerData == null || playerData.link.isEmpty()) return@LaunchedEffect
     val httpDataSourceFactory =
       DefaultHttpDataSource.Factory().setDefaultRequestProperties(playerData.headers ?: emptyMap())
@@ -379,8 +388,7 @@ fun VideoPlayer(
       playerData.link.toUri()
     }
 
-    val currentMediaItem = exoPlayer.currentMediaItem
-    if (currentMediaItem?.localConfiguration?.uri != newUri) {
+    if (loadedUri != newUri) {
       if (playerData.type.lowercase() == "hls") {
         exoPlayer.setMediaSource(
           HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(newUri))
@@ -389,7 +397,8 @@ fun VideoPlayer(
         exoPlayer.setMediaItem(MediaItem.fromUri(newUri))
       }
 
-      if (initialPosition > 0) {
+      // Only seek to initialPosition on the VERY FIRST load of this URI, and if syncMode allows restoring
+      if (initialPosition > 0 && syncMode == 0) {
         exoPlayer.seekTo(initialPosition)
         if (initialPosition > 5000) {
           val minutes = (initialPosition / 1000 / 60).toInt()
@@ -405,27 +414,12 @@ fun VideoPlayer(
         }
       }
       exoPlayer.prepare()
-    } else {
-      if (initialPosition > 0 && exoPlayer.currentPosition < 5000 && exoPlayer.currentPosition < initialPosition) {
-        exoPlayer.seekTo(initialPosition)
-        if (initialPosition > 5000) {
-          val minutes = (initialPosition / 1000 / 60).toInt()
-          val seconds = ((initialPosition / 1000) % 60).toInt()
-          notificationText = context.getString(R.string.restored_progress, minutes, seconds)
-          notificationIcon = Icons.Default.History
-          isNotificationClickable = false
-          showNotification = true
-          scope.launch {
-            delay(3000)
-            showNotification = false
-          }
-        }
-      }
+      loadedUri = newUri
     }
   }
 
   LaunchedEffect(currentTime, duration) {
-    if (duration > 0 && currentTime > 0) {
+    if (duration > 0 && currentTime > 0 && syncMode != 2) {
       onProgressUpdate(currentTime, duration)
     }
   }
@@ -461,11 +455,16 @@ fun VideoPlayer(
                 gestureText = "${(newBrightness * 100).roundToInt()}%"
               }
             } else if (!isLeftSide && volumeGestureEnabled) {
-              val currentVolume = exoPlayer.volume
-              val newVolume = (currentVolume - dragAmount / size.height).coerceIn(0f, 1f)
-              exoPlayer.volume = newVolume
+              val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+              val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+              val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+              
+              val delta = (dragAmount / size.height * maxVolume).roundToInt()
+              val newVolume = (currentVolume - delta).coerceIn(0, maxVolume)
+              
+              audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
               gestureIcon = Icons.AutoMirrored.Filled.VolumeUp
-              gestureText = "${(newVolume * 100).roundToInt()}%"
+              gestureText = "${(newVolume.toFloat() / maxVolume * 100).roundToInt()}%"
             }
           }
         )
@@ -491,6 +490,7 @@ fun VideoPlayer(
     AndroidView(factory = { ctx ->
       PlayerView(ctx).apply {
         player = exoPlayer; useController = false
+        keepScreenOn = true
       }
     }, modifier = Modifier.fillMaxSize())
     if (playerData == null && !poster.isNullOrEmpty()) {
@@ -569,7 +569,7 @@ fun VideoPlayer(
         }
       }
 
-      if (errorMessage != null) {
+      if (errorMessage != null && !isInPipMode) {
         Column(
           modifier = Modifier
             .align(Alignment.Center)
@@ -597,7 +597,7 @@ fun VideoPlayer(
         }
       } else {
         val showLoading = (isLoading || isBuffering || playerData == null) && !isDragging
-        if (showLoading) {
+        if (showLoading && !isInPipMode) {
           CircularProgressIndicator(
             modifier = Modifier
               .align(Alignment.Center)
@@ -1034,7 +1034,9 @@ fun VideoPlayer(
           brightnessGestureEnabled = brightnessGestureEnabled,
           onBrightnessGestureToggle = { scope.launch { preferencesManager.setBrightnessGesture(it) } },
           autoSkipEnabled = autoSkipEnabled,
-          onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } }
+          onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
+          syncMode = syncMode,
+          onSyncModeChange = { scope.launch { preferencesManager.setSyncMode(it) } }
         )
       }
       if (showSettingsBottomSheet) {
@@ -1078,6 +1080,8 @@ fun VideoPlayer(
             onBrightnessGestureToggle = { scope.launch { preferencesManager.setBrightnessGesture(it) } },
             autoSkipEnabled = autoSkipEnabled,
             onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
+            syncMode = syncMode,
+            onSyncModeChange = { scope.launch { preferencesManager.setSyncMode(it) } },
             onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null }
           )
         }

@@ -17,7 +17,8 @@ fun ChapterBottomSheet(
   sheetState: SheetState,
   onDismissRequest: () -> Unit,
   onSeasonClick: (String) -> Unit,
-  onChapterClick: (ChapterInfo, String) -> Unit
+  onChapterClick: (ChapterInfo, String) -> Unit,
+  onSyncModeToggle: () -> Unit
 ) {
 //  val configuration = LocalConfiguration.current
 //  val screenWidth = configuration.screenWidthDp.dp
@@ -38,7 +39,9 @@ fun ChapterBottomSheet(
       onSeasonClick = onSeasonClick,
       onChapterClick = onChapterClick,
       chapterProgress = uiState.chapterProgress,
-      isSideMenu = false
+      isSideMenu = false,
+      syncMode = uiState.syncMode,
+      onSyncModeToggle = onSyncModeToggle
     )
   }
 }

@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
@@ -146,70 +148,79 @@ fun CommentSection(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    CommentInput(
-      onPost = onPostComment,
-      isPosting = isPosting,
-      userAvatar = currentUserAvatar
-    )
+    LazyColumn(modifier = Modifier.weight(1f)) {
+      item {
+        CommentInput(
+          onPost = onPostComment,
+          isPosting = isPosting,
+          userAvatar = currentUserAvatar
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+      }
 
-    Spacer(modifier = Modifier.height(16.dp))
-
-    if (comments.isEmpty() && !isLoading) {
-      Text(
-        text = stringResource(R.string.no_comments),
-        style = MaterialTheme.typography.bodyMedium,
-        color = Color.Gray,
-        modifier = Modifier.padding(vertical = 16.dp)
-      )
-    }
-
-    comments.forEach { comment ->
-      CommentItem(
-        comment = comment,
-        onVote = onVote,
-        onReply = onReply,
-        onEdit = onEdit,
-        onTrigger = onTrigger,
-        isMine = comment.userId == currentUserId,
-        replies = replies[comment.id] ?: emptyList(),
-        hasMoreReplies = repliesHasMore[comment.id]
-          ?: (comment.repliesCount > 0 && (replies[comment.id]?.isEmpty() ?: true)),
-        onLoadReplies = { onLoadReplies(comment.id, it) },
-        currentUserId = currentUserId,
-        currentUserAvatar = currentUserAvatar
-      )
-      HorizontalDivider(
-        modifier = Modifier.padding(vertical = 8.dp),
-        thickness = 0.5.dp,
-        color = Color.Gray.copy(alpha = 0.3f)
-      )
-    }
-
-    if (hasMore) {
-      Box(
-        modifier = Modifier
-          .fillMaxWidth()
-          .clickable { onLoadMore() }
-          .padding(vertical = 8.dp),
-        contentAlignment = Alignment.Center
-      ) {
-        if (isLoading) {
-          CircularProgressIndicator(modifier = Modifier.size(24.dp))
-        } else {
+      if (comments.isEmpty() && !isLoading) {
+        item {
           Text(
-            text = stringResource(R.string.view_more_comments),
-            color = MaterialTheme.colorScheme.primary
+            text = stringResource(R.string.no_comments),
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Gray,
+            modifier = Modifier.padding(vertical = 16.dp)
           )
         }
       }
-    } else if (isLoading && comments.isEmpty()) {
-      Box(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(24.dp),
-        contentAlignment = Alignment.Center
-      ) {
-        CircularProgressIndicator()
+
+      items(comments, key = { it.id }) { comment ->
+        CommentItem(
+          comment = comment,
+          onVote = onVote,
+          onReply = onReply,
+          onEdit = onEdit,
+          onTrigger = onTrigger,
+          isMine = comment.userId == currentUserId,
+          replies = replies[comment.id] ?: emptyList(),
+          hasMoreReplies = repliesHasMore[comment.id]
+            ?: (comment.repliesCount > 0 && (replies[comment.id]?.isEmpty() ?: true)),
+          onLoadReplies = { onLoadReplies(comment.id, it) },
+          currentUserId = currentUserId,
+          currentUserAvatar = currentUserAvatar
+        )
+        HorizontalDivider(
+          modifier = Modifier.padding(vertical = 8.dp),
+          thickness = 0.5.dp,
+          color = Color.Gray.copy(alpha = 0.3f)
+        )
+      }
+
+      if (hasMore) {
+        item {
+          Box(
+            modifier = Modifier
+              .fillMaxWidth()
+              .clickable { onLoadMore() }
+              .padding(vertical = 8.dp),
+            contentAlignment = Alignment.Center
+          ) {
+            if (isLoading) {
+              CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            } else {
+              Text(
+                text = stringResource(R.string.view_more_comments),
+                color = MaterialTheme.colorScheme.primary
+              )
+            }
+          }
+        }
+      } else if (isLoading && comments.isEmpty()) {
+        item {
+          Box(
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(24.dp),
+            contentAlignment = Alignment.Center
+          ) {
+            CircularProgressIndicator()
+          }
+        }
       }
     }
   }

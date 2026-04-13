@@ -91,7 +91,8 @@ data class DetailUiState(
   val repliesOffset: Map<String, Int> = emptyMap(),
   val repliesHasMore: Map<String, Boolean> = emptyMap(),
   val isPostingComment: Boolean = false,
-  val commentError: String? = null
+  val commentError: String? = null,
+  val syncMode: Int = 0 // 0: Full, 1: Upload Only, 2: Disabled
 ) {
   val currentChapIndex: Int
     get() {
@@ -869,5 +870,11 @@ class DetailViewModel @Inject constructor(
     if (_uiState.value.commentSort?.id == sort.id) return
     _uiState.update { it.copy(commentSort = sort, comments = emptyList(), commentsOffset = 0) }
     loadComments()
+  }
+
+  fun toggleSyncMode() {
+    _uiState.update {
+      it.copy(syncMode = (it.syncMode + 1) % 3)
+    }
   }
 }

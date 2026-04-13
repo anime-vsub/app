@@ -139,6 +139,10 @@
     <string name="gesture_controls">Điều khiển cử chỉ</string>
     <string name="volume_gesture">Vuốt để chỉnh âm lượng</string>
     <string name="brightness_gesture">Vuốt để chỉnh độ sáng</string>
+    <string name="sync_mode">Đồng bộ tiến trình</string>
+    <string name="sync_mode_full">Đồng bộ hai chiều</string>
+    <string name="sync_mode_upload_only">Chỉ tải lên</string>
+    <string name="sync_mode_none">Đã tắt</string>
 
     <!-- Rankings -->
     <string name="ranking_day">Ngày</string>

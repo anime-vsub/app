@@ -140,6 +140,10 @@
     <string name="gesture_controls">Gesture Controls</string>
     <string name="volume_gesture">Swipe Volume</string>
     <string name="brightness_gesture">Swipe Brightness</string>
+    <string name="sync_mode">Sync Progress</string>
+    <string name="sync_mode_full">Two-way Sync</string>
+    <string name="sync_mode_upload_only">Upload Only</string>
+    <string name="sync_mode_none">Disabled</string>
 
     <!-- Rankings -->
     <string name="ranking_day">Day</string>

@@ -26,6 +26,7 @@ class PreferencesManager(private val context: Context) {
     private val AUTO_SYNC_NOTIFY_KEY = booleanPreferencesKey("auto_sync_notify")
     private val COOKIES_KEY = stringPreferencesKey("cookies")
     private val LAST_ACTIVE_CHECK_KEY = longPreferencesKey("last_active_check")
+    private val SYNC_MODE_KEY = androidx.datastore.preferences.core.intPreferencesKey("sync_mode")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -55,6 +56,11 @@ class PreferencesManager(private val context: Context) {
   }
 
   val lastActiveCheck: Flow<Long> = context.dataStore.data.map { it[LAST_ACTIVE_CHECK_KEY] ?: 0L }
+  val syncMode: Flow<Int> = context.dataStore.data.map { it[SYNC_MODE_KEY] ?: 0 }
+
+  suspend fun setSyncMode(value: Int) {
+    context.dataStore.edit { it[SYNC_MODE_KEY] = value }
+  }
 
   suspend fun setLastActiveCheck(value: Long) {
     context.dataStore.edit { it[LAST_ACTIVE_CHECK_KEY] = value }

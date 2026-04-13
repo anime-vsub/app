@@ -32,6 +32,9 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.SyncDisabled
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -73,7 +76,9 @@ fun EpisodeSelectorContent(
   modifier: Modifier = Modifier,
   chapterProgress: Map<String, WatchProgress>,
   isSideMenu: Boolean = false,
-  onClose: (() -> Unit)? = null
+  onClose: (() -> Unit)? = null,
+  syncMode: Int = 0,
+  onSyncModeToggle: (() -> Unit)? = null
 ) {
   var searchQuery by remember { mutableStateOf("") }
   var showVerticalSeasons by remember { mutableStateOf(false) }
@@ -100,6 +105,25 @@ fun EpisodeSelectorContent(
         fontWeight = FontWeight.Bold,
         modifier = Modifier.weight(1f)
       )
+
+      if (onSyncModeToggle != null && !showVerticalSeasons) {
+        IconButton(onClick = onSyncModeToggle) {
+          Icon(
+            imageVector = when (syncMode) {
+              1 -> Icons.Default.Upload
+              2 -> Icons.Default.SyncDisabled
+              else -> Icons.Default.Sync
+            },
+            contentDescription = "Sync Mode",
+            tint = when (syncMode) {
+              1 -> Color(0xFF4CAF50)
+              2 -> Color(0xFFF44336)
+              else -> MainColor
+            },
+            modifier = Modifier.size(20.dp)
+          )
+        }
+      }
 
       IconButton(onClick = {
         showVerticalSeasons = !showVerticalSeasons

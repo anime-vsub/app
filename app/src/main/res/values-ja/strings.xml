@@ -139,6 +139,10 @@
     <string name="gesture_controls">ジェスチャー操作</string>
     <string name="volume_gesture">スワイプで音量調節</string>
     <string name="brightness_gesture">スワイプで輝度調節</string>
+    <string name="sync_mode">視聴状況の同期</string>
+    <string name="sync_mode_full">双方向同期</string>
+    <string name="sync_mode_upload_only">アップロードのみ</string>
+    <string name="sync_mode_none">無効</string>
 
     <!-- Rankings -->
     <string name="ranking_day">日</string>

@@ -45,6 +45,9 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.SyncDisabled
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -62,6 +65,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -127,6 +131,7 @@ fun DetailScreen(
   val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val scaffoldState = rememberBottomSheetScaffoldState()
+  var isPlayerPlaying by remember { mutableStateOf(false) }
   var showDetailSheet by remember { mutableStateOf(false) }
   var showChapterSheet by remember { mutableStateOf(false) }
   var showAddToPlaylistSheet by remember { mutableStateOf(false) }
@@ -141,9 +146,9 @@ fun DetailScreen(
   val sheetHeight =
     if (isLandscapeUI) configuration.screenHeightDp.dp else configuration.screenHeightDp.dp - videoHeight
 
-  LaunchedEffect(uiState.playerData, isFullScreen) {
+  LaunchedEffect(uiState.playerData, isFullScreen, isPlayerPlaying) {
     val activity = context as? MainActivity ?: return@LaunchedEffect
-    if (uiState.playerData != null) {
+    if (uiState.playerData != null && isPlayerPlaying) {
       activity.updatePipParams { builder ->
         builder.setAspectRatio(Rational(16, 9))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -291,78 +296,81 @@ fun DetailScreen(
     ) {
       val detail = uiState.detail
 
-      val playerArea = @Composable { modifier: Modifier ->
-        Box(
-          modifier = modifier
-            .background(Color.Black)
-        ) {
-          if (detail != null && uiState.currentChapter?.id == "0" && !detail.trailer.isNullOrEmpty()) {
-            // Trailer Embed mode
-            AndroidView(
-              factory = { ctx ->
-                android.webkit.WebView(ctx).apply {
-                  settings.javaScriptEnabled = true
-                  settings.loadWithOverviewMode = true
-                  settings.useWideViewPort = true
-                  webViewClient = android.webkit.WebViewClient()
-                  loadUrl(detail.trailer)
-                }
-              },
-              modifier = Modifier.fillMaxSize()
-            )
-            IconButton(
-              onClick = onNavigateBack
-            ) {
-              Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = null,
-                tint = Color.White
+      val playerArea = remember<@Composable (Modifier) -> Unit> {
+        movableContentOf { modifier: Modifier ->
+          Box(
+            modifier = modifier
+              .background(Color.Black)
+          ) {
+            if (detail != null && uiState.currentChapter?.id == "0" && !detail.trailer.isNullOrEmpty()) {
+              // Trailer Embed mode
+              AndroidView(
+                factory = { ctx ->
+                  android.webkit.WebView(ctx).apply {
+                    settings.javaScriptEnabled = true
+                    settings.loadWithOverviewMode = true
+                    settings.useWideViewPort = true
+                    webViewClient = android.webkit.WebViewClient()
+                    loadUrl(detail.trailer)
+                  }
+                },
+                modifier = Modifier.fillMaxSize()
+              )
+              IconButton(
+                onClick = onNavigateBack
+              ) {
+                Icon(
+                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                  contentDescription = null,
+                  tint = Color.White
+                )
+              }
+            } else {
+              // Player mode (handles loading detail, loading link, and errors)
+              val currentChap = uiState.chapterData?.chaps?.getOrNull(uiState.currentChapIndex)
+              VideoPlayer(
+                playerData = uiState.playerData,
+                poster = detail?.poster ?: detail?.image,
+                title = detail?.name ?: "",
+                subtitle = currentChap?.name?.let {
+                  if (uiState.episodeNameFromApi != null) "$it - ${uiState.episodeNameFromApi}" else it
+                } ?: "",
+                isLoading = uiState.isPlayerLoading || uiState.isLoading,
+                errorMessage = uiState.playerError,
+                introRange = uiState.introRange,
+                outroRange = uiState.outroRange,
+                autoNextEnabled = uiState.autoNext,
+                hasNextEpisode = uiState.currentChapIndex + 1 < (
+                  uiState.chapterData?.chaps?.size
+                    ?: 0
+                  ),
+                onBack = onNavigateBack,
+                onReload = { viewModel.retryPlayer() },
+                onNextEpisode = { viewModel.playNext() },
+                onVideoEnded = {
+                  if (uiState.autoNext) {
+                    viewModel.playNext()
+                  }
+                },
+                servers = uiState.servers,
+                currentServer = uiState.currentServer,
+                onServerSelected = { viewModel.selectServer(it) },
+                displaySeasons = uiState.displaySeasons,
+                activeDisplaySeasonId = uiState.activeDisplaySeasonId,
+                onSeasonSelected = { viewModel.setActiveDisplaySeason(it) },
+                episodes = uiState.chapterData?.chaps ?: emptyList(),
+                currentEpisode = uiState.currentChapter,
+                onEpisodeSelected = { chap, seasonId -> viewModel.playChapter(chap, seasonId) },
+                initialPosition = uiState.lastProgress,
+                onProgressUpdate = { cur, dur -> viewModel.updateHistory(cur, dur) },
+                chapterProgress = uiState.chapterProgress,
+                isFullScreen = isFullScreen,
+                onFullScreenChange = { isFullScreen = it },
+                isInPipMode = isInPipMode,
+                onPlayingStateChange = { isPlayerPlaying = it },
+                modifier = Modifier.fillMaxSize()
               )
             }
-          } else {
-            // Player mode (handles loading detail, loading link, and errors)
-            val currentChap = uiState.chapterData?.chaps?.getOrNull(uiState.currentChapIndex)
-            VideoPlayer(
-              playerData = uiState.playerData,
-              poster = detail?.poster ?: detail?.image,
-              title = detail?.name ?: "",
-              subtitle = currentChap?.name?.let {
-                if (uiState.episodeNameFromApi != null) "$it - ${uiState.episodeNameFromApi}" else it
-              } ?: "",
-              isLoading = uiState.isPlayerLoading || uiState.isLoading,
-              errorMessage = uiState.playerError,
-              introRange = uiState.introRange,
-              outroRange = uiState.outroRange,
-              autoNextEnabled = uiState.autoNext,
-              hasNextEpisode = uiState.currentChapIndex + 1 < (
-                uiState.chapterData?.chaps?.size
-                  ?: 0
-                ),
-              onBack = onNavigateBack,
-              onReload = { viewModel.retryPlayer() },
-              onNextEpisode = { viewModel.playNext() },
-              onVideoEnded = {
-                if (uiState.autoNext) {
-                  viewModel.playNext()
-                }
-              },
-              servers = uiState.servers,
-              currentServer = uiState.currentServer,
-              onServerSelected = { viewModel.selectServer(it) },
-              displaySeasons = uiState.displaySeasons,
-              activeDisplaySeasonId = uiState.activeDisplaySeasonId,
-              onSeasonSelected = { viewModel.setActiveDisplaySeason(it) },
-              episodes = uiState.chapterData?.chaps ?: emptyList(),
-              currentEpisode = uiState.currentChapter,
-              onEpisodeSelected = { chap, seasonId -> viewModel.playChapter(chap, seasonId) },
-              initialPosition = uiState.lastProgress,
-              onProgressUpdate = { cur, dur -> viewModel.updateHistory(cur, dur) },
-              chapterProgress = uiState.chapterProgress,
-              isFullScreen = isFullScreen,
-              onFullScreenChange = { isFullScreen = it },
-              isInPipMode = isInPipMode,
-              modifier = Modifier.fillMaxSize()
-            )
           }
         }
       }
@@ -685,23 +693,46 @@ fun DetailScreen(
               Row(
                 modifier = Modifier
                   .fillMaxWidth()
-                  .clickable { showChapterSheet = true }
-                  .padding(horizontal = 16.dp, vertical = 8.dp),
+                  .padding(horizontal = 16.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
               ) {
-                Text(
-                  text = stringResource(R.string.episodes),
-                  color = TextPrimary,
-                  fontSize = 16.sp,
-                  fontWeight = FontWeight.Bold
-                )
-                Icon(
-                  imageVector = Icons.Default.ChevronRight,
-                  contentDescription = null,
-                  tint = TextGrey,
-                  modifier = Modifier.size(20.dp)
-                )
+                Row(
+                  modifier = Modifier
+                    .weight(1f)
+                    .clickable { showChapterSheet = true },
+                  verticalAlignment = Alignment.CenterVertically
+                ) {
+                  Text(
+                    text = stringResource(R.string.episodes),
+                    color = TextPrimary,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                  )
+                  Icon(
+                    imageVector = Icons.Default.ChevronRight,
+                    contentDescription = null,
+                    tint = TextGrey,
+                    modifier = Modifier.size(20.dp)
+                  )
+                }
+
+                IconButton(onClick = { viewModel.toggleSyncMode() }) {
+                  Icon(
+                    imageVector = when (uiState.syncMode) {
+                      1 -> Icons.Default.Upload
+                      2 -> Icons.Default.SyncDisabled
+                      else -> Icons.Default.Sync
+                    },
+                    contentDescription = "Sync Mode",
+                    tint = when (uiState.syncMode) {
+                      1 -> Color(0xFF4CAF50)
+                      2 -> Color(0xFFF44336)
+                      else -> MainColor
+                    },
+                    modifier = Modifier.size(20.dp)
+                  )
+                }
               }
 
               // Episode List (Horizontal)
@@ -1004,7 +1035,8 @@ fun DetailScreen(
         sheetState = chapterSheetState,
         onDismissRequest = { showChapterSheet = false },
         onSeasonClick = { viewModel.setActiveDisplaySeason(it) },
-        onChapterClick = { chap, seasonId -> viewModel.playChapter(chap, seasonId) }
+        onChapterClick = { chap, seasonId -> viewModel.playChapter(chap, seasonId) },
+        onSyncModeToggle = { viewModel.toggleSyncMode() }
       )
     }
 

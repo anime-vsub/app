@@ -139,6 +139,10 @@
     <string name="gesture_controls">手势控制</string>
     <string name="volume_gesture">滑动调节音量</string>
     <string name="brightness_gesture">滑动调节亮度</string>
+    <string name="sync_mode">同步进度</string>
+    <string name="sync_mode_full">双向同步</string>
+    <string name="sync_mode_upload_only">仅上传</string>
+    <string name="sync_mode_none">已禁用</string>
 
     <!-- Rankings -->
     <string name="ranking_day">日</string>

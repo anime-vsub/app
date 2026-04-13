@@ -86,9 +86,9 @@ fun SkipNotification(
 ) {
   Box(
     modifier = modifier
-      .clip(RoundedCornerShape(16.dp))
+      .clip(RoundedCornerShape(8.dp))
       .background(Color.Black.copy(alpha = 0.7f))
-      .padding(start = 8.dp, end = 2.dp, top = 2.dp, bottom = 2.dp)
+      .padding(start = 8.dp, end = 2.dp, top = 4.dp, bottom = 4.dp)
   ) {
     Row(
       verticalAlignment = Alignment.CenterVertically,

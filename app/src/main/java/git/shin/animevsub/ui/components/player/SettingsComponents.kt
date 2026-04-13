@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.HighQuality
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -75,6 +76,8 @@ fun SettingsBottomSheetContent(
   onBrightnessGestureToggle: (Boolean) -> Unit,
   autoSkipEnabled: Boolean,
   onAutoSkipToggle: (Boolean) -> Unit,
+  syncMode: Int,
+  onSyncModeChange: (Int) -> Unit,
   onDismiss: () -> Unit
 ) {
   val context = LocalContext.current
@@ -140,6 +143,16 @@ fun SettingsBottomSheetContent(
               title = stringResource(R.string.brightness_gesture),
               checked = brightnessGestureEnabled,
               onCheckedChange = onBrightnessGestureToggle
+            )
+            SettingsItem(
+              icon = Icons.Default.Sync,
+              title = stringResource(R.string.sync_mode),
+              value = when (syncMode) {
+                0 -> stringResource(R.string.sync_mode_full)
+                1 -> stringResource(R.string.sync_mode_upload_only)
+                else -> stringResource(R.string.sync_mode_none)
+              },
+              onClick = { onSubMenuChange("sync") }
             )
             HorizontalDivider(
               modifier = Modifier.padding(vertical = 8.dp),
@@ -213,6 +226,29 @@ fun SettingsBottomSheetContent(
                 onClick = { onSpeedSelected(speed); onDismiss() }
               )
             }
+          }
+        }
+
+        "sync" -> {
+          SettingsSubMenuContainer(
+            title = stringResource(R.string.sync_mode),
+            onBack = { onSubMenuChange(null) }
+          ) {
+            SettingsOptionItem(
+              title = stringResource(R.string.sync_mode_full),
+              isSelected = syncMode == 0,
+              onClick = { onSyncModeChange(0); onDismiss() }
+            )
+            SettingsOptionItem(
+              title = stringResource(R.string.sync_mode_upload_only),
+              isSelected = syncMode == 1,
+              onClick = { onSyncModeChange(1); onDismiss() }
+            )
+            SettingsOptionItem(
+              title = stringResource(R.string.sync_mode_none),
+              isSelected = syncMode == 2,
+              onClick = { onSyncModeChange(2); onDismiss() }
+            )
           }
         }
       }
@@ -342,7 +378,9 @@ fun SettingsSideMenuContent(
   brightnessGestureEnabled: Boolean,
   onBrightnessGestureToggle: (Boolean) -> Unit,
   autoSkipEnabled: Boolean,
-  onAutoSkipToggle: (Boolean) -> Unit
+  onAutoSkipToggle: (Boolean) -> Unit,
+  syncMode: Int,
+  onSyncModeChange: (Int) -> Unit
 ) {
   val context = LocalContext.current
   val onSupportClick = { subjectType: String ->
@@ -402,6 +440,25 @@ fun SettingsSideMenuContent(
           title = stringResource(R.string.brightness_gesture),
           checked = brightnessGestureEnabled,
           onCheckedChange = onBrightnessGestureToggle
+        )
+      }
+    }
+    SideMenuSection(title = stringResource(R.string.sync_mode)) {
+      FlowRow(spacing = 8.dp) {
+        SideMenuOptionChip(
+          text = stringResource(R.string.sync_mode_full),
+          isSelected = syncMode == 0,
+          onClick = { onSyncModeChange(0) }
+        )
+        SideMenuOptionChip(
+          text = stringResource(R.string.sync_mode_upload_only),
+          isSelected = syncMode == 1,
+          onClick = { onSyncModeChange(1) }
+        )
+        SideMenuOptionChip(
+          text = stringResource(R.string.sync_mode_none),
+          isSelected = syncMode == 2,
+          onClick = { onSyncModeChange(2) }
         )
       }
     }
