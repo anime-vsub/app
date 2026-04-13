@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/anime-vsub/app/compare/v2.0.2...v2.0.3) (2026-04-13)
+
+
+### Bug Fixes
+
+* Based on the diffs, here is a summary of the changes: ([3d5037e](https://github.com/anime-vsub/app/commit/3d5037ee9aaa4aa2a7a4e22c51f89214a83d8fc2))
+
 ## [2.0.2](https://github.com/anime-vsub/app/compare/v2.0.1...v2.0.2) (2026-04-13)
 
 
