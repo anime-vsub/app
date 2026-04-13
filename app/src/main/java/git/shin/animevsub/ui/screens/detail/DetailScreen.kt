@@ -128,8 +128,8 @@ fun DetailScreen(
   val uiState by viewModel.uiState.collectAsState()
   val context = LocalContext.current
   val snackbarHostState = remember { SnackbarHostState() }
-  val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-  val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+  val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
   val scaffoldState = rememberBottomSheetScaffoldState()
   var isPlayerPlaying by remember { mutableStateOf(false) }
   var showDetailSheet by remember { mutableStateOf(false) }
