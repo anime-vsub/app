@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/anime-vsub/app/compare/v2.0.1...v2.0.2) (2026-04-13)
+
+
+### Bug Fixes
+
+* Update `.releaserc.json` to remove the `Android Aligned APK` from the release assets configuration. ([e73b41b](https://github.com/anime-vsub/app/commit/e73b41b3feebcf185db92c9871d97ec045813f97))
+
 ## [2.0.1](https://github.com/anime-vsub/app/compare/v2.0.0...v2.0.1) (2026-04-13)
 
 
