@@ -458,10 +458,10 @@ fun VideoPlayer(
               val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
               val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
               val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-              
+
               val delta = (dragAmount / size.height * maxVolume).roundToInt()
               val newVolume = (currentVolume - delta).coerceIn(0, maxVolume)
-              
+
               audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
               gestureIcon = Icons.AutoMirrored.Filled.VolumeUp
               gestureText = "${(newVolume.toFloat() / maxVolume * 100).roundToInt()}%"
