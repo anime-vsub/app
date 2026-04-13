@@ -81,6 +81,7 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -117,18 +118,17 @@ jobs:
             semantic-release-export-data
 
       - name: Get next version
-        id: get-next-version
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npx semantic-release --dry-run | grep "The next release version is" | sed "s/.*is //" > VERSION.txt || echo "" > VERSION.txt
-          echo "version=$(cat VERSION.txt)" >> $GITHUB_OUTPUT
+        with:
+          dry_run: true
 
-      - name: Update Version in gradle.properties
-        if: steps.get-next-version.outputs.version != ''
+      - name: Update Gradle Version
+        if: steps.semantic.outputs.new_release_published == 'true'
         run: |
-          sed -i "s/versionName=.*/versionName=${{ steps.get-next-version.outputs.version }}/" gradle.properties
-          # Update versionCode to build number or similar
+          sed -i "s/versionName=.*/versionName=${{ steps.semantic.outputs.new_release_version }}/" gradle.properties
           sed -i "s/versionCode=.*/versionCode=${{ github.run_number }}/" gradle.properties
 
       - name: Build Release Bundle (AAB)
