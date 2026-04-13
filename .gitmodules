@@ -1,0 +1,4 @@
+[submodule "app/src/main/java/git/shin/animevsub/data/remote/api_hidden"]
+    path = app/src/main/java/git/shin/animevsub/data/remote/api_hidden
+    url = https://github.com/anime-vsub/api_hidden.git
+ 
