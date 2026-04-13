@@ -34,7 +34,7 @@ jobs:
         env:
           URL: ${{ secrets.SUPABASE_URL }}
           KEY: ${{ secrets.SUPABASE_KEY }}
-        run: printf '\nSUPABASE_URL="%s"\nSUPABASE_KEY="%s"\n' "$URL" "$KEY" >> local.properties
+        run: printf '\nSUPABASE_URL=%s\nSUPABASE_KEY=%s\n' "$URL" "$KEY" >> local.properties
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck
