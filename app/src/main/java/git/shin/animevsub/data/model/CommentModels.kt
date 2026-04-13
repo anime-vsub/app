@@ -4,7 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class VoteType {
-  UP, DOWN, NONE
+  UP,
+  DOWN,
+  NONE
 }
 
 @Serializable

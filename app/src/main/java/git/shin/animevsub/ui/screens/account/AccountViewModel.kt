@@ -9,12 +9,12 @@ import git.shin.animevsub.data.model.Playlist
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class AccountUiState(
   val isLoggedIn: Boolean = false,
@@ -53,7 +53,6 @@ class AccountViewModel @Inject constructor(
   val uiState: StateFlow<AccountUiState> = _uiState.asStateFlow()
 
   val uiEvent = repository.authEvent
-
 
   init {
     viewModelScope.launch {

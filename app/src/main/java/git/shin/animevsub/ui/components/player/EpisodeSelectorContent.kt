@@ -254,11 +254,15 @@ private fun SeasonItem(
   Box(
     modifier = Modifier
       .then(
-        if (isFullWidth) Modifier
-          .fillMaxWidth()
-          .height(52.dp) else Modifier
-          .widthIn(min = 90.dp)
-          .height(34.dp)
+        if (isFullWidth) {
+          Modifier
+            .fillMaxWidth()
+            .height(52.dp)
+        } else {
+          Modifier
+            .widthIn(min = 90.dp)
+            .height(34.dp)
+        }
       )
       .clip(RoundedCornerShape(if (isFullWidth) 8.dp else 4.dp))
       .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
@@ -276,7 +280,13 @@ private fun SeasonItem(
     ) {
       Text(
         text = season.name,
-        color = if (isSelected) MainColor else if (isFullWidth) TextPrimary else TextSecondary,
+        color = if (isSelected) {
+          MainColor
+        } else if (isFullWidth) {
+          TextPrimary
+        } else {
+          TextSecondary
+        },
         fontSize = if (isFullWidth) 15.sp else 12.sp,
         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
         maxLines = 1,
@@ -289,4 +299,3 @@ private fun SeasonItem(
     }
   }
 }
-

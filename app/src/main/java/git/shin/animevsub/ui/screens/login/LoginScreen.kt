@@ -78,7 +78,6 @@ fun LoginScreen(
     pageTitle = loadingText
   }
 
-
   // Navigate back on success
   LaunchedEffect(uiState.isSuccess) {
     if (uiState.isSuccess) {
@@ -120,9 +119,13 @@ fun LoginScreen(
             }) {
               Icon(
                 imageVector = if (progress < 100) Icons.Default.Close else Icons.Default.Refresh,
-                contentDescription = if (progress < 100) stringResource(R.string.stop) else stringResource(
-                  R.string.reload
-                ),
+                contentDescription = if (progress < 100) {
+                  stringResource(R.string.stop)
+                } else {
+                  stringResource(
+                    R.string.reload
+                  )
+                },
                 tint = TextPrimary,
                 modifier = Modifier.size(20.dp)
               )
@@ -137,7 +140,7 @@ fun LoginScreen(
               .fillMaxWidth()
               .height(2.dp),
             color = AccentMain,
-            trackColor = Color.Transparent,
+            trackColor = Color.Transparent
           )
         } else {
           HorizontalDivider(color = Color.White.copy(alpha = 0.1f), thickness = 0.5.dp)
@@ -244,9 +247,7 @@ fun LoginScreen(
               override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
-              ): Boolean {
-                return false
-              }
+              ): Boolean = false
             }
 
             webChromeClient = object : WebChromeClient() {

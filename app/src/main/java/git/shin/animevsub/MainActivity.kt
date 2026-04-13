@@ -29,13 +29,13 @@ import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.theme.AnimeVsubTheme
 import git.shin.animevsub.utils.CloudflareManager
 import git.shin.animevsub.utils.UpdateManager
+import javax.inject.Inject
+import kotlin.system.exitProcess
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -167,4 +167,3 @@ class MainActivity : ComponentActivity() {
     }
   }
 }
-

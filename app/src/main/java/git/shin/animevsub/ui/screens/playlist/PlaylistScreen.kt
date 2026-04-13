@@ -26,7 +26,7 @@ import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Sort
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -176,11 +176,14 @@ fun PlaylistScreen(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.height(36.dp)
               ) {
-                Icon(Icons.Default.Sort, contentDescription = null, modifier = Modifier.size(18.dp))
+                Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                  text = if (uiState.sorter == "asc") stringResource(R.string.newest_added)
-                  else stringResource(R.string.oldest_added),
+                  text = if (uiState.sorter == "asc") {
+                    stringResource(R.string.newest_added)
+                  } else {
+                    stringResource(R.string.oldest_added)
+                  },
                   fontSize = 14.sp
                 )
 

@@ -58,7 +58,7 @@ fun DbNotificationTab(
       LazyColumn(
         state = listState,
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 16.dp),
+        contentPadding = PaddingValues(bottom = 16.dp)
       ) {
         items(items, key = { "db_${it.season}" }) { item ->
           Column(modifier = Modifier.animateItem()) {

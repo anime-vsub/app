@@ -169,6 +169,8 @@
     <string name="developer_name">Tachibana Shin</string>
     <string name="source_code">源代码</string>
     <string name="license">许可证</string>
+    <string name="category">分类</string>
+    <string name="no_servers_found">未找到服务器</string>
     <string name="mit_license">MIT 许可证</string>
     <string name="coming_soon_desc">即将推出…</string>
     <string name="back">返回</string>
@@ -243,6 +245,8 @@
     <string name="minutes_ago">%1$d 分钟前</string>
     <string name="hours_ago">%1$d 小时前</string>
     <string name="days_ago">%1$d 天前</string>
+    <string name="months_ago">%1$d 个月前</string>
+    <string name="years_ago">%1$d 年前</string>
     <string name="reply_label">回复</string>
     <string name="edit">编辑</string>
     <string name="edited">已编辑</string>

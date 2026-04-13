@@ -8,12 +8,12 @@ import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.repository.AnimeRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class RankingsUiState(
   val isLoading: Boolean = true,

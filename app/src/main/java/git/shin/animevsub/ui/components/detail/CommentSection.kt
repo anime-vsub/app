@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Sort
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -107,7 +107,7 @@ fun CommentSection(
             .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
           Icon(
-            imageVector = Icons.Default.Sort,
+            imageVector = Icons.AutoMirrored.Filled.Sort,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(18.dp)
@@ -206,7 +206,8 @@ fun CommentSection(
       Box(
         modifier = Modifier
           .fillMaxWidth()
-          .padding(24.dp), contentAlignment = Alignment.Center
+          .padding(24.dp),
+        contentAlignment = Alignment.Center
       ) {
         CircularProgressIndicator()
       }

@@ -44,9 +44,9 @@ import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
-import kotlinx.coroutines.delay
 import java.util.Locale
 import kotlin.math.absoluteValue
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -225,8 +225,11 @@ fun CarouselSection(
             .width(if (isSelected) 20.dp else 6.dp)
             .clip(CircleShape)
             .background(
-              if (isSelected) MainColor
-              else Color.White.copy(alpha = 0.3f)
+              if (isSelected) {
+                MainColor
+              } else {
+                Color.White.copy(alpha = 0.3f)
+              }
             )
         )
       }

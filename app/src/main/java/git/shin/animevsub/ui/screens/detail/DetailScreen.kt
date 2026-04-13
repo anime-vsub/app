@@ -311,7 +311,7 @@ fun DetailScreen(
               modifier = Modifier.fillMaxSize()
             )
             IconButton(
-              onClick = onNavigateBack,
+              onClick = onNavigateBack
             ) {
               Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -334,8 +334,10 @@ fun DetailScreen(
               introRange = uiState.introRange,
               outroRange = uiState.outroRange,
               autoNextEnabled = uiState.autoNext,
-              hasNextEpisode = uiState.currentChapIndex + 1 < (uiState.chapterData?.chaps?.size
-                ?: 0),
+              hasNextEpisode = uiState.currentChapIndex + 1 < (
+                uiState.chapterData?.chaps?.size
+                  ?: 0
+                ),
               onBack = onNavigateBack,
               onReload = { viewModel.retryPlayer() },
               onNextEpisode = { viewModel.playNext() },
@@ -386,7 +388,8 @@ fun DetailScreen(
               modifier = Modifier
                 .fillMaxWidth()
                 .clickable { showDetailSheet = true }
-                .padding(horizontal = 16.dp, vertical = 8.dp)) {
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
               Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -400,7 +403,7 @@ fun DetailScreen(
                   modifier = Modifier.weight(1f),
                   maxLines = 2,
                   overflow = TextOverflow.Ellipsis,
-                  style = NoPaddingTextStyle,
+                  style = NoPaddingTextStyle
                 )
                 Icon(Icons.Default.ChevronRight, null, tint = TextGrey)
               }
@@ -409,7 +412,6 @@ fun DetailScreen(
                 modifier = Modifier.padding(top = 2.dp),
                 verticalAlignment = Alignment.CenterVertically
               ) {
-
                 Text(
                   text = stringResource(R.string.views_count, formatNumber(detail.views)),
                   color = TextGrey,
@@ -444,7 +446,7 @@ fun DetailScreen(
                       text = stringResource(R.string.author_label) + " ",
                       color = TextGrey,
                       fontSize = 14.sp,
-                      style = NoPaddingTextStyle,
+                      style = NoPaddingTextStyle
                     )
 
                     Text(
@@ -454,7 +456,8 @@ fun DetailScreen(
                       style = NoPaddingTextStyle,
                       modifier = Modifier.clickable(enabled = detail.authors.first().filters.isNotEmpty()) {
                         onNavigateToCategory(detail.authors.first().filters)
-                      })
+                      }
+                    )
 
                     Text(
                       text = " | ",
@@ -476,7 +479,8 @@ fun DetailScreen(
                       detail.studio?.let {
                         onNavigateToCategory(it.filters)
                       }
-                    })
+                    }
+                  )
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -513,7 +517,8 @@ fun DetailScreen(
                       style = NoPaddingTextStyle,
                       modifier = Modifier.clickable(enabled = detail.countries.first().filters.isNotEmpty()) {
                         onNavigateToCategory(detail.countries.first().filters)
-                      })
+                      }
+                    )
                   }
                 }
 
@@ -537,7 +542,7 @@ fun DetailScreen(
                     text = stringResource(R.string.rating_count, formatNumber(detail.countRate)),
                     color = TextGrey,
                     fontSize = 14.sp,
-                    style = NoPaddingTextStyle,
+                    style = NoPaddingTextStyle
                   )
                   detail.seasonOf?.let {
                     Text(
@@ -554,7 +559,8 @@ fun DetailScreen(
                       style = NoPaddingTextStyle,
                       modifier = Modifier.clickable(enabled = it.filters.isNotEmpty()) {
                         onNavigateToCategory(it.filters)
-                      })
+                      }
+                    )
                   }
                 }
 
@@ -574,8 +580,9 @@ fun DetailScreen(
                         .padding(vertical = 1.dp)
                         .clickable(enabled = genre.filters.isNotEmpty()) {
                           onNavigateToCategory(genre.filters)
-                        })
-                }
+                        }
+                    )
+                  }
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -738,8 +745,11 @@ fun DetailScreen(
                       val originalIndex =
                         if (activeSeason?.range != null) activeSeason.range.first + index else index
                       val isSelected =
-                        originalIndex == uiState.currentChapIndex && uiState.currentSeasonId == (activeSeason?.realId
-                          ?: uiState.currentSeasonId)
+                        originalIndex == uiState.currentChapIndex &&
+                          uiState.currentSeasonId == (
+                            activeSeason?.realId
+                              ?: uiState.currentSeasonId
+                            )
 
                       val progress = uiState.chapterProgress[chap.id]
 
@@ -803,7 +813,8 @@ fun DetailScreen(
                         )
                         .clickable {
                           viewModel.setActiveDisplaySeason(season.id)
-                        }, contentAlignment = Alignment.Center
+                        },
+                      contentAlignment = Alignment.Center
                     ) {
                       Text(
                         text = season.name,
@@ -903,7 +914,8 @@ fun DetailScreen(
               GridAnimeList(
                 items = detail.related,
                 columns = if (isLandscapeUI) 2 else 3,
-                onItemClick = { anime -> onNavigateToDetail(anime.animeId, anime.lastEpisode?.id) })
+                onItemClick = { anime -> onNavigateToDetail(anime.animeId, anime.lastEpisode?.id) }
+              )
             }
           }
 

@@ -112,11 +112,13 @@ fun SettingsBottomSheetContent(
             SettingsItem(
               icon = Icons.Default.BugReport,
               title = stringResource(R.string.report_bug),
-              onClick = { onSupportClick("Report") })
+              onClick = { onSupportClick("Report") }
+            )
             SettingsItem(
               icon = Icons.Default.Feedback,
               title = stringResource(R.string.feedback),
-              onClick = { onSupportClick("Feedback") })
+              onClick = { onSupportClick("Feedback") }
+            )
             HorizontalDivider(
               modifier = Modifier.padding(vertical = 8.dp),
               color = Color.White.copy(alpha = 0.1f)
@@ -147,29 +149,34 @@ fun SettingsBottomSheetContent(
               icon = Icons.Default.Dns,
               title = stringResource(R.string.server_label),
               value = currentServer?.name,
-              onClick = { onSubMenuChange("server") })
+              onClick = { onSubMenuChange("server") }
+            )
             SettingsItem(
               icon = Icons.Default.HighQuality,
               title = stringResource(R.string.quality),
               value = selectedQualityLabel,
-              onClick = { onSubMenuChange("quality") })
+              onClick = { onSubMenuChange("quality") }
+            )
             SettingsItem(
               icon = Icons.Default.Speed,
               title = stringResource(R.string.playback_speed),
               value = "${if (playbackSpeed % 1.0f == 0.0f) playbackSpeed.toInt() else playbackSpeed}x",
-              onClick = { onSubMenuChange("speed") })
+              onClick = { onSubMenuChange("speed") }
+            )
           }
         }
 
         "server" -> {
           SettingsSubMenuContainer(
             title = stringResource(R.string.server_label),
-            onBack = { onSubMenuChange(null) }) {
+            onBack = { onSubMenuChange(null) }
+          ) {
             servers.forEach { server ->
               SettingsOptionItem(
                 title = server.name,
                 isSelected = server == currentServer,
-                onClick = { onServerSelected(server); onDismiss() })
+                onClick = { onServerSelected(server); onDismiss() }
+              )
             }
           }
         }
@@ -177,16 +184,19 @@ fun SettingsBottomSheetContent(
         "quality" -> {
           SettingsSubMenuContainer(
             title = stringResource(R.string.quality),
-            onBack = { onSubMenuChange(null) }) {
+            onBack = { onSubMenuChange(null) }
+          ) {
             SettingsOptionItem(
               title = "Auto",
               isSelected = selectedQualityLabel == "Auto",
-              onClick = { onQualitySelected("Auto"); onDismiss() })
+              onClick = { onQualitySelected("Auto"); onDismiss() }
+            )
             availableQualities.forEach { quality ->
               SettingsOptionItem(
                 title = quality,
                 isSelected = selectedQualityLabel == quality,
-                onClick = { onQualitySelected(quality); onDismiss() })
+                onClick = { onQualitySelected(quality); onDismiss() }
+              )
             }
           }
         }
@@ -194,12 +204,14 @@ fun SettingsBottomSheetContent(
         "speed" -> {
           SettingsSubMenuContainer(
             title = stringResource(R.string.playback_speed),
-            onBack = { onSubMenuChange(null) }) {
+            onBack = { onSubMenuChange(null) }
+          ) {
             speeds.forEach { speed ->
               SettingsOptionItem(
                 title = "${speed}x",
                 isSelected = playbackSpeed == speed,
-                onClick = { onSpeedSelected(speed); onDismiss() })
+                onClick = { onSpeedSelected(speed); onDismiss() }
+              )
             }
           }
         }
@@ -214,7 +226,8 @@ fun SettingsItem(icon: ImageVector, title: String, value: String? = null, onClic
     modifier = Modifier
       .fillMaxWidth()
       .clickable(onClick = onClick)
-      .padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically
+      .padding(horizontal = 16.dp, vertical = 14.dp),
+    verticalAlignment = Alignment.CenterVertically
   ) {
     Icon(icon, null, tint = Color.White, modifier = Modifier.size(24.dp))
     Spacer(modifier = Modifier.width(16.dp))
@@ -297,7 +310,8 @@ fun SettingsOptionItem(title: String, isSelected: Boolean, onClick: () -> Unit) 
     modifier = Modifier
       .fillMaxWidth()
       .clickable(onClick = onClick)
-      .padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically
+      .padding(horizontal = 16.dp, vertical = 14.dp),
+    verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
       text = title,
@@ -397,7 +411,8 @@ fun SettingsSideMenuContent(
           SideMenuOptionChip(
             text = server.name,
             isSelected = server == currentServer,
-            onClick = { onServerSelected(server) })
+            onClick = { onServerSelected(server) }
+          )
         }
       }
     }
@@ -406,12 +421,14 @@ fun SettingsSideMenuContent(
         SideMenuOptionChip(
           text = "Auto",
           isSelected = currentQuality == "Auto",
-          onClick = { onQualitySelected("Auto") })
+          onClick = { onQualitySelected("Auto") }
+        )
         qualities.forEach { quality ->
           SideMenuOptionChip(
             text = quality,
             isSelected = currentQuality == quality,
-            onClick = { onQualitySelected(quality) })
+            onClick = { onQualitySelected(quality) }
+          )
         }
       }
     }
@@ -421,7 +438,8 @@ fun SettingsSideMenuContent(
           SideMenuOptionChip(
             text = "${speed}x",
             isSelected = currentSpeed == speed,
-            onClick = { onSpeedSelected(speed) })
+            onClick = { onSpeedSelected(speed) }
+          )
         }
       }
     }

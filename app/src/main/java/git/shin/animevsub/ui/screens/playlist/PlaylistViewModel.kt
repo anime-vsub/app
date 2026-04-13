@@ -7,12 +7,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.Playlist
 import git.shin.animevsub.data.model.PlaylistItem
 import git.shin.animevsub.data.repository.PlaylistRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class PlaylistUiState(
   val playlist: Playlist? = null,
@@ -172,21 +172,17 @@ class PlaylistViewModel @Inject constructor(
     }
   }
 
-  suspend fun addToOtherPlaylist(targetPlaylistId: Int, item: PlaylistItem): Result<Unit> {
-    return playlistRepository.addAnimeToPlaylist(
-      id = targetPlaylistId,
-      seasonId = item.seasonId,
-      seasonName = item.seasonName,
-      name = item.name,
-      poster = item.poster,
-      chapId = item.chapId,
-      chapName = item.chapName
-    ).map { }
-  }
+  suspend fun addToOtherPlaylist(targetPlaylistId: Int, item: PlaylistItem): Result<Unit> = playlistRepository.addAnimeToPlaylist(
+    id = targetPlaylistId,
+    seasonId = item.seasonId,
+    seasonName = item.seasonName,
+    name = item.name,
+    poster = item.poster,
+    chapId = item.chapId,
+    chapName = item.chapName
+  ).map { }
 
-  suspend fun removeAnimeFromOtherPlaylist(targetPlaylistId: Int, seasonId: String): Result<Unit> {
-    return playlistRepository.deleteAnimeFromPlaylist(targetPlaylistId, seasonId).map { }
-  }
+  suspend fun removeAnimeFromOtherPlaylist(targetPlaylistId: Int, seasonId: String): Result<Unit> = playlistRepository.deleteAnimeFromPlaylist(targetPlaylistId, seasonId).map { }
 
   fun toggleEditName(editing: Boolean) {
     _uiState.update { it.copy(isEditingName = editing) }

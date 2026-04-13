@@ -26,6 +26,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Write google-services.json
+        run: echo $'${{ secrets.GOOGLE_SERVICES }}' > app/google-services.json
+
+      - name: Write local.properties
+        env:
+          URL: ${{ secrets.SUPABASE_URL }}
+          KEY: ${{ secrets.SUPABASE_KEY }}
+        run: printf '\nSUPABASE_URL="%s"\nSUPABASE_KEY="%s"\n' "$URL" "$KEY" >> local.properties
+
       - name: Run ktlint
         run: ./gradlew ktlintCheck
 
@@ -41,8 +50,20 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
+      - name: Sign APK
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/debug
+          signingKeyBase64: ${{ secrets.KEYSTORE_CONTENT }}
+          alias: ${{ secrets.KEYSTORE_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: debug-apk-signed
+        path: ${{ steps.sign_app.outputs.signedReleaseFile }}

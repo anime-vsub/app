@@ -28,17 +28,17 @@ fun ChapterBottomSheet(
     onDismissRequest = onDismissRequest,
     sheetState = sheetState,
     containerColor = DarkSurface,
-    dragHandle = { BottomSheetDefaults.DragHandle(color = TextGrey) },
+    dragHandle = { BottomSheetDefaults.DragHandle(color = TextGrey) }
   ) {
-      EpisodeSelectorContent(
-        displaySeasons = uiState.displaySeasons,
-        activeDisplaySeasonId = uiState.activeDisplaySeasonId,
-        episodes = uiState.chapterData?.chaps ?: emptyList(),
-        currentEpisodeId = uiState.currentChapter?.id,
-        onSeasonClick = onSeasonClick,
-        onChapterClick = onChapterClick,
-        chapterProgress = uiState.chapterProgress,
-        isSideMenu = false
-      )
+    EpisodeSelectorContent(
+      displaySeasons = uiState.displaySeasons,
+      activeDisplaySeasonId = uiState.activeDisplaySeasonId,
+      episodes = uiState.chapterData?.chaps ?: emptyList(),
+      currentEpisodeId = uiState.currentChapter?.id,
+      onSeasonClick = onSeasonClick,
+      onChapterClick = onChapterClick,
+      chapterProgress = uiState.chapterProgress,
+      isSideMenu = false
+    )
   }
 }

@@ -8,8 +8,7 @@ sealed class Screen(val route: String) {
   data object Notification : Screen("notification")
   data object Account : Screen("account")
   data object AnimeDetail : Screen("detail/{animeId}?chapterId={chapterId}") {
-    fun createRoute(animeId: String, chapterId: String? = null) =
-      if (chapterId != null) "detail/$animeId?chapterId=$chapterId" else "detail/$animeId"
+    fun createRoute(animeId: String, chapterId: String? = null) = if (chapterId != null) "detail/$animeId?chapterId=$chapterId" else "detail/$animeId"
   }
 
   data object Rankings : Screen("rankings?type={type}") {

@@ -41,7 +41,7 @@ fun ApiNotificationTab(
     } else {
       LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 16.dp),
+        contentPadding = PaddingValues(bottom = 16.dp)
       ) {
         items(items, key = { "api_${it.id}" }) { notification ->
           Column(modifier = Modifier.animateItem()) {

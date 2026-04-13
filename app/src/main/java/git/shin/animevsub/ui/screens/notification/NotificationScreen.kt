@@ -89,7 +89,7 @@ fun NotificationScreen(
               text = stringResource(R.string.notifications),
               color = TextPrimary,
               fontSize = 20.sp,
-              fontWeight = FontWeight.SemiBold,
+              fontWeight = FontWeight.SemiBold
             )
           },
           actions = {

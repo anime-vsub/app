@@ -88,9 +88,7 @@ class PreferencesManager(private val context: Context) {
     }
   }
 
-  suspend fun getCookie(host: String): String? {
-    return cookies.first()[host]
-  }
+  suspend fun getCookie(host: String): String? = cookies.first()[host]
 
   suspend fun addSearchHistory(query: String) {
     context.dataStore.edit { preferences ->

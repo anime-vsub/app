@@ -57,7 +57,9 @@ fun NotificationItemRow(
           onClose(trigger)
           true
         } ?: false
-      } else false
+      } else {
+        false
+      }
     }
   )
 

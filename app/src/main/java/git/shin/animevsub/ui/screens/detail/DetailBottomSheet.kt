@@ -107,8 +107,11 @@ fun DetailBottomSheet(
               onClick = detail.countries.firstOrNull()?.let {
                 if (it.filters.isNotEmpty()) {
                   { onNavigateToCategory(it) }
-                } else null
-              })
+                } else {
+                  null
+                }
+              }
+            )
             InfoRow(
               label = stringResource(R.string.year_label),
               value = detail.yearOf?.name,
@@ -116,8 +119,11 @@ fun DetailBottomSheet(
               onClick = detail.yearOf?.let {
                 if (it.filters.isNotEmpty()) {
                   { onNavigateToCategory(it) }
-                } else null
-              })
+                } else {
+                  null
+                }
+              }
+            )
             InfoRow(
               label = stringResource(R.string.studio_label),
               value = detail.studio?.name,
@@ -125,8 +131,11 @@ fun DetailBottomSheet(
               onClick = detail.studio?.let {
                 if (it.filters.isNotEmpty()) {
                   { onNavigateToCategory(it) }
-                } else null
-              })
+                } else {
+                  null
+                }
+              }
+            )
             InfoRow(
               label = stringResource(R.string.duration_label),
               value = detail.duration,
@@ -170,7 +179,8 @@ fun DetailBottomSheet(
               .padding(horizontal = 8.dp, vertical = 4.dp)
               .clickable(enabled = genre.filters.isNotEmpty()) {
                 onNavigateToCategory(genre)
-              })
+              }
+          )
         }
       }
 

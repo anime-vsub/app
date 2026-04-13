@@ -101,7 +101,7 @@ fun UpdateDialog(
         }
         Spacer(modifier = Modifier.width(8.dp))
         TextButton(
-          onClick = onConfirm,
+          onClick = onConfirm
         ) {
           Text(
             text = stringResource(R.string.update_now),

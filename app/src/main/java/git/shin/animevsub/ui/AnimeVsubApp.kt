@@ -245,7 +245,9 @@ fun AnimeVsubAppUI(
       composable(Screen.Schedule.route) {
         val isFromBottomNav = bottomNavItems.any { it.screen == Screen.Schedule }
         ScheduleScreen(
-          onNavigateBack = if (isFromBottomNav) null else {
+          onNavigateBack = if (isFromBottomNav) {
+            null
+          } else {
             { navController.popBackStack() }
           },
           onNavigateToDetail = { animeId, chapterId ->

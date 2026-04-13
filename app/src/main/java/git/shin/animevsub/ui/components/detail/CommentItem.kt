@@ -349,10 +349,14 @@ fun CommentItem(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-              text = if (replies.isEmpty()) stringResource(
-                R.string.view_replies,
-                comment.repliesCount
-              ) else stringResource(R.string.view_more_replies),
+              text = if (replies.isEmpty()) {
+                stringResource(
+                  R.string.view_replies,
+                  comment.repliesCount
+                )
+              } else {
+                stringResource(R.string.view_more_replies)
+              },
               style = MaterialTheme.typography.bodySmall,
               fontWeight = FontWeight.Bold,
               color = MaterialTheme.colorScheme.primary

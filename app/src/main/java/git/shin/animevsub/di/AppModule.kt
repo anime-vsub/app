@@ -29,39 +29,33 @@ object AppModule {
 
   @Provides
   @Singleton
-  fun provideSupabaseClient(): SupabaseClient {
-    return createSupabaseClient(
-      supabaseUrl = BuildConfig.SUPABASE_URL,
-      supabaseKey = BuildConfig.SUPABASE_KEY
-    ) {
-      install(Postgrest)
-      install(Auth)
-    }
+  fun provideSupabaseClient(): SupabaseClient = createSupabaseClient(
+    supabaseUrl = BuildConfig.SUPABASE_URL,
+    supabaseKey = BuildConfig.SUPABASE_KEY
+  ) {
+    install(Postgrest)
+    install(Auth)
   }
 
   @Provides
   @Singleton
-  fun provideJson(): Json {
-    return Json {
-      ignoreUnknownKeys = true
-      coerceInputValues = true
-      encodeDefaults = true
-      isLenient = true
-    }
+  fun provideJson(): Json = Json {
+    ignoreUnknownKeys = true
+    coerceInputValues = true
+    encodeDefaults = true
+    isLenient = true
   }
 
   @Provides
   @Singleton
-  fun provideOkHttpClient(): OkHttpClient {
-    return OkHttpClient.Builder()
-      .connectTimeout(30, TimeUnit.SECONDS)
-      .readTimeout(30, TimeUnit.SECONDS)
-      .writeTimeout(30, TimeUnit.SECONDS)
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .cookieJar(git.shin.animevsub.data.remote.WebViewCookieJar())
-      .build()
-  }
+  fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    .connectTimeout(30, TimeUnit.SECONDS)
+    .readTimeout(30, TimeUnit.SECONDS)
+    .writeTimeout(30, TimeUnit.SECONDS)
+    .followRedirects(true)
+    .followSslRedirects(true)
+    .cookieJar(git.shin.animevsub.data.remote.WebViewCookieJar())
+    .build()
 
   @Provides
   @Singleton
@@ -70,34 +64,21 @@ object AppModule {
     json: Json,
     apiStorage: ApiStorage,
     cloudflareManager: CloudflareManager
-  ): AnimeApi {
-    return AnimeApi(client, json, apiStorage, cloudflareManager)
-  }
+  ): AnimeApi = AnimeApi(client, json, apiStorage, cloudflareManager)
 
   @Provides
   @Singleton
-  fun provideCloudflareManager(
-    preferencesManager: PreferencesManager,
-    @ApplicationContext context: Context
-  ): CloudflareManager {
-    return CloudflareManager(preferencesManager, context)
-  }
+  fun provideCloudflareManager(@ApplicationContext context: Context): CloudflareManager = CloudflareManager(context)
 
   @Provides
   @Singleton
-  fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
-    return PreferencesManager(context)
-  }
+  fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager = PreferencesManager(context)
 
   @Provides
   @Singleton
-  fun provideApiStorage(@ApplicationContext context: Context): ApiStorage {
-    return ApiStorage(context)
-  }
+  fun provideApiStorage(@ApplicationContext context: Context): ApiStorage = ApiStorage(context)
 
   @Provides
   @Singleton
-  fun provideFirebaseAnalytics(): FirebaseAnalytics {
-    return Firebase.analytics
-  }
+  fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
 }

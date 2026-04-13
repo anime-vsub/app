@@ -66,7 +66,7 @@ fun CommentInput(
         colors = TextFieldDefaults.colors(
           focusedContainerColor = Color.Transparent,
           unfocusedContainerColor = Color.Transparent,
-          disabledContainerColor = Color.Transparent,
+          disabledContainerColor = Color.Transparent
         ),
         maxLines = 5
       )
@@ -74,8 +74,11 @@ fun CommentInput(
       if (text.isNotBlank() || onCancel != null) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
           TextButton(onClick = {
-            if (onCancel != null) onCancel()
-            else text = ""
+            if (onCancel != null) {
+              onCancel()
+            } else {
+              text = ""
+            }
           }) {
             Text(stringResource(R.string.cancel_comment))
           }

@@ -169,6 +169,8 @@
     <string name="developer_name">Tachibana Shin</string>
     <string name="source_code">ソースコード</string>
     <string name="license">ライセンス</string>
+    <string name="category">カテゴリ</string>
+    <string name="no_servers_found">サーバーが見つかりません</string>
     <string name="mit_license">MITライセンス</string>
     <string name="coming_soon_desc">近日公開…</string>
     <string name="back">戻る</string>
@@ -262,6 +264,8 @@
     <string name="login_not_success">ログインに失敗しました。ウェブサイトでログインしてからもう一度お試しください。</string>
 
     <!-- Main Activity -->
+    <string name="months_ago">%1$d ヶ月前</string>
+    <string name="years_ago">%1$d 年前</string>
     <string name="authentication_prompt_title">認証</string>
     <string name="authentication_prompt_message">セッションが切れた可能性があります。再試行しますか？それともログアウトしますか？</string>
     <string name="app_inactive_title">メンテナンス中</string>

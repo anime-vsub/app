@@ -78,7 +78,7 @@ fun HistoryCard(
                 .fillMaxWidth()
                 .height(3.dp),
               color = MainColor,
-              trackColor = Color.White.copy(alpha = 0.3f),
+              trackColor = Color.White.copy(alpha = 0.3f)
             )
           }
         }
@@ -101,7 +101,7 @@ fun HistoryCard(
       fontSize = 14.sp,
       fontWeight = FontWeight.Medium,
       maxLines = 2,
-      overflow = TextOverflow.Ellipsis,
+      overflow = TextOverflow.Ellipsis
     )
     Text(
       text = item.seasonName + stringResource(R.string.episode_label, item.chapName ?: ""),

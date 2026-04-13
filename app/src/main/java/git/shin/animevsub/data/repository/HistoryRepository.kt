@@ -9,14 +9,14 @@ import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 import java.security.MessageDigest
 import java.util.TimeZone
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 @Singleton
 class HistoryRepository @Inject constructor(
@@ -34,11 +34,9 @@ class HistoryRepository @Inject constructor(
     }
   }
 
-  private fun sha256(input: String): String {
-    return MessageDigest.getInstance("SHA-256")
-      .digest(input.toByteArray())
-      .joinToString("") { "%02x".format(it) }
-  }
+  private fun sha256(input: String): String = MessageDigest.getInstance("SHA-256")
+    .digest(input.toByteArray())
+    .joinToString("") { "%02x".format(it) }
 
   private fun getGmtOffset(): Int {
     val tz = TimeZone.getDefault()
@@ -47,47 +45,58 @@ class HistoryRepository @Inject constructor(
 
   suspend fun upsertUser(user: User): Result<Unit> = runCatching {
     val uid = sha256((user.email ?: "") + user.name)
-    supabase.postgrest.rpc("upsert_user", buildJsonObject {
-      put("p_uuid", uid)
-      put("p_email", user.email)
-      put("p_name", user.name)
-    })
+    supabase.postgrest.rpc(
+      "upsert_user",
+      buildJsonObject {
+        put("p_uuid", uid)
+        put("p_email", user.email)
+        put("p_name", user.name)
+      }
+    )
   }
 
   suspend fun getHistory(page: Int, size: Int = 30): Result<List<HistoryItem>> = runCatching {
     val uid = getCurrentUid() ?: throw Exception("Login required")
-    val response = supabase.postgrest.rpc("query_history", buildJsonObject {
-      put("user_uid", uid)
-      put("page", page)
-      put("size", size)
-    })
+    val response = supabase.postgrest.rpc(
+      "query_history",
+      buildJsonObject {
+        put("user_uid", uid)
+        put("page", page)
+        put("size", size)
+      }
+    )
     response.decodeList<HistoryItem>().map { it.copy(poster = AnimeApi.decodeURI(it.poster)) }
   }
 
   suspend fun getWatchProgress(seasonId: String): Result<List<WatchProgress>> = runCatching {
     val uid = getCurrentUid() ?: throw Exception("Login required")
-    val response = supabase.postgrest.rpc("get_watch_progress", buildJsonObject {
-      put("user_uid", uid)
-      put("season_id", seasonId)
-    })
+    val response = supabase.postgrest.rpc(
+      "get_watch_progress",
+      buildJsonObject {
+        put("user_uid", uid)
+        put("season_id", seasonId)
+      }
+    )
     response.decodeList<WatchProgress>()
   }
 
-  suspend fun getSingleProgress(seasonId: String, chapId: String): Result<WatchProgress?> =
-    runCatching {
-      val uid = getCurrentUid() ?: throw Exception("Login required")
-      val response = supabase.postgrest.rpc("get_single_progress", buildJsonObject {
+  suspend fun getSingleProgress(seasonId: String, chapId: String): Result<WatchProgress?> = runCatching {
+    val uid = getCurrentUid() ?: throw Exception("Login required")
+    val response = supabase.postgrest.rpc(
+      "get_single_progress",
+      buildJsonObject {
         put("user_uid", uid)
         put("season_id", seasonId)
         put("p_chap_id", chapId)
-      })
-      try {
-        response.decodeSingle<WatchProgress>()
-      } catch (e: Exception) {
-        print(e)
-        null
       }
+    )
+    try {
+      response.decodeSingle<WatchProgress>()
+    } catch (e: Exception) {
+      print(e)
+      null
     }
+  }
 
   suspend fun setSingleProgress(
     name: String,
@@ -100,26 +109,32 @@ class HistoryRepository @Inject constructor(
     dur: Double
   ): Result<Unit> = runCatching {
     val uid = getCurrentUid() ?: throw Exception("Login required")
-    supabase.postgrest.rpc("set_single_progress", buildJsonObject {
-      put("user_uid", uid)
-      put("p_name", name)
-      put("p_poster", AnimeApi.encodeURI(poster))
-      put("season_id", seasonId)
-      put("p_season_name", seasonName)
-      put("e_cur", cur)
-      put("e_dur", dur)
-      put("e_name", chapName)
-      put("e_chap", chapId)
-      put("gmt", getGmtOffset())
-    })
+    supabase.postgrest.rpc(
+      "set_single_progress",
+      buildJsonObject {
+        put("user_uid", uid)
+        put("p_name", name)
+        put("p_poster", AnimeApi.encodeURI(poster))
+        put("season_id", seasonId)
+        put("p_season_name", seasonName)
+        put("e_cur", cur)
+        put("e_dur", dur)
+        put("e_name", chapName)
+        put("e_chap", chapId)
+        put("gmt", getGmtOffset())
+      }
+    )
   }
 
   suspend fun getLastChapOfSeason(seasonId: String): Result<String?> = runCatching {
     val uid = getCurrentUid() ?: throw Exception("Login required")
-    val response = supabase.postgrest.rpc("get_last_chap", buildJsonObject {
-      put("user_uid", uid)
-      put("season_id", seasonId)
-    })
+    val response = supabase.postgrest.rpc(
+      "get_last_chap",
+      buildJsonObject {
+        put("user_uid", uid)
+        put("season_id", seasonId)
+      }
+    )
     try {
       response.decodeSingle<LastChapResponse>().chapId
     } catch (e: Exception) {

@@ -9,16 +9,16 @@ import coil.decode.ImageDecoderDecoder
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class AnimeVsubApp : Application(), ImageLoaderFactory {
-  override fun newImageLoader(): ImageLoader {
-    return ImageLoader.Builder(this)
-      .components {
-        if (Build.VERSION.SDK_INT >= 28) {
-          add(ImageDecoderDecoder.Factory())
-        } else {
-          add(GifDecoder.Factory())
-        }
+class AnimeVsubApp :
+  Application(),
+  ImageLoaderFactory {
+  override fun newImageLoader(): ImageLoader = ImageLoader.Builder(this)
+    .components {
+      if (Build.VERSION.SDK_INT >= 28) {
+        add(ImageDecoderDecoder.Factory())
+      } else {
+        add(GifDecoder.Factory())
       }
-      .build()
-  }
+    }
+    .build()
 }

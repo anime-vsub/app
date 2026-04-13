@@ -118,10 +118,10 @@ import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.roundToInt
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
@@ -234,13 +234,16 @@ fun VideoPlayer(
             .sortedByDescending { it.label.replace("p", "").toIntOrNull() ?: 0 }
           val params = trackSelectionParameters
           val hasOverride = params.overrides.values.any { it.type == C.TRACK_TYPE_VIDEO }
-          if (!hasOverride) selectedQualityLabel = "Auto"
-          else {
+          if (!hasOverride) {
+            selectedQualityLabel = "Auto"
+          } else {
             var foundLabel = "Auto"
             availableQualities.forEach { q ->
               val override = params.overrides[q.group.mediaTrackGroup]
-              if (override != null && override.trackIndices.contains(q.trackIndex)) foundLabel =
-                q.label
+              if (override != null && override.trackIndices.contains(q.trackIndex)) {
+                foundLabel =
+                  q.label
+              }
             }
             selectedQualityLabel = foundLabel
           }
@@ -288,14 +291,17 @@ fun VideoPlayer(
   LaunchedEffect(currentTime, introRange, outroRange, autoSkipEnabled) {
     val currentSeconds = currentTime / 1000.0
     if (introRange != null && currentSeconds in introRange) {
-      if (autoSkipEnabled) exoPlayer.seekTo(((introRange.last + 0.1) * 1000).toLong())
-      else if (!showSkipNotification) {
+      if (autoSkipEnabled) {
+        exoPlayer.seekTo(((introRange.last + 0.1) * 1000).toLong())
+      } else if (!showSkipNotification) {
         skipNotificationText = context.getString(R.string.skip_intro)
         skipTargetTime = (introRange.last + 0.1) * 1000
         showSkipNotification = true
       }
-      if (showSkipNotification) skipRemainingSeconds =
-        (introRange.last - currentSeconds).toInt().coerceAtLeast(0)
+      if (showSkipNotification) {
+        skipRemainingSeconds =
+          (introRange.last - currentSeconds).toInt().coerceAtLeast(0)
+      }
     } else if (outroRange != null && currentSeconds in outroRange) {
       if (autoSkipEnabled) {
         if (hasNextEpisode) onNextEpisode() else exoPlayer.pause()
@@ -304,9 +310,13 @@ fun VideoPlayer(
         skipTargetTime = (outroRange.last + 0.1) * 1000
         showSkipNotification = true
       }
-      if (showSkipNotification) skipRemainingSeconds =
-        (outroRange.last - currentSeconds).toInt().coerceAtLeast(0)
-    } else showSkipNotification = false
+      if (showSkipNotification) {
+        skipRemainingSeconds =
+          (outroRange.last - currentSeconds).toInt().coerceAtLeast(0)
+      }
+    } else {
+      showSkipNotification = false
+    }
   }
 
   LaunchedEffect(exoPlayer) {
@@ -365,7 +375,9 @@ fun VideoPlayer(
       val tempFile = File(context.cacheDir, "temp_playlist.m3u8")
       tempFile.writeText(playerData.link)
       tempFile.toUri()
-    } else playerData.link.toUri()
+    } else {
+      playerData.link.toUri()
+    }
 
     val currentMediaItem = exoPlayer.currentMediaItem
     if (currentMediaItem?.localConfiguration?.uri != newUri) {
@@ -463,12 +475,15 @@ fun VideoPlayer(
         detectTapGestures(
           onTap = { isControlsVisible = !isControlsVisible },
           onDoubleTap = { offset ->
-            if (offset.x < size.width / 2) exoPlayer.seekTo(
-              (exoPlayer.currentPosition - 10000).coerceAtLeast(
-                0
+            if (offset.x < size.width / 2) {
+              exoPlayer.seekTo(
+                (exoPlayer.currentPosition - 10000).coerceAtLeast(
+                  0
+                )
               )
-            )
-            else exoPlayer.seekTo((exoPlayer.currentPosition + 10000).coerceAtMost(exoPlayer.duration))
+            } else {
+              exoPlayer.seekTo((exoPlayer.currentPosition + 10000).coerceAtMost(exoPlayer.duration))
+            }
           }
         )
       }
@@ -503,7 +518,8 @@ fun VideoPlayer(
       AnimatedVisibility(
         visible = isControlsVisible && !isDragging && !isInPipMode,
         enter = fadeIn() + slideInVertically { -it },
-        exit = fadeOut() + slideOutVertically { -it }) {
+        exit = fadeOut() + slideOutVertically { -it }
+      ) {
         Row(
           modifier = Modifier
             .fillMaxWidth()
@@ -541,8 +557,12 @@ fun VideoPlayer(
           }
           IconButton(onClick = onReload) { Icon(Icons.Default.Refresh, null, tint = Color.White) }
           IconButton(onClick = {
-            if (isFullScreen) showSettingsSideMenu = true else showSettingsBottomSheet =
-              true; isControlsVisible = false
+            if (isFullScreen) {
+              showSettingsSideMenu = true
+            } else {
+              showSettingsBottomSheet =
+                true
+            }; isControlsVisible = false
           }) {
             Icon(Icons.Default.Settings, "Settings", tint = Color.White)
           }
@@ -585,7 +605,8 @@ fun VideoPlayer(
               .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
-              ) { exoPlayer.pause() }, color = Color.White, strokeWidth = 3.dp
+              ) { exoPlayer.pause() },
+            color = Color.White, strokeWidth = 3.dp
           )
         }
         AnimatedVisibility(
@@ -624,7 +645,9 @@ fun VideoPlayer(
                   modifier = Modifier.fillMaxSize()
                 )
               }
-            } else Spacer(modifier = Modifier.size(48.dp))
+            } else {
+              Spacer(modifier = Modifier.size(48.dp))
+            }
             IconButton(onClick = {
               exoPlayer.seekTo(
                 (exoPlayer.currentPosition + 10000).coerceAtMost(
@@ -659,11 +682,13 @@ fun VideoPlayer(
         }
       }
 
-      if (showGestureIndicator) GestureIndicator(
-        icon = gestureIcon,
-        text = gestureText,
-        modifier = Modifier.align(Alignment.Center)
-      )
+      if (showGestureIndicator) {
+        GestureIndicator(
+          icon = gestureIcon,
+          text = gestureText,
+          modifier = Modifier.align(Alignment.Center)
+        )
+      }
 
       if (showSkipNotification) {
         SkipNotification(
@@ -700,7 +725,7 @@ fun VideoPlayer(
             .background(Color.Black.copy(alpha = 0.7f))
             .clickable(enabled = isNotificationClickable) {
               showNotification = false; isNotificationClickable = false; isAutoNexting =
-              false; onNextEpisode()
+                false; onNextEpisode()
             }
             .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
@@ -864,19 +889,22 @@ fun VideoPlayer(
                   icon = Icons.AutoMirrored.Filled.PlaylistPlay,
                   onClick = {
                     showEpisodeSideMenu = true; isControlsVisible = false
-                  })
+                  }
+                )
               }
               Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PlayerControlSmallButton(
                   icon = Icons.Default.Dns,
                   onClick = {
                     showServerSideMenu = true; isControlsVisible = false
-                  })
+                  }
+                )
                 Box {
                   PlayerControlSmallButton(
                     icon = Icons.Default.HighQuality,
                     text = selectedQualityLabel,
-                    onClick = { showQualityMenu = true })
+                    onClick = { showQualityMenu = true }
+                  )
                   DropdownMenu(
                     expanded = showQualityMenu,
                     onDismissRequest = { showQualityMenu = false },
@@ -893,8 +921,9 @@ fun VideoPlayer(
                         exoPlayer.trackSelectionParameters =
                           exoPlayer.trackSelectionParameters.buildUpon()
                             .clearOverridesOfType(C.TRACK_TYPE_VIDEO).build(); showQualityMenu =
-                        false
-                      })
+                          false
+                      }
+                    )
                     availableQualities.forEach { quality ->
                       DropdownMenuItem(
                         text = {
@@ -911,7 +940,8 @@ fun VideoPlayer(
                                 quality.trackIndex
                               )
                             ).build(); selectedQualityLabel = quality.label; showQualityMenu = false
-                        })
+                        }
+                      )
                     }
                   }
                 }
@@ -919,7 +949,8 @@ fun VideoPlayer(
                   PlayerControlSmallButton(
                     icon = Icons.Default.SlowMotionVideo,
                     text = "${if (playbackSpeed % 1.0f == 0.0f) playbackSpeed.toInt() else playbackSpeed}x",
-                    onClick = { showSpeedMenu = true })
+                    onClick = { showSpeedMenu = true }
+                  )
                   DropdownMenu(
                     expanded = showSpeedMenu,
                     onDismissRequest = { showSpeedMenu = false },
@@ -956,7 +987,8 @@ fun VideoPlayer(
           },
           chapterProgress = chapterProgress,
           isSideMenu = true,
-          onClose = { showEpisodeSideMenu = false })
+          onClose = { showEpisodeSideMenu = false }
+        )
       }
       PlayerSideMenu(
         visible = showServerSideMenu,
@@ -966,7 +998,8 @@ fun VideoPlayer(
         ServerSelectorContent(
           servers = servers,
           currentServer = currentServer,
-          onServerClick = { onServerSelected(it); showServerSideMenu = false })
+          onServerClick = { onServerSelected(it); showServerSideMenu = false }
+        )
       }
       PlayerSideMenu(
         visible = showSettingsSideMenu,
@@ -980,13 +1013,17 @@ fun VideoPlayer(
           qualities = availableQualities.map { it.label },
           currentQuality = selectedQualityLabel,
           onQualitySelected = { label ->
-            if (label == "Auto") exoPlayer.trackSelectionParameters =
-              exoPlayer.trackSelectionParameters.buildUpon()
-                .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
-                .build() else availableQualities.find { it.label == label }?.let { q ->
-              exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters.buildUpon()
-                .setOverrideForType(TrackSelectionOverride(q.group.mediaTrackGroup, q.trackIndex))
-                .build()
+            if (label == "Auto") {
+              exoPlayer.trackSelectionParameters =
+                exoPlayer.trackSelectionParameters.buildUpon()
+                  .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
+                  .build()
+            } else {
+              availableQualities.find { it.label == label }?.let { q ->
+                exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters.buildUpon()
+                  .setOverrideForType(TrackSelectionOverride(q.group.mediaTrackGroup, q.trackIndex))
+                  .build()
+              }
             }; showSettingsSideMenu = false
           },
           speeds = speeds,
@@ -997,7 +1034,8 @@ fun VideoPlayer(
           brightnessGestureEnabled = brightnessGestureEnabled,
           onBrightnessGestureToggle = { scope.launch { preferencesManager.setBrightnessGesture(it) } },
           autoSkipEnabled = autoSkipEnabled,
-          onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } })
+          onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } }
+        )
       }
       if (showSettingsBottomSheet) {
         ModalBottomSheet(
@@ -1018,13 +1056,17 @@ fun VideoPlayer(
             availableQualities = availableQualities.map { it.label },
             selectedQualityLabel = selectedQualityLabel,
             onQualitySelected = { label ->
-              if (label == "Auto") exoPlayer.trackSelectionParameters =
-                exoPlayer.trackSelectionParameters.buildUpon()
-                  .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
-                  .build() else availableQualities.find { it.label == label }?.let { q ->
-                exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters.buildUpon()
-                  .setOverrideForType(TrackSelectionOverride(q.group.mediaTrackGroup, q.trackIndex))
-                  .build()
+              if (label == "Auto") {
+                exoPlayer.trackSelectionParameters =
+                  exoPlayer.trackSelectionParameters.buildUpon()
+                    .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
+                    .build()
+              } else {
+                availableQualities.find { it.label == label }?.let { q ->
+                  exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters.buildUpon()
+                    .setOverrideForType(TrackSelectionOverride(q.group.mediaTrackGroup, q.trackIndex))
+                    .build()
+                }
               }
             },
             speeds = speeds,
@@ -1036,7 +1078,8 @@ fun VideoPlayer(
             onBrightnessGestureToggle = { scope.launch { preferencesManager.setBrightnessGesture(it) } },
             autoSkipEnabled = autoSkipEnabled,
             onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
-            onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null })
+            onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null }
+          )
         }
       }
     }

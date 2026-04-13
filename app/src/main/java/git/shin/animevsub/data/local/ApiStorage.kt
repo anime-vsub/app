@@ -13,13 +13,9 @@ import kotlinx.coroutines.flow.map
 private val Context.apiDataStore: DataStore<Preferences> by preferencesDataStore(name = "api_internal_storage")
 
 class ApiStorage(private val context: Context) {
-  fun getString(key: String): Flow<String?> {
-    return context.apiDataStore.data.map { it[stringPreferencesKey(key)] }
-  }
+  fun getString(key: String): Flow<String?> = context.apiDataStore.data.map { it[stringPreferencesKey(key)] }
 
-  suspend fun get(key: String, defaultValue: String? = null): String? {
-    return getString(key).first() ?: defaultValue
-  }
+  suspend fun get(key: String, defaultValue: String? = null): String? = getString(key).first() ?: defaultValue
 
   suspend fun set(key: String, value: String?) {
     context.apiDataStore.edit { preferences ->

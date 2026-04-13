@@ -68,7 +68,7 @@ fun HistoryItemRow(
             .height(4.dp)
             .align(androidx.compose.ui.Alignment.BottomCenter),
           color = MainColor,
-          trackColor = Color.White.copy(alpha = 0.3f),
+          trackColor = Color.White.copy(alpha = 0.3f)
         )
       }
     }

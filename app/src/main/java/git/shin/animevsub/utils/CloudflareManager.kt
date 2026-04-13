@@ -6,7 +6,8 @@ import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import git.shin.animevsub.data.local.PreferencesManager
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,13 +18,10 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class CloudflareManager @Inject constructor(
-  private val preferencesManager: PreferencesManager,
-  @dagger.hilt.android.qualifiers.ApplicationContext private val context: android.content.Context
+  @param:dagger.hilt.android.qualifiers.ApplicationContext private val context: android.content.Context
 ) {
   private val _bypassUrl = MutableStateFlow<String?>(null)
   val bypassUrl = _bypassUrl.asStateFlow()
@@ -107,9 +105,7 @@ class CloudflareManager @Inject constructor(
         override fun shouldOverrideUrlLoading(
           view: WebView?,
           request: WebResourceRequest?
-        ): Boolean {
-          return false
-        }
+        ): Boolean = false
       }
     }
 
@@ -134,6 +130,7 @@ class CloudflareManager @Inject constructor(
   }
 
   suspend fun onBypassCompleted(url: String) {
+    print(url)
     currentDeferred?.complete(true)
   }
 
@@ -180,15 +177,18 @@ class CloudflareManager @Inject constructor(
     val hasCfHeaders =
       response.code in 403..503 && (body.contains("cf-challenge") || body.contains("ray-id"))
     val hasKeywords = body.contains("<title>Just a moment...</title>") ||
-                      body.contains("Xác Minh An Toàn") || // Safe Verification
+      body.contains("Xác Minh An Toàn") ||
+      // Safe Verification
       body.contains("cf-browser-verification") ||
       body.contains("Lỗi Server")
 
     // Detection for empty title with JS redirect (Anti-bot JS challenge)
-    val isJsRedirect = (body.contains("window.location") ||
-                        body.contains("location.replace") ||
-                        body.contains("location.href")) &&
-                       (body.contains("<title></title>") || !body.contains("<title>"))
+    val isJsRedirect = (
+      body.contains("window.location") ||
+        body.contains("location.replace") ||
+        body.contains("location.href")
+      ) &&
+      (body.contains("<title></title>") || !body.contains("<title>"))
 
     return hasCfHeaders || hasKeywords || isJsRedirect
   }

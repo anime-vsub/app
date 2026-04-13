@@ -181,8 +181,11 @@ private fun FilterActionRow(
       val labelText = if (activeFiltersInGroup.isEmpty()) {
         group.name
       } else {
-        if (activeFiltersInGroup.size == 1) activeFiltersInGroup[0].name
-        else "${group.name} (${activeFiltersInGroup.size})"
+        if (activeFiltersInGroup.size == 1) {
+          activeFiltersInGroup[0].name
+        } else {
+          "${group.name} (${activeFiltersInGroup.size})"
+        }
       }
 
       FilterChip(
@@ -316,9 +319,13 @@ fun FiltersBottomSheet(
                 colors = FilterChipDefaults.filterChipColors(
                   containerColor = DarkCard,
                   labelColor = TextSecondary,
-                  selectedContainerColor = if (isExcluded) Color.Red.copy(alpha = 0.2f) else AccentMain.copy(
-                    alpha = 0.2f
-                  ),
+                  selectedContainerColor = if (isExcluded) {
+                    Color.Red.copy(alpha = 0.2f)
+                  } else {
+                    AccentMain.copy(
+                      alpha = 0.2f
+                    )
+                  },
                   selectedLabelColor = if (isExcluded) Color.Red else AccentMain
                 ),
                 border = FilterChipDefaults.filterChipBorder(

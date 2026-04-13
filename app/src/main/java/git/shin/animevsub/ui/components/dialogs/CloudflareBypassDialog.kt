@@ -114,9 +114,13 @@ fun CloudflareBypassDialog(
                 }) {
                   Icon(
                     imageVector = if (progress < 100) Icons.Default.Close else Icons.Default.Refresh,
-                    contentDescription = if (progress < 100) stringResource(R.string.stop) else stringResource(
-                      R.string.reload
-                    ),
+                    contentDescription = if (progress < 100) {
+                      stringResource(R.string.stop)
+                    } else {
+                      stringResource(
+                        R.string.reload
+                      )
+                    },
                     tint = TextPrimary,
                     modifier = Modifier.size(20.dp)
                   )
@@ -131,7 +135,7 @@ fun CloudflareBypassDialog(
                   .fillMaxWidth()
                   .height(2.dp),
                 color = AccentMain,
-                trackColor = Color.Transparent,
+                trackColor = Color.Transparent
               )
             } else {
               HorizontalDivider(color = Color.White.copy(alpha = 0.1f), thickness = 0.5.dp)

@@ -14,14 +14,14 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.model.GitHubRelease
 import git.shin.animevsub.data.model.UpdateInfo
+import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.io.File
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class UpdateManager @Inject constructor(
@@ -30,14 +30,14 @@ class UpdateManager @Inject constructor(
   private val json: Json,
   private val cloudflareManager: CloudflareManager
 ) {
-  private val GITHUB_REPO = "anime-vsub/app"
-  private val ACTIVE_CHECK_URL =
+  private val githubRepo = "anime-vsub/app"
+  private val activeCheckUrl =
     "https://raw.githubusercontent.com/anime-vsub/app/refs/heads/main/native-active"
 
   suspend fun checkAppActive(): Result<Boolean> = withContext(Dispatchers.IO) {
     try {
       val request = Request.Builder()
-        .url(ACTIVE_CHECK_URL)
+        .url(activeCheckUrl)
         .build()
 
       val response = client.newCall(request).execute()
@@ -57,7 +57,7 @@ class UpdateManager @Inject constructor(
   suspend fun checkForUpdate(): Result<UpdateInfo> = withContext(Dispatchers.IO) {
     try {
       val request = Request.Builder()
-        .url("https://api.github.com/repos/$GITHUB_REPO/releases/latest")
+        .url("https://api.github.com/repos/$githubRepo/releases/latest")
         .header("Accept", "application/vnd.github.v3+json")
         .build()
 

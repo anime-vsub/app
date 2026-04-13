@@ -19,6 +19,7 @@ import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +30,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class DetailUiState(
   val isLoading: Boolean = true,
@@ -789,7 +789,9 @@ class DetailViewModel @Inject constructor(
                     votesDown = response.votesDown,
                     userVote = voteType
                   )
-                } else c
+                } else {
+                  c
+                }
               }
               state.copy(
                 comments = state.comments.map(updateComment),
@@ -815,7 +817,9 @@ class DetailViewModel @Inject constructor(
                     isSpoiler = isSpoiler,
                     editedAt = System.currentTimeMillis() / 1000
                   )
-                } else c
+                } else {
+                  c
+                }
               }
               state.copy(
                 comments = state.comments.map(updateComment),

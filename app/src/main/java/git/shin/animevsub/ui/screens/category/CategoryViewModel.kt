@@ -8,13 +8,13 @@ import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.repository.AnimeRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import javax.inject.Inject
 
 data class CategoryUiState(
   val isLoading: Boolean = true,
@@ -90,8 +90,11 @@ class CategoryViewModel @Inject constructor(
         filters = _uiState.value.selectedFilters,
         page = page
       ).onSuccess { categoryPage ->
-        val newItems = if (page == 1) categoryPage.items
-        else _uiState.value.items + categoryPage.items
+        val newItems = if (page == 1) {
+          categoryPage.items
+        } else {
+          _uiState.value.items + categoryPage.items
+        }
         _uiState.update {
           it.copy(
             isLoading = false,
@@ -129,7 +132,6 @@ class CategoryViewModel @Inject constructor(
     if (!isMultiple) {
       current.removeAll { it.groupId == filter.groupId }
     }
-
 
     val existingIndex = current.indexOfFirst { it.id == filter.id && it.groupId == filter.groupId }
     if (existingIndex != -1) {

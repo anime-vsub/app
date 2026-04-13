@@ -65,8 +65,8 @@ import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatShortDayAndDate
 import git.shin.animevsub.ui.utils.formatTime
 import git.shin.animevsub.ui.utils.isToday
-import kotlinx.coroutines.launch
 import java.util.Calendar
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -86,7 +86,7 @@ fun ScheduleScreen(
             text = stringResource(R.string.schedule),
             color = TextPrimary,
             fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.SemiBold
           )
         },
         navigationIcon = {
@@ -178,17 +178,25 @@ fun ScheduleScreen(
                       ) {
                         Text(
                           text = shortDay,
-                          color = if (isSelected) AccentMain
-                          else if (isTodayDay) AccentMainLight
-                          else TextGrey,
+                          color = if (isSelected) {
+                            AccentMain
+                          } else if (isTodayDay) {
+                            AccentMainLight
+                          } else {
+                            TextGrey
+                          },
                           fontWeight = if (isSelected || isTodayDay) FontWeight.Bold else FontWeight.Normal,
                           fontSize = 14.sp
                         )
                         Text(
                           text = dateStr,
-                          color = if (isSelected) AccentMain
-                          else if (isTodayDay) AccentMainLight
-                          else TextGrey,
+                          color = if (isSelected) {
+                            AccentMain
+                          } else if (isTodayDay) {
+                            AccentMainLight
+                          } else {
+                            TextGrey
+                          },
                           fontSize = 10.sp
                         )
                       }

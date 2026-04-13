@@ -9,6 +9,13 @@ plugins {
   kotlin("plugin.serialization")
   id("com.google.gms.google-services")
   id("org.jlleitschuh.gradle.ktlint")
+  id("io.gitlab.arturbosch.detekt")
+}
+
+detekt {
+  buildUponDefaultConfig = true
+  allRules = false
+  config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 }
 
 android {
@@ -25,8 +32,8 @@ android {
     applicationId = "git.shin.animevsub"
     minSdk = 26
     targetSdk = 36
-    versionCode = 1
-    versionName = "2.0.0"
+    versionCode = project.property("versionCode").toString().toInt()
+    versionName = project.property("versionName").toString()
 
     buildConfigField(
       "String",
@@ -112,10 +119,10 @@ dependencies {
   // DataStore
   implementation("androidx.datastore:datastore-preferences:1.2.1")
 
-    // Media3 ExoPlayer
-    implementation("androidx.media3:media3-exoplayer:1.10.0")
-    implementation("androidx.media3:media3-exoplayer-hls:1.10.0")
-    implementation("androidx.media3:media3-ui:1.10.0")
+  // Media3 ExoPlayer
+  implementation("androidx.media3:media3-exoplayer:1.10.0")
+  implementation("androidx.media3:media3-exoplayer-hls:1.10.0")
+  implementation("androidx.media3:media3-ui:1.10.0")
 
   // Supabase
   implementation("io.github.jan-tennert.supabase:postgrest-kt:2.6.1")
@@ -148,4 +155,3 @@ dependencies {
   debugImplementation("androidx.compose.ui:ui-tooling")
   debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
-

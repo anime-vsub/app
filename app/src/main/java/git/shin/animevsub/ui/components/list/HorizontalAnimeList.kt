@@ -32,11 +32,11 @@ import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.ui.components.anime.AnimeCardItem
-import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.launch
 
 @Composable
 fun HorizontalAnimeList(

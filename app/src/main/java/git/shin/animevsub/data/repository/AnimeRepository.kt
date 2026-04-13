@@ -28,6 +28,8 @@ import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -43,8 +45,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class AnimeRepository @Inject constructor(
@@ -191,16 +191,15 @@ class AnimeRepository @Inject constructor(
     api.getServers(chapter)
   }
 
-  suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerData> =
-    runCatching {
-      val result = api.getPlayerLink(server)
-      analytics.logEvent("play_video") {
-        param(FirebaseAnalytics.Param.ITEM_ID, chapter.id)
-        param(FirebaseAnalytics.Param.ITEM_NAME, chapter.name)
-        param("server_name", server.name)
-      }
-      result
+  suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerData> = runCatching {
+    val result = api.getPlayerLink(server)
+    analytics.logEvent("play_video") {
+      param(FirebaseAnalytics.Param.ITEM_ID, chapter.id)
+      param(FirebaseAnalytics.Param.ITEM_NAME, chapter.name)
+      param("server_name", server.name)
     }
+    result
+  }
 
   // Skip Range
   suspend fun getSkipRange(
@@ -274,16 +273,14 @@ class AnimeRepository @Inject constructor(
     data
   }
 
-  suspend fun startSyncNotifications(): Result<Unit> =
-    notificationDbRepository.startSync(
-      getApiNotifications = { getNotifications() },
-      onTrigger = { onTrigger(it) }
-    )
+  suspend fun startSyncNotifications(): Result<Unit> = notificationDbRepository.startSync(
+    getApiNotifications = { getNotifications() },
+    onTrigger = { onTrigger(it) }
+  )
 
-  suspend fun onTrigger(trigger: Trigger): Result<Unit> =
-    runCatching {
-      api.onTrigger(trigger)
-    }
+  suspend fun onTrigger(trigger: Trigger): Result<Unit> = runCatching {
+    api.onTrigger(trigger)
+  }
 
   // Follows
   suspend fun getFollows(page: Int = 1): Result<CategoryPage> = runCatching {
@@ -330,8 +327,7 @@ class AnimeRepository @Inject constructor(
     api.postComment(filmId, content, isSpoiler, episodeId, parentId, threadKey)
   }
 
-  suspend fun voteComment(commentId: String, voteType: VoteType): Result<VoteResponse> =
-    runCatching {
+  suspend fun voteComment(commentId: String, voteType: VoteType): Result<VoteResponse> = runCatching {
     api.voteComment(commentId, voteType)
   }
 
@@ -346,11 +342,9 @@ class AnimeRepository @Inject constructor(
   // History
   suspend fun getHistory(page: Int) = historyRepository.getHistory(page)
   suspend fun getWatchProgress(seasonId: String) = historyRepository.getWatchProgress(seasonId)
-  suspend fun getSingleProgress(seasonId: String, chapId: String) =
-    historyRepository.getSingleProgress(seasonId, chapId)
+  suspend fun getSingleProgress(seasonId: String, chapId: String) = historyRepository.getSingleProgress(seasonId, chapId)
 
-  suspend fun getLastChapOfSeason(seasonId: String) =
-    historyRepository.getLastChapOfSeason(seasonId)
+  suspend fun getLastChapOfSeason(seasonId: String) = historyRepository.getLastChapOfSeason(seasonId)
 
   suspend fun setSingleProgress(
     name: String,
