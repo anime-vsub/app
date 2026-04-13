@@ -92,7 +92,8 @@ data class DetailUiState(
   val repliesHasMore: Map<String, Boolean> = emptyMap(),
   val isPostingComment: Boolean = false,
   val commentError: String? = null,
-  val syncMode: Int = 0 // 0: Full, 1: Upload Only, 2: Disabled
+  /** 0: Full, 1: Upload Only, 2: Disabled */
+  val syncMode: Int = 0
 ) {
   val currentChapIndex: Int
     get() {
