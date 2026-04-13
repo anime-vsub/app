@@ -43,6 +43,15 @@ jobs:
         submodules: recursive
         token: ${{ secrets.PAT_TOKEN }}
 
+    - name: Write google-services.json
+      run: echo $'${{ secrets.GOOGLE_SERVICES }}' > app/google-services.json
+
+    - name: Write local.properties
+      env:
+        URL: ${{ secrets.SUPABASE_URL }}
+        KEY: ${{ secrets.SUPABASE_KEY }}
+      run: printf '\nSUPABASE_URL=%s\nSUPABASE_KEY=%s\n' "$URL" "$KEY" >> local.properties
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
