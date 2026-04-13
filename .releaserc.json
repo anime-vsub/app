@@ -28,10 +28,6 @@
           {
             "path": "app/build/outputs/apk/release/app-release-unsigned-signed.apk",
             "label": "Android Signed APK"
-          },
-          {
-            "path": "app/build/outputs/apk/release/app-release-unsigned-aligned.apk",
-            "label": "Android Aligned APK"
           }
         ]
       }
