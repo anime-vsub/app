@@ -17,3 +17,10 @@
 -keep,includedescriptorclasses class git.shin.animevsub.**$$serializer { *; }
 -keepclassmembers class git.shin.animevsub.** { *** Companion; }
 -keepclasseswithmembers class git.shin.animevsub.** { kotlinx.serialization.KSerializer serializer(...); }
+
+-dontwarn com.google.re2j.**
+-dontwarn org.slf4j.**
+-dontwarn java.lang.management.**
+
+# Fix Ktor debug
+-dontwarn io.ktor.util.debug.**

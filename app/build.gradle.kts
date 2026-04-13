@@ -112,6 +112,10 @@ dependencies {
   // HTML Parsing (replaces cheerio)
   implementation("org.jsoup:jsoup:1.22.1")
 
+  // Fix R8 missing classes
+  implementation("com.google.re2j:re2j:1.7")
+  implementation("org.slf4j:slf4j-nop:2.0.13")
+
   // Image Loading
   implementation("io.coil-kt:coil-compose:2.7.0")
   implementation("io.coil-kt:coil-gif:2.7.0")
