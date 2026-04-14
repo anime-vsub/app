@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/anime-vsub/app/compare/v2.0.4...v2.0.5) (2026-04-14)
+
+
+### Bug Fixes
+
+* sync not need persistent ([fc72656](https://github.com/anime-vsub/app/commit/fc72656fa58419a7b1ed84bced470af56a4d75b6))
+
 ## [2.0.4](https://github.com/anime-vsub/app/compare/v2.0.3...v2.0.4) (2026-04-13)
 
 
