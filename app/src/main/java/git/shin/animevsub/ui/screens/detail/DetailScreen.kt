@@ -294,15 +294,14 @@ fun DetailScreen(
         .fillMaxSize()
         .padding(top = if (isFullScreen) 0.dp else innerPadding.calculateTopPadding())
     ) {
-      val detail = uiState.detail
-
-      val playerArea = remember<@Composable (Modifier) -> Unit> {
-        movableContentOf { modifier: Modifier ->
+      val playerArea = remember {
+        movableContentOf { modifier: Modifier, state: DetailUiState ->
+          val detail = state.detail
           Box(
             modifier = modifier
               .background(Color.Black)
           ) {
-            if (detail != null && uiState.currentChapter?.id == "0" && !detail.trailer.isNullOrEmpty()) {
+            if (detail != null && state.currentChapter?.id == "0" && !detail.trailer.isNullOrEmpty()) {
               // Trailer Embed mode
               AndroidView(
                 factory = { ctx ->
@@ -327,47 +326,49 @@ fun DetailScreen(
               }
             } else {
               // Player mode (handles loading detail, loading link, and errors)
-              val currentChap = uiState.chapterData?.chaps?.getOrNull(uiState.currentChapIndex)
+              val currentChap = state.chapterData?.chaps?.getOrNull(state.currentChapIndex)
               VideoPlayer(
-                playerData = uiState.playerData,
+                playerData = state.playerData,
                 poster = detail?.poster ?: detail?.image,
                 title = detail?.name ?: "",
                 subtitle = currentChap?.name?.let {
-                  if (uiState.episodeNameFromApi != null) "$it - ${uiState.episodeNameFromApi}" else it
+                  if (state.episodeNameFromApi != null) "$it - ${state.episodeNameFromApi}" else it
                 } ?: "",
-                isLoading = uiState.isPlayerLoading || uiState.isLoading,
-                errorMessage = uiState.playerError,
-                introRange = uiState.introRange,
-                outroRange = uiState.outroRange,
-                autoNextEnabled = uiState.autoNext,
-                hasNextEpisode = uiState.currentChapIndex + 1 < (
-                  uiState.chapterData?.chaps?.size
+                isLoading = state.isPlayerLoading || state.isLoading,
+                errorMessage = state.playerError,
+                introRange = state.introRange,
+                outroRange = state.outroRange,
+                autoNextEnabled = state.autoNext,
+                hasNextEpisode = state.currentChapIndex + 1 < (
+                  state.chapterData?.chaps?.size
                     ?: 0
                   ),
                 onBack = onNavigateBack,
                 onReload = { viewModel.retryPlayer() },
                 onNextEpisode = { viewModel.playNext() },
                 onVideoEnded = {
-                  if (uiState.autoNext) {
+                  if (state.autoNext) {
                     viewModel.playNext()
                   }
                 },
-                servers = uiState.servers,
-                currentServer = uiState.currentServer,
+                servers = state.servers,
+                currentServer = state.currentServer,
                 onServerSelected = { viewModel.selectServer(it) },
-                displaySeasons = uiState.displaySeasons,
-                activeDisplaySeasonId = uiState.activeDisplaySeasonId,
+                displaySeasons = state.displaySeasons,
+                activeDisplaySeasonId = state.activeDisplaySeasonId,
                 onSeasonSelected = { viewModel.setActiveDisplaySeason(it) },
-                episodes = uiState.chapterData?.chaps ?: emptyList(),
-                currentEpisode = uiState.currentChapter,
+                episodes = state.chapterData?.chaps ?: emptyList(),
+                currentEpisode = state.currentChapter,
                 onEpisodeSelected = { chap, seasonId -> viewModel.playChapter(chap, seasonId) },
-                initialPosition = uiState.lastProgress,
+                initialPosition = state.lastProgress,
                 onProgressUpdate = { cur, dur -> viewModel.updateHistory(cur, dur) },
-                chapterProgress = uiState.chapterProgress,
+                chapterProgress = state.chapterProgress,
                 isFullScreen = isFullScreen,
                 onFullScreenChange = { isFullScreen = it },
                 isInPipMode = isInPipMode,
                 onPlayingStateChange = { isPlayerPlaying = it },
+                syncMode = state.syncMode,
+                onSyncModeChange = { viewModel.setSyncMode(it) },
                 modifier = Modifier.fillMaxSize()
               )
             }
@@ -376,6 +377,7 @@ fun DetailScreen(
       }
 
       val scrollableContent = @Composable { modifier: Modifier ->
+        val detail = uiState.detail
         Column(
           modifier = modifier
             .verticalScroll(rememberScrollState())
@@ -986,13 +988,14 @@ fun DetailScreen(
       }
 
       if (isFullScreen) {
-        playerArea(Modifier.fillMaxSize())
+        playerArea(Modifier.fillMaxSize(), uiState)
       } else if (isLandscapeUI) {
         Row(modifier = Modifier.fillMaxSize()) {
           playerArea(
             Modifier
               .weight(0.6f)
-              .fillMaxHeight()
+              .fillMaxHeight(),
+            uiState
           )
           scrollableContent(
             Modifier
@@ -1005,7 +1008,8 @@ fun DetailScreen(
           playerArea(
             Modifier
               .fillMaxWidth()
-              .aspectRatio(16f / 9f)
+              .aspectRatio(16f / 9f),
+            uiState
           )
           scrollableContent(
             Modifier

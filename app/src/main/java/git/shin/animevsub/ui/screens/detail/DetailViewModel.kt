@@ -547,6 +547,7 @@ class DetailViewModel @Inject constructor(
   fun retryPlayer() {
     val state = _uiState.value
     if (state.currentChapter != null) {
+      _uiState.update { it.copy(playerData = null, playerError = null, isPlayerLoading = true) }
       if (state.currentServer != null) {
         loadPlayer(state.currentChapter, state.currentServer)
       } else {
@@ -877,5 +878,9 @@ class DetailViewModel @Inject constructor(
     _uiState.update {
       it.copy(syncMode = (it.syncMode + 1) % 3)
     }
+  }
+
+  fun setSyncMode(mode: Int) {
+    _uiState.update { it.copy(syncMode = mode) }
   }
 }

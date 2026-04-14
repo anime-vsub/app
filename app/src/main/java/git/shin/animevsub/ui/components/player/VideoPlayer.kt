@@ -160,7 +160,9 @@ fun VideoPlayer(
   isFullScreen: Boolean = false,
   onFullScreenChange: (Boolean) -> Unit,
   isInPipMode: Boolean = false,
-  onPlayingStateChange: (Boolean) -> Unit = {}
+  onPlayingStateChange: (Boolean) -> Unit = {},
+  syncMode: Int = 0,
+  onSyncModeChange: (Int) -> Unit = {}
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
@@ -168,7 +170,6 @@ fun VideoPlayer(
   val volumeGestureEnabled by preferencesManager.volumeGesture.collectAsState(initial = true)
   val brightnessGestureEnabled by preferencesManager.brightnessGesture.collectAsState(initial = true)
   val autoSkipEnabled by preferencesManager.autoSkip.collectAsState(initial = false)
-  val syncMode by preferencesManager.syncMode.collectAsState(initial = 0)
 
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
@@ -372,9 +373,16 @@ fun VideoPlayer(
 
   // Track the current URI to avoid reloading the same content
   var loadedUri by remember { mutableStateOf<android.net.Uri?>(null) }
+  var loadedEpisodeId by remember { mutableStateOf<String?>(null) }
 
-  LaunchedEffect(playerData) {
-    if (playerData == null || playerData.link.isEmpty()) return@LaunchedEffect
+  LaunchedEffect(playerData, currentEpisode?.id) {
+    if (playerData == null || playerData.link.isEmpty()) {
+      exoPlayer.stop()
+      exoPlayer.clearMediaItems()
+      loadedUri = null
+      loadedEpisodeId = null
+      return@LaunchedEffect
+    }
     val httpDataSourceFactory =
       DefaultHttpDataSource.Factory().setDefaultRequestProperties(playerData.headers ?: emptyMap())
     val dataSourceFactory: DataSource.Factory =
@@ -388,7 +396,7 @@ fun VideoPlayer(
       playerData.link.toUri()
     }
 
-    if (loadedUri != newUri) {
+    if (loadedUri != newUri || loadedEpisodeId != currentEpisode?.id || playerData.isContent) {
       if (playerData.type.lowercase() == "hls") {
         exoPlayer.setMediaSource(
           HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(newUri))
@@ -400,21 +408,21 @@ fun VideoPlayer(
       // Only seek to initialPosition on the VERY FIRST load of this URI, and if syncMode allows restoring
       if (initialPosition > 0 && syncMode == 0) {
         exoPlayer.seekTo(initialPosition)
-        if (initialPosition > 5000) {
-          val minutes = (initialPosition / 1000 / 60).toInt()
-          val seconds = ((initialPosition / 1000) % 60).toInt()
-          notificationText = context.getString(R.string.restored_progress, minutes, seconds)
-          notificationIcon = Icons.Default.History
-          isNotificationClickable = false
-          showNotification = true
-          scope.launch {
-            delay(3000)
-            showNotification = false
-          }
+        val minutes = (initialPosition / 1000 / 60).toInt()
+        val seconds = ((initialPosition / 1000) % 60).toInt()
+        notificationText = context.getString(R.string.restored_progress, minutes, seconds)
+        notificationIcon = Icons.Default.History
+        isNotificationClickable = false
+        showNotification = true
+        scope.launch {
+          delay(3000)
+          showNotification = false
         }
       }
       exoPlayer.prepare()
+      exoPlayer.play()
       loadedUri = newUri
+      loadedEpisodeId = currentEpisode?.id
     }
   }
 
@@ -1036,7 +1044,7 @@ fun VideoPlayer(
           autoSkipEnabled = autoSkipEnabled,
           onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
           syncMode = syncMode,
-          onSyncModeChange = { scope.launch { preferencesManager.setSyncMode(it) } }
+          onSyncModeChange = onSyncModeChange
         )
       }
       if (showSettingsBottomSheet) {
@@ -1081,7 +1089,7 @@ fun VideoPlayer(
             autoSkipEnabled = autoSkipEnabled,
             onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
             syncMode = syncMode,
-            onSyncModeChange = { scope.launch { preferencesManager.setSyncMode(it) } },
+            onSyncModeChange = onSyncModeChange,
             onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null }
           )
         }
