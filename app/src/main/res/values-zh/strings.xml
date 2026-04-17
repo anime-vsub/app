@@ -105,6 +105,10 @@
     </plurals>
     <string name="brightness">亮度</string>
     <string name="volume">音量</string>
+    <string name="speed_up_pill">%1$sx 倍速</string>
+    <string name="double_tap_skip">双击跳转时长</string>
+    <string name="long_press_speed">长按播放速度</string>
+    <string name="seconds_unit">%1$d秒</string>
 
     <!-- Account -->
     <string name="login">登录</string>

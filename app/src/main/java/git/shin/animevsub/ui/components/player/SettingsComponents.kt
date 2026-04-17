@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.HighQuality
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Sync
@@ -76,6 +77,10 @@ fun SettingsBottomSheetContent(
   onBrightnessGestureToggle: (Boolean) -> Unit,
   autoSkipEnabled: Boolean,
   onAutoSkipToggle: (Boolean) -> Unit,
+  doubleTapSkipDuration: Int,
+  onDoubleTapSkipDurationChange: (Int) -> Unit,
+  longPressSpeed: Float,
+  onLongPressSpeedChange: (Float) -> Unit,
   syncMode: Int,
   onSyncModeChange: (Int) -> Unit,
   onDismiss: () -> Unit
@@ -143,6 +148,18 @@ fun SettingsBottomSheetContent(
               title = stringResource(R.string.brightness_gesture),
               checked = brightnessGestureEnabled,
               onCheckedChange = onBrightnessGestureToggle
+            )
+            SettingsItem(
+              icon = Icons.Default.History,
+              title = stringResource(R.string.double_tap_skip),
+              value = stringResource(R.string.seconds_unit, doubleTapSkipDuration),
+              onClick = { onSubMenuChange("doubleTapSkip") }
+            )
+            SettingsItem(
+              icon = Icons.Default.Speed,
+              title = stringResource(R.string.long_press_speed),
+              value = "${longPressSpeed}x",
+              onClick = { onSubMenuChange("longPressSpeed") }
             )
             SettingsItem(
               icon = Icons.Default.Sync,
@@ -249,6 +266,36 @@ fun SettingsBottomSheetContent(
               isSelected = syncMode == 2,
               onClick = { onSyncModeChange(2); onDismiss() }
             )
+          }
+        }
+
+        "doubleTapSkip" -> {
+          SettingsSubMenuContainer(
+            title = stringResource(R.string.double_tap_skip),
+            onBack = { onSubMenuChange(null) }
+          ) {
+            listOf(5, 10, 15, 20, 30).forEach { seconds ->
+              SettingsOptionItem(
+                title = stringResource(R.string.seconds_unit, seconds),
+                isSelected = doubleTapSkipDuration == seconds,
+                onClick = { onDoubleTapSkipDurationChange(seconds); onDismiss() }
+              )
+            }
+          }
+        }
+
+        "longPressSpeed" -> {
+          SettingsSubMenuContainer(
+            title = stringResource(R.string.long_press_speed),
+            onBack = { onSubMenuChange(null) }
+          ) {
+            listOf(1.5f, 2.0f, 2.5f, 3.0f).forEach { speed ->
+              SettingsOptionItem(
+                title = "${speed}x",
+                isSelected = longPressSpeed == speed,
+                onClick = { onLongPressSpeedChange(speed); onDismiss() }
+              )
+            }
           }
         }
       }
@@ -379,6 +426,10 @@ fun SettingsSideMenuContent(
   onBrightnessGestureToggle: (Boolean) -> Unit,
   autoSkipEnabled: Boolean,
   onAutoSkipToggle: (Boolean) -> Unit,
+  doubleTapSkipDuration: Int,
+  onDoubleTapSkipDurationChange: (Int) -> Unit,
+  longPressSpeed: Float,
+  onLongPressSpeedChange: (Float) -> Unit,
   syncMode: Int,
   onSyncModeChange: (Int) -> Unit
 ) {
@@ -441,6 +492,28 @@ fun SettingsSideMenuContent(
           checked = brightnessGestureEnabled,
           onCheckedChange = onBrightnessGestureToggle
         )
+      }
+    }
+    SideMenuSection(title = stringResource(R.string.double_tap_skip)) {
+      FlowRow(spacing = 8.dp) {
+        listOf(5, 10, 15, 20, 30).forEach { seconds ->
+          SideMenuOptionChip(
+            text = stringResource(R.string.seconds_unit, seconds),
+            isSelected = doubleTapSkipDuration == seconds,
+            onClick = { onDoubleTapSkipDurationChange(seconds) }
+          )
+        }
+      }
+    }
+    SideMenuSection(title = stringResource(R.string.long_press_speed)) {
+      FlowRow(spacing = 8.dp) {
+        listOf(1.5f, 2.0f, 2.5f, 3.0f).forEach { speed ->
+          SideMenuOptionChip(
+            text = "${speed}x",
+            isSelected = longPressSpeed == speed,
+            onClick = { onLongPressSpeedChange(speed) }
+          )
+        }
       }
     }
     SideMenuSection(title = stringResource(R.string.sync_mode)) {

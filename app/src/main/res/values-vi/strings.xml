@@ -105,6 +105,10 @@
     </plurals>
     <string name="brightness">Độ sáng</string>
     <string name="volume">Âm lượng</string>
+    <string name="speed_up_pill">Tốc độ %1$sx</string>
+    <string name="double_tap_skip">Tua khi chạm đúp</string>
+    <string name="long_press_speed">Tốc độ khi nhấn giữ</string>
+    <string name="seconds_unit">%1$ds</string>
 
     <!-- Account -->
     <string name="login">Đăng nhập</string>

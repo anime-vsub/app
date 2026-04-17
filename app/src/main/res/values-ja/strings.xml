@@ -105,6 +105,10 @@
     </plurals>
     <string name="brightness">輝度</string>
     <string name="volume">音量</string>
+    <string name="speed_up_pill">%1$sx 倍速</string>
+    <string name="double_tap_skip">ダブルタップでスキップ</string>
+    <string name="long_press_speed">長押し時の速度</string>
+    <string name="seconds_unit">%1$d秒</string>
 
     <!-- Account -->
     <string name="login">ログイン</string>

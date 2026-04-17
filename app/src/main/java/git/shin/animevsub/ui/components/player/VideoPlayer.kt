@@ -1,9 +1,8 @@
 package git.shin.animevsub.ui.components.player
 
 import android.content.Context
-import android.media.AudioManager
 import android.content.pm.ActivityInfo
-import android.net.Uri
+import android.media.AudioManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -13,6 +12,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -48,6 +49,7 @@ import androidx.compose.material.icons.filled.Replay10
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SlowMotionVideo
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -82,6 +84,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -121,10 +124,11 @@ import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
-import java.io.File
-import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
@@ -170,11 +174,15 @@ fun VideoPlayer(
   val volumeGestureEnabled by preferencesManager.volumeGesture.collectAsState(initial = true)
   val brightnessGestureEnabled by preferencesManager.brightnessGesture.collectAsState(initial = true)
   val autoSkipEnabled by preferencesManager.autoSkip.collectAsState(initial = false)
+  val doubleTapSkipDuration by preferencesManager.doubleTapSkip.collectAsState(initial = 10)
+  val longPressSpeedValue by preferencesManager.longPressSpeed.collectAsState(initial = 2.0f)
 
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
 //  var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
   var playbackSpeed by remember { mutableFloatStateOf(1f) }
+  var originalSpeedBeforeLongPress by remember { mutableFloatStateOf(1f) }
+  var isLongPressing by remember { mutableStateOf(false) }
 
   var showEpisodeSideMenu by remember { mutableStateOf(false) }
   var showServerSideMenu by remember { mutableStateOf(false) }
@@ -201,6 +209,10 @@ fun VideoPlayer(
   var gestureIcon by remember { mutableStateOf(Icons.AutoMirrored.Filled.VolumeUp) }
   var gestureText by remember { mutableStateOf("") }
   var showGestureIndicator by remember { mutableStateOf(false) }
+
+  var showDoubleTapIndicator by remember { mutableStateOf(false) }
+  var doubleTapSide by remember { mutableStateOf("right") }
+  var doubleTapText by remember { mutableStateOf("") }
 
   val exoPlayer = remember {
     ExoPlayer.Builder(context).build().apply {
@@ -446,50 +458,131 @@ fun VideoPlayer(
       .pointerInput(volumeGestureEnabled, brightnessGestureEnabled, isInPipMode) {
         if (isInPipMode) return@pointerInput
         val activity = findActivity(context)
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        var volumeAccumulator = 0f
+        var brightnessAccumulator = 0f
+
         detectVerticalDragGestures(
-          onDragStart = { showGestureIndicator = true },
+          onDragStart = {
+            showGestureIndicator = true
+            volumeAccumulator = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+            val params = activity?.window?.attributes
+            brightnessAccumulator =
+              if (params != null && params.screenBrightness >= 0) params.screenBrightness else 0.5f
+          },
           onDragEnd = { showGestureIndicator = false },
           onVerticalDrag = { change, dragAmount ->
             val isLeftSide = change.position.x < size.width / 2
             if (isLeftSide && brightnessGestureEnabled) {
               activity?.let {
+                brightnessAccumulator -= dragAmount / size.height
+                brightnessAccumulator = brightnessAccumulator.coerceIn(0f, 1f)
                 val params = it.window.attributes
-                val currentBrightness =
-                  if (params.screenBrightness < 0) 0.5f else params.screenBrightness
-                val newBrightness = (currentBrightness - dragAmount / size.height).coerceIn(0f, 1f)
-                params.screenBrightness = newBrightness
+                params.screenBrightness = brightnessAccumulator
                 it.window.attributes = params
                 gestureIcon = Icons.Default.BrightnessLow
-                gestureText = "${(newBrightness * 100).roundToInt()}%"
+                gestureText = "${(brightnessAccumulator * 100).roundToInt()}%"
+                // Localize if needed, though % is universal
               }
             } else if (!isLeftSide && volumeGestureEnabled) {
-              val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
               val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-              val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+              val oldVolumeInt = volumeAccumulator.roundToInt().coerceIn(0, maxVolume)
 
-              val delta = (dragAmount / size.height * maxVolume).roundToInt()
-              val newVolume = (currentVolume - delta).coerceIn(0, maxVolume)
+              // Increase sensitivity slightly: 0.7 of screen height for full volume range
+              volumeAccumulator -= (dragAmount / (size.height * 0.7f) * maxVolume)
+              val newVolumeInt = volumeAccumulator.roundToInt().coerceIn(0, maxVolume)
 
-              audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
+              if (newVolumeInt != oldVolumeInt) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolumeInt, 0)
+              }
               gestureIcon = Icons.AutoMirrored.Filled.VolumeUp
-              gestureText = "${(newVolume.toFloat() / maxVolume * 100).roundToInt()}%"
+              // Use volumeAccumulator for smooth percentage display
+              val smoothPercent = (volumeAccumulator.coerceIn(0f, maxVolume.toFloat()) / maxVolume * 100).roundToInt()
+              gestureText = "$smoothPercent%"
             }
           }
         )
       }
-      .pointerInput(isInPipMode) {
+      .pointerInput(isInPipMode, isControlsVisible, doubleTapSkipDuration, longPressSpeedValue) {
+        if (isInPipMode) return@pointerInput
+        awaitEachGesture {
+          val down = awaitFirstDown(requireUnconsumed = false)
+          val initialX = down.position.x
+          val initialY = down.position.y
+          var longPressTriggered = false
+
+          val longPressJob = scope.launch {
+            delay(500)
+            if (!isControlsVisible) {
+              longPressTriggered = true
+              originalSpeedBeforeLongPress = playbackSpeed
+              exoPlayer.setPlaybackSpeed(longPressSpeedValue)
+              isLongPressing = true
+            }
+          }
+
+          var seekingStarted = false
+          var basePositionForSeeking = 0L
+
+          do {
+            val event = awaitPointerEvent()
+            val change = event.changes.first()
+
+            if (!longPressTriggered) {
+              val dragDistance = abs(change.position.x - initialX) + abs(change.position.y - initialY)
+              if (dragDistance > 20) {
+                longPressJob.cancel()
+              }
+            }
+
+            if (isLongPressing) {
+              val dragAmountX = change.position.x - initialX
+              if (!seekingStarted && abs(dragAmountX) > 30) {
+                seekingStarted = true
+                isDragging = true
+                basePositionForSeeking = exoPlayer.currentPosition
+              }
+
+              if (seekingStarted) {
+                val screenWidth = size.width.toFloat()
+                // Swipe across full screen = 2 minutes seek
+                val seekDelta = (dragAmountX / screenWidth * 120000L).toLong()
+                dragTime = (basePositionForSeeking + seekDelta).coerceIn(0, exoPlayer.duration)
+              }
+              change.consume()
+            }
+          } while (!change.changedToUp())
+
+          longPressJob.cancel()
+          if (isLongPressing) {
+            exoPlayer.setPlaybackSpeed(originalSpeedBeforeLongPress)
+            isLongPressing = false
+            if (isDragging) {
+              exoPlayer.seekTo(dragTime)
+              isDragging = false
+            }
+          }
+        }
+      }
+      .pointerInput(isInPipMode, doubleTapSkipDuration) {
         if (isInPipMode) return@pointerInput
         detectTapGestures(
           onTap = { isControlsVisible = !isControlsVisible },
           onDoubleTap = { offset ->
+            val skipMs = doubleTapSkipDuration * 1000L
             if (offset.x < size.width / 2) {
-              exoPlayer.seekTo(
-                (exoPlayer.currentPosition - 10000).coerceAtLeast(
-                  0
-                )
-              )
+              exoPlayer.seekTo((exoPlayer.currentPosition - skipMs).coerceAtLeast(0))
+              doubleTapSide = "left"
+              doubleTapText = "-${doubleTapSkipDuration}s"
             } else {
-              exoPlayer.seekTo((exoPlayer.currentPosition + 10000).coerceAtMost(exoPlayer.duration))
+              exoPlayer.seekTo((exoPlayer.currentPosition + skipMs).coerceAtMost(exoPlayer.duration))
+              doubleTapSide = "right"
+              doubleTapText = "+${doubleTapSkipDuration}s"
+            }
+            showDoubleTapIndicator = true
+            scope.launch {
+              delay(800)
+              showDoubleTapIndicator = false
             }
           }
         )
@@ -698,6 +791,35 @@ fun VideoPlayer(
         )
       }
 
+      if (showDoubleTapIndicator) {
+        DoubleTapIndicator(
+          side = doubleTapSide,
+          text = doubleTapText,
+          modifier = Modifier.align(Alignment.Center)
+        )
+      }
+
+      if (isLongPressing && !isDragging) {
+        Box(
+          modifier = Modifier
+            .align(Alignment.TopCenter)
+            .padding(top = if (isFullScreen) 48.dp else 16.dp)
+            .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(20.dp))
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+        ) {
+          Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Default.Speed, null, tint = MainColor, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+              text = stringResource(R.string.speed_up_pill, longPressSpeedValue),
+              color = Color.White,
+              fontSize = 14.sp,
+              fontWeight = FontWeight.Bold
+            )
+          }
+        }
+      }
+
       if (showSkipNotification) {
         SkipNotification(
           text = skipNotificationText,
@@ -732,8 +854,10 @@ fun VideoPlayer(
             .clip(RoundedCornerShape(4.dp))
             .background(Color.Black.copy(alpha = 0.7f))
             .clickable(enabled = isNotificationClickable) {
-              showNotification = false; isNotificationClickable = false; isAutoNexting =
-                false; onNextEpisode()
+              showNotification = false
+              isNotificationClickable = false
+              isAutoNexting = false
+              onNextEpisode()
             }
             .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
@@ -1043,6 +1167,10 @@ fun VideoPlayer(
           onBrightnessGestureToggle = { scope.launch { preferencesManager.setBrightnessGesture(it) } },
           autoSkipEnabled = autoSkipEnabled,
           onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
+          doubleTapSkipDuration = doubleTapSkipDuration,
+          onDoubleTapSkipDurationChange = { scope.launch { preferencesManager.setDoubleTapSkip(it) } },
+          longPressSpeed = longPressSpeedValue,
+          onLongPressSpeedChange = { scope.launch { preferencesManager.setLongPressSpeed(it) } },
           syncMode = syncMode,
           onSyncModeChange = onSyncModeChange
         )
@@ -1088,6 +1216,10 @@ fun VideoPlayer(
             onBrightnessGestureToggle = { scope.launch { preferencesManager.setBrightnessGesture(it) } },
             autoSkipEnabled = autoSkipEnabled,
             onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
+            doubleTapSkipDuration = doubleTapSkipDuration,
+            onDoubleTapSkipDurationChange = { scope.launch { preferencesManager.setDoubleTapSkip(it) } },
+            longPressSpeed = longPressSpeedValue,
+            onLongPressSpeedChange = { scope.launch { preferencesManager.setLongPressSpeed(it) } },
             syncMode = syncMode,
             onSyncModeChange = onSyncModeChange,
             onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null }

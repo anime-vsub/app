@@ -106,6 +106,10 @@
     </plurals>
     <string name="brightness">Brightness</string>
     <string name="volume">Volume</string>
+    <string name="speed_up_pill">%1$sx Speed</string>
+    <string name="double_tap_skip">Double Tap Skip</string>
+    <string name="long_press_speed">Long Press Speed</string>
+    <string name="seconds_unit">%1$ds</string>
 
     <!-- Account -->
     <string name="login">Login</string>

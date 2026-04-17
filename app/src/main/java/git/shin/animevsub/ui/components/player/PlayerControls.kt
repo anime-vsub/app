@@ -165,15 +165,17 @@ fun GestureIndicator(
 }
 
 @Composable
-fun SeekIndicator(
-  isForward: Boolean,
+fun DoubleTapIndicator(
+  side: String,
+  text: String,
   modifier: Modifier = Modifier
 ) {
+  val isForward = side == "right"
   val alpha = remember { Animatable(0f) }
   val scale = remember { Animatable(0.8f) }
   val scope = rememberCoroutineScope()
 
-  LaunchedEffect(isForward) {
+  LaunchedEffect(side) {
     scope.launch {
       alpha.snapTo(0f)
       scale.snapTo(0.8f)
@@ -218,7 +220,7 @@ fun SeekIndicator(
       )
       Spacer(modifier = Modifier.height(4.dp))
       Text(
-        text = if (isForward) "+10s" else "-10s",
+        text = text,
         color = Color.White,
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold

@@ -24,9 +24,9 @@ class PreferencesManager(private val context: Context) {
     private val BRIGHTNESS_GESTURE_KEY = booleanPreferencesKey("brightness_gesture")
     private val SEARCH_HISTORY_KEY = stringPreferencesKey("search_history")
     private val AUTO_SYNC_NOTIFY_KEY = booleanPreferencesKey("auto_sync_notify")
-    private val COOKIES_KEY = stringPreferencesKey("cookies")
     private val LAST_ACTIVE_CHECK_KEY = longPreferencesKey("last_active_check")
-    private val SYNC_MODE_KEY = androidx.datastore.preferences.core.intPreferencesKey("sync_mode")
+    private val DOUBLE_TAP_SKIP_KEY = androidx.datastore.preferences.core.intPreferencesKey("double_tap_skip")
+    private val LONG_PRESS_SPEED_KEY = androidx.datastore.preferences.core.floatPreferencesKey("long_press_speed")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -34,16 +34,10 @@ class PreferencesManager(private val context: Context) {
   val volumeGesture: Flow<Boolean> = context.dataStore.data.map { it[VOLUME_GESTURE_KEY] ?: true }
   val brightnessGesture: Flow<Boolean> =
     context.dataStore.data.map { it[BRIGHTNESS_GESTURE_KEY] ?: true }
+  val doubleTapSkip: Flow<Int> = context.dataStore.data.map { it[DOUBLE_TAP_SKIP_KEY] ?: 10 }
+  val longPressSpeed: Flow<Float> = context.dataStore.data.map { it[LONG_PRESS_SPEED_KEY] ?: 2.0f }
   val autoSyncNotify: Flow<Boolean> =
     context.dataStore.data.map { it[AUTO_SYNC_NOTIFY_KEY] ?: false }
-  val cookies: Flow<Map<String, String>> = context.dataStore.data.map { preferences ->
-    val json = preferences[COOKIES_KEY] ?: return@map emptyMap()
-    try {
-      Json.decodeFromString<Map<String, String>>(json)
-    } catch (e: Exception) {
-      emptyMap()
-    }
-  }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -56,10 +50,12 @@ class PreferencesManager(private val context: Context) {
   }
 
   val lastActiveCheck: Flow<Long> = context.dataStore.data.map { it[LAST_ACTIVE_CHECK_KEY] ?: 0L }
-  val syncMode: Flow<Int> = context.dataStore.data.map { it[SYNC_MODE_KEY] ?: 0 }
+  suspend fun setDoubleTapSkip(value: Int) {
+    context.dataStore.edit { it[DOUBLE_TAP_SKIP_KEY] = value }
+  }
 
-  suspend fun setSyncMode(value: Int) {
-    context.dataStore.edit { it[SYNC_MODE_KEY] = value }
+  suspend fun setLongPressSpeed(value: Float) {
+    context.dataStore.edit { it[LONG_PRESS_SPEED_KEY] = value }
   }
 
   suspend fun setLastActiveCheck(value: Long) {
@@ -85,16 +81,6 @@ class PreferencesManager(private val context: Context) {
   suspend fun setAutoSyncNotify(value: Boolean) {
     context.dataStore.edit { it[AUTO_SYNC_NOTIFY_KEY] = value }
   }
-
-  suspend fun setCookies(host: String, cookie: String) {
-    context.dataStore.edit { preferences ->
-      val currentCookies = cookies.first().toMutableMap()
-      currentCookies[host] = cookie
-      preferences[COOKIES_KEY] = Json.encodeToString(currentCookies.toMap())
-    }
-  }
-
-  suspend fun getCookie(host: String): String? = cookies.first()[host]
 
   suspend fun addSearchHistory(query: String) {
     context.dataStore.edit { preferences ->
