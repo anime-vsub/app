@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/anime-vsub/app/compare/v2.1.0...v2.1.1) (2026-04-17)
+
+
+### Bug Fixes
+
+* Update long press gesture detection logic in `VideoPlayer.kt` to check for any active touch points using `event.changes.any { it.pressed }` instead of `change.changedToUp()`. ([55aada1](https://github.com/anime-vsub/app/commit/55aada1350477116e72ef86ea769af6690c8fece))
+
 # [2.1.0](https://github.com/anime-vsub/app/compare/v2.0.5...v2.1.0) (2026-04-17)
 
 ### Features
