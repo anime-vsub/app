@@ -5,6 +5,22 @@ on:
     branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main" ]
+  workflow_call:
+    secrets:
+      PAT_TOKEN:
+        required: true
+      GOOGLE_SERVICES:
+        required: true
+      SUPABASE_URL:
+        required: true
+      SUPABASE_KEY:
+        required: true
+      KEYSTORE_CONTENT:
+        required: true
+      KEYSTORE_ALIAS:
+        required: true
+      KEYSTORE_PASSWORD:
+        required: true
 
 jobs:
   ci:
