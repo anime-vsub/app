@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/anime-vsub/app/compare/v2.0.5...v2.1.0) (2026-04-17)
+
+
+### Features
+
+* **player:** add customizable double-tap skip and long-press speed control ([441c8e4](https://github.com/anime-vsub/app/commit/441c8e4d71efc5fad4e2126446dab0463a401cfa))
+
 ## [2.0.5](https://github.com/anime-vsub/app/compare/v2.0.4...v2.0.5) (2026-04-14)
 
 
