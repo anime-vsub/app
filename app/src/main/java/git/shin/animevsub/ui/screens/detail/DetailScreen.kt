@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -598,53 +597,50 @@ fun DetailScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 // Action Buttons
-                Row(
+                LazyRow(
                   modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                  horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    .fillMaxWidth(),
+                  horizontalArrangement = Arrangement.spacedBy(8.dp),
+                  contentPadding = PaddingValues(horizontal = 16.dp)
                 ) {
-                  ActionButton(
-                    icon = if (uiState.isFollowed) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                    label = formatNumber(detail.follows + (if (uiState.isFollowed) 1 else 0)),
-                    iconTint = if (uiState.isFollowed) StarColor else TextPrimary,
-                    modifier = Modifier
-                      .widthIn(min = 50.dp)
-                      .wrapContentWidth(),
-                    onClick = { viewModel.toggleFollow() }
-                  )
-                  ActionButton(
-                    icon = Icons.Default.Share,
-                    label = stringResource(R.string.share),
-                    modifier = Modifier
-                      .widthIn(min = 50.dp)
-                      .wrapContentWidth(),
-                    onClick = {
-                      val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        val shareMessage = context.getString(
-                          R.string.share_message,
-                          detail.name,
-                          "https://github.com/anime-vsub/app"
+                  item {
+                    ActionButton(
+                      icon = if (uiState.isFollowed) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                      label = formatNumber(detail.follows + (if (uiState.isFollowed) 1 else 0)),
+                      iconTint = if (uiState.isFollowed) StarColor else TextPrimary,
+                      onClick = { viewModel.toggleFollow() }
+                    )
+                  }
+                  item {
+                    ActionButton(
+                      icon = Icons.Default.Share,
+                      label = stringResource(R.string.share),
+                      onClick = {
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                          type = "text/plain"
+                          val shareMessage = context.getString(
+                            R.string.share_message,
+                            detail.name,
+                            "https://github.com/anime-vsub/app"
+                          )
+                          putExtra(Intent.EXTRA_TEXT, shareMessage)
+                        }
+                        context.startActivity(
+                          Intent.createChooser(
+                            shareIntent,
+                            context.getString(R.string.share_title)
+                          )
                         )
-                        putExtra(Intent.EXTRA_TEXT, shareMessage)
                       }
-                      context.startActivity(
-                        Intent.createChooser(
-                          shareIntent,
-                          context.getString(R.string.share_title)
-                        )
-                      )
-                    }
-                  )
-                  ActionButton(
-                    icon = Icons.AutoMirrored.Filled.PlaylistAdd,
-                    label = stringResource(R.string.save_label),
-                    modifier = Modifier
-                      .widthIn(min = 50.dp)
-                      .wrapContentWidth(),
-                    onClick = { viewModel.onSaveClick() }
-                  )
+                    )
+                  }
+                  item {
+                    ActionButton(
+                      icon = Icons.AutoMirrored.Filled.PlaylistAdd,
+                      label = stringResource(R.string.save_label),
+                      onClick = { viewModel.onSaveClick() }
+                    )
+                  }
                 }
               }
 
