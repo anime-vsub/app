@@ -149,6 +149,16 @@
     <string name="sync_mode_upload_only">Upload Only</string>
     <string name="sync_mode_none">Disabled</string>
 
+    <string name="notification_settings">Notification Settings</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="enable_background_sync">Enable Background Sync</string>
+    <string name="notify_sync_interval">API Sync Interval</string>
+    <string name="db_notify_sync_interval">DB Sync Interval</string>
+    <string name="auto_sync_notify">Auto Sync Notifications</string>
+    <string name="minutes_label">%1$d min</string>
+    <string name="new_notification_title">New Anime Update</string>
+    <string name="new_notification_message">%1$s - %2$s</string>
+
     <!-- Rankings -->
     <string name="ranking_day">Day</string>
     <string name="ranking_month">Month</string>

@@ -28,8 +28,6 @@ import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.remote.api_hidden.AnimeApi
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -45,6 +43,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class AnimeRepository @Inject constructor(
@@ -244,6 +244,10 @@ class AnimeRepository @Inject constructor(
   val volumeGesture = prefs.volumeGesture
   val brightnessGesture = prefs.brightnessGesture
   val autoSyncNotify = prefs.autoSyncNotify
+  val notifyInterval = prefs.notifyInterval
+  val dbNotifyInterval = prefs.dbNotifyInterval
+  val enableBackgroundSync = prefs.enableBackgroundSync
+  val enableNotifications = prefs.enableNotifications
 
   suspend fun setAutoNext(value: Boolean) = prefs.setAutoNext(value)
   suspend fun setAutoSkip(value: Boolean) = prefs.setAutoSkip(value)
@@ -251,6 +255,10 @@ class AnimeRepository @Inject constructor(
   suspend fun setBrightnessGesture(value: Boolean) = prefs.setBrightnessGesture(value)
 
   suspend fun setAutoSyncNotify(value: Boolean) = prefs.setAutoSyncNotify(value)
+  suspend fun setNotifyInterval(value: Int) = prefs.setNotifyInterval(value)
+  suspend fun setDbNotifyInterval(value: Int) = prefs.setDbNotifyInterval(value)
+  suspend fun setEnableBackgroundSync(value: Boolean) = prefs.setEnableBackgroundSync(value)
+  suspend fun setEnableNotifications(value: Boolean) = prefs.setEnableNotifications(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

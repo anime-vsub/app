@@ -278,4 +278,13 @@
     <string name="authentication_prompt_message">您的会话可能已过期。您想重试还是退出登录？</string>
     <string name="app_inactive_title">系统维护</string>
     <string name="app_inactive_message">应用目前不可用。请稍后再试。</string>
+    <string name="notification_settings">通知设置</string>
+    <string name="enable_notifications">启用通知</string>
+    <string name="enable_background_sync">启用后台同步</string>
+    <string name="notify_sync_interval">API 同步间隔</string>
+    <string name="db_notify_sync_interval">数据库同步间隔</string>
+    <string name="auto_sync_notify">自动同步通知</string>
+    <string name="minutes_label">%1$d 分钟</string>
+    <string name="new_notification_title">新动漫更新</string>
+    <string name="new_notification_message">%1$s - %2$s</string>
 </resources>

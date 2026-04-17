@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.account.MenuSection
+import git.shin.animevsub.ui.components.account.SettingsSlider
 import git.shin.animevsub.ui.components.account.SettingsToggle
 import git.shin.animevsub.ui.screens.account.AccountViewModel
 import git.shin.animevsub.ui.theme.DarkBackground
@@ -90,6 +91,42 @@ fun SettingsScreen(
           label = stringResource(R.string.brightness_gesture),
           checked = uiState.brightnessGesture,
           onCheckedChange = { viewModel.setBrightnessGesture(it) }
+        )
+      }
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      MenuSection(title = stringResource(R.string.notification_settings)) {
+        SettingsToggle(
+          label = stringResource(R.string.enable_notifications),
+          checked = uiState.enableNotifications,
+          onCheckedChange = { viewModel.setEnableNotifications(it) }
+        )
+        SettingsToggle(
+          label = stringResource(R.string.enable_background_sync),
+          checked = uiState.enableBackgroundSync,
+          onCheckedChange = { viewModel.setEnableBackgroundSync(it) }
+        )
+        SettingsToggle(
+          label = stringResource(R.string.auto_sync_notify),
+          checked = uiState.autoSyncNotify,
+          onCheckedChange = { viewModel.setAutoSyncNotify(it) }
+        )
+        SettingsSlider(
+          label = stringResource(R.string.notify_sync_interval),
+          value = uiState.notifyInterval,
+          onValueChange = { viewModel.setNotifyInterval(it) },
+          valueRange = 15f..120f,
+          steps = 6,
+          valueText = stringResource(R.string.minutes_label, uiState.notifyInterval)
+        )
+        SettingsSlider(
+          label = stringResource(R.string.db_notify_sync_interval),
+          value = uiState.dbNotifyInterval,
+          onValueChange = { viewModel.setDbNotifyInterval(it) },
+          valueRange = 15f..240f,
+          steps = 14,
+          valueText = stringResource(R.string.minutes_label, uiState.dbNotifyInterval)
         )
       }
     }

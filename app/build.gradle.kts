@@ -105,6 +105,11 @@ dependencies {
   implementation("com.google.dagger:hilt-android:2.54")
   ksp("com.google.dagger:hilt-android-compiler:2.54")
   implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+  implementation("androidx.hilt:hilt-work:1.3.0")
+  ksp("androidx.hilt:hilt-compiler:1.3.0")
+
+  // WorkManager
+  implementation("androidx.work:work-runtime-ktx:2.11.2")
 
   // Network
   implementation("com.squareup.okhttp3:okhttp:5.3.2")

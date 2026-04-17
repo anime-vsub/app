@@ -278,4 +278,13 @@
     <string name="authentication_prompt_message">Phiên làm việc của bạn có thể đã hết hạn. Bạn có muốn thử lại hoặc đăng xuất không?</string>
     <string name="app_inactive_title">Bảo trì</string>
     <string name="app_inactive_message">Ứng dụng hiện đang tạm ngưng hoạt động. Vui lòng quay lại sau.</string>
+    <string name="notification_settings">Cài đặt thông báo</string>
+    <string name="enable_notifications">Bật thông báo</string>
+    <string name="enable_background_sync">Bật đồng bộ nền</string>
+    <string name="notify_sync_interval">Khoảng cách đồng bộ API</string>
+    <string name="db_notify_sync_interval">Khoảng cách đồng bộ DB</string>
+    <string name="auto_sync_notify">Tự động đồng bộ thông báo</string>
+    <string name="minutes_label">%1$d phút</string>
+    <string name="new_notification_title">Cập nhật Anime mới</string>
+    <string name="new_notification_message">%1$s - %2$s</string>
 </resources>

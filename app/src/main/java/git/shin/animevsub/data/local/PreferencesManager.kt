@@ -24,6 +24,10 @@ class PreferencesManager(private val context: Context) {
     private val BRIGHTNESS_GESTURE_KEY = booleanPreferencesKey("brightness_gesture")
     private val SEARCH_HISTORY_KEY = stringPreferencesKey("search_history")
     private val AUTO_SYNC_NOTIFY_KEY = booleanPreferencesKey("auto_sync_notify")
+    private val NOTIFY_INTERVAL_KEY = androidx.datastore.preferences.core.intPreferencesKey("notify_interval")
+    private val DB_NOTIFY_INTERVAL_KEY = androidx.datastore.preferences.core.intPreferencesKey("db_notify_interval")
+    private val ENABLE_BACKGROUND_SYNC_KEY = booleanPreferencesKey("enable_background_sync")
+    private val ENABLE_NOTIFICATIONS_KEY = booleanPreferencesKey("enable_notifications")
     private val LAST_ACTIVE_CHECK_KEY = longPreferencesKey("last_active_check")
     private val DOUBLE_TAP_SKIP_KEY = androidx.datastore.preferences.core.intPreferencesKey("double_tap_skip")
     private val LONG_PRESS_SPEED_KEY = androidx.datastore.preferences.core.floatPreferencesKey("long_press_speed")
@@ -38,6 +42,11 @@ class PreferencesManager(private val context: Context) {
   val longPressSpeed: Flow<Float> = context.dataStore.data.map { it[LONG_PRESS_SPEED_KEY] ?: 2.0f }
   val autoSyncNotify: Flow<Boolean> =
     context.dataStore.data.map { it[AUTO_SYNC_NOTIFY_KEY] ?: false }
+
+  val notifyInterval: Flow<Int> = context.dataStore.data.map { it[NOTIFY_INTERVAL_KEY] ?: 15 }
+  val dbNotifyInterval: Flow<Int> = context.dataStore.data.map { it[DB_NOTIFY_INTERVAL_KEY] ?: 30 }
+  val enableBackgroundSync: Flow<Boolean> = context.dataStore.data.map { it[ENABLE_BACKGROUND_SYNC_KEY] ?: true }
+  val enableNotifications: Flow<Boolean> = context.dataStore.data.map { it[ENABLE_NOTIFICATIONS_KEY] ?: true }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -80,6 +89,22 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setAutoSyncNotify(value: Boolean) {
     context.dataStore.edit { it[AUTO_SYNC_NOTIFY_KEY] = value }
+  }
+
+  suspend fun setNotifyInterval(value: Int) {
+    context.dataStore.edit { it[NOTIFY_INTERVAL_KEY] = value }
+  }
+
+  suspend fun setDbNotifyInterval(value: Int) {
+    context.dataStore.edit { it[DB_NOTIFY_INTERVAL_KEY] = value }
+  }
+
+  suspend fun setEnableBackgroundSync(value: Boolean) {
+    context.dataStore.edit { it[ENABLE_BACKGROUND_SYNC_KEY] = value }
+  }
+
+  suspend fun setEnableNotifications(value: Boolean) {
+    context.dataStore.edit { it[ENABLE_NOTIFICATIONS_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

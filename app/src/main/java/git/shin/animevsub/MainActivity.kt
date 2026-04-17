@@ -1,24 +1,34 @@
 package git.shin.animevsub
 
+import android.Manifest
 import android.app.PictureInPictureParams
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.UpdateInfo
@@ -29,13 +39,17 @@ import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.theme.AnimeVsubTheme
 import git.shin.animevsub.utils.CloudflareManager
 import git.shin.animevsub.utils.UpdateManager
-import javax.inject.Inject
-import kotlin.system.exitProcess
+import git.shin.animevsub.worker.NotificationSyncWorker
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -58,14 +72,68 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     setContent {
+      val context = LocalContext.current
       val updateInfo = remember { mutableStateOf<UpdateInfo?>(null) }
       val bypassUrl by cloudflareManager.bypassUrl.collectAsState()
       var isAppActive by remember { mutableStateOf(true) }
       val pipMode by isInPipMode.collectAsState()
 
-      androidx.compose.runtime.LaunchedEffect(Unit) {
+      var hasNotificationPermission by remember {
+        mutableStateOf(
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+              context,
+              Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+          } else {
+            true
+          }
+        )
+      }
+
+      val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+      ) { isGranted ->
+        hasNotificationPermission = isGranted
+      }
+
+      LaunchedEffect(Unit) {
+        if (!hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+      }
+
+      LaunchedEffect(Unit) {
         val lastCheck = preferencesManager.lastActiveCheck.first()
         val currentTime = System.currentTimeMillis()
+
+        launch {
+          combine(
+            animeRepository.notifyInterval,
+            animeRepository.enableBackgroundSync
+          ) { interval, enabled ->
+            interval to enabled
+          }.collectLatest { (interval, enabled) ->
+            if (!enabled) {
+              WorkManager.getInstance(applicationContext).cancelUniqueWork("NotificationSync")
+              return@collectLatest
+            }
+
+            // Minimum interval allowed by WorkManager is 15 minutes
+            val syncInterval = interval.coerceAtLeast(15).toLong()
+
+            val syncRequest = PeriodicWorkRequestBuilder<NotificationSyncWorker>(
+              syncInterval, TimeUnit.MINUTES,
+              5, TimeUnit.MINUTES
+            ).build()
+
+            WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+              "NotificationSync",
+              ExistingPeriodicWorkPolicy.UPDATE,
+              syncRequest
+            )
+          }
+        }
 
         if (currentTime - lastCheck > 24 * 60 * 60 * 1000) {
           updateManager.checkAppActive().onSuccess { active ->
@@ -147,23 +215,21 @@ class MainActivity : ComponentActivity() {
 
   override fun onUserLeaveHint() {
     super.onUserLeaveHint()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
       // For Android 8 to 11, we might need to trigger PiP manually if params are set
       // Android 12+ handles this via setAutoEnterEnabled(true)
       // We check if pip params are set (aspect ratio is a good indicator)
       try {
         enterPictureInPictureMode(PictureInPictureParams.Builder().build())
       } catch (e: Exception) {
-        // Ignore
+        print(e)
       }
     }
   }
 
   fun updatePipParams(action: (PictureInPictureParams.Builder) -> Unit) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      val builder = PictureInPictureParams.Builder()
-      action(builder)
-      setPictureInPictureParams(builder.build())
-    }
+    val builder = PictureInPictureParams.Builder()
+    action(builder)
+    setPictureInPictureParams(builder.build())
   }
 }

@@ -9,12 +9,12 @@ import git.shin.animevsub.data.model.Playlist
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class AccountUiState(
   val isLoggedIn: Boolean = false,
@@ -22,6 +22,11 @@ data class AccountUiState(
   val user: User? = null,
   val autoNext: Boolean = true,
   val autoSkip: Boolean = false,
+  val autoSyncNotify: Boolean = true,
+  val enableBackgroundSync: Boolean = true,
+  val enableNotifications: Boolean = true,
+  val notifyInterval: Int = 15,
+  val dbNotifyInterval: Int = 30,
   val volumeGesture: Boolean = true,
   val brightnessGesture: Boolean = true,
   val movieMode: Boolean = false,
@@ -87,6 +92,31 @@ class AccountViewModel @Inject constructor(
     viewModelScope.launch {
       repository.autoSkip.collect { v ->
         _uiState.update { it.copy(autoSkip = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.autoSyncNotify.collect { v ->
+        _uiState.update { it.copy(autoSyncNotify = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.enableBackgroundSync.collect { v ->
+        _uiState.update { it.copy(enableBackgroundSync = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.enableNotifications.collect { v ->
+        _uiState.update { it.copy(enableNotifications = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.notifyInterval.collect { v ->
+        _uiState.update { it.copy(notifyInterval = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.dbNotifyInterval.collect { v ->
+        _uiState.update { it.copy(dbNotifyInterval = v) }
       }
     }
     viewModelScope.launch {
@@ -195,12 +225,12 @@ class AccountViewModel @Inject constructor(
       }
     }
   }
-
-  fun retryAuth() {
-    viewModelScope.launch {
-      repository.refreshUser()
-    }
-  }
+//
+//  fun retryAuth() {
+//    viewModelScope.launch {
+//      repository.refreshUser()
+//    }
+//  }
 
   fun setAutoNext(value: Boolean) {
     viewModelScope.launch { repository.setAutoNext(value) }
@@ -208,6 +238,26 @@ class AccountViewModel @Inject constructor(
 
   fun setAutoSkip(value: Boolean) {
     viewModelScope.launch { repository.setAutoSkip(value) }
+  }
+
+  fun setAutoSyncNotify(value: Boolean) {
+    viewModelScope.launch { repository.setAutoSyncNotify(value) }
+  }
+
+  fun setEnableBackgroundSync(value: Boolean) {
+    viewModelScope.launch { repository.setEnableBackgroundSync(value) }
+  }
+
+  fun setEnableNotifications(value: Boolean) {
+    viewModelScope.launch { repository.setEnableNotifications(value) }
+  }
+
+  fun setNotifyInterval(value: Int) {
+    viewModelScope.launch { repository.setNotifyInterval(value) }
+  }
+
+  fun setDbNotifyInterval(value: Int) {
+    viewModelScope.launch { repository.setDbNotifyInterval(value) }
   }
 
   fun setVolumeGesture(value: Boolean) {

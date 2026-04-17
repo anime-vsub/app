@@ -56,12 +56,11 @@ fun DbNotificationItemRow(
     modifier = Modifier
       .fillMaxWidth()
       .background(DarkBackground)
+      .clickable { onClick(item.season, latestEpisode?.chapId ?: "") }
       .padding(16.dp)
   ) {
     Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onClick(item.season, latestEpisode?.chapId ?: "") },
+      modifier = Modifier.fillMaxWidth(),
       verticalAlignment = Alignment.CenterVertically
     ) {
       Column(modifier = Modifier.weight(1f)) {
@@ -114,7 +113,7 @@ fun DbNotificationItemRow(
       ) {
         Icon(
           imageVector = Icons.Default.Close,
-          contentDescription = "Xóa tất cả",
+          contentDescription = "Delete all",
           tint = TextGrey,
           modifier = Modifier.size(24.dp)
         )
