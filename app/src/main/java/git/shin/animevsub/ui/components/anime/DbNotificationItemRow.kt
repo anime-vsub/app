@@ -59,7 +59,9 @@ fun DbNotificationItemRow(
       .padding(16.dp)
   ) {
     Row(
-      modifier = Modifier.fillMaxWidth(),
+      modifier = Modifier
+        .fillMaxWidth()
+        .clickable { onClick(item.season, latestEpisode?.chapId ?: "") },
       verticalAlignment = Alignment.CenterVertically
     ) {
       Column(modifier = Modifier.weight(1f)) {
