@@ -84,7 +84,6 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -551,7 +550,7 @@ fun VideoPlayer(
               }
               change.consume()
             }
-          } while (!change.changedToUp())
+          } while (event.changes.any { it.pressed })
 
           longPressJob.cancel()
           if (isLongPressing) {
