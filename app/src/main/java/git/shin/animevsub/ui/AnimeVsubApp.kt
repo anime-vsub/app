@@ -1,5 +1,8 @@
 package git.shin.animevsub.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
@@ -150,7 +153,11 @@ fun AnimeVsubAppUI(
   Scaffold(
     containerColor = DarkBackground,
     bottomBar = {
-      if (!hideBottomBar) {
+      AnimatedVisibility(
+        visible = !hideBottomBar,
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it }),
+      ) {
         NavigationBar(
           containerColor = DarkSurface,
           contentColor = TextPrimary,
