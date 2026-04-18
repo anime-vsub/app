@@ -41,7 +41,8 @@ fun ChapterBottomSheet(
       chapterProgress = uiState.chapterProgress,
       isSideMenu = false,
       syncMode = uiState.syncMode,
-      onSyncModeToggle = onSyncModeToggle
+      onSyncModeToggle = onSyncModeToggle,
+      isLoading = uiState.isChaptersLoading
     )
   }
 }

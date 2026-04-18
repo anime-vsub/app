@@ -163,9 +163,10 @@ fun VideoPlayer(
   isFullScreen: Boolean = false,
   onFullScreenChange: (Boolean) -> Unit,
   isInPipMode: Boolean = false,
-  onPlayingStateChange: (Boolean) -> Unit = {},
+  onPlayingStateChange: (Boolean) -> Unit,
   syncMode: Int = 0,
-  onSyncModeChange: (Int) -> Unit = {}
+  onSyncModeChange: (Int) -> Unit,
+  isEpisodesLoading: Boolean = false
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
@@ -1118,7 +1119,8 @@ fun VideoPlayer(
           },
           chapterProgress = chapterProgress,
           isSideMenu = true,
-          onClose = { showEpisodeSideMenu = false }
+          onClose = { showEpisodeSideMenu = false },
+          isLoading = isEpisodesLoading
         )
       }
       PlayerSideMenu(

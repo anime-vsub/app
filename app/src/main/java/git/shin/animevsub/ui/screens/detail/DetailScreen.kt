@@ -368,6 +368,7 @@ fun DetailScreen(
                 onPlayingStateChange = { isPlayerPlaying = it },
                 syncMode = state.syncMode,
                 onSyncModeChange = { viewModel.setSyncMode(it) },
+                isEpisodesLoading = state.isChaptersLoading,
                 modifier = Modifier.fillMaxSize()
               )
             }

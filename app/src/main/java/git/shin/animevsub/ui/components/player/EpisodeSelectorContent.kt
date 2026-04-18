@@ -1,10 +1,12 @@
 package git.shin.animevsub.ui.components.player
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,6 +26,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -64,6 +67,7 @@ import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.utils.shimmerEffect
 
 @Composable
 fun EpisodeSelectorContent(
@@ -78,16 +82,48 @@ fun EpisodeSelectorContent(
   isSideMenu: Boolean = false,
   onClose: (() -> Unit)? = null,
   syncMode: Int = 0,
-  onSyncModeToggle: (() -> Unit)? = null
+  onSyncModeToggle: (() -> Unit)? = null,
+  isLoading: Boolean = false
 ) {
   var searchQuery by remember { mutableStateOf("") }
   var showVerticalSeasons by remember { mutableStateOf(false) }
   val seasonListState = rememberLazyListState()
+  val verticalSeasonListState = rememberLazyListState()
+  val episodeGridState = rememberLazyGridState()
 
   val currentSeasonIndex = displaySeasons.indexOfFirst { it.id == activeDisplaySeasonId }
+
+  // Scroll to current season
   LaunchedEffect(currentSeasonIndex, showVerticalSeasons) {
-    if (currentSeasonIndex >= 0 && !showVerticalSeasons) {
-      seasonListState.animateScrollToItem(currentSeasonIndex)
+    if (currentSeasonIndex >= 0) {
+      if (showVerticalSeasons) {
+        verticalSeasonListState.animateScrollToItem(currentSeasonIndex)
+      } else {
+        seasonListState.animateScrollToItem(currentSeasonIndex)
+      }
+    }
+  }
+
+  val activeSeason = displaySeasons.find { it.id == activeDisplaySeasonId }
+  val filteredChaps = remember(episodes, activeDisplaySeasonId, searchQuery) {
+    if (searchQuery.isEmpty()) {
+      if (activeSeason?.range != null) {
+        episodes.slice(activeSeason.range.filter { it < episodes.size })
+      } else {
+        episodes
+      }
+    } else {
+      episodes.filter { it.name.contains(searchQuery, ignoreCase = true) }
+    }
+  }
+
+  // Scroll to current episode
+  val currentEpisodeIndex = remember(filteredChaps, currentEpisodeId) {
+    filteredChaps.indexOfFirst { it.id == currentEpisodeId }
+  }
+  LaunchedEffect(currentEpisodeIndex, isLoading) {
+    if (!isLoading && currentEpisodeIndex >= 0) {
+      episodeGridState.animateScrollToItem(currentEpisodeIndex)
     }
   }
 
@@ -191,6 +227,7 @@ fun EpisodeSelectorContent(
 
     if (showVerticalSeasons) {
       LazyColumn(
+        state = verticalSeasonListState,
         modifier = Modifier.weight(1f),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -228,39 +265,57 @@ fun EpisodeSelectorContent(
         }
       }
 
-      val activeSeason = displaySeasons.find { it.id == activeDisplaySeasonId }
-      val filteredChaps = if (searchQuery.isEmpty()) {
-        if (activeSeason?.range != null) {
-          episodes.slice(activeSeason.range.filter { it < episodes.size })
+      AnimatedContent(
+        targetState = Pair(isLoading, activeDisplaySeasonId),
+        transitionSpec = {
+          fadeIn() togetherWith fadeOut()
+        },
+        modifier = Modifier.weight(1f),
+        label = "EpisodeListTransition"
+      ) { (loading, _) ->
+        if (loading) {
+          LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 65.dp),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            userScrollEnabled = false
+          ) {
+            items(12) {
+              Box(
+                modifier = Modifier
+                  .height(36.dp)
+                  .fillMaxWidth()
+                  .clip(RoundedCornerShape(4.dp))
+                  .shimmerEffect()
+              )
+            }
+          }
+        } else if (filteredChaps.isEmpty()) {
+          Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(stringResource(R.string.no_episodes_found), color = TextGrey, fontSize = 14.sp)
+          }
         } else {
-          episodes
-        }
-      } else {
-        episodes.filter { it.name.contains(searchQuery, ignoreCase = true) }
-      }
-
-      if (filteredChaps.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-          Text(stringResource(R.string.no_episodes_found), color = TextGrey, fontSize = 14.sp)
-        }
-      } else {
-        LazyVerticalGrid(
-          columns = GridCells.Adaptive(minSize = 65.dp),
-          modifier = Modifier.weight(1f),
-          contentPadding = PaddingValues(16.dp),
-          horizontalArrangement = Arrangement.spacedBy(10.dp),
-          verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-          items(filteredChaps) { chap ->
-            EpisodeItem(
-              chap = chap,
-              isSelected = chap.id == currentEpisodeId,
-              progress = chapterProgress[chap.id],
-              isLarge = true,
-              onClick = {
-                onChapterClick(chap, activeSeason?.realId ?: activeDisplaySeasonId)
-              }
-            )
+          LazyVerticalGrid(
+            state = episodeGridState,
+            columns = GridCells.Adaptive(minSize = 65.dp),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+          ) {
+            items(filteredChaps) { chap ->
+              EpisodeItem(
+                chap = chap,
+                isSelected = chap.id == currentEpisodeId,
+                progress = chapterProgress[chap.id],
+                isLarge = true,
+                onClick = {
+                  onChapterClick(chap, activeSeason?.realId ?: activeDisplaySeasonId)
+                }
+              )
+            }
           }
         }
       }
