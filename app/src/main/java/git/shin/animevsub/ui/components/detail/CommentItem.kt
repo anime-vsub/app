@@ -164,7 +164,10 @@ fun CommentItem(
     Spacer(modifier = Modifier.width(12.dp))
 
     Column(modifier = Modifier.weight(1f)) {
-      Row(verticalAlignment = Alignment.CenterVertically) {
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
         Text(
           text = comment.userName,
           style = MaterialTheme.typography.bodyMedium,
@@ -197,7 +200,6 @@ fun CommentItem(
           )
         }
         Spacer(modifier = Modifier.weight(1f))
-
         Box {
           IconButton(onClick = { showMenu = true }, modifier = Modifier.size(24.dp)) {
             Icon(
