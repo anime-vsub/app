@@ -1,5 +1,11 @@
 .PHONY: help submodule-pull submodule-push spull spush format check test ci build-debug build-release build-bundle clean
 
+ifeq ($(OS),Windows_NT)
+    GRADLEW = gradlew.bat
+else
+    GRADLEW = ./gradlew
+endif
+
 # Default target
 help:
 	@echo "Usage: make <target>"
@@ -29,26 +35,26 @@ submodule-push spush:
 
 # Format & Lint targets
 format:
-	./gradlew ktlintFormat
+	$(GRADLEW) ktlintFormat
 
 check:
-	./gradlew ktlintCheck detekt lintDebug
+	$(GRADLEW) ktlintCheck detekt lintDebug
 
 test:
-	./gradlew testDebugUnitTest
+	$(GRADLEW) testDebugUnitTest
 
 ci:
-	./gradlew ktlintCheck detekt lintDebug testDebugUnitTest --parallel --build-cache
+	$(GRADLEW) ktlintCheck detekt lintDebug testDebugUnitTest --parallel --build-cache
 
 # Build targets
 build-debug:
-	./gradlew assembleDebug
+	$(GRADLEW) assembleDebug
 
 build-release:
-	./gradlew :app:assembleRelease
+	$(GRADLEW) :app:assembleRelease
 
 build-bundle:
-	./gradlew :app:bundleRelease
+	$(GRADLEW) :app:bundleRelease
 
 clean:
-	./gradlew clean
+	$(GRADLEW) clean
