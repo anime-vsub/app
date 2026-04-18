@@ -1,0 +1,12 @@
+<type>(<scope>): <subject>
+
+# --- Details (What & Why) ---
+# -
+# -
+
+# --- Guidelines ---
+# Type: feat, fix, refactor, style, docs, build, ci, chore.
+# Scope: (Optional) module or feature name, e.g., (player), (settings).
+# Subject: Use imperative mood ("add" not "added"), max 50 chars.
+# Body: List specific changes. Use "refactor" for code formatting tasks.
+# Semantic format
