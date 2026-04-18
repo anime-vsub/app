@@ -19,11 +19,11 @@ import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -184,30 +184,20 @@ fun CommentSection(
           currentUserId = currentUserId,
           currentUserAvatar = currentUserAvatar
         )
-        HorizontalDivider(
-          modifier = Modifier.padding(vertical = 8.dp),
-          thickness = 0.5.dp,
-          color = Color.Gray.copy(alpha = 0.3f)
-        )
       }
 
       if (hasMore) {
         item {
+          LaunchedEffect(Unit) {
+            onLoadMore()
+          }
           Box(
             modifier = Modifier
               .fillMaxWidth()
-              .clickable { onLoadMore() }
-              .padding(vertical = 8.dp),
+              .padding(vertical = 16.dp),
             contentAlignment = Alignment.Center
           ) {
-            if (isLoading) {
-              CircularProgressIndicator(modifier = Modifier.size(24.dp))
-            } else {
-              Text(
-                text = stringResource(R.string.view_more_comments),
-                color = MaterialTheme.colorScheme.primary
-              )
-            }
+            CircularProgressIndicator(modifier = Modifier.size(24.dp))
           }
         }
       } else if (isLoading && comments.isEmpty()) {
