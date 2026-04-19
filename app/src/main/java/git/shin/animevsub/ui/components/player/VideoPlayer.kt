@@ -597,8 +597,9 @@ fun VideoPlayer(
     AndroidView(factory = { ctx ->
       PlayerView(ctx).apply {
         player = exoPlayer; useController = false
-        keepScreenOn = true
       }
+    }, update = { view ->
+      view.keepScreenOn = isPlaying
     }, modifier = Modifier.fillMaxSize())
     if (playerData == null && !poster.isNullOrEmpty()) {
       AsyncImage(
