@@ -93,6 +93,8 @@ import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.components.common.ActionButton
 import git.shin.animevsub.ui.components.detail.CommentSection
 import git.shin.animevsub.ui.components.list.GridAnimeList
+import git.shin.animevsub.ui.components.player.BedtimeReminderDialog
+import git.shin.animevsub.ui.components.player.BreakReminderDialog
 import git.shin.animevsub.ui.components.player.EpisodeItem
 import git.shin.animevsub.ui.components.player.VideoPlayer
 import git.shin.animevsub.ui.components.playlist.AddToPlaylistBottomSheet
@@ -121,6 +123,7 @@ fun DetailScreen(
   onNavigateToDetail: (String, String?) -> Unit,
   onNavigateToCategory: (List<SelectedFilter>) -> Unit,
   onNavigateToLogin: () -> Unit,
+  onNavigateToSettings: () -> Unit,
   viewModel: DetailViewModel = hiltViewModel(),
   isInPipMode: Boolean = false
 ) {
@@ -136,6 +139,7 @@ fun DetailScreen(
   var showAddToPlaylistSheet by remember { mutableStateOf(false) }
   var isFullScreen by remember { mutableStateOf(false) }
   val scope = rememberCoroutineScope()
+  var exoPlayerInstance by remember { mutableStateOf<androidx.media3.exoplayer.ExoPlayer?>(null) }
 
   val configuration = LocalConfiguration.current
   val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -194,6 +198,14 @@ fun DetailScreen(
 
         is DetailViewModel.DetailUiEffect.OpenPlaylistSheet -> {
           showAddToPlaylistSheet = true
+        }
+
+        is DetailViewModel.DetailUiEffect.PausePlayer -> {
+          exoPlayerInstance?.pause()
+        }
+
+        is DetailViewModel.DetailUiEffect.ResumePlayer -> {
+          exoPlayerInstance?.play()
         }
       }
     }
@@ -345,11 +357,7 @@ fun DetailScreen(
                 onBack = onNavigateBack,
                 onReload = { viewModel.retryPlayer() },
                 onNextEpisode = { viewModel.playNext() },
-                onVideoEnded = {
-                  if (state.autoNext) {
-                    viewModel.playNext()
-                  }
-                },
+                onVideoEnded = { viewModel.onEpisodeEnded() },
                 servers = state.servers,
                 currentServer = state.currentServer,
                 onServerSelected = { viewModel.selectServer(it) },
@@ -365,9 +373,18 @@ fun DetailScreen(
                 isFullScreen = isFullScreen,
                 onFullScreenChange = { isFullScreen = it },
                 isInPipMode = isInPipMode,
-                onPlayingStateChange = { isPlayerPlaying = it },
+                onPlayingStateChange = {
+                  isPlayerPlaying = it
+                  viewModel.setPlayerPlaying(it)
+                },
                 syncMode = state.syncMode,
                 onSyncModeChange = { viewModel.setSyncMode(it) },
+                onExoPlayerCreated = { exoPlayerInstance = it },
+                sleepTimerMinutes = state.sleepTimerMinutes,
+                onSleepTimerChange = { viewModel.setSleepTimer(it) },
+                pauseAfterCurrentEpisode = state.pauseAfterCurrentEpisode,
+                onPauseAfterCurrentEpisodeChange = { viewModel.setPauseAfterCurrentEpisode(it) },
+                sleepTimerRemainingSeconds = state.sleepTimerRemainingSeconds,
                 isEpisodesLoading = state.isChaptersLoading,
                 modifier = Modifier.fillMaxSize()
               )
@@ -1051,6 +1068,26 @@ fun DetailScreen(
           } else {
             viewModel.removeFromPlaylist(playlistId)
           }
+        }
+      )
+    }
+
+    if (uiState.showBreakReminder) {
+      BreakReminderDialog(
+        onDismiss = { viewModel.dismissBreakReminder() },
+        onSettings = {
+          viewModel.dismissBreakReminder()
+          onNavigateToSettings()
+        }
+      )
+    }
+
+    if (uiState.showBedtimeReminder) {
+      BedtimeReminderDialog(
+        onDismiss = { viewModel.dismissBedtimeReminder() },
+        onSettings = {
+          viewModel.dismissBedtimeReminder()
+          onNavigateToSettings()
         }
       )
     }

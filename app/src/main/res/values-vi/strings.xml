@@ -93,6 +93,7 @@
     <string name="now_playing">Đang phát</string>
     <string name="playback_speed">Tốc độ phát</string>
     <string name="quality">Chất lượng phát</string>
+    <string name="quality_auto">Tự động</string>
     <string name="auto_next_hint">Sắp chuyển tập tiếp theo…</string>
     <string name="auto_next_now_playing">Đang phát tập tiếp theo: %1$s</string>
     <string name="playback_speed_changed">Tốc độ phát: %1$sx</string>
@@ -238,6 +239,30 @@
     <string name="update_downloading_title">Đang tải cập nhật AnimeVsub</string>
     <string name="update_downloading_description">Phiên bản mới đang được tải xuống…</string>
     <string name="session_expired">Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.</string>
+
+    <string name="sleep_timer">Hẹn giờ ngủ</string>
+    <string name="sleep_timer_off">Tắt</string>
+    <string name="sleep_timer_minutes">%1$d phút</string>
+    <string name="sleep_timer_set">Sẽ tạm dừng sau %1$d phút</string>
+    <string name="sleep_timer_remaining">Tạm dừng sau %1$s</string>
+    <string name="sleep_timer_end_of_episode">Khi hết tập này</string>
+    <string name="sleep_timer_active">Hẹn giờ ngủ đang bật</string>
+    <string name="sleep_timer_custom">Tùy chỉnh</string>
+    <string name="sleep_timer_custom_title">Tùy chỉnh hẹn giờ ngủ</string>
+    <string name="sleep_timer_custom_hint">Phút (1–1440)</string>
+
+    <string name="remind_me_to_take_a_break">Nhắc tôi tạm dừng xem</string>
+    <string name="remind_me_when_its_bedtime">Nhắc tôi khi đến giờ đi ngủ</string>
+    <string name="reminder_frequency">Tần suất nhắc</string>
+    <string name="reminder_every_format">Sau mỗi %1$s</string>
+    <string name="bedtime_reminder_schedule">Thời gian biểu: %1$s – %2$s</string>
+    <string name="wait_until_i_finish_video_to_show_reminder">Chờ tôi xem xong video rồi mới hiển thị lời nhắc</string>
+    <string name="reminder_title">Lời nhắc</string>
+    <string name="take_a_break_message">Đã đến lúc tạm dừng xem rồi!</string>
+    <string name="bedtime_message">Đã đến giờ đi ngủ rồi!</string>
+    <string name="dismiss">Bỏ qua</string>
+    <string name="settings_capital">CÀI ĐẶT</string>
+    <string name="select_time">Chọn thời gian</string>
 
     <!-- Comments -->
     <string name="comments_title">Bình luận</string>

@@ -19,6 +19,7 @@ import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -93,7 +95,17 @@ data class DetailUiState(
   val isPostingComment: Boolean = false,
   val commentError: String? = null,
   /** 0: Full, 1: Uploadcomment Only, 2: Disabled */
-  val syncMode: Int = 0
+  val syncMode: Int = 0,
+  /** Sleep timer in minutes, 0 means disabled */
+  val sleepTimerMinutes: Int = 0,
+  /** Remaining seconds until sleep timer triggers */
+  val sleepTimerRemainingSeconds: Long = 0,
+  /** Whether to pause after current episode */
+  val pauseAfterCurrentEpisode: Boolean = false,
+  // Reminders
+  val showBreakReminder: Boolean = false,
+  val showBedtimeReminder: Boolean = false,
+  val wasPlayingBeforeReminder: Boolean = false
 ) {
   val currentChapIndex: Int
     get() {
@@ -114,6 +126,11 @@ class DetailViewModel @Inject constructor(
 
   private val chapterCache = mutableMapOf<String, ChapterData>()
   private val detailCache = mutableMapOf<String, AnimeDetail>()
+  private var sleepTimerJob: Job? = null
+  private var breakReminderJob: Job? = null
+  private var bedtimeReminderJob: Job? = null
+  private var isPlayerPlaying = false
+  private var breakReminderTargetTime: Long = 0
 
   init {
     val animeId = savedStateHandle.get<String>("animeId") ?: ""
@@ -146,6 +163,106 @@ class DetailViewModel @Inject constructor(
     }
 
     loadCommentSortOptions()
+    startReminders()
+  }
+
+  private fun startReminders() {
+    viewModelScope.launch {
+      repository.breakReminderEnabled.collect { enabled ->
+        if (enabled) {
+          startBreakReminder()
+        } else {
+          breakReminderJob?.cancel()
+          breakReminderJob = null
+        }
+      }
+    }
+    viewModelScope.launch {
+      repository.bedtimeReminderEnabled.collect { enabled ->
+        if (enabled) {
+          startBedtimeReminder()
+        } else {
+          bedtimeReminderJob?.cancel()
+          bedtimeReminderJob = null
+        }
+      }
+    }
+  }
+
+  private fun startBreakReminder() {
+    breakReminderJob?.cancel()
+    breakReminderJob = viewModelScope.launch {
+      val interval = repository.breakReminderInterval.first()
+      breakReminderTargetTime = System.currentTimeMillis() + interval * 60 * 1000L
+
+      while (isActive) {
+        val remaining = breakReminderTargetTime - System.currentTimeMillis()
+        if (remaining <= 0) {
+          val waitFinish = repository.bedtimeReminderWaitFinish.first()
+          if (!waitFinish) {
+            _uiState.update {
+              it.copy(
+                showBreakReminder = true,
+                wasPlayingBeforeReminder = isPlayerPlaying
+              )
+            }
+            _uiEffect.emit(DetailUiEffect.PausePlayer)
+          }
+          break
+        }
+        delay(60000) // Check every minute
+      }
+    }
+  }
+
+  private fun startBedtimeReminder() {
+    bedtimeReminderJob?.cancel()
+    bedtimeReminderJob = viewModelScope.launch {
+      while (isActive) {
+        val startTime = repository.bedtimeReminderStartTime.first()
+        val endTime = repository.bedtimeReminderEndTime.first()
+        val waitFinish = repository.bedtimeReminderWaitFinish.first()
+
+        val now = java.util.Calendar.getInstance()
+        val currentMinutes = now.get(java.util.Calendar.HOUR_OF_DAY) * 60 + now.get(java.util.Calendar.MINUTE)
+
+        val isBedtime = if (startTime < endTime) {
+          currentMinutes in startTime until endTime
+        } else {
+          currentMinutes >= startTime || currentMinutes < endTime
+        }
+
+        if (isBedtime) {
+          if (!waitFinish) {
+            _uiState.update {
+              it.copy(
+                showBedtimeReminder = true,
+                wasPlayingBeforeReminder = isPlayerPlaying
+              )
+            }
+            _uiEffect.emit(DetailUiEffect.PausePlayer)
+          }
+        }
+        delay(60000) // Check every minute is fine for bedtime
+      }
+    }
+  }
+
+  fun dismissBreakReminder() {
+    val wasPlaying = _uiState.value.wasPlayingBeforeReminder
+    _uiState.update { it.copy(showBreakReminder = false) }
+    if (wasPlaying) {
+      viewModelScope.launch { _uiEffect.emit(DetailUiEffect.ResumePlayer) }
+    }
+    startBreakReminder()
+  }
+
+  fun dismissBedtimeReminder() {
+    val wasPlaying = _uiState.value.wasPlayingBeforeReminder
+    _uiState.update { it.copy(showBedtimeReminder = false) }
+    if (wasPlaying) {
+      viewModelScope.launch { _uiEffect.emit(DetailUiEffect.ResumePlayer) }
+    }
   }
 
   private fun loadCommentSortOptions() {
@@ -413,7 +530,7 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  private var lastUpdateJob: kotlinx.coroutines.Job? = null
+  private var lastUpdateJob: Job? = null
   private var isInitialPlayback = true
 
   fun updateHistory(currentPosMs: Long, durationMs: Long) {
@@ -648,6 +765,8 @@ class DetailViewModel @Inject constructor(
     data class ShowSnackbar(val message: String) : DetailUiEffect()
     data object RequireLogin : DetailUiEffect()
     data object OpenPlaylistSheet : DetailUiEffect()
+    data object PausePlayer : DetailUiEffect()
+    data object ResumePlayer : DetailUiEffect()
   }
 
   private fun checkLogin(): Boolean {
@@ -882,5 +1001,109 @@ class DetailViewModel @Inject constructor(
 
   fun setSyncMode(mode: Int) {
     _uiState.update { it.copy(syncMode = mode) }
+  }
+
+  fun setSleepTimer(minutes: Int) {
+    sleepTimerJob?.cancel()
+    sleepTimerJob = null
+    _uiState.update {
+      it.copy(
+        sleepTimerMinutes = minutes,
+        sleepTimerRemainingSeconds = minutes * 60L,
+        pauseAfterCurrentEpisode = false
+      )
+    }
+
+    if (minutes > 0) {
+      sleepTimerJob = viewModelScope.launch {
+        while (isActive && _uiState.value.sleepTimerRemainingSeconds > 0) {
+          delay(1000)
+          _uiState.update {
+            it.copy(sleepTimerRemainingSeconds = it.sleepTimerRemainingSeconds - 1)
+          }
+        }
+        if (isActive) {
+          _uiEffect.emit(DetailUiEffect.PausePlayer)
+          _uiState.update {
+            it.copy(
+              sleepTimerMinutes = 0,
+              sleepTimerRemainingSeconds = 0
+            )
+          }
+          sleepTimerJob = null
+        }
+      }
+    }
+  }
+
+  fun setPauseAfterCurrentEpisode(enabled: Boolean) {
+    sleepTimerJob?.cancel()
+    sleepTimerJob = null
+    _uiState.update {
+      it.copy(
+        pauseAfterCurrentEpisode = enabled,
+        sleepTimerMinutes = 0,
+        sleepTimerRemainingSeconds = 0
+      )
+    }
+  }
+
+  fun onEpisodeEnded(): Boolean {
+    if (_uiState.value.pauseAfterCurrentEpisode) {
+      _uiState.update { it.copy(pauseAfterCurrentEpisode = false) }
+      return false
+    }
+
+    // Check if reminders are already shown (e.g. non-wait-finish reminders that triggered just before)
+    if (_uiState.value.showBreakReminder || _uiState.value.showBedtimeReminder) {
+      return false
+    }
+
+    // This is tricky because Flow is async.
+    // We use runBlocking for these quick local DataStore reads to ensure we block the next episode if needed at boundary
+    val shouldPlayNext = kotlinx.coroutines.runBlocking {
+      val breakEnabled = repository.breakReminderEnabled.first()
+      val bedtimeEnabled = repository.bedtimeReminderEnabled.first()
+      val waitFinish = repository.bedtimeReminderWaitFinish.first()
+
+      if (waitFinish) {
+        if (breakEnabled && breakReminderTargetTime != 0L && System.currentTimeMillis() >= breakReminderTargetTime) {
+          _uiState.update {
+            it.copy(
+              showBreakReminder = true,
+              wasPlayingBeforeReminder = true // It was about to play next, so effectively "playing"
+            )
+          }
+          _uiEffect.emit(DetailUiEffect.PausePlayer)
+          return@runBlocking false
+        }
+        if (bedtimeEnabled) {
+          val startTime = repository.bedtimeReminderStartTime.first()
+          val endTime = repository.bedtimeReminderEndTime.first()
+          val now = java.util.Calendar.getInstance()
+          val currentMinutes = now.get(java.util.Calendar.HOUR_OF_DAY) * 60 + now.get(java.util.Calendar.MINUTE)
+          val isBedtime = if (startTime < endTime) currentMinutes in startTime until endTime else currentMinutes >= startTime || currentMinutes < endTime
+          if (isBedtime) {
+            _uiState.update {
+              it.copy(
+                showBedtimeReminder = true,
+                wasPlayingBeforeReminder = true
+              )
+            }
+            _uiEffect.emit(DetailUiEffect.PausePlayer)
+            return@runBlocking false
+          }
+        }
+      }
+      true
+    }
+
+    if (!shouldPlayNext) return false
+
+    return playNext()
+  }
+
+  fun setPlayerPlaying(playing: Boolean) {
+    isPlayerPlaying = playing
   }
 }

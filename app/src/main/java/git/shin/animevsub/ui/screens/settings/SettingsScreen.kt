@@ -10,16 +10,22 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,9 +34,12 @@ import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.account.MenuSection
 import git.shin.animevsub.ui.components.account.SettingsSlider
 import git.shin.animevsub.ui.components.account.SettingsToggle
+import git.shin.animevsub.ui.components.player.CustomTimePickerDialog
 import git.shin.animevsub.ui.screens.account.AccountViewModel
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.utils.formatDurationMinutes
+import git.shin.animevsub.ui.utils.formatTimeMinutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +48,43 @@ fun SettingsScreen(
   viewModel: AccountViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
+  var showStartTimePicker by remember { mutableStateOf(false) }
+  var showEndTimePicker by remember { mutableStateOf(false) }
+
+  if (showStartTimePicker) {
+    val state = rememberTimePickerState(
+      initialHour = (uiState.bedtimeReminderStartTime / 60).toInt(),
+      initialMinute = (uiState.bedtimeReminderStartTime % 60).toInt(),
+      is24Hour = true
+    )
+    CustomTimePickerDialog(
+      onDismissRequest = { showStartTimePicker = false },
+      onConfirm = {
+        viewModel.setBedtimeReminderStartTime((state.hour * 60 + state.minute).toLong())
+        showStartTimePicker = false
+        showEndTimePicker = true
+      }
+    ) {
+      TimePicker(state = state)
+    }
+  }
+
+  if (showEndTimePicker) {
+    val state = rememberTimePickerState(
+      initialHour = (uiState.bedtimeReminderEndTime / 60).toInt(),
+      initialMinute = (uiState.bedtimeReminderEndTime % 60).toInt(),
+      is24Hour = true
+    )
+    CustomTimePickerDialog(
+      onDismissRequest = { showEndTimePicker = false },
+      onConfirm = {
+        viewModel.setBedtimeReminderEndTime((state.hour * 60 + state.minute).toLong())
+        showEndTimePicker = false
+      }
+    ) {
+      TimePicker(state = state)
+    }
+  }
 
   Scaffold(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -92,6 +138,48 @@ fun SettingsScreen(
           checked = uiState.brightnessGesture,
           onCheckedChange = { viewModel.setBrightnessGesture(it) }
         )
+      }
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      MenuSection(title = stringResource(R.string.general)) {
+        SettingsToggle(
+          label = stringResource(R.string.remind_me_to_take_a_break),
+          checked = uiState.breakReminderEnabled,
+          onCheckedChange = { viewModel.setBreakReminderEnabled(it) }
+        )
+        if (uiState.breakReminderEnabled) {
+          SettingsSlider(
+            label = stringResource(R.string.reminder_frequency),
+            value = uiState.breakReminderInterval,
+            onValueChange = { viewModel.setBreakReminderInterval(it) },
+            valueRange = 15f..480f,
+            steps = 31,
+            valueText = stringResource(R.string.reminder_every_format, formatDurationMinutes(uiState.breakReminderInterval))
+          )
+        }
+
+        SettingsToggle(
+          label = stringResource(R.string.remind_me_when_its_bedtime),
+          checked = uiState.bedtimeReminderEnabled,
+          onCheckedChange = { viewModel.setBedtimeReminderEnabled(it) }
+        )
+        if (uiState.bedtimeReminderEnabled) {
+          git.shin.animevsub.ui.components.account.MenuItem(
+            icon = Icons.Default.Bedtime,
+            label = stringResource(
+              R.string.bedtime_reminder_schedule,
+              formatTimeMinutes(uiState.bedtimeReminderStartTime),
+              formatTimeMinutes(uiState.bedtimeReminderEndTime)
+            ),
+            onClick = { showStartTimePicker = true }
+          )
+          SettingsToggle(
+            label = stringResource(R.string.wait_until_i_finish_video_to_show_reminder),
+            checked = uiState.bedtimeReminderWaitFinish,
+            onCheckedChange = { viewModel.setBedtimeReminderWaitFinish(it) }
+          )
+        }
       }
 
       Spacer(modifier = Modifier.height(16.dp))

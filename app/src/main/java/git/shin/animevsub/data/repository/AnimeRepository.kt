@@ -249,6 +249,13 @@ class AnimeRepository @Inject constructor(
   val enableBackgroundSync = prefs.enableBackgroundSync
   val enableNotifications = prefs.enableNotifications
 
+  val breakReminderEnabled = prefs.breakReminderEnabled
+  val breakReminderInterval = prefs.breakReminderInterval
+  val bedtimeReminderEnabled = prefs.bedtimeReminderEnabled
+  val bedtimeReminderStartTime = prefs.bedtimeReminderStartTime
+  val bedtimeReminderEndTime = prefs.bedtimeReminderEndTime
+  val bedtimeReminderWaitFinish = prefs.bedtimeReminderWaitFinish
+
   suspend fun setAutoNext(value: Boolean) = prefs.setAutoNext(value)
   suspend fun setAutoSkip(value: Boolean) = prefs.setAutoSkip(value)
   suspend fun setVolumeGesture(value: Boolean) = prefs.setVolumeGesture(value)
@@ -259,6 +266,13 @@ class AnimeRepository @Inject constructor(
   suspend fun setDbNotifyInterval(value: Int) = prefs.setDbNotifyInterval(value)
   suspend fun setEnableBackgroundSync(value: Boolean) = prefs.setEnableBackgroundSync(value)
   suspend fun setEnableNotifications(value: Boolean) = prefs.setEnableNotifications(value)
+
+  suspend fun setBreakReminderEnabled(value: Boolean) = prefs.setBreakReminderEnabled(value)
+  suspend fun setBreakReminderInterval(value: Int) = prefs.setBreakReminderInterval(value)
+  suspend fun setBedtimeReminderEnabled(value: Boolean) = prefs.setBedtimeReminderEnabled(value)
+  suspend fun setBedtimeReminderStartTime(minutes: Long) = prefs.setBedtimeReminderStartTime(minutes)
+  suspend fun setBedtimeReminderEndTime(minutes: Long) = prefs.setBedtimeReminderEndTime(minutes)
+  suspend fun setBedtimeReminderWaitFinish(value: Boolean) = prefs.setBedtimeReminderWaitFinish(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

@@ -93,6 +93,7 @@
     <string name="now_playing">再生中</string>
     <string name="playback_speed">再生速度</string>
     <string name="quality">画質</string>
+    <string name="quality_auto">自動</string>
     <string name="auto_next_hint">まもなく次のエピソードを開始します…</string>
     <string name="auto_next_now_playing">次のエピソードを再生中: %1$s</string>
     <string name="playback_speed_changed">再生速度: %1$sx</string>
@@ -270,6 +271,30 @@
     <string name="stop">停止</string>
     <string name="done">完了</string>
     <string name="login_not_success">ログインに失敗しました。ウェブサイトでログインしてからもう一度お試しください。</string>
+
+    <string name="sleep_timer">スリープタイマー</string>
+    <string name="sleep_timer_off">オフ</string>
+    <string name="sleep_timer_minutes">%1$d 分</string>
+    <string name="sleep_timer_set">%1$d 分後に一時停止します</string>
+    <string name="sleep_timer_remaining">%1$s 後に一時停止</string>
+    <string name="sleep_timer_end_of_episode">エピソード終了時</string>
+    <string name="sleep_timer_active">スリープタイマーがオンです</string>
+    <string name="sleep_timer_custom">カスタム</string>
+    <string name="sleep_timer_custom_title">カスタムスリープタイマー</string>
+    <string name="sleep_timer_custom_hint">分 (1-1440)</string>
+
+    <string name="remind_me_to_take_a_break">休憩の通知</string>
+    <string name="remind_me_when_its_bedtime">おやすみ時間の通知</string>
+    <string name="reminder_frequency">通知の間隔</string>
+    <string name="reminder_every_format">%1$s ごと</string>
+    <string name="bedtime_reminder_schedule">スケジュール: %1$s – %2$s</string>
+    <string name="wait_until_i_finish_video_to_show_reminder">動画の再生が終わるまで通知を待機する</string>
+    <string name="reminder_title">通知</string>
+    <string name="take_a_break_message">休憩の時間です！</string>
+    <string name="bedtime_message">おやすみの時間です！</string>
+    <string name="dismiss">閉じる</string>
+    <string name="settings_capital">設定</string>
+    <string name="select_time">時間を選択</string>
 
     <!-- Main Activity -->
     <string name="months_ago">%1$d ヶ月前</string>

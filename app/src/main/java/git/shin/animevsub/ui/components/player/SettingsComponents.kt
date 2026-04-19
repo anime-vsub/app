@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.BrightnessLow
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.HighQuality
@@ -34,15 +35,22 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -83,6 +91,11 @@ fun SettingsBottomSheetContent(
   onLongPressSpeedChange: (Float) -> Unit,
   syncMode: Int,
   onSyncModeChange: (Int) -> Unit,
+  sleepTimerMinutes: Int,
+  onSleepTimerChange: (Int) -> Unit,
+  pauseAfterCurrentEpisode: Boolean,
+  onPauseAfterCurrentEpisodeChange: (Boolean) -> Unit,
+  sleepTimerRemainingSeconds: Long,
   onDismiss: () -> Unit
 ) {
   val context = LocalContext.current
@@ -171,6 +184,21 @@ fun SettingsBottomSheetContent(
               },
               onClick = { onSubMenuChange("sync") }
             )
+            SettingsItem(
+              icon = Icons.Default.Timer,
+              title = stringResource(R.string.sleep_timer),
+              value = when {
+                pauseAfterCurrentEpisode -> stringResource(R.string.sleep_timer_end_of_episode)
+                sleepTimerMinutes > 0 -> {
+                  val minutes = sleepTimerRemainingSeconds / 60
+                  val seconds = sleepTimerRemainingSeconds % 60
+                  stringResource(R.string.sleep_timer_remaining, String.format("%02d:%02d", minutes, seconds))
+                }
+
+                else -> stringResource(R.string.sleep_timer_off)
+              },
+              onClick = { onSubMenuChange("sleepTimer") }
+            )
             HorizontalDivider(
               modifier = Modifier.padding(vertical = 8.dp),
               color = Color.White.copy(alpha = 0.1f)
@@ -196,6 +224,45 @@ fun SettingsBottomSheetContent(
           }
         }
 
+        "sleepTimer" -> {
+          SettingsSubMenuContainer(
+            title = stringResource(R.string.sleep_timer),
+            onBack = { onSubMenuChange(null) }
+          ) {
+            SettingsOptionItem(
+              title = stringResource(R.string.sleep_timer_off),
+              isSelected = sleepTimerMinutes == 0 && !pauseAfterCurrentEpisode,
+              onClick = {
+                onSleepTimerChange(0)
+                onPauseAfterCurrentEpisodeChange(false)
+                onDismiss()
+              }
+            )
+            SettingsOptionItem(
+              title = stringResource(R.string.sleep_timer_end_of_episode),
+              isSelected = pauseAfterCurrentEpisode,
+              onClick = {
+                onPauseAfterCurrentEpisodeChange(true)
+                onDismiss()
+              }
+            )
+            listOf(15, 30, 45, 60, 90).forEach { minutes ->
+              SettingsOptionItem(
+                title = stringResource(R.string.sleep_timer_minutes, minutes),
+                isSelected = sleepTimerMinutes == minutes,
+                onClick = { onSleepTimerChange(minutes); onDismiss() }
+              )
+            }
+            SettingsCustomSleepTimer(
+              onSleepTimerChange = {
+                onSleepTimerChange(it)
+                onDismiss()
+              },
+              isSideMenu = false
+            )
+          }
+        }
+
         "server" -> {
           SettingsSubMenuContainer(
             title = stringResource(R.string.server_label),
@@ -217,7 +284,7 @@ fun SettingsBottomSheetContent(
             onBack = { onSubMenuChange(null) }
           ) {
             SettingsOptionItem(
-              title = "Auto",
+              title = stringResource(R.string.quality_auto),
               isSelected = selectedQualityLabel == "Auto",
               onClick = { onQualitySelected("Auto"); onDismiss() }
             )
@@ -304,6 +371,67 @@ fun SettingsBottomSheetContent(
 }
 
 @Composable
+fun SettingsCustomSleepTimer(onSleepTimerChange: (Int) -> Unit, isSideMenu: Boolean) {
+  var showInput by remember { mutableStateOf(false) }
+  var value by remember { mutableStateOf("") }
+
+  if (!showInput) {
+    if (isSideMenu) {
+      SideMenuOptionChip(
+        text = stringResource(R.string.sleep_timer_custom),
+        isSelected = false,
+        onClick = { showInput = true }
+      )
+    } else {
+      SettingsOptionItem(
+        title = stringResource(R.string.sleep_timer_custom),
+        isSelected = false,
+        onClick = { showInput = true }
+      )
+    }
+  } else {
+    Row(
+      modifier = Modifier
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+        .fillMaxWidth(),
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+      OutlinedTextField(
+        value = value,
+        onValueChange = { if (it.all { char -> char.isDigit() } && it.length <= 4) value = it },
+        placeholder = { Text(stringResource(R.string.sleep_timer_custom_hint), fontSize = 12.sp) },
+        modifier = Modifier.width(if (isSideMenu) 100.dp else 140.dp),
+        singleLine = true,
+        textStyle = androidx.compose.ui.text.TextStyle(color = Color.White, fontSize = 14.sp),
+        colors = OutlinedTextFieldDefaults.colors(
+          focusedBorderColor = MainColor,
+          unfocusedBorderColor = Color.White.copy(alpha = 0.3f),
+          focusedContainerColor = Color.Transparent,
+          unfocusedContainerColor = Color.Transparent,
+          cursorColor = MainColor
+        )
+      )
+      IconButton(
+        onClick = {
+          val mins = value.toIntOrNull() ?: 0
+          if (mins in 1..1440) {
+            onSleepTimerChange(mins)
+          }
+          showInput = false
+        },
+        enabled = value.isNotEmpty()
+      ) {
+        Icon(Icons.Default.Check, null, tint = if (value.isNotEmpty()) MainColor else Color.Gray)
+      }
+      IconButton(onClick = { showInput = false }) {
+        Icon(Icons.Default.Close, null, tint = Color.White.copy(alpha = 0.6f))
+      }
+    }
+  }
+}
+
+@Composable
 fun SettingsItem(icon: ImageVector, title: String, value: String? = null, onClick: () -> Unit) {
   Row(
     modifier = Modifier
@@ -370,7 +498,7 @@ fun SettingsSubMenuContainer(title: String, onBack: () -> Unit, content: @Compos
       IconButton(onClick = onBack) {
         Icon(
           Icons.AutoMirrored.Filled.ArrowBack,
-          "Back",
+          stringResource(R.string.back),
           tint = Color.White
         )
       }
@@ -431,7 +559,12 @@ fun SettingsSideMenuContent(
   longPressSpeed: Float,
   onLongPressSpeedChange: (Float) -> Unit,
   syncMode: Int,
-  onSyncModeChange: (Int) -> Unit
+  onSyncModeChange: (Int) -> Unit,
+  sleepTimerMinutes: Int,
+  onSleepTimerChange: (Int) -> Unit,
+  pauseAfterCurrentEpisode: Boolean,
+  onPauseAfterCurrentEpisodeChange: (Boolean) -> Unit,
+  sleepTimerRemainingSeconds: Long
 ) {
   val context = LocalContext.current
   val onSupportClick = { subjectType: String ->
@@ -535,6 +668,44 @@ fun SettingsSideMenuContent(
         )
       }
     }
+    SideMenuSection(title = stringResource(R.string.sleep_timer)) {
+      FlowRow(spacing = 8.dp) {
+        SideMenuOptionChip(
+          text = stringResource(R.string.sleep_timer_off),
+          isSelected = sleepTimerMinutes == 0 && !pauseAfterCurrentEpisode,
+          onClick = {
+            onSleepTimerChange(0)
+            onPauseAfterCurrentEpisodeChange(false)
+          }
+        )
+        SideMenuOptionChip(
+          text = stringResource(R.string.sleep_timer_end_of_episode),
+          isSelected = pauseAfterCurrentEpisode,
+          onClick = { onPauseAfterCurrentEpisodeChange(true) }
+        )
+        listOf(15, 30, 45, 60, 90).forEach { minutes ->
+          SideMenuOptionChip(
+            text = stringResource(R.string.sleep_timer_minutes, minutes),
+            isSelected = sleepTimerMinutes == minutes,
+            onClick = { onSleepTimerChange(minutes) }
+          )
+        }
+        SettingsCustomSleepTimer(
+          onSleepTimerChange = onSleepTimerChange,
+          isSideMenu = true
+        )
+      }
+      if (sleepTimerMinutes > 0 && !pauseAfterCurrentEpisode) {
+        val minutes = sleepTimerRemainingSeconds / 60
+        val seconds = sleepTimerRemainingSeconds % 60
+        Text(
+          text = stringResource(R.string.sleep_timer_remaining, String.format("%02d:%02d", minutes, seconds)),
+          color = MainColor,
+          fontSize = 12.sp,
+          modifier = Modifier.padding(top = 4.dp, start = 4.dp)
+        )
+      }
+    }
     SideMenuSection(title = stringResource(R.string.server_label)) {
       FlowRow(spacing = 8.dp) {
         servers.forEach { server ->
@@ -549,7 +720,7 @@ fun SettingsSideMenuContent(
     SideMenuSection(title = stringResource(R.string.quality)) {
       FlowRow(spacing = 8.dp) {
         SideMenuOptionChip(
-          text = "Auto",
+          text = stringResource(R.string.quality_auto),
           isSelected = currentQuality == "Auto",
           onClick = { onQualitySelected("Auto") }
         )

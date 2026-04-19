@@ -93,6 +93,7 @@
     <string name="now_playing">正在播放</string>
     <string name="playback_speed">播放速度</string>
     <string name="quality">画质</string>
+    <string name="quality_auto">自动</string>
     <string name="auto_next_hint">即将自动播放下一集…</string>
     <string name="auto_next_now_playing">正在播放下一集: %1$s</string>
     <string name="playback_speed_changed">播放速度: %1$sx</string>
@@ -272,6 +273,30 @@
     <string name="stop">停止</string>
     <string name="done">完成</string>
     <string name="login_not_success">登录失败。请在网站登录后重试。</string>
+
+    <string name="sleep_timer">睡眠定时器</string>
+    <string name="sleep_timer_off">关闭</string>
+    <string name="sleep_timer_minutes">%1$d 分钟</string>
+    <string name="sleep_timer_set">将在 %1$d 分钟后暂停</string>
+    <string name="sleep_timer_remaining">将在 %1$s 后暂停</string>
+    <string name="sleep_timer_end_of_episode">本集播放结束时</string>
+    <string name="sleep_timer_active">睡眠定时器已开启</string>
+    <string name="sleep_timer_custom">自定义</string>
+    <string name="sleep_timer_custom_title">自定义睡眠定时器</string>
+    <string name="sleep_timer_custom_hint">分钟 (1-1440)</string>
+
+    <string name="remind_me_to_take_a_break">提醒我休息一下</string>
+    <string name="remind_me_when_its_bedtime">到了就寝时间提醒我</string>
+    <string name="reminder_frequency">提醒频率</string>
+    <string name="reminder_every_format">每 %1$s</string>
+    <string name="bedtime_reminder_schedule">时间安排：%1$s – %2$s</string>
+    <string name="wait_until_i_finish_video_to_show_reminder">等我看完视频再显示提醒</string>
+    <string name="reminder_title">提醒</string>
+    <string name="take_a_break_message">该休息一下了！</string>
+    <string name="bedtime_message">该睡觉了！</string>
+    <string name="dismiss">忽略</string>
+    <string name="settings_capital">设置</string>
+    <string name="select_time">选择时间</string>
 
     <!-- Main Activity -->
     <string name="authentication_prompt_title">身份验证</string>

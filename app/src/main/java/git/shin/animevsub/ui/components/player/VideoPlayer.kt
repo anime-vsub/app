@@ -147,7 +147,7 @@ fun VideoPlayer(
   onBack: () -> Unit,
   onReload: () -> Unit,
   onNextEpisode: () -> Unit,
-  onVideoEnded: () -> Unit,
+  onVideoEnded: () -> Boolean,
   servers: List<ServerInfo> = emptyList(),
   currentServer: ServerInfo? = null,
   onServerSelected: (ServerInfo) -> Unit,
@@ -166,7 +166,13 @@ fun VideoPlayer(
   onPlayingStateChange: (Boolean) -> Unit,
   syncMode: Int = 0,
   onSyncModeChange: (Int) -> Unit,
-  isEpisodesLoading: Boolean = false
+  sleepTimerMinutes: Int,
+  onSleepTimerChange: (Int) -> Unit,
+  pauseAfterCurrentEpisode: Boolean,
+  onPauseAfterCurrentEpisodeChange: (Boolean) -> Unit,
+  sleepTimerRemainingSeconds: Long,
+  isEpisodesLoading: Boolean,
+  onExoPlayerCreated: (ExoPlayer) -> Unit
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
@@ -217,12 +223,12 @@ fun VideoPlayer(
   val exoPlayer = remember {
     ExoPlayer.Builder(context).build().apply {
       playWhenReady = true
+      onExoPlayerCreated(this)
       addListener(object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
           isBuffering = playbackState == Player.STATE_BUFFERING
           if (playbackState == Player.STATE_ENDED && autoNextEnabled) {
-            if (hasNextEpisode) isAutoNexting = true
-            onVideoEnded()
+            if (hasNextEpisode && onVideoEnded()) isAutoNexting = true
           }
         }
 
@@ -1173,59 +1179,69 @@ fun VideoPlayer(
           longPressSpeed = longPressSpeedValue,
           onLongPressSpeedChange = { scope.launch { preferencesManager.setLongPressSpeed(it) } },
           syncMode = syncMode,
-          onSyncModeChange = onSyncModeChange
+          onSyncModeChange = onSyncModeChange,
+          sleepTimerMinutes = sleepTimerMinutes,
+          onSleepTimerChange = onSleepTimerChange,
+          pauseAfterCurrentEpisode = pauseAfterCurrentEpisode,
+          onPauseAfterCurrentEpisodeChange = onPauseAfterCurrentEpisodeChange,
+          sleepTimerRemainingSeconds = sleepTimerRemainingSeconds
         )
       }
-      if (showSettingsBottomSheet) {
-        ModalBottomSheet(
-          onDismissRequest = {
-            showSettingsBottomSheet = false; settingsSubMenu = null
-          },
-          sheetState = rememberModalBottomSheetState(),
-          containerColor = DarkSurface,
-          contentColor = Color.White,
-          dragHandle = null
-        ) {
-          SettingsBottomSheetContent(
-            settingsSubMenu = settingsSubMenu,
-            onSubMenuChange = { settingsSubMenu = it },
-            servers = servers,
-            currentServer = currentServer,
-            onServerSelected = onServerSelected,
-            availableQualities = availableQualities.map { it.label },
-            selectedQualityLabel = selectedQualityLabel,
-            onQualitySelected = { label ->
-              if (label == "Auto") {
-                exoPlayer.trackSelectionParameters =
-                  exoPlayer.trackSelectionParameters.buildUpon()
-                    .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
-                    .build()
-              } else {
-                availableQualities.find { it.label == label }?.let { q ->
-                  exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters.buildUpon()
-                    .setOverrideForType(TrackSelectionOverride(q.group.mediaTrackGroup, q.trackIndex))
-                    .build()
-                }
+    }
+    if (showSettingsBottomSheet) {
+      ModalBottomSheet(
+        onDismissRequest = {
+          showSettingsBottomSheet = false; settingsSubMenu = null
+        },
+        sheetState = rememberModalBottomSheetState(),
+        containerColor = DarkSurface,
+        contentColor = Color.White,
+        dragHandle = null
+      ) {
+        SettingsBottomSheetContent(
+          settingsSubMenu = settingsSubMenu,
+          onSubMenuChange = { settingsSubMenu = it },
+          servers = servers,
+          currentServer = currentServer,
+          onServerSelected = onServerSelected,
+          availableQualities = availableQualities.map { it.label },
+          selectedQualityLabel = selectedQualityLabel,
+          onQualitySelected = { label ->
+            if (label == "Auto") {
+              exoPlayer.trackSelectionParameters =
+                exoPlayer.trackSelectionParameters.buildUpon()
+                  .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
+                  .build()
+            } else {
+              availableQualities.find { it.label == label }?.let { q ->
+                exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters.buildUpon()
+                  .setOverrideForType(TrackSelectionOverride(q.group.mediaTrackGroup, q.trackIndex))
+                  .build()
               }
-            },
-            speeds = speeds,
-            playbackSpeed = playbackSpeed,
-            onSpeedSelected = { exoPlayer.setPlaybackSpeed(it) },
-            volumeGestureEnabled = volumeGestureEnabled,
-            onVolumeGestureToggle = { scope.launch { preferencesManager.setVolumeGesture(it) } },
-            brightnessGestureEnabled = brightnessGestureEnabled,
-            onBrightnessGestureToggle = { scope.launch { preferencesManager.setBrightnessGesture(it) } },
-            autoSkipEnabled = autoSkipEnabled,
-            onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
-            doubleTapSkipDuration = doubleTapSkipDuration,
-            onDoubleTapSkipDurationChange = { scope.launch { preferencesManager.setDoubleTapSkip(it) } },
-            longPressSpeed = longPressSpeedValue,
-            onLongPressSpeedChange = { scope.launch { preferencesManager.setLongPressSpeed(it) } },
-            syncMode = syncMode,
-            onSyncModeChange = onSyncModeChange,
-            onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null }
-          )
-        }
+            }
+          },
+          speeds = speeds,
+          playbackSpeed = playbackSpeed,
+          onSpeedSelected = { exoPlayer.setPlaybackSpeed(it) },
+          volumeGestureEnabled = volumeGestureEnabled,
+          onVolumeGestureToggle = { scope.launch { preferencesManager.setVolumeGesture(it) } },
+          brightnessGestureEnabled = brightnessGestureEnabled,
+          onBrightnessGestureToggle = { scope.launch { preferencesManager.setBrightnessGesture(it) } },
+          autoSkipEnabled = autoSkipEnabled,
+          onAutoSkipToggle = { scope.launch { preferencesManager.setAutoSkip(it) } },
+          doubleTapSkipDuration = doubleTapSkipDuration,
+          onDoubleTapSkipDurationChange = { scope.launch { preferencesManager.setDoubleTapSkip(it) } },
+          longPressSpeed = longPressSpeedValue,
+          onLongPressSpeedChange = { scope.launch { preferencesManager.setLongPressSpeed(it) } },
+          syncMode = syncMode,
+          onSyncModeChange = onSyncModeChange,
+          sleepTimerMinutes = sleepTimerMinutes,
+          onSleepTimerChange = onSleepTimerChange,
+          pauseAfterCurrentEpisode = pauseAfterCurrentEpisode,
+          onPauseAfterCurrentEpisodeChange = onPauseAfterCurrentEpisodeChange,
+          sleepTimerRemainingSeconds = sleepTimerRemainingSeconds,
+          onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null }
+        )
       }
     }
   }

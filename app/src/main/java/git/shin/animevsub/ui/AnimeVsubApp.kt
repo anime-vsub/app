@@ -156,7 +156,7 @@ fun AnimeVsubAppUI(
       AnimatedVisibility(
         visible = !hideBottomBar,
         enter = slideInVertically(initialOffsetY = { it }),
-        exit = slideOutVertically(targetOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it })
       ) {
         NavigationBar(
           containerColor = DarkSurface,
@@ -313,6 +313,9 @@ fun AnimeVsubAppUI(
           },
           onNavigateToLogin = {
             navController.navigate(Screen.Login.route)
+          },
+          onNavigateToSettings = {
+            navController.navigate(Screen.Settings.route)
           },
           isInPipMode = isInPipMode
         )

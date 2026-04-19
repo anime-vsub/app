@@ -44,7 +44,14 @@ data class AccountUiState(
   val historyError: String? = null,
   val followsError: String? = null,
   val playlistsError: String? = null,
-  val isRefreshing: Boolean = false
+  val isRefreshing: Boolean = false,
+  // Reminders
+  val breakReminderEnabled: Boolean = false,
+  val breakReminderInterval: Int = 60,
+  val bedtimeReminderEnabled: Boolean = false,
+  val bedtimeReminderStartTime: Long = 23 * 60,
+  val bedtimeReminderEndTime: Long = 5 * 60,
+  val bedtimeReminderWaitFinish: Boolean = true
 )
 
 @HiltViewModel
@@ -127,6 +134,36 @@ class AccountViewModel @Inject constructor(
     viewModelScope.launch {
       repository.brightnessGesture.collect { v ->
         _uiState.update { it.copy(brightnessGesture = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.breakReminderEnabled.collect { v ->
+        _uiState.update { it.copy(breakReminderEnabled = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.breakReminderInterval.collect { v ->
+        _uiState.update { it.copy(breakReminderInterval = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.bedtimeReminderEnabled.collect { v ->
+        _uiState.update { it.copy(bedtimeReminderEnabled = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.bedtimeReminderStartTime.collect { v ->
+        _uiState.update { it.copy(bedtimeReminderStartTime = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.bedtimeReminderEndTime.collect { v ->
+        _uiState.update { it.copy(bedtimeReminderEndTime = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.bedtimeReminderWaitFinish.collect { v ->
+        _uiState.update { it.copy(bedtimeReminderWaitFinish = v) }
       }
     }
   }
@@ -266,6 +303,30 @@ class AccountViewModel @Inject constructor(
 
   fun setBrightnessGesture(value: Boolean) {
     viewModelScope.launch { repository.setBrightnessGesture(value) }
+  }
+
+  fun setBreakReminderEnabled(value: Boolean) {
+    viewModelScope.launch { repository.setBreakReminderEnabled(value) }
+  }
+
+  fun setBreakReminderInterval(value: Int) {
+    viewModelScope.launch { repository.setBreakReminderInterval(value) }
+  }
+
+  fun setBedtimeReminderEnabled(value: Boolean) {
+    viewModelScope.launch { repository.setBedtimeReminderEnabled(value) }
+  }
+
+  fun setBedtimeReminderStartTime(minutes: Long) {
+    viewModelScope.launch { repository.setBedtimeReminderStartTime(minutes) }
+  }
+
+  fun setBedtimeReminderEndTime(minutes: Long) {
+    viewModelScope.launch { repository.setBedtimeReminderEndTime(minutes) }
+  }
+
+  fun setBedtimeReminderWaitFinish(value: Boolean) {
+    viewModelScope.launch { repository.setBedtimeReminderWaitFinish(value) }
   }
 
   fun createPlaylist(name: String, isPublic: Boolean = false) {

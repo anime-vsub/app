@@ -62,6 +62,26 @@ fun formatDuration(durationMs: Long): String {
   }
 }
 
+fun formatDurationMinutes(durationMinutes: Int): String {
+  val hours = durationMinutes / 60
+  val minutes = durationMinutes % 60
+  return if (hours > 0) {
+    if (minutes > 0) {
+      String.format("%d:%02d", hours, minutes)
+    } else {
+      String.format("%d:00", hours)
+    }
+  } else {
+    String.format("%d", minutes)
+  }
+}
+
+fun formatTimeMinutes(minutesTotal: Long): String {
+  val hours = minutesTotal / 60
+  val minutes = minutesTotal % 60
+  return String.format("%02d:%02d", hours, minutes)
+}
+
 fun formatTime(timestampMillis: Long): String {
   val date = Date(timestampMillis)
   val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
