@@ -1,3 +1,26 @@
+# [2.2.0](https://github.com/anime-vsub/app/compare/v2.1.1...v2.2.0) (2026-04-19)
+
+
+### Bug Fixes
+
+* **ui:** improve double tap feedback by dynamic alignment in VideoPlayer ([f8c86e4](https://github.com/anime-vsub/app/commit/f8c86e4a12a10ac82892393a2ecddf5d94ece829))
+
+
+### Features
+
+* add sleep timer, break reminders, and bedtime features ([19254f3](https://github.com/anime-vsub/app/commit/19254f33d6d25b4456710ebaa27ac12ae671345a))
+* integrate compose-markdown library for enhanced update dialog ([7260d99](https://github.com/anime-vsub/app/commit/7260d99115fd2d5de9cca95c9976328acb80216b))
+* **notification:** enable navigation to latest chapter from row click ([9648d39](https://github.com/anime-vsub/app/commit/9648d39aaed6463928a4611d5ec8058c33c6b7bf))
+* **notification:** implement background sync and system notifications ([e06fd43](https://github.com/anime-vsub/app/commit/e06fd43313511a6dd6dd43e92ca5dffca1f6a51e))
+* **ui:** add animation to NavigationBar visibility ([96b4ff3](https://github.com/anime-vsub/app/commit/96b4ff3715e8b75cf9651134d94b34d084da54b8))
+* **ui:** add loading states and auto-scroll for episode selector ([c0473f7](https://github.com/anime-vsub/app/commit/c0473f75933421f1fef7e695015967dd61ef2410))
+* **ui:** implement infinte loading ([22795f9](https://github.com/anime-vsub/app/commit/22795f9d5169f6e4f8ed34cb24bad9aa30370fed))
+
+
+### Performance Improvements
+
+* **player:** optimize screen power management ([fcb5304](https://github.com/anime-vsub/app/commit/fcb530443668587ba96db46ae4f88eef37fe6c4d))
+
 ## [2.1.1](https://github.com/anime-vsub/app/compare/v2.1.0...v2.1.1) (2026-04-17)
 
 
