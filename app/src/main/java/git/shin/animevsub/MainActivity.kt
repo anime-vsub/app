@@ -2,6 +2,7 @@ package git.shin.animevsub
 
 import android.Manifest
 import android.app.PictureInPictureParams
+import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
@@ -47,6 +48,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.system.exitProcess
@@ -67,6 +69,27 @@ class MainActivity : ComponentActivity() {
 
   private val _isInPipMode = MutableStateFlow(false)
   val isInPipMode = _isInPipMode.asStateFlow()
+
+  override fun attachBaseContext(newBase: Context) {
+    val prefs = PreferencesManager(newBase)
+    val lang = runCatching {
+      kotlinx.coroutines.runBlocking {
+        prefs.appLanguage.first()
+      }
+    }.getOrDefault("auto")
+
+    if (lang == "auto") {
+      super.attachBaseContext(newBase)
+      return
+    }
+
+    val locale = Locale(lang)
+    Locale.setDefault(locale)
+    val config = Configuration(newBase.resources.configuration)
+    config.setLocale(locale)
+    val context = newBase.createConfigurationContext(config)
+    super.attachBaseContext(context)
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -95,6 +118,19 @@ class MainActivity : ComponentActivity() {
         contract = ActivityResultContracts.RequestPermission()
       ) { isGranted ->
         hasNotificationPermission = isGranted
+      }
+
+      val appLanguage by preferencesManager.appLanguage.collectAsState(initial = null)
+      LaunchedEffect(appLanguage) {
+        appLanguage?.let { lang ->
+          val currentConfigLang = resources.configuration.locales[0].language
+          val systemLang = java.util.Locale.getDefault().language
+          val targetLang = if (lang == "auto") systemLang else lang
+
+          if (targetLang != currentConfigLang) {
+            recreate()
+          }
+        }
       }
 
       LaunchedEffect(Unit) {

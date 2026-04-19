@@ -137,6 +137,10 @@
     <string name="player_settings">播放器设置</string>
     <string name="auto_next">自动播放下一集</string>
     <string name="auto_skip">自动跳过片头/片尾</string>
+    <string name="app_language">应用语言</string>
+    <string name="language_auto">系统默认</string>
+    <string name="vietnamese">越南语</string>
+    <string name="english">英语</string>
     <string name="language_settings">语言</string>
     <string name="infinite_scroll">无限滚动</string>
     <string name="movie_mode">电影模式</string>

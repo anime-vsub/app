@@ -37,6 +37,7 @@ class PreferencesManager(private val context: Context) {
     private val BEDTIME_REMINDER_START_TIME_KEY = longPreferencesKey("bedtime_reminder_start_time")
     private val BEDTIME_REMINDER_END_TIME_KEY = longPreferencesKey("bedtime_reminder_end_time")
     private val BEDTIME_REMINDER_WAIT_FINISH_KEY = booleanPreferencesKey("bedtime_reminder_wait_finish")
+    private val APP_LANGUAGE_KEY = stringPreferencesKey("app_language")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -60,6 +61,7 @@ class PreferencesManager(private val context: Context) {
   val bedtimeReminderStartTime: Flow<Long> = context.dataStore.data.map { it[BEDTIME_REMINDER_START_TIME_KEY] ?: (23 * 60 + 0).toLong() } // 23:00
   val bedtimeReminderEndTime: Flow<Long> = context.dataStore.data.map { it[BEDTIME_REMINDER_END_TIME_KEY] ?: (5 * 60 + 0).toLong() } // 05:00
   val bedtimeReminderWaitFinish: Flow<Boolean> = context.dataStore.data.map { it[BEDTIME_REMINDER_WAIT_FINISH_KEY] ?: true }
+  val appLanguage: Flow<String> = context.dataStore.data.map { it[APP_LANGUAGE_KEY] ?: "auto" }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -142,6 +144,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setBedtimeReminderWaitFinish(value: Boolean) {
     context.dataStore.edit { it[BEDTIME_REMINDER_WAIT_FINISH_KEY] = value }
+  }
+
+  suspend fun setAppLanguage(value: String) {
+    context.dataStore.edit { it[APP_LANGUAGE_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

@@ -137,6 +137,10 @@
     <string name="player_settings">Cài đặt trình phát</string>
     <string name="auto_next">Tự động phát tập tiếp theo</string>
     <string name="auto_skip">Tự động bỏ qua Intro/Ending</string>
+    <string name="app_language">Ngôn ngữ ứng dụng</string>
+    <string name="language_auto">Mặc định hệ thống</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="english">Tiếng Anh</string>
     <string name="language_settings">Ngôn ngữ</string>
     <string name="infinite_scroll">Cuộn vô hạn</string>
     <string name="movie_mode">Chế độ phim</string>

@@ -37,6 +37,7 @@ data class AccountUiState(
   val follows: List<AnimeCard> = emptyList(),
   val playlists: List<Playlist> = emptyList(),
   val playlistCheckedStates: Map<Int, Boolean> = emptyMap(),
+  val appLanguage: String = "auto",
   val isLoadingHistory: Boolean = false,
   val isLoadingFollows: Boolean = false,
   val isLoadingPlaylists: Boolean = false,
@@ -164,6 +165,11 @@ class AccountViewModel @Inject constructor(
     viewModelScope.launch {
       repository.bedtimeReminderWaitFinish.collect { v ->
         _uiState.update { it.copy(bedtimeReminderWaitFinish = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.appLanguage.collect { v ->
+        _uiState.update { it.copy(appLanguage = v) }
       }
     }
   }
@@ -327,6 +333,10 @@ class AccountViewModel @Inject constructor(
 
   fun setBedtimeReminderWaitFinish(value: Boolean) {
     viewModelScope.launch { repository.setBedtimeReminderWaitFinish(value) }
+  }
+
+  fun setAppLanguage(value: String) {
+    viewModelScope.launch { repository.setAppLanguage(value) }
   }
 
   fun createPlaylist(name: String, isPublic: Boolean = false) {

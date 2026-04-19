@@ -138,6 +138,10 @@
     <string name="player_settings">Player Settings</string>
     <string name="auto_next">Auto Next Episode</string>
     <string name="auto_skip">Auto Skip Intro/Ending</string>
+    <string name="app_language">App Language</string>
+    <string name="language_auto">System Default</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="english">English</string>
     <string name="language_settings">Language</string>
     <string name="infinite_scroll">Infinite Scroll</string>
     <string name="movie_mode">Movie Mode</string>

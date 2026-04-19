@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.account.MenuSection
+import git.shin.animevsub.ui.components.account.SettingsSelector
 import git.shin.animevsub.ui.components.account.SettingsSlider
 import git.shin.animevsub.ui.components.account.SettingsToggle
 import git.shin.animevsub.ui.components.player.CustomTimePickerDialog
@@ -113,6 +114,16 @@ fun SettingsScreen(
         .padding(16.dp)
     ) {
       MenuSection(title = stringResource(R.string.settings)) {
+        SettingsSelector(
+          label = stringResource(R.string.app_language),
+          selectedOption = uiState.appLanguage,
+          options = listOf(
+            "auto" to stringResource(R.string.language_auto),
+            "vi" to stringResource(R.string.vietnamese),
+            "en" to stringResource(R.string.english)
+          ),
+          onOptionSelected = { viewModel.setAppLanguage(it) }
+        )
         SettingsToggle(
           label = stringResource(R.string.auto_next),
           checked = uiState.autoNext,

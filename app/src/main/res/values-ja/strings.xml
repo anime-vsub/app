@@ -137,6 +137,10 @@
     <string name="player_settings">プレーヤー設定</string>
     <string name="auto_next">次のエピソードを自動再生</string>
     <string name="auto_skip">イントロ/エンディングを自動スキップ</string>
+    <string name="app_language">アプリの言語</string>
+    <string name="language_auto">システムデフォルト</string>
+    <string name="vietnamese">ベトナム語</string>
+    <string name="english">英語</string>
     <string name="language_settings">言語</string>
     <string name="infinite_scroll">無限スクロール</string>
     <string name="movie_mode">映画モード</string>
