@@ -1,6 +1,7 @@
 package git.shin.animevsub.ui.components.dialogs
 
 import android.annotation.SuppressLint
+import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -83,7 +84,6 @@ fun CloudflareBypassDialog(
     ) {
       Scaffold(
         modifier = Modifier.fillMaxSize(),
-        contentWindowInsets = WindowInsets.statusBars,
         topBar = {
           Column {
             TopAppBar(
@@ -201,7 +201,7 @@ fun CloudflareBypassDialog(
         },
         containerColor = DarkBackground
       ) { padding ->
-        Box(
+        Column(
           modifier = Modifier
             .fillMaxSize()
             .padding(padding)
@@ -209,6 +209,10 @@ fun CloudflareBypassDialog(
           AndroidView(
             factory = { ctx ->
               WebView(ctx).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                  ViewGroup.LayoutParams.MATCH_PARENT,
+                  ViewGroup.LayoutParams.MATCH_PARENT
+                )
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 settings.userAgentString =
@@ -222,7 +226,11 @@ fun CloudflareBypassDialog(
                     pageTitle = view?.title ?: ""
 
                     // Check if bypassed
-                    if (view?.title?.contains("Just a moment", ignoreCase = true) == false) {
+                    val title = view?.title
+                    if (!title.isNullOrEmpty() &&
+                      !title.contains("Just a moment", ignoreCase = true) &&
+                      !title.contains("Cloudflare", ignoreCase = true)
+                    ) {
                       onResult(url)
                     }
                   }
