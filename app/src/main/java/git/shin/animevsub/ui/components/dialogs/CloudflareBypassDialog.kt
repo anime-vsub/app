@@ -13,9 +13,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -81,8 +82,8 @@ fun CloudflareBypassDialog(
       color = DarkBackground
     ) {
       Scaffold(
-        modifier = Modifier.statusBarsPadding(),
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = Modifier.fillMaxSize(),
+        contentWindowInsets = WindowInsets.statusBars,
         topBar = {
           Column {
             TopAppBar(
@@ -145,7 +146,8 @@ fun CloudflareBypassDialog(
         bottomBar = {
           Surface(
             color = DarkBackground,
-            tonalElevation = 8.dp
+            tonalElevation = 8.dp,
+            modifier = Modifier.navigationBarsPadding()
           ) {
             Column {
               HorizontalDivider(color = Color.White.copy(alpha = 0.1f), thickness = 0.5.dp)
