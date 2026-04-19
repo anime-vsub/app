@@ -141,6 +141,8 @@
     <string name="language_auto">Mặc định hệ thống</string>
     <string name="vietnamese">Tiếng Việt</string>
     <string name="english">Tiếng Anh</string>
+    <string name="japanese">Tiếng Nhật</string>
+    <string name="chinese">Tiếng Trung</string>
     <string name="language_settings">Ngôn ngữ</string>
     <string name="infinite_scroll">Cuộn vô hạn</string>
     <string name="movie_mode">Chế độ phim</string>

@@ -120,7 +120,9 @@ fun SettingsScreen(
           options = listOf(
             "auto" to stringResource(R.string.language_auto),
             "vi" to stringResource(R.string.vietnamese),
-            "en" to stringResource(R.string.english)
+            "en" to stringResource(R.string.english),
+            "ja" to stringResource(R.string.japanese),
+            "zh" to stringResource(R.string.chinese)
           ),
           onOptionSelected = { viewModel.setAppLanguage(it) }
         )

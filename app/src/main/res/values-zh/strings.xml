@@ -141,6 +141,8 @@
     <string name="language_auto">系统默认</string>
     <string name="vietnamese">越南语</string>
     <string name="english">英语</string>
+    <string name="japanese">日语</string>
+    <string name="chinese">中文</string>
     <string name="language_settings">语言</string>
     <string name="infinite_scroll">无限滚动</string>
     <string name="movie_mode">电影模式</string>

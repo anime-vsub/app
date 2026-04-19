@@ -142,6 +142,8 @@
     <string name="language_auto">System Default</string>
     <string name="vietnamese">Vietnamese</string>
     <string name="english">English</string>
+    <string name="japanese">Japanese</string>
+    <string name="chinese">Chinese</string>
     <string name="language_settings">Language</string>
     <string name="infinite_scroll">Infinite Scroll</string>
     <string name="movie_mode">Movie Mode</string>

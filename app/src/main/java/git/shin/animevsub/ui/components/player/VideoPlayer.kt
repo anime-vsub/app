@@ -119,6 +119,8 @@ import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.WatchProgress
+import git.shin.animevsub.ui.components.player.settings.SettingsBottomSheetContent
+import git.shin.animevsub.ui.components.player.settings.SettingsSideMenuContent
 import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
