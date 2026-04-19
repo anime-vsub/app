@@ -70,9 +70,9 @@ fun DoubleTapIndicator(
           }
         ),
         shape = if (isForward) {
-          RoundedCornerShape(topEndPercent = 100, bottomEndPercent = 100)
+          RoundedCornerShape(topStartPercent = 25, bottomStartPercent = 25)
         } else {
-          RoundedCornerShape(topStartPercent = 100, bottomStartPercent = 100)
+          RoundedCornerShape(topEndPercent = 25, bottomEndPercent = 25)
         }
       ),
     contentAlignment = if (isForward) Alignment.CenterEnd else Alignment.CenterStart
@@ -81,7 +81,10 @@ fun DoubleTapIndicator(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier = Modifier
         .scale(scale.value)
-        .padding(horizontal = 16.dp)
+        .padding(
+          start = if (isForward) 0.dp else 42.dp,
+          end = if (isForward) 42.dp else 0.dp
+        )
     ) {
       Icon(
         imageVector = if (isForward) Icons.Default.FastForward else Icons.Default.FastRewind,

@@ -12,3 +12,4 @@ local.properties
 /app/google-services.json
 node_modules
 tsconfig.json
+/.kotlin
