@@ -44,9 +44,9 @@ import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.StarColor
+import kotlinx.coroutines.delay
 import java.util.Locale
 import kotlin.math.absoluteValue
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

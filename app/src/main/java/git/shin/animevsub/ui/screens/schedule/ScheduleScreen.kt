@@ -65,8 +65,8 @@ import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatShortDayAndDate
 import git.shin.animevsub.ui.utils.formatTime
 import git.shin.animevsub.ui.utils.isToday
-import java.util.Calendar
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

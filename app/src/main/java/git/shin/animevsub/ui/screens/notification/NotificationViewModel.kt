@@ -9,7 +9,6 @@ import git.shin.animevsub.data.model.DbNotificationItem
 import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.NotificationDatabaseRepository
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed class NotificationUiEvent {
   data class ShowToast(val messageRes: Int? = null, val message: String? = null) : NotificationUiEvent()

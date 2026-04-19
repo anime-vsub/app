@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
       LaunchedEffect(appLanguage) {
         appLanguage?.let { lang ->
           val currentConfigLang = resources.configuration.locales[0].language
-          val systemLang = java.util.Locale.getDefault().language
+          val systemLang = Locale.getDefault().language
           val targetLang = if (lang == "auto") systemLang else lang
 
           if (targetLang != currentConfigLang) {

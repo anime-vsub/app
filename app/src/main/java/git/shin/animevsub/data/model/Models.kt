@@ -1,7 +1,7 @@
 package git.shin.animevsub.data.model
 
-import java.time.Instant
 import kotlinx.serialization.Serializable
+import java.time.Instant
 
 @Serializable
 data class AnimeCard(

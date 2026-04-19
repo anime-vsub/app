@@ -8,13 +8,13 @@ import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.repository.AnimeRepository
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
 data class CategoryUiState(
   val isLoading: Boolean = true,

@@ -6,13 +6,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.SearchSuggestion
 import git.shin.animevsub.data.repository.AnimeRepository
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class SearchUiState(
   val query: String = "",

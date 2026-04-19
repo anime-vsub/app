@@ -14,14 +14,14 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.model.GitHubRelease
 import git.shin.animevsub.data.model.UpdateInfo
-import java.io.File
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class UpdateManager @Inject constructor(

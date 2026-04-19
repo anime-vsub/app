@@ -7,12 +7,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.Playlist
 import git.shin.animevsub.data.model.PlaylistItem
 import git.shin.animevsub.data.repository.PlaylistRepository
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class PlaylistUiState(
   val playlist: Playlist? = null,
