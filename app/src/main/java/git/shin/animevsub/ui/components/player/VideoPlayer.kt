@@ -804,7 +804,9 @@ fun VideoPlayer(
         DoubleTapIndicator(
           side = doubleTapSide,
           text = doubleTapText,
-          modifier = Modifier.align(Alignment.Center)
+          modifier = Modifier.align(
+            if (doubleTapSide == "left") Alignment.CenterStart else Alignment.CenterEnd
+          )
         )
       }
 
