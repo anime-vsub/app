@@ -1,5 +1,9 @@
 package git.shin.animevsub.ui.components.dialogs
 
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -22,12 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.jeziellago.compose.markdowntext.MarkdownText
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.UpdateInfo
 import git.shin.animevsub.ui.theme.AccentMain
@@ -84,9 +90,31 @@ fun UpdateDialog(
       ) {
         MarkdownText(
           markdown = info.description,
-          color = TextSecondary,
-          fontSize = 14.sp,
-          lineHeight = 22.sp
+          style = MaterialTheme.typography.bodyMedium.copy(
+            color = TextSecondary,
+            fontSize = 14.sp,
+            lineHeight = 22.sp
+          ),
+          linkColor = AccentMain,
+          syntaxHighlightColor = Color.Transparent,
+          syntaxHighlightTextColor = TextPrimary,
+          beforeSetMarkdown = { _, spanned ->
+            if (spanned is Spannable) {
+              val spans = spanned.getSpans(0, spanned.length, TypefaceSpan::class.java)
+              spans.forEach { span ->
+                if (span.family == "monospace") {
+                  val start = spanned.getSpanStart(span)
+                  val end = spanned.getSpanEnd(span)
+                  spanned.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                  )
+                }
+              }
+            }
+          }
         )
       }
 
@@ -100,61 +128,18 @@ fun UpdateDialog(
           Text(text = stringResource(R.string.cancel), color = TextSecondary)
         }
         Spacer(modifier = Modifier.width(8.dp))
-        TextButton(
-          onClick = onConfirm
+        Button(
+          onClick = onConfirm,
+          colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+          shape = RoundedCornerShape(8.dp)
         ) {
           Text(
             text = stringResource(R.string.update_now),
-            color = AccentMain,
+            color = TextPrimary,
             fontWeight = FontWeight.Bold
           )
         }
       }
     }
   }
-}
-
-@Composable
-fun MarkdownText(
-  markdown: String,
-  color: Color,
-  fontSize: androidx.compose.ui.unit.TextUnit,
-  lineHeight: androidx.compose.ui.unit.TextUnit
-) {
-  // Simple markdown parser for basic formatting (bold, list)
-  val annotatedString = buildAnnotatedString {
-    val lines = markdown.split("\n")
-    lines.forEachIndexed { index, line ->
-      var currentLine = line
-
-      // Handle list items
-      if (currentLine.trimStart().startsWith("- ") || currentLine.trimStart().startsWith("* ")) {
-        append("  • ")
-        currentLine = currentLine.trimStart().substring(2)
-      }
-
-      // Handle bold text **text**
-      val boldRegex = "\\*\\*(.*?)\\*\\*".toRegex()
-      var lastIndex = 0
-      boldRegex.findAll(currentLine).forEach { match ->
-        append(currentLine.substring(lastIndex, match.range.first))
-        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = TextPrimary)) {
-          append(match.groupValues[1])
-        }
-        lastIndex = match.range.last + 1
-      }
-      append(currentLine.substring(lastIndex))
-
-      if (index < lines.size - 1) {
-        append("\n")
-      }
-    }
-  }
-
-  Text(
-    text = annotatedString,
-    color = color,
-    fontSize = fontSize,
-    lineHeight = lineHeight
-  )
 }
