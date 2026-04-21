@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,17 +31,23 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.R
+import git.shin.animevsub.ui.components.dialogs.DonationDialog
 import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
@@ -56,6 +63,7 @@ fun AboutScreen(
   viewModel: AboutViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
+  var showDonationDialog by remember { mutableStateOf(false) }
 
   Scaffold(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -91,19 +99,18 @@ fun AboutScreen(
     ) {
       Spacer(modifier = Modifier.height(32.dp))
 
-      // App icon placeholder
+      // App icon
       Box(
         modifier = Modifier
           .size(80.dp)
           .clip(RoundedCornerShape(16.dp))
-          .background(AccentMain),
+          .background(DarkCard),
         contentAlignment = Alignment.Center
       ) {
-        Text(
-          text = "AV",
-          color = TextPrimary,
-          fontSize = 28.sp,
-          fontWeight = FontWeight.Bold
+        AsyncImage(
+          model = R.mipmap.ic_launcher,
+          contentDescription = stringResource(R.string.app_name),
+          modifier = Modifier.size(64.dp)
         )
       }
 
@@ -163,15 +170,40 @@ fun AboutScreen(
 
       Spacer(modifier = Modifier.height(24.dp))
 
-      if (uiState.isCheckingUpdate) {
-        CircularProgressIndicator(color = AccentMain, modifier = Modifier.size(24.dp))
-      } else {
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
         Button(
-          onClick = { viewModel.checkUpdate() },
-          colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+          onClick = { showDonationDialog = true },
+          modifier = Modifier.weight(1f),
+          colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63)),
           shape = RoundedCornerShape(8.dp)
         ) {
-          Text(text = stringResource(R.string.check_update), color = TextPrimary)
+          Icon(
+            imageVector = Icons.Default.Favorite,
+            contentDescription = null,
+            modifier = Modifier.size(18.dp)
+          )
+          Spacer(modifier = Modifier.size(8.dp))
+          Text(text = stringResource(R.string.donation_title), color = TextPrimary)
+        }
+
+        if (uiState.isCheckingUpdate) {
+          CircularProgressIndicator(
+            color = AccentMain,
+            modifier = Modifier.size(24.dp)
+          )
+        } else {
+          Button(
+            onClick = { viewModel.checkUpdate() },
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+            shape = RoundedCornerShape(8.dp)
+          ) {
+            Text(text = stringResource(R.string.check_update), color = TextPrimary)
+          }
         }
       }
 
@@ -200,6 +232,13 @@ fun AboutScreen(
         }
       )
     }
+  }
+
+  // Donation Dialog
+  if (showDonationDialog) {
+    DonationDialog(
+      onDismiss = { showDonationDialog = false }
+    )
   }
 }
 

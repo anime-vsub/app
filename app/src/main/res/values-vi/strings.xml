@@ -318,4 +318,14 @@
     <string name="minutes_label">%1$d phút</string>
     <string name="new_notification_title">Cập nhật Anime mới</string>
     <string name="new_notification_message">%1$s - %2$s</string>
+    <!-- Donation -->
+    <string name="donation_title">Lời tâm sự từ nhà phát triển</string>
+    <string name="donation_description">Ứng dụng đã được duy trì %1$d năm và vẫn luôn miễn phí. Điều này gây áp lực tài chính rất lớn lên các nhà phát triển để duy trì server và các tính năng mới.</string>
+    <string name="donation_message">Nếu bạn yêu thích ứng dụng, hãy ủng hộ chúng mình một ly cà phê nhé! ❤️</string>
+    <string name="donation_bank_info">Ngân hàng: %1$s\nSTK: %2$s\nChủ TK: %3$s</string>
+    <string name="donation_got_it">Tôi đã hiểu</string>
+    <string name="donation_qr_saved">Đã lưu mã QR vào thư viện ảnh!</string>
+    <string name="donation_save_error">Lỗi khi lưu ảnh: %1$s</string>
+    <string name="donation_qr_desc">Mã QR ủng hộ</string>
+    <string name="donation_save_qr">Lưu mã QR</string>
 </resources>

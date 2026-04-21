@@ -318,4 +318,14 @@
     <string name="minutes_label">%1$d 分</string>
     <string name="new_notification_title">新着アニメ更新</string>
     <string name="new_notification_message">%1$s - %2$s</string>
+    <!-- Donation -->
+    <string name="donation_title">開発者からのメッセージ</string>
+    <string name="donation_description">このアプリは %1$d 年間維持されており、常に無料です。これは、サーバーや新機能の維持において、開発者に大きな経済的負担をかけています。</string>
+    <string name="donation_message">アプリを気に入いただけましたら、コーヒー一杯の支援をお願いします！❤️</string>
+    <string name="donation_bank_info">銀行: %1$s\n口座番号: %2$s\n名義人: %3$s</string>
+    <string name="donation_got_it">了解しました</string>
+    <string name="donation_qr_saved">QRコードをギャラリーに保存しました！</string>
+    <string name="donation_save_error">画像の保存中にエラーが発生しました: %1$s</string>
+    <string name="donation_qr_desc">寄付用QRコード</string>
+    <string name="donation_save_qr">QRを保存</string>
 </resources>

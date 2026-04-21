@@ -318,4 +318,14 @@
     <string name="minutes_label">%1$d 分钟</string>
     <string name="new_notification_title">新动漫更新</string>
     <string name="new_notification_message">%1$s - %2$s</string>
+    <!-- Donation -->
+    <string name="donation_title">来自开发者的信</string>
+    <string name="donation_description">该应用已维护了 %1$d 年，且始终免费。这对开发者维护服务器和开发新功能带来了巨大的经济压力。</string>
+    <string name="donation_message">如果您喜欢这个应用，请支持我们一杯咖啡！❤️</string>
+    <string name="donation_bank_info">银行: %1$s\n账号: %2$s\n户名: %3$s</string>
+    <string name="donation_got_it">我明白了</string>
+    <string name="donation_qr_saved">二维码已保存到相册！</string>
+    <string name="donation_save_error">保存图片时出错: %1$s</string>
+    <string name="donation_qr_desc">捐赠二维码</string>
+    <string name="donation_save_qr">保存二维码</string>
 </resources>

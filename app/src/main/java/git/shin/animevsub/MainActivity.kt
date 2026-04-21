@@ -36,6 +36,7 @@ import git.shin.animevsub.data.model.UpdateInfo
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.ui.AnimeVsubAppUI
 import git.shin.animevsub.ui.components.dialogs.CloudflareBypassDialog
+import git.shin.animevsub.ui.components.dialogs.DonationDialog
 import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.theme.AnimeVsubTheme
 import git.shin.animevsub.utils.CloudflareManager
@@ -100,6 +101,7 @@ class MainActivity : ComponentActivity() {
       val bypassUrl by cloudflareManager.bypassUrl.collectAsState()
       var isAppActive by remember { mutableStateOf(true) }
       val pipMode by isInPipMode.collectAsState()
+      var showDonationDialog by remember { mutableStateOf(false) }
 
       var hasNotificationPermission by remember {
         mutableStateOf(
@@ -140,9 +142,13 @@ class MainActivity : ComponentActivity() {
       }
 
       LaunchedEffect(Unit) {
-        val lastCheck = preferencesManager.lastActiveCheck.first()
+        val lastDonation = preferencesManager.lastDonationAlert.first()
         val currentTime = System.currentTimeMillis()
+        if (currentTime - lastDonation > 7 * 24 * 60 * 60 * 1000L) {
+          showDonationDialog = true
+        }
 
+        val lastCheck = preferencesManager.lastActiveCheck.first()
         launch {
           combine(
             animeRepository.notifyInterval,
@@ -233,6 +239,17 @@ class MainActivity : ComponentActivity() {
               },
               onDismiss = {
                 cloudflareManager.cancelBypass()
+              }
+            )
+          }
+
+          if (showDonationDialog) {
+            DonationDialog(
+              onDismiss = {
+                showDonationDialog = false
+                MainScope().launch {
+                  preferencesManager.setLastDonationAlert(System.currentTimeMillis())
+                }
               }
             )
           }

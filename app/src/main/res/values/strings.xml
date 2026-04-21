@@ -322,4 +322,14 @@
           or log out?</string>
     <string name="app_inactive_title">Maintenance</string>
     <string name="app_inactive_message">The application is currently unavailable. Please check back later.</string>
+    <!-- Donation -->
+    <string name="donation_title">A message from developer</string>
+    <string name="donation_description">The application has been maintained for %1$d years and is always free. This puts great financial pressure on developers to maintain servers and new features.</string>
+    <string name="donation_message">If you love the app, please support us with a cup of coffee! ❤️</string>
+    <string name="donation_bank_info">Bank: %1$s\nAccount: %2$s\nHolder: %3$s</string>
+    <string name="donation_got_it">I understand</string>
+    <string name="donation_qr_saved">QR code saved to gallery!</string>
+    <string name="donation_save_error">Error saving image: %1$s</string>
+    <string name="donation_qr_desc">QR Donation</string>
+    <string name="donation_save_qr">Save QR</string>
 </resources>

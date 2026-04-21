@@ -38,6 +38,7 @@ class PreferencesManager(private val context: Context) {
     private val BEDTIME_REMINDER_END_TIME_KEY = longPreferencesKey("bedtime_reminder_end_time")
     private val BEDTIME_REMINDER_WAIT_FINISH_KEY = booleanPreferencesKey("bedtime_reminder_wait_finish")
     private val APP_LANGUAGE_KEY = stringPreferencesKey("app_language")
+    private val LAST_DONATION_ALERT_KEY = longPreferencesKey("last_donation_alert")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -62,6 +63,7 @@ class PreferencesManager(private val context: Context) {
   val bedtimeReminderEndTime: Flow<Long> = context.dataStore.data.map { it[BEDTIME_REMINDER_END_TIME_KEY] ?: (5 * 60 + 0).toLong() } // 05:00
   val bedtimeReminderWaitFinish: Flow<Boolean> = context.dataStore.data.map { it[BEDTIME_REMINDER_WAIT_FINISH_KEY] ?: true }
   val appLanguage: Flow<String> = context.dataStore.data.map { it[APP_LANGUAGE_KEY] ?: "auto" }
+  val lastDonationAlert: Flow<Long> = context.dataStore.data.map { it[LAST_DONATION_ALERT_KEY] ?: 0L }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -148,6 +150,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setAppLanguage(value: String) {
     context.dataStore.edit { it[APP_LANGUAGE_KEY] = value }
+  }
+
+  suspend fun setLastDonationAlert(value: Long) {
+    context.dataStore.edit { it[LAST_DONATION_ALERT_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {
