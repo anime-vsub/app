@@ -328,4 +328,16 @@
     <string name="donation_save_error">画像の保存中にエラーが発生しました: %1$s</string>
     <string name="donation_qr_desc">寄付用QRコード</string>
     <string name="donation_save_qr">QRを保存</string>
+
+    <!-- Developer Options -->
+    <string name="developer_options_title">開発者向けオプション</string>
+    <string name="hide_donation_popups">寄付の通知を非表示にする (7日間)</string>
+    <string name="unlock_developer_options">開発者向けオプションをアンロック</string>
+    <string name="enter_password_to_continue">パスワードを入力してください</string>
+    <string name="password_hint">パスワード</string>
+    <string name="wrong_password">パスワードが正しくありません</string>
+    <string name="confirm">確認</string>
+    <string name="developer_step_count">開発者になるまであと %1$d ステップです。</string>
+    <string name="developer_mode_already_enabled">すでに開発者です。</string>
+    <string name="developer_mode_enabled">これで開発者になりました！</string>
 </resources>

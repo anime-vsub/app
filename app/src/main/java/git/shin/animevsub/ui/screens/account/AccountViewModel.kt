@@ -38,6 +38,8 @@ data class AccountUiState(
   val playlists: List<Playlist> = emptyList(),
   val playlistCheckedStates: Map<Int, Boolean> = emptyMap(),
   val appLanguage: String = "auto",
+  val isDeveloperMode: Boolean = false,
+  val hideDonationPopup: Boolean = false,
   val isLoadingHistory: Boolean = false,
   val isLoadingFollows: Boolean = false,
   val isLoadingPlaylists: Boolean = false,
@@ -170,6 +172,16 @@ class AccountViewModel @Inject constructor(
     viewModelScope.launch {
       repository.appLanguage.collect { v ->
         _uiState.update { it.copy(appLanguage = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.developerMode.collect { v ->
+        _uiState.update { it.copy(isDeveloperMode = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.hideDonationPopup.collect { v ->
+        _uiState.update { it.copy(hideDonationPopup = v) }
       }
     }
   }
@@ -337,6 +349,10 @@ class AccountViewModel @Inject constructor(
 
   fun setAppLanguage(value: String) {
     viewModelScope.launch { repository.setAppLanguage(value) }
+  }
+
+  fun setHideDonationPopup(value: Boolean) {
+    viewModelScope.launch { repository.setHideDonationPopup(value) }
   }
 
   fun createPlaylist(name: String, isPublic: Boolean = false) {

@@ -249,6 +249,8 @@ class AnimeRepository @Inject constructor(
   val enableBackgroundSync = prefs.enableBackgroundSync
   val enableNotifications = prefs.enableNotifications
   val appLanguage = prefs.appLanguage
+  val developerMode = prefs.developerMode
+  val hideDonationPopup = prefs.hideDonationPopup
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -275,6 +277,8 @@ class AnimeRepository @Inject constructor(
   suspend fun setBedtimeReminderEndTime(minutes: Long) = prefs.setBedtimeReminderEndTime(minutes)
   suspend fun setBedtimeReminderWaitFinish(value: Boolean) = prefs.setBedtimeReminderWaitFinish(value)
   suspend fun setAppLanguage(value: String) = prefs.setAppLanguage(value)
+  suspend fun setDeveloperMode(value: Boolean) = prefs.setDeveloperMode(value)
+  suspend fun setHideDonationPopup(value: Boolean) = prefs.setHideDonationPopup(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

@@ -1,6 +1,9 @@
 package git.shin.animevsub.ui.screens.about
 
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -26,11 +30,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -63,7 +72,10 @@ fun AboutScreen(
   viewModel: AboutViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
+  val context = LocalContext.current
   var showDonationDialog by remember { mutableStateOf(false) }
+  var iconClickCount by remember { mutableIntStateOf(0) }
+  var showPasswordDialog by remember { mutableStateOf(false) }
 
   Scaffold(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -104,7 +116,32 @@ fun AboutScreen(
         modifier = Modifier
           .size(80.dp)
           .clip(RoundedCornerShape(16.dp))
-          .background(DarkCard),
+          .background(DarkCard)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+          ) {
+            if (uiState.isDeveloperMode) {
+              iconClickCount++
+              if (iconClickCount >= 7) {
+                Toast.makeText(context, R.string.developer_mode_already_enabled, Toast.LENGTH_SHORT).show()
+                iconClickCount = 0
+              }
+            } else {
+              iconClickCount++
+              if (iconClickCount >= 7) {
+                showPasswordDialog = true
+                iconClickCount = 0
+              } else if (iconClickCount >= 4) {
+                val stepsLeft = 7 - iconClickCount
+                Toast.makeText(
+                  context,
+                  context.getString(R.string.developer_step_count, stepsLeft),
+                  Toast.LENGTH_SHORT
+                ).show()
+              }
+            }
+          },
         contentAlignment = Alignment.Center
       ) {
         AsyncImage(
@@ -167,7 +204,6 @@ fun AboutScreen(
         title = stringResource(R.string.license),
         value = "GNU-GPL v3"
       )
-
       Spacer(modifier = Modifier.height(24.dp))
 
       Row(
@@ -238,6 +274,61 @@ fun AboutScreen(
   if (showDonationDialog) {
     DonationDialog(
       onDismiss = { showDonationDialog = false }
+    )
+  }
+
+  // Developer Password Dialog
+  if (showPasswordDialog) {
+    var password by remember { mutableStateOf("") }
+    var isError by remember { mutableStateOf(false) }
+
+    AlertDialog(
+      onDismissRequest = { showPasswordDialog = false },
+      title = { Text(stringResource(R.string.unlock_developer_options)) },
+      text = {
+        Column {
+          Text(stringResource(R.string.enter_password_to_continue), fontSize = 14.sp, color = TextSecondary)
+          Spacer(modifier = Modifier.height(16.dp))
+          TextField(
+            value = password,
+            onValueChange = {
+              password = it
+              isError = false
+            },
+            placeholder = { Text(stringResource(R.string.password_hint)) },
+            singleLine = true,
+            isError = isError,
+            colors = TextFieldDefaults.colors(
+              focusedContainerColor = DarkCard,
+              unfocusedContainerColor = DarkCard,
+              errorContainerColor = DarkCard
+            ),
+            modifier = Modifier.fillMaxWidth()
+          )
+          if (isError) {
+            Text(stringResource(R.string.wrong_password), color = Color.Red, fontSize = 12.sp)
+          }
+        }
+      },
+      confirmButton = {
+        Button(
+          onClick = {
+            if (viewModel.enableDeveloperMode(password)) {
+              showPasswordDialog = false
+              Toast.makeText(context, R.string.developer_mode_enabled, Toast.LENGTH_SHORT).show()
+            } else {
+              isError = true
+            }
+          }
+        ) {
+          Text(stringResource(R.string.confirm))
+        }
+      },
+      dismissButton = {
+        TextButton(onClick = { showPasswordDialog = false }) {
+          Text(stringResource(R.string.cancel))
+        }
+      }
     )
   }
 }

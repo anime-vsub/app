@@ -328,4 +328,16 @@
     <string name="donation_save_error">Lỗi khi lưu ảnh: %1$s</string>
     <string name="donation_qr_desc">Mã QR ủng hộ</string>
     <string name="donation_save_qr">Lưu mã QR</string>
+
+    <!-- Developer Options -->
+    <string name="developer_options_title">Tùy chọn nhà phát triển</string>
+    <string name="hide_donation_popups">Ẩn thông báo ủng hộ (7 ngày)</string>
+    <string name="unlock_developer_options">Mở khóa tùy chọn nhà phát triển</string>
+    <string name="enter_password_to_continue">Vui lòng nhập mật khẩu để tiếp tục</string>
+    <string name="password_hint">Mật khẩu</string>
+    <string name="wrong_password">Mật khẩu không đúng</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="developer_step_count">Bạn còn %1$d bước nữa để trở thành nhà phát triển.</string>
+    <string name="developer_mode_already_enabled">Không cần đâu, bạn đã là nhà phát triển rồi.</string>
+    <string name="developer_mode_enabled">Bạn hiện đã là nhà phát triển!</string>
 </resources>

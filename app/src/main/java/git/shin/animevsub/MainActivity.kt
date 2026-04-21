@@ -143,8 +143,9 @@ class MainActivity : ComponentActivity() {
 
       LaunchedEffect(Unit) {
         val lastDonation = preferencesManager.lastDonationAlert.first()
+        val hideDonation = preferencesManager.hideDonationPopup.first()
         val currentTime = System.currentTimeMillis()
-        if (currentTime - lastDonation > 7 * 24 * 60 * 60 * 1000L) {
+        if (!hideDonation && currentTime - lastDonation > 7 * 24 * 60 * 60 * 1000L) {
           showDonationDialog = true
         }
 

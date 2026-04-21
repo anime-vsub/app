@@ -50,7 +50,8 @@ jobs:
         env:
           URL: ${{ secrets.SUPABASE_URL }}
           KEY: ${{ secrets.SUPABASE_KEY }}
-        run: printf '\nSUPABASE_URL=%s\nSUPABASE_KEY=%s\n' "$URL" "$KEY" >> local.properties
+          PASSWORD_UNLOCK_DEVELOPER: ${{ secrets.PASSWORD_UNLOCK_DEVELOPER }}
+        run: printf '\nSUPABASE_URL=%s\nSUPABASE_KEY=%s\nPASSWORD_UNLOCK_DEVELOPER=%s\n' "$URL" "$KEY" "$PASSWORD_UNLOCK_DEVELOPER" >> local.properties
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck

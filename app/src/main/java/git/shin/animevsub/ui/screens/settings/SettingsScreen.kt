@@ -230,6 +230,17 @@ fun SettingsScreen(
           valueText = stringResource(R.string.minutes_label, uiState.dbNotifyInterval)
         )
       }
+
+      if (uiState.isDeveloperMode) {
+        Spacer(modifier = Modifier.height(16.dp))
+        MenuSection(title = stringResource(R.string.developer_options_title)) {
+          SettingsToggle(
+            label = stringResource(R.string.hide_donation_popups),
+            checked = uiState.hideDonationPopup,
+            onCheckedChange = { viewModel.setHideDonationPopup(it) }
+          )
+        }
+      }
     }
   }
 }

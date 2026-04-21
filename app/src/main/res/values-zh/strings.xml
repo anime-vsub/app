@@ -328,4 +328,16 @@
     <string name="donation_save_error">保存图片时出错: %1$s</string>
     <string name="donation_qr_desc">捐赠二维码</string>
     <string name="donation_save_qr">保存二维码</string>
+
+    <!-- Developer Options -->
+    <string name="developer_options_title">开发者选项</string>
+    <string name="hide_donation_popups">隐藏捐赠提示 (7天)</string>
+    <string name="unlock_developer_options">解锁开发者选项</string>
+    <string name="enter_password_to_continue">请输入密码以继续</string>
+    <string name="password_hint">密码</string>
+    <string name="wrong_password">密码错误</string>
+    <string name="confirm">确认</string>
+    <string name="developer_step_count">距离成为开发者还有 %1$d 步。</string>
+    <string name="developer_mode_already_enabled">您已经是开发者了。</string>
+    <string name="developer_mode_enabled">您现在已成为开发者！</string>
 </resources>

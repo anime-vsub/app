@@ -332,4 +332,16 @@
     <string name="donation_save_error">Error saving image: %1$s</string>
     <string name="donation_qr_desc">QR Donation</string>
     <string name="donation_save_qr">Save QR</string>
+
+    <!-- Developer Options -->
+    <string name="developer_options_title">Developer Options</string>
+    <string name="hide_donation_popups">Hide donation popups (7 days)</string>
+    <string name="unlock_developer_options">Unlock developer options</string>
+    <string name="enter_password_to_continue">Please enter password to continue</string>
+    <string name="password_hint">Password</string>
+    <string name="wrong_password">Wrong password</string>
+    <string name="confirm">Confirm</string>
+    <string name="developer_step_count">You are %1$d steps away from being a developer.</string>
+    <string name="developer_mode_already_enabled">No need, you are already a developer.</string>
+    <string name="developer_mode_enabled">You are now a developer!</string>
 </resources>

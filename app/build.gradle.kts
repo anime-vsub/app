@@ -1,3 +1,4 @@
+import java.security.MessageDigest
 import java.util.Properties
 
 plugins {
@@ -28,6 +29,14 @@ android {
     localProperties.load(localPropertiesFile.inputStream())
   }
 
+  fun sha256(input: String): String {
+    val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
+    return bytes.joinToString("") { "%02x".format(it) }
+  }
+
+  val devPassword = localProperties.getProperty("PASSWORD_UNLOCK_DEVELOPER").toString()
+  val hashedDevPassword = sha256(devPassword)
+
   defaultConfig {
     applicationId = "git.shin.animevsub"
     minSdk = 26
@@ -44,6 +53,11 @@ android {
       "String",
       "SUPABASE_KEY",
       "\"${localProperties.getProperty("SUPABASE_KEY") ?: ""}\""
+    )
+    buildConfigField(
+      "String",
+      "DEV_PWD_HASH",
+      "\"$hashedDevPassword\""
     )
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
