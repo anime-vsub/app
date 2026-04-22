@@ -54,8 +54,7 @@ fun SettingsSlider(
       steps = steps,
       colors = SliderDefaults.colors(
         thumbColor = AccentMain,
-        activeTrackColor = AccentMain,
-        inactiveTrackColor = TextGrey.copy(alpha = 0.3f)
+        activeTrackColor = AccentMain, inactiveTrackColor = TextGrey.copy(alpha = 0.3f), activeTickColor = androidx.compose.ui.graphics.Color.Transparent, inactiveTickColor = androidx.compose.ui.graphics.Color.Transparent
       ),
       modifier = Modifier.padding(top = 4.dp)
     )
