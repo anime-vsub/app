@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
       return
     }
 
-    val locale = Locale(lang)
+    val locale = Locale.Builder().setLanguage(lang).build()
     Locale.setDefault(locale)
     val config = Configuration(newBase.resources.configuration)
     config.setLocale(locale)

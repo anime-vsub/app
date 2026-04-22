@@ -251,6 +251,7 @@ class AnimeRepository @Inject constructor(
   val appLanguage = prefs.appLanguage
   val developerMode = prefs.developerMode
   val hideDonationPopup = prefs.hideDonationPopup
+  val screenTransition = prefs.screenTransition
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -279,6 +280,7 @@ class AnimeRepository @Inject constructor(
   suspend fun setAppLanguage(value: String) = prefs.setAppLanguage(value)
   suspend fun setDeveloperMode(value: Boolean) = prefs.setDeveloperMode(value)
   suspend fun setHideDonationPopup(value: Boolean) = prefs.setHideDonationPopup(value)
+  suspend fun setScreenTransition(value: String) = prefs.setScreenTransition(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

@@ -41,6 +41,7 @@ class PreferencesManager(private val context: Context) {
     private val LAST_DONATION_ALERT_KEY = longPreferencesKey("last_donation_alert")
     private val DEVELOPER_MODE_KEY = booleanPreferencesKey("developer_mode")
     private val HIDE_DONATION_POPUP_KEY = booleanPreferencesKey("hide_donation_popup")
+    private val SCREEN_TRANSITION_KEY = stringPreferencesKey("screen_transition")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -68,6 +69,7 @@ class PreferencesManager(private val context: Context) {
   val lastDonationAlert: Flow<Long> = context.dataStore.data.map { it[LAST_DONATION_ALERT_KEY] ?: 0L }
   val developerMode: Flow<Boolean> = context.dataStore.data.map { it[DEVELOPER_MODE_KEY] ?: false }
   val hideDonationPopup: Flow<Boolean> = context.dataStore.data.map { it[HIDE_DONATION_POPUP_KEY] ?: false }
+  val screenTransition: Flow<String> = context.dataStore.data.map { it[SCREEN_TRANSITION_KEY] ?: "system" }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -166,6 +168,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setHideDonationPopup(value: Boolean) {
     context.dataStore.edit { it[HIDE_DONATION_POPUP_KEY] = value }
+  }
+
+  suspend fun setScreenTransition(value: String) {
+    context.dataStore.edit { it[SCREEN_TRANSITION_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

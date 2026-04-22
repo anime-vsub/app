@@ -1,7 +1,16 @@
 package git.shin.animevsub.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -89,6 +98,8 @@ fun AnimeVsubAppUI(
   val navController = rememberNavController()
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
+
+  val transitionType by animeRepository.screenTransition.collectAsState(initial = "system")
 
   var showAuthPrompt by remember { mutableStateOf(false) }
 
@@ -220,7 +231,71 @@ fun AnimeVsubAppUI(
     NavHost(
       navController = navController,
       startDestination = Screen.Home.route,
-      modifier = if (isInPipMode) Modifier else Modifier.padding(innerPadding)
+      modifier = if (isInPipMode) Modifier else Modifier.padding(innerPadding),
+      enterTransition = {
+        when (transitionType) {
+          "slide" -> slideInHorizontally(
+            initialOffsetX = { it },
+            animationSpec = tween(300)
+          ) + fadeIn(animationSpec = tween(300))
+
+          "fade" -> fadeIn(animationSpec = tween(300))
+          "zoom" -> scaleIn(initialScale = 0.8f, animationSpec = tween(300)) + fadeIn(
+            animationSpec = tween(300)
+          )
+
+          "none" -> EnterTransition.None
+          else -> fadeIn(animationSpec = tween(300))
+        }
+      },
+      exitTransition = {
+        when (transitionType) {
+          "slide" -> slideOutHorizontally(
+            targetOffsetX = { -it },
+            animationSpec = tween(300)
+          ) + fadeOut(animationSpec = tween(300))
+
+          "fade" -> fadeOut(animationSpec = tween(300))
+          "zoom" -> scaleOut(targetScale = 1.2f, animationSpec = tween(300)) + fadeOut(
+            animationSpec = tween(300)
+          )
+
+          "none" -> ExitTransition.None
+          else -> fadeOut(animationSpec = tween(300))
+        }
+      },
+      popEnterTransition = {
+        when (transitionType) {
+          "slide" -> slideInHorizontally(
+            initialOffsetX = { -it },
+            animationSpec = tween(300)
+          ) + fadeIn(animationSpec = tween(300))
+
+          "fade" -> fadeIn(animationSpec = tween(300))
+          "zoom" -> scaleIn(initialScale = 1.2f, animationSpec = tween(300)) + fadeIn(
+            animationSpec = tween(300)
+          )
+
+          "none" -> EnterTransition.None
+          else -> fadeIn(animationSpec = tween(300))
+        }
+      },
+      popExitTransition = {
+        when (transitionType) {
+          "slide" -> slideOutHorizontally(
+            targetOffsetX = { it },
+            animationSpec = tween(300)
+          ) + fadeOut(animationSpec = tween(300))
+
+          "fade" -> fadeOut(animationSpec = tween(300))
+          "zoom" -> scaleOut(targetScale = 0.8f, animationSpec = tween(300)) + fadeOut(
+            animationSpec = tween(300)
+          )
+
+          "none" -> ExitTransition.None
+          else -> fadeOut(animationSpec = tween(300))
+        }
+      }
     ) {
       // Bottom nav destinations
       composable(Screen.Home.route) {

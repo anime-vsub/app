@@ -36,7 +36,6 @@ import git.shin.animevsub.ui.components.account.SettingsSelector
 import git.shin.animevsub.ui.components.account.SettingsSlider
 import git.shin.animevsub.ui.components.account.SettingsToggle
 import git.shin.animevsub.ui.components.player.CustomTimePickerDialog
-import git.shin.animevsub.ui.screens.account.AccountViewModel
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.utils.formatDurationMinutes
@@ -46,7 +45,7 @@ import git.shin.animevsub.ui.utils.formatTimeMinutes
 @Composable
 fun SettingsScreen(
   onNavigateBack: () -> Unit,
-  viewModel: AccountViewModel = hiltViewModel()
+  viewModel: SettingsViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
   var showStartTimePicker by remember { mutableStateOf(false) }
@@ -156,6 +155,18 @@ fun SettingsScreen(
       Spacer(modifier = Modifier.height(16.dp))
 
       MenuSection(title = stringResource(R.string.general)) {
+        SettingsSelector(
+          label = stringResource(R.string.screen_transition),
+          selectedOption = uiState.screenTransition,
+          options = listOf(
+            "system" to stringResource(R.string.transition_system),
+            "slide" to stringResource(R.string.transition_slide),
+            "fade" to stringResource(R.string.transition_fade),
+            "none" to stringResource(R.string.transition_none)
+          ),
+          onOptionSelected = { viewModel.setScreenTransition(it) }
+        )
+
         SettingsToggle(
           label = stringResource(R.string.remind_me_to_take_a_break),
           checked = uiState.breakReminderEnabled,

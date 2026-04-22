@@ -340,4 +340,11 @@
     <string name="developer_step_count">距离成为开发者还有 %1$d 步。</string>
     <string name="developer_mode_already_enabled">您已经是开发者了。</string>
     <string name="developer_mode_enabled">您现在已成为开发者！</string>
+
+    <string name="screen_transition">屏幕过渡</string>
+    <string name="transition_none">无</string>
+    <string name="transition_slide">滑动 (默认)</string>
+    <string name="transition_fade">淡入淡出</string>
+    <string name="transition_zoom">缩放</string>
+    <string name="transition_system">系统默认</string>
 </resources>

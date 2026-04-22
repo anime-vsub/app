@@ -340,4 +340,11 @@
     <string name="developer_step_count">開発者になるまであと %1$d ステップです。</string>
     <string name="developer_mode_already_enabled">すでに開発者です。</string>
     <string name="developer_mode_enabled">これで開発者になりました！</string>
+
+    <string name="screen_transition">画面遷移</string>
+    <string name="transition_none">なし</string>
+    <string name="transition_slide">スライド (デフォルト)</string>
+    <string name="transition_fade">フェード</string>
+    <string name="transition_zoom">ズーム</string>
+    <string name="transition_system">システムデフォルト</string>
 </resources>

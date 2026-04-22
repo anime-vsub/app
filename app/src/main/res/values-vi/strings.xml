@@ -340,4 +340,11 @@
     <string name="developer_step_count">Bạn còn %1$d bước nữa để trở thành nhà phát triển.</string>
     <string name="developer_mode_already_enabled">Không cần đâu, bạn đã là nhà phát triển rồi.</string>
     <string name="developer_mode_enabled">Bạn hiện đã là nhà phát triển!</string>
+
+    <string name="screen_transition">Hiệu ứng chuyển màn hình</string>
+    <string name="transition_none">Không có</string>
+    <string name="transition_slide">Trượt (Mặc định)</string>
+    <string name="transition_fade">Mờ dần</string>
+    <string name="transition_zoom">Phóng to</string>
+    <string name="transition_system">Mặc định hệ thống</string>
 </resources>

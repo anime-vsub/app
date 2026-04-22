@@ -344,4 +344,11 @@
     <string name="developer_step_count">You are %1$d steps away from being a developer.</string>
     <string name="developer_mode_already_enabled">No need, you are already a developer.</string>
     <string name="developer_mode_enabled">You are now a developer!</string>
+
+    <string name="screen_transition">Screen Transition</string>
+    <string name="transition_none">None</string>
+    <string name="transition_slide">Slide (Default)</string>
+    <string name="transition_fade">Fade</string>
+    <string name="transition_zoom">Zoom</string>
+    <string name="transition_system">System Default</string>
 </resources>
