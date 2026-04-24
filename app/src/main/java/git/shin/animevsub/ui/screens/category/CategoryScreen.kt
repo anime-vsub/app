@@ -35,6 +35,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -61,17 +62,23 @@ import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.utils.tvFocusScale
+import git.shin.animevsub.utils.ResponsiveUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryScreen(
   onNavigateBack: () -> Unit,
   onNavigateToDetail: (String, String?) -> Unit,
+  windowSize: WindowSizeClass,
   viewModel: CategoryViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val gridState = rememberLazyGridState()
   var showFilterSheet by remember { mutableStateOf(false) }
+  val gridColumns = ResponsiveUtils.calculateGridColumns(
+    windowSizeClass = windowSize
+  )
 
   Scaffold(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -80,7 +87,7 @@ fun CategoryScreen(
         TopAppBar(
           title = {
             Text(
-              text = uiState.title,
+              text = uiState.title.ifEmpty { stringResource(R.string.category) },
               color = TextPrimary,
               fontSize = 18.sp,
               fontWeight = FontWeight.Bold,
@@ -128,11 +135,11 @@ fun CategoryScreen(
         onRefresh = { viewModel.refresh() }
       ) {
         when {
-          uiState.isLoading -> GridLoadingSkeleton()
+          uiState.isLoading -> GridLoadingSkeleton(columns = gridColumns)
           uiState.error != null && uiState.items.isEmpty() -> {
             ErrorScreen(
-              error = uiState.error,
-              onRetry = { viewModel.retry() }
+              error = uiState.error ?: "Unknown error",
+              onRetry = { viewModel.refresh() }
             )
           }
 
@@ -142,7 +149,8 @@ fun CategoryScreen(
               onItemClick = { onNavigateToDetail(it.animeId, it.lastEpisode?.id) },
               state = gridState,
               isLoadingMore = uiState.isLoadingMore,
-              onLoadMore = { viewModel.loadMore() }
+              onLoadMore = { viewModel.loadMore() },
+              columns = gridColumns
             )
           }
         }
@@ -191,6 +199,7 @@ private fun FilterActionRow(
       FilterChip(
         selected = isSelected,
         onClick = { onGroupClick(group) },
+        modifier = Modifier.tvFocusScale(),
         label = {
           Text(
             text = labelText,
@@ -310,6 +319,7 @@ fun FiltersBottomSheet(
                   }
                   onUpdateFilter(newFilter)
                 },
+                modifier = Modifier.tvFocusScale(),
                 label = {
                   Text(
                     text = (if (isExcluded) "!" else "") + option.name,

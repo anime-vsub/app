@@ -1,6 +1,5 @@
 package git.shin.animevsub.ui.components.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,18 +15,35 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import git.shin.animevsub.ui.components.anime.SkeletonCard
-import git.shin.animevsub.ui.theme.DarkCard
+import git.shin.animevsub.ui.utils.shimmerEffect
+import git.shin.animevsub.utils.ResponsiveUtils
 
 @Composable
-fun HomeLoadingSkeleton() {
+fun HomeLoadingSkeleton(windowSize: WindowSizeClass) {
+  val columns = ResponsiveUtils.calculateGridColumns(windowSize)
+
+  val aspectRatio = when {
+    windowSize.heightSizeClass == WindowHeightSizeClass.Compact -> {
+      if (windowSize.widthSizeClass == WindowWidthSizeClass.Expanded) 16f / 4f else 16f / 5f
+    }
+
+    windowSize.widthSizeClass == WindowWidthSizeClass.Expanded -> 16f / 6f
+    windowSize.widthSizeClass == WindowWidthSizeClass.Medium -> 16f / 8f
+    else -> 16f / 9.5f
+  }
+
   Column(
     modifier = Modifier
       .fillMaxSize()
@@ -37,32 +53,32 @@ fun HomeLoadingSkeleton() {
     Box(
       modifier = Modifier
         .fillMaxWidth()
-        .aspectRatio(16f / 9.5f)
-        .background(DarkCard)
+        .aspectRatio(aspectRatio)
+        .shimmerEffect()
     )
 
     // Quick links skeleton
     Row(
       modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 12.dp),
+        .padding(horizontal = 16.dp, vertical = 20.dp),
       horizontalArrangement = Arrangement.SpaceEvenly
     ) {
       repeat(3) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
           Box(
             modifier = Modifier
-              .size(32.dp)
-              .clip(RoundedCornerShape(8.dp))
-              .background(DarkCard)
+              .size(45.dp)
+              .clip(CircleShape)
+              .shimmerEffect()
           )
           Spacer(modifier = Modifier.height(8.dp))
           Box(
             modifier = Modifier
-              .width(60.dp)
+              .width(50.dp)
               .height(12.dp)
               .clip(RoundedCornerShape(4.dp))
-              .background(DarkCard)
+              .shimmerEffect()
           )
         }
       }
@@ -76,12 +92,12 @@ fun HomeLoadingSkeleton() {
       horizontalArrangement = Arrangement.spacedBy(12.dp),
       userScrollEnabled = false
     ) {
-      items(5) {
+      items(10) {
         SkeletonCard(modifier = Modifier.width(110.dp))
       }
     }
 
-    // Nominated (Grid 3 columns)
+    // Nominated (Grid responsive columns)
     Spacer(modifier = Modifier.height(24.dp))
     SectionSkeleton()
     Column(
@@ -94,7 +110,7 @@ fun HomeLoadingSkeleton() {
           modifier = Modifier.fillMaxWidth(),
           horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-          repeat(3) {
+          repeat(columns) {
             SkeletonCard(modifier = Modifier.weight(1f))
           }
         }
@@ -102,22 +118,17 @@ fun HomeLoadingSkeleton() {
       }
     }
 
-    // Timeline skeleton
-    Spacer(modifier = Modifier.height(16.dp))
+    // Top / Hot Update (Horizontal)
+    Spacer(modifier = Modifier.height(8.dp))
+    SectionSkeleton()
     LazyRow(
       modifier = Modifier.fillMaxWidth(),
       contentPadding = PaddingValues(horizontal = 16.dp),
-      horizontalArrangement = Arrangement.spacedBy(20.dp),
+      horizontalArrangement = Arrangement.spacedBy(12.dp),
       userScrollEnabled = false
     ) {
-      items(5) {
-        Box(
-          modifier = Modifier
-            .width(80.dp)
-            .height(40.dp)
-            .clip(RoundedCornerShape(4.dp))
-            .background(DarkCard)
-        )
+      items(10) {
+        SkeletonCard(modifier = Modifier.width(110.dp))
       }
     }
 
@@ -133,6 +144,6 @@ private fun SectionSkeleton() {
       .width(120.dp)
       .height(20.dp)
       .clip(RoundedCornerShape(4.dp))
-      .background(DarkCard)
+      .shimmerEffect()
   )
 }

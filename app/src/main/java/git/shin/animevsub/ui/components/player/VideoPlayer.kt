@@ -3,6 +3,7 @@ package git.shin.animevsub.ui.components.player
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.media.AudioManager
+import android.view.KeyEvent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -12,6 +13,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -68,6 +70,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -80,10 +83,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -125,6 +133,7 @@ import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
+import git.shin.animevsub.ui.utils.rememberScreenState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -178,6 +187,11 @@ fun VideoPlayer(
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
+  val screenState = rememberScreenState()
+  val isTV = screenState.isTV
+
+  val focusRequester = remember(isTV) { if (isTV) FocusRequester() else null }
+
   val preferencesManager = remember { PreferencesManager(context) }
   val volumeGestureEnabled by preferencesManager.volumeGesture.collectAsState(initial = true)
   val brightnessGestureEnabled by preferencesManager.brightnessGesture.collectAsState(initial = true)
@@ -459,10 +473,70 @@ fun VideoPlayer(
     }
   }
 
+  LaunchedEffect(isTV || !isControlsVisible) {
+    focusRequester?.requestFocus()
+  }
+
   Box(
     modifier = (if (isFullScreen) Modifier.fillMaxSize() else modifier)
       .background(Color.Black)
       .clipToBounds()
+      .then(
+        if (focusRequester != null) {
+          Modifier
+            .focusRequester(focusRequester)
+            .focusable()
+            .onKeyEvent { keyEvent ->
+              if (keyEvent.type == KeyEventType.KeyDown) {
+                when (keyEvent.nativeKeyEvent.keyCode) {
+                  KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                    isControlsVisible = !isControlsVisible
+                    true
+                  }
+
+                  KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    val newPos = (exoPlayer.currentPosition - 10000).coerceAtLeast(0)
+                    exoPlayer.seekTo(newPos)
+                    if (!isControlsVisible) {
+                      doubleTapSide = "left"
+                      doubleTapText = "-10s"
+                      showDoubleTapIndicator = true
+                      scope.launch { delay(800); showDoubleTapIndicator = false }
+                    }
+                    true
+                  }
+
+                  KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    val newPos = (exoPlayer.currentPosition + 10000).coerceAtMost(exoPlayer.duration)
+                    exoPlayer.seekTo(newPos)
+                    if (!isControlsVisible) {
+                      doubleTapSide = "right"
+                      doubleTapText = "+10s"
+                      showDoubleTapIndicator = true
+                      scope.launch { delay(800); showDoubleTapIndicator = false }
+                    }
+                    true
+                  }
+
+                  KeyEvent.KEYCODE_BACK -> {
+                    if (isControlsVisible) {
+                      isControlsVisible = false
+                      true
+                    } else {
+                      false
+                    }
+                  }
+
+                  else -> false
+                }
+              } else {
+                false
+              }
+            }
+        } else {
+          Modifier
+        }
+      )
       .pointerInput(volumeGestureEnabled, brightnessGestureEnabled, isInPipMode) {
         if (isInPipMode) return@pointerInput
         val activity = findActivity(context)
@@ -596,13 +670,20 @@ fun VideoPlayer(
         )
       }
   ) {
-    AndroidView(factory = { ctx ->
-      PlayerView(ctx).apply {
-        player = exoPlayer; useController = false
-      }
-    }, update = { view ->
-      view.keepScreenOn = isPlaying
-    }, modifier = Modifier.fillMaxSize())
+    key(screenState.isLandscape && isFullScreen) {
+      AndroidView(
+        factory = { ctx ->
+          PlayerView(ctx).apply {
+            player = exoPlayer
+            useController = false
+          }
+        },
+        update = { view ->
+          view.keepScreenOn = isPlaying
+        },
+        modifier = Modifier.fillMaxSize()
+      )
+    }
     if (playerData == null && !poster.isNullOrEmpty()) {
       AsyncImage(
         model = poster,

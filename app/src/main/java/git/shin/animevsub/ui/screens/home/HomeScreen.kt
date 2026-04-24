@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,6 +27,7 @@ import git.shin.animevsub.ui.components.home.QuickLinksRow
 import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.list.HorizontalAnimeList
 import git.shin.animevsub.ui.components.status.ErrorScreen
+import git.shin.animevsub.utils.ResponsiveUtils
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -34,16 +36,19 @@ fun HomeScreen(
   onNavigateToCategory: (List<SelectedFilter>) -> Unit,
   onNavigateToRankings: (String?) -> Unit,
   onNavigateToSchedule: () -> Unit,
+  windowSize: WindowSizeClass,
   viewModel: HomeViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
+
+  val columns = ResponsiveUtils.calculateGridColumns(windowSize)
 
   PullToRefreshBox(
     isRefreshing = uiState.isRefreshing,
     onRefresh = { viewModel.refresh() }
   ) {
     when {
-      uiState.isLoading -> HomeLoadingSkeleton()
+      uiState.isLoading -> HomeLoadingSkeleton(windowSize = windowSize)
       uiState.error != null && uiState.data == null -> {
         ErrorScreen(
           error = uiState.error,
@@ -67,7 +72,8 @@ fun HomeScreen(
               onItemClick = { anime ->
                 onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               },
-              onNavigateToCategory = onNavigateToCategory
+              onNavigateToCategory = onNavigateToCategory,
+              windowSize = windowSize
             )
           }
 
@@ -113,6 +119,7 @@ fun HomeScreen(
             )
             GridAnimeList(
               items = data.nominate,
+              columns = columns,
               onItemClick = { anime ->
                 onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               }
@@ -186,6 +193,7 @@ fun HomeScreen(
             )
             GridAnimeList(
               items = data.lastUpdate,
+              columns = columns,
               onItemClick = { anime ->
                 onNavigateToDetail(anime.animeId, anime.lastEpisode?.id)
               }

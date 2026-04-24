@@ -13,7 +13,7 @@ import git.shin.animevsub.ui.components.anime.SkeletonCard
 @Composable
 fun GridLoadingSkeleton(
   modifier: Modifier = Modifier,
-  columns: Int = 3,
+  columns: Int,
   itemCount: Int = 12,
   contentPadding: PaddingValues = PaddingValues(16.dp)
 ) {

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.os.Build
 import android.util.Rational
 import androidx.compose.foundation.background
@@ -59,6 +58,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -112,7 +113,9 @@ import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
+import git.shin.animevsub.ui.utils.rememberScreenState
 import git.shin.animevsub.ui.utils.shimmerEffect
+import git.shin.animevsub.ui.utils.tvFocusScale
 import kotlinx.coroutines.launch
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -124,6 +127,7 @@ fun DetailScreen(
   onNavigateToCategory: (List<SelectedFilter>) -> Unit,
   onNavigateToLogin: () -> Unit,
   onNavigateToSettings: () -> Unit,
+  windowSize: WindowSizeClass,
   viewModel: DetailViewModel = hiltViewModel(),
   isInPipMode: Boolean = false
 ) {
@@ -141,9 +145,12 @@ fun DetailScreen(
   val scope = rememberCoroutineScope()
   var exoPlayerInstance by remember { mutableStateOf<androidx.media3.exoplayer.ExoPlayer?>(null) }
 
+  val screenState = rememberScreenState()
+  val isTV = screenState.isTV
+  val isLandscape = screenState.isLandscape
+  val isLandscapeUI = (isLandscape || isTV) && !isFullScreen && !isInPipMode
+
   val configuration = LocalConfiguration.current
-  val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-  val isLandscapeUI = isLandscape && !isFullScreen && !isInPipMode
   val screenWidth = configuration.screenWidthDp.dp
   val videoHeight = if (isLandscapeUI) configuration.screenHeightDp.dp else screenWidth * 9 / 16
   val sheetHeight =
@@ -261,7 +268,7 @@ fun DetailScreen(
   BottomSheetScaffold(
     scaffoldState = scaffoldState,
     sheetContent = {
-      if (!isLandscapeUI && !isFullScreen) {
+      if (!isFullScreen) {
         CommentSection(
           comments = uiState.comments,
           totalComments = uiState.totalComments,
@@ -291,7 +298,7 @@ fun DetailScreen(
     sheetPeekHeight = 0.dp,
     sheetContainerColor = DarkSurface,
     sheetDragHandle = {
-      if (!isLandscapeUI && !isFullScreen) {
+      if (!isFullScreen) {
         git.shin.animevsub.ui.components.detail.BottomSheetDragHandle()
       }
     },
@@ -414,6 +421,7 @@ fun DetailScreen(
             Column(
               modifier = Modifier
                 .fillMaxWidth()
+                .tvFocusScale(onFocus = { showDetailSheet = true })
                 .clickable { showDetailSheet = true }
                 .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
@@ -626,7 +634,8 @@ fun DetailScreen(
                       icon = if (uiState.isFollowed) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
                       label = formatNumber(detail.follows + (if (uiState.isFollowed) 1 else 0)),
                       iconTint = if (uiState.isFollowed) StarColor else TextPrimary,
-                      onClick = { viewModel.toggleFollow() }
+                      onClick = { viewModel.toggleFollow() },
+                      modifier = Modifier.tvFocusScale()
                     )
                   }
                   item {
@@ -649,14 +658,16 @@ fun DetailScreen(
                             context.getString(R.string.share_title)
                           )
                         )
-                      }
+                      },
+                      modifier = Modifier.tvFocusScale()
                     )
                   }
                   item {
                     ActionButton(
                       icon = Icons.AutoMirrored.Filled.PlaylistAdd,
                       label = stringResource(R.string.save_label),
-                      onClick = { viewModel.onSaveClick() }
+                      onClick = { viewModel.onSaveClick() },
+                      modifier = Modifier.tvFocusScale()
                     )
                   }
                 }
@@ -687,6 +698,7 @@ fun DetailScreen(
                         color = if (isSelected) MainColor else Color.Transparent,
                         shape = RoundedCornerShape(4.dp)
                       )
+                      .tvFocusScale()
                       .clickable { viewModel.selectServer(server) }
 
                     Box(
@@ -716,6 +728,7 @@ fun DetailScreen(
                 Row(
                   modifier = Modifier
                     .weight(1f)
+                    .tvFocusScale(onFocus = { showChapterSheet = true })
                     .clickable { showChapterSheet = true },
                   verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -804,6 +817,7 @@ fun DetailScreen(
                         chap = chap,
                         isSelected = isSelected,
                         progress = progress,
+                        modifier = Modifier.tvFocusScale(),
                         onClick = {
                           viewModel.playChapter(
                             chap,
@@ -858,6 +872,7 @@ fun DetailScreen(
                           color = if (isCurrent) MainColor else Color.Transparent,
                           shape = RoundedCornerShape(4.dp)
                         )
+                        .tvFocusScale()
                         .clickable {
                           viewModel.setActiveDisplaySeason(season.id)
                         },
@@ -879,72 +894,72 @@ fun DetailScreen(
             }
 
             // Comment Preview (YouTube-style)
-            if (!isLandscapeUI) {
-              Spacer(modifier = Modifier.height(16.dp))
-              Column(
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(horizontal = 16.dp)
-                  .clip(RoundedCornerShape(12.dp))
-                  .background(MaterialTheme.colorScheme.surfaceVariant)
-                  .clickable {
-                    scope.launch {
-                      scaffoldState.bottomSheetState.expand()
-                    }
+//            if (!isTV) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Column(
+              modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .clickable {
+                  scope.launch {
+                    scaffoldState.bottomSheetState.expand()
                   }
-                  .padding(12.dp)
-              ) {
-                Row(
-                  verticalAlignment = Alignment.CenterVertically,
-                  horizontalArrangement = Arrangement.SpaceBetween,
-                  modifier = Modifier.fillMaxWidth()
-                ) {
-                  Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                      text = stringResource(R.string.comments_title),
-                      color = TextPrimary,
-                      fontSize = 14.sp,
-                      fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                      text = "${uiState.totalComments}",
-                      color = TextSecondary,
-                      fontSize = 14.sp
-                    )
-                  }
-                  Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = null,
-                    tint = TextSecondary,
-                    modifier = Modifier.size(20.dp)
-                  )
                 }
-
-                val previewComment =
-                  uiState.comments.firstOrNull { !it.isPinned && !it.isGlobalPinned }
-
-                Spacer(modifier = Modifier.height(8.dp))
+                .padding(12.dp)
+            ) {
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+              ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                  AsyncImage(
-                    model = previewComment?.userAvatar ?: uiState.currentUser?.avatar,
-                    contentDescription = null,
-                    modifier = Modifier
-                      .size(24.dp)
-                      .clip(CircleShape),
-                    contentScale = ContentScale.Crop
+                  Text(
+                    text = stringResource(R.string.comments_title),
+                    color = TextPrimary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
                   )
                   Spacer(modifier = Modifier.width(8.dp))
                   Text(
-                    text = previewComment?.content ?: stringResource(R.string.comment_hint),
-                    color = if (previewComment != null) TextPrimary else TextSecondary,
-                    fontSize = 13.sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    text = "${uiState.totalComments}",
+                    color = TextSecondary,
+                    fontSize = 14.sp
                   )
                 }
+                Icon(
+                  imageVector = Icons.Default.KeyboardArrowDown,
+                  contentDescription = null,
+                  tint = TextSecondary,
+                  modifier = Modifier.size(20.dp)
+                )
+              }
+
+              val previewComment =
+                uiState.comments.firstOrNull { !it.isPinned && !it.isGlobalPinned }
+
+              Spacer(modifier = Modifier.height(8.dp))
+              Row(verticalAlignment = Alignment.CenterVertically) {
+                AsyncImage(
+                  model = previewComment?.userAvatar ?: uiState.currentUser?.avatar,
+                  contentDescription = null,
+                  modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape),
+                  contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                  text = previewComment?.content ?: stringResource(R.string.comment_hint),
+                  color = if (previewComment != null) TextPrimary else TextSecondary,
+                  fontSize = 13.sp,
+                  maxLines = 2,
+                  overflow = TextOverflow.Ellipsis
+                )
               }
             }
+//            }
 
             // Related
             if (detail.related.isNotEmpty()) {
@@ -958,43 +973,26 @@ fun DetailScreen(
                 modifier = Modifier.padding(horizontal = 16.dp)
               )
               Spacer(modifier = Modifier.height(8.dp))
+              val columns = if (isLandscapeUI) {
+                when (windowSize.widthSizeClass) {
+                  WindowWidthSizeClass.Expanded -> 4
+                  WindowWidthSizeClass.Medium -> 3
+                  else -> 2
+                }
+              } else {
+                when (windowSize.widthSizeClass) {
+                  WindowWidthSizeClass.Compact -> 3
+                  WindowWidthSizeClass.Medium -> 4
+                  else -> 6
+                }
+              }
+
               GridAnimeList(
                 items = detail.related,
-                columns = if (isLandscapeUI) 2 else 3,
+                columns = columns,
                 onItemClick = { anime -> onNavigateToDetail(anime.animeId, anime.lastEpisode?.id) }
               )
             }
-          }
-
-          if (isLandscapeUI) {
-            CommentSection(
-              comments = uiState.comments,
-              totalComments = uiState.totalComments,
-              isLoading = uiState.isCommentsLoading,
-              hasMore = uiState.hasMoreComments,
-              onLoadMore = { viewModel.loadMoreComments() },
-              onVote = { id, vote -> viewModel.voteComment(id, vote) },
-              onReply = { parentId, content ->
-                viewModel.postComment(
-                  content,
-                  parentId = parentId
-                )
-              },
-              onEdit = { id, content -> viewModel.editComment(id, content) },
-              onTrigger = { trigger -> viewModel.onCommentTrigger(trigger) },
-              currentUserId = uiState.currentUser?.username.hashCode(),
-              replies = uiState.replies,
-              repliesHasMore = uiState.repliesHasMore,
-              onLoadReplies = { id, append -> viewModel.loadReplies(id, append) },
-              onPostComment = { content -> viewModel.postComment(content) },
-              isPosting = uiState.isPostingComment,
-              currentUserAvatar = uiState.currentUser?.avatar,
-              sort = uiState.commentSort,
-              sortOptions = uiState.commentSortOptions,
-              onSortChange = { viewModel.updateCommentSort(it) },
-              modifier = Modifier
-                .fillMaxWidth()
-            )
           }
 
           Spacer(modifier = Modifier.height(50.dp))
@@ -1096,60 +1094,70 @@ fun DetailScreen(
 
 @Composable
 private fun DetailSkeleton() {
-  Column(modifier = Modifier.padding(16.dp)) {
-    Box(
+  Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
+    // Info Block Skeleton
+    Column(
       modifier = Modifier
-        .fillMaxWidth(0.7f)
-        .height(24.dp)
-        .clip(RoundedCornerShape(4.dp))
-        .shimmerEffect()
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    Box(
-      modifier = Modifier
-        .width(100.dp)
-        .height(14.dp)
-        .clip(RoundedCornerShape(4.dp))
-        .shimmerEffect()
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Row {
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
       Box(
         modifier = Modifier
-          .width(120.dp)
-          .height(14.dp)
+          .fillMaxWidth(0.7f)
+          .height(20.dp)
           .clip(RoundedCornerShape(4.dp))
           .shimmerEffect()
       )
-      Spacer(modifier = Modifier.width(8.dp))
-      Box(
-        modifier = Modifier
-          .width(80.dp)
-          .height(14.dp)
-          .clip(RoundedCornerShape(4.dp))
-          .shimmerEffect()
-      )
-    }
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-      repeat(3) {
+      Spacer(modifier = Modifier.height(8.dp))
+      Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
           modifier = Modifier
-            .width(50.dp)
-            .height(20.dp)
+            .width(80.dp)
+            .height(14.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .shimmerEffect()
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+          modifier = Modifier
+            .width(60.dp)
+            .height(14.dp)
             .clip(RoundedCornerShape(4.dp))
             .shimmerEffect()
         )
       }
     }
 
-    Spacer(modifier = Modifier.height(24.dp))
+    // Metadata Skeleton
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+      Box(
+        modifier = Modifier
+          .width(180.dp)
+          .height(14.dp)
+          .clip(RoundedCornerShape(4.dp))
+          .shimmerEffect()
+      )
+      Spacer(modifier = Modifier.height(12.dp))
+      Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        repeat(3) {
+          Box(
+            modifier = Modifier
+              .width(50.dp)
+              .height(20.dp)
+              .clip(RoundedCornerShape(4.dp))
+              .shimmerEffect()
+          )
+        }
+      }
+    }
 
-    Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+    // Action Row Skeleton
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 20.dp),
+      horizontalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
       repeat(3) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
           Box(
@@ -1158,7 +1166,7 @@ private fun DetailSkeleton() {
               .clip(CircleShape)
               .shimmerEffect()
           )
-          Spacer(modifier = Modifier.height(4.dp))
+          Spacer(modifier = Modifier.height(6.dp))
           Box(
             modifier = Modifier
               .width(40.dp)
@@ -1170,7 +1178,28 @@ private fun DetailSkeleton() {
       }
     }
 
-    Spacer(modifier = Modifier.height(24.dp))
+    // Episode Header Skeleton
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 8.dp),
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+      Box(
+        modifier = Modifier
+          .width(100.dp)
+          .height(18.dp)
+          .clip(RoundedCornerShape(4.dp))
+          .shimmerEffect()
+      )
+      Box(
+        modifier = Modifier
+          .size(20.dp)
+          .clip(CircleShape)
+          .shimmerEffect()
+      )
+    }
 
     ChapterSkeleton()
   }
@@ -1186,7 +1215,8 @@ private fun ChapterSkeleton() {
     items(6) {
       Box(
         modifier = Modifier
-          .size(width = 50.dp, height = 36.dp)
+          .widthIn(min = 45.dp)
+          .height(36.dp)
           .clip(RoundedCornerShape(4.dp))
           .shimmerEffect()
       )

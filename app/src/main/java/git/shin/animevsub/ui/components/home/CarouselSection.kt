@@ -25,6 +25,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -53,7 +56,8 @@ import kotlin.math.absoluteValue
 fun CarouselSection(
   items: List<AnimeCard>,
   onItemClick: (AnimeCard) -> Unit,
-  onNavigateToCategory: (List<SelectedFilter>) -> Unit
+  onNavigateToCategory: (List<SelectedFilter>) -> Unit,
+  windowSize: WindowSizeClass
 ) {
   val pagerState = rememberPagerState(pageCount = { items.size })
 
@@ -66,6 +70,16 @@ fun CarouselSection(
         pagerState.animateScrollToPage(nextPage)
       }
     }
+  }
+
+  val aspectRatio = when {
+    windowSize.heightSizeClass == WindowHeightSizeClass.Compact -> {
+      if (windowSize.widthSizeClass == WindowWidthSizeClass.Expanded) 16f / 4f else 16f / 5f
+    }
+
+    windowSize.widthSizeClass == WindowWidthSizeClass.Expanded -> 16f / 6f
+    windowSize.widthSizeClass == WindowWidthSizeClass.Medium -> 16f / 8f
+    else -> 16f / 9.5f
   }
 
   Column(modifier = Modifier.fillMaxWidth()) {
@@ -90,7 +104,7 @@ fun CarouselSection(
             scaleY = scale
             this.alpha = alpha
           }
-          .aspectRatio(16f / 9.5f)
+          .aspectRatio(aspectRatio)
           .clickable { onItemClick(item) }
       ) {
         AsyncImage(

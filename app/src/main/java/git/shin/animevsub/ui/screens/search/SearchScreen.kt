@@ -32,6 +32,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -59,15 +60,22 @@ import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
   onNavigateToDetail: (String, String?) -> Unit,
+  windowSizeClass: WindowSizeClass,
   viewModel: SearchViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val focusManager = LocalFocusManager.current
+
+  val gridState = rememberLazyGridState()
+  val gridColumns = git.shin.animevsub.utils.ResponsiveUtils.calculateGridColumns(
+    windowSizeClass = windowSizeClass
+  )
 
   Column(
     modifier = Modifier
@@ -122,6 +130,7 @@ fun SearchScreen(
       modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)
+        .tvFocusScale()
         .clip(RoundedCornerShape(12.dp))
     )
 
@@ -133,7 +142,9 @@ fun SearchScreen(
           onRefresh = { viewModel.refresh() }
         ) {
           if (uiState.isLoading && uiState.searchResults.isEmpty()) {
-            GridLoadingSkeleton()
+            GridLoadingSkeleton(
+              columns = gridColumns
+            )
           } else {
             VerticalGridAnimeList(
               items = uiState.searchResults,
@@ -141,7 +152,8 @@ fun SearchScreen(
               isLoadingMore = uiState.isLoading && uiState.searchResults.isNotEmpty(),
               onLoadMore = { viewModel.loadMore() },
               contentPadding = PaddingValues(16.dp),
-              state = rememberLazyGridState()
+              state = gridState,
+              columns = gridColumns
             )
           }
         }
@@ -150,6 +162,7 @@ fun SearchScreen(
         SearchHistoryList(
           history = uiState.searchHistory,
           onHistoryClick = {
+            viewModel.onQueryChange(it)
             viewModel.onSearch(it)
           },
           onClearHistory = { viewModel.clearHistory() }
@@ -158,7 +171,9 @@ fun SearchScreen(
         // Show suggestions
         SearchSuggestionsList(
           suggestions = uiState.suggestions,
-          onSuggestionClick = { onNavigateToDetail(it.animeId, null) },
+          onSuggestionClick = {
+            onNavigateToDetail(it.animeId, null)
+          },
           onFullSearch = {
             viewModel.onSearch(uiState.query)
             focusManager.clearFocus()
@@ -166,7 +181,9 @@ fun SearchScreen(
         )
       }
 
-      if (!uiState.isLoading && uiState.isSearching && uiState.searchResults.isEmpty()) {
+      if (uiState.error != null && uiState.searchResults.isEmpty()) {
+        EmptyState(message = uiState.error!!)
+      } else if (!uiState.isLoading && uiState.isSearching && uiState.searchResults.isEmpty()) {
         EmptyState(message = stringResource(R.string.no_results))
       }
     }
@@ -194,7 +211,10 @@ fun SearchHistoryList(
           fontSize = 16.sp,
           fontWeight = FontWeight.Medium
         )
-        TextButton(onClick = onClearHistory) {
+        TextButton(
+          onClick = onClearHistory,
+          modifier = Modifier.tvFocusScale()
+        ) {
           Text(
             text = stringResource(R.string.clear_history),
             color = AccentMain,
@@ -208,6 +228,7 @@ fun SearchHistoryList(
           Row(
             modifier = Modifier
               .fillMaxWidth()
+              .tvFocusScale()
               .clickable { onHistoryClick(item) }
               .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -242,6 +263,7 @@ fun SearchSuggestionsList(
       Row(
         modifier = Modifier
           .fillMaxWidth()
+          .tvFocusScale()
           .clickable { onSuggestionClick(suggestion) }
           .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -279,6 +301,7 @@ fun SearchSuggestionsList(
         Box(
           modifier = Modifier
             .fillMaxWidth()
+            .tvFocusScale()
             .clickable { onFullSearch() }
             .padding(16.dp),
           contentAlignment = Alignment.Center

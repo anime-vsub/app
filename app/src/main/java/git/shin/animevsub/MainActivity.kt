@@ -17,6 +17,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -92,10 +94,12 @@ class MainActivity : ComponentActivity() {
     super.attachBaseContext(context)
   }
 
+  @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     setContent {
+      val windowSize = calculateWindowSizeClass(this)
       val context = LocalContext.current
       val updateInfo = remember { mutableStateOf<UpdateInfo?>(null) }
       val bypassUrl by cloudflareManager.bypassUrl.collectAsState()
@@ -204,6 +208,7 @@ class MainActivity : ComponentActivity() {
           if (isAppActive) {
             AnimeVsubAppUI(
               animeRepository = animeRepository,
+              windowSize = windowSize,
               isInPipMode = pipMode
             )
           } else {

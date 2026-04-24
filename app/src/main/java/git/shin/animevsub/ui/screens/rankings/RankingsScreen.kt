@@ -2,6 +2,7 @@ package git.shin.animevsub.ui.screens.rankings
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,8 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.anime.RankingItem
 import git.shin.animevsub.ui.components.anime.RankingSkeleton
+import git.shin.animevsub.ui.components.grid.VerticalGridRankingList
 import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
@@ -47,6 +51,7 @@ import kotlinx.coroutines.launch
 fun RankingsScreen(
   onNavigateBack: () -> Unit,
   onNavigateToDetail: (String, String?) -> Unit,
+  windowSize: WindowSizeClass,
   viewModel: RankingsViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -139,14 +144,20 @@ fun RankingsScreen(
         ) {
           RankingsListContent(
             uiState = uiState,
+            windowSize = windowSize,
             onNavigateToDetail = onNavigateToDetail,
             onRetry = { viewModel.retry() }
           )
         }
       } else {
         // Initial loading of ranking types
+        val columns = when (windowSize.widthSizeClass) {
+          WindowWidthSizeClass.Compact -> 1
+          WindowWidthSizeClass.Medium -> 2
+          else -> 3
+        }
         when {
-          uiState.isLoading -> RankingLoadingList()
+          uiState.isLoading -> RankingLoadingList(columns = columns)
           uiState.error != null || uiState.errorRes != null -> {
             ErrorScreen(
               error = uiState.error ?: uiState.errorRes?.let { stringResource(it) },
@@ -162,11 +173,18 @@ fun RankingsScreen(
 @Composable
 private fun RankingsListContent(
   uiState: RankingsUiState,
+  windowSize: WindowSizeClass,
   onNavigateToDetail: (String, String?) -> Unit,
   onRetry: () -> Unit
 ) {
+  val columns = when (windowSize.widthSizeClass) {
+    WindowWidthSizeClass.Compact -> 1
+    WindowWidthSizeClass.Medium -> 2
+    else -> 3
+  }
+
   when {
-    uiState.isLoading && uiState.items.isEmpty() -> RankingLoadingList()
+    uiState.isLoading && uiState.items.isEmpty() -> RankingLoadingList(columns = columns)
     (uiState.error != null || uiState.errorRes != null) && uiState.items.isEmpty() -> {
       ErrorScreen(
         error = uiState.error ?: uiState.errorRes?.let { stringResource(it) },
@@ -175,19 +193,29 @@ private fun RankingsListContent(
     }
 
     else -> {
-      LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-      ) {
-        itemsIndexed(uiState.items) { index, item ->
-          RankingItem(
-            rank = index + 1,
-            item = item,
-            onClick = {
-              onNavigateToDetail(item.animeId, item.lastEpisode?.id)
-            }
+      if (columns > 1) {
+        Box(modifier = Modifier.fillMaxSize()) {
+          VerticalGridRankingList(
+            items = uiState.items,
+            columns = columns,
+            onItemClick = { onNavigateToDetail(it.animeId, it.lastEpisode?.id) }
           )
+        }
+      } else {
+        LazyColumn(
+          modifier = Modifier.fillMaxSize(),
+          contentPadding = PaddingValues(16.dp),
+          verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+          itemsIndexed(uiState.items) { index, item ->
+            RankingItem(
+              rank = index + 1,
+              item = item,
+              onClick = {
+                onNavigateToDetail(item.animeId, item.lastEpisode?.id)
+              }
+            )
+          }
         }
       }
     }
@@ -195,14 +223,30 @@ private fun RankingsListContent(
 }
 
 @Composable
-private fun RankingLoadingList() {
-  LazyColumn(
-    modifier = Modifier.fillMaxSize(),
-    contentPadding = PaddingValues(16.dp),
-    verticalArrangement = Arrangement.spacedBy(12.dp)
-  ) {
-    items(10) {
-      RankingSkeleton()
+private fun RankingLoadingList(columns: Int) {
+  if (columns > 1) {
+    androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+      columns = androidx.compose.foundation.lazy.grid.GridCells.Fixed(columns),
+      modifier = Modifier.fillMaxSize(),
+      contentPadding = PaddingValues(16.dp),
+      horizontalArrangement = Arrangement.spacedBy(16.dp),
+      verticalArrangement = Arrangement.spacedBy(12.dp),
+      userScrollEnabled = false
+    ) {
+      items(12) {
+        RankingSkeleton()
+      }
+    }
+  } else {
+    LazyColumn(
+      modifier = Modifier.fillMaxSize(),
+      contentPadding = PaddingValues(16.dp),
+      verticalArrangement = Arrangement.spacedBy(12.dp),
+      userScrollEnabled = false
+    ) {
+      items(10) {
+        RankingSkeleton()
+      }
     }
   }
 }

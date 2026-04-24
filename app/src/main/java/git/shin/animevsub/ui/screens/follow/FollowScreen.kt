@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,12 +29,14 @@ import git.shin.animevsub.ui.components.grid.VerticalGridAnimeList
 import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.utils.ResponsiveUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FollowScreen(
   onNavigateBack: () -> Unit,
   onNavigateToDetail: (String, String?) -> Unit,
+  windowSize: WindowSizeClass,
   viewModel: FollowViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
@@ -71,7 +74,9 @@ fun FollowScreen(
         onRefresh = { viewModel.refresh() }
       ) {
         when {
-          uiState.isLoading -> GridLoadingSkeleton()
+          uiState.isLoading -> GridLoadingSkeleton(
+            columns = ResponsiveUtils.calculateGridColumns(windowSize)
+          )
           uiState.error != null && uiState.items.isEmpty() -> {
             ErrorScreen(
               error = uiState.error,
@@ -85,6 +90,9 @@ fun FollowScreen(
               onItemClick = { onNavigateToDetail(it.animeId, it.lastEpisode?.id) },
               state = gridState,
               isLoadingMore = uiState.isLoadingMore,
+              columns = ResponsiveUtils.calculateGridColumns(
+                windowSizeClass = windowSize
+              ),
               onLoadMore = { viewModel.loadMore() }
             )
           }

@@ -1,6 +1,5 @@
 package git.shin.animevsub.ui.components.history
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.HistoryItem
-import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
@@ -122,7 +120,7 @@ fun HistoryItemRowSkeleton() {
         .width(140.dp)
         .aspectRatio(16f / 9f)
         .clip(RoundedCornerShape(4.dp))
-        .background(DarkCard)
+        .shimmerEffect()
     )
 
     Column(
@@ -132,7 +130,8 @@ fun HistoryItemRowSkeleton() {
         modifier = Modifier
           .fillMaxWidth(0.8f)
           .height(18.dp)
-          .background(DarkCard, RoundedCornerShape(2.dp))
+          .clip(RoundedCornerShape(2.dp))
+          .shimmerEffect()
       )
 
       Spacer(modifier = Modifier.height(8.dp))
@@ -141,7 +140,8 @@ fun HistoryItemRowSkeleton() {
         modifier = Modifier
           .fillMaxWidth(0.4f)
           .height(14.dp)
-          .background(DarkCard, RoundedCornerShape(2.dp))
+          .clip(RoundedCornerShape(2.dp))
+          .shimmerEffect()
       )
 
       Spacer(modifier = Modifier.height(8.dp))
@@ -150,7 +150,8 @@ fun HistoryItemRowSkeleton() {
         modifier = Modifier
           .fillMaxWidth(0.3f)
           .height(12.dp)
-          .background(DarkCard, RoundedCornerShape(2.dp))
+          .clip(RoundedCornerShape(2.dp))
+          .shimmerEffect()
       )
     }
   }

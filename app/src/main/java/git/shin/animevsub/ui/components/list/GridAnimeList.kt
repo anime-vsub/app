@@ -22,7 +22,7 @@ fun GridAnimeList(
   items: List<AnimeCard>,
   onItemClick: (AnimeCard) -> Unit,
   modifier: Modifier = Modifier,
-  columns: Int = 3
+  columns: Int
 ) {
   Column(
     modifier = modifier

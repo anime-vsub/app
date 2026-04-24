@@ -33,7 +33,8 @@ fun VerticalGridAnimeList(
   state: LazyGridState = rememberLazyGridState(),
   isLoadingMore: Boolean = false,
   onLoadMore: () -> Unit,
-  contentPadding: PaddingValues = PaddingValues(16.dp)
+  contentPadding: PaddingValues = PaddingValues(16.dp),
+  columns: Int
 ) {
   LaunchedEffect(state.canScrollForward) {
     if (!state.canScrollForward && !isLoadingMore && items.isNotEmpty()) {
@@ -43,7 +44,7 @@ fun VerticalGridAnimeList(
 
   LazyVerticalGrid(
     state = state,
-    columns = GridCells.Fixed(3),
+    columns = GridCells.Fixed(columns),
     modifier = modifier.fillMaxSize(),
     contentPadding = contentPadding,
     horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -58,7 +59,7 @@ fun VerticalGridAnimeList(
     }
 
     if (isLoadingMore) {
-      item(span = { GridItemSpan(3) }) {
+      item(span = { GridItemSpan(columns) }) {
         Box(
           modifier = Modifier
             .fillMaxWidth()
@@ -73,7 +74,7 @@ fun VerticalGridAnimeList(
       }
     }
 
-    item(span = { GridItemSpan(3) }) {
+    item(span = { GridItemSpan(columns) }) {
       Spacer(modifier = Modifier.height(80.dp))
     }
   }
