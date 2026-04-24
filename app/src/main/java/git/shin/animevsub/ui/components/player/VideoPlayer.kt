@@ -95,6 +95,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -218,6 +219,18 @@ fun VideoPlayer(
   var selectedQualityLabel by remember { mutableStateOf("Auto") }
 
   var notificationText by remember { mutableStateOf("") }
+  val view = LocalView.current
+
+  DisposableEffect(isPlaying) {
+    if (isPlaying) {
+      view.keepScreenOn = true
+    }
+
+    onDispose {
+      view.keepScreenOn = false
+    }
+  }
+
   var showNotification by remember { mutableStateOf(false) }
   var notificationIcon by remember { mutableStateOf(Icons.Default.SkipNext) }
   var isNotificationClickable by remember { mutableStateOf(false) }
@@ -677,9 +690,6 @@ fun VideoPlayer(
             player = exoPlayer
             useController = false
           }
-        },
-        update = { view ->
-          view.keepScreenOn = isPlaying
         },
         modifier = Modifier.fillMaxSize()
       )
