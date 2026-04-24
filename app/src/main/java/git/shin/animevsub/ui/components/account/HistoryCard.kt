@@ -33,6 +33,7 @@ import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.utils.formatDuration
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @Composable
 fun HistoryCard(
@@ -42,6 +43,7 @@ fun HistoryCard(
   Column(
     modifier = Modifier
       .width(200.dp)
+      .tvFocusScale()
       .clickable(onClick = onClick)
   ) {
     Box(

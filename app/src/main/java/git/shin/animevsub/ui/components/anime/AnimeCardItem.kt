@@ -45,6 +45,7 @@ import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @Composable
 fun AnimeCardItem(
@@ -70,6 +71,7 @@ fun AnimeCardItem(
 
   Column(
     modifier = modifier
+      .tvFocusScale()
       .clickable(onClick = onClick)
   ) {
     Box(

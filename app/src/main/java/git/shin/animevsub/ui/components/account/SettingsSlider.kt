@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.utils.tvFocusScale
 import kotlin.math.roundToInt
 
 @Composable
@@ -29,6 +30,7 @@ fun SettingsSlider(
   Column(
     modifier = Modifier
       .fillMaxWidth()
+      .tvFocusScale()
       .padding(horizontal = 16.dp, vertical = 8.dp)
   ) {
     Row(

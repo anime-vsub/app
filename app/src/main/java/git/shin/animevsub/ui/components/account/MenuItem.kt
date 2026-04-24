@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @Composable
 fun MenuItem(
@@ -30,6 +31,7 @@ fun MenuItem(
   Row(
     modifier = Modifier
       .fillMaxWidth()
+      .tvFocusScale()
       .clickable(onClick = onClick)
       .padding(horizontal = 16.dp, vertical = 14.dp),
     verticalAlignment = Alignment.CenterVertically

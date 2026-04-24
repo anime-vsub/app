@@ -1,5 +1,6 @@
 package git.shin.animevsub.ui.components.account
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @Composable
 fun SettingsToggle(
@@ -25,6 +27,8 @@ fun SettingsToggle(
   Row(
     modifier = Modifier
       .fillMaxWidth()
+      .tvFocusScale()
+      .clickable { onCheckedChange(!checked) }
       .padding(horizontal = 16.dp, vertical = 8.dp),
     verticalAlignment = Alignment.CenterVertically
   ) {

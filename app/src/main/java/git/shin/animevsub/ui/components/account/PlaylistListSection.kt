@@ -34,6 +34,7 @@ import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @Composable
 fun PlaylistListSection(
@@ -88,6 +89,7 @@ fun PlaylistItemRow(
   Row(
     modifier = Modifier
       .fillMaxWidth()
+      .tvFocusScale()
       .clickable(onClick = onClick)
       .padding(vertical = 8.dp),
     verticalAlignment = Alignment.CenterVertically

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @Composable
 fun SettingsSelector(
@@ -33,6 +34,7 @@ fun SettingsSelector(
   Row(
     modifier = Modifier
       .fillMaxWidth()
+      .tvFocusScale()
       .clickable { expanded = true }
       .padding(horizontal = 16.dp, vertical = 14.dp),
     verticalAlignment = Alignment.CenterVertically

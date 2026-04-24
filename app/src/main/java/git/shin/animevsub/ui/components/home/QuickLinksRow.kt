@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @Composable
 fun QuickLinksRow(
@@ -42,19 +43,25 @@ fun QuickLinksRow(
       label = stringResource(R.string.catalog),
       icon = painterResource(id = R.drawable.icon_tool_alp),
       onClick = onCatalogClick,
-      modifier = Modifier.weight(1f)
+      modifier = Modifier
+        .weight(1f)
+        .tvFocusScale()
     )
     QuickLinkItem(
       label = stringResource(R.string.schedule),
       icon = painterResource(id = R.drawable.icon_tool_calc),
       onClick = onScheduleClick,
-      modifier = Modifier.weight(1f)
+      modifier = Modifier
+        .weight(1f)
+        .tvFocusScale()
     )
     QuickLinkItem(
       label = stringResource(R.string.rankings),
       icon = painterResource(id = R.drawable.icon_tool_rank),
       onClick = onRankingsClick,
-      modifier = Modifier.weight(1f)
+      modifier = Modifier
+        .weight(1f)
+        .tvFocusScale()
     )
   }
 }

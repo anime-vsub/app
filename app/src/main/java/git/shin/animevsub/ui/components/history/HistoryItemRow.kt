@@ -34,6 +34,8 @@ import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.utils.formatDuration
+import git.shin.animevsub.ui.utils.shimmerEffect
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @Composable
 fun HistoryItemRow(
@@ -43,6 +45,7 @@ fun HistoryItemRow(
   Row(
     modifier = Modifier
       .fillMaxWidth()
+      .tvFocusScale()
       .clickable(onClick = onClick)
       .padding(horizontal = 16.dp, vertical = 8.dp),
     horizontalArrangement = Arrangement.spacedBy(12.dp)

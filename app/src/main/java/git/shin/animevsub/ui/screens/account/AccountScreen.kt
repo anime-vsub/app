@@ -64,6 +64,7 @@ import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.ErrorColor
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.utils.tvFocusScale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -242,6 +243,7 @@ fun AccountScreen(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .background(DarkCard)
+                .tvFocusScale()
                 .clickable(onClick = onNavigateToLogin)
                 .padding(20.dp),
               contentAlignment = Alignment.Center
