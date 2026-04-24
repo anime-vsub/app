@@ -42,17 +42,16 @@ fun PlayerSideMenu(
   content: @Composable () -> Unit
 ) {
   val context = LocalContext.current
-  AnimatedVisibility(
-    visible = visible,
-    enter = fadeIn() + slideInHorizontally(initialOffsetX = { it }),
-    exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it }),
-    modifier = modifier.fillMaxSize()
-  ) {
-    Row(modifier = Modifier.fillMaxSize()) {
+  Box(modifier = modifier.fillMaxSize()) {
+    // Backdrop
+    AnimatedVisibility(
+      visible = visible,
+      enter = fadeIn(),
+      exit = fadeOut()
+    ) {
       Box(
         modifier = Modifier
-          .weight(1f)
-          .fillMaxHeight()
+          .fillMaxSize()
           .background(Color.Black.copy(alpha = 0.3f))
           .clickable(
             interactionSource = remember { MutableInteractionSource() },
@@ -60,12 +59,24 @@ fun PlayerSideMenu(
             onClick = onDismiss
           )
       )
+    }
+
+    // Side Menu
+    AnimatedVisibility(
+      visible = visible,
+      enter = fadeIn() + slideInHorizontally(initialOffsetX = { it }),
+      exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it }),
+      modifier = Modifier.align(Alignment.CenterEnd)
+    ) {
       Column(
         modifier = Modifier
           .fillMaxHeight()
           .fillMaxWidth(if (findActivity(context)?.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) 0.4f else 0.5f)
           .background(DarkSurface)
-          .clickable(enabled = false) {}
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+          ) {}
           .padding(bottom = 16.dp)
       ) {
         if (title != null) {
