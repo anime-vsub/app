@@ -92,6 +92,7 @@ import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.Badge
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.components.common.ActionButton
+import git.shin.animevsub.ui.components.detail.CommentContent
 import git.shin.animevsub.ui.components.detail.CommentSection
 import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.BedtimeReminderDialog
@@ -950,8 +951,8 @@ fun DetailScreen(
                   contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                  text = previewComment?.content ?: stringResource(R.string.comment_hint),
+                CommentContent(
+                  content = previewComment?.content ?: stringResource(R.string.comment_hint),
                   color = if (previewComment != null) TextPrimary else TextSecondary,
                   fontSize = 13.sp,
                   maxLines = 2,

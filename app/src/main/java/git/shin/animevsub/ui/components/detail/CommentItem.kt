@@ -47,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -64,6 +65,7 @@ fun CommentContent(
   modifier: Modifier = Modifier,
   style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
   color: Color = Color.Unspecified,
+  fontSize: TextUnit = TextUnit.Unspecified,
   maxLines: Int = Int.MAX_VALUE,
   overflow: TextOverflow = TextOverflow.Clip,
   stickerSize: Dp = 80.dp
@@ -90,6 +92,7 @@ fun CommentContent(
       text = content,
       style = style,
       color = if (color == Color.Unspecified) MaterialTheme.colorScheme.onSurface else color,
+      fontSize = fontSize,
       maxLines = maxLines,
       overflow = overflow,
       modifier = modifier
@@ -119,6 +122,7 @@ fun CommentContent(
               text = part,
               style = style,
               color = if (color == Color.Unspecified) MaterialTheme.colorScheme.onSurface else color,
+              fontSize = fontSize,
               maxLines = maxLines,
               overflow = overflow
             )
