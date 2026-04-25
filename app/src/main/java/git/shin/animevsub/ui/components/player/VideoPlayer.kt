@@ -589,9 +589,12 @@ fun VideoPlayer(
         }
       )
       .pointerInput(isFullScreen, anyMenuVisible) {
-        if (!isFullScreen) return@pointerInput
         awaitEachGesture {
           if (anyMenuVisible) {
+            awaitFirstDown(requireUnconsumed = false)
+            return@awaitEachGesture
+          }
+          if (!isFullScreen) {
             awaitFirstDown(requireUnconsumed = false)
             return@awaitEachGesture
           }
@@ -763,7 +766,8 @@ fun VideoPlayer(
 
         awaitEachGesture {
           val down = awaitFirstDown(requireUnconsumed = false)
-          if (anyMenuVisible) return@awaitEachGesture
+          if (anyMenuVisible || !isFullScreen) return@awaitEachGesture
+
           var dragStarted = false
           val touchSlop = viewConfiguration.touchSlop
 
