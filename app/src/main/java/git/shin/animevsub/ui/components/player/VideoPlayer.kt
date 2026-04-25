@@ -348,7 +348,17 @@ fun VideoPlayer(
   var duration by remember { mutableLongStateOf(0L) }
   var bufferedPosition by remember { mutableLongStateOf(0L) }
   var isDragging by remember { mutableStateOf(false) }
+  var isSeeking by remember { mutableStateOf(false) }
   var dragTime by remember { mutableLongStateOf(0L) }
+
+  LaunchedEffect(isDragging, showDoubleTapIndicator) {
+    if (isDragging || showDoubleTapIndicator) {
+      isSeeking = true
+    } else {
+      delay(1500)
+      isSeeking = false
+    }
+  }
   var isControlsVisible by remember { mutableStateOf(true) }
   val speeds = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f)
 
@@ -549,6 +559,7 @@ fun VideoPlayer(
                   KeyEvent.KEYCODE_DPAD_LEFT -> {
                     val newPos = (exoPlayer.currentPosition - 10000).coerceAtLeast(0)
                     exoPlayer.seekTo(newPos)
+                    currentTime = newPos
                     if (!isControlsVisible) {
                       doubleTapSide = "left"
                       doubleTapText = "-10s"
@@ -561,6 +572,7 @@ fun VideoPlayer(
                   KeyEvent.KEYCODE_DPAD_RIGHT -> {
                     val newPos = (exoPlayer.currentPosition + 10000).coerceAtMost(exoPlayer.duration)
                     exoPlayer.seekTo(newPos)
+                    currentTime = newPos
                     if (!isControlsVisible) {
                       doubleTapSide = "right"
                       doubleTapText = "+10s"
@@ -953,11 +965,15 @@ fun VideoPlayer(
             if (isControlsVisible) isControlsVisible = false
             val skipMs = doubleTapSkipDuration * 1000L
             if (offset.x < size.width / 2) {
-              exoPlayer.seekTo((exoPlayer.currentPosition - skipMs).coerceAtLeast(0))
+              val newPos = (exoPlayer.currentPosition - skipMs).coerceAtLeast(0)
+              exoPlayer.seekTo(newPos)
+              currentTime = newPos
               doubleTapSide = "left"
               doubleTapText = "-${doubleTapSkipDuration}s"
             } else {
-              exoPlayer.seekTo((exoPlayer.currentPosition + skipMs).coerceAtMost(exoPlayer.duration))
+              val newPos = (exoPlayer.currentPosition + skipMs).coerceAtMost(exoPlayer.duration)
+              exoPlayer.seekTo(newPos)
+              currentTime = newPos
               doubleTapSide = "right"
               doubleTapText = "+${doubleTapSkipDuration}s"
             }
@@ -1302,7 +1318,7 @@ fun VideoPlayer(
       }
 
       AnimatedVisibility(
-        visible = isControlsVisible && errorMessage == null && !isInPipMode,
+        visible = (isControlsVisible || isSeeking) && errorMessage == null && !isInPipMode,
         enter = fadeIn() + slideInVertically { it },
         exit = fadeOut() + slideOutVertically { it },
         modifier = Modifier.align(Alignment.BottomCenter)
@@ -1315,7 +1331,7 @@ fun VideoPlayer(
               vertical = if (isFullScreen) 16.dp else 2.dp
             )
         ) {
-          if (!isDragging) {
+          if (isControlsVisible && !isSeeking) {
             Row(
               modifier = Modifier
                 .fillMaxWidth()
@@ -1352,16 +1368,18 @@ fun VideoPlayer(
               thumbColor = Color.Transparent
             ),
             thumb = {
-              Box(
-                modifier = Modifier.size(24.dp),
-                contentAlignment = Alignment.Center
-              ) {
+              if (isControlsVisible && !isSeeking) {
                 Box(
-                  modifier = Modifier
-                    .size(12.dp)
-                    .background(MainColor, CircleShape)
-                    .border(1.dp, Color.White, CircleShape)
-                )
+                  modifier = Modifier.size(24.dp),
+                  contentAlignment = Alignment.Center
+                ) {
+                  Box(
+                    modifier = Modifier
+                      .size(12.dp)
+                      .background(MainColor, CircleShape)
+                      .border(1.dp, Color.White, CircleShape)
+                  )
+                }
               }
             },
             track = { sliderState ->
@@ -1431,7 +1449,7 @@ fun VideoPlayer(
             modifier = Modifier.height(24.dp)
           )
 
-          if (isFullScreen) {
+          if (isControlsVisible && !isSeeking && isFullScreen) {
             Spacer(modifier = Modifier.height(8.dp))
             Row(
               modifier = Modifier.fillMaxWidth(),
