@@ -20,7 +20,9 @@ object AppIntegrityChecker {
     val actualSha256 = getSignatureSha256(context)
 
     if (expectedSha256.lowercase() != actualSha256?.lowercase()) {
-      Log.e("IntegrityChecker", "App integrity check failed. Expected: \$expectedSha256, Actual: \$actualSha256")
+      if (BuildConfig.DEBUG) {
+        Log.e("IntegrityChecker", "App integrity check failed. Expected: \$expectedSha256, Actual: \$actualSha256")
+      }
       exitProcess(0)
     }
   }
@@ -45,7 +47,7 @@ object AppIntegrityChecker {
       val digest = md.digest(signatures[0].toByteArray())
       return digest.joinToString(":") { "%02X".format(it) }
     } catch (e: Exception) {
-      e.printStackTrace()
+      print(e)
       return null
     }
   }
