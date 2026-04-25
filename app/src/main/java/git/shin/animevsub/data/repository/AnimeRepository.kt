@@ -64,34 +64,6 @@ class AnimeRepository @Inject constructor(
   private val _authEvent = MutableSharedFlow<AuthEvent>(extraBufferCapacity = 1)
   val authEvent = _authEvent.asSharedFlow()
 
-  init {
-    repositoryScope.launch {
-      // Load cached notifications
-      storage.getString("cached_notifications").first()?.let { cached ->
-        try {
-          _notifications.value = json.decodeFromString<NotificationData>(cached)
-        } catch (e: Exception) {
-          print(e)
-        }
-      }
-
-      // Sync notifications and refresh user when logged in
-      isLoggedIn.collect { loggedIn ->
-        if (loggedIn) {
-          launch { getNotifications() }
-          launch { refreshUser() }
-          if (prefs.autoSyncNotify.first()) {
-            launch { startSyncNotifications() }
-          }
-        } else {
-          _notifications.value = null
-          storage.set("cached_notifications", null)
-          notificationDbRepository.clear()
-        }
-      }
-    }
-  }
-
   suspend fun refreshUser(): Result<User> = runCatching {
     try {
       val user = api.refreshUser()
@@ -221,6 +193,34 @@ class AnimeRepository @Inject constructor(
       }
     }
   val isLoggedIn: Flow<Boolean> = user.map { it != null }
+
+  init {
+    repositoryScope.launch {
+      // Load cached notifications
+      storage.getString("cached_notifications").first()?.let { cached ->
+        try {
+          _notifications.value = json.decodeFromString<NotificationData>(cached)
+        } catch (e: Exception) {
+          print(e)
+        }
+      }
+
+      // Sync notifications and refresh user when logged in
+      isLoggedIn.collect { loggedIn ->
+        if (loggedIn) {
+          launch { getNotifications() }
+          launch { refreshUser() }
+          if (prefs.autoSyncNotify.first()) {
+            launch { startSyncNotifications() }
+          }
+        } else {
+          _notifications.value = null
+          storage.set("cached_notifications", null)
+          notificationDbRepository.clear()
+        }
+      }
+    }
+  }
 
   val loginUrl: String = AnimeApi.LOGIN_URL
 
