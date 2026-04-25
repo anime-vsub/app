@@ -1093,6 +1093,13 @@ class DetailViewModel @Inject constructor(
     }
   }
 
+  fun setAutoNext(enabled: Boolean) {
+    _uiState.update { it.copy(autoNext = enabled) }
+    viewModelScope.launch {
+      repository.setAutoNext(enabled)
+    }
+  }
+
   fun onEpisodeEnded(): Boolean {
     if (!canPlayNext()) return false
 

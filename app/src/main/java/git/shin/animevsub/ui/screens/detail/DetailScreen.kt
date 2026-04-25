@@ -358,6 +358,7 @@ fun DetailScreen(
                 introRange = state.introRange,
                 outroRange = state.outroRange,
                 autoNextEnabled = state.autoNext,
+                onAutoNextToggle = { viewModel.setAutoNext(it) },
                 onBack = onNavigateBack,
                 onReload = { viewModel.retryPlayer() },
                 onNextEpisode = { viewModel.playNext() },

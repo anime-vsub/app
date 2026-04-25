@@ -53,6 +53,8 @@ fun SettingsSideMenuContent(
   onBrightnessGestureToggle: (Boolean) -> Unit,
   autoSkipEnabled: Boolean,
   onAutoSkipToggle: (Boolean) -> Unit,
+  autoNextEnabled: Boolean,
+  onAutoNextToggle: (Boolean) -> Unit,
   doubleTapSkipDuration: Int,
   onDoubleTapSkipDurationChange: (Int) -> Unit,
   longPressSpeed: Float,
@@ -111,6 +113,12 @@ fun SettingsSideMenuContent(
           title = stringResource(R.string.auto_skip),
           checked = autoSkipEnabled,
           onCheckedChange = onAutoSkipToggle
+        )
+        SettingsToggleItem(
+          icon = Icons.Default.SkipNext,
+          title = stringResource(R.string.auto_next),
+          checked = autoNextEnabled,
+          onCheckedChange = onAutoNextToggle
         )
         SettingsToggleItem(
           icon = Icons.AutoMirrored.Filled.VolumeUp,
