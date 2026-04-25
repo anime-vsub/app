@@ -569,8 +569,12 @@ fun VideoPlayer(
         }
       )
       .pointerInput(isFullScreen, anyMenuVisible) {
-        if (!isFullScreen || anyMenuVisible) return@pointerInput
+        if (!isFullScreen) return@pointerInput
         awaitEachGesture {
+          if (anyMenuVisible) {
+            awaitFirstDown(requireUnconsumed = false)
+            return@awaitEachGesture
+          }
           var pastTouchSlop = false
           val touchSlop = viewConfiguration.touchSlop
 
@@ -731,7 +735,7 @@ fun VideoPlayer(
         }
       }
       .pointerInput(volumeGestureEnabled, brightnessGestureEnabled, isInPipMode, videoZoomScale, anyMenuVisible) {
-        if (isInPipMode || anyMenuVisible) return@pointerInput
+        if (isInPipMode) return@pointerInput
         val activity = findActivity(context)
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         var volumeAccumulator = 0f
@@ -739,6 +743,7 @@ fun VideoPlayer(
 
         awaitEachGesture {
           val down = awaitFirstDown(requireUnconsumed = false)
+          if (anyMenuVisible) return@awaitEachGesture
           var dragStarted = false
           val touchSlop = viewConfiguration.touchSlop
 
@@ -823,9 +828,10 @@ fun VideoPlayer(
         }
       }
       .pointerInput(isInPipMode, isControlsVisible, doubleTapSkipDuration, longPressSpeedValue, videoZoomScale, anyMenuVisible) {
-        if (isInPipMode || anyMenuVisible) return@pointerInput
+        if (isInPipMode) return@pointerInput
         awaitEachGesture {
           val down = awaitFirstDown(requireUnconsumed = false)
+          if (anyMenuVisible) return@awaitEachGesture
           val initialX = down.position.x
           val initialY = down.position.y
           var longPressTriggered = false
@@ -903,10 +909,22 @@ fun VideoPlayer(
         }
       }
       .pointerInput(isInPipMode, isControlsVisible, doubleTapSkipDuration, anyMenuVisible) {
-        if (isInPipMode || anyMenuVisible) return@pointerInput
+        if (isInPipMode) return@pointerInput
         detectTapGestures(
-          onTap = { isControlsVisible = !isControlsVisible },
+          onTap = {
+            if (anyMenuVisible) {
+              showEpisodeSideMenu = false
+              showServerSideMenu = false
+              showSettingsSideMenu = false
+              showSettingsBottomSheet = false
+              showSpeedMenu = false
+              showQualityMenu = false
+            } else {
+              isControlsVisible = !isControlsVisible
+            }
+          },
           onDoubleTap = { offset ->
+            if (anyMenuVisible) return@detectTapGestures
             if (isControlsVisible) isControlsVisible = false
             val skipMs = doubleTapSkipDuration * 1000L
             if (offset.x < size.width / 2) {
@@ -1225,35 +1243,34 @@ fun VideoPlayer(
 
       AnimatedVisibility(
         visible = showNotification,
-        enter = fadeIn() + slideInVertically { it },
-        exit = fadeOut() + slideOutVertically { it },
+        enter = fadeIn() + slideInVertically { -it },
+        exit = fadeOut() + slideOutVertically { -it },
         modifier = Modifier
-          .align(Alignment.BottomStart)
+          .align(Alignment.TopCenter)
           .padding(
-            start = if (isFullScreen) 32.dp else 16.dp,
-            bottom = if (isFullScreen) 32.dp else 24.dp
+            top = if (isFullScreen) 48.dp else 16.dp
           )
       ) {
         Box(
           modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(Color.Black.copy(alpha = 0.7f))
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.Black.copy(alpha = 0.6f))
             .clickable(enabled = isNotificationClickable) {
               showNotification = false
               isNotificationClickable = false
               isAutoNexting = false
               onNextEpisode()
             }
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(horizontal = 12.dp, vertical = 6.dp)
         ) {
           Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(notificationIcon, null, tint = MainColor, modifier = Modifier.size(12.dp))
-            Spacer(modifier = Modifier.width(4.dp))
+            Icon(notificationIcon, null, tint = MainColor, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
               text = notificationText,
               color = Color.White,
-              fontSize = 11.sp,
-              fontWeight = FontWeight.Medium
+              fontSize = 12.sp,
+              fontWeight = FontWeight.Bold
             )
           }
         }
