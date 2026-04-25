@@ -11,6 +11,8 @@ on:
         required: true
       GOOGLE_SERVICES:
         required: true
+      GOOGLE_SERVICES_DEV:
+        required: true
       SUPABASE_URL:
         required: true
       SUPABASE_KEY:
