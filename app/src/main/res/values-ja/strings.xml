@@ -110,6 +110,11 @@
     <string name="double_tap_skip">ダブルタップでスキップ</string>
     <string name="long_press_speed">長押し時の速度</string>
     <string name="seconds_unit">%1$d秒</string>
+    <string name="video_aspect_zoom">ズームモード</string>
+    <string name="video_aspect_fit">フィットモード</string>
+    <string name="video_aspect_zoom_format">ズーム: %1$.2fx</string>
+    <string name="video_aspect_original">オリジナル</string>
+    <string name="video_aspect_zoom_fill">画面いっぱいにズーム</string>
 
     <!-- Account -->
     <string name="login">ログイン</string>
@@ -302,13 +307,6 @@
     <string name="settings_capital">設定</string>
     <string name="select_time">時間を選択</string>
 
-    <!-- Main Activity -->
-    <string name="months_ago">%1$d ヶ月前</string>
-    <string name="years_ago">%1$d 年前</string>
-    <string name="authentication_prompt_title">認証</string>
-    <string name="authentication_prompt_message">セッションが切れた可能性があります。再試行しますか？それともログアウトしますか？</string>
-    <string name="app_inactive_title">メンテナンス中</string>
-    <string name="app_inactive_message">現在、アプリをご利用いただけません。後でもう一度ご確認ください。</string>
     <string name="notification_settings">通知設定</string>
     <string name="enable_notifications">通知を有効にする</string>
     <string name="enable_background_sync">バックグラウンド同期を有効にする</string>
@@ -316,8 +314,18 @@
     <string name="db_notify_sync_interval">DB同期の間隔</string>
     <string name="auto_sync_notify">通知を自動同期</string>
     <string name="minutes_label">%1$d 分</string>
+
     <string name="new_notification_title">新着アニメ更新</string>
     <string name="new_notification_message">%1$s - %2$s</string>
+
+    <!-- Main Activity -->
+    <string name="months_ago">%1$d ヶ月前</string>
+    <string name="years_ago">%1$d 年前</string>
+    <string name="authentication_prompt_title">認証</string>
+    <string name="authentication_prompt_message">セッションが切れた可能性があります。再試行しますか？それともログアウトしますか？</string>
+    <string name="app_inactive_title">メンテナンス中</string>
+    <string name="app_inactive_message">現在、アプリをご利用いただけません。後でもう一度ご確認ください。</string>
+
     <!-- Donation -->
     <string name="donation_title">開発者からのメッセージ</string>
     <string name="donation_description">このアプリは %1$d 年間維持されており、常に無料です。これは、サーバーや新機能の維持において、開発者に大きな経済的負担をかけています。</string>

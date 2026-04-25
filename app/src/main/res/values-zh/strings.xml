@@ -110,6 +110,11 @@
     <string name="double_tap_skip">双击跳转时长</string>
     <string name="long_press_speed">长按播放速度</string>
     <string name="seconds_unit">%1$d秒</string>
+    <string name="video_aspect_zoom">缩放模式</string>
+    <string name="video_aspect_fit">适应模式</string>
+    <string name="video_aspect_zoom_format">缩放: %1$.2fx</string>
+    <string name="video_aspect_original">原始大小</string>
+    <string name="video_aspect_zoom_fill">缩放以填充</string>
 
     <!-- Account -->
     <string name="login">登录</string>
@@ -304,11 +309,6 @@
     <string name="settings_capital">设置</string>
     <string name="select_time">选择时间</string>
 
-    <!-- Main Activity -->
-    <string name="authentication_prompt_title">身份验证</string>
-    <string name="authentication_prompt_message">您的会话可能已过期。您想重试还是退出登录？</string>
-    <string name="app_inactive_title">系统维护</string>
-    <string name="app_inactive_message">应用目前不可用。请稍后再试。</string>
     <string name="notification_settings">通知设置</string>
     <string name="enable_notifications">启用通知</string>
     <string name="enable_background_sync">启用后台同步</string>
@@ -316,8 +316,16 @@
     <string name="db_notify_sync_interval">数据库同步间隔</string>
     <string name="auto_sync_notify">自动同步通知</string>
     <string name="minutes_label">%1$d 分钟</string>
+
     <string name="new_notification_title">新动漫更新</string>
     <string name="new_notification_message">%1$s - %2$s</string>
+
+    <!-- Main Activity -->
+    <string name="authentication_prompt_title">身份验证</string>
+    <string name="authentication_prompt_message">您的会话可能已过期。您想重试还是退出登录？</string>
+    <string name="app_inactive_title">系统维护</string>
+    <string name="app_inactive_message">应用目前不可用。请稍后再试。</string>
+
     <!-- Donation -->
     <string name="donation_title">来自开发者的信</string>
     <string name="donation_description">该应用已维护了 %1$d 年，且始终免费。这对开发者维护服务器和开发新功能带来了巨大的经济压力。</string>

@@ -110,6 +110,11 @@
     <string name="double_tap_skip">Tua khi chạm đúp</string>
     <string name="long_press_speed">Tốc độ khi nhấn giữ</string>
     <string name="seconds_unit">%1$ds</string>
+    <string name="video_aspect_zoom">Chế độ phóng to</string>
+    <string name="video_aspect_fit">Chế độ mặc định</string>
+    <string name="video_aspect_zoom_format">Phóng to: %1$.2fx</string>
+    <string name="video_aspect_original">Nguyên bản</string>
+    <string name="video_aspect_zoom_fill">Đã phóng to lấp đầy màn hình</string>
 
     <!-- Account -->
     <string name="login">Đăng nhập</string>

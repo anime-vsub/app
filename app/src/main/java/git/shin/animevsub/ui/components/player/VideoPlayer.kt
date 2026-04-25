@@ -5,6 +5,9 @@ import android.content.pm.ActivityInfo
 import android.media.AudioManager
 import android.view.KeyEvent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -16,8 +19,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculateCentroidSize
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -89,17 +94,20 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -135,6 +143,7 @@ import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
 import git.shin.animevsub.ui.utils.rememberScreenState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -207,11 +216,22 @@ fun VideoPlayer(
   var originalSpeedBeforeLongPress by remember { mutableFloatStateOf(1f) }
   var isLongPressing by remember { mutableStateOf(false) }
 
+  var videoZoomScale by remember { mutableFloatStateOf(1f) }
+  var videoOffset by remember { mutableStateOf(Offset.Zero) }
+  var isInteractingWithZoom by remember { mutableStateOf(false) }
+  var containerSize by remember { mutableStateOf<IntSize>(IntSize.Zero) }
+  var snapJob by remember { mutableStateOf<Job?>(null) }
+
   var showEpisodeSideMenu by remember { mutableStateOf(false) }
   var showServerSideMenu by remember { mutableStateOf(false) }
   var showSettingsBottomSheet by remember { mutableStateOf(false) }
   var showSettingsSideMenu by remember { mutableStateOf(false) }
   var settingsSubMenu by remember { mutableStateOf<String?>(null) }
+
+  var showSpeedMenu by remember { mutableStateOf(false) }
+  var showQualityMenu by remember { mutableStateOf(false) }
+
+  val anyMenuVisible = showEpisodeSideMenu || showServerSideMenu || showSettingsSideMenu || showSettingsBottomSheet || showSpeedMenu || showQualityMenu
 
   data class QualityInfo(val label: String, val group: Tracks.Group, val trackIndex: Int)
 
@@ -312,9 +332,6 @@ fun VideoPlayer(
   var isDragging by remember { mutableStateOf(false) }
   var dragTime by remember { mutableLongStateOf(0L) }
   var isControlsVisible by remember { mutableStateOf(true) }
-
-  var showSpeedMenu by remember { mutableStateOf(false) }
-  var showQualityMenu by remember { mutableStateOf(false) }
   val speeds = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f)
 
   LaunchedEffect(isAutoNexting) {
@@ -493,6 +510,7 @@ fun VideoPlayer(
   Box(
     modifier = (if (isFullScreen) Modifier.fillMaxSize() else modifier)
       .background(Color.Black)
+      .onGloballyPositioned { containerSize = it.size }
       .clipToBounds()
       .then(
         if (focusRequester != null) {
@@ -550,70 +568,276 @@ fun VideoPlayer(
           Modifier
         }
       )
-      .pointerInput(volumeGestureEnabled, brightnessGestureEnabled, isInPipMode) {
-        if (isInPipMode) return@pointerInput
+      .pointerInput(isFullScreen, anyMenuVisible) {
+        if (!isFullScreen || anyMenuVisible) return@pointerInput
+        awaitEachGesture {
+          var pastTouchSlop = false
+          val touchSlop = viewConfiguration.touchSlop
+
+          val down = awaitFirstDown(requireUnconsumed = false)
+          snapJob?.cancel()
+          // We don't set isInteractingWithZoom = true here to avoid hiding UI on simple tap
+          try {
+            do {
+              val event = awaitPointerEvent()
+              val canceled = event.changes.any { it.isConsumed }
+              if (canceled) break
+
+              if (event.changes.size > 1) {
+                val zoomChange = event.calculateZoom()
+                val panChange = event.calculatePan()
+
+                if (!pastTouchSlop) {
+                  val centroidSize = event.calculateCentroidSize(useCurrent = false)
+                  val zoomMotion = abs(1 - zoomChange) * centroidSize
+                  if (zoomMotion > touchSlop || panChange != Offset.Zero) {
+                    pastTouchSlop = true
+                    isInteractingWithZoom = true
+                  }
+                }
+
+                if (pastTouchSlop) {
+                  videoZoomScale = (videoZoomScale * zoomChange).coerceIn(0.75f, 3.0f)
+
+                  if (videoZoomScale > 1f) {
+                    val newOffset = videoOffset + panChange
+                    var maxX = (containerSize.width * (videoZoomScale - 1f)) / 2f
+                    var maxY = (containerSize.height * (videoZoomScale - 1f)) / 2f
+
+                    val videoSize = exoPlayer.videoSize
+                    if (videoSize.width > 0 && videoSize.height > 0) {
+                      val videoAspect = videoSize.width.toFloat() / videoSize.height.toFloat()
+                      val screenAspect = containerSize.width.toFloat() / containerSize.height.toFloat()
+                      if (videoAspect > screenAspect) {
+                        val actualVideoHeight = containerSize.width / videoAspect
+                        if (actualVideoHeight * videoZoomScale <= containerSize.height) maxY = 0f
+                      } else {
+                        val actualVideoWidth = containerSize.height * videoAspect
+                        if (actualVideoWidth * videoZoomScale <= containerSize.width) maxX = 0f
+                      }
+                    }
+
+                    videoOffset = Offset(
+                      newOffset.x.coerceIn(-maxX.coerceAtLeast(0f), maxX.coerceAtLeast(0f)),
+                      newOffset.y.coerceIn(-maxY.coerceAtLeast(0f), maxY.coerceAtLeast(0f))
+                    )
+                  } else {
+                    videoOffset = Offset.Zero
+                  }
+                  event.changes.forEach { it.consume() }
+                }
+              } else if (videoZoomScale > 1f) {
+                val change = event.changes.first()
+                val panChange = change.position - change.previousPosition
+                val maxEdgeSize = 30.dp.toPx()
+                val edgeSize = (size.width * 0.2f).coerceAtMost(maxEdgeSize)
+                val isEdgeTouch = down.position.x < edgeSize || down.position.x > size.width - edgeSize
+
+                if (!pastTouchSlop) {
+                  if (isEdgeTouch && abs(panChange.y) > abs(panChange.x) * 1.5f) {
+                    break
+                  }
+                  if (panChange.getDistance() > touchSlop) {
+                    pastTouchSlop = true
+                    isInteractingWithZoom = true
+                  }
+                }
+
+                if (pastTouchSlop && panChange != Offset.Zero) {
+                  val newOffset = videoOffset + panChange
+                  var maxX = (containerSize.width * (videoZoomScale - 1f)) / 2f
+                  var maxY = (containerSize.height * (videoZoomScale - 1f)) / 2f
+
+                  val videoSize = exoPlayer.videoSize
+                  if (videoSize.width > 0 && videoSize.height > 0) {
+                    val videoAspect = videoSize.width.toFloat() / videoSize.height.toFloat()
+                    val screenAspect = containerSize.width.toFloat() / containerSize.height.toFloat()
+                    if (videoAspect > screenAspect) {
+                      val actualVideoHeight = containerSize.width / videoAspect
+                      if (actualVideoHeight * videoZoomScale <= containerSize.height) maxY = 0f
+                    } else {
+                      val actualVideoWidth = containerSize.height * videoAspect
+                      if (actualVideoWidth * videoZoomScale <= containerSize.width) maxX = 0f
+                    }
+                  }
+
+                  videoOffset = Offset(
+                    newOffset.x.coerceIn(-maxX.coerceAtLeast(0f), maxX.coerceAtLeast(0f)),
+                    newOffset.y.coerceIn(-maxY.coerceAtLeast(0f), maxY.coerceAtLeast(0f))
+                  )
+                  change.consume()
+                }
+              }
+            } while (event.changes.any { it.pressed })
+
+            // Snap logic on release with animation
+            val videoSize = exoPlayer.videoSize
+            if (videoSize.width > 0 && videoSize.height > 0) {
+              val videoAspect = videoSize.width.toFloat() / videoSize.height.toFloat()
+              val screenAspect = if (containerSize.width > 0) containerSize.width.toFloat() / containerSize.height.toFloat() else 1.777f
+              val fitScale = if (videoAspect > screenAspect) {
+                containerSize.height / (containerSize.width / videoAspect)
+              } else {
+                containerSize.width / (containerSize.height * videoAspect)
+              }
+
+              var targetScale = videoZoomScale
+              var targetOffset = videoOffset
+
+              val distToFit = abs(videoZoomScale - fitScale)
+              val distToOriginal = abs(videoZoomScale - 1f)
+
+              if (distToFit < 0.15f && (distToFit < distToOriginal || videoZoomScale > 1.03f)) {
+                targetScale = fitScale
+                val maxX = (containerSize.width * (targetScale - 1f)) / 2f
+                val maxY = (containerSize.height * (targetScale - 1f)) / 2f
+                targetOffset = Offset(
+                  videoOffset.x.coerceIn(-maxX.coerceAtLeast(0f), maxX.coerceAtLeast(0f)),
+                  videoOffset.y.coerceIn(-maxY.coerceAtLeast(0f), maxY.coerceAtLeast(0f))
+                )
+              } else if (videoZoomScale < 1.08f || videoZoomScale < 1.0f) {
+                targetScale = 1.0f
+                targetOffset = Offset.Zero
+              }
+
+              if (targetScale != videoZoomScale || targetOffset != videoOffset) {
+                isInteractingWithZoom = true
+                snapJob = scope.launch {
+                  val startScale = videoZoomScale
+                  val startOffset = videoOffset
+                  animate(0f, 1f, animationSpec = spring(stiffness = Spring.StiffnessMediumLow)) { fraction, _ ->
+                    videoZoomScale = startScale + (targetScale - startScale) * fraction
+                    videoOffset = Offset(
+                      startOffset.x + (targetOffset.x - startOffset.x) * fraction,
+                      startOffset.y + (targetOffset.y - startOffset.y) * fraction
+                    )
+                  }
+                  isInteractingWithZoom = false
+                }
+              } else {
+                isInteractingWithZoom = false
+              }
+            } else {
+              isInteractingWithZoom = false
+            }
+          } catch (e: Exception) {
+            print(e)
+            isInteractingWithZoom = false
+          } finally {
+            if (snapJob?.isActive != true) {
+              isInteractingWithZoom = false
+            }
+          }
+        }
+      }
+      .pointerInput(volumeGestureEnabled, brightnessGestureEnabled, isInPipMode, videoZoomScale, anyMenuVisible) {
+        if (isInPipMode || anyMenuVisible) return@pointerInput
         val activity = findActivity(context)
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         var volumeAccumulator = 0f
         var brightnessAccumulator = 0f
 
-        detectVerticalDragGestures(
-          onDragStart = {
-            showGestureIndicator = true
-            volumeAccumulator = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
-            val params = activity?.window?.attributes
-            brightnessAccumulator =
-              if (params != null && params.screenBrightness >= 0) params.screenBrightness else 0.5f
-          },
-          onDragEnd = { showGestureIndicator = false },
-          onVerticalDrag = { change, dragAmount ->
-            val isLeftSide = change.position.x < size.width / 2
-            if (isLeftSide && brightnessGestureEnabled) {
-              activity?.let {
-                brightnessAccumulator -= dragAmount / size.height
-                brightnessAccumulator = brightnessAccumulator.coerceIn(0f, 1f)
-                val params = it.window.attributes
-                params.screenBrightness = brightnessAccumulator
-                it.window.attributes = params
-                gestureIcon = Icons.Default.BrightnessLow
-                gestureText = "${(brightnessAccumulator * 100).roundToInt()}%"
-                // Localize if needed, though % is universal
-              }
-            } else if (!isLeftSide && volumeGestureEnabled) {
-              val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-              val oldVolumeInt = volumeAccumulator.roundToInt().coerceIn(0, maxVolume)
+        awaitEachGesture {
+          val down = awaitFirstDown(requireUnconsumed = false)
+          var dragStarted = false
+          val touchSlop = viewConfiguration.touchSlop
 
-              // Increase sensitivity slightly: 0.7 of screen height for full volume range
-              volumeAccumulator -= (dragAmount / (size.height * 0.7f) * maxVolume)
-              val newVolumeInt = volumeAccumulator.roundToInt().coerceIn(0, maxVolume)
-
-              if (newVolumeInt != oldVolumeInt) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolumeInt, 0)
-              }
-              gestureIcon = Icons.AutoMirrored.Filled.VolumeUp
-              // Use volumeAccumulator for smooth percentage display
-              val smoothPercent = (volumeAccumulator.coerceIn(0f, maxVolume.toFloat()) / maxVolume * 100).roundToInt()
-              gestureText = "$smoothPercent%"
+          do {
+            val event = awaitPointerEvent()
+            if (event.changes.any { it.isConsumed }) {
+              dragStarted = false
+              showGestureIndicator = false
+              break
             }
-          }
-        )
+            val maxEdgeSize = 100.dp.toPx()
+            val edgeSize = (size.width * 0.2f).coerceAtMost(maxEdgeSize)
+            val isEdgeTouch = down.position.x < edgeSize || down.position.x > size.width - edgeSize
+
+            if (event.changes.size > 1 || (videoZoomScale > 1.05f && !isEdgeTouch)) {
+              dragStarted = false
+              showGestureIndicator = false
+              break
+            }
+
+            val change = event.changes.first()
+            if (change.pressed) {
+              val dragAmountY = change.position.y - down.position.y
+              if (!dragStarted && abs(dragAmountY) > touchSlop) {
+                dragStarted = true
+                showGestureIndicator = true
+                volumeAccumulator = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+                val params = activity?.window?.attributes
+                brightnessAccumulator = if (params != null && params.screenBrightness >= 0f) {
+                  params.screenBrightness
+                } else {
+                  // If screenBrightness is -1 (default), try to get from system
+                  try {
+                    android.provider.Settings.System.getInt(
+                      context.contentResolver,
+                      android.provider.Settings.System.SCREEN_BRIGHTNESS
+                    ) / 255f
+                  } catch (e: Exception) {
+                    print(e)
+                    0.5f
+                  }
+                }
+              }
+
+              if (dragStarted) {
+                val deltaY = change.position.y - change.previousPosition.y
+                val isLeftSide = down.position.x < size.width / 2
+
+                if (isLeftSide && brightnessGestureEnabled) {
+                  activity?.let {
+                    brightnessAccumulator -= deltaY / size.height
+                    brightnessAccumulator = brightnessAccumulator.coerceIn(0f, 1f)
+                    val params = it.window.attributes
+                    params.screenBrightness = brightnessAccumulator
+                    it.window.attributes = params
+                    gestureIcon = Icons.Default.BrightnessLow
+                    gestureText = "${(brightnessAccumulator * 100).roundToInt()}%"
+                  }
+                } else if (!isLeftSide && volumeGestureEnabled) {
+                  val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+                  val oldVolumeInt = volumeAccumulator.roundToInt().coerceIn(0, maxVolume)
+                  // Increase sensitivity slightly: 0.7 of screen height for full volume range
+                  volumeAccumulator -= (deltaY / (size.height * 0.7f) * maxVolume)
+                  val newVolumeInt = volumeAccumulator.roundToInt().coerceIn(0, maxVolume)
+
+                  if (newVolumeInt != oldVolumeInt) {
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolumeInt, 0)
+                  }
+                  gestureIcon = Icons.AutoMirrored.Filled.VolumeUp
+                  // Use volumeAccumulator for smooth percentage display
+                  val smoothPercent = (volumeAccumulator.coerceIn(0f, maxVolume.toFloat()) / maxVolume * 100).roundToInt()
+                  gestureText = "$smoothPercent%"
+                }
+                change.consume()
+              }
+            } else if (dragStarted) {
+              // Consume the up event to prevent triggering tap
+              change.consume()
+            }
+          } while (event.changes.any { it.pressed })
+          showGestureIndicator = false
+        }
       }
-      .pointerInput(isInPipMode, isControlsVisible, doubleTapSkipDuration, longPressSpeedValue) {
-        if (isInPipMode) return@pointerInput
+      .pointerInput(isInPipMode, isControlsVisible, doubleTapSkipDuration, longPressSpeedValue, videoZoomScale, anyMenuVisible) {
+        if (isInPipMode || anyMenuVisible) return@pointerInput
         awaitEachGesture {
           val down = awaitFirstDown(requireUnconsumed = false)
           val initialX = down.position.x
           val initialY = down.position.y
           var longPressTriggered = false
+          val touchSlop = viewConfiguration.touchSlop
 
           val longPressJob = scope.launch {
             delay(500)
-            if (!isControlsVisible) {
-              longPressTriggered = true
-              originalSpeedBeforeLongPress = playbackSpeed
-              exoPlayer.setPlaybackSpeed(longPressSpeedValue)
-              isLongPressing = true
-            }
+            longPressTriggered = true
+            if (isControlsVisible) isControlsVisible = false
+            originalSpeedBeforeLongPress = playbackSpeed
+            exoPlayer.setPlaybackSpeed(longPressSpeedValue)
+            isLongPressing = true
           }
 
           var seekingStarted = false
@@ -621,49 +845,69 @@ fun VideoPlayer(
 
           do {
             val event = awaitPointerEvent()
+            if (event.changes.any { it.isConsumed }) {
+              longPressJob.cancel()
+              if (isLongPressing) {
+                exoPlayer.setPlaybackSpeed(originalSpeedBeforeLongPress)
+                isLongPressing = false
+              }
+              break
+            }
+            if (event.changes.size > 1) {
+              longPressJob.cancel()
+              if (isLongPressing) {
+                exoPlayer.setPlaybackSpeed(originalSpeedBeforeLongPress)
+                isLongPressing = false
+              }
+            }
             val change = event.changes.first()
 
             if (!longPressTriggered) {
               val dragDistance = abs(change.position.x - initialX) + abs(change.position.y - initialY)
-              if (dragDistance > 20) {
+              if (dragDistance > touchSlop) {
                 longPressJob.cancel()
               }
             }
 
-            if (isLongPressing) {
-              val dragAmountX = change.position.x - initialX
-              if (!seekingStarted && abs(dragAmountX) > 30) {
-                seekingStarted = true
-                isDragging = true
-                basePositionForSeeking = exoPlayer.currentPosition
-              }
+            if (isLongPressing || longPressTriggered) {
+              if (isLongPressing) {
+                val dragAmountX = change.position.x - initialX
+                if (!seekingStarted && abs(dragAmountX) > touchSlop) {
+                  seekingStarted = true
+                  isDragging = true
+                  basePositionForSeeking = exoPlayer.currentPosition
+                }
 
-              if (seekingStarted) {
-                val screenWidth = size.width.toFloat()
-                // Swipe across full screen = 2 minutes seek
-                val seekDelta = (dragAmountX / screenWidth * 120000L).toLong()
-                dragTime = (basePositionForSeeking + seekDelta).coerceIn(0, exoPlayer.duration)
+                if (seekingStarted) {
+                  val screenWidth = size.width.toFloat()
+                  // Swipe across full screen = 2 minutes seek
+                  val seekDelta = (dragAmountX / screenWidth * 120000L).toLong()
+                  dragTime = (basePositionForSeeking + seekDelta).coerceIn(0, exoPlayer.duration)
+                }
               }
               change.consume()
             }
           } while (event.changes.any { it.pressed })
 
           longPressJob.cancel()
-          if (isLongPressing) {
-            exoPlayer.setPlaybackSpeed(originalSpeedBeforeLongPress)
-            isLongPressing = false
-            if (isDragging) {
-              exoPlayer.seekTo(dragTime)
-              isDragging = false
+          if (isLongPressing || longPressTriggered) {
+            if (isLongPressing) {
+              exoPlayer.setPlaybackSpeed(originalSpeedBeforeLongPress)
+              isLongPressing = false
+              if (isDragging) {
+                exoPlayer.seekTo(dragTime)
+                isDragging = false
+              }
             }
           }
         }
       }
-      .pointerInput(isInPipMode, doubleTapSkipDuration) {
-        if (isInPipMode) return@pointerInput
+      .pointerInput(isInPipMode, isControlsVisible, doubleTapSkipDuration, anyMenuVisible) {
+        if (isInPipMode || anyMenuVisible) return@pointerInput
         detectTapGestures(
           onTap = { isControlsVisible = !isControlsVisible },
           onDoubleTap = { offset ->
+            if (isControlsVisible) isControlsVisible = false
             val skipMs = doubleTapSkipDuration * 1000L
             if (offset.x < size.width / 2) {
               exoPlayer.seekTo((exoPlayer.currentPosition - skipMs).coerceAtLeast(0))
@@ -691,7 +935,14 @@ fun VideoPlayer(
             useController = false
           }
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+          .fillMaxSize()
+          .graphicsLayer(
+            scaleX = videoZoomScale,
+            scaleY = videoZoomScale,
+            translationX = videoOffset.x,
+            translationY = videoOffset.y
+          )
       )
     }
     if (playerData == null && !poster.isNullOrEmpty()) {
@@ -901,7 +1152,34 @@ fun VideoPlayer(
         )
       }
 
-      if (isLongPressing && !isDragging) {
+      if ((isLongPressing || (videoZoomScale > 1.01f && isInteractingWithZoom)) && !isDragging) {
+        val labelText = when {
+          isLongPressing -> "${longPressSpeedValue}x"
+          videoZoomScale >= 2.99f -> context.getString(R.string.video_aspect_zoom_format, videoZoomScale)
+          videoZoomScale <= 1.01f -> context.getString(R.string.video_aspect_original)
+          else -> {
+            val videoSize = exoPlayer.videoSize
+            if (videoSize.width > 0 && videoSize.height > 0) {
+              val videoAspect = videoSize.width.toFloat() / videoSize.height.toFloat()
+              val screenWidth = containerSize.width.toFloat()
+              val screenHeight = containerSize.height.toFloat()
+              val screenAspect = if (screenWidth > 0) screenWidth / screenHeight else 1.777f
+              val fitScale = if (videoAspect > screenAspect) {
+                screenHeight / (screenWidth / videoAspect)
+              } else {
+                screenWidth / (screenHeight * videoAspect)
+              }
+              if (abs(videoZoomScale - fitScale) < 0.02f) {
+                context.getString(R.string.video_aspect_zoom_fill)
+              } else {
+                context.getString(R.string.video_aspect_zoom_format, videoZoomScale)
+              }
+            } else {
+              context.getString(R.string.video_aspect_zoom_format, videoZoomScale)
+            }
+          }
+        }
+
         Box(
           modifier = Modifier
             .align(Alignment.TopCenter)
@@ -910,10 +1188,15 @@ fun VideoPlayer(
             .padding(horizontal = 12.dp, vertical = 6.dp)
         ) {
           Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Speed, null, tint = MainColor, modifier = Modifier.size(16.dp))
+            Icon(
+              if (isLongPressing) Icons.Default.Speed else Icons.Default.Fullscreen,
+              null,
+              tint = MainColor,
+              modifier = Modifier.size(16.dp)
+            )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
-              text = stringResource(R.string.speed_up_pill, longPressSpeedValue),
+              text = labelText,
               color = Color.White,
               fontSize = 14.sp,
               fontWeight = FontWeight.Bold

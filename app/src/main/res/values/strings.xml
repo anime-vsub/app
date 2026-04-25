@@ -111,6 +111,11 @@
     <string name="double_tap_skip">Double Tap Skip</string>
     <string name="long_press_speed">Long Press Speed</string>
     <string name="seconds_unit">%1$ds</string>
+    <string name="video_aspect_zoom">Zoom Mode</string>
+    <string name="video_aspect_fit">Fit Mode</string>
+    <string name="video_aspect_zoom_format">Zoom: %1$.2fx</string>
+    <string name="video_aspect_original">Original</string>
+    <string name="video_aspect_zoom_fill">Zoom to Fill</string>
 
     <!-- Account -->
     <string name="login">Login</string>
