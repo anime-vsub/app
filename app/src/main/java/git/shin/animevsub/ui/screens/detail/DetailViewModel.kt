@@ -118,7 +118,7 @@ data class DetailUiState(
 class DetailViewModel @Inject constructor(
   private val repository: AnimeRepository,
   private val playlistRepository: PlaylistRepository,
-  savedStateHandle: SavedStateHandle
+  private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(DetailUiState())
@@ -379,6 +379,22 @@ class DetailViewModel @Inject constructor(
     }
   }
 
+  private fun canPlayNext(): Boolean {
+    val state = _uiState.value
+    val detail = state.detail ?: return false
+    val currentAnimeId = state.animeId
+    val data = chapterCache[currentAnimeId] ?: return false // yeah sure if current anime not exists cache then it function never called
+    val currentChapterId = state.currentChapter?.id ?: return false
+    val currentIndex = data.chaps.indexOfFirst { it.id == currentChapterId }
+
+    if (currentIndex != -1 && currentIndex + 1 < data.chaps.size) {
+      return true
+    }
+
+    val currentSeasonIdx = detail.season.indexOfFirst { it.id == currentAnimeId }
+    return currentSeasonIdx != -1 && currentSeasonIdx + 1 < detail.season.size
+  }
+
   fun loadDetail(
     animeId: String,
     targetChapterId: String? = null,
@@ -423,6 +439,11 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
           handleInitialChapter(cachedChapters, targetChapterId)
         }
+      } else if (cachedChapters.chaps.isNotEmpty()) {
+        val selectedChapter: ChapterInfo? = targetChapterId?.let { id: String ->
+          cachedChapters.chaps.find { it.id == id }
+        }
+        playChapter(selectedChapter ?: cachedChapters.chaps.first(), animeId)
       }
     } ?: run {
       viewModelScope.launch {
@@ -433,6 +454,11 @@ class DetailViewModel @Inject constructor(
             updateChapterCount(animeId, chapterData.chaps.size)
             if (!isSwitchingSeason) {
               handleInitialChapter(chapterData, targetChapterId)
+            } else if (chapterData.chaps.isNotEmpty()) {
+              val selectedChapter: ChapterInfo? = targetChapterId?.let { id: String ->
+                chapterData.chaps.find { it.id == id }
+              }
+              playChapter(selectedChapter ?: chapterData.chaps.first(), animeId)
             }
           }
           .onFailure { e ->
@@ -495,6 +521,8 @@ class DetailViewModel @Inject constructor(
         lastProgress = 0L
       )
     }
+    savedStateHandle["animeId"] = seasonId
+    savedStateHandle["chapterId"] = chapter.id
     isInitialPlayback = true
 
     if (isNewSeason) {
@@ -652,11 +680,28 @@ class DetailViewModel @Inject constructor(
   }
 
   fun playNext(): Boolean {
-    val data = chapterCache[_uiState.value.animeId] ?: return false
-    val nextIndex = _uiState.value.currentChapIndex + 1
+    val currentAnimeId = _uiState.value.animeId
+    val data = chapterCache[currentAnimeId] ?: return false
+    val currentChapterId = _uiState.value.currentChapter?.id ?: return false
+    val currentIndex = data.chaps.indexOfFirst { it.id == currentChapterId }
+    if (currentIndex == -1) return false
+    val nextIndex = currentIndex + 1
+
     if (nextIndex < data.chaps.size) {
-      playChapter(data.chaps[nextIndex], _uiState.value.animeId)
+      playChapter(data.chaps[nextIndex], currentAnimeId)
       return true
+    } else {
+      // Try to play next season
+      val detail = _uiState.value.detail
+      if (detail != null && detail.season.isNotEmpty()) {
+        val currentSeasonIdx = detail.season.indexOfFirst { it.id == currentAnimeId }
+        if (currentSeasonIdx != -1 && currentSeasonIdx + 1 < detail.season.size) {
+          val nextSeason = detail.season[currentSeasonIdx + 1]
+          loadDetail(nextSeason.id, isSwitchingSeason = true) // yes it
+
+          return true
+        }
+      }
     }
     return false
   }
@@ -1049,6 +1094,8 @@ class DetailViewModel @Inject constructor(
   }
 
   fun onEpisodeEnded(): Boolean {
+    if (!canPlayNext()) return false
+
     if (_uiState.value.pauseAfterCurrentEpisode) {
       _uiState.update { it.copy(pauseAfterCurrentEpisode = false) }
       return false
@@ -1100,7 +1147,7 @@ class DetailViewModel @Inject constructor(
 
     if (!shouldPlayNext) return false
 
-    return playNext()
+    return true
   }
 
   fun setPlayerPlaying(playing: Boolean) {

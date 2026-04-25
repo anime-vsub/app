@@ -164,7 +164,6 @@ fun VideoPlayer(
   introRange: DoubleRange? = null,
   outroRange: DoubleRange? = null,
   autoNextEnabled: Boolean = false,
-  hasNextEpisode: Boolean = false,
   onBack: () -> Unit,
   onReload: () -> Unit,
   onNextEpisode: () -> Unit,
@@ -276,8 +275,12 @@ fun VideoPlayer(
       addListener(object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
           isBuffering = playbackState == Player.STATE_BUFFERING
-          if (playbackState == Player.STATE_ENDED && autoNextEnabled) {
-            if (hasNextEpisode && onVideoEnded()) isAutoNexting = true
+          if (playbackState == Player.STATE_ENDED) {
+            val hasNext = onVideoEnded()
+            if (autoNextEnabled && hasNext) {
+              onNextEpisode()
+              isAutoNexting = true
+            }
           }
         }
 
@@ -341,6 +344,9 @@ fun VideoPlayer(
       isNotificationClickable = true
       showNotification = true
       delay(3000)
+      if (isAutoNexting) {
+        isAutoNexting = false
+      }
       showNotification = false
     }
   }
@@ -363,10 +369,10 @@ fun VideoPlayer(
     val currentSeconds = currentTime / 1000.0
     if (introRange != null && currentSeconds in introRange) {
       if (autoSkipEnabled) {
-        exoPlayer.seekTo(((introRange.last + 0.1) * 1000).toLong())
+        exoPlayer.seekTo((introRange.last * 1000).toLong())
       } else if (!showSkipNotification) {
         skipNotificationText = context.getString(R.string.skip_intro)
-        skipTargetTime = (introRange.last + 0.1) * 1000
+        skipTargetTime = introRange.last * 1000
         showSkipNotification = true
       }
       if (showSkipNotification) {
@@ -375,10 +381,10 @@ fun VideoPlayer(
       }
     } else if (outroRange != null && currentSeconds in outroRange) {
       if (autoSkipEnabled) {
-        if (hasNextEpisode) onNextEpisode() else exoPlayer.pause()
+        exoPlayer.seekTo((outroRange.last * 1000).toLong())
       } else if (!showSkipNotification) {
         skipNotificationText = context.getString(R.string.skip_outro)
-        skipTargetTime = (outroRange.last + 0.1) * 1000
+        skipTargetTime = outroRange.last * 1000
         showSkipNotification = true
       }
       if (showSkipNotification) {

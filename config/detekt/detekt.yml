@@ -687,7 +687,7 @@ style:
     active: false
   ReturnCount:
     active: true
-    max: 5
+    max: 10
     excludedFunctions:
       - 'equals'
     excludeLabeled: false

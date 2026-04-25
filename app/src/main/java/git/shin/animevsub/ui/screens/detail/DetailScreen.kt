@@ -358,10 +358,6 @@ fun DetailScreen(
                 introRange = state.introRange,
                 outroRange = state.outroRange,
                 autoNextEnabled = state.autoNext,
-                hasNextEpisode = state.currentChapIndex + 1 < (
-                  state.chapterData?.chaps?.size
-                    ?: 0
-                  ),
                 onBack = onNavigateBack,
                 onReload = { viewModel.retryPlayer() },
                 onNextEpisode = { viewModel.playNext() },
