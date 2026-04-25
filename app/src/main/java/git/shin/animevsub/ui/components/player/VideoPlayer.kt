@@ -129,7 +129,9 @@ import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.ui.PlayerView
+import androidx.mediarouter.app.MediaRouteButton
 import coil.compose.AsyncImage
+import com.google.android.gms.cast.framework.CastButtonFactory
 import git.shin.animevsub.R
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.ChapterInfo
@@ -1357,6 +1359,18 @@ fun VideoPlayer(
               }
             }
           }
+
+          AndroidView(
+            factory = { ctx ->
+              MediaRouteButton(ctx).apply {
+                CastButtonFactory.setUpMediaRouteButton(ctx, this)
+              }
+            },
+            modifier = Modifier
+              .align(Alignment.End)
+              .size(32.dp)
+          )
+
           Slider(
             value = (if (isDragging) dragTime else currentTime).toFloat(),
             onValueChange = { isDragging = true; dragTime = it.toLong() },
