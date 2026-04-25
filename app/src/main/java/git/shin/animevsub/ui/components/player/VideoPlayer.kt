@@ -73,6 +73,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -117,6 +118,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionOverride
@@ -240,11 +242,13 @@ fun VideoPlayer(
   var notificationText by remember { mutableStateOf("") }
   val view = LocalView.current
 
-  DisposableEffect(isPlaying) {
-    if (isPlaying) {
-      view.keepScreenOn = true
-    }
+  var isAutoNexting by remember(playerData) { mutableStateOf(false) }
+  // (isLoading || isBuffering
+  SideEffect {
+    view.keepScreenOn = isPlaying || isBuffering || isAutoNexting || isLoading
+  }
 
+  DisposableEffect(Unit) {
     onDispose {
       view.keepScreenOn = false
     }
@@ -253,7 +257,6 @@ fun VideoPlayer(
   var showNotification by remember { mutableStateOf(false) }
   var notificationIcon by remember { mutableStateOf(Icons.Default.SkipNext) }
   var isNotificationClickable by remember { mutableStateOf(false) }
-  var isAutoNexting by remember(playerData) { mutableStateOf(false) }
 
   var showSkipNotification by remember { mutableStateOf(false) }
   var skipNotificationText by remember { mutableStateOf("") }
@@ -275,6 +278,10 @@ fun VideoPlayer(
       addListener(object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
           isBuffering = playbackState == Player.STATE_BUFFERING
+          // Playing status includes actual playing or loading (buffering) as requested
+          isPlaying = (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) && playWhenReady
+          onPlayingStateChange(isPlaying)
+
           if (playbackState == Player.STATE_ENDED) {
             val hasNext = onVideoEnded()
             if (autoNextEnabled && hasNext) {
@@ -285,8 +292,15 @@ fun VideoPlayer(
         }
 
         override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-          isPlaying = playWhenReady
-          onPlayingStateChange(playWhenReady)
+          val state = this@apply.playbackState
+          isPlaying = (state == Player.STATE_READY || state == Player.STATE_BUFFERING) && playWhenReady
+          onPlayingStateChange(isPlaying)
+        }
+
+        override fun onPlayerError(error: PlaybackException) {
+          isPlaying = false
+          isBuffering = false
+          onPlayingStateChange(false)
         }
 
 //        override fun onRenderedFirstFrame() {
