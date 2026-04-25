@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ data class CategoryUiState(
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
   private val repository: AnimeRepository,
-  savedStateHandle: SavedStateHandle
+  private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(CategoryUiState())
@@ -141,6 +142,7 @@ class CategoryViewModel @Inject constructor(
     }
 
     _uiState.update { it.copy(selectedFilters = current) }
+    savedStateHandle["filters"] = Json.encodeToString(current)
     loadPage(1)
   }
 

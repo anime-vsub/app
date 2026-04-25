@@ -27,7 +27,7 @@ data class RankingsUiState(
 @HiltViewModel
 class RankingsViewModel @Inject constructor(
   private val repository: AnimeRepository,
-  savedStateHandle: SavedStateHandle
+  private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(RankingsUiState())
@@ -73,6 +73,7 @@ class RankingsViewModel @Inject constructor(
   }
 
   fun loadRankings(type: String) {
+    savedStateHandle["type"] = type
     _uiState.update {
       it.copy(
         selectedType = type,
