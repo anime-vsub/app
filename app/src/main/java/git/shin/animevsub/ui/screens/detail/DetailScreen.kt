@@ -1092,7 +1092,7 @@ fun DetailScreen(
 
 @Composable
 private fun DetailSkeleton() {
-  Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
+  Column(modifier = Modifier.padding(vertical = 8.dp)) {
     // Info Block Skeleton
     Column(
       modifier = Modifier
@@ -1102,11 +1102,11 @@ private fun DetailSkeleton() {
       Box(
         modifier = Modifier
           .fillMaxWidth(0.7f)
-          .height(20.dp)
+          .height(24.dp)
           .clip(RoundedCornerShape(4.dp))
           .shimmerEffect()
       )
-      Spacer(modifier = Modifier.height(8.dp))
+      Spacer(modifier = Modifier.height(12.dp))
       Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
           modifier = Modifier
@@ -1115,10 +1115,18 @@ private fun DetailSkeleton() {
             .clip(RoundedCornerShape(4.dp))
             .shimmerEffect()
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         Box(
           modifier = Modifier
             .width(60.dp)
+            .height(14.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .shimmerEffect()
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Box(
+          modifier = Modifier
+            .width(40.dp)
             .height(14.dp)
             .clip(RoundedCornerShape(4.dp))
             .shimmerEffect()
@@ -1127,22 +1135,30 @@ private fun DetailSkeleton() {
     }
 
     // Metadata Skeleton
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
       Box(
         modifier = Modifier
-          .width(180.dp)
+          .fillMaxWidth(0.9f)
           .height(14.dp)
           .clip(RoundedCornerShape(4.dp))
           .shimmerEffect()
       )
-      Spacer(modifier = Modifier.height(12.dp))
+      Spacer(modifier = Modifier.height(8.dp))
+      Box(
+        modifier = Modifier
+          .fillMaxWidth(0.6f)
+          .height(14.dp)
+          .clip(RoundedCornerShape(4.dp))
+          .shimmerEffect()
+      )
+      Spacer(modifier = Modifier.height(16.dp))
       Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        repeat(3) {
+        repeat(4) {
           Box(
             modifier = Modifier
-              .width(50.dp)
-              .height(20.dp)
-              .clip(RoundedCornerShape(4.dp))
+              .width(60.dp)
+              .height(24.dp)
+              .clip(RoundedCornerShape(12.dp))
               .shimmerEffect()
           )
         }
@@ -1156,15 +1172,15 @@ private fun DetailSkeleton() {
         .padding(horizontal = 16.dp, vertical = 20.dp),
       horizontalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-      repeat(3) {
+      repeat(4) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
           Box(
             modifier = Modifier
-              .size(24.dp)
+              .size(28.dp)
               .clip(CircleShape)
               .shimmerEffect()
           )
-          Spacer(modifier = Modifier.height(6.dp))
+          Spacer(modifier = Modifier.height(8.dp))
           Box(
             modifier = Modifier
               .width(40.dp)
@@ -1180,26 +1196,74 @@ private fun DetailSkeleton() {
     Row(
       modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 8.dp),
+        .padding(horizontal = 16.dp, vertical = 12.dp),
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.SpaceBetween
     ) {
       Box(
         modifier = Modifier
-          .width(100.dp)
-          .height(18.dp)
+          .width(120.dp)
+          .height(20.dp)
           .clip(RoundedCornerShape(4.dp))
           .shimmerEffect()
       )
       Box(
         modifier = Modifier
-          .size(20.dp)
+          .size(24.dp)
           .clip(CircleShape)
           .shimmerEffect()
       )
     }
 
     ChapterSkeleton()
+
+    // Recommend Skeleton
+    Spacer(modifier = Modifier.height(24.dp))
+    Box(
+      modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .width(150.dp)
+        .height(20.dp)
+        .clip(RoundedCornerShape(4.dp))
+        .shimmerEffect()
+    )
+    Spacer(modifier = Modifier.height(12.dp))
+
+    RecommendSkeleton()
+  }
+}
+
+@Composable
+private fun RecommendSkeleton() {
+  Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+    repeat(2) {
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
+        repeat(3) {
+          Column(modifier = Modifier.weight(1f)) {
+            Box(
+              modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(2f / 3f)
+                .clip(RoundedCornerShape(8.dp))
+                .shimmerEffect()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Box(
+              modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .height(14.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .shimmerEffect()
+            )
+          }
+        }
+      }
+    }
   }
 }
 
