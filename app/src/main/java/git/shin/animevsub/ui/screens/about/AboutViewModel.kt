@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.UpdateInfo
+import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import git.shin.animevsub.utils.UpdateManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +22,8 @@ data class AboutUiState(
   val updateInfo: UpdateInfo? = null,
   val error: String? = null,
   val isDeveloperMode: Boolean = false,
-  val hideDonationPopup: Boolean = false
+  val hideDonationPopup: Boolean = false,
+  val loginUrl: String = ""
 )
 
 @HiltViewModel
@@ -39,7 +41,8 @@ class AboutViewModel @Inject constructor(
   ) { internal, devMode, hideDonation ->
     internal.copy(
       isDeveloperMode = devMode,
-      hideDonationPopup = hideDonation
+      hideDonationPopup = hideDonation,
+      loginUrl = if (devMode) AnimeApi.LOGIN_URL else ""
     )
   }.stateIn(
     scope = viewModelScope,

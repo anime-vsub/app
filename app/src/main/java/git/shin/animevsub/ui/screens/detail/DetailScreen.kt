@@ -39,6 +39,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Share
@@ -665,6 +666,25 @@ fun DetailScreen(
                       icon = Icons.AutoMirrored.Filled.PlaylistAdd,
                       label = stringResource(R.string.save_label),
                       onClick = { viewModel.onSaveClick() },
+                      modifier = Modifier.tvFocusScale()
+                    )
+                  }
+                  item {
+                    ActionButton(
+                      icon = Icons.Default.BugReport,
+                      label = stringResource(R.string.report),
+                      onClick = {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                          data = android.net.Uri.parse("mailto:support@animevsub.eu.org")
+                          val subject = "Report/Feedback: ${detail.name} (ID: ${uiState.animeId})"
+                          putExtra(Intent.EXTRA_SUBJECT, subject)
+                        }
+                        try {
+                          context.startActivity(Intent.createChooser(intent, context.getString(R.string.report)))
+                        } catch (_: Exception) {
+                          // Ignore
+                        }
+                      },
                       modifier = Modifier.tvFocusScale()
                     )
                   }

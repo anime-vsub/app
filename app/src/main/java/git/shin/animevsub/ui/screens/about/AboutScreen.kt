@@ -1,5 +1,6 @@
 package git.shin.animevsub.ui.screens.about
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -204,6 +206,15 @@ fun AboutScreen(
         title = stringResource(R.string.license),
         value = "GNU-GPL v3"
       )
+
+      if (uiState.loginUrl.isNotEmpty()) {
+        Spacer(modifier = Modifier.height(8.dp))
+        InfoCard(
+          title = "API Login URL",
+          value = uiState.loginUrl
+        )
+      }
+
       Spacer(modifier = Modifier.height(24.dp))
 
       Row(
@@ -211,6 +222,32 @@ fun AboutScreen(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically
       ) {
+        Button(
+          onClick = {
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+              data = android.net.Uri.parse("mailto:support@animevsub.eu.org")
+              val subject = "Feedback: AnimeVsub v${BuildConfig.VERSION_NAME}"
+              putExtra(Intent.EXTRA_SUBJECT, subject)
+            }
+            try {
+              context.startActivity(Intent.createChooser(intent, context.getString(R.string.report)))
+            } catch (_: Exception) {
+            }
+          },
+          modifier = Modifier.weight(1f),
+          colors = ButtonDefaults.buttonColors(containerColor = DarkCard),
+          shape = RoundedCornerShape(8.dp)
+        ) {
+          Icon(
+            imageVector = Icons.Default.BugReport,
+            contentDescription = null,
+            modifier = Modifier.size(18.dp),
+            tint = TextPrimary
+          )
+          Spacer(modifier = Modifier.size(8.dp))
+          Text(text = stringResource(R.string.report), color = TextPrimary)
+        }
+
         Button(
           onClick = { showDonationDialog = true },
           modifier = Modifier.weight(1f),
@@ -225,21 +262,23 @@ fun AboutScreen(
           Spacer(modifier = Modifier.size(8.dp))
           Text(text = stringResource(R.string.donation_title), color = TextPrimary)
         }
+      }
 
-        if (uiState.isCheckingUpdate) {
-          CircularProgressIndicator(
-            color = AccentMain,
-            modifier = Modifier.size(24.dp)
-          )
-        } else {
-          Button(
-            onClick = { viewModel.checkUpdate() },
-            modifier = Modifier.weight(1f),
-            colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
-            shape = RoundedCornerShape(8.dp)
-          ) {
-            Text(text = stringResource(R.string.check_update), color = TextPrimary)
-          }
+      Spacer(modifier = Modifier.height(12.dp))
+
+      if (uiState.isCheckingUpdate) {
+        CircularProgressIndicator(
+          color = AccentMain,
+          modifier = Modifier.size(24.dp)
+        )
+      } else {
+        Button(
+          onClick = { viewModel.checkUpdate() },
+          modifier = Modifier.fillMaxWidth(),
+          colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+          shape = RoundedCornerShape(8.dp)
+        ) {
+          Text(text = stringResource(R.string.check_update), color = TextPrimary)
         }
       }
 
