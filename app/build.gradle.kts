@@ -162,6 +162,7 @@ dependencies {
   implementation("androidx.media3:media3-cast:1.10.0")
   implementation("com.google.android.gms:play-services-cast-framework:22.3.1")
   implementation("androidx.mediarouter:mediarouter:1.7.0")
+  implementation("androidx.appcompat:appcompat:1.7.0")
 
   // Supabase
   implementation("io.github.jan-tennert.supabase:postgrest-kt:2.6.1")

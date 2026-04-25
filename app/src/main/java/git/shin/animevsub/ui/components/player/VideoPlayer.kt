@@ -57,6 +57,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SlowMotionVideo
 import androidx.compose.material.icons.filled.Speed
+// import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -129,9 +130,7 @@ import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.ui.PlayerView
-import androidx.mediarouter.app.MediaRouteButton
 import coil.compose.AsyncImage
-import com.google.android.gms.cast.framework.CastButtonFactory
 import git.shin.animevsub.R
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.ChapterInfo
@@ -153,6 +152,10 @@ import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.abs
 import kotlin.math.roundToInt
+
+// import androidx.mediarouter.media.MediaRouter
+// import androidx.mediarouter.app.MediaRouteChooserDialog
+// import androidx.mediarouter.app.MediaRouteControllerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
@@ -1069,6 +1072,20 @@ fun VideoPlayer(
             }
           }
           IconButton(onClick = onReload) { Icon(Icons.Default.Refresh, null, tint = Color.White) }
+//          IconButton(
+//            onClick = {
+//              val router = MediaRouter.getInstance(context)
+//              val route = router.selectedRoute
+//
+//              if (!route.isDefault) {
+//                MediaRouteControllerDialog(context).show()
+//              } else {
+//                MediaRouteChooserDialog(context).show()
+//              }
+//            }
+//          ) {
+//            Icon(Icons.Default.Cast, "Cast", tint = Color.White)
+//          }
           IconButton(onClick = {
             if (isFullScreen) {
               showSettingsSideMenu = true
@@ -1359,17 +1376,6 @@ fun VideoPlayer(
               }
             }
           }
-
-          AndroidView(
-            factory = { ctx ->
-              MediaRouteButton(ctx).apply {
-                CastButtonFactory.setUpMediaRouteButton(ctx, this)
-              }
-            },
-            modifier = Modifier
-              .align(Alignment.End)
-              .size(32.dp)
-          )
 
           Slider(
             value = (if (isDragging) dragTime else currentTime).toFloat(),
