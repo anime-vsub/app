@@ -59,6 +59,11 @@ android {
       "DEV_PWD_HASH",
       "\"$hashedDevPassword\""
     )
+    buildConfigField(
+      "String",
+      "RELEASE_CERT_SHA256",
+      "\"${localProperties.getProperty("RELEASE_CERT_SHA256") ?: ""}\""
+    )
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     vectorDrawables {

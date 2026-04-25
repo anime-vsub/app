@@ -44,14 +44,22 @@ jobs:
         run: chmod +x gradlew
 
       - name: Write google-services.json
-        run: echo $'${{ secrets.GOOGLE_SERVICES }}' > app/google-services.json
+        run: echo $'${{ secrets.GOOGLE_SERVICES_DEV }}' > app/google-services.json
 
       - name: Write local.properties
         env:
           URL: ${{ secrets.SUPABASE_URL }}
           KEY: ${{ secrets.SUPABASE_KEY }}
           PASSWORD_UNLOCK_DEVELOPER: ${{ secrets.PASSWORD_UNLOCK_DEVELOPER }}
-        run: printf '\nSUPABASE_URL=%s\nSUPABASE_KEY=%s\nPASSWORD_UNLOCK_DEVELOPER=%s\n' "$URL" "$KEY" "$PASSWORD_UNLOCK_DEVELOPER" >> local.properties
+          KEYSTORE_CONTENT: ${{ secrets.KEYSTORE_CONTENT }}
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          printf '\nSUPABASE_URL=%s\nSUPABASE_KEY=%s\nPASSWORD_UNLOCK_DEVELOPER=%s\n' "$URL" "$KEY" "$PASSWORD_UNLOCK_DEVELOPER" >> local.properties
+          echo "$KEYSTORE_CONTENT" | base64 --decode > release.keystore
+          SHA256=$(keytool -list -v -keystore release.keystore -alias "$KEYSTORE_ALIAS" -storepass "$KEYSTORE_PASSWORD" 2>/dev/null | grep "SHA256: " | awk '{print $2}')
+          echo "RELEASE_CERT_SHA256=$SHA256" >> local.properties
+          rm release.keystore
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck

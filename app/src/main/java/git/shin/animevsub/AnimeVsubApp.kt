@@ -20,6 +20,11 @@ class AnimeVsubApp :
   @Inject
   lateinit var workerFactory: HiltWorkerFactory
 
+  override fun onCreate() {
+    super.onCreate()
+    AppIntegrityChecker.checkIntegrity(this)
+  }
+
   override val workManagerConfiguration: Configuration
     get() = Configuration.Builder()
       .setWorkerFactory(workerFactory)
