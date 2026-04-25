@@ -1,3 +1,28 @@
+# [2.3.0](https://github.com/anime-vsub/app/compare/v2.2.1...v2.3.0) (2026-04-25)
+
+
+### Bug Fixes
+
+* **player:** consume touch when not full screen ([1905f87](https://github.com/anime-vsub/app/commit/1905f876f6965f7d0d34977025a4ab8655aceece))
+
+
+### Features
+
+* add Developer Mode and donation popup control ([2df9f28](https://github.com/anime-vsub/app/commit/2df9f287b8cf356c9e345c75695213da42f68e7b))
+* **cast:** Add Google Cast and Leanback support ([7422542](https://github.com/anime-vsub/app/commit/742254225f708cedfdb456512f454feb7b0428c7))
+* implement CommentItem component and DetailScreen UI for displaying and interacting with comments ([ce99f9e](https://github.com/anime-vsub/app/commit/ce99f9ea6db9087466209f63000f466235b3a290))
+* implement UI components and screens for the AnimeVsub application architecture ([5f66032](https://github.com/anime-vsub/app/commit/5f6603290460399b3773185444dc405affe5c93b))
+* **player:** add auto next toggle to settings ([7b10fae](https://github.com/anime-vsub/app/commit/7b10faea82af228dc57f690d90c4ab1c4a919212))
+* **player:** add pinch to zoom video gestures ([dedc5f3](https://github.com/anime-vsub/app/commit/dedc5f38a8a60f429737d154a5970a6ca682a68d))
+* **player:** enhance seek bar visibility and state ([cdb223e](https://github.com/anime-vsub/app/commit/cdb223e34482f197273808b10f656fc960434449))
+* **player:** improve auto next and skip logic ([a30bef4](https://github.com/anime-vsub/app/commit/a30bef49ce68471def7831ee45eeeb796e456946))
+* **player:** improve menu interaction and notification UI ([c2ce682](https://github.com/anime-vsub/app/commit/c2ce682fc9cb4dba50bdfca5696a0c71803c0c8f))
+* **player:** Keep screen on while playing video ([793733a](https://github.com/anime-vsub/app/commit/793733a7ec9d1421511aae4c3e194e9a11d1690c))
+* **security:** add app integrity check ([2e648fc](https://github.com/anime-vsub/app/commit/2e648fcc08a394d08970b18a39fbeb77fa6b23ec))
+* **tv:** add focus scale to UI components ([76c1ad4](https://github.com/anime-vsub/app/commit/76c1ad4f41ef8508c2ea224593a5790ff5e88cf9))
+* **ui:** add report button and dev login URL ([a8a4f6c](https://github.com/anime-vsub/app/commit/a8a4f6cab95240ee4a5e44a29ae7998154a347f3))
+* **ui:** persist viewmodel state ([1fa34e0](https://github.com/anime-vsub/app/commit/1fa34e02f08d8328b53538f78d2aa64b9db6dcc7))
+
 ## [2.2.1](https://github.com/anime-vsub/app/compare/v2.2.0...v2.2.1) (2026-04-21)
 
 
