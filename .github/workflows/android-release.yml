@@ -15,6 +15,7 @@ jobs:
     secrets:
       PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+      GOOGLE_SERVICES_DEV: ${{ secrets.GOOGLE_SERVICES_DEV }}
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
       KEYSTORE_CONTENT: ${{ secrets.KEYSTORE_CONTENT }}
