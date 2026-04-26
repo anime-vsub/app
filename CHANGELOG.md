@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/anime-vsub/app/compare/v2.3.0...v2.3.1) (2026-04-26)
+
+
+### Bug Fixes
+
+* disable chrome cast crash ([9149b5b](https://github.com/anime-vsub/app/commit/9149b5b95b8dca4d027bf2d1f7d2363565168f2d))
+
 # [2.3.0](https://github.com/anime-vsub/app/compare/v2.2.1...v2.3.0) (2026-04-25)
 
 
