@@ -115,7 +115,7 @@ class ContinueWatchingWidget : GlanceAppWidget() {
         action = "PLAY_ANIME"
         putExtra("animeId", history.seasonId)
         putExtra("chapterId", history.chapId)
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
       }
       actionStartActivity(intent)
     } else {

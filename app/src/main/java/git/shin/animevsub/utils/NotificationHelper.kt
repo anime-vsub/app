@@ -32,7 +32,7 @@ class NotificationHelper(private val context: Context) {
     notificationManager.createNotificationChannel(channel)
   }
 
-  fun showNotification(title: String, message: String) {
+  fun showNotification(title: String, message: String, animeId: String? = null, chapterId: String? = null) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       if (ActivityCompat.checkSelfPermission(
           context,
@@ -44,10 +44,15 @@ class NotificationHelper(private val context: Context) {
     }
 
     val intent = Intent(context, MainActivity::class.java).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+      if (animeId != null) {
+        action = "PLAY_ANIME"
+        putExtra("animeId", animeId)
+        putExtra("chapterId", chapterId)
+      }
+      flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
     }
     val pendingIntent = PendingIntent.getActivity(
-      context, 0, intent,
+      context, System.currentTimeMillis().toInt(), intent,
       PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
 

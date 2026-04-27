@@ -54,7 +54,9 @@ class NotificationSyncWorker @AssistedInject constructor(
       newlyAdded.forEach { item ->
         helper.showNotification(
           title = context.getString(R.string.new_notification_title),
-          message = context.getString(R.string.new_notification_message, item.title, item.content)
+          message = context.getString(R.string.new_notification_message, item.title, item.content),
+          animeId = item.animeId,
+          chapterId = item.chapId
         )
       }
     }

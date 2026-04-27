@@ -3,6 +3,7 @@ package git.shin.animevsub
 import android.Manifest
 import android.app.PictureInPictureParams
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
@@ -96,9 +97,12 @@ class MainActivity : ComponentActivity() {
     super.attachBaseContext(context)
   }
 
+  private val intentFlow = MutableStateFlow<Intent?>(null)
+
   @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    intentFlow.value = intent
     enableEdgeToEdge()
     setContent {
       val windowSize = calculateWindowSizeClass(this)
@@ -108,6 +112,8 @@ class MainActivity : ComponentActivity() {
       var isAppActive by remember { mutableStateOf(true) }
       val pipMode by isInPipMode.collectAsState()
       var showDonationDialog by remember { mutableStateOf(false) }
+
+      val currentIntent by intentFlow.collectAsState()
 
       var hasNotificationPermission by remember {
         mutableStateOf(
@@ -211,12 +217,16 @@ class MainActivity : ComponentActivity() {
         Surface(modifier = Modifier.fillMaxSize()) {
           if (isAppActive) {
             val navController = rememberNavController()
-            LaunchedEffect(intent) {
-              if (intent?.action == "PLAY_ANIME") {
-                val animeId = intent.getStringExtra("animeId")
-                val chapterId = intent.getStringExtra("chapterId")
-                if (animeId != null) {
-                  navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+
+            LaunchedEffect(currentIntent) {
+              currentIntent?.let { intent ->
+                if (intent.action == "PLAY_ANIME") {
+                  val animeId = intent.getStringExtra("animeId")
+                  val chapterId = intent.getStringExtra("chapterId")
+                  if (animeId != null) {
+                    navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+                    intentFlow.value = null
+                  }
                 }
               }
             }
@@ -278,6 +288,12 @@ class MainActivity : ComponentActivity() {
         }
       }
     }
+  }
+
+  override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    setIntent(intent)
+    intentFlow.value = intent
   }
 
   override fun onPictureInPictureModeChanged(
