@@ -192,6 +192,10 @@ dependencies {
   // Markdown
   implementation("com.github.jeziellago:compose-markdown:0.7.1")
 
+  // Glance (Widgets)
+  implementation("androidx.glance:glance-appwidget:1.1.1")
+  implementation("androidx.glance:glance-material3:1.1.1")
+
   // Testing
   testImplementation("junit:junit:4.13.2")
   androidTestImplementation("androidx.test.ext:junit:1.3.0")

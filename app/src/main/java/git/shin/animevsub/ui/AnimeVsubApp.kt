@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -102,12 +103,12 @@ import kotlinx.serialization.json.Json
 fun AnimeVsubAppUI(
   animeRepository: AnimeRepository,
   windowSize: WindowSizeClass,
+  navController: NavHostController = rememberNavController(),
   notificationViewModel: NotificationViewModel = hiltViewModel(),
   isInPipMode: Boolean = false
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
-  val navController = rememberNavController()
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
 

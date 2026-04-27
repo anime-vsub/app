@@ -599,7 +599,7 @@ class DetailViewModel @Inject constructor(
         cur = latestProgress.cur,
         dur = latestProgress.dur
       )
-      delay(10000) // 10 second throttle
+      delay(25000) // 10 second throttle
     }
   }
 

@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
+import androidx.navigation.compose.rememberNavController
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -40,6 +41,7 @@ import git.shin.animevsub.ui.AnimeVsubAppUI
 import git.shin.animevsub.ui.components.dialogs.CloudflareBypassDialog
 import git.shin.animevsub.ui.components.dialogs.DonationDialog
 import git.shin.animevsub.ui.components.dialogs.UpdateDialog
+import git.shin.animevsub.ui.navigation.Screen
 import git.shin.animevsub.ui.theme.AnimeVsubTheme
 import git.shin.animevsub.utils.CloudflareManager
 import git.shin.animevsub.utils.UpdateManager
@@ -208,9 +210,21 @@ class MainActivity : ComponentActivity() {
       AnimeVsubTheme(dynamicColor = dynamicColor) {
         Surface(modifier = Modifier.fillMaxSize()) {
           if (isAppActive) {
+            val navController = rememberNavController()
+            LaunchedEffect(intent) {
+              if (intent?.action == "PLAY_ANIME") {
+                val animeId = intent.getStringExtra("animeId")
+                val chapterId = intent.getStringExtra("chapterId")
+                if (animeId != null) {
+                  navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+                }
+              }
+            }
+
             AnimeVsubAppUI(
               animeRepository = animeRepository,
               windowSize = windowSize,
+              navController = navController,
               isInPipMode = pipMode
             )
           } else {
