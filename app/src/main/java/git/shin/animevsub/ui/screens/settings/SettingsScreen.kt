@@ -155,6 +155,14 @@ fun SettingsScreen(
       Spacer(modifier = Modifier.height(16.dp))
 
       MenuSection(title = stringResource(R.string.general)) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+          SettingsToggle(
+            label = stringResource(R.string.dynamic_color),
+            checked = uiState.dynamicColor,
+            onCheckedChange = { viewModel.setDynamicColor(it) }
+          )
+        }
+
         SettingsSelector(
           label = stringResource(R.string.screen_transition),
           selectedOption = uiState.screenTransition,

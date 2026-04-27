@@ -30,7 +30,8 @@ data class SettingsUiState(
   val bedtimeReminderStartTime: Long = 23 * 60,
   val bedtimeReminderEndTime: Long = 5 * 60,
   val bedtimeReminderWaitFinish: Boolean = true,
-  val screenTransition: String = "system"
+  val screenTransition: String = "system",
+  val dynamicColor: Boolean = false
 )
 
 @HiltViewModel
@@ -137,6 +138,11 @@ class SettingsViewModel @Inject constructor(
         _uiState.update { it.copy(screenTransition = v) }
       }
     }
+    viewModelScope.launch {
+      repository.dynamicColor.collect { v ->
+        _uiState.update { it.copy(dynamicColor = v) }
+      }
+    }
   }
 
   fun setAutoNext(value: Boolean) {
@@ -209,5 +215,9 @@ class SettingsViewModel @Inject constructor(
 
   fun setScreenTransition(value: String) {
     viewModelScope.launch { repository.setScreenTransition(value) }
+  }
+
+  fun setDynamicColor(value: Boolean) {
+    viewModelScope.launch { repository.setDynamicColor(value) }
   }
 }

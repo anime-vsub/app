@@ -356,4 +356,9 @@
     <string name="transition_fade">Fade</string>
     <string name="transition_zoom">Zoom</string>
     <string name="transition_system">System Default</string>
+    <string name="dynamic_color">Dynamic Color</string>
+    <string name="dynamic_color_desc">Use colors from your wallpaper (Android 12+)</string>
+    <string name="continue_watching_widget_title">Continue Watching</string>
+    <string name="continue_watching_widget_desc">Quickly watch your ongoing anime</string>
+    <string name="no_anime_watched">No anime watched yet</string>
 </resources>

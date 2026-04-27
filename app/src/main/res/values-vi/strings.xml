@@ -352,4 +352,9 @@
     <string name="transition_fade">Mờ dần</string>
     <string name="transition_zoom">Phóng to</string>
     <string name="transition_system">Mặc định hệ thống</string>
+    <string name="dynamic_color">Màu sắc năng động</string>
+    <string name="dynamic_color_desc">Sử dụng tông màu từ hình nền (Android 12+)</string>
+    <string name="continue_watching_widget_title">Xem tiếp</string>
+    <string name="continue_watching_widget_desc">Xem nhanh bộ phim đang xem dở</string>
+    <string name="no_anime_watched">Chưa có phim đang xem</string>
 </resources>

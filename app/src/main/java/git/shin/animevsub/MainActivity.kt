@@ -127,6 +127,8 @@ class MainActivity : ComponentActivity() {
       }
 
       val appLanguage by preferencesManager.appLanguage.collectAsState(initial = null)
+      val dynamicColor by preferencesManager.dynamicColor.collectAsState(initial = false)
+
       LaunchedEffect(appLanguage) {
         appLanguage?.let { lang ->
           val currentConfigLang = resources.configuration.locales[0].language
@@ -203,7 +205,7 @@ class MainActivity : ComponentActivity() {
         }
       }
 
-      AnimeVsubTheme {
+      AnimeVsubTheme(dynamicColor = dynamicColor) {
         Surface(modifier = Modifier.fillMaxSize()) {
           if (isAppActive) {
             AnimeVsubAppUI(

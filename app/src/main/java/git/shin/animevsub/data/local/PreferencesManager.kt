@@ -42,6 +42,7 @@ class PreferencesManager(private val context: Context) {
     private val DEVELOPER_MODE_KEY = booleanPreferencesKey("developer_mode")
     private val HIDE_DONATION_POPUP_KEY = booleanPreferencesKey("hide_donation_popup")
     private val SCREEN_TRANSITION_KEY = stringPreferencesKey("screen_transition")
+    private val DYNAMIC_COLOR_KEY = booleanPreferencesKey("dynamic_color")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -70,6 +71,7 @@ class PreferencesManager(private val context: Context) {
   val developerMode: Flow<Boolean> = context.dataStore.data.map { it[DEVELOPER_MODE_KEY] ?: false }
   val hideDonationPopup: Flow<Boolean> = context.dataStore.data.map { it[HIDE_DONATION_POPUP_KEY] ?: false }
   val screenTransition: Flow<String> = context.dataStore.data.map { it[SCREEN_TRANSITION_KEY] ?: "system" }
+  val dynamicColor: Flow<Boolean> = context.dataStore.data.map { it[DYNAMIC_COLOR_KEY] ?: false }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -172,6 +174,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setScreenTransition(value: String) {
     context.dataStore.edit { it[SCREEN_TRANSITION_KEY] = value }
+  }
+
+  suspend fun setDynamicColor(value: Boolean) {
+    context.dataStore.edit { it[DYNAMIC_COLOR_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {
