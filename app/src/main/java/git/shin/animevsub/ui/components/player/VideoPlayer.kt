@@ -1379,8 +1379,8 @@ fun VideoPlayer(
 
           Slider(
             value = (if (isDragging) dragTime else currentTime).toFloat(),
-            onValueChange = { isDragging = true; dragTime = it.toLong() },
-            onValueChangeFinished = { exoPlayer.seekTo(dragTime); isDragging = false },
+            onValueChange = { dragTime = it.toLong() },
+            onValueChangeFinished = { exoPlayer.seekTo(dragTime) },
             valueRange = 0f..duration.toFloat().coerceAtLeast(1f),
             colors = SliderDefaults.colors(
               activeTrackColor = MainColor,
