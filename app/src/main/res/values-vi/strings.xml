@@ -359,4 +359,5 @@
     <string name="continue_watching_widget_title">Xem tiếp</string>
     <string name="continue_watching_widget_desc">Xem nhanh bộ phim đang xem dở</string>
     <string name="no_anime_watched">Chưa có phim đang xem</string>
+    <string name="tap_to_open_app">Nhấn để mở ứng dụng</string>
 </resources>

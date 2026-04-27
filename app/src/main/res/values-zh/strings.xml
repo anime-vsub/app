@@ -362,4 +362,5 @@
     <string name="continue_watching_widget_title">继续观看</string>
     <string name="continue_watching_widget_desc">快速播放正在观看的动漫</string>
     <string name="no_anime_watched">暂无播放中的动漫</string>
+    <string name="tap_to_open_app">点击打开应用</string>
 </resources>

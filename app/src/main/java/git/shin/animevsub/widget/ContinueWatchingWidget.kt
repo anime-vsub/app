@@ -34,9 +34,11 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
+import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import coil.Coil
@@ -184,7 +186,13 @@ class ContinueWatchingWidget : GlanceAppWidget() {
               text = history.name,
               style = TextStyle(
                 color = ColorProvider(Color.White),
-                fontSize = if (isLarge) 20.sp else if (isSmall) 14.sp else 16.sp,
+                fontSize = if (isLarge) {
+                  20.sp
+                } else if (isSmall) {
+                  14.sp
+                } else {
+                  16.sp
+                },
                 fontWeight = FontWeight.Bold
               ),
               maxLines = if (isLarge) 2 else 1
@@ -197,7 +205,13 @@ class ContinueWatchingWidget : GlanceAppWidget() {
               ),
               style = TextStyle(
                 color = ColorProvider(Color(0xFFB0B0B0)),
-                fontSize = if (isLarge) 16.sp else if (isSmall) 12.sp else 14.sp
+                fontSize = if (isLarge) {
+                  16.sp
+                } else if (isSmall) {
+                  12.sp
+                } else {
+                  14.sp
+                }
               ),
               maxLines = 1
             )
@@ -208,7 +222,13 @@ class ContinueWatchingWidget : GlanceAppWidget() {
               text = "${formatDuration(history.cur)} / ${formatDuration(history.dur)}",
               style = TextStyle(
                 color = ColorProvider(Color(0xFF9E9E9E)),
-                fontSize = if (isLarge) 14.sp else if (isSmall) 11.sp else 12.sp
+                fontSize = if (isLarge) {
+                  14.sp
+                } else if (isSmall) {
+                  11.sp
+                } else {
+                  12.sp
+                }
               )
             )
 
@@ -225,13 +245,45 @@ class ContinueWatchingWidget : GlanceAppWidget() {
           }
         }
       } else {
-        Text(
-          text = context.getString(R.string.no_anime_watched),
-          style = TextStyle(
-            color = ColorProvider(Color.White),
-            fontSize = 14.sp
+        Column(
+          modifier = GlanceModifier.fillMaxSize(),
+          horizontalAlignment = Alignment.CenterHorizontally,
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Box(
+            modifier = GlanceModifier
+              .size(if (isSmall || isShort) 40.dp else 56.dp)
+              .cornerRadius(28.dp)
+              .background(ColorProvider(Color(0xFF1E2D4A))),
+            contentAlignment = Alignment.Center
+          ) {
+            Text(
+              text = "🎬",
+              style = TextStyle(fontSize = if (isSmall || isShort) 20.sp else 28.sp)
+            )
+          }
+          Spacer(modifier = GlanceModifier.height(if (isSmall || isShort) 8.dp else 12.dp))
+          Text(
+            text = context.getString(R.string.no_anime_watched),
+            style = TextStyle(
+              color = ColorProvider(Color.White),
+              fontSize = if (isSmall || isShort) 12.sp else 14.sp,
+              fontWeight = FontWeight.Medium,
+              textAlign = TextAlign.Center
+            )
           )
-        )
+          if (!isShort) {
+            Spacer(modifier = GlanceModifier.height(4.dp))
+            Text(
+              text = context.getString(R.string.tap_to_open_app),
+              style = TextStyle(
+                color = ColorProvider(Color(0xFF9E9E9E)),
+                fontSize = if (isSmall) 10.sp else 12.sp,
+                textAlign = TextAlign.Center
+              )
+            )
+          }
+        }
       }
     }
   }

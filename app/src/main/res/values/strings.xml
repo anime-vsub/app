@@ -363,4 +363,5 @@
     <string name="continue_watching_widget_title">Continue Watching</string>
     <string name="continue_watching_widget_desc">Quickly watch your ongoing anime</string>
     <string name="no_anime_watched">No anime watched yet</string>
+    <string name="tap_to_open_app">Tap to open app</string>
 </resources>
