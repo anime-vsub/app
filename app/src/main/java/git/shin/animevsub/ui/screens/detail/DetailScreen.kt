@@ -160,17 +160,30 @@ fun DetailScreen(
 
   LaunchedEffect(uiState.playerData, isFullScreen, isPlayerPlaying) {
     val activity = context as? MainActivity ?: return@LaunchedEffect
-    if (uiState.playerData != null && isPlayerPlaying) {
-      activity.updatePipParams { builder ->
+    if (uiState.playerData != null) {
+      activity.updatePipParams(isPlayerPlaying) { builder ->
         builder.setAspectRatio(Rational(16, 9))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-          builder.setAutoEnterEnabled(true)
+          builder.setAutoEnterEnabled(isPlayerPlaying)
         }
       }
-    } else {
-      activity.updatePipParams { builder ->
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-          builder.setAutoEnterEnabled(false)
+    }
+  }
+
+  LaunchedEffect(exoPlayerInstance) {
+    val activity = context as? MainActivity ?: return@LaunchedEffect
+    activity.pipEvent.collect { event ->
+      when (event) {
+        MainActivity.PipEvent.PLAY -> {
+          exoPlayerInstance?.play()
+        }
+
+        MainActivity.PipEvent.PAUSE -> {
+          exoPlayerInstance?.pause()
+        }
+
+        MainActivity.PipEvent.NEXT -> {
+          viewModel.playNext()
         }
       }
     }

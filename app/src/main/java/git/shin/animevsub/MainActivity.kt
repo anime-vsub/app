@@ -1,7 +1,11 @@
 package git.shin.animevsub
 
 import android.Manifest
+import android.app.PendingIntent
 import android.app.PictureInPictureParams
+import android.app.RemoteAction
+import android.content.BroadcastReceiver
+import android.graphics.drawable.Icon
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -48,7 +52,9 @@ import git.shin.animevsub.utils.CloudflareManager
 import git.shin.animevsub.utils.UpdateManager
 import git.shin.animevsub.worker.NotificationSyncWorker
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -76,6 +82,34 @@ class MainActivity : ComponentActivity() {
   private val _isInPipMode = MutableStateFlow(false)
   val isInPipMode = _isInPipMode.asStateFlow()
 
+  companion object {
+    const val ACTION_MEDIA_CONTROL = "media_control"
+    const val EXTRA_CONTROL_TYPE = "control_type"
+    const val CONTROL_TYPE_PLAY = 1
+    const val CONTROL_TYPE_PAUSE = 2
+    const val CONTROL_TYPE_NEXT = 3
+  }
+
+  private val pipReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      if (intent?.action != ACTION_MEDIA_CONTROL) return
+      val controlType = intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)
+      MainScope().launch {
+        when (controlType) {
+          CONTROL_TYPE_PLAY -> _pipEvent.emit(PipEvent.PLAY)
+          CONTROL_TYPE_PAUSE -> _pipEvent.emit(PipEvent.PAUSE)
+          CONTROL_TYPE_NEXT -> _pipEvent.emit(PipEvent.NEXT)
+        }
+      }
+    }
+  }
+
+  enum class PipEvent { PLAY, PAUSE, NEXT }
+  private val _pipEvent = MutableSharedFlow<PipEvent>()
+  val pipEvent = _pipEvent.asSharedFlow()
+
+  private var isPipPlaying = false
+
   override fun attachBaseContext(newBase: Context) {
     val prefs = PreferencesManager(newBase)
     val lang = runCatching {
@@ -102,6 +136,12 @@ class MainActivity : ComponentActivity() {
   @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    val filter = android.content.IntentFilter(ACTION_MEDIA_CONTROL)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      registerReceiver(pipReceiver, filter, RECEIVER_EXPORTED)
+    } else {
+      registerReceiver(pipReceiver, filter)
+    }
     intentFlow.value = intent
     enableEdgeToEdge()
     setContent {
@@ -311,6 +351,7 @@ class MainActivity : ComponentActivity() {
       // Android 12+ handles this via setAutoEnterEnabled(true)
       // We check if pip params are set (aspect ratio is a good indicator)
       try {
+        // Just enter PiP, system will use last set parameters
         enterPictureInPictureMode(PictureInPictureParams.Builder().build())
       } catch (e: Exception) {
         print(e)
@@ -318,8 +359,71 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  fun updatePipParams(action: (PictureInPictureParams.Builder) -> Unit) {
+  override fun onDestroy() {
+    super.onDestroy()
+    try {
+      unregisterReceiver(pipReceiver)
+    } catch (e: Exception) {
+      // Ignored
+    }
+  }
+
+  fun updatePipParams(isPlaying: Boolean? = null, action: (PictureInPictureParams.Builder) -> Unit) {
+    if (isPlaying != null) {
+      isPipPlaying = isPlaying
+    }
     val builder = PictureInPictureParams.Builder()
+
+    val actions = mutableListOf<RemoteAction>()
+    val intent = Intent(ACTION_MEDIA_CONTROL).setPackage(packageName)
+
+    if (isPipPlaying) {
+      actions.add(
+        RemoteAction(
+          Icon.createWithResource(this, R.drawable.ic_pause),
+          "Pause",
+          "Pause",
+          PendingIntent.getBroadcast(
+            this,
+            CONTROL_TYPE_PAUSE,
+            Intent(intent).putExtra(EXTRA_CONTROL_TYPE, CONTROL_TYPE_PAUSE),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+          )
+        )
+      )
+    } else {
+      actions.add(
+        RemoteAction(
+          Icon.createWithResource(this, R.drawable.ic_play),
+          "Play",
+          "Play",
+          PendingIntent.getBroadcast(
+            this,
+            CONTROL_TYPE_PLAY,
+            Intent(intent).putExtra(EXTRA_CONTROL_TYPE, CONTROL_TYPE_PLAY),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+          )
+        )
+      )
+    }
+    builder.setActions(actions)
+
+    // Add Next button if not playing or playing
+    actions.add(
+      RemoteAction(
+        Icon.createWithResource(this, R.drawable.ic_next),
+        "Next",
+        "Next Episode",
+        PendingIntent.getBroadcast(
+          this,
+          CONTROL_TYPE_NEXT,
+          Intent(intent).putExtra(EXTRA_CONTROL_TYPE, CONTROL_TYPE_NEXT),
+          PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+      )
+    )
+    builder.setActions(actions)
+
     action(builder)
     setPictureInPictureParams(builder.build())
   }
