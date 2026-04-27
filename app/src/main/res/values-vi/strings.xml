@@ -58,6 +58,15 @@
     <string name="studio_prefix">Sản xuất bởi %1$s</string>
     <string name="rating_count">%1$s người đánh giá</string>
     <string name="share">Chia sẻ</string>
+    <string name="download">Tải xuống</string>
+    <string name="download_started">Bắt đầu tải xuống</string>
+    <string name="download_queued">Đang chờ</string>
+    <string name="download_downloading">Đang tải (%1$s)</string>
+    <string name="download_converting">Đang chuyển đổi (%1$s)</string>
+    <string name="download_completed">Hoàn tất</string>
+    <string name="download_failed">Lỗi</string>
+    <string name="download_cancel">Hủy</string>
+    <string name="download_view">Xem</string>
     <string name="save_label">Lưu</string>
     <string name="episodes_title">Tập</string>
     <string name="total_episodes">%1$s tập</string>

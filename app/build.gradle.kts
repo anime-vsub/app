@@ -100,6 +100,9 @@ android {
     resources {
       excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
+    jniLibs {
+      useLegacyPackaging = true
+    }
   }
 }
 
@@ -134,6 +137,12 @@ dependencies {
   implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
   implementation("androidx.hilt:hilt-work:1.3.0")
   ksp("androidx.hilt:hilt-compiler:1.3.0")
+
+  // Room
+  val roomVersion = "2.6.1"
+  implementation("androidx.room:room-runtime:$roomVersion")
+  implementation("androidx.room:room-ktx:$roomVersion")
+  ksp("androidx.room:room-compiler:$roomVersion")
 
   // WorkManager
   implementation("androidx.work:work-runtime-ktx:2.11.2")
@@ -191,6 +200,9 @@ dependencies {
 
   // Markdown
   implementation("com.github.jeziellago:compose-markdown:0.7.1")
+
+  // FFmpeg (Mobile FFmpeg - Older but stable)
+  implementation("com.arthenica:mobile-ffmpeg-full:4.4")
 
   // Testing
   testImplementation("junit:junit:4.13.2")

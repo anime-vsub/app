@@ -1,5 +1,6 @@
 package git.shin.animevsub.ui
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -77,6 +78,7 @@ import git.shin.animevsub.ui.screens.about.AboutScreen
 import git.shin.animevsub.ui.screens.account.AccountScreen
 import git.shin.animevsub.ui.screens.category.CategoryScreen
 import git.shin.animevsub.ui.screens.detail.DetailScreen
+import git.shin.animevsub.ui.screens.downloads.DownloadsScreen
 import git.shin.animevsub.ui.screens.follow.FollowScreen
 import git.shin.animevsub.ui.screens.history.HistoryScreen
 import git.shin.animevsub.ui.screens.home.HomeScreen
@@ -102,11 +104,31 @@ fun AnimeVsubAppUI(
   animeRepository: AnimeRepository,
   windowSize: WindowSizeClass,
   notificationViewModel: NotificationViewModel = hiltViewModel(),
-  isInPipMode: Boolean = false
+  isInPipMode: Boolean = false,
+  intent: Intent? = null
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
   val navController = rememberNavController()
+
+  LaunchedEffect(intent) {
+    intent?.data?.let { uri ->
+      if (uri.scheme == "animevsub" && uri.host == "detail") {
+        val animeId = uri.pathSegments.firstOrNull()
+        val chapterId = uri.getQueryParameter("chapterId")
+        if (animeId != null) {
+          navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId)) {
+             popUpTo(navController.graph.findStartDestination().id) {
+               saveState = true
+             }
+             launchSingleTop = true
+             restoreState = true
+          }
+        }
+      }
+    }
+  }
+
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
 
@@ -169,6 +191,7 @@ fun AnimeVsubAppUI(
       route == Screen.About.route ||
       route == Screen.History.route ||
       route == Screen.Follow.route ||
+      route == Screen.Downloads.route ||
       route.startsWith("playlist")
   } ?: false
 
@@ -435,6 +458,7 @@ fun AnimeVsubAppUI(
             onNavigateToLogin = { navController.navigate(Screen.Login.route) },
             onNavigateToHistory = { navController.navigate(Screen.History.route) },
             onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
+            onNavigateToDownloads = { navController.navigate(Screen.Downloads.route) },
             onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
             onNavigateToAbout = { navController.navigate(Screen.About.route) },
             onNavigateToPlaylist = { playlistId ->
@@ -541,6 +565,15 @@ fun AnimeVsubAppUI(
           FollowScreen(
             onNavigateBack = { navController.popBackStack() },
             windowSize = windowSize,
+            onNavigateToDetail = { animeId, chapterId ->
+              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+            }
+          )
+        }
+
+        composable(Screen.Downloads.route) {
+          DownloadsScreen(
+            onNavigateBack = { navController.popBackStack() },
             onNavigateToDetail = { animeId, chapterId ->
               navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
             }

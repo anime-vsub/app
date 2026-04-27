@@ -58,6 +58,15 @@
     <string name="studio_prefix">制作: %1$s</string>
     <string name="rating_count">%1$s 件の評価</string>
     <string name="share">共有</string>
+    <string name="download">ダウンロード</string>
+    <string name="download_started">ダウンロードを開始しました</string>
+    <string name="download_queued">待機中</string>
+    <string name="download_downloading">ダウンロード中</string>
+    <string name="download_converting">変換中</string>
+    <string name="download_completed">完了</string>
+    <string name="download_failed">失敗</string>
+    <string name="download_cancel">キャンセル</string>
+    <string name="download_view">見る</string>
     <string name="save_label">保存</string>
     <string name="episodes_title">エピソード</string>
     <string name="total_episodes">%1$s エピソード</string>

@@ -58,6 +58,15 @@
     <string name="studio_prefix">Produced by %1$s</string>
     <string name="rating_count">%1$s ratings</string>
     <string name="share">Share</string>
+    <string name="download">Download</string>
+    <string name="download_started">Download started</string>
+    <string name="download_queued">Queued</string>
+    <string name="download_downloading">Downloading (%1$s)</string>
+    <string name="download_converting">Converting (%1$s)</string>
+    <string name="download_completed">Completed</string>
+    <string name="download_failed">Failed</string>
+    <string name="download_cancel">Cancel</string>
+    <string name="download_view">View</string>
     <string name="save_label">Save</string>
     <string name="episodes_title">Episodes</string>
     <string name="total_episodes">%1$s episodes</string>
@@ -124,6 +133,7 @@
     <string name="password">Password</string>
     <string name="history">History</string>
     <string name="follow">Follow</string>
+    <string name="downloads">Downloads</string>
     <string name="followed">Followed</string>
     <string name="unfollowed">Unfollowed</string>
     <string name="follow_error">An error occurred, please try again</string>
@@ -219,6 +229,7 @@
     <string name="mark_read">Mark as read</string>
     <string name="no_history">No watch history</string>
     <string name="no_follows">No followed anime</string>
+    <string name="no_downloads">No downloaded anime</string>
     <string name="history_subtitle">%1$s Ep. %2$s</string>
 
     <!-- Playlist -->

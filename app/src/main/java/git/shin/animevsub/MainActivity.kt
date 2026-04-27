@@ -209,7 +209,8 @@ class MainActivity : ComponentActivity() {
             AnimeVsubAppUI(
               animeRepository = animeRepository,
               windowSize = windowSize,
-              isInPipMode = pipMode
+              isInPipMode = pipMode,
+              intent = intent
             )
           } else {
             AlertDialog(

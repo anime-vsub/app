@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import git.shin.animevsub.R
+import git.shin.animevsub.ui.components.account.DownloadHorizontalList
 import git.shin.animevsub.ui.components.account.FollowHorizontalList
 import git.shin.animevsub.ui.components.account.HistoryHorizontalList
 import git.shin.animevsub.ui.components.account.PlaylistListSection
@@ -72,6 +73,7 @@ fun AccountScreen(
   onNavigateToLogin: () -> Unit,
   onNavigateToHistory: () -> Unit,
   onNavigateToFollow: () -> Unit,
+  onNavigateToDownloads: () -> Unit,
   onNavigateToSettings: () -> Unit,
   onNavigateToAbout: () -> Unit,
   onNavigateToPlaylist: (String) -> Unit,
@@ -296,6 +298,19 @@ fun AccountScreen(
             onHeaderClick = onNavigateToFollow,
             onRetry = { viewModel.refreshFollows() },
             onItemClick = { anime -> onNavigateToDetail(anime.animeId, null) }
+          )
+
+          Spacer(modifier = Modifier.height(24.dp))
+
+          DownloadHorizontalList(
+            downloads = uiState.downloads,
+            isLoading = uiState.isLoadingDownloads,
+            error = uiState.downloadsError,
+            onHeaderClick = onNavigateToDownloads,
+            onRetry = { viewModel.refreshDownloads() },
+            onItemClick = { item ->
+              onNavigateToDetail(item.animeId, item.id)
+            }
           )
 
           Spacer(modifier = Modifier.height(24.dp))

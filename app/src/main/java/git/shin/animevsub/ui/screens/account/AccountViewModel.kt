@@ -22,14 +22,17 @@ data class AccountUiState(
   val user: User? = null,
   val histories: List<HistoryItem> = emptyList(),
   val follows: List<AnimeCard> = emptyList(),
+  val downloads: List<git.shin.animevsub.data.local.download.DownloadEntity> = emptyList(),
   val playlists: List<Playlist> = emptyList(),
   val playlistCheckedStates: Map<Int, Boolean> = emptyMap(),
   val isLoadingHistory: Boolean = false,
   val isLoadingFollows: Boolean = false,
+  val isLoadingDownloads: Boolean = false,
   val isLoadingPlaylists: Boolean = false,
   val isCheckingUpdate: Boolean = false,
   val historyError: String? = null,
   val followsError: String? = null,
+  val downloadsError: String? = null,
   val playlistsError: String? = null,
   val isRefreshing: Boolean = false
 )
@@ -38,6 +41,7 @@ data class AccountUiState(
 class AccountViewModel @Inject constructor(
   private val repository: AnimeRepository,
   private val playlistRepository: PlaylistRepository,
+  private val downloadRepository: git.shin.animevsub.data.repository.DownloadRepository,
   private val updateManager: git.shin.animevsub.utils.UpdateManager
 ) : ViewModel() {
 
@@ -47,6 +51,11 @@ class AccountViewModel @Inject constructor(
   val uiEvent = repository.authEvent
 
   init {
+    viewModelScope.launch {
+      downloadRepository.allDownloads.collect { downloads ->
+        _uiState.update { it.copy(downloads = downloads.take(10)) }
+      }
+    }
     viewModelScope.launch {
       repository.isLoggedIn.collect { isLoggedIn ->
         _uiState.update { it.copy(isLoggedIn = isLoggedIn, isAuthReady = true) }
@@ -137,6 +146,11 @@ class AccountViewModel @Inject constructor(
           _uiState.value = _uiState.value.copy(isLoadingFollows = false, followsError = e.message)
         }
     }
+  }
+
+  fun refreshDownloads() {
+    // Downloads are already synced via Flow in init, but we can provide a manual trigger if needed
+    // or just leave it for consistency if we add more complex logic later.
   }
 
   fun refreshPlaylists() {

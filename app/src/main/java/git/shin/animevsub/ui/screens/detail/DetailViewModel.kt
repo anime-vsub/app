@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import git.shin.animevsub.data.local.download.DownloadEntity
+import git.shin.animevsub.data.local.download.DownloadStatus
 import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
@@ -18,6 +20,7 @@ import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
+import git.shin.animevsub.data.repository.DownloadRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -57,6 +60,7 @@ data class DetailUiState(
   val episodeNameFromApi: String? = null,
   val lastProgress: Long = 0,
   val chapterProgress: Map<String, WatchProgress> = emptyMap(),
+  val downloads: Map<String, DownloadEntity> = emptyMap(),
 
   /**
    * The actual season ID from the API (Real ID).
@@ -118,6 +122,7 @@ data class DetailUiState(
 class DetailViewModel @Inject constructor(
   private val repository: AnimeRepository,
   private val playlistRepository: PlaylistRepository,
+  private val downloadRepository: DownloadRepository,
   private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -164,6 +169,15 @@ class DetailViewModel @Inject constructor(
 
     loadCommentSortOptions()
     startReminders()
+    observeDownloads()
+  }
+
+  private fun observeDownloads() {
+    viewModelScope.launch {
+      downloadRepository.allDownloads.collect { list ->
+        _uiState.update { it.copy(downloads = list.associateBy { it.id }) }
+      }
+    }
   }
 
   private fun startReminders() {
@@ -529,7 +543,7 @@ class DetailViewModel @Inject constructor(
       loadDetail(seasonId, chapter.id, isSwitchingSeason = true)
     }
 
-    loadServers(chapter)
+    checkDownloadAndLoad(chapter)
     loadSkipRange(chapter)
     loadHistory(chapter, seasonId)
     loadAllChapterProgress(seasonId)
@@ -619,7 +633,36 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  private fun loadServers(chapter: ChapterInfo) {
+  private fun checkDownloadAndLoad(chapter: ChapterInfo) {
+    viewModelScope.launch {
+      val download = downloadRepository.getDownloadById(chapter.id)
+      if (download != null && download.status == DownloadStatus.COMPLETED && download.filePath != null) {
+        val file = java.io.File(download.filePath)
+        if (file.exists()) {
+          _uiState.update {
+            it.copy(
+              isPlayerLoading = false,
+              playerData = PlayerData(
+                link = download.filePath,
+                type = "mp4", // FFmpeg conversion result is MP4
+                isContent = false
+              ),
+              playerError = null
+            )
+          }
+          // Still load servers in background if online to allow switching
+          loadServers(chapter, silent = true)
+          return@launch
+        } else {
+          // File was deleted manually, clean up DB
+          downloadRepository.deleteDownload(chapter.id)
+        }
+      }
+      loadServers(chapter)
+    }
+  }
+
+  private fun loadServers(chapter: ChapterInfo, silent: Boolean = false) {
     viewModelScope.launch {
       repository.getServers(chapter)
         .onSuccess { servers ->
@@ -627,8 +670,10 @@ class DetailViewModel @Inject constructor(
           if (servers.isNotEmpty()) {
             val defaultServer = servers.first()
             _uiState.update { it.copy(currentServer = defaultServer) }
-            loadPlayer(chapter, defaultServer)
-          } else {
+            if (!silent || _uiState.value.playerData == null) {
+              loadPlayer(chapter, defaultServer)
+            }
+          } else if (!silent) {
             _uiState.update {
               it.copy(
                 isPlayerLoading = false,
@@ -638,7 +683,9 @@ class DetailViewModel @Inject constructor(
           }
         }
         .onFailure { e ->
-          _uiState.update { it.copy(isPlayerLoading = false, playerError = e.message) }
+          if (!silent) {
+            _uiState.update { it.copy(isPlayerLoading = false, playerError = e.message) }
+          }
         }
     }
   }
@@ -658,6 +705,26 @@ class DetailViewModel @Inject constructor(
 
   private fun loadPlayer(chapter: ChapterInfo, server: ServerInfo) {
     viewModelScope.launch {
+      // Check for local download first
+      val download = downloadRepository.getDownloadById(chapter.id)
+      if (download != null && download.status == DownloadStatus.COMPLETED && download.filePath != null) {
+        val file = java.io.File(download.filePath)
+        if (file.exists()) {
+          _uiState.update {
+            it.copy(
+              isPlayerLoading = false,
+              playerData = PlayerData(
+                link = download.filePath,
+                type = "mp4", // FFmpeg conversion result is MP4
+                isContent = false
+              ),
+              playerError = null
+            )
+          }
+          return@launch
+        }
+      }
+
       repository.getPlayerLink(chapter, server)
         .onSuccess { data ->
           _uiState.update {
@@ -1029,6 +1096,25 @@ class DetailViewModel @Inject constructor(
         .onFailure { e ->
           _uiEffect.emit(DetailUiEffect.ShowSnackbar(e.message ?: "ACTION_ERROR"))
         }
+    }
+  }
+
+  fun downloadCurrentEpisode() {
+    val state = _uiState.value
+    val chapter = state.currentChapter ?: return
+    val detail = state.detail ?: return
+    val playerData = state.playerData ?: return
+
+    viewModelScope.launch {
+      downloadRepository.startDownload(
+        id = chapter.id,
+        animeId = state.currentSeasonId,
+        animeTitle = detail.name,
+        episodeTitle = chapter.name,
+        thumbnail = detail.poster ?: detail.image,
+        url = playerData.link
+      )
+      _uiEffect.emit(DetailUiEffect.ShowSnackbar("DOWNLOAD_STARTED"))
     }
   }
 

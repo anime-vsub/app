@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
@@ -106,6 +107,10 @@ import git.shin.animevsub.ui.styles.NoPaddingTextStyle
 import git.shin.animevsub.ui.styles.SmallTextStyle
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
+import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.FileDownloadDone
+import androidx.compose.material.icons.filled.Downloading
+import git.shin.animevsub.data.local.download.DownloadStatus
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
@@ -195,6 +200,7 @@ fun DetailScreen(
             "FOLLOW_ERROR" -> followErrorMsg
             "REPORT_SUCCESS" -> reportSuccessMsg
             "REPORT_ERROR" -> reportErrorMsg
+            "DOWNLOAD_STARTED" -> context.getString(R.string.download_started)
             else -> effect.message
           }
           snackbarHostState.showSnackbar(message)
@@ -658,6 +664,34 @@ fun DetailScreen(
                           )
                         )
                       },
+                      modifier = Modifier.tvFocusScale()
+                    )
+                  }
+                  item {
+                    val currentChapter = uiState.currentChapter
+                    val download = uiState.downloads[currentChapter?.id]
+                    
+                    val downloadLabel = when (download?.status) {
+                      DownloadStatus.DOWNLOADING -> stringResource(R.string.download_downloading, "${download.progress}%")
+                      DownloadStatus.CONVERTING -> stringResource(R.string.download_converting, "${download.progress}%")
+                      DownloadStatus.QUEUED -> stringResource(R.string.download_queued)
+                      DownloadStatus.COMPLETED -> stringResource(R.string.download_view)
+                      DownloadStatus.FAILED -> stringResource(R.string.download_failed)
+                      else -> stringResource(R.string.download)
+                    }
+                    
+                    val downloadIcon = when (download?.status) {
+                      DownloadStatus.DOWNLOADING, DownloadStatus.CONVERTING -> Icons.Default.Downloading
+                      DownloadStatus.COMPLETED -> Icons.Default.FileDownloadDone
+                      DownloadStatus.FAILED -> Icons.Default.ErrorOutline
+                      else -> Icons.Default.FileDownload
+                    }
+
+                    ActionButton(
+                      icon = downloadIcon,
+                      label = downloadLabel,
+                      onClick = { viewModel.downloadCurrentEpisode() },
+                      enabled = uiState.playerData != null && download?.status != DownloadStatus.COMPLETED,
                       modifier = Modifier.tvFocusScale()
                     )
                   }

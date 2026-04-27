@@ -1,6 +1,7 @@
 package git.shin.animevsub.di
 
 import android.content.Context
+import androidx.room.Room
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -11,7 +12,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.local.ApiStorage
+import git.shin.animevsub.data.local.AppDatabase
 import git.shin.animevsub.data.local.PreferencesManager
+import git.shin.animevsub.data.local.download.DownloadDao
 import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import git.shin.animevsub.utils.CloudflareManager
 import io.github.jan.supabase.SupabaseClient
@@ -81,4 +84,18 @@ object AppModule {
   @Provides
   @Singleton
   fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
+
+  @Provides
+  @Singleton
+  fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+    return Room.databaseBuilder(
+      context,
+      AppDatabase::class.java,
+      "anime_vsub.db"
+    ).build()
+  }
+
+  @Provides
+  @Singleton
+  fun provideDownloadDao(database: AppDatabase): DownloadDao = database.downloadDao()
 }
