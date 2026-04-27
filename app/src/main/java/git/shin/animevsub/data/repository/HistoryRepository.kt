@@ -1,11 +1,14 @@
 package git.shin.animevsub.data.repository
 
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.model.HistoryItem
 import git.shin.animevsub.data.model.LastChapResponse
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import git.shin.animevsub.widget.ContinueWatchingWidget
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc
@@ -22,7 +25,8 @@ import javax.inject.Singleton
 class HistoryRepository @Inject constructor(
   private val supabase: SupabaseClient,
   private val storage: ApiStorage,
-  private val json: Json
+  private val json: Json,
+  @ApplicationContext private val context: Context
 ) {
   private suspend fun getCurrentUid(): String? {
     val userJson = storage.getString("user_data").firstOrNull() ?: return null
@@ -124,6 +128,7 @@ class HistoryRepository @Inject constructor(
         put("gmt", getGmtOffset())
       }
     )
+    ContinueWatchingWidget.refresh(context)
   }
 
   suspend fun getLastChapOfSeason(seasonId: String): Result<String?> = runCatching {

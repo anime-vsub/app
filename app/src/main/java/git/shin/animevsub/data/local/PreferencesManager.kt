@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -43,6 +44,7 @@ class PreferencesManager(private val context: Context) {
     private val HIDE_DONATION_POPUP_KEY = booleanPreferencesKey("hide_donation_popup")
     private val SCREEN_TRANSITION_KEY = stringPreferencesKey("screen_transition")
     private val DYNAMIC_COLOR_KEY = booleanPreferencesKey("dynamic_color")
+    private val HISTORY_SYNC_INTERVAL_KEY = intPreferencesKey("history_sync_interval")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -72,6 +74,7 @@ class PreferencesManager(private val context: Context) {
   val hideDonationPopup: Flow<Boolean> = context.dataStore.data.map { it[HIDE_DONATION_POPUP_KEY] ?: false }
   val screenTransition: Flow<String> = context.dataStore.data.map { it[SCREEN_TRANSITION_KEY] ?: "system" }
   val dynamicColor: Flow<Boolean> = context.dataStore.data.map { it[DYNAMIC_COLOR_KEY] ?: false }
+  val historySyncInterval: Flow<Int> = context.dataStore.data.map { it[HISTORY_SYNC_INTERVAL_KEY] ?: 20 }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -178,6 +181,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setDynamicColor(value: Boolean) {
     context.dataStore.edit { it[DYNAMIC_COLOR_KEY] = value }
+  }
+
+  suspend fun setHistorySyncInterval(value: Int) {
+    context.dataStore.edit { it[HISTORY_SYNC_INTERVAL_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

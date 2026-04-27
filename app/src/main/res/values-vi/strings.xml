@@ -336,6 +336,8 @@
 
     <!-- Developer Options -->
     <string name="developer_options_title">Tùy chọn nhà phát triển</string>
+    <string name="history_sync_interval">Khoảng cách đồng bộ tiến trình</string>
+    <string name="seconds_label">%1$d giây</string>
     <string name="hide_donation_popups">Ẩn thông báo ủng hộ (7 ngày)</string>
     <string name="unlock_developer_options">Mở khóa tùy chọn nhà phát triển</string>
     <string name="enter_password_to_continue">Vui lòng nhập mật khẩu để tiếp tục</string>

@@ -253,6 +253,7 @@ class AnimeRepository @Inject constructor(
   val hideDonationPopup = prefs.hideDonationPopup
   val screenTransition = prefs.screenTransition
   val dynamicColor = prefs.dynamicColor
+  val historySyncInterval = prefs.historySyncInterval
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -283,6 +284,7 @@ class AnimeRepository @Inject constructor(
   suspend fun setHideDonationPopup(value: Boolean) = prefs.setHideDonationPopup(value)
   suspend fun setScreenTransition(value: String) = prefs.setScreenTransition(value)
   suspend fun setDynamicColor(value: Boolean) = prefs.setDynamicColor(value)
+  suspend fun setHistorySyncInterval(value: Int) = prefs.setHistorySyncInterval(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

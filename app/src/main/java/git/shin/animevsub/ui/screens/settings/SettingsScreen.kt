@@ -258,6 +258,14 @@ fun SettingsScreen(
             checked = uiState.hideDonationPopup,
             onCheckedChange = { viewModel.setHideDonationPopup(it) }
           )
+          SettingsSlider(
+            label = stringResource(R.string.history_sync_interval),
+            value = uiState.historySyncInterval,
+            onValueChange = { viewModel.setHistorySyncInterval(it) },
+            valueRange = 10f..120f,
+            steps = 11,
+            valueText = stringResource(R.string.seconds_label, uiState.historySyncInterval)
+          )
         }
       }
     }

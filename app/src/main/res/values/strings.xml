@@ -340,6 +340,8 @@
 
     <!-- Developer Options -->
     <string name="developer_options_title">Developer Options</string>
+    <string name="history_sync_interval">History Sync Interval</string>
+    <string name="seconds_label">%1$d sec</string>
     <string name="hide_donation_popups">Hide donation popups (7 days)</string>
     <string name="unlock_developer_options">Unlock developer options</string>
     <string name="enter_password_to_continue">Please enter password to continue</string>

@@ -31,7 +31,8 @@ data class SettingsUiState(
   val bedtimeReminderEndTime: Long = 5 * 60,
   val bedtimeReminderWaitFinish: Boolean = true,
   val screenTransition: String = "system",
-  val dynamicColor: Boolean = false
+  val dynamicColor: Boolean = false,
+  val historySyncInterval: Int = 20
 )
 
 @HiltViewModel
@@ -143,6 +144,11 @@ class SettingsViewModel @Inject constructor(
         _uiState.update { it.copy(dynamicColor = v) }
       }
     }
+    viewModelScope.launch {
+      repository.historySyncInterval.collect { v ->
+        _uiState.update { it.copy(historySyncInterval = v) }
+      }
+    }
   }
 
   fun setAutoNext(value: Boolean) {
@@ -219,5 +225,9 @@ class SettingsViewModel @Inject constructor(
 
   fun setDynamicColor(value: Boolean) {
     viewModelScope.launch { repository.setDynamicColor(value) }
+  }
+
+  fun setHistorySyncInterval(value: Int) {
+    viewModelScope.launch { repository.setHistorySyncInterval(value) }
   }
 }

@@ -339,6 +339,8 @@
 
     <!-- Developer Options -->
     <string name="developer_options_title">開発者向けオプション</string>
+    <string name="history_sync_interval">視聴進捗同期の間隔</string>
+    <string name="seconds_label">%1$d 秒</string>
     <string name="hide_donation_popups">寄付の通知を非表示にする (7日間)</string>
     <string name="unlock_developer_options">開発者向けオプションをアンロック</string>
     <string name="enter_password_to_continue">パスワードを入力してください</string>

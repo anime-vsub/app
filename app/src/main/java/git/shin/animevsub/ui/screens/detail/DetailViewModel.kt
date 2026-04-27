@@ -575,7 +575,7 @@ class DetailViewModel @Inject constructor(
       it.copy(chapterProgress = newMap)
     }
 
-    // Throttle Supabase RPC calls: Only save every 10 seconds
+    // Throttle Supabase RPC calls: Only save every N seconds
     if (lastUpdateJob?.isActive == true) return
     lastUpdateJob = viewModelScope.launch {
       if (isInitialPlayback) {
@@ -599,7 +599,9 @@ class DetailViewModel @Inject constructor(
         cur = latestProgress.cur,
         dur = latestProgress.dur
       )
-      delay(25000) // 10 second throttle
+
+      val interval = repository.historySyncInterval.first()
+      delay(interval * 1000L)
     }
   }
 

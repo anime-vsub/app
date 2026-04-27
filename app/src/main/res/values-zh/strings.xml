@@ -339,6 +339,8 @@
 
     <!-- Developer Options -->
     <string name="developer_options_title">开发者选项</string>
+    <string name="history_sync_interval">历史进度同步间隔</string>
+    <string name="seconds_label">%1$d 秒</string>
     <string name="hide_donation_popups">隐藏捐赠提示 (7天)</string>
     <string name="unlock_developer_options">解锁开发者选项</string>
     <string name="enter_password_to_continue">请输入密码以继续</string>
