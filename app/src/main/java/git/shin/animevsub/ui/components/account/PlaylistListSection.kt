@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.Playlist
 import git.shin.animevsub.ui.components.common.ErrorRetrySection
-import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.components.playlist.PlaylistPoster
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
@@ -94,11 +93,9 @@ fun PlaylistItemRow(
       .padding(vertical = 8.dp),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    Icon(
-      imageVector = Icons.AutoMirrored.Filled.PlaylistPlay,
-      contentDescription = null,
-      tint = AccentMain,
-      modifier = Modifier.size(22.dp)
+    PlaylistPoster(
+      posterUrl = playlist.poster,
+      modifier = Modifier.width(80.dp)
     )
     Spacer(modifier = Modifier.width(16.dp))
     Column(modifier = Modifier.weight(1f)) {

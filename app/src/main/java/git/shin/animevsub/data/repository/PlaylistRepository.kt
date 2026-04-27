@@ -48,7 +48,9 @@ class PlaylistRepository @Inject constructor(
         put("user_uid", uid)
       }
     )
-    response.decodeList<Playlist>()
+    response.decodeList<Playlist>().map {
+      it.copy(poster = it.poster?.let { p -> AnimeApi.decodeURI(p) })
+    }
   }
 
   suspend fun createPlaylist(name: String, isPublic: Boolean): Result<Playlist> = runCatching {
@@ -61,7 +63,8 @@ class PlaylistRepository @Inject constructor(
         put("is_public", isPublic)
       }
     )
-    response.decodeSingle<Playlist>()
+    val playlist = response.decodeSingle<Playlist>()
+    playlist.copy(poster = playlist.poster?.let { p -> AnimeApi.decodeURI(p) })
   }
 
   suspend fun deletePlaylist(id: Int): Result<Unit> = runCatching {
@@ -135,7 +138,8 @@ class PlaylistRepository @Inject constructor(
       }
     )
     try {
-      response.decodeSingle<Playlist>()
+      val playlist = response.decodeSingle<Playlist>()
+      playlist.copy(poster = playlist.poster?.let { p -> AnimeApi.decodeURI(p) })
     } catch (e: Exception) {
       null
     }
@@ -152,7 +156,8 @@ class PlaylistRepository @Inject constructor(
       }
     )
     try {
-      response.decodeSingle<Playlist>()
+      val playlist = response.decodeSingle<Playlist>()
+      playlist.copy(poster = playlist.poster?.let { p -> AnimeApi.decodeURI(p) })
     } catch (e: Exception) {
       null
     }

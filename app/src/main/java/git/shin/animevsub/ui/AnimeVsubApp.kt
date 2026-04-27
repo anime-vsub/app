@@ -84,6 +84,7 @@ import git.shin.animevsub.ui.screens.login.LoginScreen
 import git.shin.animevsub.ui.screens.notification.NotificationScreen
 import git.shin.animevsub.ui.screens.notification.NotificationViewModel
 import git.shin.animevsub.ui.screens.playlist.PlaylistScreen
+import git.shin.animevsub.ui.screens.playlist.PlaylistsScreen
 import git.shin.animevsub.ui.screens.rankings.RankingsScreen
 import git.shin.animevsub.ui.screens.schedule.ScheduleScreen
 import git.shin.animevsub.ui.screens.search.SearchScreen
@@ -169,6 +170,7 @@ fun AnimeVsubAppUI(
       route == Screen.About.route ||
       route == Screen.History.route ||
       route == Screen.Follow.route ||
+      route == Screen.Playlists.route ||
       route.startsWith("playlist")
   } ?: false
 
@@ -437,6 +439,7 @@ fun AnimeVsubAppUI(
             onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
             onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
             onNavigateToAbout = { navController.navigate(Screen.About.route) },
+            onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) },
             onNavigateToPlaylist = { playlistId ->
               navController.navigate(Screen.Playlist.createRoute(playlistId))
             },
@@ -563,6 +566,15 @@ fun AnimeVsubAppUI(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToDetail = { animeId, chapterId ->
               navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+            }
+          )
+        }
+
+        composable(Screen.Playlists.route) {
+          PlaylistsScreen(
+            onBack = { navController.popBackStack() },
+            onNavigateToPlaylist = { playlistId ->
+              navController.navigate(Screen.Playlist.createRoute(playlistId))
             }
           )
         }

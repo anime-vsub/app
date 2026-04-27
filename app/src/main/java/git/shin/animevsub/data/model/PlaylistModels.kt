@@ -11,7 +11,7 @@ data class Playlist(
   @SerialName("public") val isPublic: Boolean = false,
   @SerialName("created_at") val createdAt: String? = null,
   @SerialName("movies_count") val movieCount: Int = 0,
-  val poster: String? = null
+  @SerialName("poster_url") val poster: String? = null
 )
 
 @Serializable

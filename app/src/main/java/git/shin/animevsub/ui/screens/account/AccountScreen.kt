@@ -55,7 +55,7 @@ import coil.compose.AsyncImage
 import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.account.FollowHorizontalList
 import git.shin.animevsub.ui.components.account.HistoryHorizontalList
-import git.shin.animevsub.ui.components.account.PlaylistListSection
+import git.shin.animevsub.ui.components.account.PlaylistHorizontalList
 import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
@@ -74,6 +74,7 @@ fun AccountScreen(
   onNavigateToFollow: () -> Unit,
   onNavigateToSettings: () -> Unit,
   onNavigateToAbout: () -> Unit,
+  onNavigateToPlaylists: () -> Unit,
   onNavigateToPlaylist: (String) -> Unit,
   onNavigateToDetail: (String, String?) -> Unit,
   viewModel: AccountViewModel = hiltViewModel()
@@ -300,15 +301,26 @@ fun AccountScreen(
 
           Spacer(modifier = Modifier.height(24.dp))
 
-          // Menu items
-          Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            PlaylistListSection(
-              playlists = uiState.playlists,
-              isLoading = uiState.isLoadingPlaylists,
-              error = uiState.playlistsError,
-              onRetry = { viewModel.refreshPlaylists() },
-              onItemClick = { playlist ->
-                onNavigateToPlaylist(playlist.id.toString())
+          var showCreatePlaylistDialog by remember { mutableStateOf(false) }
+
+          PlaylistHorizontalList(
+            playlists = uiState.playlists,
+            isLoading = uiState.isLoadingPlaylists,
+            error = uiState.playlistsError,
+            onHeaderClick = onNavigateToPlaylists,
+            onAddClick = { showCreatePlaylistDialog = true },
+            onRetry = { viewModel.refreshPlaylists() },
+            onItemClick = { playlist ->
+              onNavigateToPlaylist(playlist.id.toString())
+            }
+          )
+
+          if (showCreatePlaylistDialog) {
+            git.shin.animevsub.ui.components.playlist.CreatePlaylistDialog(
+              onDismiss = { showCreatePlaylistDialog = false },
+              onCreate = { name ->
+                viewModel.createPlaylist(name)
+                showCreatePlaylistDialog = false
               }
             )
           }
