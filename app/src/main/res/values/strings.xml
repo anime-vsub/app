@@ -360,6 +360,10 @@
     <string name="transition_system">System Default</string>
     <string name="dynamic_color">Dynamic Color</string>
     <string name="dynamic_color_desc">Use colors from your wallpaper (Android 12+)</string>
+    <string name="app_icon">App Icon</string>
+    <string name="app_icon_default">Default</string>
+    <string name="app_icon_old">Classic</string>
+    <string name="custom_shortcut">Custom Shortcut</string>
     <string name="continue_watching_widget_title">Continue Watching</string>
     <string name="continue_watching_widget_desc">Quickly watch your ongoing anime</string>
     <string name="no_anime_watched">No anime watched yet</string>

@@ -32,7 +32,8 @@ data class SettingsUiState(
   val bedtimeReminderWaitFinish: Boolean = true,
   val screenTransition: String = "system",
   val dynamicColor: Boolean = false,
-  val historySyncInterval: Int = 20
+  val historySyncInterval: Int = 20,
+  val appIcon: String = "default"
 )
 
 @HiltViewModel
@@ -145,6 +146,11 @@ class SettingsViewModel @Inject constructor(
       }
     }
     viewModelScope.launch {
+      repository.appIcon.collect { v ->
+        _uiState.update { it.copy(appIcon = v) }
+      }
+    }
+    viewModelScope.launch {
       repository.historySyncInterval.collect { v ->
         _uiState.update { it.copy(historySyncInterval = v) }
       }
@@ -213,6 +219,10 @@ class SettingsViewModel @Inject constructor(
 
   fun setAppLanguage(value: String) {
     viewModelScope.launch { repository.setAppLanguage(value) }
+  }
+
+  fun setAppIcon(value: String) {
+    viewModelScope.launch { repository.setAppIcon(value) }
   }
 
   fun setHideDonationPopup(value: Boolean) {

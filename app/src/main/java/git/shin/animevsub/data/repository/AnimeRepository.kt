@@ -254,6 +254,7 @@ class AnimeRepository @Inject constructor(
   val screenTransition = prefs.screenTransition
   val dynamicColor = prefs.dynamicColor
   val historySyncInterval = prefs.historySyncInterval
+  val appIcon = prefs.appIcon
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -280,6 +281,7 @@ class AnimeRepository @Inject constructor(
   suspend fun setBedtimeReminderEndTime(minutes: Long) = prefs.setBedtimeReminderEndTime(minutes)
   suspend fun setBedtimeReminderWaitFinish(value: Boolean) = prefs.setBedtimeReminderWaitFinish(value)
   suspend fun setAppLanguage(value: String) = prefs.setAppLanguage(value)
+  suspend fun setAppIcon(value: String) = prefs.setAppIcon(value)
   suspend fun setDeveloperMode(value: Boolean) = prefs.setDeveloperMode(value)
   suspend fun setHideDonationPopup(value: Boolean) = prefs.setHideDonationPopup(value)
   suspend fun setScreenTransition(value: String) = prefs.setScreenTransition(value)

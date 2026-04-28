@@ -359,6 +359,10 @@
     <string name="transition_system">系统默认</string>
     <string name="dynamic_color">动态色彩</string>
     <string name="dynamic_color_desc">基于壁纸生成颜色 (Android 12+)</string>
+    <string name="app_icon">应用图标</string>
+    <string name="app_icon_default">默认</string>
+    <string name="app_icon_old">经典</string>
+    <string name="custom_shortcut">自定义快捷方式</string>
     <string name="continue_watching_widget_title">继续观看</string>
     <string name="continue_watching_widget_desc">快速播放正在观看的动漫</string>
     <string name="no_anime_watched">暂无播放中的动漫</string>

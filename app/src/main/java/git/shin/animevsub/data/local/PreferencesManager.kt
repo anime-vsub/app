@@ -45,6 +45,7 @@ class PreferencesManager(private val context: Context) {
     private val SCREEN_TRANSITION_KEY = stringPreferencesKey("screen_transition")
     private val DYNAMIC_COLOR_KEY = booleanPreferencesKey("dynamic_color")
     private val HISTORY_SYNC_INTERVAL_KEY = intPreferencesKey("history_sync_interval")
+    private val APP_ICON_KEY = stringPreferencesKey("app_icon")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -75,6 +76,7 @@ class PreferencesManager(private val context: Context) {
   val screenTransition: Flow<String> = context.dataStore.data.map { it[SCREEN_TRANSITION_KEY] ?: "system" }
   val dynamicColor: Flow<Boolean> = context.dataStore.data.map { it[DYNAMIC_COLOR_KEY] ?: false }
   val historySyncInterval: Flow<Int> = context.dataStore.data.map { it[HISTORY_SYNC_INTERVAL_KEY] ?: 20 }
+  val appIcon: Flow<String> = context.dataStore.data.map { it[APP_ICON_KEY] ?: "default" }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -181,6 +183,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setDynamicColor(value: Boolean) {
     context.dataStore.edit { it[DYNAMIC_COLOR_KEY] = value }
+  }
+
+  suspend fun setAppIcon(value: String) {
+    context.dataStore.edit { it[APP_ICON_KEY] = value }
   }
 
   suspend fun setHistorySyncInterval(value: Int) {

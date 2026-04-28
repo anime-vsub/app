@@ -5,11 +5,14 @@ import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
 import android.content.BroadcastReceiver
-import android.graphics.drawable.Icon
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.BitmapFactory
+import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -34,6 +37,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.navigation.compose.rememberNavController
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
@@ -51,6 +57,7 @@ import git.shin.animevsub.ui.theme.AnimeVsubTheme
 import git.shin.animevsub.utils.CloudflareManager
 import git.shin.animevsub.utils.UpdateManager
 import git.shin.animevsub.worker.NotificationSyncWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,6 +67,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -67,6 +75,46 @@ import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+  // ... rest of activity ...
+  fun setAppIcon(iconName: String) {
+    val pm = packageManager
+    val defaultAlias = ComponentName(this, "git.shin.animevsub.MainActivityDefault")
+    val oldAlias = ComponentName(this, "git.shin.animevsub.MainActivityOld")
+
+    when (iconName) {
+      "default" -> {
+        pm.setComponentEnabledSetting(defaultAlias, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+        pm.setComponentEnabledSetting(oldAlias, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+      }
+
+      "old" -> {
+        pm.setComponentEnabledSetting(oldAlias, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+        pm.setComponentEnabledSetting(defaultAlias, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+      }
+    }
+  }
+
+  suspend fun createCustomShortcut(uri: Uri) {
+    withContext(Dispatchers.IO) {
+      val inputStream = contentResolver.openInputStream(uri)
+      val bitmap = BitmapFactory.decodeStream(inputStream)
+
+      if (ShortcutManagerCompat.isRequestPinShortcutSupported(this@MainActivity)) {
+        val intent = Intent(this@MainActivity, MainActivity::class.java).apply {
+          action = Intent.ACTION_MAIN
+        }
+
+        val pinShortcutInfo = ShortcutInfoCompat.Builder(this@MainActivity, "custom_icon_${System.currentTimeMillis()}")
+          .setShortLabel(getString(R.string.app_name))
+          .setIcon(IconCompat.createWithBitmap(bitmap))
+          .setIntent(intent)
+          .build()
+
+        ShortcutManagerCompat.requestPinShortcut(this@MainActivity, pinShortcutInfo, null)
+      }
+    }
+  }
+
   @Inject
   lateinit var updateManager: UpdateManager
 
