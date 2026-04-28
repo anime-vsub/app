@@ -5,6 +5,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.MainActivity
 import git.shin.animevsub.R
@@ -70,24 +72,29 @@ fun AppIconSelector(
 ) {
   val icons = listOf(
     "default" to R.drawable.ic_launcher_foreground,
-    "old" to R.drawable.ic_launcher_old
+    "old" to R.drawable.ic_launcher_old,
+    "vibrant" to R.drawable.ic_launcher_foreground_vibrant,
+    "rainbow" to R.drawable.ic_launcher_foreground_rainbow,
+    "neon" to R.drawable.ic_launcher_foreground_neon,
+    "ai" to R.drawable.ic_launcher_foreground_ai
   )
 
   Column(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(vertical = 8.dp)
+      .padding(horizontal = 16.dp, vertical = 8.dp)
   ) {
     Text(
       text = stringResource(R.string.app_icon),
-      color = TextGrey,
-      fontSize = 13.sp,
-      fontWeight = FontWeight.Medium,
+      color = TextPrimary,
+      fontSize = 15.sp,
       modifier = Modifier.padding(bottom = 8.dp)
     )
     Row(
-      modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.spacedBy(16.dp)
+      modifier = Modifier
+        .fillMaxWidth()
+        .horizontalScroll(rememberScrollState()),
+      horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
       icons.forEach { (id, resId) ->
         val isSelected = selectedIcon == id
@@ -122,6 +129,10 @@ fun AppIconSelector(
             text = when (id) {
               "default" -> stringResource(R.string.app_icon_default)
               "old" -> stringResource(R.string.app_icon_old)
+              "vibrant" -> stringResource(R.string.app_icon_vibrant)
+              "rainbow" -> stringResource(R.string.app_icon_rainbow)
+              "neon" -> stringResource(R.string.app_icon_neon)
+              "ai" -> stringResource(R.string.app_icon_ai)
               else -> id
             },
             style = MaterialTheme.typography.bodyMedium,

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:translateX="18"
+        android:translateY="18">
+        <!-- Multi-color Dynamic Ring -->
+        <path
+            android:pathData="M36,4C18.33,4 4,18.33 4,36C4,53.67 18.33,68 36,68C53.67,68 68,53.67 68,36C68,18.33 53.67,4 36,4ZM36,60C22.75,60 12,49.25 12,36C12,22.75 22.75,12 36,12C49.25,12 60,22.75 60,36C60,49.25 49.25,60 36,60Z">
+            <aapt:attr name="android:fillColor">
+                <gradient android:startX="4" android:startY="36" android:endX="68" android:endY="36" android:type="linear">
+                    <item android:color="#FFFF0000" android:offset="0" />
+                    <item android:color="#FFFFFF00" android:offset="0.2" />
+                    <item android:color="#FF00FF00" android:offset="0.4" />
+                    <item android:color="#FF00FFFF" android:offset="0.6" />
+                    <item android:color="#FF0000FF" android:offset="0.8" />
+                    <item android:color="#FFFF00FF" android:offset="1" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- White Play Symbol -->
+        <path
+            android:pathData="M48,36L30,48L30,24Z"
+            android:fillColor="#FFFFFF" />
+
+        <!-- Accent Dots -->
+        <path
+            android:pathData="M55,20 A3,3 0 1 1 54.99,20 Z"
+            android:fillColor="#FF00FFFF" />
+        <path
+            android:pathData="M17,52 A3,3 0 1 1 16.99,52 Z"
+            android:fillColor="#FFFF00FF" />
+    </group>
+</vector>

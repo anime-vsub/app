@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:translateX="18"
+        android:translateY="18">
+        <!-- Neon Cyberpunk Triangle/Play -->
+        <path
+            android:pathData="M36,10 L62,55 L10,55 Z"
+            android:strokeWidth="3"
+            android:strokeLineJoin="round">
+            <aapt:attr name="android:strokeColor">
+                <gradient android:startX="10" android:startY="10" android:endX="62" android:endY="55" android:type="linear">
+                    <item android:color="#FF00F2FF" android:offset="0" />
+                    <item android:color="#FFFF00D4" android:offset="1" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <path
+            android:pathData="M36,22 L50,46 L22,46 Z"
+            android:fillColor="#80FFFFFF" />
+
+        <!-- Neon Glitch Lines -->
+        <path
+            android:pathData="M5,15 L20,15"
+            android:strokeWidth="2"
+            android:strokeColor="#FF00F2FF" />
+        <path
+            android:pathData="M55,50 L70,50"
+            android:strokeWidth="2"
+            android:strokeColor="#FFFF00D4" />
+    </group>
+</vector>

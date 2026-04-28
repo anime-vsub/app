@@ -78,19 +78,22 @@ class MainActivity : ComponentActivity() {
   // ... rest of activity ...
   fun setAppIcon(iconName: String) {
     val pm = packageManager
-    val defaultAlias = ComponentName(this, "git.shin.animevsub.MainActivityDefault")
-    val oldAlias = ComponentName(this, "git.shin.animevsub.MainActivityOld")
+    val aliases = mapOf(
+      "default" to ComponentName(this, "git.shin.animevsub.MainActivityDefault"),
+      "old" to ComponentName(this, "git.shin.animevsub.MainActivityOld"),
+      "vibrant" to ComponentName(this, "git.shin.animevsub.MainActivityVibrant"),
+      "rainbow" to ComponentName(this, "git.shin.animevsub.MainActivityRainbow"),
+      "neon" to ComponentName(this, "git.shin.animevsub.MainActivityNeon"),
+      "ai" to ComponentName(this, "git.shin.animevsub.MainActivityAi")
+    )
 
-    when (iconName) {
-      "default" -> {
-        pm.setComponentEnabledSetting(defaultAlias, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
-        pm.setComponentEnabledSetting(oldAlias, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+    aliases.forEach { (name, component) ->
+      val state = if (name == iconName) {
+        PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+      } else {
+        PackageManager.COMPONENT_ENABLED_STATE_DISABLED
       }
-
-      "old" -> {
-        pm.setComponentEnabledSetting(oldAlias, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
-        pm.setComponentEnabledSetting(defaultAlias, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
-      }
+      pm.setComponentEnabledSetting(component, state, PackageManager.DONT_KILL_APP)
     }
   }
 
@@ -308,12 +311,22 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(currentIntent) {
               currentIntent?.let { intent ->
-                if (intent.action == "PLAY_ANIME") {
-                  val animeId = intent.getStringExtra("animeId")
-                  val chapterId = intent.getStringExtra("chapterId")
-                  if (animeId != null) {
-                    navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-                    intentFlow.value = null
+                when (intent.action) {
+                  "PLAY_ANIME" -> {
+                    val animeId = intent.getStringExtra("animeId")
+                    val chapterId = intent.getStringExtra("chapterId")
+                    if (animeId != null) {
+                      navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+                      intentFlow.value = null
+                    }
+                  }
+
+                  "OPEN_ANIME" -> {
+                    val animeId = intent.getStringExtra("animeId")
+                    if (animeId != null) {
+                      navController.navigate(Screen.AnimeDetail.createRoute(animeId))
+                      intentFlow.value = null
+                    }
                   }
                 }
               }

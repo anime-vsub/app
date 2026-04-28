@@ -362,6 +362,10 @@
     <string name="app_icon">アプリのアイコン</string>
     <string name="app_icon_default">デフォルト</string>
     <string name="app_icon_old">クラシック</string>
+    <string name="app_icon_vibrant">バイブラント</string>
+    <string name="app_icon_rainbow">レインボー</string>
+    <string name="app_icon_neon">ネオン</string>
+    <string name="app_icon_ai">AIグラデーション</string>
     <string name="custom_shortcut">カスタムショートカット</string>
     <string name="continue_watching_widget_title">続きから見る</string>
     <string name="continue_watching_widget_desc">視聴中のアニメをすぐに再生</string>

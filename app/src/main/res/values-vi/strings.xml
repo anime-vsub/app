@@ -359,6 +359,10 @@
     <string name="app_icon">Biểu tượng ứng dụng</string>
     <string name="app_icon_default">Mặc định</string>
     <string name="app_icon_old">Cổ điển</string>
+    <string name="app_icon_vibrant">Rực rỡ</string>
+    <string name="app_icon_rainbow">Cầu vồng</string>
+    <string name="app_icon_neon">Neon</string>
+    <string name="app_icon_ai">AI Gradient</string>
     <string name="custom_shortcut">Lối tắt tùy chỉnh</string>
     <string name="continue_watching_widget_title">Xem tiếp</string>
     <string name="continue_watching_widget_desc">Xem nhanh bộ phim đang xem dở</string>
