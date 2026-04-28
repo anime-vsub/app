@@ -1,3 +1,25 @@
+# [2.4.0](https://github.com/anime-vsub/app/compare/v2.3.1...v2.4.0) (2026-04-28)
+
+
+### Bug Fixes
+
+* **player:** simplify slider drag state handling ([c836a65](https://github.com/anime-vsub/app/commit/c836a654d6b7519cc3410b6aca35f1ed5c4d68b5))
+* Remove early break in notification fetch ([bd43ab7](https://github.com/anime-vsub/app/commit/bd43ab7b6f2abd2f12e463b2073600bfe00544ca))
+
+
+### Features
+
+* **history:** allow configurable history sync interval ([499560a](https://github.com/anime-vsub/app/commit/499560aeef1feb6859439511dd4761c24909e905))
+* **icons:** add new selectable app icons ([519e385](https://github.com/anime-vsub/app/commit/519e385607e8c4d03c3ccbd1249fca6cc7aa75f4))
+* **intent:** improve deep linking and intent handling ([b21971a](https://github.com/anime-vsub/app/commit/b21971af4ad11893590ab551e3d53b47fb201e0a))
+* **launcher:** add app icon customization ([23a0518](https://github.com/anime-vsub/app/commit/23a05189a6aaf425e78c3728ddcfb5293ba4502b))
+* **pip:** add playback controls to PiP mode ([b803d2f](https://github.com/anime-vsub/app/commit/b803d2f7358e4b5bdf509014960af777ba13922b))
+* **playlist:** Implement playlist management UI and logic ([21a0e13](https://github.com/anime-vsub/app/commit/21a0e139fffd2010eefdf9bb63b1bc7ae17345d1))
+* **settings:** add dynamic color option ([beaaaeb](https://github.com/anime-vsub/app/commit/beaaaeb23b12d6f4060c576c709bd1f6bec717e4))
+* **widget:** add continue watching widget ([aaa0d58](https://github.com/anime-vsub/app/commit/aaa0d58a5e1a18ebc89bf5e5e1f17b0d5caaabf7))
+* **widget:** add History and Latest Updates widgets ([54744fc](https://github.com/anime-vsub/app/commit/54744fc245941c69d34c3e3f96380c3b24405f44))
+* **widget:** enhance empty state of Continue Watching ([4028729](https://github.com/anime-vsub/app/commit/4028729436820e38e21f9fd304beba9950a4ec88))
+
 ## [2.3.1](https://github.com/anime-vsub/app/compare/v2.3.0...v2.3.1) (2026-04-26)
 
 
