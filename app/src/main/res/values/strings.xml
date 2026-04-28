@@ -370,6 +370,10 @@
     <string name="custom_shortcut">Custom Shortcut</string>
     <string name="continue_watching_widget_title">Continue Watching</string>
     <string name="continue_watching_widget_desc">Quickly watch your ongoing anime</string>
+    <string name="history_widget_title">Watch History</string>
+    <string name="history_widget_desc">See your recently watched anime</string>
+    <string name="latest_updated_widget_title">Latest Updates</string>
+    <string name="latest_updated_widget_desc">See recently updated anime</string>
     <string name="no_anime_watched">No anime watched yet</string>
     <string name="tap_to_open_app">Tap to open app</string>
 </resources>

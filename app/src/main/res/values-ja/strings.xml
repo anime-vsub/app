@@ -369,6 +369,10 @@
     <string name="custom_shortcut">カスタムショートカット</string>
     <string name="continue_watching_widget_title">続きから見る</string>
     <string name="continue_watching_widget_desc">視聴中のアニメをすぐに再生</string>
+    <string name="history_widget_title">視聴履歴</string>
+    <string name="history_widget_desc">最近視聴したアニメを表示</string>
+    <string name="latest_updated_widget_title">最新更新</string>
+    <string name="latest_updated_widget_desc">最近更新されたアニメを表示</string>
     <string name="no_anime_watched">視聴中のアニメはありません</string>
     <string name="tap_to_open_app">タップしてアプリを開く</string>
 </resources>

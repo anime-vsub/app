@@ -188,11 +188,12 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val filter = android.content.IntentFilter(ACTION_MEDIA_CONTROL)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      registerReceiver(pipReceiver, filter, RECEIVER_EXPORTED)
-    } else {
-      registerReceiver(pipReceiver, filter)
-    }
+    ContextCompat.registerReceiver(
+      this,
+      pipReceiver,
+      filter,
+      ContextCompat.RECEIVER_EXPORTED
+    )
     intentFlow.value = intent
     enableEdgeToEdge()
     setContent {
