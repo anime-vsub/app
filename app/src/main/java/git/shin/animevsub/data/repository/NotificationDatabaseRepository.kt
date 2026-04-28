@@ -189,10 +189,10 @@ class NotificationDatabaseRepository @Inject constructor(
           }
           kotlinx.coroutines.delay(200)
         }
-
-        // The API returns notifications in pages (usually 10-20 per page).
-        // If we get fewer than a full page (e.g., < 5), it means there are no more notifications to fetch.
-        if (apiData.items.size < 5) break
+//
+//        // The API returns notifications in pages (usually 10-20 per page).
+//        // If we get fewer than a full page (e.g., < 5), it means there are no more notifications to fetch.
+//        if (apiData.items.size < 5) break
       }
       getCountNotify()
     } finally {
