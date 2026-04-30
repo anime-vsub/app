@@ -21,6 +21,7 @@ val TextGrey = Color(0xFF9E9E9E)
 val StarColor = Color(0xFFFFD700)
 val ErrorColor = Color(0xFFCF6679)
 val SuccessColor = Color(0xFF4CAF50)
+val GithubBlue = Color(0xFF58A6FF)
 
 // Popular Colors
 val MainColor = Color(0xFF00D639)

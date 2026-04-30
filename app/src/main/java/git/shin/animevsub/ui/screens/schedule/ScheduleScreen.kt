@@ -145,14 +145,14 @@ fun ScheduleScreen(
               ScrollableTabRow(
                 selectedTabIndex = pagerState.currentPage,
                 containerColor = DarkBackground,
-                contentColor = AccentMain,
+                contentColor = MainColor,
                 edgePadding = 16.dp,
                 divider = {},
                 indicator = { tabPositions ->
                   if (pagerState.currentPage < tabPositions.size) {
                     TabRowDefaults.SecondaryIndicator(
                       modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                      color = AccentMain,
+                      color = MainColor,
                       height = 2.dp
                     )
                   }
@@ -179,9 +179,9 @@ fun ScheduleScreen(
                         Text(
                           text = shortDay,
                           color = if (isSelected) {
-                            AccentMain
+                            MainColor
                           } else if (isTodayDay) {
-                            AccentMainLight
+                            MainColor.copy(alpha = 0.7f)
                           } else {
                             TextGrey
                           },
@@ -191,9 +191,9 @@ fun ScheduleScreen(
                         Text(
                           text = dateStr,
                           color = if (isSelected) {
-                            AccentMain
+                            MainColor
                           } else if (isTodayDay) {
-                            AccentMainLight
+                            MainColor.copy(alpha = 0.7f)
                           } else {
                             TextGrey
                           },
@@ -311,7 +311,7 @@ private fun ScheduleDayList(
               if (subInfo.isNotEmpty()) {
                 Text(
                   text = subInfo,
-                  color = AccentMain,
+                  color = MainColor,
                   fontSize = 13.sp,
                   fontWeight = FontWeight.Medium,
                   modifier = Modifier.padding(top = 2.dp)

@@ -38,6 +38,8 @@ import git.shin.animevsub.R
 import git.shin.animevsub.data.model.UpdateInfo
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkSurface
+import git.shin.animevsub.ui.theme.GithubBlue
+import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
 
@@ -95,7 +97,7 @@ fun UpdateDialog(
             fontSize = 14.sp,
             lineHeight = 22.sp
           ),
-          linkColor = AccentMain,
+          linkColor = GithubBlue,
           syntaxHighlightColor = Color.Transparent,
           syntaxHighlightTextColor = TextPrimary,
           beforeSetMarkdown = { _, spanned ->
@@ -130,12 +132,12 @@ fun UpdateDialog(
         Spacer(modifier = Modifier.width(8.dp))
         Button(
           onClick = onConfirm,
-          colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+          colors = ButtonDefaults.buttonColors(containerColor = MainColor),
           shape = RoundedCornerShape(8.dp)
         ) {
           Text(
             text = stringResource(R.string.update_now),
-            color = TextPrimary,
+            color = Color.Black,
             fontWeight = FontWeight.Bold
           )
         }
