@@ -1032,7 +1032,7 @@ fun VideoPlayer(
       }
 
       AnimatedVisibility(
-        visible = isControlsVisible && !isDragging && !isInPipMode,
+        visible = (isControlsVisible || isDragging) && !isInPipMode,
         enter = fadeIn() + slideInVertically { -it },
         exit = fadeOut() + slideOutVertically { -it }
       ) {
@@ -1140,7 +1140,7 @@ fun VideoPlayer(
           )
         }
         AnimatedVisibility(
-          visible = isControlsVisible && !isDragging && !isInPipMode,
+          visible = (isControlsVisible || isDragging) && !isInPipMode,
           enter = fadeIn(),
           exit = fadeOut(),
           modifier = Modifier.align(Alignment.Center)
@@ -1350,7 +1350,7 @@ fun VideoPlayer(
               vertical = if (isFullScreen) 16.dp else 2.dp
             )
         ) {
-          if (isControlsVisible && !isSeeking) {
+          if (isControlsVisible || isDragging) {
             Row(
               modifier = Modifier
                 .fillMaxWidth()
@@ -1379,8 +1379,14 @@ fun VideoPlayer(
 
           Slider(
             value = (if (isDragging) dragTime else currentTime).toFloat(),
-            onValueChange = { dragTime = it.toLong() },
-            onValueChangeFinished = { exoPlayer.seekTo(dragTime) },
+            onValueChange = {
+              isDragging = true
+              dragTime = it.toLong()
+            },
+            onValueChangeFinished = {
+              exoPlayer.seekTo(dragTime)
+              isDragging = false
+            },
             valueRange = 0f..duration.toFloat().coerceAtLeast(1f),
             colors = SliderDefaults.colors(
               activeTrackColor = MainColor,
@@ -1388,7 +1394,7 @@ fun VideoPlayer(
               thumbColor = Color.Transparent
             ),
             thumb = {
-              if (isControlsVisible && !isSeeking) {
+              if (isDragging || isControlsVisible) {
                 Box(
                   modifier = Modifier.size(24.dp),
                   contentAlignment = Alignment.Center
@@ -1469,7 +1475,7 @@ fun VideoPlayer(
             modifier = Modifier.height(24.dp)
           )
 
-          if (isControlsVisible && !isSeeking && isFullScreen) {
+          if ((isControlsVisible || isDragging) && isFullScreen) {
             Spacer(modifier = Modifier.height(8.dp))
             Row(
               modifier = Modifier.fillMaxWidth(),
