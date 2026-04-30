@@ -182,6 +182,17 @@ fun DetailScreen(
     }
   }
 
+  DisposableEffect(Unit) {
+    onDispose {
+      val activity = context as? MainActivity ?: return@onDispose
+      activity.updatePipParams(false) { builder ->
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          builder.setAutoEnterEnabled(false)
+        }
+      }
+    }
+  }
+
   LaunchedEffect(exoPlayerInstance) {
     val activity = context as? MainActivity ?: return@LaunchedEffect
     activity.pipEvent.collect { event ->

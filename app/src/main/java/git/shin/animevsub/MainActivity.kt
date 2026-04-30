@@ -408,12 +408,10 @@ class MainActivity : ComponentActivity() {
 
   override fun onUserLeaveHint() {
     super.onUserLeaveHint()
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+    if (isPipPlaying && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
       // For Android 8 to 11, we might need to trigger PiP manually if params are set
       // Android 12+ handles this via setAutoEnterEnabled(true)
-      // We check if pip params are set (aspect ratio is a good indicator)
       try {
-        // Just enter PiP, system will use last set parameters
         enterPictureInPictureMode(PictureInPictureParams.Builder().build())
       } catch (e: Exception) {
         print(e)
