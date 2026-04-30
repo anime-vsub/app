@@ -56,7 +56,8 @@ class NotificationSyncWorker @AssistedInject constructor(
           title = context.getString(R.string.new_notification_title),
           message = context.getString(R.string.new_notification_message, item.title, item.content),
           animeId = item.animeId,
-          chapterId = item.chapId
+          chapterId = item.chapId,
+          imageUrl = item.image
         )
       }
     }

@@ -575,6 +575,16 @@ fun SettingsScreen(
             steps = 11,
             valueText = stringResource(R.string.seconds_label, uiState.historySyncInterval)
           )
+
+          Button(
+            onClick = { viewModel.testNotification() },
+            colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 16.dp, vertical = 8.dp)
+          ) {
+            Text("Test System Notification", color = Color.White)
+          }
         }
       }
     }

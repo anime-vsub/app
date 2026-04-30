@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.R
 import git.shin.animevsub.data.repository.AnimeRepository
+import git.shin.animevsub.utils.NotificationHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -334,5 +335,14 @@ class SettingsViewModel @Inject constructor(
 
   fun setHistorySyncInterval(value: Int) {
     viewModelScope.launch { repository.setHistorySyncInterval(value) }
+  }
+
+  fun testNotification() {
+    val helper = NotificationHelper(context)
+    helper.showNotification(
+      title = "Test Notification",
+      message = "This is a test notification with a thumbnail.",
+      imageUrl = "https://picsum.photos/536/354"
+    )
   }
 }

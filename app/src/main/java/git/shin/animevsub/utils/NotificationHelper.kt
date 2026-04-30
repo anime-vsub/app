@@ -7,12 +7,21 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import coil.Coil
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import git.shin.animevsub.MainActivity
 import git.shin.animevsub.R
+import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NotificationHelper(private val context: Context) {
   companion object {
@@ -32,7 +41,13 @@ class NotificationHelper(private val context: Context) {
     notificationManager.createNotificationChannel(channel)
   }
 
-  fun showNotification(title: String, message: String, animeId: String? = null, chapterId: String? = null) {
+  fun showNotification(
+    title: String,
+    message: String,
+    animeId: String? = null,
+    chapterId: String? = null,
+    imageUrl: String? = null
+  ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       if (ActivityCompat.checkSelfPermission(
           context,
@@ -56,6 +71,8 @@ class NotificationHelper(private val context: Context) {
       PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
 
+    val notificationId = System.currentTimeMillis().toInt()
+
     val builder = NotificationCompat.Builder(context, CHANNEL_ID)
       .setSmallIcon(R.drawable.ic_notification)
       .setContentTitle(title)
@@ -64,7 +81,45 @@ class NotificationHelper(private val context: Context) {
       .setContentIntent(pendingIntent)
       .setAutoCancel(true)
 
-    val notificationManager = NotificationManagerCompat.from(context)
-    notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
+    if (!imageUrl.isNullOrEmpty()) {
+      val scope = CoroutineScope(Dispatchers.IO)
+      scope.launch {
+        val bitmap = fetchBitmap(imageUrl)
+        withContext(Dispatchers.Main) {
+          if (bitmap != null) {
+            builder.setLargeIcon(bitmap)
+            builder.setStyle(
+              NotificationCompat.BigPictureStyle()
+                .bigPicture(bitmap)
+                .bigLargeIcon(null as Bitmap?)
+            )
+          }
+          val notificationManager = NotificationManagerCompat.from(context)
+          notificationManager.notify(notificationId, builder.build())
+        }
+      }
+    } else {
+      val notificationManager = NotificationManagerCompat.from(context)
+      notificationManager.notify(notificationId, builder.build())
+    }
+  }
+
+  private suspend fun fetchBitmap(url: String): Bitmap? = withContext(Dispatchers.IO) {
+    val loader = Coil.imageLoader(context)
+    val request = ImageRequest.Builder(context)
+      .data(url)
+      .apply {
+        AnimeApi.getHeaders(url).forEach { (key, value) ->
+          addHeader(key, value)
+        }
+      }
+      .allowHardware(false)
+      .build()
+    val result = loader.execute(request)
+    if (result is SuccessResult) {
+      (result.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
+    } else {
+      null
+    }
   }
 }
