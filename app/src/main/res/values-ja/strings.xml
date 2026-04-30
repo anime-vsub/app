@@ -314,6 +314,8 @@
     <string name="db_notify_sync_interval">DB同期の間隔</string>
     <string name="auto_sync_notify">通知を自動同期</string>
     <string name="minutes_label">%1$d 分</string>
+    <string name="sort_oldest">古い順</string>
+    <string name="sort_newest">新しい順</string>
 
     <string name="new_notification_title">新着アニメ更新</string>
     <string name="new_notification_message">%1$s - %2$s</string>
@@ -375,4 +377,25 @@
     <string name="latest_updated_widget_desc">最近更新されたアニメを表示</string>
     <string name="no_anime_watched">視聴中のアニメはありません</string>
     <string name="tap_to_open_app">タップしてアプリを開く</string>
+
+    <!-- Gemini AI -->
+    <string name="ai_features">AI機能 (Gemini)</string>
+    <string name="gemini_api_key">Gemini APIキー</string>
+    <string name="gemini_api_key_hint">ここにAPIキーを入力してください…</string>
+    <string name="get_api_key">APIキーを取得</string>
+    <string name="test_api_key">接続テスト</string>
+    <string name="api_key_valid">APIキーは有効です！</string>
+    <string name="api_key_invalid">APIキーが無効であるか、エラーが発生しました</string>
+    <string name="api_key_test_success">✓ 成功！モデルに接続しました: %1$s</string>
+    <string name="api_key_test_success_with_response">✓ 成功！モデルに接続しました: %1$s\nレスポンス: %2$s</string>
+    <string name="api_key_test_error">✗ エラー: %1$s</string>
+    <string name="gemini_guide_title">Gemini APIキーの取得方法</string>
+    <string name="gemini_guide_content">1. Google AI Studio (aistudio.google.com) にアクセスします\n2. Googleアカウントでサインインします\n3. \"Get API key\" をクリックします\n4. 新しいプロジェクトで新しいAPIキーを作成します\n5. キーをコピーしてここに貼り付けます。</string>
+    <string name="ai_summary_title">最近の要約</string>
+    <string name="ai_summary_enabled">通知の要約を有効にする</string>
+    <string name="ai_summary_desc">デバイスですでに受信した最新の通知を要約します</string>
+    <string name="ai_recap_enabled">エピソードの要約を有効にする</string>
+    <string name="ai_recap_title">前回の要約</string>
+    <string name="ai_recap_not_loaded">タップして前のエピソードのAI要約を読み込む</string>
+    <string name="ai_recap_desc">詳細画面で前のエピソードの短い要約を表示します</string>
 </resources>

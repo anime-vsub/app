@@ -255,6 +255,9 @@ class AnimeRepository @Inject constructor(
   val dynamicColor = prefs.dynamicColor
   val historySyncInterval = prefs.historySyncInterval
   val appIcon = prefs.appIcon
+  val aiSummaryEnabled = prefs.aiSummaryEnabled
+  val aiRecapEnabled = prefs.aiRecapEnabled
+  val geminiModel = prefs.geminiModel
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -287,6 +290,12 @@ class AnimeRepository @Inject constructor(
   suspend fun setScreenTransition(value: String) = prefs.setScreenTransition(value)
   suspend fun setDynamicColor(value: Boolean) = prefs.setDynamicColor(value)
   suspend fun setHistorySyncInterval(value: Int) = prefs.setHistorySyncInterval(value)
+
+  suspend fun setAiSummaryEnabled(value: Boolean) = prefs.setAiSummaryEnabled(value)
+  suspend fun setAiRecapEnabled(value: Boolean) = prefs.setAiRecapEnabled(value)
+  suspend fun setGeminiApiKey(value: String) = prefs.setGeminiApiKey(value)
+  suspend fun getGeminiApiKey() = prefs.geminiApiKey.first()
+  suspend fun setGeminiModel(value: String) = prefs.setGeminiModel(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

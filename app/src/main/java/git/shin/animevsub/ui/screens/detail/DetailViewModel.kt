@@ -105,7 +105,13 @@ data class DetailUiState(
   // Reminders
   val showBreakReminder: Boolean = false,
   val showBedtimeReminder: Boolean = false,
-  val wasPlayingBeforeReminder: Boolean = false
+  val wasPlayingBeforeReminder: Boolean = false,
+  val aiRecap: String? = null,
+  val isRecapLoading: Boolean = false,
+  val recapError: String? = null,
+  val aiEpisodeSummary: String? = null,
+  val isAiSummaryLoading: Boolean = false,
+  val aiSummaryError: String? = null
 ) {
   val currentChapIndex: Int
     get() {
@@ -118,6 +124,8 @@ data class DetailUiState(
 class DetailViewModel @Inject constructor(
   private val repository: AnimeRepository,
   private val playlistRepository: PlaylistRepository,
+  private val geminiRepository: git.shin.animevsub.data.repository.GeminiRepository,
+  private val preferencesManager: git.shin.animevsub.data.local.PreferencesManager,
   private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -518,7 +526,10 @@ class DetailViewModel @Inject constructor(
         servers = emptyList(),
         currentServer = null,
         playerData = null,
-        lastProgress = 0L
+        lastProgress = 0L,
+        aiRecap = null,
+        isRecapLoading = false,
+        recapError = null
       )
     }
     savedStateHandle["animeId"] = seasonId
@@ -619,6 +630,69 @@ class DetailViewModel @Inject constructor(
           }
         }
     }
+  }
+
+  fun generateRecap() {
+    val detail = _uiState.value.detail ?: return
+    val chapter = _uiState.value.currentChapter ?: return
+
+    viewModelScope.launch {
+      if (!preferencesManager.aiRecapEnabled.first()) {
+        _uiState.update { it.copy(aiRecap = null, recapError = null) }
+        return@launch
+      }
+
+      _uiState.update { it.copy(isRecapLoading = true, aiRecap = null, recapError = null) }
+      try {
+        val language = java.util.Locale.getDefault().displayLanguage
+        val recap = geminiRepository.getRecap(
+          animeName = detail.name,
+          episode = chapter.name,
+          language = language,
+          animeId = _uiState.value.animeId,
+          chapterId = chapter.id
+        )
+        _uiState.update { it.copy(aiRecap = recap, isRecapLoading = false) }
+      } catch (e: Exception) {
+        _uiState.update {
+          it.copy(
+            isRecapLoading = false,
+            recapError = e.message ?: "Could not generate recap at this time."
+          )
+        }
+      }
+    }
+  }
+
+  fun generateEpisodeSummary(currentTimeMs: Long) {
+    val detail = _uiState.value.detail ?: return
+    val chapter = _uiState.value.currentChapter ?: return
+
+    _uiState.update { it.copy(isAiSummaryLoading = true, aiSummaryError = null, aiEpisodeSummary = null) }
+    viewModelScope.launch {
+      try {
+        val language = java.util.Locale.getDefault().displayLanguage
+        val summary = geminiRepository.getEpisodeSummary(
+          animeName = detail.name,
+          episodeName = chapter.name,
+          timestampMs = currentTimeMs,
+          language = language,
+          animeId = _uiState.value.animeId,
+          chapterId = chapter.id
+        )
+        _uiState.update { it.copy(aiEpisodeSummary = summary, isAiSummaryLoading = false) }
+      } catch (e: Exception) {
+        _uiState.update { it.copy(isAiSummaryLoading = false, aiSummaryError = e.message) }
+      }
+    }
+  }
+
+  fun clearAiSummary() {
+    _uiState.update { it.copy(aiEpisodeSummary = null, aiSummaryError = null) }
+  }
+
+  fun retryRecap() {
+    generateRecap()
   }
 
   private fun loadServers(chapter: ChapterInfo) {

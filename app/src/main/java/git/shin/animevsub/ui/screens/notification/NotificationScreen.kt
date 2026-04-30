@@ -168,7 +168,9 @@ fun NotificationScreen(
               onRefresh = { viewModel.loadDbNotifications(true) },
               onLoadMore = { viewModel.loadDbNotifications() },
               onNavigateToDetail = onNavigateToDetail,
-              onDelete = { season, chapId -> viewModel.deleteDbNotification(season, chapId) }
+              onDelete = { season, chapId -> viewModel.deleteDbNotification(season, chapId) },
+              onSearchQueryChanged = { viewModel.onSearchQueryChanged(it) },
+              onToggleOrder = { viewModel.toggleOrder() }
             )
           }
         }

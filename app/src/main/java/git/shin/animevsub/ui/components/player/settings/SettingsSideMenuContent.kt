@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.BrightnessLow
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Feedback
@@ -65,7 +66,8 @@ fun SettingsSideMenuContent(
   onSleepTimerChange: (Int) -> Unit,
   pauseAfterCurrentEpisode: Boolean,
   onPauseAfterCurrentEpisodeChange: (Boolean) -> Unit,
-  sleepTimerRemainingSeconds: Long
+  sleepTimerRemainingSeconds: Long,
+  onAiSummary: () -> Unit
 ) {
   val context = LocalContext.current
   val onSupportClick = { subjectType: String ->
@@ -103,6 +105,15 @@ fun SettingsSideMenuContent(
         Icon(Icons.Default.Feedback, null, modifier = Modifier.size(20.dp))
         Spacer(modifier = Modifier.width(8.dp))
         Text(stringResource(R.string.feedback), fontSize = 14.sp)
+      }
+      TextButton(
+        onClick = onAiSummary,
+        modifier = Modifier.weight(1f),
+        colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
+      ) {
+        Icon(Icons.Default.AutoAwesome, null, modifier = Modifier.size(20.dp))
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(stringResource(R.string.ai_episode_summary), fontSize = 14.sp)
       }
     }
     Spacer(modifier = Modifier.height(16.dp))

@@ -192,6 +192,9 @@ dependencies {
   // Markdown
   implementation("com.github.jeziellago:compose-markdown:0.7.1")
 
+  // Gemini AI SDK
+  implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+
   // Glance (Widgets)
   implementation("androidx.glance:glance-appwidget:1.1.1")
   implementation("androidx.glance:glance-material3:1.1.1")

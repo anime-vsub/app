@@ -1,6 +1,7 @@
 package git.shin.animevsub.data.repository
 
 import git.shin.animevsub.data.local.ApiStorage
+import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.DbNotificationCount
 import git.shin.animevsub.data.model.DbNotificationEpisode
 import git.shin.animevsub.data.model.DbNotificationItem
@@ -26,7 +27,8 @@ import javax.inject.Singleton
 class NotificationDatabaseRepository @Inject constructor(
   private val supabase: SupabaseClient,
   private val storage: ApiStorage,
-  private val json: Json
+  private val json: Json,
+  private val prefs: PreferencesManager
 ) {
   private val _dbNotifications = MutableStateFlow<List<DbNotificationItem>>(emptyList())
   val dbNotifications = _dbNotifications.asStateFlow()
@@ -64,7 +66,12 @@ class NotificationDatabaseRepository @Inject constructor(
     count
   }
 
-  suspend fun queryNotify(page: Int, pageSize: Int = 30): Result<List<DbNotificationItem>> = runCatching {
+  suspend fun queryNotify(
+    page: Int,
+    pageSize: Int = 30,
+    query: String? = null,
+    asc: Boolean = false
+  ): Result<List<DbNotificationItem>> = runCatching {
     val uid = getCurrentUid() ?: throw Exception("Not login")
     val response = supabase.postgrest.rpc(
       "query_notify",
@@ -72,6 +79,8 @@ class NotificationDatabaseRepository @Inject constructor(
         put("p_page", page)
         put("p_page_size", pageSize)
         put("p_user_uid", uid)
+        put("p_query", query)
+        put("p_asc", asc)
       }
     )
     val items = response.decodeList<DbNotificationItem>().map {

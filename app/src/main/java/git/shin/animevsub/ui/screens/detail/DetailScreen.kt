@@ -37,6 +37,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.BugReport
@@ -67,6 +68,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -93,8 +95,13 @@ import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.Badge
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.components.common.ActionButton
+import git.shin.animevsub.ui.components.detail.AiRecapBlock
+import git.shin.animevsub.ui.components.detail.ChapterBottomSheet
 import git.shin.animevsub.ui.components.detail.CommentContent
 import git.shin.animevsub.ui.components.detail.CommentSection
+import git.shin.animevsub.ui.components.detail.DetailBottomSheet
+import git.shin.animevsub.ui.components.detail.RecapBottomSheet
+import git.shin.animevsub.ui.components.detail.SummaryBottomSheet
 import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.BedtimeReminderDialog
 import git.shin.animevsub.ui.components.player.BreakReminderDialog
@@ -137,10 +144,15 @@ fun DetailScreen(
   val context = LocalContext.current
   val snackbarHostState = remember { SnackbarHostState() }
   val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+  val recapSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+  val summarySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
   val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
   val scaffoldState = rememberBottomSheetScaffoldState()
   var isPlayerPlaying by remember { mutableStateOf(false) }
   var showDetailSheet by remember { mutableStateOf(false) }
+  var showRecapSheet by remember { mutableStateOf(false) }
+  var showSummarySheet by remember { mutableStateOf(false) }
+  var summaryTimestamp by remember { mutableLongStateOf(0L) }
   var showChapterSheet by remember { mutableStateOf(false) }
   var showAddToPlaylistSheet by remember { mutableStateOf(false) }
   var isFullScreen by remember { mutableStateOf(false) }
@@ -399,6 +411,11 @@ fun DetailScreen(
                 syncMode = state.syncMode,
                 onSyncModeChange = { viewModel.setSyncMode(it) },
                 onExoPlayerCreated = { exoPlayerInstance = it },
+                onAiSummary = { timestamp ->
+                  summaryTimestamp = timestamp
+                  viewModel.generateEpisodeSummary(timestamp)
+                  showSummarySheet = true
+                },
                 sleepTimerMinutes = state.sleepTimerMinutes,
                 onSleepTimerChange = { viewModel.setSleepTimer(it) },
                 pauseAfterCurrentEpisode = state.pauseAfterCurrentEpisode,
@@ -684,16 +701,38 @@ fun DetailScreen(
                   }
                   item {
                     ActionButton(
+                      icon = Icons.Default.AutoAwesome,
+                      label = stringResource(R.string.ai_recap_title),
+                      onClick = {
+                        if (uiState.aiRecap == null && !uiState.isRecapLoading) {
+                          viewModel.generateRecap()
+                        }
+                        showRecapSheet = true
+                      },
+                      modifier = Modifier.tvFocusScale()
+                    )
+                  }
+                  item {
+                    ActionButton(
                       icon = Icons.Default.BugReport,
                       label = stringResource(R.string.report),
                       onClick = {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
                           data = android.net.Uri.parse("mailto:support@animevsub.eu.org")
-                          val subject = "Report/Feedback: ${detail.name} (ID: ${uiState.animeId})"
+                          val subject = context.getString(
+                            R.string.report_feedback_subject,
+                            detail.name,
+                            uiState.animeId
+                          )
                           putExtra(Intent.EXTRA_SUBJECT, subject)
                         }
                         try {
-                          context.startActivity(Intent.createChooser(intent, context.getString(R.string.report)))
+                          context.startActivity(
+                            Intent.createChooser(
+                              intent,
+                              context.getString(R.string.report)
+                            )
+                          )
                         } catch (_: Exception) {
                           // Ignore
                         }
@@ -702,6 +741,17 @@ fun DetailScreen(
                     )
                   }
                 }
+              }
+
+              // AI Recap Section
+              if (uiState.aiRecap != null || uiState.isRecapLoading || uiState.recapError != null) {
+                AiRecapBlock(
+                  aiRecap = uiState.aiRecap,
+                  isRecapLoading = uiState.isRecapLoading,
+                  recapError = uiState.recapError,
+                  onGenerateClick = { viewModel.generateRecap() },
+                  onExpandClick = { showRecapSheet = true }
+                )
               }
 
               // Server Section
@@ -784,7 +834,7 @@ fun DetailScreen(
                       2 -> Icons.Default.SyncDisabled
                       else -> Icons.Default.Sync
                     },
-                    contentDescription = "Sync Mode",
+                    contentDescription = stringResource(R.string.sync_mode_description),
                     tint = when (uiState.syncMode) {
                       1 -> Color(0xFF4CAF50)
                       2 -> Color(0xFFF44336)
@@ -1072,6 +1122,38 @@ fun DetailScreen(
         onNavigateToCategory = { categoryLink ->
           onNavigateToCategory(categoryLink.filters)
         }
+      )
+    }
+
+    // AI Recap Bottom Sheet
+    if (showRecapSheet) {
+      RecapBottomSheet(
+        recap = uiState.aiRecap,
+        isLoading = uiState.isRecapLoading,
+        error = uiState.recapError,
+        sheetState = recapSheetState,
+        onDismissRequest = { showRecapSheet = false },
+        onRetry = { viewModel.retryRecap() }
+      )
+    }
+
+    // AI Summary Bottom Sheet
+    if (showSummarySheet) {
+      val minutes = summaryTimestamp / (1000 * 60)
+      val seconds = (summaryTimestamp / 1000) % 60
+      val timestampStr = String.format(java.util.Locale.getDefault(), "%02d:%02d", minutes, seconds)
+
+      SummaryBottomSheet(
+        title = stringResource(R.string.ai_summary_at_timestamp, timestampStr),
+        content = uiState.aiEpisodeSummary,
+        isLoading = uiState.isAiSummaryLoading,
+        error = uiState.aiSummaryError,
+        sheetState = summarySheetState,
+        onDismissRequest = {
+          showSummarySheet = false
+          viewModel.clearAiSummary()
+        },
+        onRetry = { viewModel.generateEpisodeSummary(summaryTimestamp) }
       )
     }
 

@@ -1,6 +1,8 @@
-package git.shin.animevsub.ui.screens.detail
+package git.shin.animevsub.ui.components.detail
 
 import android.annotation.SuppressLint
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -125,8 +127,8 @@ fun DetailBottomSheet(
               }
             )
             InfoRow(
-              label = stringResource(R.string.studio_label),
               value = detail.studio?.name,
+              label = stringResource(R.string.studio_label),
               textStyle = SmallTextStyle,
               onClick = detail.studio?.let {
                 if (it.filters.isNotEmpty()) {
@@ -217,11 +219,11 @@ fun DetailBottomSheet(
         ) {
           AndroidView(
             factory = { ctx ->
-              val webView = android.webkit.WebView(ctx).apply {
+              val webView = WebView(ctx).apply {
                 settings.javaScriptEnabled = true
                 settings.loadWithOverviewMode = true
                 settings.useWideViewPort = true
-                webViewClient = android.webkit.WebViewClient()
+                webViewClient = WebViewClient()
               }
               webView.loadUrl(detail.trailer)
               webView

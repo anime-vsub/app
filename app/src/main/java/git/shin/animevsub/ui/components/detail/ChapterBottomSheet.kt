@@ -1,4 +1,4 @@
-package git.shin.animevsub.ui.screens.detail
+package git.shin.animevsub.ui.components.detail
 
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -7,6 +7,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.ui.components.player.EpisodeSelectorContent
+import git.shin.animevsub.ui.screens.detail.DetailUiState
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 

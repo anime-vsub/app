@@ -41,6 +41,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.BrightnessLow
 import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.ErrorOutline
@@ -200,7 +201,8 @@ fun VideoPlayer(
   onPauseAfterCurrentEpisodeChange: (Boolean) -> Unit,
   sleepTimerRemainingSeconds: Long,
   isEpisodesLoading: Boolean,
-  onExoPlayerCreated: (ExoPlayer) -> Unit
+  onExoPlayerCreated: (ExoPlayer) -> Unit,
+  onAiSummary: (Long) -> Unit
 ) {
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
@@ -1494,6 +1496,10 @@ fun VideoPlayer(
                     showEpisodeSideMenu = true; isControlsVisible = false
                   }
                 )
+                PlayerControlSmallButton(
+                  icon = Icons.Default.AutoAwesome,
+                  onClick = { onAiSummary(exoPlayer.currentPosition) }
+                )
               }
               Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PlayerControlSmallButton(
@@ -1651,7 +1657,11 @@ fun VideoPlayer(
           onSleepTimerChange = onSleepTimerChange,
           pauseAfterCurrentEpisode = pauseAfterCurrentEpisode,
           onPauseAfterCurrentEpisodeChange = onPauseAfterCurrentEpisodeChange,
-          sleepTimerRemainingSeconds = sleepTimerRemainingSeconds
+          sleepTimerRemainingSeconds = sleepTimerRemainingSeconds,
+          onAiSummary = {
+            onAiSummary(exoPlayer.currentPosition)
+            showSettingsSideMenu = false
+          }
         )
       }
     }
@@ -1709,6 +1719,10 @@ fun VideoPlayer(
           pauseAfterCurrentEpisode = pauseAfterCurrentEpisode,
           onPauseAfterCurrentEpisodeChange = onPauseAfterCurrentEpisodeChange,
           sleepTimerRemainingSeconds = sleepTimerRemainingSeconds,
+          onAiSummary = {
+            onAiSummary(exoPlayer.currentPosition)
+            showSettingsBottomSheet = false; settingsSubMenu = null
+          },
           onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null }
         )
       }

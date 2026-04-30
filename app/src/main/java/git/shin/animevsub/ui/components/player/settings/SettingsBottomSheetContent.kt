@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.BrightnessLow
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Dns
@@ -65,6 +66,7 @@ fun SettingsBottomSheetContent(
   pauseAfterCurrentEpisode: Boolean,
   onPauseAfterCurrentEpisodeChange: (Boolean) -> Unit,
   sleepTimerRemainingSeconds: Long,
+  onAiSummary: () -> Unit,
   onDismiss: () -> Unit
 ) {
   val context = LocalContext.current
@@ -108,6 +110,11 @@ fun SettingsBottomSheetContent(
               icon = Icons.Default.Feedback,
               title = stringResource(R.string.feedback),
               onClick = { onSupportClick("Feedback") }
+            )
+            SettingsItem(
+              icon = Icons.Default.AutoAwesome,
+              title = stringResource(R.string.ai_episode_summary),
+              onClick = onAiSummary
             )
             HorizontalDivider(
               modifier = Modifier.padding(vertical = 8.dp),

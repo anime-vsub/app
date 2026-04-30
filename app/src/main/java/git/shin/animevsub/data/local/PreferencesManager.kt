@@ -46,6 +46,10 @@ class PreferencesManager(private val context: Context) {
     private val DYNAMIC_COLOR_KEY = booleanPreferencesKey("dynamic_color")
     private val HISTORY_SYNC_INTERVAL_KEY = intPreferencesKey("history_sync_interval")
     private val APP_ICON_KEY = stringPreferencesKey("app_icon")
+    private val AI_SUMMARY_ENABLED_KEY = booleanPreferencesKey("ai_summary_enabled")
+    private val AI_RECAP_ENABLED_KEY = booleanPreferencesKey("ai_recap_enabled")
+    private val GEMINI_API_KEY_KEY = stringPreferencesKey("gemini_api_key")
+    private val GEMINI_MODEL_KEY = stringPreferencesKey("gemini_model")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -77,6 +81,10 @@ class PreferencesManager(private val context: Context) {
   val dynamicColor: Flow<Boolean> = context.dataStore.data.map { it[DYNAMIC_COLOR_KEY] ?: false }
   val historySyncInterval: Flow<Int> = context.dataStore.data.map { it[HISTORY_SYNC_INTERVAL_KEY] ?: 20 }
   val appIcon: Flow<String> = context.dataStore.data.map { it[APP_ICON_KEY] ?: "default" }
+  val aiSummaryEnabled: Flow<Boolean> = context.dataStore.data.map { it[AI_SUMMARY_ENABLED_KEY] ?: true }
+  val aiRecapEnabled: Flow<Boolean> = context.dataStore.data.map { it[AI_RECAP_ENABLED_KEY] ?: true }
+  val geminiApiKey: Flow<String> = context.dataStore.data.map { it[GEMINI_API_KEY_KEY] ?: "" }
+  val geminiModel: Flow<String> = context.dataStore.data.map { it[GEMINI_MODEL_KEY] ?: "gemini-1.5-flash" }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -191,6 +199,22 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setHistorySyncInterval(value: Int) {
     context.dataStore.edit { it[HISTORY_SYNC_INTERVAL_KEY] = value }
+  }
+
+  suspend fun setAiSummaryEnabled(value: Boolean) {
+    context.dataStore.edit { it[AI_SUMMARY_ENABLED_KEY] = value }
+  }
+
+  suspend fun setAiRecapEnabled(value: Boolean) {
+    context.dataStore.edit { it[AI_RECAP_ENABLED_KEY] = value }
+  }
+
+  suspend fun setGeminiApiKey(value: String) {
+    context.dataStore.edit { it[GEMINI_API_KEY_KEY] = value }
+  }
+
+  suspend fun setGeminiModel(value: String) {
+    context.dataStore.edit { it[GEMINI_MODEL_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

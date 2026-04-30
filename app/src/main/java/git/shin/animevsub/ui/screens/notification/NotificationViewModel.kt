@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.R
+import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.DbNotificationCount
 import git.shin.animevsub.data.model.DbNotificationItem
 import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.NotificationDatabaseRepository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,13 +38,17 @@ data class NotificationUiState(
   val isAuthReady: Boolean = false,
   val dbPage: Int = 1,
   val hasMoreDb: Boolean = true,
-  val autoSync: Boolean = false
+  val isLoadingDb: Boolean = false,
+  val autoSync: Boolean = false,
+  val searchQuery: String = "",
+  val isAscending: Boolean = false
 )
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
   private val repository: AnimeRepository,
-  private val notificationDbRepository: NotificationDatabaseRepository
+  private val notificationDbRepository: NotificationDatabaseRepository,
+  private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(NotificationUiState())
@@ -128,19 +135,33 @@ class NotificationViewModel @Inject constructor(
     }
   }
 
+  private var loadDbJob: Job? = null
+
   fun loadDbNotifications(isRefreshing: Boolean = false) {
-    viewModelScope.launch {
-      val currentPage = if (isRefreshing) 1 else _uiState.value.dbPage
-      notificationDbRepository.queryNotify(currentPage)
-        .onSuccess { items ->
-          // Repo handles list merging now, we just update pagination state
-          _uiState.update {
-            it.copy(
-              dbPage = if (items.isEmpty()) currentPage else currentPage + 1,
-              hasMoreDb = items.isNotEmpty()
-            )
+    if (_uiState.value.isLoadingDb && !isRefreshing) return
+
+    loadDbJob?.cancel()
+    loadDbJob = viewModelScope.launch {
+      _uiState.update { it.copy(isLoadingDb = true, isRefreshing = isRefreshing) }
+      try {
+        val state = _uiState.value
+        val currentPage = if (isRefreshing) 1 else state.dbPage
+        notificationDbRepository.queryNotify(
+          page = currentPage,
+          query = if (state.searchQuery.isBlank()) null else state.searchQuery,
+          asc = state.isAscending
+        )
+          .onSuccess { items ->
+            _uiState.update {
+              it.copy(
+                dbPage = if (items.isEmpty()) currentPage else currentPage + 1,
+                hasMoreDb = items.isNotEmpty()
+              )
+            }
           }
-        }
+      } finally {
+        _uiState.update { it.copy(isLoadingDb = false, isRefreshing = false) }
+      }
     }
   }
 
@@ -184,9 +205,26 @@ class NotificationViewModel @Inject constructor(
     }
   }
 
+  private var searchJob: Job? = null
+
+  fun onSearchQueryChanged(query: String) {
+    _uiState.update { it.copy(searchQuery = query) }
+    searchJob?.cancel()
+    searchJob = viewModelScope.launch {
+      delay(500)
+      loadDbNotifications(isRefreshing = true)
+    }
+  }
+
+  fun toggleOrder() {
+    _uiState.update { it.copy(isAscending = !it.isAscending) }
+    loadDbNotifications(isRefreshing = true)
+  }
+
   fun setAutoSync(enabled: Boolean) {
     viewModelScope.launch {
-      repository.setAutoSyncNotify(enabled)
+      preferencesManager.setAutoSyncNotify(enabled)
+      _uiState.update { it.copy(autoSync = enabled) }
     }
   }
 }

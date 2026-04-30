@@ -157,6 +157,7 @@
     <string name="volume_gesture">Swipe Volume</string>
     <string name="brightness_gesture">Swipe Brightness</string>
     <string name="sync_mode">Sync Progress</string>
+    <string name="sync_mode_description">Sync Mode</string>
     <string name="sync_mode_full">Two-way Sync</string>
     <string name="sync_mode_upload_only">Upload Only</string>
     <string name="sync_mode_none">Disabled</string>
@@ -168,6 +169,8 @@
     <string name="db_notify_sync_interval">DB Sync Interval</string>
     <string name="auto_sync_notify">Auto Sync Notifications</string>
     <string name="minutes_label">%1$d min</string>
+    <string name="sort_oldest">Oldest First</string>
+    <string name="sort_newest">Newest First</string>
     <string name="new_notification_title">New Anime Update</string>
     <string name="new_notification_message">%1$s - %2$s</string>
 
@@ -283,6 +286,7 @@
     <string name="edit">Edit</string>
     <string name="edited">edited</string>
     <string name="report">Report</string>
+    <string name="report_feedback_subject">Report/Feedback: %1$s (ID: %2$s)</string>
     <string name="report_success">Reported successfully</string>
     <string name="report_error">Failed to report</string>
     <string name="pinned">Pinned</string>
@@ -376,4 +380,30 @@
     <string name="latest_updated_widget_desc">See recently updated anime</string>
     <string name="no_anime_watched">No anime watched yet</string>
     <string name="tap_to_open_app">Tap to open app</string>
+
+    <!-- Gemini AI -->
+    <string name="ai_features">AI Features (Gemini)</string>
+    <string name="gemini_api_key">Gemini API Key</string>
+    <string name="gemini_api_key_hint">Enter your API key here…</string>
+    <string name="get_api_key">Get API Key</string>
+    <string name="test_api_key">Test Connection</string>
+    <string name="api_key_valid">API Key is valid!</string>
+    <string name="api_key_invalid">API Key is invalid or error occurred</string>
+    <string name="api_key_test_success">✓ Success! Connected with model: %1$s</string>
+    <string name="api_key_test_success_with_response">✓ Success! Connected with model: %1$s\nResponse: %2$s</string>
+    <string name="api_key_test_error">✗ Error: %1$s</string>
+    <string name="gemini_guide_title">How to get Gemini API Key</string>
+    <string name="gemini_guide_content">1. Visit Google AI Studio (aistudio.google.com)\n2. Sign in with your Google account\n3. Click on \"Get API key\"\n4. Create a new API key in a new project\n5. Copy the key and paste it here.</string>
+    <string name="ai_summary_title">Recent Summary</string>
+    <string name="ai_summary_enabled">Enable Notification Summary</string>
+    <string name="ai_summary_desc">Summarize the latest notifications already received on your device</string>
+    <string name="ai_recap_enabled">Enable Episode Recap</string>
+    <string name="ai_recap_title">Previous Recap</string>
+    <string name="ai_recap_not_loaded">Tap to load AI recap for previous episodes</string>
+    <string name="ai_recap_desc">Show short recap of previous episodes in detail screen</string>
+    <string name="ai_episode_summary">AI Summary</string>
+    <string name="ai_episode_summary_desc">Summarize current episode up to this point</string>
+    <string name="ai_generating_summary">Generating summary…</string>
+    <string name="ai_summary_failed">Failed to generate summary</string>
+    <string name="ai_summary_at_timestamp">Summary at %1$s</string>
 </resources>
