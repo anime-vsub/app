@@ -143,6 +143,7 @@ class GeminiRepository @Inject constructor(
             Act as a professional anime fan, summarize the main events that happened in previous episodes of '$animeName' (up to before episode $episode).
             Focus on key plot points so viewers can catch up.
             Respond in $language. Concise and natural. Use Markdown (bold, lists) to highlight main points. Avoid code blocks. Not need welcome.
+            Finally, include a brief note about the next season's release date or the possibility of its production if information is available.
     """.trimIndent()
 
     val response = callGeminiApi(prompt)
@@ -172,6 +173,7 @@ class GeminiRepository @Inject constructor(
             You are an anime expert. Summarize the current episode '$episodeName' of the anime '$animeName' up to the point $timestampFormatted.
             Provide a concise summary of the events occurring from the beginning of this episode until this timestamp.
             Use Markdown for formatting. Respond in $language. Be concise and helpful.
+            Finally, include a brief note about the next season's release date or the possibility of its production if information is available.
     """.trimIndent()
 
     val response = callGeminiApi(prompt)

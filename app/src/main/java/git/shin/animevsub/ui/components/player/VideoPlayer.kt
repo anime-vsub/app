@@ -1365,16 +1365,24 @@ fun VideoPlayer(
                 color = Color.White,
                 fontSize = if (isFullScreen) 16.sp else 13.sp
               )
-              IconButton(
-                onClick = { onFullScreenChange(!isFullScreen) },
-                modifier = Modifier.size(28.dp)
-              ) {
-                Icon(
-                  if (isFullScreen) Icons.Default.FullscreenExit else Icons.Default.Fullscreen,
-                  "Toggle Full Screen",
-                  tint = Color.White,
-                  modifier = Modifier.fillMaxSize()
-                )
+              Row(verticalAlignment = Alignment.CenterVertically) {
+                if (!isFullScreen) {
+                  PlayerControlSmallButton(
+                    icon = Icons.Default.AutoAwesome,
+                    onClick = { onAiSummary(exoPlayer.currentPosition) }
+                  )
+                }
+                IconButton(
+                  onClick = { onFullScreenChange(!isFullScreen) },
+                  modifier = Modifier.size(28.dp)
+                ) {
+                  Icon(
+                    if (isFullScreen) Icons.Default.FullscreenExit else Icons.Default.Fullscreen,
+                    "Toggle Full Screen",
+                    tint = Color.White,
+                    modifier = Modifier.fillMaxSize()
+                  )
+                }
               }
             }
           }
