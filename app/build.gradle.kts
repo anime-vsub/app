@@ -19,6 +19,20 @@ detekt {
   config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 }
 
+tasks.register("lintFast") {
+  dependsOn("lintDebug")
+
+  doFirst {
+    // disable KSP
+    tasks.matching { it.name.startsWith("ksp") }.configureEach { enabled = false }
+    // disable Kotlin compile
+    tasks.matching { it.name.contains("compile", ignoreCase = true) }.configureEach { enabled = false }
+    // disable detekt, ktlint
+    tasks.matching { it.name.startsWith("detekt") }.configureEach { enabled = false }
+    tasks.matching { it.name.startsWith("ktlint") }.configureEach { enabled = false }
+  }
+}
+
 android {
   namespace = "git.shin.animevsub"
   compileSdk = 36
