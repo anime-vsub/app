@@ -1,3 +1,17 @@
+# [2.5.0](https://github.com/anime-vsub/app/compare/v2.4.0...v2.5.0) (2026-05-01)
+
+
+### Bug Fixes
+
+* **pip:** refine picture-in-picture behavior ([d420ba4](https://github.com/anime-vsub/app/commit/d420ba4bdb10ba701875410c796354ea949c5e01))
+
+
+### Features
+
+* **ai:** Integrate Gemini AI for summaries and recaps ([c904cf9](https://github.com/anime-vsub/app/commit/c904cf986cd726ac3a577e2e21dbceb8c084a1ae))
+* **notification:** add image support and test button ([9c3499b](https://github.com/anime-vsub/app/commit/9c3499ba2ee58142cb92022dca1f396daee0fc2c))
+* **player:** improve seek bar interaction ([a876028](https://github.com/anime-vsub/app/commit/a876028dd2291297d955650b20e8b9b95996066c))
+
 # [2.4.0](https://github.com/anime-vsub/app/compare/v2.3.1...v2.4.0) (2026-04-28)
 
 
