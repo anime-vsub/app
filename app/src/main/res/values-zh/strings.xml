@@ -405,4 +405,6 @@
     <string name="ai_generating_summary">正在生成摘要…</string>
     <string name="ai_summary_failed">生成摘要失败</string>
     <string name="ai_summary_at_timestamp">%1$s 时的摘要</string>
+    <string name="prevent_screen_recording">防止屏幕截图</string>
+    <string name="prevent_screen_recording_desc">禁用屏幕截图和屏幕录制，以提高隐私和安全性</string>
 </resources>

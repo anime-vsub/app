@@ -563,6 +563,12 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(16.dp))
         MenuSection(title = stringResource(R.string.developer_options_title)) {
           SettingsToggle(
+            label = stringResource(R.string.prevent_screen_recording),
+            description = stringResource(R.string.prevent_screen_recording_desc),
+            checked = uiState.flagSecure,
+            onCheckedChange = { viewModel.setFlagSecure(it) }
+          )
+          SettingsToggle(
             label = stringResource(R.string.hide_donation_popups),
             checked = uiState.hideDonationPopup,
             onCheckedChange = { viewModel.setHideDonationPopup(it) }

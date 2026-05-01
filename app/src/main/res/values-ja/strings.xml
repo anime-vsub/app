@@ -405,4 +405,6 @@
     <string name="ai_generating_summary">要約を生成中…</string>
     <string name="ai_summary_failed">要約の生成に失敗しました</string>
     <string name="ai_summary_at_timestamp">%1$s 時点の要約</string>
+    <string name="prevent_screen_recording">スクリーンショットの防止</string>
+    <string name="prevent_screen_recording_desc">プライバシーとセキュリティ向上のため、スクリーンショットと画面録画を無効にします</string>
 </resources>

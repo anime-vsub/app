@@ -258,6 +258,7 @@ class AnimeRepository @Inject constructor(
   val aiSummaryEnabled = prefs.aiSummaryEnabled
   val aiRecapEnabled = prefs.aiRecapEnabled
   val geminiModel = prefs.geminiModel
+  val flagSecure = prefs.flagSecure
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -296,6 +297,7 @@ class AnimeRepository @Inject constructor(
   suspend fun setGeminiApiKey(value: String) = prefs.setGeminiApiKey(value)
   suspend fun getGeminiApiKey() = prefs.geminiApiKey.first()
   suspend fun setGeminiModel(value: String) = prefs.setGeminiModel(value)
+  suspend fun setFlagSecure(value: Boolean) = prefs.setFlagSecure(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

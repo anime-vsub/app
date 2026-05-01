@@ -406,4 +406,6 @@
     <string name="ai_generating_summary">Generating summary…</string>
     <string name="ai_summary_failed">Failed to generate summary</string>
     <string name="ai_summary_at_timestamp">Summary at %1$s</string>
+    <string name="prevent_screen_recording">Prevent Screen Recording</string>
+    <string name="prevent_screen_recording_desc">Disable screenshots and screen recording for better privacy and security</string>
 </resources>

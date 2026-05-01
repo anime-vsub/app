@@ -402,4 +402,6 @@
     <string name="ai_generating_summary">Đang tạo tóm tắt…</string>
     <string name="ai_summary_failed">Không thể tạo tóm tắt</string>
     <string name="ai_summary_at_timestamp">Tóm tắt tại %1$s</string>
+    <string name="prevent_screen_recording">Chống quay chụp màn hình</string>
+    <string name="prevent_screen_recording_desc">Vô hiệu hóa tính năng chụp ảnh và quay video màn hình để bảo vệ nội dung</string>
 </resources>

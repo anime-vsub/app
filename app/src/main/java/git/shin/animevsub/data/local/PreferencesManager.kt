@@ -50,6 +50,7 @@ class PreferencesManager(private val context: Context) {
     private val AI_RECAP_ENABLED_KEY = booleanPreferencesKey("ai_recap_enabled")
     private val GEMINI_API_KEY_KEY = stringPreferencesKey("gemini_api_key")
     private val GEMINI_MODEL_KEY = stringPreferencesKey("gemini_model")
+    private val FLAG_SECURE_KEY = booleanPreferencesKey("flag_secure")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -85,6 +86,7 @@ class PreferencesManager(private val context: Context) {
   val aiRecapEnabled: Flow<Boolean> = context.dataStore.data.map { it[AI_RECAP_ENABLED_KEY] ?: true }
   val geminiApiKey: Flow<String> = context.dataStore.data.map { it[GEMINI_API_KEY_KEY] ?: "" }
   val geminiModel: Flow<String> = context.dataStore.data.map { it[GEMINI_MODEL_KEY] ?: "gemini-1.5-flash" }
+  val flagSecure: Flow<Boolean> = context.dataStore.data.map { it[FLAG_SECURE_KEY] ?: true }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -215,6 +217,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setGeminiModel(value: String) {
     context.dataStore.edit { it[GEMINI_MODEL_KEY] = value }
+  }
+
+  suspend fun setFlagSecure(value: Boolean) {
+    context.dataStore.edit { it[FLAG_SECURE_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

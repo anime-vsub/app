@@ -1,9 +1,12 @@
 package git.shin.animevsub.ui.components.player
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.media.AudioManager
 import android.view.KeyEvent
+import android.view.SurfaceView
+import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
@@ -217,6 +220,7 @@ fun VideoPlayer(
   val autoSkipEnabled by preferencesManager.autoSkip.collectAsState(initial = false)
   val doubleTapSkipDuration by preferencesManager.doubleTapSkip.collectAsState(initial = 10)
   val longPressSpeedValue by preferencesManager.longPressSpeed.collectAsState(initial = 2.0f)
+  val flagSecureEnabled by preferencesManager.flagSecure.collectAsState(initial = true)
 
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
@@ -999,6 +1003,7 @@ fun VideoPlayer(
           PlayerView(ctx).apply {
             player = exoPlayer
             useController = false
+            (videoSurfaceView as? SurfaceView)?.setSecure(flagSecureEnabled)
           }
         },
         modifier = Modifier

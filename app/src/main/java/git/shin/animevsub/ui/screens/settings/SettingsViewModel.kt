@@ -42,6 +42,7 @@ data class SettingsUiState(
   val aiRecapEnabled: Boolean = true,
   val geminiApiKey: String = "",
   val geminiModel: String = "gemini-2.5-flash",
+  val flagSecure: Boolean = true,
   val availableModels: List<String> = emptyList(),
   val isLoadingModels: Boolean = false,
   val isTestingKey: Boolean = false,
@@ -190,6 +191,11 @@ class SettingsViewModel @Inject constructor(
         _uiState.update { it.copy(geminiModel = v) }
       }
     }
+    viewModelScope.launch {
+      repository.flagSecure.collect { v ->
+        _uiState.update { it.copy(flagSecure = v) }
+      }
+    }
   }
 
   fun setGeminiApiKey(value: String) {
@@ -335,6 +341,10 @@ class SettingsViewModel @Inject constructor(
 
   fun setHistorySyncInterval(value: Int) {
     viewModelScope.launch { repository.setHistorySyncInterval(value) }
+  }
+
+  fun setFlagSecure(value: Boolean) {
+    viewModelScope.launch { repository.setFlagSecure(value) }
   }
 
   fun testNotification() {
