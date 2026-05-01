@@ -1,12 +1,10 @@
 package git.shin.animevsub.ui.components.player
 
-import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.media.AudioManager
 import android.view.KeyEvent
 import android.view.SurfaceView
-import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
