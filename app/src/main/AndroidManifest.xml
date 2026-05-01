@@ -38,10 +38,6 @@
                 tools:node="remove" />
         </provider>
 
-        <meta-data
-            android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="git.shin.animevsub.cast.CastOptionsProvider" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
