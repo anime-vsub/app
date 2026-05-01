@@ -270,6 +270,7 @@
     <string name="edit">編集</string>
     <string name="edited">編集済み</string>
     <string name="report">報告</string>
+    <string name="report_feedback_subject">報告/フィードバック: %1$s (ID: %2$s)</string>
     <string name="report_success">報告しました</string>
     <string name="report_error">報告に失敗しました</string>
     <string name="pinned">固定済み</string>
@@ -399,4 +400,9 @@
     <string name="ai_recap_title">前回の要約</string>
     <string name="ai_recap_not_loaded">タップして前のエピソードのAI要約を読み込む</string>
     <string name="ai_recap_desc">詳細画面で前のエピソードの短い要約を表示します</string>
+    <string name="ai_episode_summary">AI要約</string>
+    <string name="ai_episode_summary_desc">現時点までのエピソードの要約を表示します</string>
+    <string name="ai_generating_summary">要約を生成中…</string>
+    <string name="ai_summary_failed">要約の生成に失敗しました</string>
+    <string name="ai_summary_at_timestamp">%1$s 時点の要約</string>
 </resources>

@@ -397,4 +397,9 @@
     <string name="ai_recap_title">Tóm tắt nội dung</string>
     <string name="ai_recap_not_loaded">Nhấn để xem AI tóm tắt các tập trước</string>
     <string name="ai_recap_desc">Hiển thị tóm tắt ngắn gọn các tập trước ở màn hình chi tiết</string>
+    <string name="ai_episode_summary">Tóm tắt AI</string>
+    <string name="ai_episode_summary_desc">Tóm tắt tập hiện tại cho đến thời điểm này</string>
+    <string name="ai_generating_summary">Đang tạo tóm tắt…</string>
+    <string name="ai_summary_failed">Không thể tạo tóm tắt</string>
+    <string name="ai_summary_at_timestamp">Tóm tắt tại %1$s</string>
 </resources>

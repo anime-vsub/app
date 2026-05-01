@@ -285,6 +285,7 @@
     <string name="edit">编辑</string>
     <string name="edited">已编辑</string>
     <string name="report">举报</string>
+    <string name="report_feedback_subject">报告/反馈: %1$s (ID: %2$s)</string>
     <string name="report_success">举报成功</string>
     <string name="report_error">举报失败</string>
     <string name="pinned">已置顶</string>
@@ -399,4 +400,9 @@
     <string name="ai_recap_title">前情回顾</string>
     <string name="ai_recap_not_loaded">点击加载前几集的 AI 回顾</string>
     <string name="ai_recap_desc">在详情页面显示前几集的简短回顾</string>
+    <string name="ai_episode_summary">AI摘要</string>
+    <string name="ai_episode_summary_desc">摘要当前剧集截至此时间点的内容</string>
+    <string name="ai_generating_summary">正在生成摘要…</string>
+    <string name="ai_summary_failed">生成摘要失败</string>
+    <string name="ai_summary_at_timestamp">%1$s 时的摘要</string>
 </resources>
