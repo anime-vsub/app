@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/anime-vsub/app/compare/v2.5.0...v2.5.1) (2026-05-01)
+
+
+### Bug Fixes
+
+* **security:** add option to prevent screen recording ([670204e](https://github.com/anime-vsub/app/commit/670204ee9787ea6447c7f9a55f1f983e3f5e53a5))
+
 # [2.5.0](https://github.com/anime-vsub/app/compare/v2.4.0...v2.5.0) (2026-05-01)
 
 
