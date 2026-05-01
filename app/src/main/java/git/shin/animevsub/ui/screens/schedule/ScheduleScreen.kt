@@ -55,8 +55,6 @@ import git.shin.animevsub.R
 import git.shin.animevsub.data.model.ScheduleDay
 import git.shin.animevsub.ui.components.anime.ScheduleLoadingSkeleton
 import git.shin.animevsub.ui.components.status.ErrorScreen
-import git.shin.animevsub.ui.theme.AccentMain
-import git.shin.animevsub.ui.theme.AccentMainLight
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextGrey

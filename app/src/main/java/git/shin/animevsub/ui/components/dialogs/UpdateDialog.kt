@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.sp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.UpdateInfo
-import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.GithubBlue
 import git.shin.animevsub.ui.theme.MainColor

@@ -3,13 +3,11 @@ package git.shin.animevsub.ui.screens.account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.HistoryItem
 import git.shin.animevsub.data.model.Playlist
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.repository.AnimeRepository
-import git.shin.animevsub.data.repository.GeminiRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,9 +38,7 @@ data class AccountUiState(
 class AccountViewModel @Inject constructor(
   private val repository: AnimeRepository,
   private val playlistRepository: PlaylistRepository,
-  private val updateManager: git.shin.animevsub.utils.UpdateManager,
-  private val geminiRepository: GeminiRepository,
-  private val preferencesManager: PreferencesManager
+  private val updateManager: git.shin.animevsub.utils.UpdateManager
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(AccountUiState())

@@ -1,7 +1,6 @@
 package git.shin.animevsub.data.repository
 
 import git.shin.animevsub.data.local.ApiStorage
-import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.DbNotificationCount
 import git.shin.animevsub.data.model.DbNotificationEpisode
 import git.shin.animevsub.data.model.DbNotificationItem
@@ -27,8 +26,7 @@ import javax.inject.Singleton
 class NotificationDatabaseRepository @Inject constructor(
   private val supabase: SupabaseClient,
   private val storage: ApiStorage,
-  private val json: Json,
-  private val prefs: PreferencesManager
+  private val json: Json
 ) {
   private val _dbNotifications = MutableStateFlow<List<DbNotificationItem>>(emptyList())
   val dbNotifications = _dbNotifications.asStateFlow()

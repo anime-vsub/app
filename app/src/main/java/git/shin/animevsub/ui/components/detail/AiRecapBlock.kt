@@ -34,6 +34,8 @@ import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.tvFocusScale
+import androidx.compose.ui.graphics.Color
+import git.shin.animevsub.ui.theme.GithubBlue
 
 @Composable
 fun AiRecapBlock(
@@ -95,10 +97,13 @@ fun AiRecapBlock(
           maxLines = 4,
           truncateOnTextOverflow = true,
           style = MaterialTheme.typography.bodyMedium.copy(
-            color = TextPrimary,
-            fontSize = 13.sp,
-            lineHeight = 18.sp
+            color = TextSecondary,
+            fontSize = 14.sp,
+            lineHeight = 22.sp
           ),
+          linkColor = GithubBlue,
+          syntaxHighlightColor = Color.Transparent,
+          syntaxHighlightTextColor = TextPrimary,
           modifier = Modifier.fillMaxWidth()
         )
       } else if (recapError != null) {

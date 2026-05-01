@@ -39,6 +39,8 @@ import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.shimmerEffect
+import androidx.compose.ui.graphics.Color
+import git.shin.animevsub.ui.theme.GithubBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,11 +102,14 @@ fun SummaryBottomSheet(
       } else if (content != null) {
         MarkdownText(
           markdown = content,
-          style = MaterialTheme.typography.bodyLarge.copy(
-            color = TextPrimary,
-            fontSize = 16.sp,
-            lineHeight = 24.sp
-          )
+          style = MaterialTheme.typography.bodyMedium.copy(
+            color = TextSecondary,
+            fontSize = 14.sp,
+            lineHeight = 22.sp
+          ),
+          linkColor = GithubBlue,
+          syntaxHighlightColor = Color.Transparent,
+          syntaxHighlightTextColor = TextPrimary
         )
       }
     }
