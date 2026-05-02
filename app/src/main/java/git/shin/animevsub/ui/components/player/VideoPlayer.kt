@@ -995,7 +995,7 @@ fun VideoPlayer(
         )
       }
   ) {
-    key(screenState.isLandscape && isFullScreen) {
+    key(screenState.isLandscape && isFullScreen, flagSecureEnabled) {
       AndroidView(
         factory = { ctx ->
           PlayerView(ctx).apply {
