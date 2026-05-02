@@ -1,3 +1,10 @@
+## [2.5.2](https://github.com/anime-vsub/app/compare/v2.5.1...v2.5.2) (2026-05-02)
+
+
+### Bug Fixes
+
+* secure mode disable but not disable drm ([6cd6ca0](https://github.com/anime-vsub/app/commit/6cd6ca0c9d8bcd2c8f6117f0dee981acbafe3d71))
+
 ## [2.5.1](https://github.com/anime-vsub/app/compare/v2.5.0...v2.5.1) (2026-05-01)
 
 
