@@ -1,5 +1,9 @@
 # AnimeVsub Application!
 
+> [!TIP]
+> Would you like to create an app for your website? Please contact me via email at [tachibshin@duck.com](mailto:tachibshin@duck.com)
+> 
+
 > [!WARNING]
 > 📢⚠️📌❗ **The application is currently distributed for free on GitHub and it is OPEN SOURCE COMPLYING WITH THE [GNU GPL-3.0 LICENSE](./LICENSE)**
 > **PLEASE DO NOT MODIFY IT TO EMBEDD ADVERTISING OR USE IT FOR COMMERCIAL PURPOSES.**
