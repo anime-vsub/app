@@ -1162,6 +1162,7 @@ fun DetailScreen(
         onSendMessage = { viewModel.sendAiChatMessage(it) },
         onSuggestionClick = { viewModel.sendAiChatMessage(it) },
         onRetry = { viewModel.initAiChat(ChatMode.RECAP) },
+        fullscreen = isFullScreen,
         onClearHistory = { viewModel.clearAiChat() }
       )
     }
@@ -1192,6 +1193,7 @@ fun DetailScreen(
         onSendMessage = { viewModel.sendAiChatMessage(it) },
         onSuggestionClick = { viewModel.sendAiChatMessage(it) },
         onRetry = { viewModel.initAiChat(ChatMode.SUMMARY) },
+        fullscreen = isFullScreen,
         onClearHistory = { viewModel.clearAiChat() }
       )
     }
