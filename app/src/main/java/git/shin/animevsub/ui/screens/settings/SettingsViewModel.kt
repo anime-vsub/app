@@ -40,8 +40,15 @@ data class SettingsUiState(
   val appIcon: String = "default",
   val aiSummaryEnabled: Boolean = true,
   val aiRecapEnabled: Boolean = true,
+  val aiProvider: String = "gemini",
   val geminiApiKey: String = "",
   val geminiModel: String = "gemini-2.5-flash",
+  val openaiApiKey: String = "",
+  val openaiModel: String = "gpt-4o-mini",
+  val openaiEndpoint: String = "",
+  val claudeApiKey: String = "",
+  val claudeModel: String = "claude-sonnet-4-20250514",
+  val claudeEndpoint: String = "",
   val flagSecure: Boolean = true,
   val availableModels: List<String> = emptyList(),
   val isLoadingModels: Boolean = false,
@@ -182,6 +189,41 @@ class SettingsViewModel @Inject constructor(
       }
     }
     viewModelScope.launch {
+      repository.aiProvider.collect { v ->
+        _uiState.update { it.copy(aiProvider = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.openaiApiKey.collect { v ->
+        _uiState.update { it.copy(openaiApiKey = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.openaiModel.collect { v ->
+        _uiState.update { it.copy(openaiModel = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.openaiEndpoint.collect { v ->
+        _uiState.update { it.copy(openaiEndpoint = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.claudeApiKey.collect { v ->
+        _uiState.update { it.copy(claudeApiKey = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.claudeModel.collect { v ->
+        _uiState.update { it.copy(claudeModel = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.claudeEndpoint.collect { v ->
+        _uiState.update { it.copy(claudeEndpoint = v) }
+      }
+    }
+    viewModelScope.launch {
       repository.getGeminiApiKey()?.let { v ->
         _uiState.update { it.copy(geminiApiKey = v) }
       }
@@ -251,12 +293,105 @@ class SettingsViewModel @Inject constructor(
     }
   }
 
+  fun testOpenAIKey() {
+    val key = _uiState.value.openaiApiKey
+    if (key.isBlank()) return
+
+    viewModelScope.launch {
+      _uiState.update { it.copy(isTestingKey = true, testResult = null) }
+      val result = geminiRepository.testOpenAI(key, _uiState.value.openaiModel, _uiState.value.openaiEndpoint)
+      val message = if (result.isSuccess) {
+        val response = result.getOrNull()
+        if (response != null) {
+          context.getString(R.string.api_key_test_success_with_response, _uiState.value.openaiModel, response)
+        } else {
+          context.getString(R.string.api_key_test_success, _uiState.value.openaiModel)
+        }
+      } else {
+        val exception = result.exceptionOrNull()
+        val errorMsg = exception?.message ?: context.getString(R.string.error_occurred)
+        context.getString(R.string.api_key_test_error, errorMsg)
+      }
+      _uiState.update {
+        it.copy(
+          isTestingKey = false,
+          testResult = message,
+          testSuccess = result.isSuccess
+        )
+      }
+    }
+  }
+
+  fun testClaudeKey() {
+    val key = _uiState.value.claudeApiKey
+    if (key.isBlank()) return
+
+    viewModelScope.launch {
+      _uiState.update { it.copy(isTestingKey = true, testResult = null) }
+      val result = geminiRepository.testClaude(key, _uiState.value.claudeModel, _uiState.value.claudeEndpoint)
+      val message = if (result.isSuccess) {
+        val response = result.getOrNull()
+        if (response != null) {
+          context.getString(R.string.api_key_test_success_with_response, _uiState.value.claudeModel, response)
+        } else {
+          context.getString(R.string.api_key_test_success, _uiState.value.claudeModel)
+        }
+      } else {
+        val exception = result.exceptionOrNull()
+        val errorMsg = exception?.message ?: context.getString(R.string.error_occurred)
+        context.getString(R.string.api_key_test_error, errorMsg)
+      }
+      _uiState.update {
+        it.copy(
+          isTestingKey = false,
+          testResult = message,
+          testSuccess = result.isSuccess
+        )
+      }
+    }
+  }
+
   fun setAiSummaryEnabled(value: Boolean) {
     viewModelScope.launch { repository.setAiSummaryEnabled(value) }
   }
 
   fun setAiRecapEnabled(value: Boolean) {
     viewModelScope.launch { repository.setAiRecapEnabled(value) }
+  }
+
+  fun setAiProvider(value: String) {
+    viewModelScope.launch { repository.setAiProvider(value) }
+    _uiState.update { it.copy(aiProvider = value) }
+  }
+
+  fun setOpenaiApiKey(value: String) {
+    _uiState.update { it.copy(openaiApiKey = value) }
+    viewModelScope.launch { repository.setOpenaiApiKey(value) }
+  }
+
+  fun setOpenaiModel(value: String) {
+    viewModelScope.launch { repository.setOpenaiModel(value) }
+    _uiState.update { it.copy(openaiModel = value) }
+  }
+
+  fun setOpenaiEndpoint(value: String) {
+    _uiState.update { it.copy(openaiEndpoint = value) }
+    viewModelScope.launch { repository.setOpenaiEndpoint(value) }
+  }
+
+  fun setClaudeApiKey(value: String) {
+    _uiState.update { it.copy(claudeApiKey = value) }
+    viewModelScope.launch { repository.setClaudeApiKey(value) }
+  }
+
+  fun setClaudeModel(value: String) {
+    viewModelScope.launch { repository.setClaudeModel(value) }
+    _uiState.update { it.copy(claudeModel = value) }
+  }
+
+  fun setClaudeEndpoint(value: String) {
+    _uiState.update { it.copy(claudeEndpoint = value) }
+    viewModelScope.launch { repository.setClaudeEndpoint(value) }
   }
 
   fun setAutoNext(value: Boolean) {

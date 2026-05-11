@@ -382,9 +382,23 @@
     <string name="tap_to_open_app">Tap to open app</string>
 
     <!-- Gemini AI -->
-    <string name="ai_features">AI Features (Gemini)</string>
+    <string name="ai_features">AI Features</string>
+    <string name="ai_provider">AI Provider</string>
+    <string name="ai_provider_gemini">Google Gemini</string>
+    <string name="ai_provider_openai">OpenAI</string>
+    <string name="ai_provider_claude">Anthropic Claude</string>
     <string name="gemini_api_key">Gemini API Key</string>
     <string name="gemini_api_key_hint">Enter your API key here…</string>
+    <string name="openai_api_key">OpenAI API Key</string>
+    <string name="openai_api_key_hint">sk-…</string>
+    <string name="openai_model">OpenAI Model</string>
+    <string name="openai_endpoint">OpenAI Endpoint (optional)</string>
+    <string name="openai_endpoint_hint">https://api.openai.com/v1</string>
+    <string name="claude_api_key">Claude API Key</string>
+    <string name="claude_api_key_hint">sk-ant-…</string>
+    <string name="claude_model">Claude Model</string>
+    <string name="claude_endpoint">Claude Endpoint (optional)</string>
+    <string name="claude_endpoint_hint">https://api.anthropic.com/v1</string>
     <string name="get_api_key">Get API Key</string>
     <string name="test_api_key">Test Connection</string>
     <string name="api_key_valid">API Key is valid!</string>
@@ -408,4 +422,8 @@
     <string name="ai_summary_at_timestamp">Summary at %1$s</string>
     <string name="prevent_screen_recording">Prevent Screen Recording</string>
     <string name="prevent_screen_recording_desc">Disable screenshots and screen recording for better privacy and security</string>
+    <string name="ai_chat_title">AI Assistant</string>
+    <string name="ai_chat_placeholder">Ask anything about this anime…</string>
+    <string name="send">Send</string>
+    <string name="ai_chat_error">Failed to get response. Please try again.</string>
 </resources>

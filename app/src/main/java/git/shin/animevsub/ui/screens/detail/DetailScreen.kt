@@ -100,8 +100,9 @@ import git.shin.animevsub.ui.components.detail.ChapterBottomSheet
 import git.shin.animevsub.ui.components.detail.CommentContent
 import git.shin.animevsub.ui.components.detail.CommentSection
 import git.shin.animevsub.ui.components.detail.DetailBottomSheet
-import git.shin.animevsub.ui.components.detail.RecapBottomSheet
-import git.shin.animevsub.ui.components.detail.SummaryBottomSheet
+import git.shin.animevsub.ui.components.detail.AiChatBottomSheet
+import git.shin.animevsub.ui.components.detail.AiChatMessage
+import git.shin.animevsub.ui.components.detail.ChatMode
 import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.BedtimeReminderDialog
 import git.shin.animevsub.ui.components.player.BreakReminderDialog
@@ -144,8 +145,8 @@ fun DetailScreen(
   val context = LocalContext.current
   val snackbarHostState = remember { SnackbarHostState() }
   val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-  val recapSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-  val summarySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+  val recapSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  val summarySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val chapterSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
   val scaffoldState = rememberBottomSheetScaffoldState()
   var isPlayerPlaying by remember { mutableStateOf(false) }
@@ -424,7 +425,7 @@ fun DetailScreen(
                 onExoPlayerCreated = { exoPlayerInstance = it },
                 onAiSummary = { timestamp ->
                   summaryTimestamp = timestamp
-                  viewModel.generateEpisodeSummary(timestamp)
+                  viewModel.initAiChat("summary")
                   showSummarySheet = true
                 },
                 sleepTimerMinutes = state.sleepTimerMinutes,
@@ -667,7 +668,7 @@ fun DetailScreen(
                   modifier = Modifier
                     .fillMaxWidth(),
                   horizontalArrangement = Arrangement.spacedBy(8.dp),
-                  contentPadding = PaddingValues(horizontal = 16.dp)
+                  contentPadding = PaddingValues(horizontal = 0.dp)
                 ) {
                   item {
                     ActionButton(
@@ -715,9 +716,7 @@ fun DetailScreen(
                       icon = Icons.Default.AutoAwesome,
                       label = stringResource(R.string.ai_recap_title),
                       onClick = {
-                        if (uiState.aiRecap == null && !uiState.isRecapLoading) {
-                          viewModel.generateRecap()
-                        }
+                        viewModel.initAiChat("recap")
                         showRecapSheet = true
                       },
                       modifier = Modifier.tvFocusScale()
@@ -760,8 +759,14 @@ fun DetailScreen(
                   aiRecap = uiState.aiRecap,
                   isRecapLoading = uiState.isRecapLoading,
                   recapError = uiState.recapError,
-                  onGenerateClick = { viewModel.generateRecap() },
-                  onExpandClick = { showRecapSheet = true }
+                  onGenerateClick = {
+                    viewModel.initAiChat("recap")
+                    showRecapSheet = true
+                  },
+                  onExpandClick = {
+                    viewModel.initAiChat("recap")
+                    showRecapSheet = true
+                  }
                 )
               }
 
@@ -1138,13 +1143,28 @@ fun DetailScreen(
 
     // AI Recap Bottom Sheet
     if (showRecapSheet) {
-      RecapBottomSheet(
-        recap = uiState.aiRecap,
-        isLoading = uiState.isRecapLoading,
-        error = uiState.recapError,
+      AiChatBottomSheet(
+        title = stringResource(R.string.ai_chat_title),
+        isLoading = uiState.isAiChatLoading,
+        error = uiState.aiChatError,
+        messages = uiState.recapChatMessages.map {
+          git.shin.animevsub.ui.components.detail.AiChatMessage(
+            content = it.content,
+            isFromUser = it.role == "user",
+            isLoading = false
+          )
+        },
+        suggestedQuestions = uiState.recapChatSuggestedQuestions,
+        isSending = uiState.isAiChatLoading,
+        chatMode = ChatMode.RECAP,
         sheetState = recapSheetState,
-        onDismissRequest = { showRecapSheet = false },
-        onRetry = { viewModel.retryRecap() }
+        onDismissRequest = {
+          showRecapSheet = false
+        },
+        onSendMessage = { viewModel.sendAiChatMessage(it) },
+        onSuggestionClick = { viewModel.sendAiChatMessage(it) },
+        onRetry = { viewModel.initAiChat("recap") },
+        onClearHistory = { viewModel.clearAiChat() }
       )
     }
 
@@ -1154,17 +1174,28 @@ fun DetailScreen(
       val seconds = (summaryTimestamp / 1000) % 60
       val timestampStr = String.format(java.util.Locale.getDefault(), "%02d:%02d", minutes, seconds)
 
-      SummaryBottomSheet(
+      AiChatBottomSheet(
         title = stringResource(R.string.ai_summary_at_timestamp, timestampStr),
-        content = uiState.aiEpisodeSummary,
-        isLoading = uiState.isAiSummaryLoading,
-        error = uiState.aiSummaryError,
+        isLoading = uiState.isAiChatLoading,
+        error = uiState.aiChatError,
+        messages = uiState.summaryChatMessages.map {
+          git.shin.animevsub.ui.components.detail.AiChatMessage(
+            content = it.content,
+            isFromUser = it.role == "user",
+            isLoading = false
+          )
+        },
+        suggestedQuestions = uiState.summaryChatSuggestedQuestions,
+        isSending = uiState.isAiChatLoading,
+        chatMode = ChatMode.SUMMARY,
         sheetState = summarySheetState,
         onDismissRequest = {
           showSummarySheet = false
-          viewModel.clearAiSummary()
         },
-        onRetry = { viewModel.generateEpisodeSummary(summaryTimestamp) }
+        onSendMessage = { viewModel.sendAiChatMessage(it) },
+        onSuggestionClick = { viewModel.sendAiChatMessage(it) },
+        onRetry = { viewModel.initAiChat("summary") },
+        onClearHistory = { viewModel.clearAiChat() }
       )
     }
 

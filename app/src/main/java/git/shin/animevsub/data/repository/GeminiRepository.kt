@@ -3,18 +3,40 @@ package git.shin.animevsub.data.repository
 import android.util.Log
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.generationConfig
+import com.google.ai.client.generativeai.type.content
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.DbNotificationItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+
+data class ChatMessage(
+  val role: String,
+  val content: String
+)
+
+data class ChatContext(
+  val animeName: String,
+  val otherName: String? = null,
+  val episodeName: String?,
+  val currentTimestamp: Long? = null,
+  val language: String
+)
+
+data class AiChatResponse(
+  val content: String,
+  val suggestions: List<String> = emptyList()
+)
 
 @Singleton
 class GeminiRepository @Inject constructor(
@@ -34,7 +56,7 @@ class GeminiRepository @Inject constructor(
 
   private suspend fun getModelName(): String {
     val model = prefs.geminiModel.first()
-    return if (model.isBlank()) "gemini-1.5-flash" else model
+    return if (model.isBlank()) "gemini-flash-lite-latest" else model
   }
 
   suspend fun listAvailableModels(): List<String> = withContext(Dispatchers.IO) {
@@ -85,6 +107,105 @@ class GeminiRepository @Inject constructor(
     response.text ?: "Connect successfully but not respond."
   }
 
+  suspend fun testOpenAI(apiKey: String, model: String, endpoint: String): Result<String> = withContext(Dispatchers.IO) {
+    runCatching {
+      val baseUrl = if (endpoint.isBlank()) "https://api.openai.com/v1" else endpoint.trimEnd('/')
+      val client = OkHttpClient.Builder()
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .build()
+
+      val requestBody = JSONObject().apply {
+        put("model", model)
+        put(
+          "messages",
+          JSONArray().put(
+            JSONObject().apply {
+              put("role", "user")
+              put("content", "Hello, are you working?")
+            }
+          )
+        )
+        put("max_tokens", 50)
+      }
+
+      val request = Request.Builder()
+        .url("$baseUrl/chat/completions")
+        .header("Authorization", "Bearer $apiKey")
+        .header("Content-Type", "application/json")
+        .post(requestBody.toString().toRequestBody("application/json".toMediaTypeOrNull()))
+        .build()
+
+      val response = client.newCall(request).execute()
+      val body = response.body?.string() ?: throw Exception("Empty response")
+      response.close()
+
+      val json = JSONObject(body)
+      if (json.has("choices")) {
+        val choices = json.getJSONArray("choices")
+        if (choices.length() > 0) {
+          choices.getJSONObject(0).getJSONObject("message").getString("content")
+        } else {
+          "Connected but no response"
+        }
+      } else if (json.has("error")) {
+        throw Exception(json.getJSONObject("error").getString("message"))
+      } else {
+        throw Exception("Unknown response: $body")
+      }
+    }
+  }
+
+  suspend fun testClaude(apiKey: String, model: String, endpoint: String): Result<String> = withContext(Dispatchers.IO) {
+    runCatching {
+      val baseUrl = if (endpoint.isBlank()) "https://api.anthropic.com/v1" else endpoint.trimEnd('/')
+      val client = OkHttpClient.Builder()
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .build()
+
+      val requestBody = JSONObject().apply {
+        put("model", model)
+        put(
+          "messages",
+          JSONArray().put(
+            JSONObject().apply {
+              put("role", "user")
+              put("content", "Hello, are you working?")
+            }
+          )
+        )
+        put("max_tokens", 50)
+      }
+
+      val request = Request.Builder()
+        .url("$baseUrl/messages")
+        .header("x-api-key", apiKey)
+        .header("anthropic-version", "2023-06-01")
+        .header("Content-Type", "application/json")
+        .post(requestBody.toString().toRequestBody("application/json".toMediaTypeOrNull()))
+        .build()
+
+      val response = client.newCall(request).execute()
+      val body = response.body?.string() ?: throw Exception("Empty response")
+      response.close()
+
+      val json = JSONObject(body)
+      if (json.has("content")) {
+        val content = json.getJSONArray("content")
+        if (content.length() > 0) {
+          content.getJSONObject(0).getString("text")
+        } else {
+          "Connected but no response"
+        }
+      } else if (json.has("error")) {
+        throw Exception(json.getJSONObject("error").getString("message"))
+      } else {
+        throw Exception("Unknown response: $body")
+      }
+    }
+  }
+
   suspend fun saveApiKey(apiKey: String) {
     prefs.setGeminiApiKey(apiKey)
   }
@@ -126,60 +247,187 @@ class GeminiRepository @Inject constructor(
     return callGeminiApi(prompt)
   }
 
+  private fun extractSuggestions(response: String): AiChatResponse {
+    val tagStart = "<suggestions>"
+    val tagEnd = "</suggestions>"
+    val startIndex = response.indexOf(tagStart)
+    val endIndex = response.indexOf(tagEnd)
+
+    if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+      val content = response.substring(0, startIndex).trim()
+      val suggestionsJson = response.substring(startIndex + tagStart.length, endIndex).trim()
+      val suggestions = mutableListOf<String>()
+      try {
+        val jsonArray = JSONArray(suggestionsJson)
+        for (i in 0 until jsonArray.length()) {
+          suggestions.add(jsonArray.getString(i))
+        }
+      } catch (e: Exception) {
+        Log.e("GeminiRepository", "Error parsing suggestions", e)
+      }
+      return AiChatResponse(content, suggestions)
+    }
+    return AiChatResponse(response.trim())
+  }
+
   suspend fun getRecap(
     animeName: String,
+    otherName: String? = null,
     episode: String,
     language: String,
     animeId: String? = null,
-    chapterId: String? = null
-  ): String {
+    chapterId: String? = null,
+    includeSuggestions: Boolean = false
+  ): AiChatResponse {
     val cacheKey = if (animeId != null && chapterId != null) "ai_recap_${animeId}_$chapterId" else null
-    cacheKey?.let {
-      val cached = storage.get(it)
-      if (!cached.isNullOrBlank()) return cached
+    if (!includeSuggestions) {
+      cacheKey?.let {
+        val cached = storage.get(it)
+        if (!cached.isNullOrBlank()) return AiChatResponse(cached)
+      }
     }
 
+    val animeIdentity = if (otherName.isNullOrBlank()) "'$animeName'" else "'$animeName' (also known as '$otherName')"
     val prompt = """
-            Act as a professional anime fan, summarize the main events that happened in previous episodes of '$animeName' (up to before episode $episode).
+            Act as a professional anime fan, summarize the main events that happened in previous episodes of $animeIdentity (up to before episode $episode).
             Focus on key plot points so viewers can catch up.
             Respond in $language. Concise and natural. Use Markdown (bold, lists) to highlight main points. Avoid code blocks. Not need welcome.
             Finally, include a brief note about the next season's release date or the possibility of its production if information is available.
+            ${if (includeSuggestions) "\nAt the very end, provide 3 suggested follow-up questions in a JSON array wrapped in <suggestions> tags. Example: <suggestions>[\"Question 1\", \"Question 2\"]</suggestions>" else ""}
     """.trimIndent()
 
     val response = callGeminiApi(prompt)
-    if (cacheKey != null) {
-      storage.set(cacheKey, response)
+    val result = extractSuggestions(response)
+    if (cacheKey != null && !includeSuggestions) {
+      storage.set(cacheKey, result.content)
     }
-    return response
+    return result
   }
 
   suspend fun getEpisodeSummary(
     animeName: String,
+    otherName: String? = null,
     episodeName: String,
     timestampMs: Long,
     language: String,
     animeId: String? = null,
-    chapterId: String? = null
-  ): String {
+    chapterId: String? = null,
+    includeSuggestions: Boolean = false
+  ): AiChatResponse {
     val minutes = timestampMs / (1000 * 60)
     val cacheKey = if (animeId != null && chapterId != null) "ai_summary_${animeId}_${chapterId}_$minutes" else null
-    cacheKey?.let {
-      val cached = storage.get(it)
-      if (!cached.isNullOrBlank()) return cached
+    if (!includeSuggestions) {
+      cacheKey?.let {
+        val cached = storage.get(it)
+        if (!cached.isNullOrBlank()) return AiChatResponse(cached)
+      }
     }
 
     val timestampFormatted = String.format("%02d:%02d", minutes, (timestampMs / 1000) % 60)
+    val animeIdentity = if (otherName.isNullOrBlank()) "'$animeName'" else "'$animeName' (also known as '$otherName')"
     val prompt = """
-            You are an anime expert. Summarize the current episode '$episodeName' of the anime '$animeName' up to the point $timestampFormatted.
+            You are an anime expert. Summarize the current episode '$episodeName' of the anime $animeIdentity up to the point $timestampFormatted.
             Provide a concise summary of the events occurring from the beginning of this episode until this timestamp.
             Use Markdown for formatting. Respond in $language. Be concise and helpful.
             Finally, include a brief note about the next season's release date or the possibility of its production if information is available.
+            ${if (includeSuggestions) "\nAt the very end, provide 3 suggested follow-up questions in a JSON array wrapped in <suggestions> tags. Example: <suggestions>[\"Question 1\", \"Question 2\"]</suggestions>" else ""}
     """.trimIndent()
 
     val response = callGeminiApi(prompt)
-    if (cacheKey != null) {
-      storage.set(cacheKey, response)
+    val result = extractSuggestions(response)
+    if (cacheKey != null && !includeSuggestions) {
+      storage.set(cacheKey, result.content)
     }
-    return response
+    return result
+  }
+
+  suspend fun chatWithAI(
+    messages: List<ChatMessage>,
+    context: ChatContext
+  ): AiChatResponse = withContext(Dispatchers.IO) {
+    val apiKey = getApiKey() ?: throw Exception("Gemini API Key is not configured")
+    val modelName = getModelName()
+
+    try {
+      val generativeModel = GenerativeModel(
+        modelName = modelName,
+        apiKey = apiKey,
+        generationConfig = generationConfig {
+          temperature = 0.7f
+        }
+      )
+
+      val contents = buildList {
+        add(
+          content(role = "user") {
+            text(
+              """
+                You are an enthusiastic anime assistant helping users understand and enjoy anime.
+                Current context:
+                - Anime: ${context.animeName} ${context.otherName?.let { "(Other name: $it)" } ?: ""}
+                - Episode: ${context.episodeName ?: "N/A"}
+                - Current timestamp: ${
+                context.currentTimestamp?.let {
+                  String.format("%02d:%02d", it / (1000 * 60), (it / 1000) % 60)
+                } ?: "N/A"
+              }
+                - Language: ${context.language}
+
+                Guidelines:
+                1. Respond in the same language as the user
+                2. Be friendly, helpful, and concise
+                3. Use Markdown for formatting
+                4. Avoid code blocks in responses
+                5. If asked about future plot points, politely say you don't know
+                6. Keep responses focused on the anime context
+                7. At the very end of your response, always provide 3 suggested follow-up questions that the user might want to ask next. Format these suggestions as a JSON array of strings wrapped in <suggestions> tags. Example: <suggestions>["Question 1", "Question 2", "Question 3"]</suggestions>
+              """.trimIndent()
+            )
+          }
+        )
+
+        messages.forEach { msg ->
+          add(
+            content(role = if (msg.role == "user") "user" else "model") {
+              text(msg.content)
+            }
+          )
+        }
+      }
+
+      val response = generativeModel.generateContent(*contents.toTypedArray())
+      val rawText = response.text?.trim() ?: throw Exception("Empty response from AI")
+      extractSuggestions(rawText)
+    } catch (e: Exception) {
+      Log.e("GeminiRepository", "Error in chat", e)
+      throw e
+    }
+  }
+
+  suspend fun getSuggestedQuestions(
+    animeName: String,
+    episodeName: String?,
+    language: String,
+    mode: String
+  ): List<String> = emptyList()
+
+  private fun getDefaultSuggestions(mode: String, language: String): List<String> = when (mode) {
+    "recap" -> listOf(
+      "Tóm tắt các sự kiện chính",
+      "Ai là nhân vật chính?",
+      "Xung đột chính là gì?",
+      "Bối cảnh thế giới như thế nào?",
+      "Cần lưu ý điều gì?"
+    )
+
+    "summary" -> listOf(
+      "Đang có chuyện gì?",
+      "Nhân vật này là ai?",
+      "Giải thích phân cảnh này",
+      "Ý nghĩa của hành động này?",
+      "Tóm tắt nội dung đến hiện tại"
+    )
+
+    else -> listOf()
   }
 }

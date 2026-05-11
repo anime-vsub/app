@@ -381,9 +381,23 @@
     <string name="tap_to_open_app">点击打开应用</string>
 
     <!-- Gemini AI -->
-    <string name="ai_features">AI 功能 (Gemini)</string>
+    <string name="ai_features">AI 功能</string>
+    <string name="ai_provider">AI 提供商</string>
+    <string name="ai_provider_gemini">Google Gemini</string>
+    <string name="ai_provider_openai">OpenAI</string>
+    <string name="ai_provider_claude">Anthropic Claude</string>
     <string name="gemini_api_key">Gemini API 密钥</string>
     <string name="gemini_api_key_hint">在此处输入您的 API 密钥…</string>
+    <string name="openai_api_key">OpenAI API 密钥</string>
+    <string name="openai_api_key_hint">sk-…</string>
+    <string name="openai_model">OpenAI 模型</string>
+    <string name="openai_endpoint">OpenAI 终结点 (可选)</string>
+    <string name="openai_endpoint_hint">https://api.openai.com/v1</string>
+    <string name="claude_api_key">Claude API 密钥</string>
+    <string name="claude_api_key_hint">sk-ant-…</string>
+    <string name="claude_model">Claude 模型</string>
+    <string name="claude_endpoint">Claude 终结点 (可选)</string>
+    <string name="claude_endpoint_hint">https://api.anthropic.com/v1</string>
     <string name="get_api_key">获取 API 密钥</string>
     <string name="test_api_key">测试连接</string>
     <string name="api_key_valid">API 密钥有效！</string>
@@ -407,4 +421,8 @@
     <string name="ai_summary_at_timestamp">%1$s 时的摘要</string>
     <string name="prevent_screen_recording">防止屏幕截图</string>
     <string name="prevent_screen_recording_desc">禁用屏幕截图和屏幕录制，以提高隐私和安全性</string>
+    <string name="ai_chat_title">AI 助手</string>
+    <string name="ai_chat_placeholder">问问关于这部动漫的任何事情…</string>
+    <string name="send">发送</string>
+    <string name="ai_chat_error">获取响应失败。请稍后再试。</string>
 </resources>

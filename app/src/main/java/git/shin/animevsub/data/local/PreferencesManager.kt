@@ -48,6 +48,13 @@ class PreferencesManager(private val context: Context) {
     private val APP_ICON_KEY = stringPreferencesKey("app_icon")
     private val AI_SUMMARY_ENABLED_KEY = booleanPreferencesKey("ai_summary_enabled")
     private val AI_RECAP_ENABLED_KEY = booleanPreferencesKey("ai_recap_enabled")
+    private val AI_PROVIDER_KEY = stringPreferencesKey("ai_provider")
+    private val OPENAI_API_KEY_KEY = stringPreferencesKey("openai_api_key")
+    private val OPENAI_MODEL_KEY = stringPreferencesKey("openai_model")
+    private val OPENAI_ENDPOINT_KEY = stringPreferencesKey("openai_endpoint")
+    private val CLAUDE_API_KEY_KEY = stringPreferencesKey("claude_api_key")
+    private val CLAUDE_MODEL_KEY = stringPreferencesKey("claude_model")
+    private val CLAUDE_ENDPOINT_KEY = stringPreferencesKey("claude_endpoint")
     private val GEMINI_API_KEY_KEY = stringPreferencesKey("gemini_api_key")
     private val GEMINI_MODEL_KEY = stringPreferencesKey("gemini_model")
     private val FLAG_SECURE_KEY = booleanPreferencesKey("flag_secure")
@@ -84,6 +91,13 @@ class PreferencesManager(private val context: Context) {
   val appIcon: Flow<String> = context.dataStore.data.map { it[APP_ICON_KEY] ?: "default" }
   val aiSummaryEnabled: Flow<Boolean> = context.dataStore.data.map { it[AI_SUMMARY_ENABLED_KEY] ?: true }
   val aiRecapEnabled: Flow<Boolean> = context.dataStore.data.map { it[AI_RECAP_ENABLED_KEY] ?: true }
+  val aiProvider: Flow<String> = context.dataStore.data.map { it[AI_PROVIDER_KEY] ?: "gemini" }
+  val openaiApiKey: Flow<String> = context.dataStore.data.map { it[OPENAI_API_KEY_KEY] ?: "" }
+  val openaiModel: Flow<String> = context.dataStore.data.map { it[OPENAI_MODEL_KEY] ?: "gpt-4o-mini" }
+  val openaiEndpoint: Flow<String> = context.dataStore.data.map { it[OPENAI_ENDPOINT_KEY] ?: "" }
+  val claudeApiKey: Flow<String> = context.dataStore.data.map { it[CLAUDE_API_KEY_KEY] ?: "" }
+  val claudeModel: Flow<String> = context.dataStore.data.map { it[CLAUDE_MODEL_KEY] ?: "claude-sonnet-4-20250514" }
+  val claudeEndpoint: Flow<String> = context.dataStore.data.map { it[CLAUDE_ENDPOINT_KEY] ?: "" }
   val geminiApiKey: Flow<String> = context.dataStore.data.map { it[GEMINI_API_KEY_KEY] ?: "" }
   val geminiModel: Flow<String> = context.dataStore.data.map { it[GEMINI_MODEL_KEY] ?: "gemini-1.5-flash" }
   val flagSecure: Flow<Boolean> = context.dataStore.data.map { it[FLAG_SECURE_KEY] ?: true }
@@ -209,6 +223,34 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setAiRecapEnabled(value: Boolean) {
     context.dataStore.edit { it[AI_RECAP_ENABLED_KEY] = value }
+  }
+
+  suspend fun setAiProvider(value: String) {
+    context.dataStore.edit { it[AI_PROVIDER_KEY] = value }
+  }
+
+  suspend fun setOpenaiApiKey(value: String) {
+    context.dataStore.edit { it[OPENAI_API_KEY_KEY] = value }
+  }
+
+  suspend fun setOpenaiModel(value: String) {
+    context.dataStore.edit { it[OPENAI_MODEL_KEY] = value }
+  }
+
+  suspend fun setOpenaiEndpoint(value: String) {
+    context.dataStore.edit { it[OPENAI_ENDPOINT_KEY] = value }
+  }
+
+  suspend fun setClaudeApiKey(value: String) {
+    context.dataStore.edit { it[CLAUDE_API_KEY_KEY] = value }
+  }
+
+  suspend fun setClaudeModel(value: String) {
+    context.dataStore.edit { it[CLAUDE_MODEL_KEY] = value }
+  }
+
+  suspend fun setClaudeEndpoint(value: String) {
+    context.dataStore.edit { it[CLAUDE_ENDPOINT_KEY] = value }
   }
 
   suspend fun setGeminiApiKey(value: String) {

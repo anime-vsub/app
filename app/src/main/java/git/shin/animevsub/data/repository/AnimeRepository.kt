@@ -257,6 +257,14 @@ class AnimeRepository @Inject constructor(
   val appIcon = prefs.appIcon
   val aiSummaryEnabled = prefs.aiSummaryEnabled
   val aiRecapEnabled = prefs.aiRecapEnabled
+  val aiProvider = prefs.aiProvider
+  val openaiApiKey = prefs.openaiApiKey
+  val openaiModel = prefs.openaiModel
+  val openaiEndpoint = prefs.openaiEndpoint
+  val claudeApiKey = prefs.claudeApiKey
+  val claudeModel = prefs.claudeModel
+  val claudeEndpoint = prefs.claudeEndpoint
+  val geminiApiKey = prefs.geminiApiKey
   val geminiModel = prefs.geminiModel
   val flagSecure = prefs.flagSecure
 
@@ -294,9 +302,18 @@ class AnimeRepository @Inject constructor(
 
   suspend fun setAiSummaryEnabled(value: Boolean) = prefs.setAiSummaryEnabled(value)
   suspend fun setAiRecapEnabled(value: Boolean) = prefs.setAiRecapEnabled(value)
+  suspend fun setAiProvider(value: String) = prefs.setAiProvider(value)
+  suspend fun setOpenaiApiKey(value: String) = prefs.setOpenaiApiKey(value)
+  suspend fun setOpenaiModel(value: String) = prefs.setOpenaiModel(value)
+  suspend fun setOpenaiEndpoint(value: String) = prefs.setOpenaiEndpoint(value)
+  suspend fun setClaudeApiKey(value: String) = prefs.setClaudeApiKey(value)
+  suspend fun setClaudeModel(value: String) = prefs.setClaudeModel(value)
+  suspend fun setClaudeEndpoint(value: String) = prefs.setClaudeEndpoint(value)
   suspend fun setGeminiApiKey(value: String) = prefs.setGeminiApiKey(value)
   suspend fun getGeminiApiKey() = prefs.geminiApiKey.first()
   suspend fun setGeminiModel(value: String) = prefs.setGeminiModel(value)
+  suspend fun getOpenaiApiKey() = prefs.openaiApiKey.first()
+  suspend fun getClaudeApiKey() = prefs.claudeApiKey.first()
   suspend fun setFlagSecure(value: Boolean) = prefs.setFlagSecure(value)
 
   // Search History

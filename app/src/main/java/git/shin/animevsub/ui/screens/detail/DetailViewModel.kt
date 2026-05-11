@@ -18,6 +18,9 @@ import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
+import git.shin.animevsub.data.repository.ChatContext
+import git.shin.animevsub.data.repository.ChatMessage
+import git.shin.animevsub.data.repository.GeminiRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -111,7 +114,16 @@ data class DetailUiState(
   val recapError: String? = null,
   val aiEpisodeSummary: String? = null,
   val isAiSummaryLoading: Boolean = false,
-  val aiSummaryError: String? = null
+  val aiSummaryError: String? = null,
+
+  // AI Chat state
+  val recapChatMessages: List<git.shin.animevsub.data.repository.ChatMessage> = emptyList(),
+  val recapChatSuggestedQuestions: List<String> = emptyList(),
+  val summaryChatMessages: List<git.shin.animevsub.data.repository.ChatMessage> = emptyList(),
+  val summaryChatSuggestedQuestions: List<String> = emptyList(),
+  val isAiChatLoading: Boolean = false,
+  val aiChatError: String? = null,
+  val aiChatMode: String = "recap"
 ) {
   val currentChapIndex: Int
     get() {
@@ -136,6 +148,10 @@ class DetailViewModel @Inject constructor(
   private val detailCache = mutableMapOf<String, AnimeDetail>()
   private var sleepTimerJob: Job? = null
   private var breakReminderJob: Job? = null
+
+  companion object {
+    private const val MAX_AI_CHAT_MESSAGES = 50
+  }
   private var bedtimeReminderJob: Job? = null
   private var isPlayerPlaying = false
   private var breakReminderTargetTime: Long = 0
@@ -645,14 +661,15 @@ class DetailViewModel @Inject constructor(
       _uiState.update { it.copy(isRecapLoading = true, aiRecap = null, recapError = null) }
       try {
         val language = java.util.Locale.getDefault().displayLanguage
-        val recap = geminiRepository.getRecap(
+        val result = geminiRepository.getRecap(
           animeName = detail.name,
+          otherName = detail.othername,
           episode = chapter.name,
           language = language,
           animeId = _uiState.value.animeId,
           chapterId = chapter.id
         )
-        _uiState.update { it.copy(aiRecap = recap, isRecapLoading = false) }
+        _uiState.update { it.copy(aiRecap = result.content, isRecapLoading = false) }
       } catch (e: Exception) {
         _uiState.update {
           it.copy(
@@ -672,15 +689,16 @@ class DetailViewModel @Inject constructor(
     viewModelScope.launch {
       try {
         val language = java.util.Locale.getDefault().displayLanguage
-        val summary = geminiRepository.getEpisodeSummary(
+        val result = geminiRepository.getEpisodeSummary(
           animeName = detail.name,
+          otherName = detail.othername,
           episodeName = chapter.name,
           timestampMs = currentTimeMs,
           language = language,
           animeId = _uiState.value.animeId,
           chapterId = chapter.id
         )
-        _uiState.update { it.copy(aiEpisodeSummary = summary, isAiSummaryLoading = false) }
+        _uiState.update { it.copy(aiEpisodeSummary = result.content, isAiSummaryLoading = false) }
       } catch (e: Exception) {
         _uiState.update { it.copy(isAiSummaryLoading = false, aiSummaryError = e.message) }
       }
@@ -693,6 +711,174 @@ class DetailViewModel @Inject constructor(
 
   fun retryRecap() {
     generateRecap()
+  }
+
+  fun initAiChat(mode: String) {
+    val detail = _uiState.value.detail ?: return
+    val chapter = _uiState.value.currentChapter
+
+    val hasMessages = if (mode == "recap") {
+      _uiState.value.recapChatMessages.isNotEmpty()
+    } else {
+      _uiState.value.summaryChatMessages.isNotEmpty()
+    }
+
+    if (hasMessages) {
+      _uiState.update { it.copy(aiChatMode = mode, aiChatError = null) }
+      return
+    }
+
+    _uiState.update {
+      it.copy(
+        aiChatMode = mode,
+        aiChatError = null,
+        isAiChatLoading = true
+      )
+    }
+
+    viewModelScope.launch {
+      try {
+        val language = java.util.Locale.getDefault().displayLanguage
+
+        if (mode == "recap") {
+          val result = geminiRepository.getRecap(
+            animeName = detail.name,
+            otherName = detail.othername,
+            episode = chapter?.name ?: "1",
+            language = language,
+            animeId = _uiState.value.animeId,
+            chapterId = chapter?.id,
+            includeSuggestions = true
+          )
+          _uiState.update {
+            it.copy(
+              recapChatMessages = listOf(git.shin.animevsub.data.repository.ChatMessage(role = "model", content = result.content)),
+              recapChatSuggestedQuestions = result.suggestions,
+              isAiChatLoading = false
+            )
+          }
+        } else {
+          val result = geminiRepository.getEpisodeSummary(
+            animeName = detail.name,
+            otherName = detail.othername,
+            episodeName = chapter?.name ?: "1",
+            timestampMs = _uiState.value.lastProgress,
+            language = language,
+            animeId = _uiState.value.animeId,
+            chapterId = chapter?.id,
+            includeSuggestions = true
+          )
+          _uiState.update {
+            it.copy(
+              summaryChatMessages = listOf(git.shin.animevsub.data.repository.ChatMessage(role = "model", content = result.content)),
+              summaryChatSuggestedQuestions = result.suggestions,
+              isAiChatLoading = false
+            )
+          }
+        }
+      } catch (e: Exception) {
+        _uiState.update {
+          it.copy(
+            isAiChatLoading = false,
+            aiChatError = e.message
+          )
+        }
+      }
+    }
+  }
+
+  fun sendAiChatMessage(message: String) {
+    val detail = _uiState.value.detail ?: return
+    val chapter = _uiState.value.currentChapter
+    val mode = _uiState.value.aiChatMode
+
+    val currentMessages = if (mode == "recap") {
+      _uiState.value.recapChatMessages.toMutableList()
+    } else {
+      _uiState.value.summaryChatMessages.toMutableList()
+    }
+    currentMessages.add(git.shin.animevsub.data.repository.ChatMessage(role = "user", content = message))
+    val limitedMessages = currentMessages.takeLast(MAX_AI_CHAT_MESSAGES)
+
+    _uiState.update {
+      if (mode == "recap") {
+        it.copy(
+          recapChatMessages = limitedMessages,
+          isAiChatLoading = true,
+          aiChatError = null
+        )
+      } else {
+        it.copy(
+          summaryChatMessages = limitedMessages,
+          isAiChatLoading = true,
+          aiChatError = null
+        )
+      }
+    }
+
+    viewModelScope.launch {
+      try {
+        val language = java.util.Locale.getDefault().displayLanguage
+        val context = git.shin.animevsub.data.repository.ChatContext(
+          animeName = detail.name,
+          otherName = detail.othername,
+          episodeName = chapter?.name,
+          currentTimestamp = _uiState.value.lastProgress,
+          language = language
+        )
+
+        val result = geminiRepository.chatWithAI(
+          messages = limitedMessages,
+          context = context
+        )
+
+        _uiState.update { state ->
+          if (mode == "recap") {
+            val updatedMessages = state.recapChatMessages.toMutableList()
+            updatedMessages.add(git.shin.animevsub.data.repository.ChatMessage(role = "model", content = result.content))
+            state.copy(
+              recapChatMessages = updatedMessages.takeLast(MAX_AI_CHAT_MESSAGES),
+              recapChatSuggestedQuestions = result.suggestions,
+              isAiChatLoading = false
+            )
+          } else {
+            val updatedMessages = state.summaryChatMessages.toMutableList()
+            updatedMessages.add(git.shin.animevsub.data.repository.ChatMessage(role = "model", content = result.content))
+            state.copy(
+              summaryChatMessages = updatedMessages.takeLast(MAX_AI_CHAT_MESSAGES),
+              summaryChatSuggestedQuestions = result.suggestions,
+              isAiChatLoading = false
+            )
+          }
+        }
+      } catch (e: Exception) {
+        _uiState.update {
+          it.copy(
+            isAiChatLoading = false,
+            aiChatError = e.message
+          )
+        }
+      }
+    }
+  }
+
+  fun clearAiChat() {
+    val mode = _uiState.value.aiChatMode
+    _uiState.update {
+      if (mode == "recap") {
+        it.copy(
+          recapChatMessages = emptyList(),
+          recapChatSuggestedQuestions = emptyList(),
+          aiChatError = null
+        )
+      } else {
+        it.copy(
+          summaryChatMessages = emptyList(),
+          summaryChatSuggestedQuestions = emptyList(),
+          aiChatError = null
+        )
+      }
+    }
   }
 
   private fun loadServers(chapter: ChapterInfo) {

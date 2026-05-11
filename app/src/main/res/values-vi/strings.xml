@@ -378,9 +378,23 @@
     <string name="tap_to_open_app">Nhấn để mở ứng dụng</string>
 
     <!-- Gemini AI -->
-    <string name="ai_features">Tính năng AI (Gemini)</string>
+    <string name="ai_features">Tính năng AI</string>
+    <string name="ai_provider">Nhà cung cấp AI</string>
+    <string name="ai_provider_gemini">Google Gemini</string>
+    <string name="ai_provider_openai">OpenAI</string>
+    <string name="ai_provider_claude">Anthropic Claude</string>
     <string name="gemini_api_key">Gemini API Key</string>
     <string name="gemini_api_key_hint">Nhập mã API của bạn tại đây…</string>
+    <string name="openai_api_key">OpenAI API Key</string>
+    <string name="openai_api_key_hint">sk-…</string>
+    <string name="openai_model">OpenAI Model</string>
+    <string name="openai_endpoint">OpenAI Endpoint (tùy chọn)</string>
+    <string name="openai_endpoint_hint">https://api.openai.com/v1</string>
+    <string name="claude_api_key">Claude API Key</string>
+    <string name="claude_api_key_hint">sk-ant-...</string>
+    <string name="claude_model">Claude Model</string>
+    <string name="claude_endpoint">Claude Endpoint (tùy chọn)</string>
+    <string name="claude_endpoint_hint">https://api.anthropic.com/v1</string>
     <string name="get_api_key">Lấy API Key</string>
     <string name="test_api_key">Kiểm tra kết nối</string>
     <string name="api_key_valid">API Key hợp lệ!</string>
@@ -404,4 +418,8 @@
     <string name="ai_summary_at_timestamp">Tóm tắt tại %1$s</string>
     <string name="prevent_screen_recording">Chống quay chụp màn hình</string>
     <string name="prevent_screen_recording_desc">Vô hiệu hóa tính năng chụp ảnh và quay video màn hình để bảo vệ nội dung</string>
+    <string name="ai_chat_title">Trợ lý AI</string>
+    <string name="ai_chat_placeholder">Hỏi bất cứ điều gì về bộ anime này…</string>
+    <string name="send">Gửi</string>
+    <string name="ai_chat_error">Không thể nhận phản hồi. Vui lòng thử lại.</string>
 </resources>

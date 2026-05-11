@@ -34,7 +34,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -405,102 +404,29 @@ fun SettingsScreen(
 
       MenuSection(title = stringResource(R.string.ai_features)) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-          OutlinedTextField(
-            value = uiState.geminiApiKey,
-            onValueChange = { viewModel.setGeminiApiKey(it) },
-            label = { Text(stringResource(R.string.gemini_api_key)) },
-            placeholder = { Text(stringResource(R.string.gemini_api_key_hint)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-              IconButton(onClick = { showAiGuide = true }) {
-                Icon(Icons.Default.HelpOutline, contentDescription = null, tint = AccentMain)
-              }
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-              focusedTextColor = TextPrimary,
-              unfocusedTextColor = TextPrimary,
-              focusedBorderColor = AccentMain,
-              unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
-            )
-          )
-
-          Spacer(modifier = Modifier.height(8.dp))
-
-          Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-          ) {
-            Button(
-              onClick = { viewModel.testGeminiKey() },
-              enabled = !uiState.isTestingKey && uiState.geminiApiKey.isNotBlank(),
-              colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
-              modifier = Modifier.weight(1f)
-            ) {
-              if (uiState.isTestingKey) {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White, strokeWidth = 2.dp)
-              } else {
-                Text(stringResource(R.string.test_api_key))
-              }
-            }
-
-            Button(
-              onClick = { uriHandler.openUri("https://aistudio.google.com/app/apikey") },
-              colors = ButtonDefaults.buttonColors(containerColor = DarkSurface),
-              modifier = Modifier.weight(1f)
-            ) {
-              Text(stringResource(R.string.get_api_key), color = TextPrimary)
-            }
-          }
-
-          uiState.testResult?.let { result ->
-            val isSuccess = uiState.testSuccess
-            Text(
-              text = result,
-              color = if (isSuccess) Color(0xFF4CAF50) else ErrorColor,
-              fontSize = 12.sp,
-              modifier = Modifier.padding(top = 4.dp)
-            )
-          }
-
-          Spacer(modifier = Modifier.height(8.dp))
-
           Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
           ) {
             Text(
-              text = "Model:",
+              text = stringResource(R.string.ai_provider),
               color = TextPrimary,
               fontSize = 14.sp,
-              modifier = Modifier.weight(0.3f)
+              modifier = Modifier.weight(0.4f)
             )
-            Box(modifier = Modifier.weight(0.7f)) {
+            Box(modifier = Modifier.weight(0.6f)) {
               var expanded by remember { mutableStateOf(false) }
+              val providers = listOf("gemini" to stringResource(R.string.ai_provider_gemini), "openai" to stringResource(R.string.ai_provider_openai), "claude" to stringResource(R.string.ai_provider_claude))
+              val currentProvider = providers.find { it.first == uiState.aiProvider }?.second ?: stringResource(R.string.ai_provider_gemini)
+
               OutlinedTextField(
-                value = uiState.geminiModel,
+                value = currentProvider,
                 onValueChange = { },
                 readOnly = true,
                 trailingIcon = {
-                  Row {
-                    if (uiState.availableModels.isNotEmpty()) {
-                      IconButton(onClick = { expanded = true }) {
-                        Icon(
-                          Icons.Default.ArrowDropDown,
-                          contentDescription = null,
-                          tint = TextSecondary
-                        )
-                      }
-                    }
-                    IconButton(onClick = { viewModel.loadAvailableModels() }) {
-                      if (uiState.isLoadingModels) {
-                        CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = AccentMain)
-                      } else {
-                        Icon(Icons.Default.Refresh, contentDescription = null, tint = TextSecondary)
-                      }
-                    }
+                  IconButton(onClick = { expanded = true }) {
+                    Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = TextSecondary)
                   }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -515,11 +441,11 @@ fun SettingsScreen(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
               ) {
-                uiState.availableModels.forEach { model ->
+                providers.forEach { (value, label) ->
                   DropdownMenuItem(
-                    text = { Text(model, color = TextPrimary) },
+                    text = { Text(label, color = TextPrimary) },
                     onClick = {
-                      viewModel.setGeminiModel(model)
+                      viewModel.setAiProvider(value)
                       expanded = false
                     }
                   )
@@ -527,9 +453,23 @@ fun SettingsScreen(
               }
             }
           }
-        }
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = DarkSurface)
+          Spacer(modifier = Modifier.height(12.dp))
+
+          when (uiState.aiProvider) {
+            "gemini" -> {
+              GeminiApiKeySection(uiState, viewModel, showAiGuide, uriHandler) { showAiGuide = it }
+            }
+
+            "openai" -> {
+              OpenAIApiKeySection(uiState, viewModel)
+            }
+
+            "claude" -> {
+              ClaudeApiKeySection(uiState, viewModel)
+            }
+          }
+        }
 
         SettingsToggle(
           label = stringResource(R.string.ai_summary_enabled),
@@ -594,5 +534,337 @@ fun SettingsScreen(
         }
       }
     }
+  }
+}
+
+@Composable
+private fun GeminiApiKeySection(
+  uiState: SettingsUiState,
+  viewModel: SettingsViewModel,
+  showAiGuide: Boolean,
+  uriHandler: androidx.compose.ui.platform.UriHandler,
+  onShowGuideChange: (Boolean) -> Unit
+) {
+  Column {
+    OutlinedTextField(
+      value = uiState.geminiApiKey,
+      onValueChange = { viewModel.setGeminiApiKey(it) },
+      label = { Text(stringResource(R.string.gemini_api_key)) },
+      placeholder = { Text(stringResource(R.string.gemini_api_key_hint)) },
+      modifier = Modifier.fillMaxWidth(),
+      singleLine = true,
+      trailingIcon = {
+        IconButton(onClick = { onShowGuideChange(true) }) {
+          Icon(Icons.Default.HelpOutline, contentDescription = null, tint = AccentMain)
+        }
+      },
+      colors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = TextPrimary,
+        unfocusedTextColor = TextPrimary,
+        focusedBorderColor = AccentMain,
+        unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+      )
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Button(
+        onClick = { viewModel.testGeminiKey() },
+        enabled = !uiState.isTestingKey && uiState.geminiApiKey.isNotBlank(),
+        colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+        modifier = Modifier.weight(1f)
+      ) {
+        if (uiState.isTestingKey) {
+          CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White, strokeWidth = 2.dp)
+        } else {
+          Text(stringResource(R.string.test_api_key))
+        }
+      }
+
+      Button(
+        onClick = { uriHandler.openUri("https://aistudio.google.com/app/apikey") },
+        colors = ButtonDefaults.buttonColors(containerColor = DarkSurface),
+        modifier = Modifier.weight(1f)
+      ) {
+        Text(stringResource(R.string.get_api_key), color = TextPrimary)
+      }
+    }
+
+    uiState.testResult?.let { result ->
+      val isSuccess = uiState.testSuccess
+      Text(
+        text = result,
+        color = if (isSuccess) Color(0xFF4CAF50) else ErrorColor,
+        fontSize = 12.sp,
+        modifier = Modifier.padding(top = 4.dp)
+      )
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Text(
+        text = "Model:",
+        color = TextPrimary,
+        fontSize = 14.sp,
+        modifier = Modifier.weight(0.3f)
+      )
+      Box(modifier = Modifier.weight(0.7f)) {
+        var expanded by remember { mutableStateOf(false) }
+        OutlinedTextField(
+          value = uiState.geminiModel,
+          onValueChange = { },
+          readOnly = true,
+          trailingIcon = {
+            Row {
+              if (uiState.availableModels.isNotEmpty()) {
+                IconButton(onClick = { expanded = true }) {
+                  Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = TextSecondary)
+                }
+              }
+              IconButton(onClick = { viewModel.loadAvailableModels() }) {
+                if (uiState.isLoadingModels) {
+                  CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = AccentMain)
+                } else {
+                  Icon(Icons.Default.Refresh, contentDescription = null, tint = TextSecondary)
+                }
+              }
+            }
+          },
+          modifier = Modifier.fillMaxWidth(),
+          colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = TextPrimary,
+            unfocusedTextColor = TextPrimary,
+            focusedBorderColor = AccentMain,
+            unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+          )
+        )
+        DropdownMenu(
+          expanded = expanded,
+          onDismissRequest = { expanded = false }
+        ) {
+          uiState.availableModels.forEach { model ->
+            DropdownMenuItem(
+              text = { Text(model, color = TextPrimary) },
+              onClick = {
+                viewModel.setGeminiModel(model)
+                expanded = false
+              }
+            )
+          }
+        }
+      }
+    }
+  }
+
+  if (showAiGuide) {
+    AlertDialog(
+      onDismissRequest = { onShowGuideChange(false) },
+      title = { Text(stringResource(R.string.gemini_guide_title), color = TextPrimary) },
+      text = { Text(stringResource(R.string.gemini_guide_content), color = TextSecondary) },
+      confirmButton = {
+        TextButton(onClick = { onShowGuideChange(false) }) {
+          Text(stringResource(R.string.ok), color = AccentMain)
+        }
+      },
+      containerColor = DarkCard
+    )
+  }
+}
+
+@Composable
+private fun OpenAIApiKeySection(
+  uiState: SettingsUiState,
+  viewModel: SettingsViewModel
+) {
+  Column {
+    OutlinedTextField(
+      value = uiState.openaiApiKey,
+      onValueChange = { viewModel.setOpenaiApiKey(it) },
+      label = { Text(stringResource(R.string.openai_api_key)) },
+      placeholder = { Text(stringResource(R.string.openai_api_key_hint)) },
+      modifier = Modifier.fillMaxWidth(),
+      singleLine = true,
+      colors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = TextPrimary,
+        unfocusedTextColor = TextPrimary,
+        focusedBorderColor = AccentMain,
+        unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+      )
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Button(
+        onClick = { viewModel.testOpenAIKey() },
+        enabled = !uiState.isTestingKey && uiState.openaiApiKey.isNotBlank(),
+        colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+        modifier = Modifier.weight(1f)
+      ) {
+        if (uiState.isTestingKey) {
+          CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White, strokeWidth = 2.dp)
+        } else {
+          Text(stringResource(R.string.test_api_key))
+        }
+      }
+
+      Button(
+        onClick = { },
+        colors = ButtonDefaults.buttonColors(containerColor = DarkSurface),
+        modifier = Modifier.weight(1f)
+      ) {
+        Text(stringResource(R.string.get_api_key), color = TextPrimary)
+      }
+    }
+
+    uiState.testResult?.let { result ->
+      Text(
+        text = result,
+        color = if (uiState.testSuccess) Color(0xFF4CAF50) else ErrorColor,
+        fontSize = 12.sp,
+        modifier = Modifier.padding(top = 4.dp)
+      )
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    OutlinedTextField(
+      value = uiState.openaiModel,
+      onValueChange = { viewModel.setOpenaiModel(it) },
+      label = { Text(stringResource(R.string.openai_model)) },
+      modifier = Modifier.fillMaxWidth(),
+      singleLine = true,
+      colors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = TextPrimary,
+        unfocusedTextColor = TextPrimary,
+        focusedBorderColor = AccentMain,
+        unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+      )
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    OutlinedTextField(
+      value = uiState.openaiEndpoint,
+      onValueChange = { viewModel.setOpenaiEndpoint(it) },
+      label = { Text(stringResource(R.string.openai_endpoint)) },
+      placeholder = { Text(stringResource(R.string.openai_endpoint_hint)) },
+      modifier = Modifier.fillMaxWidth(),
+      singleLine = true,
+      colors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = TextPrimary,
+        unfocusedTextColor = TextPrimary,
+        focusedBorderColor = AccentMain,
+        unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+      )
+    )
+  }
+}
+
+@Composable
+private fun ClaudeApiKeySection(
+  uiState: SettingsUiState,
+  viewModel: SettingsViewModel
+) {
+  Column {
+    OutlinedTextField(
+      value = uiState.claudeApiKey,
+      onValueChange = { viewModel.setClaudeApiKey(it) },
+      label = { Text(stringResource(R.string.claude_api_key)) },
+      placeholder = { Text(stringResource(R.string.claude_api_key_hint)) },
+      modifier = Modifier.fillMaxWidth(),
+      singleLine = true,
+      colors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = TextPrimary,
+        unfocusedTextColor = TextPrimary,
+        focusedBorderColor = AccentMain,
+        unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+      )
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Button(
+        onClick = { viewModel.testClaudeKey() },
+        enabled = !uiState.isTestingKey && uiState.claudeApiKey.isNotBlank(),
+        colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+        modifier = Modifier.weight(1f)
+      ) {
+        if (uiState.isTestingKey) {
+          CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White, strokeWidth = 2.dp)
+        } else {
+          Text(stringResource(R.string.test_api_key))
+        }
+      }
+
+      Button(
+        onClick = { },
+        colors = ButtonDefaults.buttonColors(containerColor = DarkSurface),
+        modifier = Modifier.weight(1f)
+      ) {
+        Text(stringResource(R.string.get_api_key), color = TextPrimary)
+      }
+    }
+
+    uiState.testResult?.let { result ->
+      Text(
+        text = result,
+        color = if (uiState.testSuccess) Color(0xFF4CAF50) else ErrorColor,
+        fontSize = 12.sp,
+        modifier = Modifier.padding(top = 4.dp)
+      )
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    OutlinedTextField(
+      value = uiState.claudeModel,
+      onValueChange = { viewModel.setClaudeModel(it) },
+      label = { Text(stringResource(R.string.claude_model)) },
+      modifier = Modifier.fillMaxWidth(),
+      singleLine = true,
+      colors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = TextPrimary,
+        unfocusedTextColor = TextPrimary,
+        focusedBorderColor = AccentMain,
+        unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+      )
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    OutlinedTextField(
+      value = uiState.claudeEndpoint,
+      onValueChange = { viewModel.setClaudeEndpoint(it) },
+      label = { Text(stringResource(R.string.claude_endpoint)) },
+      placeholder = { Text(stringResource(R.string.claude_endpoint_hint)) },
+      modifier = Modifier.fillMaxWidth(),
+      singleLine = true,
+      colors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = TextPrimary,
+        unfocusedTextColor = TextPrimary,
+        focusedBorderColor = AccentMain,
+        unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+      )
+    )
   }
 }
