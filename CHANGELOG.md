@@ -1,3 +1,16 @@
+# [2.6.0](https://github.com/anime-vsub/app/compare/v2.5.2...v2.6.0) (2026-05-11)
+
+
+### Bug Fixes
+
+* **ai:** improve Gemini API response handling ([4822144](https://github.com/anime-vsub/app/commit/482214487c292a4f9727c9f6b82ce992726808cf))
+
+
+### Features
+
+* **ai-provider:** add OpenAI and Claude support ([0d9f609](https://github.com/anime-vsub/app/commit/0d9f60948b81983cc93f33fd379216d1e14b91cc))
+* Implement multi-provider AI chat assistant ([cd16899](https://github.com/anime-vsub/app/commit/cd1689944ea4c9a49f408f6b9e185a2b0bd73253))
+
 ## [2.5.2](https://github.com/anime-vsub/app/compare/v2.5.1...v2.5.2) (2026-05-02)
 
 
