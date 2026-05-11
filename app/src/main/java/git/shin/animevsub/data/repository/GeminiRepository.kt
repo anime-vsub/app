@@ -523,7 +523,7 @@ class GeminiRepository @Inject constructor(
     val apiKey = getApiKey() ?: throw Exception("Gemini API Key is not configured")
     val modelName = getModelName()
 
-    try {
+    return try {
       val generativeModel = GenerativeModel(
         modelName = modelName,
         apiKey = apiKey,
