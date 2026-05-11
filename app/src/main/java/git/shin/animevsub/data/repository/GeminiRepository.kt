@@ -395,39 +395,12 @@ class GeminiRepository @Inject constructor(
         }
       }
 
-      val response = generativeModel.generateContent(*contents.toTypedArray())
+      val response = generativeModel.generateContent(contents)
       val rawText = response.text?.trim() ?: throw Exception("Empty response from AI")
       extractSuggestions(rawText)
     } catch (e: Exception) {
       Log.e("GeminiRepository", "Error in chat", e)
       throw e
     }
-  }
-
-  suspend fun getSuggestedQuestions(
-    animeName: String,
-    episodeName: String?,
-    language: String,
-    mode: String
-  ): List<String> = emptyList()
-
-  private fun getDefaultSuggestions(mode: String, language: String): List<String> = when (mode) {
-    "recap" -> listOf(
-      "Tóm tắt các sự kiện chính",
-      "Ai là nhân vật chính?",
-      "Xung đột chính là gì?",
-      "Bối cảnh thế giới như thế nào?",
-      "Cần lưu ý điều gì?"
-    )
-
-    "summary" -> listOf(
-      "Đang có chuyện gì?",
-      "Nhân vật này là ai?",
-      "Giải thích phân cảnh này",
-      "Ý nghĩa của hành động này?",
-      "Tóm tắt nội dung đến hiện tại"
-    )
-
-    else -> listOf()
   }
 }

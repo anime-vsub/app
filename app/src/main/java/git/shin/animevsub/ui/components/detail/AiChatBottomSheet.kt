@@ -84,11 +84,6 @@ data class AiChatMessage(
   val isLoading: Boolean = false
 )
 
-enum class ChatMode {
-  RECAP,
-  SUMMARY
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AiChatBottomSheet(
@@ -98,7 +93,6 @@ fun AiChatBottomSheet(
   messages: List<AiChatMessage>,
   suggestedQuestions: List<String>,
   isSending: Boolean,
-  chatMode: ChatMode,
   sheetState: SheetState,
   onDismissRequest: () -> Unit,
   onSendMessage: (String) -> Unit,

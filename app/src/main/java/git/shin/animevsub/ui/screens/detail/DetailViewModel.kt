@@ -36,6 +36,11 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+enum class ChatMode {
+  RECAP,
+  SUMMARY
+}
+
 data class DetailUiState(
   val isLoading: Boolean = true,
   val isRefreshing: Boolean = false,
@@ -123,7 +128,7 @@ data class DetailUiState(
   val summaryChatSuggestedQuestions: List<String> = emptyList(),
   val isAiChatLoading: Boolean = false,
   val aiChatError: String? = null,
-  val aiChatMode: String = "recap"
+  val aiChatMode: ChatMode = ChatMode.RECAP
 ) {
   val currentChapIndex: Int
     get() {
@@ -713,7 +718,7 @@ class DetailViewModel @Inject constructor(
     generateRecap()
   }
 
-  fun initAiChat(mode: String) {
+  fun initAiChat(mode: ChatMode) {
     val detail = _uiState.value.detail ?: return
     val chapter = _uiState.value.currentChapter
 
@@ -792,7 +797,7 @@ class DetailViewModel @Inject constructor(
     val chapter = _uiState.value.currentChapter
     val mode = _uiState.value.aiChatMode
 
-    val currentMessages = if (mode == "recap") {
+    val currentMessages = if (mode == ChatMode.RECAP) {
       _uiState.value.recapChatMessages.toMutableList()
     } else {
       _uiState.value.summaryChatMessages.toMutableList()
@@ -801,7 +806,7 @@ class DetailViewModel @Inject constructor(
     val limitedMessages = currentMessages.takeLast(MAX_AI_CHAT_MESSAGES)
 
     _uiState.update {
-      if (mode == "recap") {
+      if (mode == ChatMode.RECAP) {
         it.copy(
           recapChatMessages = limitedMessages,
           isAiChatLoading = true,
@@ -865,7 +870,7 @@ class DetailViewModel @Inject constructor(
   fun clearAiChat() {
     val mode = _uiState.value.aiChatMode
     _uiState.update {
-      if (mode == "recap") {
+      if (mode == ChatMode.RECAP) {
         it.copy(
           recapChatMessages = emptyList(),
           recapChatSuggestedQuestions = emptyList(),

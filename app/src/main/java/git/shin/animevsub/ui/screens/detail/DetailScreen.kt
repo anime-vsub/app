@@ -102,7 +102,6 @@ import git.shin.animevsub.ui.components.detail.CommentSection
 import git.shin.animevsub.ui.components.detail.DetailBottomSheet
 import git.shin.animevsub.ui.components.detail.AiChatBottomSheet
 import git.shin.animevsub.ui.components.detail.AiChatMessage
-import git.shin.animevsub.ui.components.detail.ChatMode
 import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.BedtimeReminderDialog
 import git.shin.animevsub.ui.components.player.BreakReminderDialog
@@ -425,7 +424,7 @@ fun DetailScreen(
                 onExoPlayerCreated = { exoPlayerInstance = it },
                 onAiSummary = { timestamp ->
                   summaryTimestamp = timestamp
-                  viewModel.initAiChat("summary")
+                  viewModel.initAiChat(ChatMode.SUMMARY)
                   showSummarySheet = true
                 },
                 sleepTimerMinutes = state.sleepTimerMinutes,
@@ -716,7 +715,7 @@ fun DetailScreen(
                       icon = Icons.Default.AutoAwesome,
                       label = stringResource(R.string.ai_recap_title),
                       onClick = {
-                        viewModel.initAiChat("recap")
+                        viewModel.initAiChat(ChatMode.RECAP)
                         showRecapSheet = true
                       },
                       modifier = Modifier.tvFocusScale()
@@ -760,11 +759,11 @@ fun DetailScreen(
                   isRecapLoading = uiState.isRecapLoading,
                   recapError = uiState.recapError,
                   onGenerateClick = {
-                    viewModel.initAiChat("recap")
+                    viewModel.initAiChat(ChatMode.RECAP)
                     showRecapSheet = true
                   },
                   onExpandClick = {
-                    viewModel.initAiChat("recap")
+                    viewModel.initAiChat(ChatMode.RECAP)
                     showRecapSheet = true
                   }
                 )
@@ -1156,14 +1155,13 @@ fun DetailScreen(
         },
         suggestedQuestions = uiState.recapChatSuggestedQuestions,
         isSending = uiState.isAiChatLoading,
-        chatMode = ChatMode.RECAP,
         sheetState = recapSheetState,
         onDismissRequest = {
           showRecapSheet = false
         },
         onSendMessage = { viewModel.sendAiChatMessage(it) },
         onSuggestionClick = { viewModel.sendAiChatMessage(it) },
-        onRetry = { viewModel.initAiChat("recap") },
+        onRetry = { viewModel.initAiChat(ChatMode.RECAP) },
         onClearHistory = { viewModel.clearAiChat() }
       )
     }
@@ -1187,14 +1185,13 @@ fun DetailScreen(
         },
         suggestedQuestions = uiState.summaryChatSuggestedQuestions,
         isSending = uiState.isAiChatLoading,
-        chatMode = ChatMode.SUMMARY,
         sheetState = summarySheetState,
         onDismissRequest = {
           showSummarySheet = false
         },
         onSendMessage = { viewModel.sendAiChatMessage(it) },
         onSuggestionClick = { viewModel.sendAiChatMessage(it) },
-        onRetry = { viewModel.initAiChat("summary") },
+        onRetry = { viewModel.initAiChat(ChatMode.SUMMARY) },
         onClearHistory = { viewModel.clearAiChat() }
       )
     }
