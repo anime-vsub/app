@@ -722,7 +722,7 @@ class DetailViewModel @Inject constructor(
     val detail = _uiState.value.detail ?: return
     val chapter = _uiState.value.currentChapter
 
-    val hasMessages = if (mode == "recap") {
+    val hasMessages = if (mode == ChatMode.RECAP) {
       _uiState.value.recapChatMessages.isNotEmpty()
     } else {
       _uiState.value.summaryChatMessages.isNotEmpty()
@@ -745,7 +745,7 @@ class DetailViewModel @Inject constructor(
       try {
         val language = java.util.Locale.getDefault().displayLanguage
 
-        if (mode == "recap") {
+        if (mode == ChatMode.RECAP) {
           val result = geminiRepository.getRecap(
             animeName = detail.name,
             otherName = detail.othername,
@@ -838,7 +838,7 @@ class DetailViewModel @Inject constructor(
         )
 
         _uiState.update { state ->
-          if (mode == "recap") {
+          if (mode == ChatMode.RECAP) {
             val updatedMessages = state.recapChatMessages.toMutableList()
             updatedMessages.add(git.shin.animevsub.data.repository.ChatMessage(role = "model", content = result.content))
             state.copy(
