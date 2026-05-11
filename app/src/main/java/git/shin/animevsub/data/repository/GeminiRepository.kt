@@ -264,13 +264,14 @@ class GeminiRepository @Inject constructor(
       AiProvider.GEMINI -> callGeminiApi(prompt)
       AiProvider.OPENAI -> callOpenAIApi(prompt)
       AiProvider.CLAUDE -> callClaudeApi(prompt)
+      else -> throw Exception("Unknown AI provider")
     }
   }
 
   private suspend fun callGeminiApi(prompt: String): String {
     val apiKey = getApiKey() ?: throw Exception("Gemini API Key is not configured")
     val modelName = getModelName()
-    try {
+    return try {
       val generativeModel = GenerativeModel(
         modelName = modelName,
         apiKey = apiKey,
@@ -545,7 +546,7 @@ class GeminiRepository @Inject constructor(
       }
 
       val response = generativeModel.generateContent(contents)
-      val rawText = response.text?.trim() ?: throw Exception("Empty response from AI")
+      val rawText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text?.trim() ?: throw Exception("Empty response from AI")
       return extractSuggestions(rawText)
     } catch (e: Exception) {
       Log.e("GeminiRepository", "Error in Gemini chat", e)
