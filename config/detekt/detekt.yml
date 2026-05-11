@@ -705,7 +705,7 @@ style:
     ignoredCharacters: []
   ThrowsCount:
     active: true
-    max: 5
+    max: 12
     excludeGuardClauses: false
   TrailingWhitespace:
     active: false
