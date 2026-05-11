@@ -545,9 +545,9 @@ class GeminiRepository @Inject constructor(
         }
       }
 
-      val response = generativeModel.generateContent(contents)
-      val rawText = response.candidates?.firstOrNull()?.content?.parts?.firstOrNull()?.text?.trim() ?: throw Exception("Empty response from AI")
-      return extractSuggestions(rawText)
+      val response = generativeModel.generateContent(*contents.toTypedArray())
+      val rawText = response.text?.trim() ?: throw Exception("Empty response from AI")
+      extractSuggestions(rawText)
     } catch (e: Exception) {
       Log.e("GeminiRepository", "Error in Gemini chat", e)
       throw e
