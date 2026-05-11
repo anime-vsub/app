@@ -57,7 +57,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -67,7 +66,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.jeziellago.compose.markdowntext.MarkdownText
-import kotlinx.coroutines.delay
 import git.shin.animevsub.R
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.GithubBlue
@@ -76,13 +74,8 @@ import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.shimmerEffect
-
-data class AiChatMessage(
-  val id: String = System.currentTimeMillis().toString(),
-  val content: String,
-  val isFromUser: Boolean,
-  val isLoading: Boolean = false
-)
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

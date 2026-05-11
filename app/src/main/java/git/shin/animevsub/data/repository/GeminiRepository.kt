@@ -545,7 +545,7 @@ class GeminiRepository @Inject constructor(
         }
       }
 
-      val response = generativeModel.generateContent(*contents.toTypedArray())
+      val response = generativeModel.generateContent(contents)
       val rawText = response.text?.trim() ?: throw Exception("Empty response from AI")
       extractSuggestions(rawText)
     } catch (e: Exception) {
