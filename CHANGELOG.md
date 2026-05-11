@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/anime-vsub/app/compare/v2.6.0...v2.6.1) (2026-05-11)
+
+
+### Bug Fixes
+
+* **ai-chat:** add fullscreen mode to sheet ([1d75c6b](https://github.com/anime-vsub/app/commit/1d75c6bea235be5e45a9920780a4045a0caa4aa4))
+
 # [2.6.0](https://github.com/anime-vsub/app/compare/v2.5.2...v2.6.0) (2026-05-11)
 
 
