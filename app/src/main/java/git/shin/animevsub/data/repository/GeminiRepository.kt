@@ -545,7 +545,8 @@ class GeminiRepository @Inject constructor(
         }
       }
 
-      val response = generativeModel.generateContent(contents)
+      @Suppress("SpreadOperator")
+      val response = generativeModel.generateContent(*contents.toTypedArray())
       val rawText = response.text?.trim() ?: throw Exception("Empty response from AI")
       extractSuggestions(rawText)
     } catch (e: Exception) {
