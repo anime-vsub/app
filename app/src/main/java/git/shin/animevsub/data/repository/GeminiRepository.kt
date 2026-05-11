@@ -39,7 +39,9 @@ data class AiChatResponse(
 )
 
 enum class AiProvider {
-  GEMINI, OPENAI, CLAUDE
+  GEMINI,
+  OPENAI,
+  CLAUDE
 }
 
 @Singleton
@@ -496,7 +498,7 @@ class GeminiRepository @Inject constructor(
       context.currentTimestamp?.let {
         String.format("%02d:%02d", it / (1000 * 60), (it / 1000) % 60)
       } ?: "N/A"
-      }
+    }
       - Language: ${context.language}
 
       Guidelines:
@@ -558,15 +560,19 @@ class GeminiRepository @Inject constructor(
 
     try {
       val openAIMessages = JSONArray().apply {
-        put(JSONObject().apply {
-          put("role", "system")
-          put("content", systemPrompt)
-        })
+        put(
+          JSONObject().apply {
+            put("role", "system")
+            put("content", systemPrompt)
+          }
+        )
         messages.forEach { msg ->
-          put(JSONObject().apply {
-            put("role", if (msg.role == "user") "user" else "assistant")
-            put("content", msg.content)
-          })
+          put(
+            JSONObject().apply {
+              put("role", if (msg.role == "user") "user" else "assistant")
+              put("content", msg.content)
+            }
+          )
         }
       }
 
@@ -614,15 +620,19 @@ class GeminiRepository @Inject constructor(
 
     try {
       val claudeMessages = JSONArray().apply {
-        put(JSONObject().apply {
-          put("role", "user")
-          put("content", "System: $systemPrompt")
-        })
+        put(
+          JSONObject().apply {
+            put("role", "user")
+            put("content", "System: $systemPrompt")
+          }
+        )
         messages.forEach { msg ->
-          put(JSONObject().apply {
-            put("role", if (msg.role == "user") "user" else "assistant")
-            put("content", msg.content)
-          })
+          put(
+            JSONObject().apply {
+              put("role", if (msg.role == "user") "user" else "assistant")
+              put("content", msg.content)
+            }
+          )
         }
       }
 
