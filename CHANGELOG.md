@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/anime-vsub/app/compare/v2.6.1...v2.7.0) (2026-05-13)
+
+
+### Features
+
+* **player:** implement redirect prefetch for HLS ([dcf24e4](https://github.com/anime-vsub/app/commit/dcf24e44bc997662ba7d0a9334aaf3a5c82262aa))
+
 ## [2.6.1](https://github.com/anime-vsub/app/compare/v2.6.0...v2.6.1) (2026-05-11)
 
 
