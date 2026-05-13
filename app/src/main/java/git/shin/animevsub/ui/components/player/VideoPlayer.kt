@@ -1,5 +1,6 @@
 package git.shin.animevsub.ui.components.player
 
+// import androidx.compose.material.icons.filled.Cast
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.media.AudioManager
@@ -59,7 +60,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SlowMotionVideo
 import androidx.compose.material.icons.filled.Speed
-// import androidx.compose.material.icons.filled.Cast
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -141,6 +141,9 @@ import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.WatchProgress
+import git.shin.animevsub.data.remote.HlsPlaylistParser
+import git.shin.animevsub.data.remote.HlsSegmentPrefetcher
+import git.shin.animevsub.data.remote.RedirectResolvingDataSourceFactory
 import git.shin.animevsub.ui.components.player.settings.SettingsBottomSheetContent
 import git.shin.animevsub.ui.components.player.settings.SettingsSideMenuContent
 import git.shin.animevsub.ui.styles.SmallTextStyle
@@ -151,6 +154,7 @@ import git.shin.animevsub.ui.utils.rememberScreenState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import java.io.File
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -219,9 +223,36 @@ fun VideoPlayer(
   val doubleTapSkipDuration by preferencesManager.doubleTapSkip.collectAsState(initial = 10)
   val longPressSpeedValue by preferencesManager.longPressSpeed.collectAsState(initial = 2.0f)
   val flagSecureEnabled by preferencesManager.flagSecure.collectAsState(initial = true)
+  val redirectPrefetchEnabled by preferencesManager.redirectPrefetchEnabled.collectAsState(initial = false)
+  val redirectPrefetchCount by preferencesManager.redirectPrefetchCount.collectAsState(initial = 5)
+
+  val okHttpClient = remember(redirectPrefetchEnabled) {
+    if (redirectPrefetchEnabled) {
+      OkHttpClient.Builder()
+        .connectTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+        .readTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+        .followRedirects(true)
+        .followSslRedirects(true)
+        .build()
+    } else {
+      null
+    }
+  }
+
+  val segmentPrefetcher = remember(okHttpClient) {
+    okHttpClient?.let { HlsSegmentPrefetcher(it, maxConcurrentPrefetches = 10) }
+  }
+
+  val playlistParser = remember(okHttpClient) {
+    okHttpClient?.let { HlsPlaylistParser(it) }
+  }
 
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
+  var showPrefetchSuggestion by remember { mutableStateOf(false) }
+  var bufferingCount by remember { mutableIntStateOf(0) }
+  var lastBufferingTime by remember { mutableLongStateOf(0L) }
+  val prefetchSuggestionThreshold = 3
 //  var isFirstFrameRendered by remember(playerData) { mutableStateOf(false) }
   var playbackSpeed by remember { mutableFloatStateOf(1f) }
   var originalSpeedBeforeLongPress by remember { mutableFloatStateOf(1f) }
@@ -288,7 +319,18 @@ fun VideoPlayer(
       addListener(object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
           isBuffering = playbackState == Player.STATE_BUFFERING
-          // Playing status includes actual playing or loading (buffering) as requested
+          if (isBuffering && !redirectPrefetchEnabled) {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastBufferingTime < 10000) {
+              bufferingCount++
+            } else {
+              bufferingCount = 1
+            }
+            lastBufferingTime = currentTime
+            if (bufferingCount >= prefetchSuggestionThreshold) {
+              showPrefetchSuggestion = true
+            }
+          }
           isPlaying = (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) && playWhenReady
           onPlayingStateChange(isPlaying)
 
@@ -485,10 +527,30 @@ fun VideoPlayer(
       exoPlayer.clearMediaItems()
       loadedUri = null
       loadedEpisodeId = null
+      segmentPrefetcher?.clearCache()
       return@LaunchedEffect
     }
+
+    if (redirectPrefetchEnabled) {
+      segmentPrefetcher?.clearCache()
+    }
+
+    val m3u8Content = if (playerData.isContent && playerData.type.lowercase() == "hls") {
+      playerData.link
+    } else {
+      null
+    }
+
     val httpDataSourceFactory =
-      DefaultHttpDataSource.Factory().setDefaultRequestProperties(playerData.headers ?: emptyMap())
+      if (redirectPrefetchEnabled && okHttpClient != null) {
+        RedirectResolvingDataSourceFactory(
+          httpClient = okHttpClient,
+          defaultRequestProperties = (playerData.headers ?: emptyMap()).toMutableMap()
+        )
+      } else {
+        DefaultHttpDataSource.Factory().setDefaultRequestProperties(playerData.headers ?: emptyMap())
+      }
+
     val dataSourceFactory: DataSource.Factory =
       DefaultDataSource.Factory(context, httpDataSourceFactory)
 
@@ -525,6 +587,19 @@ fun VideoPlayer(
       }
       exoPlayer.prepare()
       exoPlayer.play()
+
+      if (redirectPrefetchEnabled && m3u8Content != null && playlistParser != null && segmentPrefetcher != null) {
+        val segmentUrls = playlistParser.extractSegmentUrlsFromContent(m3u8Content, playerData.link)
+        if (segmentUrls.isNotEmpty()) {
+          val prefetchCount = minOf(segmentUrls.size, redirectPrefetchCount)
+          val segmentUrlsToPrefetch = segmentUrls.take(prefetchCount)
+          val headers = playerData.headers ?: emptyMap()
+          scope.launch {
+            segmentPrefetcher.prefetchFromPlaylist(playerData.link, segmentUrlsToPrefetch, headers)
+          }
+        }
+      }
+
       loadedUri = newUri
       loadedEpisodeId = currentEpisode?.id
     }
@@ -1306,6 +1381,19 @@ fun VideoPlayer(
         )
       }
 
+      if (showPrefetchSuggestion) {
+        PrefetchSuggestion(
+          onEnable = {
+            scope.launch { preferencesManager.setRedirectPrefetchEnabled(true) }
+            showPrefetchSuggestion = false
+          },
+          onDismiss = { showPrefetchSuggestion = false },
+          modifier = Modifier
+            .align(Alignment.TopCenter)
+            .padding(top = if (isFullScreen) 48.dp else 24.dp)
+        )
+      }
+
       AnimatedVisibility(
         visible = showNotification,
         enter = fadeIn() + slideInVertically { -it },
@@ -1672,7 +1760,11 @@ fun VideoPlayer(
           onAiSummary = {
             onAiSummary(exoPlayer.currentPosition)
             showSettingsSideMenu = false
-          }
+          },
+          redirectPrefetchEnabled = redirectPrefetchEnabled,
+          onRedirectPrefetchToggle = { scope.launch { preferencesManager.setRedirectPrefetchEnabled(it) } },
+          redirectPrefetchCount = redirectPrefetchCount,
+          onRedirectPrefetchCountChange = { scope.launch { preferencesManager.setRedirectPrefetchCount(it) } }
         )
       }
     }
@@ -1734,6 +1826,10 @@ fun VideoPlayer(
             onAiSummary(exoPlayer.currentPosition)
             showSettingsBottomSheet = false; settingsSubMenu = null
           },
+          redirectPrefetchEnabled = redirectPrefetchEnabled,
+          onRedirectPrefetchToggle = { scope.launch { preferencesManager.setRedirectPrefetchEnabled(it) } },
+          redirectPrefetchCount = redirectPrefetchCount,
+          onRedirectPrefetchCountChange = { scope.launch { preferencesManager.setRedirectPrefetchCount(it) } },
           onDismiss = { showSettingsBottomSheet = false; settingsSubMenu = null }
         )
       }

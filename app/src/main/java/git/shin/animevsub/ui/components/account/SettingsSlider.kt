@@ -4,12 +4,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.ui.theme.AccentMain
@@ -18,6 +21,7 @@ import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.utils.tvFocusScale
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsSlider(
   label: String,
@@ -54,11 +58,22 @@ fun SettingsSlider(
       onValueChange = { onValueChange(it.roundToInt()) },
       valueRange = valueRange,
       steps = steps,
+      modifier = Modifier.padding(top = 4.dp),
       colors = SliderDefaults.colors(
-        thumbColor = AccentMain,
-        activeTrackColor = AccentMain, inactiveTrackColor = TextGrey.copy(alpha = 0.3f), activeTickColor = androidx.compose.ui.graphics.Color.Transparent, inactiveTickColor = androidx.compose.ui.graphics.Color.Transparent
+        activeTrackColor = AccentMain,
+        inactiveTrackColor = TextGrey.copy(alpha = 0.3f),
+        activeTickColor = Color.Transparent,
+        inactiveTickColor = Color.Transparent
       ),
-      modifier = Modifier.padding(top = 4.dp)
+      thumb = {
+        androidx.compose.foundation.layout.Box(
+          modifier = Modifier
+            .size(12.dp)
+            .padding(0.dp)
+        ) {
+          androidx.compose.foundation.Canvas(modifier = Modifier.size(12.dp)) {}
+        }
+      }
     )
   }
 }

@@ -258,6 +258,22 @@ fun SettingsScreen(
           checked = uiState.autoSkip,
           onCheckedChange = { viewModel.setAutoSkip(it) }
         )
+        SettingsToggle(
+          label = stringResource(R.string.redirect_prefetch),
+          description = stringResource(R.string.redirect_prefetch_desc),
+          checked = uiState.redirectPrefetchEnabled,
+          onCheckedChange = { viewModel.setRedirectPrefetchEnabled(it) }
+        )
+        if (uiState.redirectPrefetchEnabled) {
+          SettingsSlider(
+            label = stringResource(R.string.redirect_prefetch_count),
+            value = uiState.redirectPrefetchCount,
+            onValueChange = { viewModel.setRedirectPrefetchCount(it) },
+            valueRange = 5f..50f,
+            steps = 8,
+            valueText = "${uiState.redirectPrefetchCount}"
+          )
+        }
       }
 
       Spacer(modifier = Modifier.height(16.dp))

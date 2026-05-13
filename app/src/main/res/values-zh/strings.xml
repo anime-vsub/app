@@ -421,8 +421,13 @@
     <string name="ai_summary_at_timestamp">%1$s 时的摘要</string>
     <string name="prevent_screen_recording">防止屏幕截图</string>
     <string name="prevent_screen_recording_desc">禁用屏幕截图和屏幕录制，以提高隐私和安全性</string>
+    <string name="redirect_prefetch">预加载视频链接</string>
+    <string name="redirect_prefetch_desc">在播放前解析视频URL，减少有重定向的流的缓冲时间</string>
+    <string name="redirect_prefetch_count">预加载链接数量</string>
+    <string name="redirect_prefetch_count_desc">播放前解析的视频链接数量 (%1$d)</string>
     <string name="ai_chat_title">AI 助手</string>
     <string name="ai_chat_placeholder">问问关于这部动漫的任何事情…</string>
     <string name="send">发送</string>
     <string name="ai_chat_error">获取响应失败。请稍后再试。</string>
+    <string name="prefetch_suggestion_text">视频卡顿？点击启用URL预加载</string>
 </resources>

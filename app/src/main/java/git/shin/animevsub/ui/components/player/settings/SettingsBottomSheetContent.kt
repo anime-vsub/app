@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.HighQuality
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Sync
@@ -67,6 +68,10 @@ fun SettingsBottomSheetContent(
   onPauseAfterCurrentEpisodeChange: (Boolean) -> Unit,
   sleepTimerRemainingSeconds: Long,
   onAiSummary: () -> Unit,
+  redirectPrefetchEnabled: Boolean,
+  onRedirectPrefetchToggle: (Boolean) -> Unit,
+  redirectPrefetchCount: Int,
+  onRedirectPrefetchCountChange: (Int) -> Unit,
   onDismiss: () -> Unit
 ) {
   val context = LocalContext.current
@@ -144,6 +149,20 @@ fun SettingsBottomSheetContent(
               checked = brightnessGestureEnabled,
               onCheckedChange = onBrightnessGestureToggle
             )
+            SettingsToggleItem(
+              icon = Icons.Default.Link,
+              title = stringResource(R.string.redirect_prefetch),
+              checked = redirectPrefetchEnabled,
+              onCheckedChange = onRedirectPrefetchToggle
+            )
+            if (redirectPrefetchEnabled) {
+              SettingsItem(
+                icon = Icons.Default.Link,
+                title = stringResource(R.string.redirect_prefetch_count),
+                value = redirectPrefetchCount.toString(),
+                onClick = { onSubMenuChange("redirectPrefetchCount") }
+              )
+            }
             SettingsItem(
               icon = Icons.Default.History,
               title = stringResource(R.string.double_tap_skip),
@@ -343,6 +362,21 @@ fun SettingsBottomSheetContent(
                 title = "${speed}x",
                 isSelected = longPressSpeed == speed,
                 onClick = { onLongPressSpeedChange(speed); onDismiss() }
+              )
+            }
+          }
+        }
+
+        "redirectPrefetchCount" -> {
+          SettingsSubMenuContainer(
+            title = stringResource(R.string.redirect_prefetch_count),
+            onBack = { onSubMenuChange(null) }
+          ) {
+            listOf(5, 10, 15, 20, 30, 40, 50).forEach { count ->
+              SettingsOptionItem(
+                title = count.toString(),
+                isSelected = redirectPrefetchCount == count,
+                onClick = { onRedirectPrefetchCountChange(count); onDismiss() }
               )
             }
           }
