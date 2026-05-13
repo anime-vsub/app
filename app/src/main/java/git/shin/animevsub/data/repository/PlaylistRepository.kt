@@ -6,7 +6,7 @@ import git.shin.animevsub.data.model.PlaylistHasMovieResponse
 import git.shin.animevsub.data.model.PlaylistItem
 import git.shin.animevsub.data.model.PlaylistPosterResponse
 import git.shin.animevsub.data.model.User
-import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import git.shin.animevsub.data.remote.api.AnimeDataSource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc
@@ -24,7 +24,8 @@ import javax.inject.Singleton
 class PlaylistRepository @Inject constructor(
   private val supabase: SupabaseClient,
   private val storage: ApiStorage,
-  private val json: Json
+  private val json: Json,
+  private val animeDataSource: AnimeDataSource
 ) {
   private suspend fun getCurrentUid(): String? {
     val userJson = storage.getString("user_data").firstOrNull() ?: return null
@@ -49,7 +50,7 @@ class PlaylistRepository @Inject constructor(
       }
     )
     response.decodeList<Playlist>().map {
-      it.copy(poster = it.poster?.let { p -> AnimeApi.decodeURI(p) })
+      it.copy(poster = it.poster?.let { p -> animeDataSource.decodeURI(p) })
     }
   }
 
@@ -64,7 +65,7 @@ class PlaylistRepository @Inject constructor(
       }
     )
     val playlist = response.decodeSingle<Playlist>()
-    playlist.copy(poster = playlist.poster?.let { p -> AnimeApi.decodeURI(p) })
+    playlist.copy(poster = playlist.poster?.let { p -> animeDataSource.decodeURI(p) })
   }
 
   suspend fun deletePlaylist(id: Int): Result<Unit> = runCatching {
@@ -133,13 +134,13 @@ class PlaylistRepository @Inject constructor(
         put("p_name", name)
         put("p_name_chap", chapName)
         put("p_name_season", seasonName)
-        put("p_poster", AnimeApi.encodeURI(poster))
+        put("p_poster", animeDataSource.encodeURI(poster))
         put("p_season", seasonId)
       }
     )
     try {
       val playlist = response.decodeSingle<Playlist>()
-      playlist.copy(poster = playlist.poster?.let { p -> AnimeApi.decodeURI(p) })
+      playlist.copy(poster = playlist.poster?.let { p -> animeDataSource.decodeURI(p) })
     } catch (e: Exception) {
       null
     }
@@ -157,7 +158,7 @@ class PlaylistRepository @Inject constructor(
     )
     try {
       val playlist = response.decodeSingle<Playlist>()
-      playlist.copy(poster = playlist.poster?.let { p -> AnimeApi.decodeURI(p) })
+      playlist.copy(poster = playlist.poster?.let { p -> animeDataSource.decodeURI(p) })
     } catch (e: Exception) {
       null
     }
@@ -195,7 +196,7 @@ class PlaylistRepository @Inject constructor(
       }
     )
     response.decodeList<PlaylistItem>().map {
-      it.copy(poster = AnimeApi.decodeURI(it.poster))
+      it.copy(poster = animeDataSource.decodeURI(it.poster))
     }
   }
 
@@ -210,7 +211,7 @@ class PlaylistRepository @Inject constructor(
     )
     try {
       val data = response.decodeSingle<PlaylistPosterResponse>()
-      data.poster?.let { AnimeApi.decodeURI(it) }
+      data.poster?.let { animeDataSource.decodeURI(it) }
     } catch (e: Exception) {
       null
     }

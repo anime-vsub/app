@@ -7,7 +7,7 @@ import git.shin.animevsub.data.model.HistoryItem
 import git.shin.animevsub.data.model.LastChapResponse
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.WatchProgress
-import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import git.shin.animevsub.data.remote.api.AnimeDataSource
 import git.shin.animevsub.widget.ContinueWatchingWidget
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
@@ -26,6 +26,7 @@ class HistoryRepository @Inject constructor(
   private val supabase: SupabaseClient,
   private val storage: ApiStorage,
   private val json: Json,
+  private val animeDataSource: AnimeDataSource,
   @ApplicationContext private val context: Context
 ) {
   private suspend fun getCurrentUid(): String? {
@@ -69,7 +70,7 @@ class HistoryRepository @Inject constructor(
         put("size", size)
       }
     )
-    response.decodeList<HistoryItem>().map { it.copy(poster = AnimeApi.decodeURI(it.poster)) }
+    response.decodeList<HistoryItem>().map { it.copy(poster = animeDataSource.decodeURI(it.poster)) }
   }
 
   suspend fun getWatchProgress(seasonId: String): Result<List<WatchProgress>> = runCatching {
@@ -118,7 +119,7 @@ class HistoryRepository @Inject constructor(
       buildJsonObject {
         put("user_uid", uid)
         put("p_name", name)
-        put("p_poster", AnimeApi.encodeURI(poster))
+        put("p_poster", animeDataSource.encodeURI(poster))
         put("season_id", seasonId)
         put("p_season_name", seasonName)
         put("e_cur", cur)

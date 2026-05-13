@@ -17,6 +17,18 @@ detekt {
   buildUponDefaultConfig = true
   allRules = false
   config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+
+  val excludePatterns = listOf(
+    "**/git/shin/animevsub/data/remote/api_example/**"
+  )
+
+  val sourceRoot = file("app/src/main/java")
+
+  input = files(
+    fileTree(sourceRoot) {
+      exclude(excludePatterns)
+    }
+  )
 }
 
 tasks.register("lintFast") {

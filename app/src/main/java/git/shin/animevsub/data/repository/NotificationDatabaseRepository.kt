@@ -8,7 +8,7 @@ import git.shin.animevsub.data.model.NotificationData
 import git.shin.animevsub.data.model.NotificationItem
 import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.User
-import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import git.shin.animevsub.data.remote.api.AnimeDataSource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc
@@ -26,7 +26,8 @@ import javax.inject.Singleton
 class NotificationDatabaseRepository @Inject constructor(
   private val supabase: SupabaseClient,
   private val storage: ApiStorage,
-  private val json: Json
+  private val json: Json,
+  private val animeDataSource: AnimeDataSource
 ) {
   private val _dbNotifications = MutableStateFlow<List<DbNotificationItem>>(emptyList())
   val dbNotifications = _dbNotifications.asStateFlow()
@@ -82,7 +83,7 @@ class NotificationDatabaseRepository @Inject constructor(
       }
     )
     val items = response.decodeList<DbNotificationItem>().map {
-      it.copy(image = it.image?.let { img -> AnimeApi.decodeURI(img) })
+      it.copy(image = it.image?.let { img -> animeDataSource.decodeURI(img) })
     }
 
     if (page == 1) {
@@ -131,7 +132,7 @@ class NotificationDatabaseRepository @Inject constructor(
     val response = supabase.postgrest.rpc(
       "upsert_notify",
       buildJsonObject {
-        put("p_image", item.image?.let { AnimeApi.encodeURI(it) })
+        put("p_image", item.image?.let { animeDataSource.encodeURI(it) })
         put("p_name", item.title)
         put("p_chap", item.content.replace(Regex("[^0-9.]"), ""))
         put("p_time", item.createdAt?.toString())

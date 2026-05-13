@@ -27,7 +27,7 @@ import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
-import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import git.shin.animevsub.data.remote.api.AnimeDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -48,7 +48,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AnimeRepository @Inject constructor(
-  private val api: AnimeApi,
+  private val api: AnimeDataSource,
   private val historyRepository: HistoryRepository,
   private val notificationDbRepository: NotificationDatabaseRepository,
   private val prefs: PreferencesManager,
@@ -222,7 +222,7 @@ class AnimeRepository @Inject constructor(
     }
   }
 
-  val loginUrl: String = AnimeApi.LOGIN_URL
+  val loginUrl: String get() = api.loginUrl
 
 //  suspend fun login(email: String, password: String): Result<User> = runCatching {
 //    val user = api.login(email, password)

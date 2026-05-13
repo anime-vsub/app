@@ -76,3 +76,7 @@ Use `gradlew.bat` instead of `./gradlew` on Windows. Makefile handles this autom
 ## Excluded from VCS
 
 `local.properties`, `google-services.json`, and release keystores must NOT be committed.
+
+## AnimeDataSource
+- `app\src\main\java\git\shin\animevsub\data\remote\api\AnimeDataSource.kt` - Interface to get data from anime source
+- `app\src\main\java\git\shin\animevsub\data\remote\api_example\GogoAnimeDataSource.kt` - Example implementation of AnimeDataSource for GogoAnime

@@ -14,3 +14,4 @@ node_modules
 tsconfig.json
 /.kotlin
 /plan.md
+/*.log

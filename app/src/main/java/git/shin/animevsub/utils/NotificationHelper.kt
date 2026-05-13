@@ -17,7 +17,7 @@ import coil.request.ImageRequest
 import coil.request.SuccessResult
 import git.shin.animevsub.MainActivity
 import git.shin.animevsub.R
-import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import git.shin.animevsub.data.remote.api.AnimeDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -109,7 +109,7 @@ class NotificationHelper(private val context: Context) {
     val request = ImageRequest.Builder(context)
       .data(url)
       .apply {
-        AnimeApi.getHeaders(url).forEach { (key, value) ->
+        AnimeDataSource.getHeaders(url).forEach { (key, value) ->
           addHeader(key, value)
         }
       }

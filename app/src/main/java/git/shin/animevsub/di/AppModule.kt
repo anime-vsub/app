@@ -12,6 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
+import git.shin.animevsub.data.remote.api.AnimeDataSource
 import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import git.shin.animevsub.utils.CloudflareManager
 import io.github.jan.supabase.SupabaseClient
@@ -59,12 +60,12 @@ object AppModule {
 
   @Provides
   @Singleton
-  fun provideAnimeApi(
+  fun provideAnimeDataSource(
     client: OkHttpClient,
     json: Json,
     apiStorage: ApiStorage,
     cloudflareManager: CloudflareManager
-  ): AnimeApi = AnimeApi(client, json, apiStorage, cloudflareManager)
+  ): AnimeDataSource = AnimeApi(client, json, apiStorage, cloudflareManager)
 
   @Provides
   @Singleton
