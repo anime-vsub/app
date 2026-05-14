@@ -23,11 +23,13 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -81,6 +83,7 @@ import git.shin.animevsub.ui.screens.detail.DetailScreen
 import git.shin.animevsub.ui.screens.follow.FollowScreen
 import git.shin.animevsub.ui.screens.history.HistoryScreen
 import git.shin.animevsub.ui.screens.home.HomeScreen
+import git.shin.animevsub.ui.screens.plugins.PluginScreen
 import git.shin.animevsub.ui.screens.login.LoginScreen
 import git.shin.animevsub.ui.screens.notification.NotificationScreen
 import git.shin.animevsub.ui.screens.notification.NotificationViewModel
@@ -158,7 +161,8 @@ fun AnimeVsubAppUI(
       Icons.Filled.Notifications,
       Icons.Outlined.Notifications
     ),
-    BottomNavItem(Screen.Account, R.string.nav_account, Icons.Filled.Person, Icons.Outlined.Person)
+    BottomNavItem(Screen.Account, R.string.nav_account, Icons.Filled.Person, Icons.Outlined.Person),
+    BottomNavItem(Screen.Plugins, R.string.nav_plugins, Icons.Filled.Extension, Icons.Outlined.Extension)
   )
 
   // Routes where bottom bar should be hidden
@@ -172,7 +176,8 @@ fun AnimeVsubAppUI(
       route == Screen.History.route ||
       route == Screen.Follow.route ||
       route == Screen.Playlists.route ||
-      route.startsWith("playlist")
+      route.startsWith("playlist") ||
+      route == Screen.Plugins.route
   } ?: false
 
   val configuration = LocalConfiguration.current
@@ -553,7 +558,8 @@ fun AnimeVsubAppUI(
 
         composable(Screen.Settings.route) {
           SettingsScreen(
-            onNavigateBack = { navController.popBackStack() }
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToPlugins = { navController.navigate(Screen.Plugins.route) }
           )
         }
 
@@ -577,6 +583,12 @@ fun AnimeVsubAppUI(
             onNavigateToPlaylist = { playlistId ->
               navController.navigate(Screen.Playlist.createRoute(playlistId))
             }
+          )
+        }
+
+        composable(Screen.Plugins.route) {
+          PluginScreen(
+            onNavigateBack = { navController.popBackStack() }
           )
         }
       }

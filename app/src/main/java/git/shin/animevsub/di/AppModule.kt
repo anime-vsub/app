@@ -14,6 +14,8 @@ import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.remote.api.AnimeDataSource
 import git.shin.animevsub.data.remote.api_hidden.AnimeApi
+import git.shin.animevsub.plugin.DataSourceProvider
+import git.shin.animevsub.plugin.PluginManager
 import git.shin.animevsub.utils.CloudflareManager
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
@@ -82,4 +84,20 @@ object AppModule {
   @Provides
   @Singleton
   fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
+
+  @Provides
+  @Singleton
+  fun providePluginManager(
+    @ApplicationContext context: Context,
+    client: OkHttpClient,
+    json: Json,
+    preferencesManager: PreferencesManager
+  ): PluginManager = PluginManager(context, client, json, preferencesManager)
+
+  @Provides
+  @Singleton
+  fun provideDataSourceProvider(
+    builtInDataSource: AnimeApi,
+    pluginManager: PluginManager
+  ): DataSourceProvider = DataSourceProvider(builtInDataSource, pluginManager)
 }

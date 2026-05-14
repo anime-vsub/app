@@ -29,6 +29,7 @@ sealed class Screen(val route: String) {
   data object Playlist : Screen("playlist/{playlistId}") {
     fun createRoute(playlistId: String) = "playlist/$playlistId"
   }
+  data object Plugins : Screen("plugins")
 }
 
 data class BottomNavItem(

@@ -1,0 +1,42 @@
+{
+  "repo": {
+    "name": "Example Anime Repositories",
+    "url": "https://example.com/plugins/index.json",
+    "icon": "https://example.com/plugins/icon.png"
+  },
+  "plugins": [
+    {
+      "name": "Example Anime API",
+      "packageName": "com.example.anime",
+      "version": "1.0.0",
+      "versionCode": 1,
+      "description": "Example plugin demonstrating the plugin system",
+      "author": "Example Author",
+      "icon": "https://example.com/plugins/com.example.anime/icon.png",
+      "url": "https://example.com/plugins/com.example.anime.jar",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "AnimeFlv",
+      "packageName": "com.animeflv",
+      "version": "1.2.0",
+      "versionCode": 12,
+      "description": "AnimeFLV source",
+      "author": "Community",
+      "icon": "https://example.com/plugins/com.animeflv/icon.png",
+      "url": "https://example.com/plugins/com.animeflv.jar",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "Jkanime",
+      "packageName": "com.jkanime",
+      "version": "1.0.5",
+      "versionCode": 10,
+      "description": "Jkanime source",
+      "author": "Community",
+      "icon": "https://example.com/plugins/com.jkanime/icon.png",
+      "url": "https://example.com/plugins/com.jkanime.jar",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

@@ -431,4 +431,24 @@
     <string name="send">Send</string>
     <string name="ai_chat_error">Failed to get response. Please try again.</string>
     <string name="prefetch_suggestion_text">Video lagging? Tap to enable URL prefetch</string>
+
+    <!-- Plugins -->
+    <string name="nav_plugins">Plugins</string>
+    <string name="manage_plugins">Manage Plugins</string>
+    <string name="plugin_repositories">Plugin Repositories</string>
+    <string name="installed_plugins">Installed Plugins</string>
+    <string name="add_repository">Add Repository</string>
+    <string name="install_from_file">Install from File</string>
+    <string name="plugin_version">Version %1$s</string>
+    <string name="plugin_by">by %1$s</string>
+    <string name="plugin_loaded">Loaded</string>
+    <string name="plugin_disabled">Disabled</string>
+    <string name="plugin_failed">Failed to load</string>
+    <string name="no_plugins_installed">No plugins installed</string>
+    <string name="no_repositories">No repositories added</string>
+    <string name="browse_plugins">Browse Plugins</string>
+    <string name="install">Install</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="set_active">Set as Active</string>
+    <string name="repo_url_hint">https://example.com/index.json</string>
 </resources>

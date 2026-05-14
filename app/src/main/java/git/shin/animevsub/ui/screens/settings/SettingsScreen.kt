@@ -166,6 +166,7 @@ fun AppIconSelector(
 @Composable
 fun SettingsScreen(
   onNavigateBack: () -> Unit,
+  onNavigateToPlugins: () -> Unit,
   viewModel: SettingsViewModel = hiltViewModel()
 ) {
   val context = LocalContext.current

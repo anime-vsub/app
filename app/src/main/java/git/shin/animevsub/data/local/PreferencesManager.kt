@@ -60,6 +60,25 @@ class PreferencesManager(private val context: Context) {
     private val FLAG_SECURE_KEY = booleanPreferencesKey("flag_secure")
     private val REDIRECT_PREFETCH_ENABLED_KEY = booleanPreferencesKey("redirect_prefetch_enabled")
     private val REDIRECT_PREFETCH_COUNT_KEY = intPreferencesKey("redirect_prefetch_count")
+    private val PLUGIN_STATES_KEY = stringPreferencesKey("plugin_states")
+    private val PLUGIN_REPOS_KEY = stringPreferencesKey("plugin_repos")
+    private val ACTIVE_PLUGIN_KEY = stringPreferencesKey("active_plugin")
+  }
+
+  val pluginStates: Flow<String> = context.dataStore.data.map { it[PLUGIN_STATES_KEY] ?: "" }
+  val pluginRepos: Flow<String> = context.dataStore.data.map { it[PLUGIN_REPOS_KEY] ?: "" }
+  val activePlugin: Flow<String> = context.dataStore.data.map { it[ACTIVE_PLUGIN_KEY] ?: "" }
+
+  suspend fun setPluginStates(json: String) {
+    context.dataStore.edit { it[PLUGIN_STATES_KEY] = json }
+  }
+
+  suspend fun setPluginRepos(json: String) {
+    context.dataStore.edit { it[PLUGIN_REPOS_KEY] = json }
+  }
+
+  suspend fun setActivePlugin(pluginId: String) {
+    context.dataStore.edit { it[ACTIVE_PLUGIN_KEY] = pluginId }
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
