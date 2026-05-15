@@ -182,7 +182,8 @@ fun CommentSection(
             ?: (comment.repliesCount > 0 && (replies[comment.id]?.isEmpty() ?: true)),
           onLoadReplies = { onLoadReplies(comment.id, it) },
           currentUserId = currentUserId,
-          currentUserAvatar = currentUserAvatar
+          currentUserAvatar = currentUserAvatar,
+          modifier = Modifier.padding(vertical = 4.dp)
         )
       }
 

@@ -146,13 +146,14 @@ fun CommentItem(
   isReply: Boolean = false,
   isMine: Boolean = false,
   currentUserId: Int? = null,
-  currentUserAvatar: String? = null
+  currentUserAvatar: String? = null,
+  modifier: Modifier = Modifier
 ) {
   var showReplyInput by remember { mutableStateOf(false) }
   var showEditInput by remember { mutableStateOf(false) }
   var showMenu by remember { mutableStateOf(false) }
 
-  Row(modifier = Modifier.fillMaxWidth()) {
+  Row(modifier = modifier.fillMaxWidth()) {
     AsyncImage(
       model = ImageRequest.Builder(LocalContext.current)
         .data(comment.userAvatar)
@@ -170,40 +171,43 @@ fun CommentItem(
     Column(modifier = Modifier.weight(1f)) {
       Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
       ) {
-        Text(
-          text = comment.userName,
-          style = MaterialTheme.typography.bodyMedium,
-          fontWeight = FontWeight.Bold,
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
-          color = MaterialTheme.colorScheme.onSurface,
-          modifier = Modifier.weight(1f, fill = false)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-          text = formatCommentTime(comment.createdAt),
-          style = MaterialTheme.typography.bodySmall,
-          color = Color.Gray
-        )
-        if (comment.isPinned || comment.isGlobalPinned) {
-          Spacer(modifier = Modifier.width(8.dp))
-          Icon(
-            imageVector = Icons.Default.PushPin,
-            contentDescription = "Pinned",
-            modifier = Modifier.size(12.dp),
-            tint = MaterialTheme.colorScheme.primary
-          )
-          Spacer(modifier = Modifier.width(4.dp))
+        Row(
+          verticalAlignment = Alignment.CenterVertically
+        ) {
           Text(
-            text = stringResource(if (comment.isGlobalPinned) R.string.global_pinned else R.string.pinned),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold
+            text = comment.userName,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onSurface
           )
+          Spacer(modifier = Modifier.width(8.dp))
+          Text(
+            text = formatCommentTime(comment.createdAt),
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray
+          )
+          if (comment.isPinned || comment.isGlobalPinned) {
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(
+              imageVector = Icons.Default.PushPin,
+              contentDescription = "Pinned",
+              modifier = Modifier.size(12.dp),
+              tint = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+              text = stringResource(if (comment.isGlobalPinned) R.string.global_pinned else R.string.pinned),
+              style = MaterialTheme.typography.labelSmall,
+              color = MaterialTheme.colorScheme.primary,
+              fontWeight = FontWeight.Bold
+            )
+          }
         }
-        Spacer(modifier = Modifier.weight(1f))
         Box {
           IconButton(onClick = { showMenu = true }, modifier = Modifier.size(24.dp)) {
             Icon(
