@@ -431,4 +431,10 @@
     <string name="send">Send</string>
     <string name="ai_chat_error">Failed to get response. Please try again.</string>
     <string name="prefetch_suggestion_text">Video lagging? Tap to enable URL prefetch</string>
+
+    <!-- Swipe Gestures -->
+    <string name="swipe_up_to_fullscreen">Swipe up to fullscreen</string>
+    <string name="swipe_down_to_minimize">Swipe down to minimize</string>
+    <string name="release_to_fullscreen">Release to enter fullscreen</string>
+    <string name="release_to_minimize">Release to minimize</string>
 </resources>

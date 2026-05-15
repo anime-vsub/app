@@ -264,6 +264,8 @@ fun VideoPlayer(
   var containerSize by remember { mutableStateOf<IntSize>(IntSize.Zero) }
   var snapJob by remember { mutableStateOf<Job?>(null) }
 
+  var swipeScale by remember { mutableFloatStateOf(1f) }
+
   var showEpisodeSideMenu by remember { mutableStateOf(false) }
   var showServerSideMenu by remember { mutableStateOf(false) }
   var showSettingsBottomSheet by remember { mutableStateOf(false) }
@@ -503,6 +505,7 @@ fun VideoPlayer(
   }
 
   LaunchedEffect(isFullScreen) {
+    swipeScale = 1f
     val activity = findActivity(context) ?: return@LaunchedEffect
     val window = activity.window
     val controller = WindowCompat.getInsetsController(window, window.decorView)
@@ -854,6 +857,67 @@ fun VideoPlayer(
           }
         }
       }
+      .pointerInput(isFullScreen, isInPipMode, anyMenuVisible) {
+        if (isInPipMode) return@pointerInput
+        awaitEachGesture {
+          val down = awaitFirstDown(requireUnconsumed = false)
+          if (anyMenuVisible || isFullScreen) return@awaitEachGesture
+
+          val touchSlop = viewConfiguration.touchSlop
+          var dragStarted = false
+          var dragDeltaY = 0f
+
+          do {
+            val event = awaitPointerEvent()
+            if (event.changes.any { it.isConsumed }) break
+            if (event.changes.size > 1) break
+
+            val change = event.changes.first()
+            if (change.pressed) {
+              dragDeltaY = change.position.y - down.position.y
+
+              if (!dragStarted && abs(dragDeltaY) > touchSlop) {
+                if (dragDeltaY > 0) break
+                dragStarted = true
+              }
+
+              if (dragStarted) {
+                val progress = (-dragDeltaY / (size.height * 0.3f)).coerceIn(0f, 1f)
+                swipeScale = 1f + progress * 0.3f
+                gestureIcon = Icons.Default.Fullscreen
+                gestureText = if (progress >= 1f) {
+                  context.getString(R.string.release_to_fullscreen)
+                } else {
+                  context.getString(R.string.swipe_up_to_fullscreen)
+                }
+                showGestureIndicator = true
+
+                change.consume()
+              }
+            }
+          } while (event.changes.any { it.pressed })
+
+          if (dragStarted) {
+            showGestureIndicator = false
+
+            if (-dragDeltaY >= size.height * 0.3f) {
+              onFullScreenChange(true)
+              swipeScale = 1f
+            } else {
+              scope.launch {
+                val startScale = swipeScale
+                animate(
+                  0f, 1f,
+                  animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                ) { fraction, _ ->
+                  swipeScale = 1f + (startScale - 1f) * (1f - fraction)
+                }
+                swipeScale = 1f
+              }
+            }
+          }
+        }
+      }
       .pointerInput(volumeGestureEnabled, brightnessGestureEnabled, isInPipMode, videoZoomScale, anyMenuVisible) {
         if (isInPipMode) return@pointerInput
         val activity = findActivity(context)
@@ -1082,8 +1146,8 @@ fun VideoPlayer(
         modifier = Modifier
           .fillMaxSize()
           .graphicsLayer(
-            scaleX = videoZoomScale,
-            scaleY = videoZoomScale,
+            scaleX = videoZoomScale * swipeScale,
+            scaleY = videoZoomScale * swipeScale,
             translationX = videoOffset.x,
             translationY = videoOffset.y
           )

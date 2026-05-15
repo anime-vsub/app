@@ -430,4 +430,10 @@
     <string name="send">送信</string>
     <string name="ai_chat_error">応答の取得に失敗しました。もう一度お試しください。</string>
     <string name="prefetch_suggestion_text">動画が重い？タップしてURLプリフェッチを有効化</string>
+
+    <!-- Swipe Gestures -->
+    <string name="swipe_up_to_fullscreen">上にスワイプで全画面</string>
+    <string name="swipe_down_to_minimize">下にスワイプで最小化</string>
+    <string name="release_to_fullscreen">離して全画面に</string>
+    <string name="release_to_minimize">離して最小化</string>
 </resources>

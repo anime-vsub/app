@@ -427,4 +427,10 @@
     <string name="send">Gửi</string>
     <string name="ai_chat_error">Không thể nhận phản hồi. Vui lòng thử lại.</string>
     <string name="prefetch_suggestion_text">Video giật? Nhấn để bật tải trước URL</string>
+
+    <!-- Swipe Gestures -->
+    <string name="swipe_up_to_fullscreen">Vuốt lên để phát toàn màn hình</string>
+    <string name="swipe_down_to_minimize">Vuốt xuống để thu nhỏ</string>
+    <string name="release_to_fullscreen">Thả để vào toàn màn hình</string>
+    <string name="release_to_minimize">Thả để thu nhỏ</string>
 </resources>
