@@ -17,16 +17,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bedtime
-import androidx.compose.material.icons.filled.HelpOutline
+import androidx.compose.material.icons.filled.Block
+import androidx.compose.material.icons.filled.FastForward
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsActive
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.PlayCircleFilled
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.SmartToy
+import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.Summarize
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.SyncProblem
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material.icons.filled.VideocamOff
+import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -239,6 +261,7 @@ fun SettingsScreen(
         SettingsSelector(
           label = stringResource(R.string.app_language),
           selectedOption = uiState.appLanguage,
+          icon = Icons.Default.Language,
           options = listOf(
             "auto" to stringResource(R.string.language_auto),
             "vi" to stringResource(R.string.vietnamese),
@@ -250,17 +273,20 @@ fun SettingsScreen(
         )
         SettingsToggle(
           label = stringResource(R.string.auto_next),
+          icon = Icons.Default.PlayArrow,
           checked = uiState.autoNext,
           onCheckedChange = { viewModel.setAutoNext(it) }
         )
         SettingsToggle(
           label = stringResource(R.string.auto_skip),
+          icon = Icons.Default.FastForward,
           checked = uiState.autoSkip,
           onCheckedChange = { viewModel.setAutoSkip(it) }
         )
         SettingsToggle(
           label = stringResource(R.string.redirect_prefetch),
           description = stringResource(R.string.redirect_prefetch_desc),
+          icon = Icons.Default.Sync,
           checked = uiState.redirectPrefetchEnabled,
           onCheckedChange = { viewModel.setRedirectPrefetchEnabled(it) }
         )
@@ -268,6 +294,7 @@ fun SettingsScreen(
           SettingsSlider(
             label = stringResource(R.string.redirect_prefetch_count),
             value = uiState.redirectPrefetchCount,
+            icon = Icons.Default.Tune,
             onValueChange = { viewModel.setRedirectPrefetchCount(it) },
             valueRange = 5f..50f,
             steps = 8,
@@ -281,11 +308,13 @@ fun SettingsScreen(
       MenuSection(title = stringResource(R.string.gesture_controls)) {
         SettingsToggle(
           label = stringResource(R.string.volume_gesture),
+          icon = Icons.AutoMirrored.Filled.VolumeUp,
           checked = uiState.volumeGesture,
           onCheckedChange = { viewModel.setVolumeGesture(it) }
         )
         SettingsToggle(
           label = stringResource(R.string.brightness_gesture),
+          icon = Icons.Default.WbSunny,
           checked = uiState.brightnessGesture,
           onCheckedChange = { viewModel.setBrightnessGesture(it) }
         )
@@ -297,6 +326,7 @@ fun SettingsScreen(
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
           SettingsToggle(
             label = stringResource(R.string.dynamic_color),
+            icon = Icons.Default.Palette,
             checked = uiState.dynamicColor,
             onCheckedChange = { viewModel.setDynamicColor(it) }
           )
@@ -329,6 +359,7 @@ fun SettingsScreen(
         SettingsSelector(
           label = stringResource(R.string.screen_transition),
           selectedOption = uiState.screenTransition,
+          icon = Icons.Default.Sync,
           options = listOf(
             "system" to stringResource(R.string.transition_system),
             "slide" to stringResource(R.string.transition_slide),
@@ -340,6 +371,7 @@ fun SettingsScreen(
 
         SettingsToggle(
           label = stringResource(R.string.remind_me_to_take_a_break),
+          icon = Icons.Default.Timer,
           checked = uiState.breakReminderEnabled,
           onCheckedChange = { viewModel.setBreakReminderEnabled(it) }
         )
@@ -347,6 +379,7 @@ fun SettingsScreen(
           SettingsSlider(
             label = stringResource(R.string.reminder_frequency),
             value = uiState.breakReminderInterval,
+            icon = Icons.Default.Sync,
             onValueChange = { viewModel.setBreakReminderInterval(it) },
             valueRange = 15f..480f,
             steps = 31,
@@ -356,6 +389,7 @@ fun SettingsScreen(
 
         SettingsToggle(
           label = stringResource(R.string.remind_me_when_its_bedtime),
+          icon = Icons.Default.Bedtime,
           checked = uiState.bedtimeReminderEnabled,
           onCheckedChange = { viewModel.setBedtimeReminderEnabled(it) }
         )
@@ -371,6 +405,7 @@ fun SettingsScreen(
           )
           SettingsToggle(
             label = stringResource(R.string.wait_until_i_finish_video_to_show_reminder),
+            icon = Icons.Default.PlayCircleFilled,
             checked = uiState.bedtimeReminderWaitFinish,
             onCheckedChange = { viewModel.setBedtimeReminderWaitFinish(it) }
           )
@@ -382,22 +417,26 @@ fun SettingsScreen(
       MenuSection(title = stringResource(R.string.notification_settings)) {
         SettingsToggle(
           label = stringResource(R.string.enable_notifications),
+          icon = Icons.Default.Notifications,
           checked = uiState.enableNotifications,
           onCheckedChange = { viewModel.setEnableNotifications(it) }
         )
         SettingsToggle(
           label = stringResource(R.string.enable_background_sync),
+          icon = Icons.Default.SyncProblem,
           checked = uiState.enableBackgroundSync,
           onCheckedChange = { viewModel.setEnableBackgroundSync(it) }
         )
         SettingsToggle(
           label = stringResource(R.string.auto_sync_notify),
+          icon = Icons.Default.AutoAwesome,
           checked = uiState.autoSyncNotify,
           onCheckedChange = { viewModel.setAutoSyncNotify(it) }
         )
         SettingsSlider(
           label = stringResource(R.string.notify_sync_interval),
           value = uiState.notifyInterval,
+          icon = Icons.Default.Schedule,
           onValueChange = { viewModel.setNotifyInterval(it) },
           valueRange = 15f..120f,
           steps = 6,
@@ -406,6 +445,7 @@ fun SettingsScreen(
         SettingsSlider(
           label = stringResource(R.string.db_notify_sync_interval),
           value = uiState.dbNotifyInterval,
+          icon = Icons.Default.Storage,
           onValueChange = { viewModel.setDbNotifyInterval(it) },
           valueRange = 15f..240f,
           steps = 14,
@@ -425,6 +465,12 @@ fun SettingsScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
           ) {
+            Icon(
+              imageVector = Icons.Default.SmartToy,
+              contentDescription = null,
+              tint = AccentMain,
+              modifier = Modifier.size(22.dp)
+            )
             Text(
               text = stringResource(R.string.ai_provider),
               color = TextPrimary,
@@ -490,12 +536,14 @@ fun SettingsScreen(
         SettingsToggle(
           label = stringResource(R.string.ai_summary_enabled),
           description = stringResource(R.string.ai_summary_desc),
+          icon = Icons.Default.Summarize,
           checked = uiState.aiSummaryEnabled,
           onCheckedChange = { viewModel.setAiSummaryEnabled(it) }
         )
         SettingsToggle(
           label = stringResource(R.string.ai_recap_enabled),
           description = stringResource(R.string.ai_recap_desc),
+          icon = Icons.Default.History,
           checked = uiState.aiRecapEnabled,
           onCheckedChange = { viewModel.setAiRecapEnabled(it) }
         )
@@ -521,17 +569,20 @@ fun SettingsScreen(
           SettingsToggle(
             label = stringResource(R.string.prevent_screen_recording),
             description = stringResource(R.string.prevent_screen_recording_desc),
+            icon = Icons.Default.VideocamOff,
             checked = uiState.flagSecure,
             onCheckedChange = { viewModel.setFlagSecure(it) }
           )
           SettingsToggle(
             label = stringResource(R.string.hide_donation_popups),
+            icon = Icons.Default.Block,
             checked = uiState.hideDonationPopup,
             onCheckedChange = { viewModel.setHideDonationPopup(it) }
           )
           SettingsSlider(
             label = stringResource(R.string.history_sync_interval),
             value = uiState.historySyncInterval,
+            icon = Icons.Default.History,
             onValueChange = { viewModel.setHistorySyncInterval(it) },
             valueRange = 10f..120f,
             steps = 11,
@@ -545,6 +596,12 @@ fun SettingsScreen(
               .fillMaxWidth()
               .padding(horizontal = 16.dp, vertical = 8.dp)
           ) {
+            Icon(
+              imageVector = Icons.Default.NotificationsActive,
+              contentDescription = null,
+              modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
             Text("Test System Notification", color = Color.White)
           }
         }
@@ -571,7 +628,7 @@ private fun GeminiApiKeySection(
       singleLine = true,
       trailingIcon = {
         IconButton(onClick = { onShowGuideChange(true) }) {
-          Icon(Icons.Default.HelpOutline, contentDescription = null, tint = AccentMain)
+          Icon(Icons.AutoMirrored.Filled.HelpOutline, contentDescription = null, tint = AccentMain)
         }
       },
       colors = OutlinedTextFieldDefaults.colors(

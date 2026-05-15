@@ -2,10 +2,13 @@ package git.shin.animevsub.ui.components.account
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -13,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.ui.theme.AccentMain
@@ -29,7 +33,8 @@ fun SettingsSlider(
   onValueChange: (Int) -> Unit,
   valueRange: ClosedFloatingPointRange<Float>,
   steps: Int = 0,
-  valueText: String
+  valueText: String,
+  icon: ImageVector? = null
 ) {
   Column(
     modifier = Modifier
@@ -41,6 +46,15 @@ fun SettingsSlider(
       modifier = Modifier.fillMaxWidth(),
       verticalAlignment = Alignment.CenterVertically
     ) {
+      if (icon != null) {
+        Icon(
+          imageVector = icon,
+          contentDescription = null,
+          tint = AccentMain,
+          modifier = Modifier.size(22.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+      }
       Text(
         text = label,
         color = TextPrimary,
