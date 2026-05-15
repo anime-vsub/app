@@ -239,7 +239,7 @@ class ContinueWatchingWidget : GlanceAppWidget() {
             LinearProgressIndicator(
               progress = progress,
               modifier = GlanceModifier.fillMaxWidth().height(if (isLarge) 6.dp else 4.dp),
-              color = ColorProvider(Color(0xFF6C63FF)),
+              color = ColorProvider(Color(0xFF8B85FF)),
               backgroundColor = ColorProvider(Color(0xFF3A4A6B))
             )
           }

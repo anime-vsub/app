@@ -252,7 +252,7 @@ class HistoryWidget : GlanceAppWidget() {
         LinearProgressIndicator(
           progress = progress,
           modifier = GlanceModifier.fillMaxWidth().height(3.dp),
-          color = ColorProvider(Color(0xFF6C63FF)),
+          color = ColorProvider(Color(0xFF8B85FF)),
           backgroundColor = ColorProvider(Color(0xFF3A4A6B))
         )
       }
@@ -306,7 +306,7 @@ class HistoryWidget : GlanceAppWidget() {
             LinearProgressIndicator(
               progress = progress,
               modifier = GlanceModifier.fillMaxWidth().height(3.dp),
-              color = ColorProvider(Color(0xFF6C63FF)),
+              color = ColorProvider(Color(0xFF8B85FF)),
               backgroundColor = ColorProvider(Color(0x80000000))
             )
           }
