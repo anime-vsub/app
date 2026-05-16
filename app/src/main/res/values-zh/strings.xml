@@ -219,7 +219,28 @@
     <!-- Notification -->
     <string name="no_playlists">未找到播放列表</string>
     <string name="no_notifications">暂无通知</string>
+    <string name="no_system_notifications">暂无系统通知</string>
     <string name="mark_read">标记为已读</string>
+    <string name="delete_notification">删除通知</string>
+    <string name="clear_all_notifications">清除所有通知</string>
+    <string name="notification_type_general">通知</string>
+    <string name="notification_type_app_update">应用更新</string>
+    <string name="notification_type_maintenance">维护</string>
+    <string name="notification_type_promotion">促销</string>
+    <string name="notification_type_feature">新功能</string>
+    <string name="notification_type_bugfix">错误修复</string>
+    <string name="notification_type_security">安全</string>
+    <string name="time_just_now">刚刚</string>
+    <string name="time_minutes_ago">%d分钟前</string>
+    <string name="time_hours_ago">%d小时前</string>
+    <string name="time_days_ago">%d天前</string>
+    <string name="time_weeks_ago">%d周前</string>
+    <string name="tab_api">API</string>
+    <string name="tab_database">数据库</string>
+    <string name="tab_system">系统</string>
+    <plurals name="notification_count">
+        <item quantity="other">%d条通知</item>
+    </plurals>
     <string name="no_history">暂无播放历史</string>
     <string name="no_follows">暂无关注的动漫</string>
     <string name="history_subtitle">%1$s 第 %2$s 集</string>

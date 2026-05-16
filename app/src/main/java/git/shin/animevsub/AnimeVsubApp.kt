@@ -17,11 +17,17 @@ class AnimeVsubApp :
   ImageLoaderFactory,
   Configuration.Provider {
 
+  companion object {
+    var instance: AnimeVsubApp? = null
+      private set
+  }
+
   @Inject
   lateinit var workerFactory: HiltWorkerFactory
 
   override fun onCreate() {
     super.onCreate()
+    instance = this
     AppIntegrityChecker.checkIntegrity(this)
   }
 

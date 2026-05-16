@@ -219,7 +219,29 @@
     <!-- Notification -->
     <string name="no_playlists">No playlists found</string>
     <string name="no_notifications">No notifications</string>
+    <string name="no_system_notifications">No system notifications</string>
     <string name="mark_read">Mark as read</string>
+    <string name="delete_notification">Delete notification</string>
+    <string name="clear_all_notifications">Clear all notifications</string>
+    <string name="notification_type_general">Notification</string>
+    <string name="notification_type_app_update">App Update</string>
+    <string name="notification_type_maintenance">Maintenance</string>
+    <string name="notification_type_promotion">Promotion</string>
+    <string name="notification_type_feature">New Feature</string>
+    <string name="notification_type_bugfix">Bug Fix</string>
+    <string name="notification_type_security">Security</string>
+    <plurals name="notification_count">
+        <item quantity="one">%d notification</item>
+        <item quantity="other">%d notifications</item>
+    </plurals>
+    <string name="time_just_now">Just now</string>
+    <string name="time_minutes_ago">%dm ago</string>
+    <string name="time_hours_ago">%dh ago</string>
+    <string name="time_days_ago">%dd ago</string>
+    <string name="time_weeks_ago">%dw ago</string>
+    <string name="tab_api">API</string>
+    <string name="tab_database">Database</string>
+    <string name="tab_system">System</string>
     <string name="no_history">No watch history</string>
     <string name="no_follows">No followed anime</string>
     <string name="history_subtitle">%1$s Ep. %2$s</string>

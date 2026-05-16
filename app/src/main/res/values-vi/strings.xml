@@ -206,7 +206,28 @@
     <!-- Notification -->
     <string name="no_playlists">Không tìm thấy danh sách phát</string>
     <string name="no_notifications">Không có thông báo</string>
+    <string name="no_system_notifications">Không có thông báo hệ thống</string>
     <string name="mark_read">Đánh dấu đã đọc</string>
+    <string name="delete_notification">Xóa thông báo</string>
+    <string name="clear_all_notifications">Xóa tất cả thông báo</string>
+    <string name="notification_type_general">Thông báo</string>
+    <string name="notification_type_app_update">Cập nhật ứng dụng</string>
+    <string name="notification_type_maintenance">Bảo trì</string>
+    <string name="notification_type_promotion">Khuyến mãi</string>
+    <string name="notification_type_feature">Tính năng mới</string>
+    <string name="notification_type_bugfix">Sửa lỗi</string>
+    <string name="notification_type_security">Bảo mật</string>
+    <plurals name="notification_count">
+        <item quantity="other">%d thông báo</item>
+    </plurals>
+    <string name="time_just_now">Vừa xong</string>
+    <string name="time_minutes_ago">%dp trước</string>
+    <string name="time_hours_ago">%dg trước</string>
+    <string name="time_days_ago">%dng trước</string>
+    <string name="time_weeks_ago">%dt trước</string>
+    <string name="tab_api">API</string>
+    <string name="tab_database">Database</string>
+    <string name="tab_system">Hệ thống</string>
     <string name="no_history">Chưa có lịch sử xem</string>
     <string name="no_follows">Chưa theo dõi phim nào</string>
     <string name="history_subtitle">%1$s tập %2$s</string>

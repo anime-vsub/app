@@ -1,9 +1,17 @@
 {
   "private": true,
   "devDependencies": {
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "firebase-admin": "^12.0.0"
   },
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "fcm:test": "bun .github/scripts/send-fcm.ts --title=\"Test Notification\" --body=\"This is a test notification from AnimeVsub\" --type=general --topics=all_users --android_priority=high --android_color=\"#8B85FF\"",
+    "fcm:test:image": "bun .github/scripts/send-fcm.ts --title=\"Test with Image\" --body=\"Check out this awesome notification with an image!\" --type=feature --topics=all_users --image=\"https://picsum.photos/800/400?random=$(date +%s)\" --android_priority=high --android_color=\"#8B85FF\"",
+    "fcm:test:link": "bun .github/scripts/send-fcm.ts --title=\"Open Link\" --body=\"Tap to open a web page in your browser\" --type=general --topics=all_users --deep_link=\"https://github.com/anime-vsub\" --android_priority=high --android_color=\"#8B85FF\"",
+    "fcm:token": "bun .github/scripts/send-fcm.ts --title=\"Test Notification\" --body=\"This is a test notification from AnimeVsub\" --type=general --token=$FCM_TOKEN --android_priority=high --android_color=\"#8B85FF\"",
+    "fcm:release": "bun .github/scripts/send-fcm.ts --title=\"AnimeVsub Update\" --body=\"A new version is available! Check settings to update.\" --type=app_update --deep_link=about --topics=\"all_users,app_updates\" --android_priority=high --android_color=\"#8B85FF\" --android_channel_id=system_notifications",
+    "fcm:send": "bun .github/scripts/send-fcm.ts",
+    "fcm:token-info": "echo 'Usage: $env:FCM_TOKEN=\"your-device-token\"; bun run fcm:token'"
   }
 }

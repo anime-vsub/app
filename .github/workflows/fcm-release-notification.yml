@@ -1,0 +1,51 @@
+name: FCM Release Notification
+
+on:
+  workflow_run:
+    workflows: ["Android Release"]
+    types:
+      - completed
+    branches: [main]
+
+jobs:
+  send-release-notification:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Get latest release info
+        id: release
+        run: |
+          LATEST_RELEASE=$(gh api repos/${{ github.repository }}/releases/latest)
+          VERSION=$(echo "$LATEST_RELEASE" | jq -r '.tag_name')
+          NOTES=$(echo "$LATEST_RELEASE" | jq -r '.body' | head -c 500)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "notes=$NOTES" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Send FCM Notification
+        run: |
+          bun .github/scripts/send-fcm.ts \
+            --title="AnimeVsub ${{ steps.release.outputs.version }} Released" \
+            --body="${{ steps.release.outputs.notes }}" \
+            --type=app_update \
+            --deep_link=about \
+            --topics="all_users,app_updates" \
+            --android_priority=high \
+            --android_color="#8B85FF" \
+            --android_channel_id=system_notifications
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

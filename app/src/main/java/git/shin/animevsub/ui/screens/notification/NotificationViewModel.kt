@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.R
 import git.shin.animevsub.data.local.PreferencesManager
+import git.shin.animevsub.data.local.SystemNotificationStore
 import git.shin.animevsub.data.model.DbNotificationCount
 import git.shin.animevsub.data.model.DbNotificationItem
 import git.shin.animevsub.data.model.NotificationData
+import git.shin.animevsub.data.model.SystemNotification
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.NotificationDatabaseRepository
 import kotlinx.coroutines.Job
@@ -32,6 +34,7 @@ data class NotificationUiState(
   val data: NotificationData? = null,
   val dbNotifications: List<DbNotificationItem> = emptyList(),
   val dbNotificationCount: DbNotificationCount? = null,
+  val systemNotifications: List<SystemNotification> = emptyList(),
   val isSyncing: Boolean = false,
   val error: String? = null,
   val isLoggedIn: Boolean = false,
@@ -48,7 +51,8 @@ data class NotificationUiState(
 class NotificationViewModel @Inject constructor(
   private val repository: AnimeRepository,
   private val notificationDbRepository: NotificationDatabaseRepository,
-  private val preferencesManager: PreferencesManager
+  private val preferencesManager: PreferencesManager,
+  private val systemNotificationStore: SystemNotificationStore
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(NotificationUiState())
@@ -99,6 +103,12 @@ class NotificationViewModel @Inject constructor(
       launch {
         repository.autoSyncNotify.collect { enabled ->
           _uiState.update { it.copy(autoSync = enabled) }
+        }
+      }
+
+      launch {
+        systemNotificationStore.notifications.collect { notifications ->
+          _uiState.update { it.copy(systemNotifications = notifications) }
         }
       }
     }
@@ -202,6 +212,24 @@ class NotificationViewModel @Inject constructor(
         .onFailure { e ->
           _uiEvent.emit(NotificationUiEvent.ShowToast(message = e.message))
         }
+    }
+  }
+
+  fun markSystemNotificationAsRead(id: String) {
+    viewModelScope.launch {
+      systemNotificationStore.markAsRead(id)
+    }
+  }
+
+  fun deleteSystemNotification(id: String) {
+    viewModelScope.launch {
+      systemNotificationStore.delete(id)
+    }
+  }
+
+  fun clearSystemNotifications() {
+    viewModelScope.launch {
+      systemNotificationStore.clearAll()
     }
   }
 

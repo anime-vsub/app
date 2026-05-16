@@ -245,6 +245,8 @@ class MainActivity : ComponentActivity() {
         if (!hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
           permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+
+        git.shin.animevsub.utils.AnimeVsubFirebaseMessagingService.subscribeToTopics()
       }
 
       LaunchedEffect(Unit) {
@@ -328,6 +330,35 @@ class MainActivity : ComponentActivity() {
                       navController.navigate(Screen.AnimeDetail.createRoute(animeId))
                       intentFlow.value = null
                     }
+                  }
+
+                  "OPEN_FROM_NOTIFICATION" -> {
+                    val deepLink = intent.getStringExtra("deep_link")
+                    val animeId = intent.getStringExtra("animeId")
+                    val chapterId = intent.getStringExtra("chapterId")
+
+                    when {
+                      deepLink == "settings" -> {
+                        navController.navigate(Screen.Settings.route)
+                      }
+                      deepLink == "notification" -> {
+                        navController.navigate(Screen.Notification.route)
+                      }
+                      deepLink == "about" -> {
+                        navController.navigate(Screen.About.route)
+                      }
+                      deepLink != null && (deepLink.startsWith("http://") || deepLink.startsWith("https://")) -> {
+                        val uri = android.net.Uri.parse(deepLink)
+                        val browserIntent = Intent(Intent.ACTION_VIEW, uri).apply {
+                          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                        startActivity(browserIntent)
+                      }
+                      animeId != null -> {
+                        navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+                      }
+                    }
+                    intentFlow.value = null
                   }
                 }
               }

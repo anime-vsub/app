@@ -206,7 +206,28 @@
     <!-- Notification -->
     <string name="no_playlists">プレイリストが見つかりません</string>
     <string name="no_notifications">通知はありません</string>
+    <string name="no_system_notifications">システム通知はありません</string>
     <string name="mark_read">既読にする</string>
+    <string name="delete_notification">通知を削除</string>
+    <string name="clear_all_notifications">すべての通知をクリア</string>
+    <string name="notification_type_general">通知</string>
+    <string name="notification_type_app_update">アプリの更新</string>
+    <string name="notification_type_maintenance">メンテナンス</string>
+    <string name="notification_type_promotion">キャンペーン</string>
+    <string name="notification_type_feature">新機能</string>
+    <string name="notification_type_bugfix">バグ修正</string>
+    <string name="notification_type_security">セキュリティ</string>
+    <string name="time_just_now">たった今</string>
+    <string name="time_minutes_ago">%d分前</string>
+    <string name="time_hours_ago">%d時間前</string>
+    <string name="time_days_ago">%d日前</string>
+    <string name="time_weeks_ago">%d週間前</string>
+    <string name="tab_api">API</string>
+    <string name="tab_database">データベース</string>
+    <string name="tab_system">システム</string>
+    <plurals name="notification_count">
+        <item quantity="other">%d件の通知</item>
+    </plurals>
     <string name="no_history">視聴履歴はありません</string>
     <string name="no_follows">フォロー中のアニメはありません</string>
     <string name="history_subtitle">%1$s 第 %2$s 話</string>

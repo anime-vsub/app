@@ -36,11 +36,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
+import git.shin.animevsub.data.model.SystemNotification
 import git.shin.animevsub.ui.components.anime.NotificationListSkeleton
 import git.shin.animevsub.ui.screens.notification.components.ApiNotificationTab
 import git.shin.animevsub.ui.screens.notification.components.DbNotificationTab
 import git.shin.animevsub.ui.screens.notification.components.LoginRequiredScreen
 import git.shin.animevsub.ui.screens.notification.components.NotificationTabs
+import git.shin.animevsub.ui.screens.notification.components.SystemNotificationTab
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkSurface
@@ -52,12 +54,16 @@ import kotlinx.coroutines.launch
 fun NotificationScreen(
   onNavigateToDetail: (String, String?) -> Unit,
   onNavigateToLogin: () -> Unit,
+  onNavigateToSystemSettings: () -> Unit,
+  onNavigateToAbout: () -> Unit,
   viewModel: NotificationViewModel = hiltViewModel()
 ) {
   val uiState by viewModel.uiState.collectAsState()
   val context = LocalContext.current
   val scope = rememberCoroutineScope()
-  val pagerState = rememberPagerState(pageCount = { 2 })
+  val pagerState = rememberPagerState(pageCount = { 3 })
+
+  val unreadSystemCount = uiState.systemNotifications.count { !it.isRead }
 
   // If autoSync is enabled, set default tab to Database (index 1)
   LaunchedEffect(uiState.autoSync, uiState.isAuthReady) {
@@ -124,7 +130,11 @@ fun NotificationScreen(
             }
           },
           apiCount = uiState.data?.items?.size ?: 0,
-          dbCount = uiState.dbNotificationCount?.notifyCount ?: 0
+          dbCount = uiState.dbNotificationCount?.notifyCount ?: 0,
+          systemCount = unreadSystemCount,
+          apiLabel = stringResource(R.string.tab_api),
+          dbLabel = stringResource(R.string.tab_database),
+          systemLabel = stringResource(R.string.tab_system)
         )
       }
     },
@@ -146,8 +156,6 @@ fun NotificationScreen(
 
       if (!uiState.isAuthReady) {
         NotificationListSkeleton()
-      } else if (!uiState.isLoggedIn) {
-        LoginRequiredScreen(onNavigateToLogin)
       } else {
         HorizontalPager(
           state = pagerState,
@@ -155,25 +163,72 @@ fun NotificationScreen(
           beyondViewportPageCount = 1
         ) { page ->
           when (page) {
-            0 -> ApiNotificationTab(
-              uiState = uiState,
-              onRefresh = { viewModel.loadNotifications(true) },
-              onNavigateToDetail = onNavigateToDetail,
-              onTrigger = { viewModel.onTrigger(it) },
-              onRetry = { viewModel.loadNotifications() }
-            )
+            0 -> if (uiState.isLoggedIn) {
+              ApiNotificationTab(
+                uiState = uiState,
+                onRefresh = { viewModel.loadNotifications(true) },
+                onNavigateToDetail = onNavigateToDetail,
+                onTrigger = { viewModel.onTrigger(it) },
+                onRetry = { viewModel.loadNotifications() }
+              )
+            } else {
+              LoginRequiredScreen(onNavigateToLogin)
+            }
 
-            1 -> DbNotificationTab(
-              uiState = uiState,
-              onRefresh = { viewModel.loadDbNotifications(true) },
-              onLoadMore = { viewModel.loadDbNotifications() },
-              onNavigateToDetail = onNavigateToDetail,
-              onDelete = { season, chapId -> viewModel.deleteDbNotification(season, chapId) },
-              onSearchQueryChanged = { viewModel.onSearchQueryChanged(it) },
-              onToggleOrder = { viewModel.toggleOrder() }
+            1 -> if (uiState.isLoggedIn) {
+              DbNotificationTab(
+                uiState = uiState,
+                onRefresh = { viewModel.loadDbNotifications(true) },
+                onLoadMore = { viewModel.loadDbNotifications() },
+                onNavigateToDetail = onNavigateToDetail,
+                onDelete = { season, chapId -> viewModel.deleteDbNotification(season, chapId) },
+                onSearchQueryChanged = { viewModel.onSearchQueryChanged(it) },
+                onToggleOrder = { viewModel.toggleOrder() }
+              )
+            } else {
+              LoginRequiredScreen(onNavigateToLogin)
+            }
+
+            2 -> SystemNotificationTab(
+              notifications = uiState.systemNotifications,
+              isLoading = false,
+              onMarkRead = { viewModel.markSystemNotificationAsRead(it) },
+              onDelete = { viewModel.deleteSystemNotification(it) },
+              onClearAll = { viewModel.clearSystemNotifications() },
+              onNotificationClick = { notification ->
+                handleSystemNotificationClick(notification, onNavigateToDetail, onNavigateToSystemSettings, onNavigateToAbout)
+              }
             )
           }
         }
+      }
+    }
+  }
+}
+
+private fun handleSystemNotificationClick(
+  notification: SystemNotification,
+  onNavigateToDetail: (String, String?) -> Unit,
+  onNavigateToSystemSettings: () -> Unit,
+  onNavigateToAbout: () -> Unit
+) {
+  val deepLink = notification.deepLink
+
+  when {
+    deepLink == "about" -> onNavigateToAbout()
+    deepLink == "settings" -> onNavigateToSystemSettings()
+    deepLink == "notification" -> { }
+    deepLink != null && (deepLink.startsWith("http://") || deepLink.startsWith("https://")) -> {
+      android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(deepLink)).apply {
+        addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+      }.also { intent ->
+        val context = git.shin.animevsub.AnimeVsubApp.instance ?: return
+        context.startActivity(intent)
+      }
+    }
+    else -> {
+      if (notification.animeId != null) {
+        onNavigateToDetail(notification.animeId, notification.chapterId)
       }
     }
   }

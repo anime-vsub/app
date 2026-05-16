@@ -1,0 +1,298 @@
+name: FCM Broadcast Notification
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: 'Notification title'
+        required: true
+        type: string
+      body:
+        description: 'Notification body text'
+        required: true
+        type: string
+      type:
+        description: 'Notification type'
+        required: true
+        default: 'general'
+        type: choice
+        options:
+          - general
+          - app_update
+          - maintenance
+          - promotion
+          - feature
+          - bugfix
+          - security
+      image:
+        description: 'Image URL for notification'
+        required: false
+        type: string
+      deep_link:
+        description: 'Deep link path (settings, notification, detail/{id}, episode/{id}/{chap})'
+        required: false
+        type: string
+      anime_id:
+        description: 'Anime ID for detail navigation'
+        required: false
+        type: string
+      chapter_id:
+        description: 'Chapter ID for episode navigation'
+        required: false
+        type: string
+      id:
+        description: 'Custom notification ID'
+        required: false
+        type: string
+      token:
+        description: 'FCM device token (overrides topics/condition)'
+        required: false
+        type: string
+      topics:
+        description: 'Comma-separated FCM topics (default: all_users)'
+        required: false
+        default: 'all_users'
+        type: string
+      condition:
+        description: 'FCM condition expression (overrides topics)'
+        required: false
+        type: string
+      android_channel_id:
+        description: 'Android notification channel ID'
+        required: false
+        type: string
+      android_priority:
+        description: 'Android notification priority'
+        required: false
+        default: 'normal'
+        type: choice
+        options:
+          - normal
+          - high
+      android_ttl:
+        description: 'Android TTL in seconds (default: 86400)'
+        required: false
+        type: string
+      android_icon:
+        description: 'Android notification icon resource name'
+        required: false
+        type: string
+      android_color:
+        description: 'Android notification color (hex #RRGGBB)'
+        required: false
+        type: string
+      android_visibility:
+        description: 'Android notification visibility'
+        required: false
+        type: choice
+        options:
+          - PRIVATE
+          - PUBLIC
+          - SECRET
+      android_notification_count:
+        description: 'Android badge count'
+        required: false
+        type: string
+      android_sound:
+        description: 'Android notification sound file name'
+        required: false
+        type: string
+      android_vibrate_timings:
+        description: 'Android vibrate timings (JSON array, e.g. ["0s","1s","2s","1s"])'
+        required: false
+        type: string
+      android_light_settings:
+        description: 'Android light settings (JSON)'
+        required: false
+        type: string
+      android_default_sound:
+        description: 'Use default Android notification sound'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      android_default_vibrate_timings:
+        description: 'Use default Android vibrate timings'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      android_default_light_settings:
+        description: 'Use default Android light settings'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      android_sticky:
+        description: 'Make notification sticky'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      android_local_only:
+        description: 'Make notification local only'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      android_event_time:
+        description: 'Android event time (ISO 8601)'
+        required: false
+        type: string
+      android_tag:
+        description: 'Android notification tag'
+        required: false
+        type: string
+      android_click_action:
+        description: 'Android click action intent'
+        required: false
+        type: string
+      android_link:
+        description: 'Android deep link URL'
+        required: false
+        type: string
+      android_group_key:
+        description: 'Android group key for stacking'
+        required: false
+        type: string
+      android_group_alert_behavior:
+        description: 'Android group alert behavior'
+        required: false
+        type: string
+      android_summary_text:
+        description: 'Android summary text for grouped notifications'
+        required: false
+        type: string
+      apns_priority:
+        description: 'APNs priority (10 for high, 5 for normal)'
+        required: false
+        type: string
+      apns_ttl:
+        description: 'APNs expiration timestamp'
+        required: false
+        type: string
+      apns_collapse_id:
+        description: 'APNs collapse ID'
+        required: false
+        type: string
+      apns_thread_id:
+        description: 'APNs thread ID'
+        required: false
+        type: string
+      apns_badge:
+        description: 'APNs badge count'
+        required: false
+        type: string
+      apns_sound:
+        description: 'APNs sound file name'
+        required: false
+        type: string
+      web_ttl:
+        description: 'Web push TTL in seconds'
+        required: false
+        type: string
+      web_urgency:
+        description: 'Web push urgency'
+        required: false
+        type: choice
+        options:
+          - very-low
+          - low
+          - normal
+          - high
+      web_fallback_title:
+        description: 'Web fallback notification title'
+        required: false
+        type: string
+      web_fallback_body:
+        description: 'Web fallback notification body'
+        required: false
+        type: string
+      web_fallback_icon:
+        description: 'Web fallback notification icon URL'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run mode (test without sending)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  send-broadcast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Send FCM Broadcast
+        run: |
+          bun .github/scripts/send-fcm.ts \
+            --title="${{ inputs.title }}" \
+            --body="${{ inputs.body }}" \
+            --type="${{ inputs.type }}" \
+            ${{ inputs.image && format('--image="{0}"', inputs.image) || '' }} \
+            ${{ inputs.deep_link && format('--deep_link="{0}"', inputs.deep_link) || '' }} \
+            ${{ inputs.anime_id && format('--anime_id="{0}"', inputs.anime_id) || '' }} \
+            ${{ inputs.chapter_id && format('--chapter_id="{0}"', inputs.chapter_id) || '' }} \
+            ${{ inputs.id && format('--id="{0}"', inputs.id) || '' }} \
+            ${{ inputs.token && format('--token="{0}"', inputs.token) || '' }} \
+            ${{ inputs.topics && format('--topics="{0}"', inputs.topics) || '' }} \
+            ${{ inputs.condition && format('--condition="{0}"', inputs.condition) || '' }} \
+            ${{ inputs.android_channel_id && format('--android_channel_id="{0}"', inputs.android_channel_id) || '' }} \
+            ${{ inputs.android_priority && format('--android_priority="{0}"', inputs.android_priority) || '' }} \
+            ${{ inputs.android_ttl && format('--android_ttl="{0}"', inputs.android_ttl) || '' }} \
+            ${{ inputs.android_icon && format('--android_icon="{0}"', inputs.android_icon) || '' }} \
+            ${{ inputs.android_color && format('--android_color="{0}"', inputs.android_color) || '' }} \
+            ${{ inputs.android_visibility && format('--android_visibility="{0}"', inputs.android_visibility) || '' }} \
+            ${{ inputs.android_notification_count && format('--android_notification_count="{0}"', inputs.android_notification_count) || '' }} \
+            ${{ inputs.android_sound && format('--android_sound="{0}"', inputs.android_sound) || '' }} \
+            ${{ inputs.android_vibrate_timings && format('--android_vibrate_timings="{0}"', inputs.android_vibrate_timings) || '' }} \
+            ${{ inputs.android_light_settings && format('--android_light_settings="{0}"', inputs.android_light_settings) || '' }} \
+            ${{ inputs.android_default_light_settings == 'true' && '--android_default_light_settings=true' || '' }} \
+            ${{ inputs.android_default_vibrate_timings == 'true' && '--android_default_vibrate_timings=true' || '' }} \
+            ${{ inputs.android_default_sound == 'true' && '--android_default_sound=true' || '' }} \
+            ${{ inputs.android_sticky == 'true' && '--android_sticky=true' || '' }} \
+            ${{ inputs.android_local_only == 'true' && '--android_local_only=true' || '' }} \
+            ${{ inputs.android_event_time && format('--android_event_time="{0}"', inputs.android_event_time) || '' }} \
+            ${{ inputs.android_tag && format('--android_tag="{0}"', inputs.android_tag) || '' }} \
+            ${{ inputs.android_click_action && format('--android_click_action="{0}"', inputs.android_click_action) || '' }} \
+            ${{ inputs.android_link && format('--android_link="{0}"', inputs.android_link) || '' }} \
+            ${{ inputs.android_group_key && format('--android_group_key="{0}"', inputs.android_group_key) || '' }} \
+            ${{ inputs.android_group_alert_behavior && format('--android_group_alert_behavior="{0}"', inputs.android_group_alert_behavior) || '' }} \
+            ${{ inputs.android_summary_text && format('--android_summary_text="{0}"', inputs.android_summary_text) || '' }} \
+            ${{ inputs.apns_priority && format('--apns_priority="{0}"', inputs.apns_priority) || '' }} \
+            ${{ inputs.apns_ttl && format('--apns_ttl="{0}"', inputs.apns_ttl) || '' }} \
+            ${{ inputs.apns_collapse_id && format('--apns_collapse_id="{0}"', inputs.apns_collapse_id) || '' }} \
+            ${{ inputs.apns_thread_id && format('--apns_thread_id="{0}"', inputs.apns_thread_id) || '' }} \
+            ${{ inputs.apns_badge && format('--apns_badge="{0}"', inputs.apns_badge) || '' }} \
+            ${{ inputs.apns_sound && format('--apns_sound="{0}"', inputs.apns_sound) || '' }} \
+            ${{ inputs.web_ttl && format('--web_ttl="{0}"', inputs.web_ttl) || '' }} \
+            ${{ inputs.web_urgency && format('--web_urgency="{0}"', inputs.web_urgency) || '' }} \
+            ${{ inputs.web_fallback_title && format('--web_fallback_title="{0}"', inputs.web_fallback_title) || '' }} \
+            ${{ inputs.web_fallback_body && format('--web_fallback_body="{0}"', inputs.web_fallback_body) || '' }} \
+            ${{ inputs.web_fallback_icon && format('--web_fallback_icon="{0}"', inputs.web_fallback_icon) || '' }} \
+            --dry_run="${{ inputs.dry_run }}"
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

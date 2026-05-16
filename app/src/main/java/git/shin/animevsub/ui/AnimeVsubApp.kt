@@ -429,6 +429,12 @@ fun AnimeVsubAppUI(
             },
             onNavigateToLogin = {
               navController.navigate(Screen.Login.route)
+            },
+            onNavigateToSystemSettings = {
+              navController.navigate(Screen.Settings.route)
+            },
+            onNavigateToAbout = {
+              navController.navigate(Screen.About.route)
             }
           )
         }

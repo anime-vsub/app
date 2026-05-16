@@ -30,7 +30,11 @@ fun NotificationTabs(
   selectedTab: Int,
   onTabSelected: (Int) -> Unit,
   apiCount: Int,
-  dbCount: Int
+  dbCount: Int,
+  systemCount: Int,
+  apiLabel: String,
+  dbLabel: String,
+  systemLabel: String
 ) {
   Row(
     modifier = Modifier
@@ -42,17 +46,24 @@ fun NotificationTabs(
     verticalAlignment = Alignment.CenterVertically
   ) {
     NotificationTabItem(
-      title = "API",
+      title = apiLabel,
       count = apiCount,
       isSelected = selectedTab == 0,
       onClick = { onTabSelected(0) },
       modifier = Modifier.weight(1f)
     )
     NotificationTabItem(
-      title = "Database",
+      title = dbLabel,
       count = dbCount,
       isSelected = selectedTab == 1,
       onClick = { onTabSelected(1) },
+      modifier = Modifier.weight(1f)
+    )
+    NotificationTabItem(
+      title = systemLabel,
+      count = systemCount,
+      isSelected = selectedTab == 2,
+      onClick = { onTabSelected(2) },
       modifier = Modifier.weight(1f)
     )
   }
