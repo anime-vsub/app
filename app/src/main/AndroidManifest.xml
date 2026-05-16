@@ -36,6 +36,9 @@
                 android:name="androidx.work.WorkManagerInitializer"
                 android:value="androidx.startup"
                 tools:node="remove" />
+            <meta-data
+                android:name="git.shin.animevsub.FirebaseInitializer"
+                android:value="androidx.startup" />
         </provider>
 
         <provider

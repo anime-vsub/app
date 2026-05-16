@@ -9,6 +9,8 @@ plugins {
   id("org.jetbrains.kotlin.plugin.compose")
   kotlin("plugin.serialization")
   id("com.google.gms.google-services")
+  id("com.google.firebase.crashlytics")
+  id("com.google.firebase.firebase-perf")
   id("org.jlleitschuh.gradle.ktlint")
   id("io.gitlab.arturbosch.detekt")
 }
@@ -202,6 +204,8 @@ dependencies {
   implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
   implementation("com.google.firebase:firebase-analytics")
   implementation("com.google.firebase:firebase-messaging")
+  implementation("com.google.firebase:firebase-crashlytics")
+  implementation("com.google.firebase:firebase-perf")
 
   // Coroutines
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
