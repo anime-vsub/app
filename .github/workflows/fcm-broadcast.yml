@@ -40,10 +40,6 @@ on:
         description: 'Chapter ID for episode navigation'
         required: false
         type: string
-      id:
-        description: 'Custom notification ID'
-        required: false
-        type: string
       token:
         description: 'FCM device token (overrides topics/condition)'
         required: false
@@ -53,175 +49,6 @@ on:
         required: false
         default: 'all_users'
         type: string
-      condition:
-        description: 'FCM condition expression (overrides topics)'
-        required: false
-        type: string
-      android_channel_id:
-        description: 'Android notification channel ID'
-        required: false
-        type: string
-      android_priority:
-        description: 'Android notification priority'
-        required: false
-        default: 'normal'
-        type: choice
-        options:
-          - normal
-          - high
-      android_ttl:
-        description: 'Android TTL in seconds (default: 86400)'
-        required: false
-        type: string
-      android_icon:
-        description: 'Android notification icon resource name'
-        required: false
-        type: string
-      android_color:
-        description: 'Android notification color (hex #RRGGBB)'
-        required: false
-        type: string
-      android_visibility:
-        description: 'Android notification visibility'
-        required: false
-        type: choice
-        options:
-          - PRIVATE
-          - PUBLIC
-          - SECRET
-      android_notification_count:
-        description: 'Android badge count'
-        required: false
-        type: string
-      android_sound:
-        description: 'Android notification sound file name'
-        required: false
-        type: string
-      android_vibrate_timings:
-        description: 'Android vibrate timings (JSON array, e.g. ["0s","1s","2s","1s"])'
-        required: false
-        type: string
-      android_light_settings:
-        description: 'Android light settings (JSON)'
-        required: false
-        type: string
-      android_default_sound:
-        description: 'Use default Android notification sound'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
-      android_default_vibrate_timings:
-        description: 'Use default Android vibrate timings'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
-      android_default_light_settings:
-        description: 'Use default Android light settings'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
-      android_sticky:
-        description: 'Make notification sticky'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
-      android_local_only:
-        description: 'Make notification local only'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
-      android_event_time:
-        description: 'Android event time (ISO 8601)'
-        required: false
-        type: string
-      android_tag:
-        description: 'Android notification tag'
-        required: false
-        type: string
-      android_click_action:
-        description: 'Android click action intent'
-        required: false
-        type: string
-      android_link:
-        description: 'Android deep link URL'
-        required: false
-        type: string
-      android_group_key:
-        description: 'Android group key for stacking'
-        required: false
-        type: string
-      android_group_alert_behavior:
-        description: 'Android group alert behavior'
-        required: false
-        type: string
-      android_summary_text:
-        description: 'Android summary text for grouped notifications'
-        required: false
-        type: string
-      apns_priority:
-        description: 'APNs priority (10 for high, 5 for normal)'
-        required: false
-        type: string
-      apns_ttl:
-        description: 'APNs expiration timestamp'
-        required: false
-        type: string
-      apns_collapse_id:
-        description: 'APNs collapse ID'
-        required: false
-        type: string
-      apns_thread_id:
-        description: 'APNs thread ID'
-        required: false
-        type: string
-      apns_badge:
-        description: 'APNs badge count'
-        required: false
-        type: string
-      apns_sound:
-        description: 'APNs sound file name'
-        required: false
-        type: string
-      web_ttl:
-        description: 'Web push TTL in seconds'
-        required: false
-        type: string
-      web_urgency:
-        description: 'Web push urgency'
-        required: false
-        type: choice
-        options:
-          - very-low
-          - low
-          - normal
-          - high
-      web_fallback_title:
-        description: 'Web fallback notification title'
-        required: false
-        type: string
-      web_fallback_body:
-        description: 'Web fallback notification body'
-        required: false
-        type: string
-      web_fallback_icon:
-        description: 'Web fallback notification icon URL'
-        required: false
-        type: string
       dry_run:
         description: 'Dry run mode (test without sending)'
         required: false
@@ -230,6 +57,26 @@ on:
         options:
           - 'true'
           - 'false'
+      android_config:
+        description: 'Android config as JSON (channel_id, priority, ttl, icon, color, visibility, notification_count, sound, vibrate_timings, light_settings, default_sound, default_vibrate, default_light, sticky, local_only, event_time, tag, click_action, link, group_key, group_alert, summary_text)'
+        required: false
+        type: string
+      apns_config:
+        description: 'APNs config as JSON (priority, ttl, collapse_id, thread_id, badge, sound)'
+        required: false
+        type: string
+      web_config:
+        description: 'Web config as JSON (ttl, urgency, fallback_title, fallback_body, fallback_icon)'
+        required: false
+        type: string
+      notification_id:
+        description: 'Custom notification ID'
+        required: false
+        type: string
+      condition:
+        description: 'FCM condition expression (overrides topics)'
+        required: false
+        type: string
 
 jobs:
   send-broadcast:
@@ -246,6 +93,33 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Parse Android config
+        if: inputs.android_config
+        id: android_config
+        run: |
+          echo "${{ inputs.android_config }}" > /tmp/android_config.json
+          while IFS='=' read -r key value; do
+            [ -n "$key" ] && [ "$key" != "null" ] && echo "android_${key}=${value}" >> $GITHUB_OUTPUT
+          done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' /tmp/android_config.json)
+
+      - name: Parse APNs config
+        if: inputs.apns_config
+        id: apns_config
+        run: |
+          echo "${{ inputs.apns_config }}" > /tmp/apns_config.json
+          while IFS='=' read -r key value; do
+            [ -n "$key" ] && [ "$key" != "null" ] && echo "apns_${key}=${value}" >> $GITHUB_OUTPUT
+          done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' /tmp/apns_config.json)
+
+      - name: Parse Web config
+        if: inputs.web_config
+        id: web_config
+        run: |
+          echo "${{ inputs.web_config }}" > /tmp/web_config.json
+          while IFS='=' read -r key value; do
+            [ -n "$key" ] && [ "$key" != "null" ] && echo "web_${key}=${value}" >> $GITHUB_OUTPUT
+          done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' /tmp/web_config.json)
+
       - name: Send FCM Broadcast
         run: |
           bun .github/scripts/send-fcm.ts \
@@ -256,43 +130,43 @@ jobs:
             ${{ inputs.deep_link && format('--deep_link="{0}"', inputs.deep_link) || '' }} \
             ${{ inputs.anime_id && format('--anime_id="{0}"', inputs.anime_id) || '' }} \
             ${{ inputs.chapter_id && format('--chapter_id="{0}"', inputs.chapter_id) || '' }} \
-            ${{ inputs.id && format('--id="{0}"', inputs.id) || '' }} \
+            ${{ inputs.notification_id && format('--id="{0}"', inputs.notification_id) || '' }} \
             ${{ inputs.token && format('--token="{0}"', inputs.token) || '' }} \
             ${{ inputs.topics && format('--topics="{0}"', inputs.topics) || '' }} \
             ${{ inputs.condition && format('--condition="{0}"', inputs.condition) || '' }} \
-            ${{ inputs.android_channel_id && format('--android_channel_id="{0}"', inputs.android_channel_id) || '' }} \
-            ${{ inputs.android_priority && format('--android_priority="{0}"', inputs.android_priority) || '' }} \
-            ${{ inputs.android_ttl && format('--android_ttl="{0}"', inputs.android_ttl) || '' }} \
-            ${{ inputs.android_icon && format('--android_icon="{0}"', inputs.android_icon) || '' }} \
-            ${{ inputs.android_color && format('--android_color="{0}"', inputs.android_color) || '' }} \
-            ${{ inputs.android_visibility && format('--android_visibility="{0}"', inputs.android_visibility) || '' }} \
-            ${{ inputs.android_notification_count && format('--android_notification_count="{0}"', inputs.android_notification_count) || '' }} \
-            ${{ inputs.android_sound && format('--android_sound="{0}"', inputs.android_sound) || '' }} \
-            ${{ inputs.android_vibrate_timings && format('--android_vibrate_timings="{0}"', inputs.android_vibrate_timings) || '' }} \
-            ${{ inputs.android_light_settings && format('--android_light_settings="{0}"', inputs.android_light_settings) || '' }} \
-            ${{ inputs.android_default_light_settings == 'true' && '--android_default_light_settings=true' || '' }} \
-            ${{ inputs.android_default_vibrate_timings == 'true' && '--android_default_vibrate_timings=true' || '' }} \
-            ${{ inputs.android_default_sound == 'true' && '--android_default_sound=true' || '' }} \
-            ${{ inputs.android_sticky == 'true' && '--android_sticky=true' || '' }} \
-            ${{ inputs.android_local_only == 'true' && '--android_local_only=true' || '' }} \
-            ${{ inputs.android_event_time && format('--android_event_time="{0}"', inputs.android_event_time) || '' }} \
-            ${{ inputs.android_tag && format('--android_tag="{0}"', inputs.android_tag) || '' }} \
-            ${{ inputs.android_click_action && format('--android_click_action="{0}"', inputs.android_click_action) || '' }} \
-            ${{ inputs.android_link && format('--android_link="{0}"', inputs.android_link) || '' }} \
-            ${{ inputs.android_group_key && format('--android_group_key="{0}"', inputs.android_group_key) || '' }} \
-            ${{ inputs.android_group_alert_behavior && format('--android_group_alert_behavior="{0}"', inputs.android_group_alert_behavior) || '' }} \
-            ${{ inputs.android_summary_text && format('--android_summary_text="{0}"', inputs.android_summary_text) || '' }} \
-            ${{ inputs.apns_priority && format('--apns_priority="{0}"', inputs.apns_priority) || '' }} \
-            ${{ inputs.apns_ttl && format('--apns_ttl="{0}"', inputs.apns_ttl) || '' }} \
-            ${{ inputs.apns_collapse_id && format('--apns_collapse_id="{0}"', inputs.apns_collapse_id) || '' }} \
-            ${{ inputs.apns_thread_id && format('--apns_thread_id="{0}"', inputs.apns_thread_id) || '' }} \
-            ${{ inputs.apns_badge && format('--apns_badge="{0}"', inputs.apns_badge) || '' }} \
-            ${{ inputs.apns_sound && format('--apns_sound="{0}"', inputs.apns_sound) || '' }} \
-            ${{ inputs.web_ttl && format('--web_ttl="{0}"', inputs.web_ttl) || '' }} \
-            ${{ inputs.web_urgency && format('--web_urgency="{0}"', inputs.web_urgency) || '' }} \
-            ${{ inputs.web_fallback_title && format('--web_fallback_title="{0}"', inputs.web_fallback_title) || '' }} \
-            ${{ inputs.web_fallback_body && format('--web_fallback_body="{0}"', inputs.web_fallback_body) || '' }} \
-            ${{ inputs.web_fallback_icon && format('--web_fallback_icon="{0}"', inputs.web_fallback_icon) || '' }} \
+            ${{ steps.android_config.outputs.channel_id && format('--android_channel_id="{0}"', steps.android_config.outputs.channel_id) || '' }} \
+            ${{ steps.android_config.outputs.priority && format('--android_priority="{0}"', steps.android_config.outputs.priority) || '' }} \
+            ${{ steps.android_config.outputs.ttl && format('--android_ttl="{0}"', steps.android_config.outputs.ttl) || '' }} \
+            ${{ steps.android_config.outputs.icon && format('--android_icon="{0}"', steps.android_config.outputs.icon) || '' }} \
+            ${{ steps.android_config.outputs.color && format('--android_color="{0}"', steps.android_config.outputs.color) || '' }} \
+            ${{ steps.android_config.outputs.visibility && format('--android_visibility="{0}"', steps.android_config.outputs.visibility) || '' }} \
+            ${{ steps.android_config.outputs.notification_count && format('--android_notification_count="{0}"', steps.android_config.outputs.notification_count) || '' }} \
+            ${{ steps.android_config.outputs.sound && format('--android_sound="{0}"', steps.android_config.outputs.sound) || '' }} \
+            ${{ steps.android_config.outputs.vibrate_timings && format('--android_vibrate_timings="{0}"', steps.android_config.outputs.vibrate_timings) || '' }} \
+            ${{ steps.android_config.outputs.light_settings && format('--android_light_settings="{0}"', steps.android_config.outputs.light_settings) || '' }} \
+            ${{ steps.android_config.outputs.default_sound == 'true' && '--android_default_sound=true' || '' }} \
+            ${{ steps.android_config.outputs.default_vibrate == 'true' && '--android_default_vibrate_timings=true' || '' }} \
+            ${{ steps.android_config.outputs.default_light == 'true' && '--android_default_light_settings=true' || '' }} \
+            ${{ steps.android_config.outputs.sticky == 'true' && '--android_sticky=true' || '' }} \
+            ${{ steps.android_config.outputs.local_only == 'true' && '--android_local_only=true' || '' }} \
+            ${{ steps.android_config.outputs.event_time && format('--android_event_time="{0}"', steps.android_config.outputs.event_time) || '' }} \
+            ${{ steps.android_config.outputs.tag && format('--android_tag="{0}"', steps.android_config.outputs.tag) || '' }} \
+            ${{ steps.android_config.outputs.click_action && format('--android_click_action="{0}"', steps.android_config.outputs.click_action) || '' }} \
+            ${{ steps.android_config.outputs.link && format('--android_link="{0}"', steps.android_config.outputs.link) || '' }} \
+            ${{ steps.android_config.outputs.group_key && format('--android_group_key="{0}"', steps.android_config.outputs.group_key) || '' }} \
+            ${{ steps.android_config.outputs.group_alert && format('--android_group_alert_behavior="{0}"', steps.android_config.outputs.group_alert) || '' }} \
+            ${{ steps.android_config.outputs.summary_text && format('--android_summary_text="{0}"', steps.android_config.outputs.summary_text) || '' }} \
+            ${{ steps.apns_config.outputs.priority && format('--apns_priority="{0}"', steps.apns_config.outputs.priority) || '' }} \
+            ${{ steps.apns_config.outputs.ttl && format('--apns_ttl="{0}"', steps.apns_config.outputs.ttl) || '' }} \
+            ${{ steps.apns_config.outputs.collapse_id && format('--apns_collapse_id="{0}"', steps.apns_config.outputs.collapse_id) || '' }} \
+            ${{ steps.apns_config.outputs.thread_id && format('--apns_thread_id="{0}"', steps.apns_config.outputs.thread_id) || '' }} \
+            ${{ steps.apns_config.outputs.badge && format('--apns_badge="{0}"', steps.apns_config.outputs.badge) || '' }} \
+            ${{ steps.apns_config.outputs.sound && format('--apns_sound="{0}"', steps.apns_config.outputs.sound) || '' }} \
+            ${{ steps.web_config.outputs.ttl && format('--web_ttl="{0}"', steps.web_config.outputs.ttl) || '' }} \
+            ${{ steps.web_config.outputs.urgency && format('--web_urgency="{0}"', steps.web_config.outputs.urgency) || '' }} \
+            ${{ steps.web_config.outputs.fallback_title && format('--web_fallback_title="{0}"', steps.web_config.outputs.fallback_title) || '' }} \
+            ${{ steps.web_config.outputs.fallback_body && format('--web_fallback_body="{0}"', steps.web_config.outputs.fallback_body) || '' }} \
+            ${{ steps.web_config.outputs.fallback_icon && format('--web_fallback_icon="{0}"', steps.web_config.outputs.fallback_icon) || '' }} \
             --dry_run="${{ inputs.dry_run }}"
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
