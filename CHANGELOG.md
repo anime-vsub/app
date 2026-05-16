@@ -1,3 +1,19 @@
+# [2.8.0](https://github.com/anime-vsub/app/compare/v2.7.0...v2.8.0) (2026-05-16)
+
+
+### Bug Fixes
+
+* **comment:** align more button to right edge and add vertical padding ([77754ae](https://github.com/anime-vsub/app/commit/77754aefff75ab355834a46e6d4a1f8f5d112d26))
+* sync widget accent colors with updated theme ([f1d361b](https://github.com/anime-vsub/app/commit/f1d361bbf86648a8a50eb4edf042f1ef03f6853b))
+
+
+### Features
+
+* add FCM push notification system with System tab ([3815f10](https://github.com/anime-vsub/app/commit/3815f10f8f598b9f429e7705813bae858f9c8014))
+* add Firebase Crashlytics and Performance Monitoring ([605a327](https://github.com/anime-vsub/app/commit/605a327e1e187ad864ffaa87a4ba2dd8a94b90c7))
+* add icons to all settings screen items ([60a2b24](https://github.com/anime-vsub/app/commit/60a2b245eb00201635e06ac08647bcd0c8b975ea))
+* **player:** add swipe up gesture to enter fullscreen with scale animation ([8b81429](https://github.com/anime-vsub/app/commit/8b81429e5ffc45328bf297f9ee64a574320475df))
+
 # [2.7.0](https://github.com/anime-vsub/app/compare/v2.6.1...v2.7.0) (2026-05-13)
 
 
