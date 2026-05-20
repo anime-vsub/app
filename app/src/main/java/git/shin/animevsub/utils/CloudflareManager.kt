@@ -86,7 +86,8 @@ class CloudflareManager @Inject constructor(
                 "(function() { " +
                   "return document.title.includes('Just a moment') || " +
                   "document.body.innerText.includes('cf-challenge') || " +
-                  "document.body.innerText.includes('ray-id'); " +
+                  "document.body.innerText.includes('ray-id') || " +
+                  "document.querySelector('.captcha-placeholder') !== null;"
                   "})()"
               ) { result ->
                 if (result == "false") {
@@ -175,19 +176,20 @@ class CloudflareManager @Inject constructor(
 
   private fun isCloudflareChallenge(response: Response, body: String): Boolean {
     val hasCfHeaders =
-      response.code in 403..503 && (body.contains("cf-challenge") || body.contains("ray-id"))
+      response.code in 403..503 && (body.contains("cf-challenge") || body.contains("ray-id") || response.header("cf-mitigated") == "challenge")
     val hasKeywords = body.contains("<title>Just a moment...</title>") ||
       body.contains("Xác Minh An Toàn") ||
       // Safe Verification
       body.contains("cf-browser-verification") ||
-      body.contains("Lỗi Server")
+      body.contains("Lỗi Server") ||
+      body.contains("Xác minh khu vực")
 
     // Detection for empty title with JS redirect (Anti-bot JS challenge)
     val isJsRedirect = (
       body.contains("window.location") ||
         body.contains("location.replace") ||
         body.contains("location.href")
-      ) &&
+      ) ||
       (body.contains("<title></title>") || !body.contains("<title>"))
 
     return hasCfHeaders || hasKeywords || isJsRedirect
