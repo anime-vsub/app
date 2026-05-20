@@ -87,7 +87,7 @@ class CloudflareManager @Inject constructor(
                   "return document.title.includes('Just a moment') || " +
                   "document.body.innerText.includes('cf-challenge') || " +
                   "document.body.innerText.includes('ray-id') || " +
-                  "document.querySelector('.captcha-placeholder') !== null;"
+                  "document.querySelector('.captcha-placeholder') !== null;" +
                   "})()"
               ) { result ->
                 if (result == "false") {
