@@ -1,3 +1,10 @@
+## [2.8.1](https://github.com/anime-vsub/app/compare/v2.8.0...v2.8.1) (2026-05-20)
+
+
+### Bug Fixes
+
+* enhance Cloudflare challenge detection logic ([#138](https://github.com/anime-vsub/app/issues/138)) ([9260e4f](https://github.com/anime-vsub/app/commit/9260e4f5c29cc9ed31170e495db95da744908c09))
+
 # [2.8.0](https://github.com/anime-vsub/app/compare/v2.7.0...v2.8.0) (2026-05-16)
 
 
