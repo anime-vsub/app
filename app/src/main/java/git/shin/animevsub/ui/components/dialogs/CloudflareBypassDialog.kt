@@ -227,7 +227,7 @@ fun CloudflareBypassDialog(
                     // if (!title.isNullOrEmpty() &&
                     //  !title.contains("Just a moment", ignoreCase = true) &&
                     //  !title.contains("Cloudflare", ignoreCase = true)
-                    if (!title.isNullOrEmpty() && title?.contains("Solved 0x0000", ignoreCase = true)) {
+                    if (!title.isNullOrEmpty() && title.contains("Solved 0x0000", ignoreCase = true)) {
                       onResult(url)
                     }
                   }
