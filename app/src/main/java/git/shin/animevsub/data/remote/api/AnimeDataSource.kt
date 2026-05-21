@@ -23,6 +23,7 @@ import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
+import git.shin.animevsub.utils.CloudflareManager
 import kotlinx.coroutines.flow.Flow
 
 interface AnimeDataSource {
@@ -71,10 +72,11 @@ interface AnimeDataSource {
   fun decodeURI(url: String): String
 
   companion object {
-    private const val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+    val userAgent: String
+      get() = CloudflareManager.getCurrentUserAgent()
 
     fun getHeaders(url: String): Map<String, String> = mapOf(
-      "User-Agent" to USER_AGENT,
+      "User-Agent" to userAgent,
       "Referer" to url.substringBefore("/", "").ifEmpty { "" }
     )
 

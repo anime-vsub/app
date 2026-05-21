@@ -20,10 +20,10 @@ class HlsPlaylistParser(private val httpClient: OkHttpClient) {
     val resolution: String?
   )
 
-  suspend fun parsePlaylist(playlistUrl: String, referer: String? = null): PlaylistInfo? {
+  suspend fun parsePlaylist(playlistUrl: String, headers: Map<String, String>): PlaylistInfo? {
     return try {
       val requestBuilder = Request.Builder().url(playlistUrl)
-      referer?.let { requestBuilder.addHeader("Referer", it) }
+      headers.forEach { (key, value) -> requestBuilder.header(key, value) }
 
       val response = httpClient.newCall(requestBuilder.build()).execute()
       if (!response.isSuccessful) return null

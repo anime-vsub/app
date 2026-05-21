@@ -95,13 +95,12 @@ import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.Badge
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.components.common.ActionButton
+import git.shin.animevsub.ui.components.detail.AiChatBottomSheet
 import git.shin.animevsub.ui.components.detail.AiRecapBlock
 import git.shin.animevsub.ui.components.detail.ChapterBottomSheet
 import git.shin.animevsub.ui.components.detail.CommentContent
 import git.shin.animevsub.ui.components.detail.CommentSection
 import git.shin.animevsub.ui.components.detail.DetailBottomSheet
-import git.shin.animevsub.ui.components.detail.AiChatBottomSheet
-import git.shin.animevsub.ui.components.detail.AiChatMessage
 import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.BedtimeReminderDialog
 import git.shin.animevsub.ui.components.player.BreakReminderDialog

@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.R
 import git.shin.animevsub.data.repository.AnimeRepository
+import git.shin.animevsub.utils.CloudflareManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +24,7 @@ data class LoginUiState(
 @HiltViewModel
 class LoginViewModel @Inject constructor(
   private val repository: AnimeRepository,
+  val cloudflareManager: CloudflareManager,
   @ApplicationContext private val context: Context
 ) : ViewModel() {
 

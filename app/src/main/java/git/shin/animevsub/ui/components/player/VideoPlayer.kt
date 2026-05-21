@@ -144,6 +144,7 @@ import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.remote.HlsPlaylistParser
 import git.shin.animevsub.data.remote.HlsSegmentPrefetcher
 import git.shin.animevsub.data.remote.RedirectResolvingDataSourceFactory
+import git.shin.animevsub.data.remote.WebViewCookieJar
 import git.shin.animevsub.ui.components.player.settings.SettingsBottomSheetContent
 import git.shin.animevsub.ui.components.player.settings.SettingsSideMenuContent
 import git.shin.animevsub.ui.styles.SmallTextStyle
@@ -229,10 +230,11 @@ fun VideoPlayer(
   val okHttpClient = remember(redirectPrefetchEnabled) {
     if (redirectPrefetchEnabled) {
       OkHttpClient.Builder()
-        .connectTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
-        .readTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+        .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+        .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
         .followRedirects(true)
         .followSslRedirects(true)
+        .cookieJar(WebViewCookieJar())
         .build()
     } else {
       null

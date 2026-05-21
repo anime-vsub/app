@@ -13,7 +13,8 @@ import java.io.IOException
 @UnstableApi
 class RedirectResolvingHttpDataSource(
   private val httpClient: OkHttpClient,
-  private val defaultHttpDataSource: DefaultHttpDataSource
+  private val defaultHttpDataSource: DefaultHttpDataSource,
+  private val headers: Map<String, String>
 ) : HttpDataSource by defaultHttpDataSource {
 
   private val redirectCache = mutableMapOf<String, String>()
@@ -37,6 +38,7 @@ class RedirectResolvingHttpDataSource(
 
     return try {
       val requestBuilder = Request.Builder().url(url)
+      headers.forEach { (key, value) -> requestBuilder.header(key, value) }
       val request = requestBuilder.head().build()
       val response = httpClient.newCall(request).execute()
 
@@ -64,6 +66,7 @@ class RedirectResolvingHttpDataSource(
 
     val resolvedUrl = try {
       val requestBuilder = Request.Builder().url(url)
+      headers.forEach { (key, value) -> requestBuilder.header(key, value) }
       val request = requestBuilder.head().build()
       val response = httpClient.newCall(request).execute()
 
@@ -108,7 +111,7 @@ class RedirectResolvingDataSourceFactory(
 
   override fun createDataSource(): HttpDataSource {
     val defaultDataSource = defaultFactory.createDataSource() as DefaultHttpDataSource
-    return RedirectResolvingHttpDataSource(httpClient, defaultDataSource)
+    return RedirectResolvingHttpDataSource(httpClient, defaultDataSource, defaultRequestProperties)
   }
 
   override fun setDefaultRequestProperties(defaultRequestProperties: Map<String, String>): HttpDataSource.Factory {

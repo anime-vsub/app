@@ -402,6 +402,11 @@ class MainActivity : ComponentActivity() {
                   cloudflareManager.onBypassCompleted(url)
                 }
               },
+              onUserAgent = { ua ->
+                MainScope().launch {
+                  cloudflareManager.updateUserAgent(ua)
+                }
+              },
               onDismiss = {
                 cloudflareManager.cancelBypass()
               }

@@ -1,15 +1,11 @@
 package git.shin.animevsub.ui.components.dialogs
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.view.ViewGroup
-import android.webkit.ConsoleMessage
-import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import android.webkit.WebView.setWebContentsDebuggingEnabled
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -63,6 +59,7 @@ import git.shin.animevsub.ui.theme.TextPrimary
 fun CloudflareBypassDialog(
   url: String,
   onResult: (String?) -> Unit,
+  onUserAgent: (String) -> Unit,
   onDismiss: () -> Unit
 ) {
   var webView by remember { mutableStateOf<WebView?>(null) }
@@ -216,102 +213,12 @@ fun CloudflareBypassDialog(
                   ViewGroup.LayoutParams.MATCH_PARENT
                 )
                 settings.javaScriptEnabled = true
-                settings.useWideViewPort = true
-                settings.loadWithOverviewMode = true
                 settings.domStorageEnabled = true
-                settings.setSupportZoom(true)
-                settings.builtInZoomControls = true
-                settings.displayZoomControls = false
-                settings.userAgentString =
-                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-
-                settings.allowFileAccess = false
-                settings.allowContentAccess = false
-                setWebContentsDebuggingEnabled(false)
-
-                webChromeClient = object : WebChromeClient() {
-                  override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-                    return true
-                  }
-
-                  override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                    result?.confirm()
-                    return true
-                  }
-
-                  override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                    result?.confirm()
-                    return true
-                  }
-                }
+                onUserAgent(settings.userAgentString)
 
                 webViewClient = object : WebViewClient() {
-                  override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
-                    super.onPageStarted(view, url, favicon)
-                    injectAntiDetectConsole(view)
-                  }
-
-                  private fun injectAntiDetectConsole(view: WebView?) {
-                    val antiDetectConsoleJs = """
-            (function() {
-                if (window.console && window.console.__isFake) return;
-
-                const methods = ['log', 'info', 'warn', 'error', 'debug', 'assert', 'clear', 'trace'];
-                const noOp = function() {};
-
-                function makeNativeLike(func, name) {
-                    Object.defineProperty(func, 'toString', {
-                        configurable: true,
-                        enumerable: false,
-                        writable: true,
-                        value: function() {
-                            return 'function ' + name + '() { [native code] }';
-                        }
-                    });
-                    Object.defineProperty(func.toString, 'toString', {
-                        configurable: true,
-                        enumerable: false,
-                        writable: true,
-                        value: function() {
-                            return 'function toString() { [native code] }';
-                        }
-                    });
-                }
-
-                if (window.console) {
-                    methods.forEach(method => {
-                        if (window.console[method]) {
-                            window.console[method] = noOp;
-                            makeNativeLike(window.console[method], method);
-                        }
-                    });
-                    
-                    Object.defineProperty(window.console, '__isFake', {
-                        value: true,
-                        enumerable: false,
-                        configurable: false
-                    });
-                }
-        Object.defineProperty(navigator, 'webdriver', {
-            get: () => undefined
-        });
-
-        Object.defineProperty(navigator, 'languages', {
-            get: () => ['vi-VN', 'vi', 'en-US', 'en']
-        });
-
-        Object.defineProperty(navigator, 'plugins', {
-            get: () => [1, 2, 3, 4, 5]
-        });
-    })();
-        """
-
-                    view?.evaluateJavascript(antiDetectConsoleJs, null)
-                  }
-
                   override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    injectAntiDetectConsole(view)
                     canGoBack = view?.canGoBack() ?: false
                     canGoForward = view?.canGoForward() ?: false
                     pageTitle = view?.title ?: ""

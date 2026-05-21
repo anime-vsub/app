@@ -23,14 +23,27 @@ import javax.inject.Singleton
 class CloudflareManager @Inject constructor(
   @param:dagger.hilt.android.qualifiers.ApplicationContext private val context: android.content.Context
 ) {
+  companion object {
+    const val DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+
+    @Volatile
+    private var instance: CloudflareManager? = null
+
+    fun getCurrentUserAgent(): String = instance?.currentUserAgent() ?: DEFAULT_USER_AGENT
+  }
+
+  init {
+    instance = this
+  }
+
   private val _bypassUrl = MutableStateFlow<String?>(null)
   val bypassUrl = _bypassUrl.asStateFlow()
 
+  private var _userAgent = MutableStateFlow<String?>(null)
+  val userAgent = _userAgent.asStateFlow()
+
   private val mutex = Mutex()
   private var currentDeferred: CompletableDeferred<Boolean>? = null
-
-  private val userAgent =
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
 
   suspend fun startBypass(url: String): Boolean {
     // Try headless first
@@ -68,7 +81,7 @@ class CloudflareManager @Inject constructor(
     val webView = WebView(context).apply {
       settings.javaScriptEnabled = true
       settings.domStorageEnabled = true
-      settings.userAgentString = userAgent
+      updateUserAgent(settings.userAgentString)
 
       webViewClient = object : WebViewClient() {
         private var checkJob: Runnable? = null
@@ -122,6 +135,7 @@ class CloudflareManager @Inject constructor(
     val result = try {
       deferred.await()
     } catch (e: Exception) {
+      print(e)
       false
     } finally {
       webView.stopLoading()
@@ -134,6 +148,12 @@ class CloudflareManager @Inject constructor(
     print(url)
     currentDeferred?.complete(true)
   }
+
+  fun updateUserAgent(ua: String) {
+    _userAgent.value = ua
+  }
+
+  fun currentUserAgent(): String = _userAgent.value ?: DEFAULT_USER_AGENT
 
   fun cancelBypass() {
     currentDeferred?.complete(false)
@@ -166,7 +186,10 @@ class CloudflareManager @Inject constructor(
       if (retryCount < 1) {
         response.close()
         if (startBypass(request.url.toString())) {
-          return@withContext fetch(client, request, retryCount + 1)
+          val newRequest = request.newBuilder()
+            .header("User-Agent", currentUserAgent())
+            .build()
+          return@withContext fetch(client, newRequest, retryCount + 1)
         }
       }
     }

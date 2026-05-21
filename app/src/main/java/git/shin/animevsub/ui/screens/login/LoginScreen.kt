@@ -233,8 +233,6 @@ fun LoginScreen(
           WebView(context).apply {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
-            settings.userAgentString =
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
 
             webViewClient = object : WebViewClient() {
               override fun onPageFinished(view: WebView?, url: String?) {
