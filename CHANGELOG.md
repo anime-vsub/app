@@ -1,3 +1,10 @@
+## [2.8.2](https://github.com/anime-vsub/app/compare/v2.8.1...v2.8.2) (2026-05-21)
+
+
+### Bug Fixes
+
+* Modify Cloudflare bypass check logic ([6334a90](https://github.com/anime-vsub/app/commit/6334a908c152ab79c279d43909059db86fe57b92))
+
 ## [2.8.1](https://github.com/anime-vsub/app/compare/v2.8.0...v2.8.1) (2026-05-20)
 
 
