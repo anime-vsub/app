@@ -22,5 +22,12 @@
 -dontwarn org.slf4j.**
 -dontwarn java.lang.management.**
 
+# Firebase
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+
+# FCM Service
+-keep class git.shin.animevsub.utils.AnimeVsubFirebaseMessagingService { *; }
+
 # Fix Ktor debug
 -dontwarn io.ktor.util.debug.**

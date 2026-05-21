@@ -32,12 +32,16 @@ class AnimeVsubFirebaseMessagingService : FirebaseMessagingService() {
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             Log.d(TAG, "Subscribed to all_users topic")
+          } else {
+            Log.e(TAG, "Failed to subscribe to all_users topic", task.exception)
           }
         }
       FirebaseMessaging.getInstance().subscribeToTopic("app_updates")
         .addOnCompleteListener { task ->
           if (task.isSuccessful) {
             Log.d(TAG, "Subscribed to app_updates topic")
+          } else {
+            Log.e(TAG, "Failed to subscribe to app_updates topic", task.exception)
           }
         }
     }
