@@ -224,10 +224,10 @@ fun CloudflareBypassDialog(
 
                     // Check if bypassed
                     val title = view?.title
-                    if (!title.isNullOrEmpty() &&
-                      !title.contains("Just a moment", ignoreCase = true) &&
-                      !title.contains("Cloudflare", ignoreCase = true)
-                    ) {
+                    // if (!title.isNullOrEmpty() &&
+                    //  !title.contains("Just a moment", ignoreCase = true) &&
+                    //  !title.contains("Cloudflare", ignoreCase = true)
+                    if (title.contains("Solved 0x0000", ignoreCase = true)) {
                       onResult(url)
                     }
                   }
