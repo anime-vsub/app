@@ -18,7 +18,9 @@ import git.shin.animevsub.utils.CloudflareManager
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.gotrue.SettingsSessionManager
 import io.github.jan.supabase.postgrest.Postgrest
+import com.russhwolf.settings.SharedPreferencesSettings
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -30,12 +32,15 @@ object AppModule {
 
   @Provides
   @Singleton
-  fun provideSupabaseClient(): SupabaseClient = createSupabaseClient(
+  fun provideSupabaseClient(@ApplicationContext context: Context): SupabaseClient = createSupabaseClient(
     supabaseUrl = BuildConfig.SUPABASE_URL,
     supabaseKey = BuildConfig.SUPABASE_KEY
   ) {
     install(Postgrest)
-    install(Auth)
+    install(Auth) {
+      val sharedPreferences = context.getSharedPreferences("supabase_session", Context.MODE_PRIVATE)
+      sessionManager = SettingsSessionManager(SharedPreferencesSettings(sharedPreferences))
+    }
   }
 
   @Provides
