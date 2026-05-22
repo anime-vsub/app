@@ -1,3 +1,10 @@
+## [2.8.3](https://github.com/anime-vsub/app/compare/v2.8.2...v2.8.3) (2026-05-22)
+
+
+### Bug Fixes
+
+* cloudflare infinte loop. Now support VPN and other area ([5c1dd9b](https://github.com/anime-vsub/app/commit/5c1dd9b41b92f55063c039b8634d6e8674531b93))
+
 ## [2.8.2](https://github.com/anime-vsub/app/compare/v2.8.1...v2.8.2) (2026-05-21)
 
 
