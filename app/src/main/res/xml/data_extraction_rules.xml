@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <!-- Exclude unencrypted Supabase session from cloud backup and device transfer -->
+    <cloud-backup>
+        <exclude domain="sharedpref" path="supabase_session.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="supabase_session.xml" />
+    </device-transfer>
+</data-extraction-rules>
