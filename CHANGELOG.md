@@ -1,3 +1,10 @@
+## [2.9.2](https://github.com/anime-vsub/app/compare/v2.9.1...v2.9.2) (2026-05-23)
+
+
+### Bug Fixes
+
+* can't login ([a3514cc](https://github.com/anime-vsub/app/commit/a3514cc084b8e3809dce17f5d8e8c43aae385a12))
+
 ## [2.9.1](https://github.com/anime-vsub/app/compare/v2.9.0...v2.9.1) (2026-05-23)
 
 
