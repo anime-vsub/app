@@ -81,7 +81,8 @@ class CloudflareManager @Inject constructor(
     val webView = WebView(context).apply {
       settings.javaScriptEnabled = true
       settings.domStorageEnabled = true
-      updateUserAgent(settings.userAgentString)
+      settings.userAgentString = currentUserAgent()
+      // updateUserAgent(settings.userAgentString)
 
       webViewClient = object : WebViewClient() {
         private var checkJob: Runnable? = null
