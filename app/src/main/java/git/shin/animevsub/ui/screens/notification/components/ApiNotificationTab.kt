@@ -14,6 +14,7 @@ import git.shin.animevsub.ui.components.anime.NotificationItemRow
 import git.shin.animevsub.ui.components.anime.NotificationListSkeleton
 import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.ui.screens.notification.NotificationUiState
+import androidx.compose.foundation.lazy.itemsIndexed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +43,7 @@ fun ApiNotificationTab(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(bottom = 16.dp)
       ) {
-        items(items, key = { "api_${it.id}" }) { notification ->
+        itemsIndexed(items, key = { index, item -> "api_${item.id}_$index" }) { index, notification ->
           NotificationItemRow(
             notification = notification,
             onClick = {
