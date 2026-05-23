@@ -23,8 +23,27 @@ import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
+import git.shin.animevsub.data.remote.SegmentDataInterceptor
+import git.shin.animevsub.data.remote.SegmentUrlInterceptor
 import git.shin.animevsub.utils.CloudflareManager
 import kotlinx.coroutines.flow.Flow
+import java.net.URI
+
+fun extractOrigin(rawUrl: String, defaultScheme: String = "https"): String {
+  val normalized = if (rawUrl.contains("://")) {
+    rawUrl
+  } else {
+    "$defaultScheme://$rawUrl"
+  }
+
+  val uri = URI(normalized)
+
+  return if (uri.port == -1) {
+    "${uri.scheme}://${uri.host}"
+  } else {
+    "${uri.scheme}://${uri.host}:${uri.port}"
+  }
+}
 
 interface AnimeDataSource {
   val hostCurl: String
@@ -51,6 +70,9 @@ interface AnimeDataSource {
   suspend fun getServers(chapter: ChapterInfo): List<ServerInfo>
   suspend fun getPlayerLink(server: ServerInfo): PlayerData
 
+  val segmentUrlInterceptor: SegmentUrlInterceptor? get() = null
+  val segmentDataInterceptor: SegmentDataInterceptor? get() = null
+
   suspend fun getEpisodeSkip(animeId: String, detail: AnimeDetail, chapter: ChapterInfo): InOutroEpisode?
 
   suspend fun getFollows(page: Int): CategoryPage
@@ -75,10 +97,17 @@ interface AnimeDataSource {
     val userAgent: String
       get() = CloudflareManager.getCurrentUserAgent()
 
-    fun getHeaders(url: String): Map<String, String> = mapOf(
-      "User-Agent" to userAgent,
-      "Referer" to url.substringBefore("/", "").ifEmpty { "" }
-    )
+    fun getHeaders(url: String, ignoreUserAgent: Boolean = false): Map<String, String> {
+      val headers = mutableMapOf<String, String>()
+
+      if (!ignoreUserAgent) {
+        headers["User-Agent"] = userAgent
+      }
+
+      headers["Referer"] = extractOrigin(url)
+
+      return headers
+    }
 
     fun extractBackgroundImage(style: String): String = Regex("background-image\\s*:\\s*url\\(['\"]?([^'\")]+)['\"]?\\)").find(style)?.groupValues?.getOrNull(1) ?: ""
   }

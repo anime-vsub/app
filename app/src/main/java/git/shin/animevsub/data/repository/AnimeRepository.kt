@@ -16,7 +16,7 @@ import git.shin.animevsub.data.model.FilterOption
 import git.shin.animevsub.data.model.HomeData
 import git.shin.animevsub.data.model.InOutroEpisode
 import git.shin.animevsub.data.model.NotificationData
-import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.PlayerConfig
 import git.shin.animevsub.data.model.PostCommentResponse
 import git.shin.animevsub.data.model.ReplyResponse
 import git.shin.animevsub.data.model.ScheduleDay
@@ -163,14 +163,19 @@ class AnimeRepository @Inject constructor(
     api.getServers(chapter)
   }
 
-  suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerData> = runCatching {
-    val result = api.getPlayerLink(server)
+  suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerConfig> = runCatching {
+    val playerData = api.getPlayerLink(server)
     analytics.logEvent("play_video") {
       param(FirebaseAnalytics.Param.ITEM_ID, chapter.id)
       param(FirebaseAnalytics.Param.ITEM_NAME, chapter.name)
       param("server_name", server.name)
     }
-    result
+    PlayerConfig(
+      playerData = playerData,
+      server = server,
+      segmentUrlInterceptor = api.segmentUrlInterceptor,
+      segmentDataInterceptor = api.segmentDataInterceptor
+    )
   }
 
   // Skip Range

@@ -1,5 +1,7 @@
 package git.shin.animevsub.data.model
 
+import git.shin.animevsub.data.remote.SegmentDataInterceptor
+import git.shin.animevsub.data.remote.SegmentUrlInterceptor
 import kotlinx.serialization.Serializable
 import java.time.Instant
 
@@ -95,6 +97,13 @@ data class PlayerData(
   val type: String,
   val headers: Map<String, String>? = null,
   val isContent: Boolean = false
+)
+
+class PlayerConfig(
+  val playerData: PlayerData,
+  val server: ServerInfo,
+  val segmentUrlInterceptor: SegmentUrlInterceptor?,
+  val segmentDataInterceptor: SegmentDataInterceptor?
 )
 
 data class ChapterData(

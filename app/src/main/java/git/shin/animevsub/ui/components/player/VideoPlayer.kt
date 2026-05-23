@@ -138,12 +138,13 @@ import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.DoubleRange
-import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.PlayerConfig
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.remote.HlsPlaylistParser
 import git.shin.animevsub.data.remote.HlsSegmentPrefetcher
 import git.shin.animevsub.data.remote.RedirectResolvingDataSourceFactory
+import git.shin.animevsub.data.remote.TransformableDataSourceFactory
 import git.shin.animevsub.data.remote.WebViewCookieJar
 import git.shin.animevsub.ui.components.player.settings.SettingsBottomSheetContent
 import git.shin.animevsub.ui.components.player.settings.SettingsSideMenuContent
@@ -168,7 +169,7 @@ import kotlin.math.roundToInt
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 @Composable
 fun VideoPlayer(
-  playerData: PlayerData?,
+  playerConfig: PlayerConfig?,
   poster: String?,
   modifier: Modifier = Modifier,
   title: String = "",
@@ -226,6 +227,8 @@ fun VideoPlayer(
   val flagSecureEnabled by preferencesManager.flagSecure.collectAsState(initial = true)
   val redirectPrefetchEnabled by preferencesManager.redirectPrefetchEnabled.collectAsState(initial = false)
   val redirectPrefetchCount by preferencesManager.redirectPrefetchCount.collectAsState(initial = 5)
+
+  val playerData = playerConfig?.playerData
 
   val okHttpClient = remember(redirectPrefetchEnabled) {
     if (redirectPrefetchEnabled) {
@@ -526,7 +529,7 @@ fun VideoPlayer(
   var loadedUri by remember { mutableStateOf<android.net.Uri?>(null) }
   var loadedEpisodeId by remember { mutableStateOf<String?>(null) }
 
-  LaunchedEffect(playerData, currentEpisode?.id) {
+  LaunchedEffect(playerConfig, currentEpisode?.id) {
     if (playerData == null || playerData.link.isEmpty()) {
       exoPlayer.stop()
       exoPlayer.clearMediaItems()
@@ -547,7 +550,15 @@ fun VideoPlayer(
     }
 
     val httpDataSourceFactory =
-      if (redirectPrefetchEnabled && okHttpClient != null) {
+      if (playerConfig?.segmentUrlInterceptor != null || playerConfig?.segmentDataInterceptor != null) {
+        TransformableDataSourceFactory(
+          server = playerConfig.server,
+          playerData = playerConfig.playerData,
+          urlInterceptor = playerConfig.segmentUrlInterceptor,
+          dataInterceptor = playerConfig.segmentDataInterceptor,
+          defaultRequestProperties = (playerData.headers ?: emptyMap()).toMutableMap()
+        )
+      } else if (redirectPrefetchEnabled && okHttpClient != null) {
         RedirectResolvingDataSourceFactory(
           httpClient = okHttpClient,
           defaultRequestProperties = (playerData.headers ?: emptyMap()).toMutableMap()
@@ -593,7 +604,7 @@ fun VideoPlayer(
       exoPlayer.prepare()
       exoPlayer.play()
 
-      if (redirectPrefetchEnabled && m3u8Content != null && playlistParser != null && segmentPrefetcher != null) {
+      if (false && redirectPrefetchEnabled && m3u8Content != null && playlistParser != null && segmentPrefetcher != null) {
         val segmentUrls = playlistParser.extractSegmentUrlsFromContent(m3u8Content, playerData.link)
         if (segmentUrls.isNotEmpty()) {
           val prefetchCount = minOf(segmentUrls.size, redirectPrefetchCount)

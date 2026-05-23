@@ -11,16 +11,13 @@ import git.shin.animevsub.data.model.Comment
 import git.shin.animevsub.data.model.DisplaySeason
 import git.shin.animevsub.data.model.DoubleRange
 import git.shin.animevsub.data.model.FilterOption
-import git.shin.animevsub.data.model.PlayerData
+import git.shin.animevsub.data.model.PlayerConfig
 import git.shin.animevsub.data.model.Season
 import git.shin.animevsub.data.model.ServerInfo
 import git.shin.animevsub.data.model.Trigger
 import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.model.WatchProgress
 import git.shin.animevsub.data.repository.AnimeRepository
-import git.shin.animevsub.data.repository.ChatContext
-import git.shin.animevsub.data.repository.ChatMessage
-import git.shin.animevsub.data.repository.GeminiRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -53,7 +50,7 @@ data class DetailUiState(
   val initialChapterId: String? = null,
   // Player state
   val isPlayerLoading: Boolean = false,
-  val playerData: PlayerData? = null,
+  val playerConfig: PlayerConfig? = null,
   val playerError: String? = null,
   val currentChapter: ChapterInfo? = null,
   val servers: List<ServerInfo> = emptyList(),
@@ -546,7 +543,7 @@ class DetailViewModel @Inject constructor(
         episodeNameFromApi = null,
         servers = emptyList(),
         currentServer = null,
-        playerData = null,
+        playerConfig = null,
         lastProgress = 0L,
         aiRecap = null,
         isRecapLoading = false,
@@ -917,7 +914,7 @@ class DetailViewModel @Inject constructor(
         currentServer = server,
         isPlayerLoading = true,
         playerError = null,
-        playerData = null
+        playerConfig = null
       )
     }
     loadPlayer(chapter, server)
@@ -930,7 +927,7 @@ class DetailViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               isPlayerLoading = false,
-              playerData = data,
+              playerConfig = data,
               playerError = null
             )
           }
@@ -976,7 +973,7 @@ class DetailViewModel @Inject constructor(
   fun retryPlayer() {
     val state = _uiState.value
     if (state.currentChapter != null) {
-      _uiState.update { it.copy(playerData = null, playerError = null, isPlayerLoading = true) }
+      _uiState.update { it.copy(playerConfig = null, playerError = null, isPlayerLoading = true) }
       if (state.currentServer != null) {
         loadPlayer(state.currentChapter, state.currentServer)
       } else {

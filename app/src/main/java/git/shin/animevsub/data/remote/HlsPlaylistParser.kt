@@ -1,8 +1,6 @@
 package git.shin.animevsub.data.remote
 
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.IOException
 import java.util.regex.Pattern
 
 class HlsPlaylistParser(private val httpClient: OkHttpClient) {
@@ -19,24 +17,6 @@ class HlsPlaylistParser(private val httpClient: OkHttpClient) {
     val bandwidth: Int,
     val resolution: String?
   )
-
-  suspend fun parsePlaylist(playlistUrl: String, headers: Map<String, String>): PlaylistInfo? {
-    return try {
-      val requestBuilder = Request.Builder().url(playlistUrl)
-      headers.forEach { (key, value) -> requestBuilder.header(key, value) }
-
-      val response = httpClient.newCall(requestBuilder.build()).execute()
-      if (!response.isSuccessful) return null
-
-      val content = response.body?.string() ?: return null
-      response.close()
-
-      val baseUrl = getBaseUrl(playlistUrl)
-      parseM3u8Content(content, baseUrl)
-    } catch (e: IOException) {
-      null
-    }
-  }
 
   private fun parseM3u8Content(content: String, baseUrl: String): PlaylistInfo {
     val lines = content.lines().filter { it.isNotBlank() }

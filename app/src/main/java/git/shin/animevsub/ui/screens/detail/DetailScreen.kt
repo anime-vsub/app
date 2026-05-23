@@ -169,9 +169,9 @@ fun DetailScreen(
   val sheetHeight =
     if (isLandscapeUI) configuration.screenHeightDp.dp else configuration.screenHeightDp.dp - videoHeight
 
-  LaunchedEffect(uiState.playerData, isFullScreen, isPlayerPlaying) {
+  LaunchedEffect(uiState.playerConfig?.playerData, isFullScreen, isPlayerPlaying) {
     val activity = context as? MainActivity ?: return@LaunchedEffect
-    if (uiState.playerData != null) {
+    if (uiState.playerConfig != null) {
       activity.updatePipParams(isPlayerPlaying) { builder ->
         builder.setAspectRatio(Rational(16, 9))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -383,7 +383,7 @@ fun DetailScreen(
               // Player mode (handles loading detail, loading link, and errors)
               val currentChap = state.chapterData?.chaps?.getOrNull(state.currentChapIndex)
               VideoPlayer(
-                playerData = state.playerData,
+                playerConfig = state.playerConfig,
                 poster = detail?.poster ?: detail?.image,
                 title = detail?.name ?: "",
                 subtitle = currentChap?.name?.let {
