@@ -1,3 +1,16 @@
+# [2.9.0](https://github.com/anime-vsub/app/compare/v2.8.3...v2.9.0) (2026-05-23)
+
+
+### Bug Fixes
+
+* **cloudflare:** set current user agent ([5c2e19e](https://github.com/anime-vsub/app/commit/5c2e19e5030da5422ba4000b267dc37e8be19aa6))
+* **notification:** use index for list item keys ([5c48629](https://github.com/anime-vsub/app/commit/5c486297273752f55d2a99f20312dc24968b0176))
+
+
+### Features
+
+* add segment decryption and interceptors ([1f2355a](https://github.com/anime-vsub/app/commit/1f2355a45e61c64cdaaddfa4eda050dccd2dcfdc))
+
 ## [2.8.3](https://github.com/anime-vsub/app/compare/v2.8.2...v2.8.3) (2026-05-22)
 
 
