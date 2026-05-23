@@ -1,3 +1,10 @@
+## [2.9.1](https://github.com/anime-vsub/app/compare/v2.9.0...v2.9.1) (2026-05-23)
+
+
+### Bug Fixes
+
+* remove hard code force server ([a3d762d](https://github.com/anime-vsub/app/commit/a3d762d9836d770caba8f310e80f4f98bbae08a7))
+
 # [2.9.0](https://github.com/anime-vsub/app/compare/v2.8.3...v2.9.0) (2026-05-23)
 
 
