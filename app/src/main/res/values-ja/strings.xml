@@ -442,10 +442,6 @@
     <string name="ai_summary_at_timestamp">%1$s 時点の要約</string>
     <string name="prevent_screen_recording">スクリーンショットの防止</string>
     <string name="prevent_screen_recording_desc">プライバシーとセキュリティ向上のため、スクリーンショットと画面録画を無効にします</string>
-    <string name="redirect_prefetch">動画リンクの事前読み込み</string>
-    <string name="redirect_prefetch_desc">再生前に動画URLを解決し、リダイレクトのあるストリームのバッファリングを減少させます</string>
-    <string name="redirect_prefetch_count">事前読み込みリンク数</string>
-    <string name="redirect_prefetch_count_desc">再生前に解決する動画リンク数 (%1$d)</string>
     <string name="ai_chat_title">AIアシスタント</string>
     <string name="ai_chat_placeholder">このアニメについて何でも聞いてください…</string>
     <string name="send">送信</string>

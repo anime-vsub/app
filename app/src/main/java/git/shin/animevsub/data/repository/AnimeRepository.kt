@@ -320,10 +320,6 @@ class AnimeRepository @Inject constructor(
   suspend fun getOpenaiApiKey() = prefs.openaiApiKey.first()
   suspend fun getClaudeApiKey() = prefs.claudeApiKey.first()
   suspend fun setFlagSecure(value: Boolean) = prefs.setFlagSecure(value)
-  suspend fun setRedirectPrefetchEnabled(value: Boolean) = prefs.setRedirectPrefetchEnabled(value)
-  val redirectPrefetchEnabled = prefs.redirectPrefetchEnabled
-  suspend fun setRedirectPrefetchCount(value: Int) = prefs.setRedirectPrefetchCount(value)
-  val redirectPrefetchCount = prefs.redirectPrefetchCount
 
   // Search History
   val searchHistory = prefs.searchHistory

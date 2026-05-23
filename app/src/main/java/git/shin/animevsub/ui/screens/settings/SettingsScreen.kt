@@ -46,7 +46,6 @@ import androidx.compose.material.icons.filled.Summarize
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.SyncProblem
 import androidx.compose.material.icons.filled.Timer
-import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.VideocamOff
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.AlertDialog
@@ -283,24 +282,6 @@ fun SettingsScreen(
           checked = uiState.autoSkip,
           onCheckedChange = { viewModel.setAutoSkip(it) }
         )
-        SettingsToggle(
-          label = stringResource(R.string.redirect_prefetch),
-          description = stringResource(R.string.redirect_prefetch_desc),
-          icon = Icons.Default.Sync,
-          checked = uiState.redirectPrefetchEnabled,
-          onCheckedChange = { viewModel.setRedirectPrefetchEnabled(it) }
-        )
-        if (uiState.redirectPrefetchEnabled) {
-          SettingsSlider(
-            label = stringResource(R.string.redirect_prefetch_count),
-            value = uiState.redirectPrefetchCount,
-            icon = Icons.Default.Tune,
-            onValueChange = { viewModel.setRedirectPrefetchCount(it) },
-            valueRange = 5f..50f,
-            steps = 8,
-            valueText = "${uiState.redirectPrefetchCount}"
-          )
-        }
       }
 
       Spacer(modifier = Modifier.height(16.dp))

@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.BrightnessLow
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Feedback
-import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -68,11 +67,7 @@ fun SettingsSideMenuContent(
   pauseAfterCurrentEpisode: Boolean,
   onPauseAfterCurrentEpisodeChange: (Boolean) -> Unit,
   sleepTimerRemainingSeconds: Long,
-  onAiSummary: () -> Unit,
-  redirectPrefetchEnabled: Boolean,
-  onRedirectPrefetchToggle: (Boolean) -> Unit,
-  redirectPrefetchCount: Int,
-  onRedirectPrefetchCountChange: (Int) -> Unit
+  onAiSummary: () -> Unit
 ) {
   val context = LocalContext.current
   val onSupportClick = { subjectType: String ->
@@ -148,25 +143,6 @@ fun SettingsSideMenuContent(
           checked = brightnessGestureEnabled,
           onCheckedChange = onBrightnessGestureToggle
         )
-        SettingsToggleItem(
-          icon = Icons.Default.Link,
-          title = stringResource(R.string.redirect_prefetch),
-          checked = redirectPrefetchEnabled,
-          onCheckedChange = onRedirectPrefetchToggle
-        )
-      }
-    }
-    if (redirectPrefetchEnabled) {
-      SideMenuSection(title = stringResource(R.string.redirect_prefetch_count)) {
-        FlowRow(spacing = 8.dp) {
-          listOf(5, 10, 15, 20, 30, 40, 50).forEach { count ->
-            SideMenuOptionChip(
-              text = count.toString(),
-              isSelected = redirectPrefetchCount == count,
-              onClick = { onRedirectPrefetchCountChange(count) }
-            )
-          }
-        }
       }
     }
     SideMenuSection(title = stringResource(R.string.double_tap_skip)) {

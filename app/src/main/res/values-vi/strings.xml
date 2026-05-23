@@ -439,10 +439,6 @@
     <string name="ai_summary_at_timestamp">Tóm tắt tại %1$s</string>
     <string name="prevent_screen_recording">Chống quay chụp màn hình</string>
     <string name="prevent_screen_recording_desc">Vô hiệu hóa tính năng chụp ảnh và quay video màn hình để bảo vệ nội dung</string>
-    <string name="redirect_prefetch">Tải trước liên kết video</string>
-    <string name="redirect_prefetch_desc">Giải quyết URL video trước khi phát để giảm độ trễ cho các stream có chuyển hướng</string>
-    <string name="redirect_prefetch_count">Số lượng liên kết tải trước</string>
-    <string name="redirect_prefetch_count_desc">Số lượng liên kết video được giải quyết trước khi phát (%1$d)</string>
     <string name="ai_chat_title">Trợ lý AI</string>
     <string name="ai_chat_placeholder">Hỏi bất cứ điều gì về bộ anime này…</string>
     <string name="send">Gửi</string>

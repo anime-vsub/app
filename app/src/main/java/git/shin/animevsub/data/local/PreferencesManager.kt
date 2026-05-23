@@ -58,8 +58,6 @@ class PreferencesManager(private val context: Context) {
     private val GEMINI_API_KEY_KEY = stringPreferencesKey("gemini_api_key")
     private val GEMINI_MODEL_KEY = stringPreferencesKey("gemini_model")
     private val FLAG_SECURE_KEY = booleanPreferencesKey("flag_secure")
-    private val REDIRECT_PREFETCH_ENABLED_KEY = booleanPreferencesKey("redirect_prefetch_enabled")
-    private val REDIRECT_PREFETCH_COUNT_KEY = intPreferencesKey("redirect_prefetch_count")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -103,8 +101,6 @@ class PreferencesManager(private val context: Context) {
   val geminiApiKey: Flow<String> = context.dataStore.data.map { it[GEMINI_API_KEY_KEY] ?: "" }
   val geminiModel: Flow<String> = context.dataStore.data.map { it[GEMINI_MODEL_KEY] ?: "gemini-1.5-flash" }
   val flagSecure: Flow<Boolean> = context.dataStore.data.map { it[FLAG_SECURE_KEY] ?: true }
-  val redirectPrefetchEnabled: Flow<Boolean> = context.dataStore.data.map { it[REDIRECT_PREFETCH_ENABLED_KEY] ?: false }
-  val redirectPrefetchCount: Flow<Int> = context.dataStore.data.map { it[REDIRECT_PREFETCH_COUNT_KEY] ?: 10 }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -267,14 +263,6 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setFlagSecure(value: Boolean) {
     context.dataStore.edit { it[FLAG_SECURE_KEY] = value }
-  }
-
-  suspend fun setRedirectPrefetchEnabled(value: Boolean) {
-    context.dataStore.edit { it[REDIRECT_PREFETCH_ENABLED_KEY] = value }
-  }
-
-  suspend fun setRedirectPrefetchCount(value: Int) {
-    context.dataStore.edit { it[REDIRECT_PREFETCH_COUNT_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

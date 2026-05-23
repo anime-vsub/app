@@ -50,8 +50,6 @@ data class SettingsUiState(
   val claudeModel: String = "claude-sonnet-4-20250514",
   val claudeEndpoint: String = "",
   val flagSecure: Boolean = true,
-  val redirectPrefetchEnabled: Boolean = false,
-  val redirectPrefetchCount: Int = 5,
   val availableModels: List<String> = emptyList(),
   val isLoadingModels: Boolean = false,
   val isTestingKey: Boolean = false,
@@ -238,16 +236,6 @@ class SettingsViewModel @Inject constructor(
     viewModelScope.launch {
       repository.flagSecure.collect { v ->
         _uiState.update { it.copy(flagSecure = v) }
-      }
-    }
-    viewModelScope.launch {
-      repository.redirectPrefetchEnabled.collect { v ->
-        _uiState.update { it.copy(redirectPrefetchEnabled = v) }
-      }
-    }
-    viewModelScope.launch {
-      repository.redirectPrefetchCount.collect { v ->
-        _uiState.update { it.copy(redirectPrefetchCount = v) }
       }
     }
   }
@@ -492,14 +480,6 @@ class SettingsViewModel @Inject constructor(
 
   fun setFlagSecure(value: Boolean) {
     viewModelScope.launch { repository.setFlagSecure(value) }
-  }
-
-  fun setRedirectPrefetchEnabled(value: Boolean) {
-    viewModelScope.launch { repository.setRedirectPrefetchEnabled(value) }
-  }
-
-  fun setRedirectPrefetchCount(value: Int) {
-    viewModelScope.launch { repository.setRedirectPrefetchCount(value) }
   }
 
   fun testNotification() {

@@ -444,10 +444,6 @@
     <string name="ai_summary_at_timestamp">Summary at %1$s</string>
     <string name="prevent_screen_recording">Prevent Screen Recording</string>
     <string name="prevent_screen_recording_desc">Disable screenshots and screen recording for better privacy and security</string>
-    <string name="redirect_prefetch">Video Link Prefetch</string>
-    <string name="redirect_prefetch_desc">Resolve video URLs before playback to reduce buffering on streams with redirects</string>
-    <string name="redirect_prefetch_count">Prefetch Link Count</string>
-    <string name="redirect_prefetch_count_desc">Number of video links to resolve before playback (%1$d)</string>
     <string name="ai_chat_title">AI Assistant</string>
     <string name="ai_chat_placeholder">Ask anything about this anime…</string>
     <string name="send">Send</string>
