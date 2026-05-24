@@ -1,3 +1,16 @@
+# [2.10.0](https://github.com/anime-vsub/app/compare/v2.9.2...v2.10.0) (2026-05-24)
+
+
+### Bug Fixes
+
+* update dependency version (can't login) ([39244cc](https://github.com/anime-vsub/app/commit/39244cc6c2b1177fc8ebed5234894943b912f554))
+
+
+### Features
+
+* implement external platforms support in anime details ([15e52bd](https://github.com/anime-vsub/app/commit/15e52bde12d9a3570ad1829bacf7489e3bb335d7))
+* implement filtering for follows and modularize filter components ([06b97a2](https://github.com/anime-vsub/app/commit/06b97a22ffb7b9834716d0f0c05392167d1f0624))
+
 ## [2.9.2](https://github.com/anime-vsub/app/compare/v2.9.1...v2.9.2) (2026-05-23)
 
 
