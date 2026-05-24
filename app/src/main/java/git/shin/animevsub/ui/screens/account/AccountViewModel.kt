@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.AnimeCard
+import git.shin.animevsub.data.model.FilterGroup
 import git.shin.animevsub.data.model.HistoryItem
 import git.shin.animevsub.data.model.Playlist
+import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.data.repository.PlaylistRepository
@@ -31,7 +33,10 @@ data class AccountUiState(
   val historyError: String? = null,
   val followsError: String? = null,
   val playlistsError: String? = null,
-  val isRefreshing: Boolean = false
+  val isRefreshing: Boolean = false,
+  val followFilterGroups: List<FilterGroup> = emptyList(),
+  val followSelectedFilters: List<SelectedFilter> = emptyList(),
+  val isFollowFilterLoading: Boolean = false
 )
 
 @HiltViewModel
@@ -52,6 +57,7 @@ class AccountViewModel @Inject constructor(
         _uiState.update { it.copy(isLoggedIn = isLoggedIn, isAuthReady = true) }
         if (isLoggedIn) {
           refreshHistory()
+          loadFollowFilters()
           refreshFollows()
           refreshPlaylists()
         } else {
@@ -60,7 +66,9 @@ class AccountViewModel @Inject constructor(
               user = null,
               histories = emptyList(),
               follows = emptyList(),
-              playlists = emptyList()
+              playlists = emptyList(),
+              followFilterGroups = emptyList(),
+              followSelectedFilters = emptyList()
             )
           }
         }
@@ -87,7 +95,7 @@ class AccountViewModel @Inject constructor(
             }
         }
         val followsJob = launch {
-          repository.getFollows(1)
+          repository.getFollows(filters = _uiState.value.followSelectedFilters, page = 1)
             .onSuccess { page ->
               _uiState.update { it.copy(follows = page.items.take(10), followsError = null) }
             }
@@ -128,7 +136,7 @@ class AccountViewModel @Inject constructor(
   fun refreshFollows() {
     viewModelScope.launch {
       _uiState.value = _uiState.value.copy(isLoadingFollows = true, followsError = null)
-      repository.getFollows(1)
+      repository.getFollows(filters = _uiState.value.followSelectedFilters, page = 1)
         .onSuccess { page ->
           _uiState.value =
             _uiState.value.copy(follows = page.items.take(10), isLoadingFollows = false)
@@ -137,6 +145,50 @@ class AccountViewModel @Inject constructor(
           _uiState.value = _uiState.value.copy(isLoadingFollows = false, followsError = e.message)
         }
     }
+  }
+
+  fun loadFollowFilters() {
+    viewModelScope.launch {
+      _uiState.update { it.copy(isFollowFilterLoading = true) }
+      repository.getFollowFilters(emptyList())
+        .onSuccess { groups ->
+          val currentFilters = _uiState.value.followSelectedFilters
+          val newDefaults = groups.filter { it.default != null }
+            .filter { group -> currentFilters.none { it.groupId == group.id } }
+            .mapNotNull { group ->
+              val option = group.options.find { it.id == group.default }
+              option?.let { SelectedFilter(group.id, it.id, it.name) }
+            }
+          val updatedFilters = currentFilters + newDefaults
+          _uiState.update {
+            it.copy(followFilterGroups = groups, followSelectedFilters = updatedFilters, isFollowFilterLoading = false)
+          }
+          if (newDefaults.isNotEmpty()) refreshFollows()
+        }
+        .onFailure {
+          _uiState.update { it.copy(isFollowFilterLoading = false) }
+        }
+    }
+  }
+
+  fun updateFollowFilter(filter: SelectedFilter) {
+    val current = _uiState.value.followSelectedFilters.toMutableList()
+    val group = _uiState.value.followFilterGroups.find { it.id == filter.groupId }
+    val isMultiple = group?.isMultiple == true
+
+    if (!isMultiple) {
+      current.removeAll { it.groupId == filter.groupId }
+    }
+
+    val existingIndex = current.indexOfFirst { it.id == filter.id && it.groupId == filter.groupId }
+    if (existingIndex != -1) {
+      current.removeAt(existingIndex)
+    } else {
+      current.add(filter)
+    }
+
+    _uiState.update { it.copy(followSelectedFilters = current) }
+    refreshFollows()
   }
 
   fun refreshPlaylists() {

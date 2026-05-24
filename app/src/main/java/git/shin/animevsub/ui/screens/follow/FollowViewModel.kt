@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.AnimeCard
+import git.shin.animevsub.data.model.FilterGroup
+import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.data.repository.AnimeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +21,10 @@ data class FollowUiState(
   val error: String? = null,
   val currentPage: Int = 1,
   val totalPages: Int = 1,
-  val isLoadingMore: Boolean = false
+  val isLoadingMore: Boolean = false,
+  val filterGroups: List<FilterGroup> = emptyList(),
+  val selectedFilters: List<SelectedFilter> = emptyList(),
+  val isFilterLoading: Boolean = false
 )
 
 @HiltViewModel
@@ -32,6 +37,31 @@ class FollowViewModel @Inject constructor(
 
   init {
     loadPage(1)
+    loadFilters()
+  }
+
+  private fun loadFilters() {
+    viewModelScope.launch {
+      _uiState.update { it.copy(isFilterLoading = true) }
+      repository.getFollowFilters(_uiState.value.selectedFilters)
+        .onSuccess { groups ->
+          val currentFilters = _uiState.value.selectedFilters
+          val newDefaults = groups.filter { it.default != null }
+            .filter { group -> currentFilters.none { it.groupId == group.id } }
+            .mapNotNull { group ->
+              val option = group.options.find { it.id == group.default }
+              option?.let { SelectedFilter(group.id, it.id, it.name) }
+            }
+          val updatedFilters = currentFilters + newDefaults
+          _uiState.update {
+            it.copy(filterGroups = groups, selectedFilters = updatedFilters, isFilterLoading = false)
+          }
+          if (newDefaults.isNotEmpty()) loadPage(1)
+        }
+        .onFailure {
+          _uiState.update { it.copy(isFilterLoading = false) }
+        }
+    }
   }
 
   fun loadPage(page: Int, isRefreshing: Boolean = false) {
@@ -46,7 +76,7 @@ class FollowViewModel @Inject constructor(
         _uiState.update { it.copy(isLoadingMore = true) }
       }
 
-      repository.getFollows(page)
+      repository.getFollows(_uiState.value.selectedFilters, page)
         .onSuccess { categoryPage ->
           _uiState.update {
             it.copy(
@@ -75,6 +105,26 @@ class FollowViewModel @Inject constructor(
 
   fun refresh() {
     loadPage(1, isRefreshing = true)
+  }
+
+  fun updateFilter(filter: SelectedFilter) {
+    val current = _uiState.value.selectedFilters.toMutableList()
+    val group = _uiState.value.filterGroups.find { it.id == filter.groupId }
+    val isMultiple = group?.isMultiple == true
+
+    if (!isMultiple) {
+      current.removeAll { it.groupId == filter.groupId }
+    }
+
+    val existingIndex = current.indexOfFirst { it.id == filter.id && it.groupId == filter.groupId }
+    if (existingIndex != -1) {
+      current.removeAt(existingIndex)
+    } else {
+      current.add(filter)
+    }
+
+    _uiState.update { it.copy(selectedFilters = current) }
+    loadPage(1)
   }
 
   fun loadMore() {

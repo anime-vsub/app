@@ -57,6 +57,7 @@ import git.shin.animevsub.ui.components.account.FollowHorizontalList
 import git.shin.animevsub.ui.components.account.HistoryHorizontalList
 import git.shin.animevsub.ui.components.account.PlaylistHorizontalList
 import git.shin.animevsub.ui.components.dialogs.UpdateDialog
+import git.shin.animevsub.ui.components.filter.FiltersBottomSheet
 import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
@@ -94,6 +95,7 @@ fun AccountScreen(
   }
 
   var showUpdateDialog by remember { mutableStateOf<git.shin.animevsub.data.model.UpdateInfo?>(null) }
+  var showFollowFilterSheet by remember { mutableStateOf(false) }
 
   Scaffold(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -296,7 +298,8 @@ fun AccountScreen(
             error = uiState.followsError,
             onHeaderClick = onNavigateToFollow,
             onRetry = { viewModel.refreshFollows() },
-            onItemClick = { anime -> onNavigateToDetail(anime.animeId, null) }
+            onItemClick = { anime -> onNavigateToDetail(anime.animeId, null) },
+            onFilterClick = { showFollowFilterSheet = true }
           )
 
           Spacer(modifier = Modifier.height(24.dp))
@@ -338,6 +341,15 @@ fun AccountScreen(
           viewModel.downloadUpdate(info)
           showUpdateDialog = null
         }
+      )
+    }
+
+    if (showFollowFilterSheet) {
+      FiltersBottomSheet(
+        groups = uiState.followFilterGroups,
+        selectedFilters = uiState.followSelectedFilters,
+        onDismiss = { showFollowFilterSheet = false },
+        onUpdateFilter = { viewModel.updateFollowFilter(it) }
       )
     }
   }

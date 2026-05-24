@@ -56,18 +56,26 @@ class CategoryViewModel @Inject constructor(
       )
     }
     loadPage(1)
-    if (filters.isNotEmpty()) {
-      loadFilters()
-    }
+    loadFilters()
   }
 
   private fun loadFilters() {
-    val filters = _uiState.value.selectedFilters
     viewModelScope.launch {
       _uiState.update { it.copy(isFilterLoading = true) }
-      repository.getFilters(filters)
+      repository.getFilters(_uiState.value.selectedFilters)
         .onSuccess { groups ->
-          _uiState.update { it.copy(filterGroups = groups, isFilterLoading = false) }
+          val currentFilters = _uiState.value.selectedFilters
+          val newDefaults = groups.filter { it.default != null }
+            .filter { group -> currentFilters.none { it.groupId == group.id } }
+            .mapNotNull { group ->
+              val option = group.options.find { it.id == group.default }
+              option?.let { SelectedFilter(group.id, it.id, it.name) }
+            }
+          val updatedFilters = currentFilters + newDefaults
+          _uiState.update {
+            it.copy(filterGroups = groups, selectedFilters = updatedFilters, isFilterLoading = false)
+          }
+          if (newDefaults.isNotEmpty()) loadPage(1)
         }
         .onFailure {
           _uiState.update { it.copy(isFilterLoading = false) }

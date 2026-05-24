@@ -67,7 +67,9 @@ class GogoAnimeDataSource @Inject constructor() : AnimeDataSource {
 
   override suspend fun getEpisodeSkip(animeId: String, detail: AnimeDetail, chapter: ChapterInfo): InOutroEpisode? = null
 
-  override suspend fun getFollows(page: Int): CategoryPage = throw NotImplementedError("Not implemented yet")
+  override suspend fun getFollows(filters: List<SelectedFilter>, page: Int): CategoryPage = throw NotImplementedError("Not implemented yet")
+
+  override suspend fun getFollowFilters(filters: List<SelectedFilter>): List<FilterGroup> = throw NotImplementedError("Not implemented yet")
 
   override suspend fun checkFollow(animeId: String): Boolean = throw NotImplementedError("Not implemented yet")
 

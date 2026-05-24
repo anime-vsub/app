@@ -174,7 +174,8 @@ data class FilterGroup(
   val id: String,
   val name: String,
   val options: List<FilterOption>,
-  val isMultiple: Boolean = false
+  val isMultiple: Boolean = false,
+  val default: String? = null
 )
 
 @Serializable

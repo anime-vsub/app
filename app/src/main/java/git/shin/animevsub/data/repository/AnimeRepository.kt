@@ -352,8 +352,12 @@ class AnimeRepository @Inject constructor(
   }
 
   // Follows
-  suspend fun getFollows(page: Int = 1): Result<CategoryPage> = runCatching {
-    api.getFollows(page)
+  suspend fun getFollows(filters: List<SelectedFilter> = emptyList(), page: Int = 1): Result<CategoryPage> = runCatching {
+    api.getFollows(filters, page)
+  }
+
+  suspend fun getFollowFilters(filters: List<SelectedFilter> = emptyList()): Result<List<FilterGroup>> = runCatching {
+    api.getFollowFilters(filters)
   }
 
   suspend fun checkFollow(animeId: String): Result<Boolean> = runCatching {

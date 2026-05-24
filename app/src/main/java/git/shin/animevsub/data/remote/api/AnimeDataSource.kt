@@ -75,7 +75,8 @@ interface AnimeDataSource {
 
   suspend fun getEpisodeSkip(animeId: String, detail: AnimeDetail, chapter: ChapterInfo): InOutroEpisode?
 
-  suspend fun getFollows(page: Int): CategoryPage
+  suspend fun getFollows(filters: List<SelectedFilter>, page: Int): CategoryPage
+  suspend fun getFollowFilters(filters: List<SelectedFilter>): List<FilterGroup>
   suspend fun checkFollow(animeId: String): Boolean
   suspend fun toggleFollow(animeId: String, follow: Boolean)
 
