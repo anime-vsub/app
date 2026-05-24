@@ -2,6 +2,7 @@ package git.shin.animevsub.ui.screens.detail
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.net.Uri
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
@@ -747,6 +748,58 @@ fun DetailScreen(
                       },
                       modifier = Modifier.tvFocusScale()
                     )
+                  }
+                }
+              }
+
+              // External Platforms
+              if (detail.externalPlatforms.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                  text = stringResource(R.string.watch_on),
+                  color = TextPrimary,
+                  fontSize = 16.sp,
+                  fontWeight = FontWeight.Bold,
+                  modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                LazyRow(
+                  modifier = Modifier.fillMaxWidth(),
+                  horizontalArrangement = Arrangement.spacedBy(12.dp),
+                  contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                  items(detail.externalPlatforms) { platform ->
+                    Box(
+                      modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable {
+                          val intent = Intent(Intent.ACTION_VIEW, Uri.parse(platform.href))
+                          context.startActivity(intent)
+                        }
+                        .padding(horizontal = 12.dp),
+                      contentAlignment = Alignment.Center
+                    ) {
+                      Row(
+                        modifier = Modifier.fillMaxHeight(),
+                        verticalAlignment = Alignment.CenterVertically
+                      ) {
+                        if (!platform.logo.isNullOrEmpty()) {
+                          AsyncImage(
+                            model = platform.logo,
+                            contentDescription = platform.name,
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.height(32.dp)
+                          )
+                        } else {
+                          Text(
+                            text = platform.name,
+                            color = TextPrimary,
+                            fontSize = 13.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                          )
+                        }
+                      }
+                    }
                   }
                 }
               }

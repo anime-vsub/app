@@ -55,6 +55,12 @@ data class HomeData(
   val hotUpdate: List<AnimeCard>
 )
 
+data class ExternalPlatform(
+  val href: String,
+  val name: String,
+  val logo: String?
+)
+
 data class AnimeDetail(
   val name: String,
   val othername: String?,
@@ -77,7 +83,8 @@ data class AnimeDetail(
   val seasonOf: CategoryLink?,
   val trailer: String?,
   val related: List<AnimeCard>,
-  val extra: Map<String, String> = emptyMap()
+  val extra: Map<String, String> = emptyMap(),
+  val externalPlatforms: List<ExternalPlatform> = emptyList()
 )
 
 @Serializable

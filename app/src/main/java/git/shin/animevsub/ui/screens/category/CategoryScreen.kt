@@ -143,5 +143,3 @@ fun CategoryScreen(
     )
   }
 }
-
-

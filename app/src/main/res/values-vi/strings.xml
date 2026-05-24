@@ -86,6 +86,7 @@
     <string name="server_high">Cao</string>
     <string name="server_low">Thấp</string>
     <string name="server_label">Máy chủ phát</string>
+    <string name="watch_on">Xem trên</string>
     <string name="next_episode">Tập tiếp theo</string>
     <string name="previous_episode">Tập trước</string>
     <string name="next_ep">Tiếp</string>

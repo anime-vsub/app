@@ -86,6 +86,7 @@
     <string name="server_high">高清</string>
     <string name="server_low">普清</string>
     <string name="server_label">服务器</string>
+    <string name="watch_on">观看于</string>
     <string name="next_episode">下一集</string>
     <string name="previous_episode">上一集</string>
     <string name="next_ep">下一集</string>

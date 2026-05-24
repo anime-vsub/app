@@ -86,6 +86,7 @@
     <string name="server_high">高画質</string>
     <string name="server_low">低画質</string>
     <string name="server_label">サーバー</string>
+    <string name="watch_on">視聴する</string>
     <string name="next_episode">次のエピソード</string>
     <string name="previous_episode">前のエピソード</string>
     <string name="next_ep">次へ</string>
