@@ -811,6 +811,7 @@ fun VideoPlayer(
             val event = awaitPointerEvent()
             if (event.changes.any { it.isConsumed }) break
             if (event.changes.size > 1) break
+            if (isFullScreen) break
 
             val change = event.changes.first()
             if (change.pressed) {
