@@ -58,7 +58,7 @@ class AccountViewModel @Inject constructor(
         if (isLoggedIn) {
           refreshHistory()
           loadFollowFilters()
-          refreshFollows()
+//          refreshFollows()
           refreshPlaylists()
         } else {
           _uiState.update {
@@ -163,7 +163,7 @@ class AccountViewModel @Inject constructor(
           _uiState.update {
             it.copy(followFilterGroups = groups, followSelectedFilters = updatedFilters, isFollowFilterLoading = false)
           }
-          if (newDefaults.isNotEmpty()) refreshFollows()
+          refreshFollows()
         }
         .onFailure {
           _uiState.update { it.copy(isFollowFilterLoading = false) }
