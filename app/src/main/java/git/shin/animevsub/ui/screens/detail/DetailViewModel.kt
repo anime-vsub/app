@@ -889,9 +889,10 @@ class DetailViewModel @Inject constructor(
         .onSuccess { servers ->
           _uiState.update { it.copy(servers = servers) }
           if (servers.isNotEmpty()) {
-            val defaultServer = servers.first()
-            _uiState.update { it.copy(currentServer = defaultServer) }
-            loadPlayer(chapter, defaultServer)
+            val preferredServerName = preferencesManager.preferredServer.first()
+            val serverToPlay = servers.find { it.name == preferredServerName } ?: servers.first()
+            _uiState.update { it.copy(currentServer = serverToPlay) }
+            loadPlayer(chapter, serverToPlay)
           } else {
             _uiState.update {
               it.copy(
@@ -916,6 +917,9 @@ class DetailViewModel @Inject constructor(
         playerError = null,
         playerConfig = null
       )
+    }
+    viewModelScope.launch {
+      preferencesManager.setPreferredServer(server.name)
     }
     loadPlayer(chapter, server)
   }
