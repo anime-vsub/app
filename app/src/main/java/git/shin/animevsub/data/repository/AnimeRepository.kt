@@ -67,7 +67,8 @@ class AnimeRepository @Inject constructor(
   suspend fun refreshUser(): Result<User> = runCatching {
     try {
       val user = api.refreshUser()
-      historyRepository.upsertUser(user)
+      // not need because reactive with user
+//      historyRepository.upsertUser(user)
       user
     } catch (e: Exception) {
       if (e !is java.io.IOException && e.message?.contains("Không thể lấy thông tin") == true) {
