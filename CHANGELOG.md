@@ -1,3 +1,17 @@
+# [2.11.0](https://github.com/anime-vsub/app/compare/v2.10.0...v2.11.0) (2026-05-27)
+
+
+### Bug Fixes
+
+* disable pointer event handling in VideoPlayer during full screen ([9253fa1](https://github.com/anime-vsub/app/commit/9253fa12d6586aa5eef3c351863e51b3ab662947))
+* LAG VIDEO. refine JS redirect detection in CloudflareManager ([c56cf09](https://github.com/anime-vsub/app/commit/c56cf09c6ea626c79233857901911ab59f164712))
+
+
+### Features
+
+* implement customizable video buffer settings and refine player gestures ([e15bef5](https://github.com/anime-vsub/app/commit/e15bef5d596bbdcd82e3e085b0d37bc9f28da874))
+* implement preferred server persistence ([fbb242c](https://github.com/anime-vsub/app/commit/fbb242c878daa7fa01aab292fbe5630b8350c2ac))
+
 # [2.10.0](https://github.com/anime-vsub/app/compare/v2.9.2...v2.10.0) (2026-05-24)
 
 
