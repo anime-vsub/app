@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.PlayCircleFilled
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.SmartToy
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.Summarize
 import androidx.compose.material.icons.filled.Sync
@@ -394,6 +395,56 @@ fun SettingsScreen(
       }
 
       Spacer(modifier = Modifier.height(16.dp))
+
+      MenuSection(title = stringResource(R.string.video_buffer_settings)) {
+        SettingsSlider(
+          label = stringResource(R.string.min_buffer_ms),
+          value = uiState.minBufferMs / 1000,
+          icon = Icons.Default.Timer,
+          onValueChange = { viewModel.setMinBufferMs(it * 1000) },
+          valueRange = 15f..120f,
+          steps = 21,
+          valueText = stringResource(R.string.seconds_label, uiState.minBufferMs / 1000)
+        )
+
+        SettingsSlider(
+          label = stringResource(R.string.max_buffer_ms),
+          value = uiState.maxBufferMs / 1000,
+          icon = Icons.Default.Speed,
+          onValueChange = { viewModel.setMaxBufferMs(it * 1000) },
+          valueRange = 30f..300f,
+          steps = 27,
+          valueText = stringResource(R.string.seconds_label, uiState.maxBufferMs / 1000)
+        )
+
+        SettingsSlider(
+          label = stringResource(R.string.buffer_for_playback_ms),
+          value = uiState.bufferForPlaybackMs / 1000,
+          icon = Icons.Default.PlayArrow,
+          onValueChange = { viewModel.setBufferForPlaybackMs(it * 1000) },
+          valueRange = 1f..30f,
+          steps = 29,
+          valueText = stringResource(R.string.seconds_label, uiState.bufferForPlaybackMs / 1000)
+        )
+
+        SettingsSlider(
+          label = stringResource(R.string.buffer_for_playback_after_rebuffer_ms),
+          value = uiState.bufferForPlaybackAfterRebufferMs / 1000,
+          icon = Icons.Default.Refresh,
+          onValueChange = { viewModel.setBufferForPlaybackAfterRebufferMs(it * 1000) },
+          valueRange = 1f..60f,
+          steps = 59,
+          valueText = stringResource(R.string.seconds_label, uiState.bufferForPlaybackAfterRebufferMs / 1000)
+        )
+
+        SettingsToggle(
+          label = stringResource(R.string.prioritize_time_over_size),
+          description = stringResource(R.string.prioritize_time_over_size_desc),
+          icon = Icons.Default.AutoAwesome,
+          checked = uiState.prioritizeTimeOverSize,
+          onCheckedChange = { viewModel.setPrioritizeTimeOverSize(it) }
+        )
+      }
 
       MenuSection(title = stringResource(R.string.notification_settings)) {
         SettingsToggle(

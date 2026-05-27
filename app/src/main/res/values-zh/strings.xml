@@ -449,6 +449,15 @@
     <string name="ai_chat_error">获取响应失败。请稍后再试。</string>
     <string name="prefetch_suggestion_text">视频卡顿？点击启用URL预加载</string>
 
+    <!-- Video Buffer Settings -->
+    <string name="video_buffer_settings">视频缓冲设置</string>
+    <string name="min_buffer_ms">最小缓冲</string>
+    <string name="max_buffer_ms">最大缓冲</string>
+    <string name="buffer_for_playback_ms">播放启动缓冲</string>
+    <string name="buffer_for_playback_after_rebuffer_ms">卡顿后缓冲</string>
+    <string name="prioritize_time_over_size">时间优先于大小</string>
+    <string name="prioritize_time_over_size_desc">暂停时也继续加载分段</string>
+
     <!-- Swipe Gestures -->
     <string name="swipe_up_to_fullscreen">上滑进入全屏</string>
     <string name="swipe_down_to_minimize">下滑最小化</string>

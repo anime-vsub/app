@@ -449,6 +449,15 @@
     <string name="ai_chat_error">応答の取得に失敗しました。もう一度お試しください。</string>
     <string name="prefetch_suggestion_text">動画が重い？タップしてURLプリフェッチを有効化</string>
 
+    <!-- Video Buffer Settings -->
+    <string name="video_buffer_settings">ビデオバッファ設定</string>
+    <string name="min_buffer_ms">最小バッファ</string>
+    <string name="max_buffer_ms">最大バッファ</string>
+    <string name="buffer_for_playback_ms">再生開始バッファ</string>
+    <string name="buffer_for_playback_after_rebuffer_ms">リバッファ後バッファ</string>
+    <string name="prioritize_time_over_size">サイズより時間を優先</string>
+    <string name="prioritize_time_over_size_desc">一時停止中もセグメントの読み込みを継続する</string>
+
     <!-- Swipe Gestures -->
     <string name="swipe_up_to_fullscreen">上にスワイプで全画面</string>
     <string name="swipe_down_to_minimize">下にスワイプで最小化</string>

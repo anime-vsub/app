@@ -446,6 +446,15 @@
     <string name="ai_chat_error">Không thể nhận phản hồi. Vui lòng thử lại.</string>
     <string name="prefetch_suggestion_text">Video giật? Nhấn để bật tải trước URL</string>
 
+    <!-- Video Buffer Settings -->
+    <string name="video_buffer_settings">Cài đặt bộ đệm video</string>
+    <string name="min_buffer_ms">Bộ đệm tối thiểu</string>
+    <string name="max_buffer_ms">Bộ đệm tối đa</string>
+    <string name="buffer_for_playback_ms">Bộ đệm để phát</string>
+    <string name="buffer_for_playback_after_rebuffer_ms">Bộ đệm sau khi khựng</string>
+    <string name="prioritize_time_over_size">Ưu tiên thời gian tải hơn kích thước</string>
+    <string name="prioritize_time_over_size_desc">Tiếp tục tải dữ liệu kể cả khi video đang tạm dừng</string>
+
     <!-- Swipe Gestures -->
     <string name="swipe_up_to_fullscreen">Vuốt lên để phát toàn màn hình</string>
     <string name="swipe_down_to_minimize">Vuốt xuống để thu nhỏ</string>

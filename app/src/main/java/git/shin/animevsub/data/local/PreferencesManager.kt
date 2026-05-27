@@ -59,6 +59,11 @@ class PreferencesManager(private val context: Context) {
     private val GEMINI_MODEL_KEY = stringPreferencesKey("gemini_model")
     private val FLAG_SECURE_KEY = booleanPreferencesKey("flag_secure")
     private val PREFERRED_SERVER_KEY = stringPreferencesKey("preferred_server")
+    private val MIN_BUFFER_MS_KEY = intPreferencesKey("min_buffer_ms")
+    private val MAX_BUFFER_MS_KEY = intPreferencesKey("max_buffer_ms")
+    private val BUFFER_FOR_PLAYBACK_MS_KEY = intPreferencesKey("buffer_for_playback_ms")
+    private val BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS_KEY = intPreferencesKey("buffer_for_playback_after_rebuffer_ms")
+    private val PRIORITIZE_TIME_OVER_SIZE_KEY = booleanPreferencesKey("prioritize_time_over_size")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: true }
@@ -103,6 +108,12 @@ class PreferencesManager(private val context: Context) {
   val geminiModel: Flow<String> = context.dataStore.data.map { it[GEMINI_MODEL_KEY] ?: "gemini-1.5-flash" }
   val flagSecure: Flow<Boolean> = context.dataStore.data.map { it[FLAG_SECURE_KEY] ?: true }
   val preferredServer: Flow<String> = context.dataStore.data.map { it[PREFERRED_SERVER_KEY] ?: "" }
+
+  val minBufferMs: Flow<Int> = context.dataStore.data.map { it[MIN_BUFFER_MS_KEY] ?: 50_000 }
+  val maxBufferMs: Flow<Int> = context.dataStore.data.map { it[MAX_BUFFER_MS_KEY] ?: 120_000 }
+  val bufferForPlaybackMs: Flow<Int> = context.dataStore.data.map { it[BUFFER_FOR_PLAYBACK_MS_KEY] ?: 5_000 }
+  val bufferForPlaybackAfterRebufferMs: Flow<Int> = context.dataStore.data.map { it[BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS_KEY] ?: 8_000 }
+  val prioritizeTimeOverSize: Flow<Boolean> = context.dataStore.data.map { it[PRIORITIZE_TIME_OVER_SIZE_KEY] ?: true }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -269,6 +280,26 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setPreferredServer(value: String) {
     context.dataStore.edit { it[PREFERRED_SERVER_KEY] = value }
+  }
+
+  suspend fun setMinBufferMs(value: Int) {
+    context.dataStore.edit { it[MIN_BUFFER_MS_KEY] = value }
+  }
+
+  suspend fun setMaxBufferMs(value: Int) {
+    context.dataStore.edit { it[MAX_BUFFER_MS_KEY] = value }
+  }
+
+  suspend fun setBufferForPlaybackMs(value: Int) {
+    context.dataStore.edit { it[BUFFER_FOR_PLAYBACK_MS_KEY] = value }
+  }
+
+  suspend fun setBufferForPlaybackAfterRebufferMs(value: Int) {
+    context.dataStore.edit { it[BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS_KEY] = value }
+  }
+
+  suspend fun setPrioritizeTimeOverSize(value: Boolean) {
+    context.dataStore.edit { it[PRIORITIZE_TIME_OVER_SIZE_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

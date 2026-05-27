@@ -451,6 +451,15 @@
     <string name="ai_chat_error">Failed to get response. Please try again.</string>
     <string name="prefetch_suggestion_text">Video lagging? Tap to enable URL prefetch</string>
 
+    <!-- Video Buffer Settings -->
+    <string name="video_buffer_settings">Video Buffer Settings</string>
+    <string name="min_buffer_ms">Min Buffer</string>
+    <string name="max_buffer_ms">Max Buffer</string>
+    <string name="buffer_for_playback_ms">Buffer for Playback</string>
+    <string name="buffer_for_playback_after_rebuffer_ms">Buffer after Rebuffer</string>
+    <string name="prioritize_time_over_size">Prioritize Time Over Size</string>
+    <string name="prioritize_time_over_size_desc">Keep loading segments even when paused</string>
+
     <!-- Swipe Gestures -->
     <string name="swipe_up_to_fullscreen">Swipe up to fullscreen</string>
     <string name="swipe_down_to_minimize">Swipe down to minimize</string>

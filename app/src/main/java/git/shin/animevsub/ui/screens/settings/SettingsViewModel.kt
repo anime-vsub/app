@@ -50,6 +50,11 @@ data class SettingsUiState(
   val claudeModel: String = "claude-sonnet-4-20250514",
   val claudeEndpoint: String = "",
   val flagSecure: Boolean = true,
+  val minBufferMs: Int = 50_000,
+  val maxBufferMs: Int = 120_000,
+  val bufferForPlaybackMs: Int = 10_000,
+  val bufferForPlaybackAfterRebufferMs: Int = 12_000,
+  val prioritizeTimeOverSize: Boolean = true,
   val availableModels: List<String> = emptyList(),
   val isLoadingModels: Boolean = false,
   val isTestingKey: Boolean = false,
@@ -236,6 +241,31 @@ class SettingsViewModel @Inject constructor(
     viewModelScope.launch {
       repository.flagSecure.collect { v ->
         _uiState.update { it.copy(flagSecure = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.minBufferMs.collect { v ->
+        _uiState.update { it.copy(minBufferMs = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.maxBufferMs.collect { v ->
+        _uiState.update { it.copy(maxBufferMs = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.bufferForPlaybackMs.collect { v ->
+        _uiState.update { it.copy(bufferForPlaybackMs = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.bufferForPlaybackAfterRebufferMs.collect { v ->
+        _uiState.update { it.copy(bufferForPlaybackAfterRebufferMs = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.prioritizeTimeOverSize.collect { v ->
+        _uiState.update { it.copy(prioritizeTimeOverSize = v) }
       }
     }
   }
@@ -480,6 +510,26 @@ class SettingsViewModel @Inject constructor(
 
   fun setFlagSecure(value: Boolean) {
     viewModelScope.launch { repository.setFlagSecure(value) }
+  }
+
+  fun setMinBufferMs(value: Int) {
+    viewModelScope.launch { repository.setMinBufferMs(value) }
+  }
+
+  fun setMaxBufferMs(value: Int) {
+    viewModelScope.launch { repository.setMaxBufferMs(value) }
+  }
+
+  fun setBufferForPlaybackMs(value: Int) {
+    viewModelScope.launch { repository.setBufferForPlaybackMs(value) }
+  }
+
+  fun setBufferForPlaybackAfterRebufferMs(value: Int) {
+    viewModelScope.launch { repository.setBufferForPlaybackAfterRebufferMs(value) }
+  }
+
+  fun setPrioritizeTimeOverSize(value: Boolean) {
+    viewModelScope.launch { repository.setPrioritizeTimeOverSize(value) }
   }
 
   fun testNotification() {

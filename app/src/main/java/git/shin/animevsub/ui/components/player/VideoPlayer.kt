@@ -129,6 +129,7 @@ import androidx.media3.common.Tracks
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.ui.PlayerView
@@ -221,6 +222,12 @@ fun VideoPlayer(
   val longPressSpeedValue by preferencesManager.longPressSpeed.collectAsState(initial = 2.0f)
   val flagSecureEnabled by preferencesManager.flagSecure.collectAsState(initial = true)
 
+  val minBufferMs by preferencesManager.minBufferMs.collectAsState(initial = 50_000)
+  val maxBufferMs by preferencesManager.maxBufferMs.collectAsState(initial = 120_000)
+  val bufferForPlaybackMs by preferencesManager.bufferForPlaybackMs.collectAsState(initial = 5_000)
+  val bufferForPlaybackAfterRebufferMs by preferencesManager.bufferForPlaybackAfterRebufferMs.collectAsState(initial = 8_000)
+  val prioritizeTimeOverSize by preferencesManager.prioritizeTimeOverSize.collectAsState(initial = true)
+
   val playerData = playerConfig?.playerData
 
   var isPlaying by remember { mutableStateOf(true) }
@@ -286,75 +293,87 @@ fun VideoPlayer(
   var doubleTapSide by remember { mutableStateOf("right") }
   var doubleTapText by remember { mutableStateOf("") }
 
-  val exoPlayer = remember {
-    ExoPlayer.Builder(context).build().apply {
-      playWhenReady = true
-      onExoPlayerCreated(this)
-      addListener(object : Player.Listener {
-        override fun onPlaybackStateChanged(playbackState: Int) {
-          isBuffering = playbackState == Player.STATE_BUFFERING
-          isPlaying = (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) && playWhenReady
-          onPlayingStateChange(isPlaying)
+  val exoPlayer = remember(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs, prioritizeTimeOverSize) {
+    val loadControl = DefaultLoadControl.Builder()
+      .setBufferDurationsMs(
+        minBufferMs,
+        maxBufferMs,
+        bufferForPlaybackMs,
+        bufferForPlaybackAfterRebufferMs
+      )
+      .setPrioritizeTimeOverSizeThresholds(prioritizeTimeOverSize)
+      .build()
 
-          if (playbackState == Player.STATE_ENDED) {
-            val hasNext = onVideoEnded()
-            if (autoNextEnabled && hasNext) {
-              onNextEpisode()
-              isAutoNexting = true
+    ExoPlayer.Builder(context)
+      .setLoadControl(loadControl)
+      .build().apply {
+        playWhenReady = true
+        onExoPlayerCreated(this)
+        addListener(object : Player.Listener {
+          override fun onPlaybackStateChanged(playbackState: Int) {
+            isBuffering = playbackState == Player.STATE_BUFFERING
+            isPlaying = (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) && playWhenReady
+            onPlayingStateChange(isPlaying)
+
+            if (playbackState == Player.STATE_ENDED) {
+              val hasNext = onVideoEnded()
+              if (autoNextEnabled && hasNext) {
+                onNextEpisode()
+                isAutoNexting = true
+              }
             }
           }
-        }
 
-        override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-          val state = this@apply.playbackState
-          isPlaying = (state == Player.STATE_READY || state == Player.STATE_BUFFERING) && playWhenReady
-          onPlayingStateChange(isPlaying)
-        }
+          override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+            val state = this@apply.playbackState
+            isPlaying = (state == Player.STATE_READY || state == Player.STATE_BUFFERING) && playWhenReady
+            onPlayingStateChange(isPlaying)
+          }
 
-        override fun onPlayerError(error: PlaybackException) {
-          isPlaying = false
-          isBuffering = false
-          onPlayingStateChange(false)
-        }
+          override fun onPlayerError(error: PlaybackException) {
+            isPlaying = false
+            isBuffering = false
+            onPlayingStateChange(false)
+          }
 
 //        override fun onRenderedFirstFrame() {
 //          isFirstFrameRendered = true
 //        }
 
-        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
-          playbackSpeed = playbackParameters.speed
-        }
+          override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
+            playbackSpeed = playbackParameters.speed
+          }
 
-        override fun onTracksChanged(tracks: Tracks) {
-          val qualities = mutableListOf<QualityInfo>()
-          tracks.groups.forEach { group ->
-            if (group.type == C.TRACK_TYPE_VIDEO) {
-              for (i in 0 until group.length) {
-                val format = group.getTrackFormat(i)
-                if (format.height > 0) qualities.add(QualityInfo("${format.height}p", group, i))
+          override fun onTracksChanged(tracks: Tracks) {
+            val qualities = mutableListOf<QualityInfo>()
+            tracks.groups.forEach { group ->
+              if (group.type == C.TRACK_TYPE_VIDEO) {
+                for (i in 0 until group.length) {
+                  val format = group.getTrackFormat(i)
+                  if (format.height > 0) qualities.add(QualityInfo("${format.height}p", group, i))
+                }
               }
             }
-          }
-          availableQualities = qualities.distinctBy { it.label }
-            .sortedByDescending { it.label.replace("p", "").toIntOrNull() ?: 0 }
-          val params = trackSelectionParameters
-          val hasOverride = params.overrides.values.any { it.type == C.TRACK_TYPE_VIDEO }
-          if (!hasOverride) {
-            selectedQualityLabel = "Auto"
-          } else {
-            var foundLabel = "Auto"
-            availableQualities.forEach { q ->
-              val override = params.overrides[q.group.mediaTrackGroup]
-              if (override != null && override.trackIndices.contains(q.trackIndex)) {
-                foundLabel =
-                  q.label
+            availableQualities = qualities.distinctBy { it.label }
+              .sortedByDescending { it.label.replace("p", "").toIntOrNull() ?: 0 }
+            val params = trackSelectionParameters
+            val hasOverride = params.overrides.values.any { it.type == C.TRACK_TYPE_VIDEO }
+            if (!hasOverride) {
+              selectedQualityLabel = "Auto"
+            } else {
+              var foundLabel = "Auto"
+              availableQualities.forEach { q ->
+                val override = params.overrides[q.group.mediaTrackGroup]
+                if (override != null && override.trackIndices.contains(q.trackIndex)) {
+                  foundLabel =
+                    q.label
+                }
               }
+              selectedQualityLabel = foundLabel
             }
-            selectedQualityLabel = foundLabel
           }
-        }
-      })
-    }
+        })
+      }
   }
 
   var currentTime by remember { mutableLongStateOf(0L) }
@@ -869,6 +888,9 @@ fun VideoPlayer(
         awaitEachGesture {
           val down = awaitFirstDown(requireUnconsumed = false)
           if (anyMenuVisible || !isFullScreen) return@awaitEachGesture
+
+          val yRatio = down.position.y / size.height
+          if (yRatio < 0.2f || yRatio > 0.8f) return@awaitEachGesture
 
           var dragStarted = false
           val touchSlop = viewConfiguration.touchSlop

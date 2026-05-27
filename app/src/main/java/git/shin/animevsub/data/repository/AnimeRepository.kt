@@ -274,6 +274,12 @@ class AnimeRepository @Inject constructor(
   val geminiModel = prefs.geminiModel
   val flagSecure = prefs.flagSecure
 
+  val minBufferMs = prefs.minBufferMs
+  val maxBufferMs = prefs.maxBufferMs
+  val bufferForPlaybackMs = prefs.bufferForPlaybackMs
+  val bufferForPlaybackAfterRebufferMs = prefs.bufferForPlaybackAfterRebufferMs
+  val prioritizeTimeOverSize = prefs.prioritizeTimeOverSize
+
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
   val bedtimeReminderEnabled = prefs.bedtimeReminderEnabled
@@ -321,6 +327,12 @@ class AnimeRepository @Inject constructor(
   suspend fun getOpenaiApiKey() = prefs.openaiApiKey.first()
   suspend fun getClaudeApiKey() = prefs.claudeApiKey.first()
   suspend fun setFlagSecure(value: Boolean) = prefs.setFlagSecure(value)
+
+  suspend fun setMinBufferMs(value: Int) = prefs.setMinBufferMs(value)
+  suspend fun setMaxBufferMs(value: Int) = prefs.setMaxBufferMs(value)
+  suspend fun setBufferForPlaybackMs(value: Int) = prefs.setBufferForPlaybackMs(value)
+  suspend fun setBufferForPlaybackAfterRebufferMs(value: Int) = prefs.setBufferForPlaybackAfterRebufferMs(value)
+  suspend fun setPrioritizeTimeOverSize(value: Boolean) = prefs.setPrioritizeTimeOverSize(value)
 
   // Search History
   val searchHistory = prefs.searchHistory
