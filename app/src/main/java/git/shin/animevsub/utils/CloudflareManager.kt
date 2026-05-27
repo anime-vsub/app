@@ -209,12 +209,7 @@ class CloudflareManager @Inject constructor(
       body.contains("Xác minh khu vực")
 
     // Detection for empty title with JS redirect (Anti-bot JS challenge)
-    val isJsRedirect = (
-      body.contains("window.location") ||
-        body.contains("location.replace") ||
-        body.contains("location.href")
-      ) ||
-      (body.contains("<title></title>") || !body.contains("<title>"))
+    val isJsRedirect = (response.header("content-type")?.contains("text/html") == true) && body.contains("<title></title>")
 
     return hasCfHeaders || hasKeywords || isJsRedirect
   }
