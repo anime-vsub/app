@@ -111,8 +111,8 @@ class PreferencesManager(private val context: Context) {
 
   val minBufferMs: Flow<Int> = context.dataStore.data.map { it[MIN_BUFFER_MS_KEY] ?: 50_000 }
   val maxBufferMs: Flow<Int> = context.dataStore.data.map { it[MAX_BUFFER_MS_KEY] ?: 120_000 }
-  val bufferForPlaybackMs: Flow<Int> = context.dataStore.data.map { it[BUFFER_FOR_PLAYBACK_MS_KEY] ?: 5_000 }
-  val bufferForPlaybackAfterRebufferMs: Flow<Int> = context.dataStore.data.map { it[BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS_KEY] ?: 8_000 }
+  val bufferForPlaybackMs: Flow<Int> = context.dataStore.data.map { it[BUFFER_FOR_PLAYBACK_MS_KEY] ?: 10_000 }
+  val bufferForPlaybackAfterRebufferMs: Flow<Int> = context.dataStore.data.map { it[BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS_KEY] ?: 12_000 }
   val prioritizeTimeOverSize: Flow<Boolean> = context.dataStore.data.map { it[PRIORITIZE_TIME_OVER_SIZE_KEY] ?: true }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
