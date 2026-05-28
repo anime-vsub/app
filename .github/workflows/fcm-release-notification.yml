@@ -40,7 +40,7 @@ jobs:
         run: |
           bun .github/scripts/send-fcm.ts \
             --title="AnimeVsub ${{ steps.release.outputs.version }} Released" \
-            --body="${{ steps.release.outputs.notes }}" \
+            --body="${{ steps.release.outputs.version }}" \
             --type=app_update \
             --deep_link=about \
             --topics="all_users,app_updates" \
