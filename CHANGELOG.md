@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/anime-vsub/app/compare/v2.11.0...v2.11.1) (2026-05-28)
+
+
+### Bug Fixes
+
+* Update buffer settings in PreferencesManager ([a2dc2d4](https://github.com/anime-vsub/app/commit/a2dc2d4cc0c8d6fb39f68b83f739a7e9f209b2cf))
+
 # [2.11.0](https://github.com/anime-vsub/app/compare/v2.10.0...v2.11.0) (2026-05-27)
 
 
