@@ -34,6 +34,10 @@ class HistoryViewModel @Inject constructor(
 
   private val allItems = mutableListOf<HistoryItem>()
 
+  companion object {
+    private const val MAX_HISTORY_ITEMS = 500
+  }
+
   init {
     loadHistory(1)
   }
@@ -54,6 +58,9 @@ class HistoryViewModel @Inject constructor(
       repository.getHistory(page)
         .onSuccess { items ->
           allItems.addAll(items)
+          if (allItems.size > MAX_HISTORY_ITEMS) {
+            allItems.subList(0, allItems.size - MAX_HISTORY_ITEMS).clear()
+          }
           val grouped = groupItems(allItems)
           _uiState.update {
             it.copy(

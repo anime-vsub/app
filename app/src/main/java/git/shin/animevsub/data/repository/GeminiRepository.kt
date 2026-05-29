@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.generationConfig
 import com.google.ai.client.generativeai.type.content
-import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.DbNotificationItem
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +15,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.LinkedHashMap
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,9 +46,16 @@ enum class AiProvider {
 
 @Singleton
 class GeminiRepository @Inject constructor(
-  private val prefs: PreferencesManager,
-  private val storage: ApiStorage
+  private val prefs: PreferencesManager
 ) {
+  companion object {
+    private const val MAX_AI_CACHE_ENTRIES = 50
+  }
+
+  private val aiCache = object : LinkedHashMap<String, String>(16, 0.75f, true) {
+    override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>): Boolean = size > MAX_AI_CACHE_ENTRIES
+  }
+
   // OkHttpClient remains for listing models as the SDK doesn't expose this management API yet
   private val client = OkHttpClient.Builder()
     .connectTimeout(60, TimeUnit.SECONDS)
@@ -427,8 +434,8 @@ class GeminiRepository @Inject constructor(
     val cacheKey = if (animeId != null && chapterId != null) "ai_recap_${animeId}_$chapterId" else null
     if (!includeSuggestions) {
       cacheKey?.let {
-        val cached = storage.get(it)
-        if (!cached.isNullOrBlank()) return AiChatResponse(cached)
+        val cached = aiCache[it]
+        if (cached != null) return AiChatResponse(cached)
       }
     }
 
@@ -444,7 +451,7 @@ class GeminiRepository @Inject constructor(
     val response = callAiApi(prompt)
     val result = extractSuggestions(response)
     if (cacheKey != null && !includeSuggestions) {
-      storage.set(cacheKey, result.content)
+      aiCache[cacheKey] = result.content
     }
     return result
   }
@@ -463,8 +470,8 @@ class GeminiRepository @Inject constructor(
     val cacheKey = if (animeId != null && chapterId != null) "ai_summary_${animeId}_${chapterId}_$minutes" else null
     if (!includeSuggestions) {
       cacheKey?.let {
-        val cached = storage.get(it)
-        if (!cached.isNullOrBlank()) return AiChatResponse(cached)
+        val cached = aiCache[it]
+        if (cached != null) return AiChatResponse(cached)
       }
     }
 
@@ -474,14 +481,13 @@ class GeminiRepository @Inject constructor(
             You are an anime expert. Summarize the current episode '$episodeName' of the anime $animeIdentity up to the point $timestampFormatted.
             Provide a concise summary of the events occurring from the beginning of this episode until this timestamp.
             Use Markdown for formatting. Respond in $language. Be concise and helpful.
-            Finally, include a brief note about the next season's release date or the possibility of its production if information is available.
             ${if (includeSuggestions) "\nAt the very end, provide 3 suggested follow-up questions in a JSON array wrapped in <suggestions> tags. Example: <suggestions>[\"Question 1\", \"Question 2\"]</suggestions>" else ""}
     """.trimIndent()
 
     val response = callAiApi(prompt)
     val result = extractSuggestions(response)
     if (cacheKey != null && !includeSuggestions) {
-      storage.set(cacheKey, result.content)
+      aiCache[cacheKey] = result.content
     }
     return result
   }

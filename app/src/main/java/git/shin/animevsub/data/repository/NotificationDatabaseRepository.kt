@@ -36,6 +36,10 @@ class NotificationDatabaseRepository @Inject constructor(
   val dbNotificationCount = _dbNotificationCount.asStateFlow()
 
   private val _isSyncing = MutableStateFlow(false)
+
+  companion object {
+    private const val MAX_DB_NOTIFICATIONS = 100
+  }
   val isSyncing = _isSyncing.asStateFlow()
 
   private suspend fun getCurrentUid(): String? {
@@ -89,7 +93,9 @@ class NotificationDatabaseRepository @Inject constructor(
     if (page == 1) {
       _dbNotifications.value = items
     } else {
-      _dbNotifications.value = (_dbNotifications.value + items).distinctBy { it.season }
+      _dbNotifications.value = (_dbNotifications.value + items)
+        .distinctBy { it.season }
+        .take(MAX_DB_NOTIFICATIONS)
     }
 
     items
