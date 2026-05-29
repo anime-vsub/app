@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -68,6 +69,12 @@ fun CloudflareBypassDialog(
   var progress by remember { mutableIntStateOf(0) }
   val loadingText = stringResource(R.string.loading)
   var pageTitle by remember { mutableStateOf(loadingText) }
+
+  DisposableEffect(Unit) {
+    onDispose {
+      webView?.destroy()
+    }
+  }
 
   Dialog(
     onDismissRequest = onDismiss,

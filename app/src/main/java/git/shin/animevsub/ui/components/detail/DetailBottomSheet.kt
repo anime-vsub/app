@@ -27,6 +27,11 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -217,16 +222,22 @@ fun DetailBottomSheet(
             .clip(RoundedCornerShape(8.dp))
             .background(Color.Black)
         ) {
+          var trailerWebView by remember { mutableStateOf<WebView?>(null) }
+          DisposableEffect(Unit) {
+            onDispose {
+              trailerWebView?.destroy()
+            }
+          }
           AndroidView(
             factory = { ctx ->
-              val webView = WebView(ctx).apply {
+              WebView(ctx).apply {
                 settings.javaScriptEnabled = true
                 settings.loadWithOverviewMode = true
                 settings.useWideViewPort = true
                 webViewClient = WebViewClient()
+                loadUrl(detail.trailer)
+                trailerWebView = this
               }
-              webView.loadUrl(detail.trailer)
-              webView
             }, modifier = Modifier.fillMaxSize()
           )
         }

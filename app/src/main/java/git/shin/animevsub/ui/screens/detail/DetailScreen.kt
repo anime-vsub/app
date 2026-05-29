@@ -353,6 +353,12 @@ fun DetailScreen(
       val playerArea = remember {
         movableContentOf { modifier: Modifier, state: DetailUiState ->
           val detail = state.detail
+          var trailerWebView by remember { mutableStateOf<android.webkit.WebView?>(null) }
+          DisposableEffect(Unit) {
+            onDispose {
+              trailerWebView?.destroy()
+            }
+          }
           Box(
             modifier = modifier
               .background(Color.Black)
@@ -367,6 +373,7 @@ fun DetailScreen(
                     settings.useWideViewPort = true
                     webViewClient = android.webkit.WebViewClient()
                     loadUrl(detail.trailer)
+                    trailerWebView = this
                   }
                 },
                 modifier = Modifier.fillMaxSize()

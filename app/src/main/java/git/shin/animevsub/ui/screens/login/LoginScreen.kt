@@ -36,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -73,6 +74,12 @@ fun LoginScreen(
   var pageTitle by remember { mutableStateOf("") }
   val loadingText = stringResource(R.string.loading)
   val loginText = stringResource(R.string.login)
+
+  DisposableEffect(Unit) {
+    onDispose {
+      webView?.destroy()
+    }
+  }
 
   LaunchedEffect(Unit) {
     pageTitle = loadingText
