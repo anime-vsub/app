@@ -119,6 +119,7 @@ import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
@@ -224,8 +225,8 @@ fun VideoPlayer(
 
   val minBufferMs by preferencesManager.minBufferMs.collectAsState(initial = 50_000)
   val maxBufferMs by preferencesManager.maxBufferMs.collectAsState(initial = 120_000)
-  val bufferForPlaybackMs by preferencesManager.bufferForPlaybackMs.collectAsState(initial = 5_000)
-  val bufferForPlaybackAfterRebufferMs by preferencesManager.bufferForPlaybackAfterRebufferMs.collectAsState(initial = 8_000)
+  val bufferForPlaybackMs by preferencesManager.bufferForPlaybackMs.collectAsState(initial = 10_000)
+  val bufferForPlaybackAfterRebufferMs by preferencesManager.bufferForPlaybackAfterRebufferMs.collectAsState(initial = 12_000)
   val prioritizeTimeOverSize by preferencesManager.prioritizeTimeOverSize.collectAsState(initial = true)
 
   val playerData = playerConfig?.playerData
@@ -240,7 +241,7 @@ fun VideoPlayer(
   var videoZoomScale by remember { mutableFloatStateOf(1f) }
   var videoOffset by remember { mutableStateOf(Offset.Zero) }
   var isInteractingWithZoom by remember { mutableStateOf(false) }
-  var containerSize by remember { mutableStateOf<IntSize>(IntSize.Zero) }
+  var containerSize by remember { mutableStateOf(IntSize.Zero) }
   var snapJob by remember { mutableStateOf<Job?>(null) }
 
   var swipeScale by remember { mutableFloatStateOf(1f) }
@@ -293,7 +294,14 @@ fun VideoPlayer(
   var doubleTapSide by remember { mutableStateOf("right") }
   var doubleTapText by remember { mutableStateOf("") }
 
-  val exoPlayer = remember(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs, prioritizeTimeOverSize) {
+  var currentTime by remember { mutableLongStateOf(0L) }
+  var duration by remember { mutableLongStateOf(0L) }
+  var bufferedPosition by remember { mutableLongStateOf(0L) }
+  var isDragging by remember { mutableStateOf(false) }
+  var isSeeking by remember { mutableStateOf(false) }
+  var dragTime by remember { mutableLongStateOf(0L) }
+
+  val exoPlayer = remember {
     val loadControl = DefaultLoadControl.Builder()
       .setBufferDurationsMs(
         minBufferMs,
@@ -303,17 +311,27 @@ fun VideoPlayer(
       )
       .setPrioritizeTimeOverSizeThresholds(prioritizeTimeOverSize)
       .build()
+    val audioAttributes = AudioAttributes.Builder()
+      .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+      .setUsage(C.USAGE_MEDIA)
+      .build()
 
     ExoPlayer.Builder(context)
       .setLoadControl(loadControl)
       .build().apply {
         playWhenReady = true
+        setAudioAttributes(audioAttributes, true)
+
         onExoPlayerCreated(this)
         addListener(object : Player.Listener {
           override fun onPlaybackStateChanged(playbackState: Int) {
             isBuffering = playbackState == Player.STATE_BUFFERING
             isPlaying = (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) && playWhenReady
             onPlayingStateChange(isPlaying)
+
+            if (playbackState == Player.STATE_READY) {
+              duration = this@apply.duration.coerceAtLeast(0L)
+            }
 
             if (playbackState == Player.STATE_ENDED) {
               val hasNext = onVideoEnded()
@@ -334,6 +352,16 @@ fun VideoPlayer(
             isPlaying = false
             isBuffering = false
             onPlayingStateChange(false)
+          }
+
+          override fun onTimelineChanged(timeline: androidx.media3.common.Timeline, reason: Int) {
+            if (!timeline.isEmpty) {
+              val window = androidx.media3.common.Timeline.Window()
+              timeline.getWindow(0, window)
+              if (window.durationMs != C.TIME_UNSET) {
+                duration = window.durationMs.coerceAtLeast(0L)
+              }
+            }
           }
 
 //        override fun onRenderedFirstFrame() {
@@ -375,13 +403,6 @@ fun VideoPlayer(
         })
       }
   }
-
-  var currentTime by remember { mutableLongStateOf(0L) }
-  var duration by remember { mutableLongStateOf(0L) }
-  var bufferedPosition by remember { mutableLongStateOf(0L) }
-  var isDragging by remember { mutableStateOf(false) }
-  var isSeeking by remember { mutableStateOf(false) }
-  var dragTime by remember { mutableLongStateOf(0L) }
 
   LaunchedEffect(isDragging, showDoubleTapIndicator) {
     if (isDragging || showDoubleTapIndicator) {
@@ -457,7 +478,7 @@ fun VideoPlayer(
     while (true) {
       if (!isDragging) {
         currentTime = exoPlayer.currentPosition
-        duration = exoPlayer.duration.coerceAtLeast(0L)
+//        duration = exoPlayer.duration.coerceAtLeast(0L)
         bufferedPosition = exoPlayer.bufferedPosition
       }
       delay(500)
@@ -513,7 +534,7 @@ fun VideoPlayer(
     }
 
     val httpDataSourceFactory =
-      if (playerConfig?.segmentUrlInterceptor != null || playerConfig?.segmentDataInterceptor != null) {
+      if (playerConfig.segmentUrlInterceptor != null || playerConfig.segmentDataInterceptor != null) {
         TransformableDataSourceFactory(
           server = playerConfig.server,
           playerData = playerConfig.playerData,
@@ -560,7 +581,7 @@ fun VideoPlayer(
         }
       }
       exoPlayer.prepare()
-      exoPlayer.play()
+//      exoPlayer.play()
 
       loadedUri = newUri
       loadedEpisodeId = currentEpisode?.id
@@ -890,7 +911,7 @@ fun VideoPlayer(
           if (anyMenuVisible || !isFullScreen) return@awaitEachGesture
 
           val yRatio = down.position.y / size.height
-          if (yRatio < 0.2f || yRatio > 0.8f) return@awaitEachGesture
+          if (yRatio !in 0.2f..0.8f) return@awaitEachGesture
 
           var dragStarted = false
           val touchSlop = viewConfiguration.touchSlop

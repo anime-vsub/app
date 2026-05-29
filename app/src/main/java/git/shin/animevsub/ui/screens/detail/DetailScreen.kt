@@ -2,9 +2,9 @@ package git.shin.animevsub.ui.screens.detail
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.net.Uri
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.net.Uri
 import android.os.Build
 import android.util.Rational
 import androidx.compose.foundation.background
@@ -184,6 +184,8 @@ fun DetailScreen(
 
   DisposableEffect(Unit) {
     onDispose {
+      exoPlayerInstance?.release()
+      exoPlayerInstance = null
       val activity = context as? MainActivity ?: return@onDispose
       activity.updatePipParams(false) { builder ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

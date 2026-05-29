@@ -9,6 +9,7 @@ import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ServerInfo
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 @UnstableApi
 class TransformableHttpDataSource(
@@ -19,30 +20,25 @@ class TransformableHttpDataSource(
   private val dataInterceptor: SegmentDataInterceptor?
 ) : HttpDataSource by delegate {
 
-  private var transformedData: ByteArray? = null
   private var dataStream: ByteArrayInputStream? = null
-  private var currentUrl: String? = null
+  private var isDelegateOpened = false
 
   override fun open(dataSpec: DataSpec): Long {
     var uri = dataSpec.uri.toString()
     if (urlInterceptor != null) {
       uri = urlInterceptor.intercept(server, playerData, uri)
     }
-    currentUrl = uri
 
     val resolvedSpec = dataSpec.buildUpon()
       .setUri(Uri.parse(uri))
       .build()
 
     val delegateLength = delegate.open(resolvedSpec)
-    currentUrl = delegate.uri.toString()
-    val specUrl = uri
+    isDelegateOpened = true
 
     if (dataInterceptor != null) {
       val fullData = readAllFromDelegate()
-      delegate.close()
-      val transformed = dataInterceptor.intercept(server, playerData, specUrl, fullData)
-      transformedData = transformed
+      val transformed = dataInterceptor.intercept(server, playerData, uri, fullData)
       dataStream = ByteArrayInputStream(transformed)
       return transformed.size.toLong()
     }
@@ -53,12 +49,14 @@ class TransformableHttpDataSource(
   private fun readAllFromDelegate(): ByteArray {
     val buffer = ByteArray(8192)
     val output = ByteArrayOutputStream()
-    while (true) {
-      val bytesRead = delegate.read(buffer, 0, buffer.size)
-      if (bytesRead == -1) break
-      output.write(buffer, 0, bytesRead)
+    output.use { os ->
+      while (true) {
+        val bytesRead = delegate.read(buffer, 0, buffer.size)
+        if (bytesRead == -1) break
+        os.write(buffer, 0, bytesRead)
+      }
+      return os.toByteArray()
     }
-    return output.toByteArray()
   }
 
   override fun read(buffer: ByteArray, offset: Int, length: Int): Int = if (dataStream != null) {
@@ -68,10 +66,15 @@ class TransformableHttpDataSource(
   }
 
   override fun close() {
-    transformedData = null
+    try {
+      dataStream?.close()
+    } catch (_: IOException) {
+    }
     dataStream = null
-    currentUrl = null
-    delegate.close()
+    if (isDelegateOpened) {
+      isDelegateOpened = false
+      delegate.close()
+    }
   }
 }
 
