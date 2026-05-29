@@ -41,11 +41,13 @@ class UpdateManager @Inject constructor(
         .build()
 
       val response = client.newCall(request).execute()
-      if (response.isSuccessful) {
-        val body = response.body.string().trim()
-        Result.success(body.isEmpty())
-      } else {
-        Result.success(false)
+      response.use { res ->
+        if (res.isSuccessful) {
+          val body = res.body.string().trim()
+          Result.success(body.isEmpty())
+        } else {
+          Result.success(false)
+        }
       }
     } catch (e: Exception) {
       // In case of network error, we might want to allow the app to run if it was previously checked
@@ -62,25 +64,27 @@ class UpdateManager @Inject constructor(
         .build()
 
       val response = cloudflareManager.fetch(client, request)
-      if (!response.isSuccessful) return@withContext Result.failure(Exception("Failed to fetch release: ${response.code}"))
+      response.use { res ->
+        if (!res.isSuccessful) return@use Result.failure(Exception("Failed to fetch release: ${res.code}"))
 
-      val body = response.body.string()
-      val release = json.decodeFromString<GitHubRelease>(body)
+        val body = res.body.string()
+        val release = json.decodeFromString<GitHubRelease>(body)
 
-      val latestVersion = release.tagName.removePrefix("v")
+        val latestVersion = release.tagName.removePrefix("v")
 
-      val isNewer = isVersionNewer(latestVersion)
-      val apkAsset = release.assets.find { it.name == "app-release-signed.apk" }
-        ?: release.assets.find { it.name.endsWith(".apk") }
+        val isNewer = isVersionNewer(latestVersion)
+        val apkAsset = release.assets.find { it.name == "app-release-signed.apk" }
+          ?: release.assets.find { it.name.endsWith(".apk") }
 
-      Result.success(
-        UpdateInfo(
-          version = latestVersion,
-          description = release.body,
-          downloadUrl = apkAsset?.downloadUrl ?: "",
-          isNewer = isNewer
+        Result.success(
+          UpdateInfo(
+            version = latestVersion,
+            description = release.body,
+            downloadUrl = apkAsset?.downloadUrl ?: "",
+            isNewer = isNewer
+          )
         )
-      )
+      }
     } catch (e: Exception) {
       Result.failure(e)
     }
