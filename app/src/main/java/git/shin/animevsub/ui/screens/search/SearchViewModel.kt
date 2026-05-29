@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.SearchSuggestion
 import git.shin.animevsub.data.repository.AnimeRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,6 +70,7 @@ class SearchViewModel @Inject constructor(
           )
         }
         .onFailure { e ->
+          if (e is CancellationException) return@launch
           _uiState.value = _uiState.value.copy(
             isLoading = false,
             error = e.message
@@ -111,6 +113,7 @@ class SearchViewModel @Inject constructor(
           )
         }
         .onFailure { e ->
+          if (e is CancellationException) return@launch
           _uiState.value = _uiState.value.copy(
             isRefreshing = false,
             isLoading = false,
@@ -142,6 +145,7 @@ class SearchViewModel @Inject constructor(
           )
         }
         .onFailure { e ->
+          if (e is CancellationException) return@launch
           _uiState.value = _uiState.value.copy(
             isLoading = false,
             error = e.message

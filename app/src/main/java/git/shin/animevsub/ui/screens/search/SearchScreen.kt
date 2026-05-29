@@ -60,6 +60,7 @@ import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.utils.shimmerEffect
 import git.shin.animevsub.ui.utils.tvFocusScale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -149,7 +150,7 @@ fun SearchScreen(
             VerticalGridAnimeList(
               items = uiState.searchResults,
               onItemClick = { onNavigateToDetail(it.animeId, null) },
-              isLoadingMore = uiState.isLoading && uiState.searchResults.isNotEmpty(),
+              isLoadingMore = uiState.isLoading,
               onLoadMore = { viewModel.loadMore() },
               contentPadding = PaddingValues(16.dp),
               state = gridState,
@@ -167,6 +168,8 @@ fun SearchScreen(
           },
           onClearHistory = { viewModel.clearHistory() }
         )
+      } else if (uiState.isLoading) {
+        SearchSuggestionSkeleton()
       } else {
         // Show suggestions
         SearchSuggestionsList(
@@ -311,6 +314,45 @@ fun SearchSuggestionsList(
             color = AccentMain,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+fun SearchSuggestionSkeleton() {
+  val items = 5
+  LazyColumn(modifier = Modifier.tvFocusScale()) {
+    items(items) {
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+      ) {
+        Box(
+          modifier = Modifier
+            .size(50.dp, 70.dp)
+            .clip(RoundedCornerShape(6.dp))
+            .shimmerEffect()
+        )
+        Column(modifier = Modifier.weight(1f)) {
+          Box(
+            modifier = Modifier
+              .fillMaxWidth(0.8f)
+              .height(16.dp)
+              .clip(RoundedCornerShape(2.dp))
+              .shimmerEffect()
+          )
+          Spacer(modifier = Modifier.height(4.dp))
+          Box(
+            modifier = Modifier
+              .fillMaxWidth(0.4f)
+              .height(12.dp)
+              .clip(RoundedCornerShape(2.dp))
+              .shimmerEffect()
           )
         }
       }
