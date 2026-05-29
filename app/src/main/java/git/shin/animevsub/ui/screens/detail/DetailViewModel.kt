@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.ChapterData
 import git.shin.animevsub.data.model.ChapterInfo
@@ -55,8 +56,8 @@ data class DetailUiState(
   val currentChapter: ChapterInfo? = null,
   val servers: List<ServerInfo> = emptyList(),
   val currentServer: ServerInfo? = null,
-  val autoNext: Boolean = true,
-  val autoSkip: Boolean = false,
+  val autoNext: Boolean = PreferencesManager.DEFAULT_AUTO_NEXT,
+  val autoSkip: Boolean = PreferencesManager.DEFAULT_AUTO_SKIP,
   val introRange: DoubleRange? = null,
   val outroRange: DoubleRange? = null,
   val episodeNameFromApi: String? = null,

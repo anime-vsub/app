@@ -153,6 +153,7 @@ import git.shin.animevsub.ui.utils.formatDuration
 import git.shin.animevsub.ui.utils.rememberScreenState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.abs
@@ -216,18 +217,40 @@ fun VideoPlayer(
   val focusRequester = remember(isTV) { if (isTV) FocusRequester() else null }
 
   val preferencesManager = remember { PreferencesManager(context) }
-  val volumeGestureEnabled by preferencesManager.volumeGesture.collectAsState(initial = true)
-  val brightnessGestureEnabled by preferencesManager.brightnessGesture.collectAsState(initial = true)
-  val autoSkipEnabled by preferencesManager.autoSkip.collectAsState(initial = false)
-  val doubleTapSkipDuration by preferencesManager.doubleTapSkip.collectAsState(initial = 10)
-  val longPressSpeedValue by preferencesManager.longPressSpeed.collectAsState(initial = 2.0f)
-  val flagSecureEnabled by preferencesManager.flagSecure.collectAsState(initial = true)
+  val volumeGestureEnabled by preferencesManager.volumeGesture.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.volumeGesture.first() }
+  )
+  val brightnessGestureEnabled by preferencesManager.brightnessGesture.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.brightnessGesture.first() }
+  )
+  val autoSkipEnabled by preferencesManager.autoSkip.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.autoSkip.first() }
+  )
+  val doubleTapSkipDuration by preferencesManager.doubleTapSkip.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.doubleTapSkip.first() }
+  )
+  val longPressSpeedValue by preferencesManager.longPressSpeed.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.longPressSpeed.first() }
+  )
+  val flagSecureEnabled by preferencesManager.flagSecure.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.flagSecure.first() }
+  )
 
-  val minBufferMs by preferencesManager.minBufferMs.collectAsState(initial = 50_000)
-  val maxBufferMs by preferencesManager.maxBufferMs.collectAsState(initial = 120_000)
-  val bufferForPlaybackMs by preferencesManager.bufferForPlaybackMs.collectAsState(initial = 10_000)
-  val bufferForPlaybackAfterRebufferMs by preferencesManager.bufferForPlaybackAfterRebufferMs.collectAsState(initial = 12_000)
-  val prioritizeTimeOverSize by preferencesManager.prioritizeTimeOverSize.collectAsState(initial = true)
+  val minBufferMs by preferencesManager.minBufferMs.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.minBufferMs.first() }
+  )
+  val maxBufferMs by preferencesManager.maxBufferMs.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.maxBufferMs.first() }
+  )
+  val bufferForPlaybackMs by preferencesManager.bufferForPlaybackMs.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.bufferForPlaybackMs.first() }
+  )
+  val bufferForPlaybackAfterRebufferMs by preferencesManager.bufferForPlaybackAfterRebufferMs.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.bufferForPlaybackAfterRebufferMs.first() }
+  )
+  val prioritizeTimeOverSize by preferencesManager.prioritizeTimeOverSize.collectAsState(
+    initial = kotlinx.coroutines.runBlocking { preferencesManager.prioritizeTimeOverSize.first() }
+  )
 
   val playerData = playerConfig?.playerData
 
@@ -302,10 +325,12 @@ fun VideoPlayer(
   var dragTime by remember { mutableLongStateOf(0L) }
 
   val exoPlayer = remember {
+    val minBufferMsVal = maxOf(minBufferMs, maxOf(bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs))
+
     val loadControl = DefaultLoadControl.Builder()
       .setBufferDurationsMs(
-        minBufferMs,
-        maxBufferMs,
+        minBufferMsVal,
+        maxOf(maxBufferMs, minBufferMsVal),
         bufferForPlaybackMs,
         bufferForPlaybackAfterRebufferMs
       )

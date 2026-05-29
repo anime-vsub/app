@@ -42,7 +42,7 @@ data class NotificationUiState(
   val dbPage: Int = 1,
   val hasMoreDb: Boolean = true,
   val isLoadingDb: Boolean = false,
-  val autoSync: Boolean = false,
+  val autoSync: Boolean = PreferencesManager.DEFAULT_AUTO_SYNC_NOTIFY,
   val searchQuery: String = "",
   val isAscending: Boolean = false
 )

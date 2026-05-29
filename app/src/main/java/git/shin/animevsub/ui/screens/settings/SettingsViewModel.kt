@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.R
+import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.data.repository.AnimeRepository
 import git.shin.animevsub.utils.NotificationHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,45 +17,45 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SettingsUiState(
-  val autoNext: Boolean = true,
-  val autoSkip: Boolean = false,
-  val autoSyncNotify: Boolean = true,
-  val enableBackgroundSync: Boolean = true,
-  val enableNotifications: Boolean = true,
-  val notifyInterval: Int = 15,
-  val dbNotifyInterval: Int = 30,
-  val volumeGesture: Boolean = true,
-  val brightnessGesture: Boolean = true,
-  val appLanguage: String = "auto",
-  val isDeveloperMode: Boolean = false,
-  val hideDonationPopup: Boolean = false,
-  val breakReminderEnabled: Boolean = false,
-  val breakReminderInterval: Int = 60,
-  val bedtimeReminderEnabled: Boolean = false,
-  val bedtimeReminderStartTime: Long = 23 * 60,
-  val bedtimeReminderEndTime: Long = 5 * 60,
-  val bedtimeReminderWaitFinish: Boolean = true,
-  val screenTransition: String = "system",
-  val dynamicColor: Boolean = false,
-  val historySyncInterval: Int = 20,
-  val appIcon: String = "default",
-  val aiSummaryEnabled: Boolean = true,
-  val aiRecapEnabled: Boolean = true,
-  val aiProvider: String = "gemini",
-  val geminiApiKey: String = "",
-  val geminiModel: String = "gemini-2.5-flash",
-  val openaiApiKey: String = "",
-  val openaiModel: String = "gpt-4o-mini",
-  val openaiEndpoint: String = "",
-  val claudeApiKey: String = "",
-  val claudeModel: String = "claude-sonnet-4-20250514",
-  val claudeEndpoint: String = "",
-  val flagSecure: Boolean = true,
-  val minBufferMs: Int = 50_000,
-  val maxBufferMs: Int = 120_000,
-  val bufferForPlaybackMs: Int = 10_000,
-  val bufferForPlaybackAfterRebufferMs: Int = 12_000,
-  val prioritizeTimeOverSize: Boolean = true,
+  val autoNext: Boolean = PreferencesManager.DEFAULT_AUTO_NEXT,
+  val autoSkip: Boolean = PreferencesManager.DEFAULT_AUTO_SKIP,
+  val autoSyncNotify: Boolean = PreferencesManager.DEFAULT_AUTO_SYNC_NOTIFY,
+  val enableBackgroundSync: Boolean = PreferencesManager.DEFAULT_ENABLE_BACKGROUND_SYNC,
+  val enableNotifications: Boolean = PreferencesManager.DEFAULT_ENABLE_NOTIFICATIONS,
+  val notifyInterval: Int = PreferencesManager.DEFAULT_NOTIFY_INTERVAL,
+  val dbNotifyInterval: Int = PreferencesManager.DEFAULT_DB_NOTIFY_INTERVAL,
+  val volumeGesture: Boolean = PreferencesManager.DEFAULT_VOLUME_GESTURE,
+  val brightnessGesture: Boolean = PreferencesManager.DEFAULT_BRIGHTNESS_GESTURE,
+  val appLanguage: String = PreferencesManager.DEFAULT_APP_LANGUAGE,
+  val isDeveloperMode: Boolean = PreferencesManager.DEFAULT_DEVELOPER_MODE,
+  val hideDonationPopup: Boolean = PreferencesManager.DEFAULT_HIDE_DONATION_POPUP,
+  val breakReminderEnabled: Boolean = PreferencesManager.DEFAULT_BREAK_REMINDER_ENABLED,
+  val breakReminderInterval: Int = PreferencesManager.DEFAULT_BREAK_REMINDER_INTERVAL,
+  val bedtimeReminderEnabled: Boolean = PreferencesManager.DEFAULT_BEDTIME_REMINDER_ENABLED,
+  val bedtimeReminderStartTime: Long = PreferencesManager.DEFAULT_BEDTIME_REMINDER_START_TIME,
+  val bedtimeReminderEndTime: Long = PreferencesManager.DEFAULT_BEDTIME_REMINDER_END_TIME,
+  val bedtimeReminderWaitFinish: Boolean = PreferencesManager.DEFAULT_BEDTIME_REMINDER_WAIT_FINISH,
+  val screenTransition: String = PreferencesManager.DEFAULT_SCREEN_TRANSITION,
+  val dynamicColor: Boolean = PreferencesManager.DEFAULT_DYNAMIC_COLOR,
+  val historySyncInterval: Int = PreferencesManager.DEFAULT_HISTORY_SYNC_INTERVAL,
+  val appIcon: String = PreferencesManager.DEFAULT_APP_ICON,
+  val aiSummaryEnabled: Boolean = PreferencesManager.DEFAULT_AI_SUMMARY_ENABLED,
+  val aiRecapEnabled: Boolean = PreferencesManager.DEFAULT_AI_RECAP_ENABLED,
+  val aiProvider: String = PreferencesManager.DEFAULT_AI_PROVIDER,
+  val geminiApiKey: String = PreferencesManager.DEFAULT_GEMINI_API_KEY,
+  val geminiModel: String = PreferencesManager.DEFAULT_GEMINI_MODEL,
+  val openaiApiKey: String = PreferencesManager.DEFAULT_OPENAI_API_KEY,
+  val openaiModel: String = PreferencesManager.DEFAULT_OPENAI_MODEL,
+  val openaiEndpoint: String = PreferencesManager.DEFAULT_OPENAI_ENDPOINT,
+  val claudeApiKey: String = PreferencesManager.DEFAULT_CLAUDE_API_KEY,
+  val claudeModel: String = PreferencesManager.DEFAULT_CLAUDE_MODEL,
+  val claudeEndpoint: String = PreferencesManager.DEFAULT_CLAUDE_ENDPOINT,
+  val flagSecure: Boolean = PreferencesManager.DEFAULT_FLAG_SECURE,
+  val minBufferMs: Int = PreferencesManager.DEFAULT_MIN_BUFFER_MS,
+  val maxBufferMs: Int = PreferencesManager.DEFAULT_MAX_BUFFER_MS,
+  val bufferForPlaybackMs: Int = PreferencesManager.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+  val bufferForPlaybackAfterRebufferMs: Int = PreferencesManager.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS,
+  val prioritizeTimeOverSize: Boolean = PreferencesManager.DEFAULT_PRIORITIZE_TIME_OVER_SIZE,
   val availableModels: List<String> = emptyList(),
   val isLoadingModels: Boolean = false,
   val isTestingKey: Boolean = false,
@@ -64,7 +65,7 @@ data class SettingsUiState(
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-  @ApplicationContext private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val repository: AnimeRepository,
   private val geminiRepository: git.shin.animevsub.data.repository.GeminiRepository
 ) : ViewModel() {
@@ -229,7 +230,7 @@ class SettingsViewModel @Inject constructor(
       }
     }
     viewModelScope.launch {
-      repository.getGeminiApiKey()?.let { v ->
+      repository.getGeminiApiKey().let { v ->
         _uiState.update { it.copy(geminiApiKey = v) }
       }
     }
@@ -513,7 +514,13 @@ class SettingsViewModel @Inject constructor(
   }
 
   fun setMinBufferMs(value: Int) {
-    viewModelScope.launch { repository.setMinBufferMs(value) }
+    viewModelScope.launch {
+      repository.setMinBufferMs(value)
+
+      if (value >= uiState.value.maxBufferMs) {
+        repository.setMaxBufferMs(value)
+      }
+    }
   }
 
   fun setMaxBufferMs(value: Int) {
@@ -521,11 +528,29 @@ class SettingsViewModel @Inject constructor(
   }
 
   fun setBufferForPlaybackMs(value: Int) {
-    viewModelScope.launch { repository.setBufferForPlaybackMs(value) }
+    viewModelScope.launch {
+      repository.setBufferForPlaybackMs(value)
+
+      if (value >= uiState.value.minBufferMs) {
+        repository.setMinBufferMs(value)
+      }
+      if (value >= uiState.value.maxBufferMs) {
+        repository.setMaxBufferMs(value)
+      }
+    }
   }
 
   fun setBufferForPlaybackAfterRebufferMs(value: Int) {
-    viewModelScope.launch { repository.setBufferForPlaybackAfterRebufferMs(value) }
+    viewModelScope.launch {
+      repository.setBufferForPlaybackAfterRebufferMs(value)
+
+      if (value >= uiState.value.minBufferMs) {
+        repository.setMinBufferMs(value)
+      }
+      if (value >= uiState.value.maxBufferMs) {
+        repository.setMaxBufferMs(value)
+      }
+    }
   }
 
   fun setPrioritizeTimeOverSize(value: Boolean) {
