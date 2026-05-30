@@ -1,3 +1,16 @@
+## [2.11.2](https://github.com/anime-vsub/app/compare/v2.11.1...v2.11.2) (2026-05-30)
+
+
+### Bug Fixes
+
+* **update:** close network responses properly ([f9015e4](https://github.com/anime-vsub/app/commit/f9015e4261f4e847ae44e2a5595b8ba8fd8c5663))
+* **webview:** destroy WebView on dispose ([bac33c6](https://github.com/anime-vsub/app/commit/bac33c65b73ffcad9b7e6aea00cdf0fcdfe09e6b))
+
+
+### Performance Improvements
+
+* **data:** Limit in-memory lists and optimize AI cache ([b1e7e7d](https://github.com/anime-vsub/app/commit/b1e7e7d3a1fe939b2ac5d250debe17b26d27c178))
+
 ## [2.11.1](https://github.com/anime-vsub/app/compare/v2.11.0...v2.11.1) (2026-05-28)
 
 
