@@ -736,7 +736,7 @@ fun DetailScreen(
                       label = stringResource(R.string.report),
                       onClick = {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                          data = android.net.Uri.parse("mailto:support@animevsub.eu.org")
+                          data = Uri.parse("mailto:support@animevsub.eu.org")
                           val subject = context.getString(
                             R.string.report_feedback_subject,
                             detail.name,
@@ -831,7 +831,7 @@ fun DetailScreen(
               }
 
               // Server Section
-              if (uiState.servers.size >= 2) {
+              if (uiState.servers.size >= 2 || (uiState.isServersLoading && uiState.previousHadMultipleServers)) {
                 Text(
                   text = stringResource(R.string.server_label),
                   color = TextPrimary,
@@ -844,31 +844,43 @@ fun DetailScreen(
                   horizontalArrangement = Arrangement.spacedBy(8.dp),
                   contentPadding = PaddingValues(horizontal = 16.dp)
                 ) {
-                  items(uiState.servers) { server ->
-                    val isSelected = server == uiState.currentServer
-                    val boxModifier = Modifier
-                      .height(36.dp)
-                      .clip(RoundedCornerShape(4.dp))
-                      .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
-                      .border(
-                        width = if (isSelected) 1.5.dp else 1.dp,
-                        color = if (isSelected) MainColor else Color.Transparent,
-                        shape = RoundedCornerShape(4.dp)
+                  if (uiState.isServersLoading && uiState.servers.isEmpty()) {
+                    items(3) {
+                      Box(
+                        modifier = Modifier
+                          .width(80.dp)
+                          .height(36.dp)
+                          .clip(RoundedCornerShape(4.dp))
+                          .shimmerEffect()
                       )
-                      .tvFocusScale()
-                      .clickable { viewModel.selectServer(server) }
+                    }
+                  } else {
+                    items(uiState.servers) { server ->
+                      val isSelected = server == uiState.currentServer
+                      val boxModifier = Modifier
+                        .height(36.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(if (isSelected) MainColor.copy(alpha = 0.15f) else DarkCard)
+                        .border(
+                          width = if (isSelected) 1.5.dp else 1.dp,
+                          color = if (isSelected) MainColor else Color.Transparent,
+                          shape = RoundedCornerShape(4.dp)
+                        )
+                        .tvFocusScale()
+                        .clickable { viewModel.selectServer(server) }
 
-                    Box(
-                      modifier = boxModifier,
-                      contentAlignment = Alignment.Center
-                    ) {
-                      Text(
-                        text = server.name,
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        color = if (isSelected) MainColor else TextPrimary,
-                        fontSize = 13.sp,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                      )
+                      Box(
+                        modifier = boxModifier,
+                        contentAlignment = Alignment.Center
+                      ) {
+                        Text(
+                          text = server.name,
+                          modifier = Modifier.padding(horizontal = 12.dp),
+                          color = if (isSelected) MainColor else TextPrimary,
+                          fontSize = 13.sp,
+                          fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                        )
+                      }
                     }
                   }
                 }

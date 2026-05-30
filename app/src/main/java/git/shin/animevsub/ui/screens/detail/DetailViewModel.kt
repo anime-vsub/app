@@ -56,6 +56,8 @@ data class DetailUiState(
   val currentChapter: ChapterInfo? = null,
   val servers: List<ServerInfo> = emptyList(),
   val currentServer: ServerInfo? = null,
+  val isServersLoading: Boolean = false,
+  val previousHadMultipleServers: Boolean = false,
   val autoNext: Boolean = PreferencesManager.DEFAULT_AUTO_NEXT,
   val autoSkip: Boolean = PreferencesManager.DEFAULT_AUTO_SKIP,
   val introRange: DoubleRange? = null,
@@ -531,6 +533,8 @@ class DetailViewModel @Inject constructor(
       seasonId
     }
 
+    val prevMultiple = _uiState.value.servers.size >= 2
+
     _uiState.update {
       it.copy(
         currentChapter = chapter,
@@ -544,6 +548,8 @@ class DetailViewModel @Inject constructor(
         episodeNameFromApi = null,
         servers = emptyList(),
         currentServer = null,
+        previousHadMultipleServers = prevMultiple,
+        isServersLoading = true,
         playerConfig = null,
         lastProgress = 0L,
         aiRecap = null,
@@ -888,7 +894,7 @@ class DetailViewModel @Inject constructor(
     viewModelScope.launch {
       repository.getServers(chapter)
         .onSuccess { servers ->
-          _uiState.update { it.copy(servers = servers) }
+          _uiState.update { it.copy(servers = servers, isServersLoading = false) }
           if (servers.isNotEmpty()) {
             val preferredServerName = preferencesManager.preferredServer.first()
             val serverToPlay = servers.find { it.name == preferredServerName } ?: servers.first()
@@ -897,6 +903,7 @@ class DetailViewModel @Inject constructor(
           } else {
             _uiState.update {
               it.copy(
+                isServersLoading = false,
                 isPlayerLoading = false,
                 playerError = "No servers found"
               )
@@ -904,7 +911,13 @@ class DetailViewModel @Inject constructor(
           }
         }
         .onFailure { e ->
-          _uiState.update { it.copy(isPlayerLoading = false, playerError = e.message) }
+          _uiState.update {
+            it.copy(
+              isServersLoading = false,
+              isPlayerLoading = false,
+              playerError = e.message
+            )
+          }
         }
     }
   }
