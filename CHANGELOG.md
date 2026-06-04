@@ -1,3 +1,15 @@
+# [2.12.0](https://github.com/anime-vsub/app/compare/v2.11.2...v2.12.0) (2026-06-04)
+
+
+### Bug Fixes
+
+* update network configuration and Cloudflare bypass handling ([0a16906](https://github.com/anime-vsub/app/commit/0a169060eeed7f32bafbfcabcd6938a5f4e43b44))
+
+
+### Features
+
+* implement DNS over HTTPS (DoH) support ([dcce401](https://github.com/anime-vsub/app/commit/dcce401d41b2f8c31057f47ce19b8c8a1a160b84))
+
 ## [2.11.2](https://github.com/anime-vsub/app/compare/v2.11.1...v2.11.2) (2026-05-30)
 
 
