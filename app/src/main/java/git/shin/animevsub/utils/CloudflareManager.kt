@@ -145,7 +145,7 @@ class CloudflareManager @Inject constructor(
     result
   }
 
-  suspend fun onBypassCompleted(url: String) {
+  fun onBypassCompleted(url: String) {
     print(url)
     currentDeferred?.complete(true)
   }

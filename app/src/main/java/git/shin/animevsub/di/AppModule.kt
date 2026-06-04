@@ -53,7 +53,7 @@ object AppModule {
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
     .writeTimeout(30, TimeUnit.SECONDS)
-    .followRedirects(true)
+    .followRedirects(false)
     .followSslRedirects(true)
     .cookieJar(git.shin.animevsub.data.remote.WebViewCookieJar())
     .build()
