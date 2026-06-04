@@ -56,6 +56,8 @@ data class SettingsUiState(
   val bufferForPlaybackMs: Int = PreferencesManager.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
   val bufferForPlaybackAfterRebufferMs: Int = PreferencesManager.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS,
   val prioritizeTimeOverSize: Boolean = PreferencesManager.DEFAULT_PRIORITIZE_TIME_OVER_SIZE,
+  val dnsMode: String = PreferencesManager.DEFAULT_DNS_MODE,
+  val customDnsUrl: String = PreferencesManager.DEFAULT_CUSTOM_DNS_URL,
   val availableModels: List<String> = emptyList(),
   val isLoadingModels: Boolean = false,
   val isTestingKey: Boolean = false,
@@ -267,6 +269,16 @@ class SettingsViewModel @Inject constructor(
     viewModelScope.launch {
       repository.prioritizeTimeOverSize.collect { v ->
         _uiState.update { it.copy(prioritizeTimeOverSize = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.dnsMode.collect { v ->
+        _uiState.update { it.copy(dnsMode = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.customDnsUrl.collect { v ->
+        _uiState.update { it.copy(customDnsUrl = v) }
       }
     }
   }
@@ -555,6 +567,14 @@ class SettingsViewModel @Inject constructor(
 
   fun setPrioritizeTimeOverSize(value: Boolean) {
     viewModelScope.launch { repository.setPrioritizeTimeOverSize(value) }
+  }
+
+  fun setDnsMode(value: String) {
+    viewModelScope.launch { repository.setDnsMode(value) }
+  }
+
+  fun setCustomDnsUrl(value: String) {
+    viewModelScope.launch { repository.setCustomDnsUrl(value) }
   }
 
   fun testNotification() {

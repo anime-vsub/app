@@ -465,4 +465,18 @@
     <string name="swipe_down_to_minimize">Swipe down to minimize</string>
     <string name="release_to_fullscreen">Release to enter fullscreen</string>
     <string name="release_to_minimize">Release to minimize</string>
+
+    <!-- DNS Settings -->
+    <string name="network_settings">Network Settings</string>
+    <string name="dns_mode">DNS over HTTPS</string>
+    <string name="dns_system">System Default</string>
+    <string name="dns_google">Google DNS</string>
+    <string name="dns_cloudflare">Cloudflare DNS</string>
+    <string name="dns_quad9">Quad9 DNS</string>
+    <string name="dns_custom">Custom DNS</string>
+    <string name="custom_dns_url">Custom DoH URL</string>
+    <string name="custom_dns_url_hint">https://example.com/dns-query</string>
+    <string name="dns_info_webview">Enable DNS in WebView</string>
+    <string name="dns_info_desc">Use selected DoH for internal browser and requests</string>
+    <string name="open_system_dns_settings">Open System Private DNS Settings</string>
 </resources>

@@ -463,4 +463,18 @@
     <string name="swipe_down_to_minimize">下滑最小化</string>
     <string name="release_to_fullscreen">松开进入全屏</string>
     <string name="release_to_minimize">松开最小化</string>
+
+    <!-- DNS Settings -->
+    <string name="network_settings">网络设置</string>
+    <string name="dns_mode">DNS over HTTPS (DoH)</string>
+    <string name="dns_system">系统默认</string>
+    <string name="dns_google">Google DNS</string>
+    <string name="dns_cloudflare">Cloudflare DNS</string>
+    <string name="dns_quad9">Quad9 DNS</string>
+    <string name="dns_custom">自定义 DNS</string>
+    <string name="custom_dns_url">自定义 DoH URL</string>
+    <string name="custom_dns_url_hint">https://example.com/dns-query</string>
+    <string name="dns_info_webview">在 WebView 中启用 DNS</string>
+    <string name="dns_info_desc">在内部浏览器和请求中使用所选的 DoH</string>
+    <string name="open_system_dns_settings">打开系统私人 DNS 设置</string>
 </resources>

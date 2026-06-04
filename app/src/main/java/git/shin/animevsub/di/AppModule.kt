@@ -12,6 +12,8 @@ import dagger.hilt.components.SingletonComponent
 import git.shin.animevsub.BuildConfig
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
+import git.shin.animevsub.data.remote.DynamicDns
+import git.shin.animevsub.data.remote.WebViewCookieJar
 import git.shin.animevsub.data.remote.api.AnimeDataSource
 import git.shin.animevsub.data.remote.api_hidden.AnimeApi
 import git.shin.animevsub.utils.CloudflareManager
@@ -22,6 +24,7 @@ import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -49,13 +52,29 @@ object AppModule {
 
   @Provides
   @Singleton
-  fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+  @Named(DNS_BOOTSTRAP_CLIENT)
+  fun provideDnsBootstrapClient(): OkHttpClient = OkHttpClient.Builder()
+    .connectTimeout(15, TimeUnit.SECONDS)
+    .readTimeout(15, TimeUnit.SECONDS)
+    .build()
+
+  @Provides
+  @Singleton
+  fun provideDynamicDns(
+    prefs: PreferencesManager,
+    @Named(DNS_BOOTSTRAP_CLIENT) dnsBootstrapClient: OkHttpClient
+  ): DynamicDns = DynamicDns(prefs, dnsBootstrapClient)
+
+  @Provides
+  @Singleton
+  fun provideOkHttpClient(dynamicDns: DynamicDns): OkHttpClient = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
     .writeTimeout(30, TimeUnit.SECONDS)
     .followRedirects(false)
     .followSslRedirects(true)
-    .cookieJar(git.shin.animevsub.data.remote.WebViewCookieJar())
+    .cookieJar(WebViewCookieJar())
+    .dns(dynamicDns)
     .build()
 
   @Provides
@@ -82,4 +101,6 @@ object AppModule {
   @Provides
   @Singleton
   fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
+
+  private const val DNS_BOOTSTRAP_CLIENT = "dnsBootstrapClient"
 }

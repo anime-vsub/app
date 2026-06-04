@@ -1,6 +1,7 @@
 package git.shin.animevsub.ui.components.account
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import git.shin.animevsub.ui.utils.tvFocusScale
 fun MenuItem(
   icon: ImageVector,
   label: String,
+  description: String? = null,
   onClick: () -> Unit
 ) {
   Row(
@@ -43,12 +45,23 @@ fun MenuItem(
       modifier = Modifier.size(22.dp)
     )
     Spacer(modifier = Modifier.width(16.dp))
-    Text(
-      text = label,
-      color = TextPrimary,
-      fontSize = 15.sp,
-      modifier = Modifier.weight(1f)
-    )
+    Column(modifier = Modifier.weight(1f)) {
+      Text(
+        text = label,
+        color = TextPrimary,
+        fontSize = 15.sp,
+        modifier = Modifier.weight(1f)
+      )
+      if (description != null) {
+        Text(
+          text = description,
+          color = TextGrey,
+          fontSize = 12.sp,
+          lineHeight = 16.sp,
+          modifier = Modifier.padding(top = 2.dp)
+        )
+      }
+    }
     Icon(
       imageVector = Icons.AutoMirrored.Filled.ArrowForward,
       contentDescription = null,

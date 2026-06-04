@@ -1,5 +1,6 @@
 package git.shin.animevsub.ui.screens.settings
 
+import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,14 +25,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.Block
+import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.FastForward
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsActive
@@ -445,6 +449,63 @@ fun SettingsScreen(
           onCheckedChange = { viewModel.setPrioritizeTimeOverSize(it) }
         )
       }
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      MenuSection(title = stringResource(R.string.network_settings)) {
+        SettingsSelector(
+          label = stringResource(R.string.dns_mode),
+          selectedOption = uiState.dnsMode,
+          icon = Icons.Default.Dns,
+          options = listOf(
+            "system" to stringResource(R.string.dns_system),
+            "google" to stringResource(R.string.dns_google),
+            "cloudflare" to stringResource(R.string.dns_cloudflare),
+            "quad9" to stringResource(R.string.dns_quad9),
+            "custom" to stringResource(R.string.dns_custom)
+          ),
+          onOptionSelected = { viewModel.setDnsMode(it) }
+        )
+
+        if (uiState.dnsMode == "custom") {
+          OutlinedTextField(
+            value = uiState.customDnsUrl,
+            onValueChange = { viewModel.setCustomDnsUrl(it) },
+            label = { Text(stringResource(R.string.custom_dns_url)) },
+            placeholder = { Text(stringResource(R.string.custom_dns_url_hint)) },
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(horizontal = 16.dp, vertical = 8.dp),
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+              focusedTextColor = TextPrimary,
+              unfocusedTextColor = TextPrimary,
+              focusedBorderColor = AccentMain,
+              unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
+            )
+          )
+        }
+
+        MenuItem(
+          icon = Icons.Default.Info,
+          label = stringResource(R.string.dns_info_webview),
+          description = stringResource(R.string.dns_info_desc),
+          onClick = {}
+        )
+
+        MenuItem(
+          icon = Icons.AutoMirrored.Filled.OpenInNew,
+          label = stringResource(R.string.open_system_dns_settings),
+          onClick = {
+            val intent = Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS).apply {
+              addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            runCatching { context.startActivity(intent) }
+          }
+        )
+      }
+
+      Spacer(modifier = Modifier.height(16.dp))
 
       MenuSection(title = stringResource(R.string.notification_settings)) {
         SettingsToggle(

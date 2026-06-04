@@ -127,6 +127,8 @@ android {
   packaging {
     resources {
       excludes += "/META-INF/{AL2.0,LGPL2.1}"
+      excludes += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+      excludes += "/META-INF/DEPENDENCIES"
     }
   }
 }
@@ -168,6 +170,7 @@ dependencies {
 
   // Network
   implementation("com.squareup.okhttp3:okhttp:5.3.2")
+  implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:5.3.2")
 
   // HTML Parsing (replaces cheerio)
   implementation("org.jsoup:jsoup:1.22.1")

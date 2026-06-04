@@ -460,4 +460,18 @@
     <string name="swipe_down_to_minimize">Vuốt xuống để thu nhỏ</string>
     <string name="release_to_fullscreen">Thả để vào toàn màn hình</string>
     <string name="release_to_minimize">Thả để thu nhỏ</string>
+
+    <!-- DNS Settings -->
+    <string name="network_settings">Cài đặt mạng</string>
+    <string name="dns_mode">DNS qua HTTPS (DoH)</string>
+    <string name="dns_system">Mặc định hệ thống</string>
+    <string name="dns_google">Google DNS</string>
+    <string name="dns_cloudflare">Cloudflare DNS</string>
+    <string name="dns_quad9">Quad9 DNS</string>
+    <string name="dns_custom">DNS tùy chỉnh</string>
+    <string name="custom_dns_url">URL DoH tùy chỉnh</string>
+    <string name="custom_dns_url_hint">https://example.com/dns-query</string>
+    <string name="dns_info_webview">Bật DNS trong WebView</string>
+    <string name="dns_info_desc">Sử dụng DoH đã chọn cho trình duyệt nội bộ và các yêu cầu</string>
+    <string name="open_system_dns_settings">Mở cài đặt Private DNS của hệ thống</string>
 </resources>

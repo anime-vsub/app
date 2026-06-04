@@ -63,6 +63,14 @@ class PreferencesManager(private val context: Context) {
     const val DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 12_000
     const val DEFAULT_PRIORITIZE_TIME_OVER_SIZE = true
     const val DEFAULT_LAST_ACTIVE_CHECK = 0L
+    const val DEFAULT_DNS_MODE = "cloudflare"
+    const val DEFAULT_CUSTOM_DNS_URL = "https://dns.google/dns-query"
+
+    const val DNS_MODE_SYSTEM = "system"
+    const val DNS_MODE_GOOGLE = "google"
+    const val DNS_MODE_CLOUDFLARE = "cloudflare"
+    const val DNS_MODE_QUAD9 = "quad9"
+    const val DNS_MODE_CUSTOM = "custom"
 
     private val AUTO_NEXT_KEY = booleanPreferencesKey("auto_next")
     private val AUTO_SKIP_KEY = booleanPreferencesKey("auto_skip")
@@ -109,6 +117,8 @@ class PreferencesManager(private val context: Context) {
     private val BUFFER_FOR_PLAYBACK_MS_KEY = intPreferencesKey("buffer_for_playback_ms")
     private val BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS_KEY = intPreferencesKey("buffer_for_playback_after_rebuffer_ms")
     private val PRIORITIZE_TIME_OVER_SIZE_KEY = booleanPreferencesKey("prioritize_time_over_size")
+    private val DNS_MODE_KEY = stringPreferencesKey("dns_mode")
+    private val CUSTOM_DNS_URL_KEY = stringPreferencesKey("custom_dns_url")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: DEFAULT_AUTO_NEXT }
@@ -159,6 +169,9 @@ class PreferencesManager(private val context: Context) {
   val bufferForPlaybackMs: Flow<Int> = context.dataStore.data.map { it[BUFFER_FOR_PLAYBACK_MS_KEY] ?: DEFAULT_BUFFER_FOR_PLAYBACK_MS }
   val bufferForPlaybackAfterRebufferMs: Flow<Int> = context.dataStore.data.map { it[BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS_KEY] ?: DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS }
   val prioritizeTimeOverSize: Flow<Boolean> = context.dataStore.data.map { it[PRIORITIZE_TIME_OVER_SIZE_KEY] ?: DEFAULT_PRIORITIZE_TIME_OVER_SIZE }
+
+  val dnsMode: Flow<String> = context.dataStore.data.map { it[DNS_MODE_KEY] ?: DEFAULT_DNS_MODE }
+  val customDnsUrl: Flow<String> = context.dataStore.data.map { it[CUSTOM_DNS_URL_KEY] ?: DEFAULT_CUSTOM_DNS_URL }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -345,6 +358,14 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setPrioritizeTimeOverSize(value: Boolean) {
     context.dataStore.edit { it[PRIORITIZE_TIME_OVER_SIZE_KEY] = value }
+  }
+
+  suspend fun setDnsMode(value: String) {
+    context.dataStore.edit { it[DNS_MODE_KEY] = value }
+  }
+
+  suspend fun setCustomDnsUrl(value: String) {
+    context.dataStore.edit { it[CUSTOM_DNS_URL_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

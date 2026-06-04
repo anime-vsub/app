@@ -279,6 +279,8 @@ class AnimeRepository @Inject constructor(
   val bufferForPlaybackMs = prefs.bufferForPlaybackMs
   val bufferForPlaybackAfterRebufferMs = prefs.bufferForPlaybackAfterRebufferMs
   val prioritizeTimeOverSize = prefs.prioritizeTimeOverSize
+  val dnsMode = prefs.dnsMode
+  val customDnsUrl = prefs.customDnsUrl
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -333,6 +335,8 @@ class AnimeRepository @Inject constructor(
   suspend fun setBufferForPlaybackMs(value: Int) = prefs.setBufferForPlaybackMs(value)
   suspend fun setBufferForPlaybackAfterRebufferMs(value: Int) = prefs.setBufferForPlaybackAfterRebufferMs(value)
   suspend fun setPrioritizeTimeOverSize(value: Boolean) = prefs.setPrioritizeTimeOverSize(value)
+  suspend fun setDnsMode(value: String) = prefs.setDnsMode(value)
+  suspend fun setCustomDnsUrl(value: String) = prefs.setCustomDnsUrl(value)
 
   // Search History
   val searchHistory = prefs.searchHistory
