@@ -9,6 +9,9 @@ import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import dagger.hilt.android.HiltAndroidApp
+import git.shin.animevsub.data.remote.WebViewCookieJar
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -37,6 +40,16 @@ class AnimeVsubApp :
       .build()
 
   override fun newImageLoader(): ImageLoader = ImageLoader.Builder(this)
+    .okHttpClient {
+      OkHttpClient.Builder()
+        .cookieJar(WebViewCookieJar())
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .followRedirects(true)
+        .followSslRedirects(true)
+        .build()
+    }
     .components {
       if (Build.VERSION.SDK_INT >= 28) {
         add(ImageDecoderDecoder.Factory())
