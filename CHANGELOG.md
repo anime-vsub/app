@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/anime-vsub/app/compare/v2.12.0...v2.12.1) (2026-06-16)
+
+
+### Bug Fixes
+
+* allow image load with cookie manager ([27b1281](https://github.com/anime-vsub/app/commit/27b12816659eed59ce1c994cb37ba3f420096e21))
+
 # [2.12.0](https://github.com/anime-vsub/app/compare/v2.11.2...v2.12.0) (2026-06-04)
 
 
