@@ -87,6 +87,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -159,6 +160,8 @@ import java.io.File
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
+private const val PLAYBACK_START_TIMEOUT_MS = 15_000L
+
 // import androidx.mediarouter.media.MediaRouter
 // import androidx.mediarouter.app.MediaRouteChooserDialog
 // import androidx.mediarouter.app.MediaRouteControllerDialog
@@ -182,6 +185,7 @@ fun VideoPlayer(
   onReload: () -> Unit,
   onNextEpisode: () -> Unit,
   onVideoEnded: () -> Boolean,
+  onPlaybackFailed: (String) -> Unit,
   servers: List<ServerInfo> = emptyList(),
   currentServer: ServerInfo? = null,
   onServerSelected: (ServerInfo) -> Unit,
@@ -253,6 +257,7 @@ fun VideoPlayer(
   )
 
   val playerData = playerConfig?.playerData
+  val currentOnPlaybackFailed by rememberUpdatedState(onPlaybackFailed)
 
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
@@ -320,6 +325,7 @@ fun VideoPlayer(
   var currentTime by remember { mutableLongStateOf(0L) }
   var duration by remember { mutableLongStateOf(0L) }
   var bufferedPosition by remember { mutableLongStateOf(0L) }
+  var pendingRestorePosition by remember { mutableStateOf<Long?>(null) }
   var isDragging by remember { mutableStateOf(false) }
   var isSeeking by remember { mutableStateOf(false) }
   var dragTime by remember { mutableLongStateOf(0L) }
@@ -356,6 +362,28 @@ fun VideoPlayer(
 
             if (playbackState == Player.STATE_READY) {
               duration = this@apply.duration.coerceAtLeast(0L)
+              pendingRestorePosition?.let { restorePosition ->
+                if (duration > 0L) {
+                  val safePosition = restorePosition.coerceIn(
+                    0L,
+                    (duration - 1000L).coerceAtLeast(0L)
+                  )
+                  seekTo(safePosition)
+                  currentTime = safePosition
+                  pendingRestorePosition = null
+
+                  val minutes = (safePosition / 1000 / 60).toInt()
+                  val seconds = ((safePosition / 1000) % 60).toInt()
+                  notificationText = context.getString(R.string.restored_progress, minutes, seconds)
+                  notificationIcon = Icons.Default.History
+                  isNotificationClickable = false
+                  showNotification = true
+                  scope.launch {
+                    delay(3000)
+                    showNotification = false
+                  }
+                }
+              }
             }
 
             if (playbackState == Player.STATE_ENDED) {
@@ -377,6 +405,7 @@ fun VideoPlayer(
             isPlaying = false
             isBuffering = false
             onPlayingStateChange(false)
+            currentOnPlaybackFailed(error.message ?: "Playback failed")
           }
 
           override fun onTimelineChanged(timeline: androidx.media3.common.Timeline, reason: Int) {
@@ -555,6 +584,7 @@ fun VideoPlayer(
       exoPlayer.clearMediaItems()
       loadedUri = null
       loadedEpisodeId = null
+      pendingRestorePosition = null
       return@LaunchedEffect
     }
 
@@ -583,6 +613,11 @@ fun VideoPlayer(
     }
 
     if (loadedUri != newUri || loadedEpisodeId != currentEpisode?.id || playerData.isContent) {
+      currentTime = 0L
+      duration = 0L
+      bufferedPosition = 0L
+      pendingRestorePosition = if (initialPosition > 0 && syncMode == 0) initialPosition else null
+
       if (playerData.type.lowercase() == "hls") {
         exoPlayer.setMediaSource(
           HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(newUri))
@@ -591,25 +626,31 @@ fun VideoPlayer(
         exoPlayer.setMediaItem(MediaItem.fromUri(newUri))
       }
 
-      // Only seek to initialPosition on the VERY FIRST load of this URI, and if syncMode allows restoring
-      if (initialPosition > 0 && syncMode == 0) {
-        exoPlayer.seekTo(initialPosition)
-        val minutes = (initialPosition / 1000 / 60).toInt()
-        val seconds = ((initialPosition / 1000) % 60).toInt()
-        notificationText = context.getString(R.string.restored_progress, minutes, seconds)
-        notificationIcon = Icons.Default.History
-        isNotificationClickable = false
-        showNotification = true
-        scope.launch {
-          delay(3000)
-          showNotification = false
-        }
-      }
       exoPlayer.prepare()
 //      exoPlayer.play()
 
       loadedUri = newUri
       loadedEpisodeId = currentEpisode?.id
+    }
+  }
+
+  LaunchedEffect(playerConfig, currentEpisode?.id, errorMessage) {
+    if (playerData == null || playerData.link.isEmpty() || errorMessage != null) return@LaunchedEffect
+
+    val watchedConfig = playerConfig
+    val watchedEpisodeId = currentEpisode?.id
+    delay(PLAYBACK_START_TIMEOUT_MS)
+
+    if (
+      playerConfig == watchedConfig &&
+      currentEpisode?.id == watchedEpisodeId &&
+      errorMessage == null &&
+      exoPlayer.playWhenReady &&
+      exoPlayer.playbackState == Player.STATE_BUFFERING &&
+      exoPlayer.currentPosition <= 0L &&
+      duration <= 0L
+    ) {
+      currentOnPlaybackFailed("Playback timed out")
     }
   }
 

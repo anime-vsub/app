@@ -409,6 +409,7 @@ fun DetailScreen(
                 onReload = { viewModel.retryPlayer() },
                 onNextEpisode = { viewModel.playNext() },
                 onVideoEnded = { viewModel.onEpisodeEnded() },
+                onPlaybackFailed = { viewModel.handlePlaybackFailure(it) },
                 servers = state.servers,
                 currentServer = state.currentServer,
                 onServerSelected = { viewModel.selectServer(it) },

@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 
 enum class ChatMode {
@@ -156,6 +157,12 @@ class DetailViewModel @Inject constructor(
 
   companion object {
     private const val MAX_AI_CHAT_MESSAGES = 50
+    private const val DETAIL_LOAD_TIMEOUT_MS = 15_000L
+    private const val CHAPTER_LOAD_TIMEOUT_MS = 15_000L
+    private const val INITIAL_CHAPTER_LOOKUP_TIMEOUT_MS = 5_000L
+    private const val SERVER_LOAD_TIMEOUT_MS = 15_000L
+    private const val PLAYER_LINK_TIMEOUT_MS = 15_000L
+    private const val PLAYBACK_TIMEOUT_MESSAGE = "Playback timed out"
   }
   private var bedtimeReminderJob: Job? = null
   private var isPlayerPlaying = false
@@ -394,7 +401,11 @@ class DetailViewModel @Inject constructor(
       loadAllChapterProgress(seasonId)
     } ?: run {
       viewModelScope.launch {
-        repository.getChapters(seasonId)
+        val result = withTimeoutOrNull(CHAPTER_LOAD_TIMEOUT_MS) {
+          repository.getChapters(seasonId)
+        } ?: Result.failure(Exception("Chapter load timed out"))
+
+        result
           .onSuccess { chapterData ->
             chapterCache[seasonId] = chapterData
             _uiState.update { it.copy(chapterData = chapterData, isChaptersLoading = false) }
@@ -447,7 +458,11 @@ class DetailViewModel @Inject constructor(
       loadComments(animeDetail = cachedDetail)
     } ?: run {
       viewModelScope.launch {
-        repository.getAnimeDetail(animeId)
+        val result = withTimeoutOrNull(DETAIL_LOAD_TIMEOUT_MS) {
+          repository.getAnimeDetail(animeId)
+        } ?: Result.failure(Exception("Detail load timed out"))
+
+        result
           .onSuccess { detail ->
             detailCache[animeId] = detail
             _uiState.update { it.copy(detail = detail, isLoading = false) }
@@ -476,7 +491,11 @@ class DetailViewModel @Inject constructor(
       }
     } ?: run {
       viewModelScope.launch {
-        repository.getChapters(animeId)
+        val result = withTimeoutOrNull(CHAPTER_LOAD_TIMEOUT_MS) {
+          repository.getChapters(animeId)
+        } ?: Result.failure(Exception("Chapter load timed out"))
+
+        result
           .onSuccess { chapterData ->
             chapterCache[animeId] = chapterData
             _uiState.update { it.copy(chapterData = chapterData, isChaptersLoading = false) }
@@ -509,7 +528,9 @@ class DetailViewModel @Inject constructor(
         foundChapter
       } else {
         // ID doesn't exist or no target ID provided, check watch history for "Continue Watching"
-        val lastChapId = repository.getLastChapOfSeason(_uiState.value.animeId).getOrNull()
+        val lastChapId = withTimeoutOrNull(INITIAL_CHAPTER_LOOKUP_TIMEOUT_MS) {
+          repository.getLastChapOfSeason(_uiState.value.animeId).getOrNull()
+        }
         if (lastChapId != null) {
           chapterData.chaps.find { it.id == lastChapId } ?: chapterData.chaps.first()
         } else {
@@ -560,6 +581,7 @@ class DetailViewModel @Inject constructor(
     savedStateHandle["animeId"] = seasonId
     savedStateHandle["chapterId"] = chapter.id
     isInitialPlayback = true
+    autoPlaybackRetryKey = null
 
     if (isNewSeason) {
       loadDetail(seasonId, chapter.id, isSwitchingSeason = true)
@@ -596,6 +618,7 @@ class DetailViewModel @Inject constructor(
 
   private var lastUpdateJob: Job? = null
   private var isInitialPlayback = true
+  private var autoPlaybackRetryKey: String? = null
 
   fun updateHistory(currentPosMs: Long, durationMs: Long) {
     if (_uiState.value.currentUser == null) return
@@ -892,7 +915,11 @@ class DetailViewModel @Inject constructor(
 
   private fun loadServers(chapter: ChapterInfo) {
     viewModelScope.launch {
-      repository.getServers(chapter)
+      val result = withTimeoutOrNull(SERVER_LOAD_TIMEOUT_MS) {
+        repository.getServers(chapter)
+      } ?: Result.failure(Exception("Server load timed out"))
+
+      result
         .onSuccess { servers ->
           _uiState.update { it.copy(servers = servers, isServersLoading = false) }
           if (servers.isNotEmpty()) {
@@ -924,6 +951,7 @@ class DetailViewModel @Inject constructor(
 
   fun selectServer(server: ServerInfo) {
     val chapter = _uiState.value.currentChapter ?: return
+    autoPlaybackRetryKey = null
     _uiState.update {
       it.copy(
         currentServer = server,
@@ -938,9 +966,36 @@ class DetailViewModel @Inject constructor(
     loadPlayer(chapter, server)
   }
 
+  fun handlePlaybackFailure(message: String) {
+    val state = _uiState.value
+    val chapter = state.currentChapter ?: return
+    val server = state.currentServer ?: return
+
+    if (message == PLAYBACK_TIMEOUT_MESSAGE) {
+      val retryKey = "${chapter.id}:${server.name}"
+      if (autoPlaybackRetryKey != retryKey) {
+        autoPlaybackRetryKey = retryKey
+        _uiState.update { it.copy(playerConfig = null, playerError = null, isPlayerLoading = true) }
+        loadPlayer(chapter, server)
+        return
+      }
+    }
+
+    _uiState.update {
+      it.copy(
+        isPlayerLoading = false,
+        playerError = message
+      )
+    }
+  }
+
   private fun loadPlayer(chapter: ChapterInfo, server: ServerInfo) {
     viewModelScope.launch {
-      repository.getPlayerLink(chapter, server)
+      val result = withTimeoutOrNull(PLAYER_LINK_TIMEOUT_MS) {
+        repository.getPlayerLink(chapter, server)
+      } ?: Result.failure(Exception(PLAYBACK_TIMEOUT_MESSAGE))
+
+      result
         .onSuccess { data ->
           _uiState.update {
             it.copy(
@@ -951,12 +1006,7 @@ class DetailViewModel @Inject constructor(
           }
         }
         .onFailure { e ->
-          _uiState.update {
-            it.copy(
-              isPlayerLoading = false,
-              playerError = e.message
-            )
-          }
+          handlePlaybackFailure(e.message ?: "Playback failed")
         }
     }
   }
@@ -991,6 +1041,7 @@ class DetailViewModel @Inject constructor(
   fun retryPlayer() {
     val state = _uiState.value
     if (state.currentChapter != null) {
+      autoPlaybackRetryKey = null
       _uiState.update { it.copy(playerConfig = null, playerError = null, isPlayerLoading = true) }
       if (state.currentServer != null) {
         loadPlayer(state.currentChapter, state.currentServer)
@@ -1050,7 +1101,11 @@ class DetailViewModel @Inject constructor(
       val currentSeasonId = _uiState.value.currentSeasonId
 
       // Reload detail
-      repository.getAnimeDetail(animeId)
+      val detailResult = withTimeoutOrNull(DETAIL_LOAD_TIMEOUT_MS) {
+        repository.getAnimeDetail(animeId)
+      } ?: Result.failure(Exception("Detail load timed out"))
+
+      detailResult
         .onSuccess { detail ->
           detailCache[animeId] = detail
           _uiState.update { it.copy(detail = detail) }
@@ -1060,7 +1115,11 @@ class DetailViewModel @Inject constructor(
         }
 
       // Reload chapters for current season
-      repository.getChapters(currentSeasonId)
+      val chapterResult = withTimeoutOrNull(CHAPTER_LOAD_TIMEOUT_MS) {
+        repository.getChapters(currentSeasonId)
+      } ?: Result.failure(Exception("Chapter load timed out"))
+
+      chapterResult
         .onSuccess { chapterData ->
           chapterCache[currentSeasonId] = chapterData
           _uiState.update { it.copy(chapterData = chapterData) }
