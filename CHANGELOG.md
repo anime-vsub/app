@@ -1,3 +1,10 @@
+## [2.12.2](https://github.com/anime-vsub/app/compare/v2.12.1...v2.12.2) (2026-08-07)
+
+
+### Bug Fixes
+
+* prevent player loading stalls ([e8e5fec](https://github.com/anime-vsub/app/commit/e8e5fecdcd168e899f138d8250fb728d4c040af6))
+
 ## [2.12.1](https://github.com/anime-vsub/app/compare/v2.12.0...v2.12.1) (2026-06-16)
 
 
