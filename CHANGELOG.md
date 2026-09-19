@@ -1,3 +1,10 @@
+## [2.12.3](https://github.com/anime-vsub/app/compare/v2.12.2...v2.12.3) (2026-09-19)
+
+
+### Bug Fixes
+
+* update core api for fix error 403 ([77eb43b](https://github.com/anime-vsub/app/commit/77eb43b92243dfa5d5eca8ce9aedbdfa9b6b56b0))
+
 ## [2.12.2](https://github.com/anime-vsub/app/compare/v2.12.1...v2.12.2) (2026-08-07)
 
 
