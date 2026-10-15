@@ -9,9 +9,9 @@
 | File                                           | Purpose                                                             |
 |------------------------------------------------|---------------------------------------------------------------------|
 | `data/remote/api_hidden/SegmentDecryptUtil.kt` | All crypto utilities (f2, f3, f4, f7, f8, f10, f12, decryptSegment) |
-| `data/remote/api_hidden/M3u8Result.kt`         | Result data class (content, skGlobalDecoded, avsCryptoHarden)       |
+| `data/remote/api_hidden/M3u8Result.kt`         | Result data class (content, avsCryptoHarden)                        |
 | `data/remote/api_hidden/AnimeApiCore.kt`       | `getM3u8Content()` + `fnCrypto()` + `extractIdAndSid()`             |
-| `data/remote/api_hidden/AnimeApiPlayer.kt`     | `lastSkGlobalDecoded`, `lastAvsCryptoHarden` state                  |
+| `data/remote/api_hidden/AnimeApiPlayer.kt`     | `lastAvsCryptoHarden` state                                         |
 | `data/remote/api_hidden/AnimeApi.kt`           | `segmentUrlInterceptor` + `segmentDataInterceptor` wiring           |
 
 ## Function mapping
@@ -27,8 +27,15 @@ f4(token)                → parseEnvelope(token): EnvelopeData
 f7(n)                    → lcgNext(n) (private inline)
 f8(content, etag)        → descrambleContent(content, etag)
 f10(token)               → extractJtiOdd(token): String
-f12(data)                → trimSegmentHeader(data): ByteArray
-decryptSegment(url, sk)  → decryptSegmentUrl(url, skGlobalDecoded): String
+f12(data)                → trimSegmentHeader(data): ByteArray — KHÁC TS 1 chút:
+                           TS f12 = slice(127) (dead code, không gọi); Kotlin cắt
+                           128 byte CHỈ KHI dữ liệu còn PNG magic (thấy trong bản
+                           trả full file). Thấy payload thẳng (BYTERANGE) → giữ nguyên.
+decryptSegment(url, sk?)  → decryptSegmentUrl(url, sessionKey?): String
+                           sessionKey = null (mặc định) → lấy SK từ JWT `token`
+                           trên chính segment URL (f10). KHÔNG truyền SK của
+                           player (avsToken) — kể từ 1.35.12 hai khóa khác nhau,
+                           ép dùng SK của player sẽ ra URL rác.
 transferStag(stag)       → base64Decode(stag) (private inline)
 ```
 
@@ -38,7 +45,7 @@ transferStag(stag)       → base64Decode(stag) (private inline)
 
 1. `extractIdAndSid()`: fetch player page HTML, extract `id`, `_avsSk`, `_avsCryptoHarden`,
    `_avsCryptoHardenShadow`
-2. `skGlobalDecoded = f10(avsSk)`, `fc = btoa("cross-origin")`
+2. `fc = btoa("cross-origin")`
 3. Build playlist URL: `https://<host>/playlist/{id}/playlist.m3u8?token={avsSk}&fc={fc}`
 4. Fetch playlist → parse X-Envelope header (JSON with `cn`/`sk`/`ts`/`uid`) or fallback
    `X-edge-Tag`/`X-Cache-Node`/`X-Request-Trace`/`X-Proxy-Digest`
@@ -70,18 +77,50 @@ TS `f9`:**
 ```
 getPlayerLink():
   iframe path:
-    core.getM3u8Content() → M3u8Result(content, skGlobalDecoded, avsCryptoHarden)
-    → stores lastSkGlobalDecoded, lastAvsCryptoHarden
+    core.getM3u8Content() → M3u8Result(content, avsCryptoHarden)
+    → stores lastAvsCryptoHarden
+    headers = AnimeDataSource.getHeaders(baseUrl) — PHẢI kèm User-Agent
+    (CF của stream.googleapiscdn.com trả 403 challenge khi thiếu UA)
   decryptM3u8 path:
-    → clears lastSkGlobalDecoded = null, lastAvsCryptoHarden = false
+    → clears lastAvsCryptoHarden = false
 ```
 
 ### AnimeApi.kt
 
 ```
-segmentUrlInterceptor: uses decryptSegmentUrl() when _avsCryptoHarden=true
-segmentDataInterceptor: always uses trimSegmentHeader() (f12)
+segmentUrlInterceptor: LUÔN BẬN (stateless) — decryptSegmentUrl(url) tự lấy SK
+  từ JWT `token` trên segment URL. Lỗi giải mã → giữ nguyên URL (fallback 404
+  graceful thay vì crash). Không còn gate theo lastAvsCryptoHarden.
+segmentDataInterceptor: luôn dùng trimSegmentHeader() (f12, PNG-aware)
 ```
+
+## Segment pipeline (site đổi 10/2026 — loader 1.35.12)
+
+Segment URL dạng placeholder `https://stream.googleapiscdn.com/hls/{fileId}.ts?e=...&i=...&token=JWT`,
+Media3 xử lý theo thứ tự:
+
+1. **URL interceptor**: `decryptSegmentUrl()` → URL media thật trên
+   `lh3.googleusercontent.com` (HMAC-SHA256 + AES-CTR, counter = `i`).
+   SK = f10(JWT `token` **trên chính URL segment**) — *không còn* dùng
+   avsToken của player (2 khóa khác nhau, ép dùng sai → URL rác).
+2. **BYTERANGE**: playlist có `#EXT-X-BYTERANGE:<len>@128` → Media3 tự request
+   `Range: bytes=128-` (lh3 trả 206) → payload thẳng, hết 128 byte header PNG.
+   `segmentDataInterceptor` chỉ cắt PNG khi server trả trọn file (phòng hờ).
+3. **AES-128-CBC**: Media3 tự làm theo `#EXT-X-KEY`
+   (`https://stream.googleapiscdn.com/seg-key/...`, key 16 byte, IV = media
+   sequence) — không cần code riêng, chỉ cần request key đúng UA: `/seg-key/`
+   trả **403 challenge khi thiếu User-Agent** (không UA → 403; Chrome/Dalvik → 200).
+4. Kết quả: MPEG-TS (h264 1080p + aac).
+
+**Cloudflare**: `CloudflareManager` bypass (WebView solve + `WebViewCookieJar`)
+chỉ áp dụng cho request OkHttp của app (fetch HTML player + playlist).
+**Media3 KHÔNG đi qua CloudflareManager** → header của `PlayerData` phải tự
+mang User-Agent trình duyệt (`AnimeDataSource.getHeaders(baseUrl)` — không
+`ignoreUserAgent=true`).
+
+**Domain**: `HOST_CURL_DEFAULT = animevietsub.sale` (host cũ `animevietsub.pl`
+đã chết — DNS không resolve) + `resolveDomain()` đọc `transform.json` từ
+`animevsubtv/data-animevsub-ext` để migrate host cũ đang lưu trong storage.
 
 ## Bitwise pitfalls (TS → Kotlin)
 
@@ -140,4 +179,10 @@ interpretation.
 4. **`SegmentDecryptUtil.kt`**: after any changes, verify bitwise correctness (see pitfalls above).
 5. **`AnimeApiPlayer.kt`**: verify state vars are correctly set/cleared.
 6. **`AnimeApi.kt`**: verify interceptors still match.
-7. Run: `make format`
+7. **`decryptSegmentUrl()`** (`SegmentDecryptUtil.kt`): SK mặc định phải lấy từ
+   JWT `token` trên segment URL (f10). Đối chiếu với `decryptSegment()` trong
+   run.ts (nếu run.ts thêm `sessionKey` → mirror y hệt).
+8. **`trimSegmentHeader()`**: format PNG wrapper + `#EXT-X-BYTERANGE:<len>@128`
+   có đổi không? Header mới dài bao nhiêu byte?
+9. Run: `make format` + `make check`; kiểm chứng nhanh: `bun test` trong repo
+   decrypt rồi lấy 1 segment giải ra ffprobe (xem `run.spec.ts`).
