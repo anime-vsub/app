@@ -5,15 +5,17 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.datasource.HttpDataSource
+import androidx.media3.datasource.okhttp.OkHttpDataSource
 import git.shin.animevsub.data.model.PlayerData
 import git.shin.animevsub.data.model.ServerInfo
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import okhttp3.Call
 
 @UnstableApi
 class TransformableHttpDataSource(
-  private val delegate: DefaultHttpDataSource,
+  private val delegate: HttpDataSource,
   private val server: ServerInfo,
   private val playerData: PlayerData,
   private val urlInterceptor: SegmentUrlInterceptor?,
@@ -84,30 +86,32 @@ class TransformableDataSourceFactory(
   private val playerData: PlayerData,
   private val urlInterceptor: SegmentUrlInterceptor?,
   private val dataInterceptor: SegmentDataInterceptor?,
-  private val defaultRequestProperties: MutableMap<String, String> = mutableMapOf()
+  private val defaultRequestProperties: MutableMap<String, String> = mutableMapOf(),
+  callFactory: Call.Factory? = null
 ) : HttpDataSource.Factory {
 
-  private val defaultFactory = DefaultHttpDataSource.Factory()
-
-  init {
-    defaultFactory.setDefaultRequestProperties(defaultRequestProperties)
+  private val innerFactory: HttpDataSource.Factory = if (callFactory != null) {
+    OkHttpDataSource.Factory(callFactory).apply {
+      setDefaultRequestProperties(defaultRequestProperties)
+    }
+  } else {
+    DefaultHttpDataSource.Factory().apply {
+      setDefaultRequestProperties(defaultRequestProperties)
+    }
   }
 
-  override fun createDataSource(): HttpDataSource {
-    val defaultDataSource = defaultFactory.createDataSource() as DefaultHttpDataSource
-    return TransformableHttpDataSource(
-      delegate = defaultDataSource,
-      server = server,
-      playerData = playerData,
-      urlInterceptor = urlInterceptor,
-      dataInterceptor = dataInterceptor
-    )
-  }
+  override fun createDataSource(): HttpDataSource = TransformableHttpDataSource(
+    delegate = innerFactory.createDataSource(),
+    server = server,
+    playerData = playerData,
+    urlInterceptor = urlInterceptor,
+    dataInterceptor = dataInterceptor
+  )
 
   override fun setDefaultRequestProperties(defaultRequestProperties: Map<String, String>): HttpDataSource.Factory {
     this.defaultRequestProperties.clear()
     this.defaultRequestProperties.putAll(defaultRequestProperties)
-    defaultFactory.setDefaultRequestProperties(defaultRequestProperties)
+    innerFactory.setDefaultRequestProperties(defaultRequestProperties)
     return this
   }
 }

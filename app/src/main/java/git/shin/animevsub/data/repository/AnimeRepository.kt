@@ -43,6 +43,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,7 +55,8 @@ class AnimeRepository @Inject constructor(
   private val prefs: PreferencesManager,
   private val storage: ApiStorage,
   private val json: Json,
-  private val analytics: FirebaseAnalytics
+  private val analytics: FirebaseAnalytics,
+  private val okHttpClient: OkHttpClient
 ) {
   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -175,7 +177,8 @@ class AnimeRepository @Inject constructor(
       playerData = playerData,
       server = server,
       segmentUrlInterceptor = api.segmentUrlInterceptor,
-      segmentDataInterceptor = api.segmentDataInterceptor
+      segmentDataInterceptor = api.segmentDataInterceptor,
+      callFactory = okHttpClient
     )
   }
 

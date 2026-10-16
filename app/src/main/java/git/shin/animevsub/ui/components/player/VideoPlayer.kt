@@ -595,7 +595,8 @@ fun VideoPlayer(
           playerData = playerConfig.playerData,
           urlInterceptor = playerConfig.segmentUrlInterceptor,
           dataInterceptor = playerConfig.segmentDataInterceptor,
-          defaultRequestProperties = (playerData.headers ?: emptyMap()).toMutableMap()
+          defaultRequestProperties = (playerData.headers ?: emptyMap()).toMutableMap(),
+          callFactory = playerConfig.callFactory
         )
       } else {
         DefaultHttpDataSource.Factory().setDefaultRequestProperties(playerData.headers ?: emptyMap())

@@ -3,6 +3,7 @@ package git.shin.animevsub.data.model
 import git.shin.animevsub.data.remote.SegmentDataInterceptor
 import git.shin.animevsub.data.remote.SegmentUrlInterceptor
 import kotlinx.serialization.Serializable
+import okhttp3.Call
 import java.time.Instant
 
 @Serializable
@@ -110,7 +111,8 @@ class PlayerConfig(
   val playerData: PlayerData,
   val server: ServerInfo,
   val segmentUrlInterceptor: SegmentUrlInterceptor?,
-  val segmentDataInterceptor: SegmentDataInterceptor?
+  val segmentDataInterceptor: SegmentDataInterceptor?,
+  val callFactory: Call.Factory? = null
 )
 
 data class ChapterData(

@@ -190,6 +190,7 @@ dependencies {
   // Media3 ExoPlayer
   implementation("androidx.media3:media3-exoplayer:1.10.0")
   implementation("androidx.media3:media3-exoplayer-hls:1.10.0")
+  implementation("androidx.media3:media3-datasource-okhttp:1.10.0")
   implementation("androidx.media3:media3-ui:1.10.0")
   implementation("androidx.media3:media3-cast:1.10.0")
   implementation("com.google.android.gms:play-services-cast-framework:22.3.1")
