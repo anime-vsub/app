@@ -1,3 +1,10 @@
+## [2.12.5](https://github.com/anime-vsub/app/compare/v2.12.4...v2.12.5) (2026-10-16)
+
+
+### Bug Fixes
+
+* **player:** fetch HLS segments/keys via app's OkHttp session ([e34e500](https://github.com/anime-vsub/app/commit/e34e50018c3758451091f0d5da56e7e725d328fa))
+
 ## [2.12.4](https://github.com/anime-vsub/app/compare/v2.12.3...v2.12.4) (2026-10-16)
 
 
