@@ -1,3 +1,11 @@
+## [2.12.4](https://github.com/anime-vsub/app/compare/v2.12.3...v2.12.4) (2026-10-16)
+
+
+### Bug Fixes
+
+* **player:** ktlint condition-wrapping in trimSegmentHeader ([9f4a5ce](https://github.com/anime-vsub/app/commit/9f4a5cea4d2be469145ba36fdd661e6dce09c0cf))
+* **player:** sync avs decrypt pipeline (loader 1.35.12) ([959333d](https://github.com/anime-vsub/app/commit/959333d7c109ca7e674762aeae1ec34f911457d1))
+
 ## [2.12.3](https://github.com/anime-vsub/app/compare/v2.12.2...v2.12.3) (2026-09-19)
 
 
