@@ -267,11 +267,19 @@ fun VideoPlayer(
   // `initialPosition` so a reload restores the position even when progress
   // sync is set to upload-only or disabled.
   var recoveryResumePosition by remember { mutableStateOf<Long?>(null) }
+  // Last position that ExoPlayer actually reported. It survives the moment
+  // the player resets to zero after an error, which is exactly when the user
+  // taps retry and expects to continue where playback stopped.
+  var lastPlaybackPosition by remember { mutableLongStateOf(0L) }
 
   fun reloadStream(positionMs: Long, manual: Boolean) {
     if (manual) stallDetector.reset()
-    if (positionMs > 0L) recoveryResumePosition = positionMs
-    currentOnReload(positionMs)
+    // ExoPlayer can report 0 once the stream has errored even though the user
+    // was minutes into the episode. Fall back to the last real position so
+    // retry and reload resume playback instead of restarting it.
+    val resumeAt = maxOf(positionMs, lastPlaybackPosition)
+    if (resumeAt > 0L) recoveryResumePosition = resumeAt
+    currentOnReload(resumeAt)
   }
 
   var isPlaying by remember { mutableStateOf(true) }
@@ -385,6 +393,7 @@ fun VideoPlayer(
                   )
                   seekTo(safePosition)
                   currentTime = safePosition
+                  lastPlaybackPosition = safePosition
                   pendingRestorePosition = null
 
                   val minutes = (safePosition / 1000 / 60).toInt()
@@ -422,6 +431,9 @@ fun VideoPlayer(
             onPlayingStateChange(false)
 
             val position = this@apply.currentPosition
+            // The player drops to zero on error; keep showing (and resuming
+            // from) the last position that really played.
+            currentTime = maxOf(currentTime, lastPlaybackPosition)
             if (error.isExpiredStreamError()) {
               when (stallDetector.streamError(position, SystemClock.elapsedRealtime())) {
                 StreamStallDetector.Action.RELOAD -> {
@@ -561,7 +573,14 @@ fun VideoPlayer(
   LaunchedEffect(exoPlayer) {
     while (true) {
       if (!isDragging) {
-        currentTime = exoPlayer.currentPosition
+        val position = exoPlayer.currentPosition
+        val playbackState = exoPlayer.playbackState
+        currentTime = position
+        // Ignore the zero ExoPlayer reports after an error (STATE_IDLE), but
+        // accept a real seek back to the start while playback is active.
+        if (position > 0L || playbackState != Player.STATE_IDLE) {
+          lastPlaybackPosition = position
+        }
 //        duration = exoPlayer.duration.coerceAtLeast(0L)
         bufferedPosition = exoPlayer.bufferedPosition
       }
@@ -572,6 +591,7 @@ fun VideoPlayer(
   // A different episode or server starts with a fresh recovery budget.
   LaunchedEffect(currentEpisode?.id, currentServer?.name) {
     stallDetector.reset()
+    lastPlaybackPosition = 0L
   }
 
   // Sources hand out expiring signed URLs; when one dies ExoPlayer can stay in
@@ -1206,6 +1226,8 @@ fun VideoPlayer(
               isLongPressing = false
               if (isDragging) {
                 exoPlayer.seekTo(dragTime)
+                currentTime = dragTime
+                lastPlaybackPosition = dragTime
                 isDragging = false
               }
             }
@@ -1235,12 +1257,14 @@ fun VideoPlayer(
               val newPos = (exoPlayer.currentPosition - skipMs).coerceAtLeast(0)
               exoPlayer.seekTo(newPos)
               currentTime = newPos
+              lastPlaybackPosition = newPos
               doubleTapSide = "left"
               doubleTapText = "-${doubleTapSkipDuration}s"
             } else {
               val newPos = (exoPlayer.currentPosition + skipMs).coerceAtMost(exoPlayer.duration)
               exoPlayer.seekTo(newPos)
               currentTime = newPos
+              lastPlaybackPosition = newPos
               doubleTapSide = "right"
               doubleTapText = "+${doubleTapSkipDuration}s"
             }
@@ -1626,7 +1650,7 @@ fun VideoPlayer(
               verticalAlignment = Alignment.CenterVertically
             ) {
               Text(
-                text = "${formatDuration(currentTime)} / ${formatDuration(duration)}",
+                text = "${formatDuration(if (isDragging) dragTime else currentTime)} / ${formatDuration(duration)}",
                 color = Color.White,
                 fontSize = if (isFullScreen) 16.sp else 13.sp
               )
@@ -1660,6 +1684,10 @@ fun VideoPlayer(
             },
             onValueChangeFinished = {
               exoPlayer.seekTo(dragTime)
+              // Keep the label on the seek target until the sampler catches
+              // up, instead of flashing the old position.
+              currentTime = dragTime
+              lastPlaybackPosition = dragTime
               isDragging = false
             },
             valueRange = 0f..duration.toFloat().coerceAtLeast(1f),
