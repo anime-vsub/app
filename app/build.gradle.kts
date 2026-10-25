@@ -21,7 +21,8 @@ detekt {
   config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 
   val excludePatterns = listOf(
-    "**/git/shin/animevsub/data/remote/api_example/**"
+    "**/git/shin/animevsub/data/remote/api_example/**",
+    "**/uniffi/**"
   )
 
   val sourceRoot = file("app/src/main/java")
@@ -31,6 +32,13 @@ detekt {
       exclude(excludePatterns)
     }
   )
+}
+
+ktlint {
+  // Generated uniffi bindings are not hand-written code.
+  filter {
+    exclude("**/uniffi/**")
+  }
 }
 
 tasks.register("lintFast") {
@@ -50,6 +58,8 @@ tasks.register("lintFast") {
 android {
   namespace = "git.shin.animevsub"
   compileSdk = 36
+  // Required for the Rust WARP library (16 KB page size, targetSdk 36).
+  ndkVersion = "28.2.13676358"
 
   val localProperties = Properties()
   val localPropertiesFile = rootProject.file("local.properties")
@@ -96,6 +106,11 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     vectorDrawables {
       useSupportLibrary = true
+    }
+    ndk {
+      // Keep the APK in sync with the ABIs built by `make warp-native`
+      // (and drop the JNA x86 binaries we have no WARP library for).
+      abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
     }
   }
 
@@ -172,6 +187,9 @@ dependencies {
   implementation("com.squareup.okhttp3:okhttp:5.3.2")
   implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:5.3.2")
   implementation("com.squareup.okhttp3:okhttp-urlconnection:5.3.2")
+
+  // Cloudflare WARP native library (uniffi bindings need JNA)
+  implementation("net.java.dev.jna:jna:5.17.0@aar")
 
   // HTML Parsing (replaces cheerio)
   implementation("org.jsoup:jsoup:1.22.1")

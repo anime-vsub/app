@@ -1038,11 +1038,21 @@ class DetailViewModel @Inject constructor(
     return false
   }
 
-  fun retryPlayer() {
+  fun retryPlayer(resumeAtMs: Long = 0L) {
     val state = _uiState.value
     if (state.currentChapter != null) {
       autoPlaybackRetryKey = null
-      _uiState.update { it.copy(playerConfig = null, playerError = null, isPlayerLoading = true) }
+      _uiState.update {
+        it.copy(
+          playerConfig = null,
+          playerError = null,
+          isPlayerLoading = true,
+          // Keep watching from where the expired stream stopped. The
+          // player restores this once the new playlist reports its
+          // duration.
+          lastProgress = if (resumeAtMs > 0L) resumeAtMs else it.lastProgress
+        )
+      }
       if (state.currentServer != null) {
         loadPlayer(state.currentChapter, state.currentServer)
       } else {

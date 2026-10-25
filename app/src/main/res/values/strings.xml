@@ -469,6 +469,16 @@
     <!-- DNS Settings -->
     <string name="network_settings">Network Settings</string>
     <string name="dns_mode">DNS over HTTPS</string>
+    <string name="warp_mode">Cloudflare WARP</string>
+    <string name="warp_mode_off">Off</string>
+    <string name="warp_mode_wireguard">WireGuard (UDP)</string>
+    <string name="warp_mode_masque_h3">MASQUE · HTTP/3 (QUIC)</string>
+    <string name="warp_mode_masque_h2">MASQUE · HTTP/2 (TCP)</string>
+    <string name="warp_status">Tunnel status</string>
+    <string name="warp_status_connecting">Connecting…</string>
+    <string name="warp_reset">Reset device registration</string>
+    <string name="warp_reset_desc">Register a new device with Cloudflare WARP</string>
+    <string name="stream_expired">Stream link expired. Tap Retry to reload.</string>
     <string name="dns_system">System Default</string>
     <string name="dns_google">Google DNS</string>
     <string name="dns_cloudflare">Cloudflare DNS</string>

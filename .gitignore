@@ -16,3 +16,6 @@ tsconfig.json
 /plan.md
 /*.log
 /firebase-adminsdk.json
+/app/src/main/jniLibs
+/warp-native/target
+/warp-native/generated

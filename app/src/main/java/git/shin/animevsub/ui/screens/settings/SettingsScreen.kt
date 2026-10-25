@@ -52,6 +52,7 @@ import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.SyncProblem
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.VideocamOff
+import androidx.compose.material.icons.filled.VpnLock
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -92,6 +93,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.MainActivity
 import git.shin.animevsub.R
+import git.shin.animevsub.data.local.PreferencesManager
 import git.shin.animevsub.ui.components.account.MenuItem
 import git.shin.animevsub.ui.components.account.MenuSection
 import git.shin.animevsub.ui.components.account.SettingsSelector
@@ -483,6 +485,38 @@ fun SettingsScreen(
               focusedBorderColor = AccentMain,
               unfocusedBorderColor = TextSecondary.copy(alpha = 0.5f)
             )
+          )
+        }
+
+        if (uiState.warpAvailable) {
+          SettingsSelector(
+            label = stringResource(R.string.warp_mode),
+            selectedOption = uiState.warpMode,
+            icon = Icons.Default.VpnLock,
+            options = listOf(
+              PreferencesManager.WARP_MODE_OFF to stringResource(R.string.warp_mode_off),
+              PreferencesManager.WARP_MODE_WIREGUARD to stringResource(R.string.warp_mode_wireguard),
+              PreferencesManager.WARP_MODE_MASQUE_H3 to stringResource(R.string.warp_mode_masque_h3),
+              PreferencesManager.WARP_MODE_MASQUE_H2 to stringResource(R.string.warp_mode_masque_h2)
+            ),
+            onOptionSelected = { viewModel.setWarpMode(it) }
+          )
+        }
+
+        if (uiState.warpAvailable && uiState.warpMode != PreferencesManager.WARP_MODE_OFF) {
+          MenuItem(
+            icon = Icons.Default.Info,
+            label = stringResource(R.string.warp_status),
+            description = uiState.warpError
+              ?: uiState.warpStatus.ifBlank { stringResource(R.string.warp_status_connecting) },
+            onClick = {}
+          )
+
+          MenuItem(
+            icon = Icons.Default.Refresh,
+            label = stringResource(R.string.warp_reset),
+            description = stringResource(R.string.warp_reset_desc),
+            onClick = { viewModel.resetWarpCredentials() }
           )
         }
 

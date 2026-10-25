@@ -4,6 +4,7 @@ package git.shin.animevsub.ui.components.player
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.media.AudioManager
+import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.SurfaceView
 import androidx.compose.animation.AnimatedVisibility
@@ -131,6 +132,7 @@ import androidx.media3.common.Tracks
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.datasource.HttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
@@ -152,6 +154,7 @@ import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.utils.formatDuration
 import git.shin.animevsub.ui.utils.rememberScreenState
+import git.shin.animevsub.utils.StreamStallDetector
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -182,7 +185,7 @@ fun VideoPlayer(
   autoNextEnabled: Boolean = false,
   onAutoNextToggle: (Boolean) -> Unit,
   onBack: () -> Unit,
-  onReload: () -> Unit,
+  onReload: (Long) -> Unit,
   onNextEpisode: () -> Unit,
   onVideoEnded: () -> Boolean,
   onPlaybackFailed: (String) -> Unit,
@@ -258,6 +261,18 @@ fun VideoPlayer(
 
   val playerData = playerConfig?.playerData
   val currentOnPlaybackFailed by rememberUpdatedState(onPlaybackFailed)
+  val currentOnReload by rememberUpdatedState(onReload)
+  val stallDetector = remember { StreamStallDetector() }
+  // Position to seek back to after a stream reload. Kept separate from
+  // `initialPosition` so a reload restores the position even when progress
+  // sync is set to upload-only or disabled.
+  var recoveryResumePosition by remember { mutableStateOf<Long?>(null) }
+
+  fun reloadStream(positionMs: Long, manual: Boolean) {
+    if (manual) stallDetector.reset()
+    if (positionMs > 0L) recoveryResumePosition = positionMs
+    currentOnReload(positionMs)
+  }
 
   var isPlaying by remember { mutableStateOf(true) }
   var isBuffering by remember { mutableStateOf(false) }
@@ -405,6 +420,21 @@ fun VideoPlayer(
             isPlaying = false
             isBuffering = false
             onPlayingStateChange(false)
+
+            val position = this@apply.currentPosition
+            if (error.isExpiredStreamError()) {
+              when (stallDetector.streamError(position, SystemClock.elapsedRealtime())) {
+                StreamStallDetector.Action.RELOAD -> {
+                  reloadStream(position, manual = false)
+                  return
+                }
+                StreamStallDetector.Action.GIVE_UP -> {
+                  currentOnPlaybackFailed(context.getString(R.string.stream_expired))
+                  return
+                }
+                StreamStallDetector.Action.NONE -> Unit
+              }
+            }
             currentOnPlaybackFailed(error.message ?: "Playback failed")
           }
 
@@ -539,6 +569,32 @@ fun VideoPlayer(
     }
   }
 
+  // A different episode or server starts with a fresh recovery budget.
+  LaunchedEffect(currentEpisode?.id, currentServer?.name) {
+    stallDetector.reset()
+  }
+
+  // Sources hand out expiring signed URLs; when one dies ExoPlayer can stay in
+  // STATE_BUFFERING forever. Reload the player link and keep the position.
+  LaunchedEffect(exoPlayer, playerConfig) {
+    while (true) {
+      if (playerConfig != null) {
+        val position = exoPlayer.currentPosition
+        val stalled = exoPlayer.playWhenReady &&
+          exoPlayer.playbackState == Player.STATE_BUFFERING &&
+          !isDragging
+        when (stallDetector.sample(position, SystemClock.elapsedRealtime(), stalled)) {
+          StreamStallDetector.Action.RELOAD -> reloadStream(position, manual = false)
+          StreamStallDetector.Action.GIVE_UP -> currentOnPlaybackFailed(
+            context.getString(R.string.stream_expired)
+          )
+          StreamStallDetector.Action.NONE -> Unit
+        }
+      }
+      delay(1_000)
+    }
+  }
+
   LaunchedEffect(
     isControlsVisible,
     isDragging,
@@ -578,6 +634,11 @@ fun VideoPlayer(
   var loadedUri by remember { mutableStateOf<android.net.Uri?>(null) }
   var loadedEpisodeId by remember { mutableStateOf<String?>(null) }
 
+  // A pending reload resume point belongs to the stream being replaced.
+  LaunchedEffect(currentEpisode?.id) {
+    recoveryResumePosition = null
+  }
+
   LaunchedEffect(playerConfig, currentEpisode?.id) {
     if (playerData == null || playerData.link.isEmpty()) {
       exoPlayer.stop()
@@ -589,7 +650,11 @@ fun VideoPlayer(
     }
 
     val httpDataSourceFactory =
-      if (playerConfig.segmentUrlInterceptor != null || playerConfig.segmentDataInterceptor != null) {
+      if (
+        playerConfig.segmentUrlInterceptor != null ||
+        playerConfig.segmentDataInterceptor != null ||
+        playerConfig.callFactory != null
+      ) {
         TransformableDataSourceFactory(
           server = playerConfig.server,
           playerData = playerConfig.playerData,
@@ -617,7 +682,10 @@ fun VideoPlayer(
       currentTime = 0L
       duration = 0L
       bufferedPosition = 0L
-      pendingRestorePosition = if (initialPosition > 0 && syncMode == 0) initialPosition else null
+      val resumeAt = recoveryResumePosition?.takeIf { it > 0L }
+        ?: initialPosition.takeIf { it > 0L && syncMode == 0 }
+      pendingRestorePosition = resumeAt
+      recoveryResumePosition = null
 
       if (playerData.type.lowercase() == "hls") {
         exoPlayer.setMediaSource(
@@ -1266,7 +1334,9 @@ fun VideoPlayer(
               )
             }
           }
-          IconButton(onClick = onReload) { Icon(Icons.Default.Refresh, null, tint = Color.White) }
+          IconButton(onClick = {
+            reloadStream(currentTime, manual = true)
+          }) { Icon(Icons.Default.Refresh, null, tint = Color.White) }
 //          IconButton(
 //            onClick = {
 //              val router = MediaRouter.getInstance(context)
@@ -1316,7 +1386,9 @@ fun VideoPlayer(
           )
           Spacer(modifier = Modifier.height(16.dp))
           Button(
-            onClick = onReload,
+            onClick = {
+              reloadStream(currentTime, manual = true)
+            },
             colors = ButtonDefaults.buttonColors(containerColor = MainColor)
           ) { Text(stringResource(R.string.retry)) }
         }
@@ -1929,4 +2001,29 @@ fun VideoPlayer(
       }
     }
   }
+}
+
+/** HTTP statuses produced when a signed media URL is no longer valid. */
+private val EXPIRED_STREAM_HTTP_CODES = setOf(401, 403, 404, 410)
+
+/**
+ * True when the failure looks like an expired signed URL rather than a
+ * decoding or connectivity problem.
+ */
+private fun PlaybackException.isExpiredStreamError(): Boolean {
+  if (
+    errorCode != PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS &&
+    errorCode != PlaybackException.ERROR_CODE_IO_FILE_NOT_FOUND
+  ) {
+    return false
+  }
+
+  var cause: Throwable? = cause
+  while (cause != null) {
+    if (cause is HttpDataSource.InvalidResponseCodeException) {
+      return cause.responseCode in EXPIRED_STREAM_HTTP_CODES
+    }
+    cause = cause.cause
+  }
+  return errorCode == PlaybackException.ERROR_CODE_IO_FILE_NOT_FOUND
 }

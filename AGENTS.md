@@ -14,6 +14,22 @@ make build-bundle   # Release AAB bundle
 ./gradlew :app:bundleRelease
 ```
 
+## Cloudflare WARP (streaming)
+
+Video traffic can be routed through an embedded Cloudflare WARP tunnel
+(WireGuard or MASQUE, no `VpnService`). The native library lives in
+`warp-native/` (Rust + uniffi) and is built into `app/src/main/jniLibs`
+(gitignored):
+
+```bash
+make warp-native   # needs Rust Android targets, cargo-ndk 4.1.2, NDK 28.2.13676358
+```
+
+`make build-debug`, `build-release` and `build-bundle` depend on it. If the
+`.so` is missing, the app still builds and the WARP setting hides itself.
+Regenerate the Kotlin bindings after changing the uniffi API with
+`make warp-bindings`.
+
 ## Code Quality
 
 ```bash

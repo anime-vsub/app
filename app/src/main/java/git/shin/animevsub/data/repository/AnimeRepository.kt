@@ -28,6 +28,7 @@ import git.shin.animevsub.data.model.User
 import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.remote.api.AnimeDataSource
+import git.shin.animevsub.utils.WarpManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -56,7 +57,8 @@ class AnimeRepository @Inject constructor(
   private val storage: ApiStorage,
   private val json: Json,
   private val analytics: FirebaseAnalytics,
-  private val okHttpClient: OkHttpClient
+  private val okHttpClient: OkHttpClient,
+  private val warpManager: WarpManager
 ) {
   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -178,7 +180,7 @@ class AnimeRepository @Inject constructor(
       server = server,
       segmentUrlInterceptor = api.segmentUrlInterceptor,
       segmentDataInterceptor = api.segmentDataInterceptor,
-      callFactory = okHttpClient
+      callFactory = warpManager.forPlayback(okHttpClient)
     )
   }
 
@@ -284,6 +286,7 @@ class AnimeRepository @Inject constructor(
   val prioritizeTimeOverSize = prefs.prioritizeTimeOverSize
   val dnsMode = prefs.dnsMode
   val customDnsUrl = prefs.customDnsUrl
+  val warpMode = prefs.warpMode
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -340,6 +343,7 @@ class AnimeRepository @Inject constructor(
   suspend fun setPrioritizeTimeOverSize(value: Boolean) = prefs.setPrioritizeTimeOverSize(value)
   suspend fun setDnsMode(value: String) = prefs.setDnsMode(value)
   suspend fun setCustomDnsUrl(value: String) = prefs.setCustomDnsUrl(value)
+  suspend fun setWarpMode(value: String) = prefs.setWarpMode(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

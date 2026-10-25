@@ -58,6 +58,10 @@ data class SettingsUiState(
   val prioritizeTimeOverSize: Boolean = PreferencesManager.DEFAULT_PRIORITIZE_TIME_OVER_SIZE,
   val dnsMode: String = PreferencesManager.DEFAULT_DNS_MODE,
   val customDnsUrl: String = PreferencesManager.DEFAULT_CUSTOM_DNS_URL,
+  val warpMode: String = PreferencesManager.DEFAULT_WARP_MODE,
+  val warpStatus: String = "",
+  val warpError: String? = null,
+  val warpAvailable: Boolean = true,
   val availableModels: List<String> = emptyList(),
   val isLoadingModels: Boolean = false,
   val isTestingKey: Boolean = false,
@@ -69,7 +73,8 @@ data class SettingsUiState(
 class SettingsViewModel @Inject constructor(
   @param:ApplicationContext private val context: Context,
   private val repository: AnimeRepository,
-  private val geminiRepository: git.shin.animevsub.data.repository.GeminiRepository
+  private val geminiRepository: git.shin.animevsub.data.repository.GeminiRepository,
+  private val warpManager: git.shin.animevsub.utils.WarpManager
 ) : ViewModel() {
 
   private val _uiState = MutableStateFlow(SettingsUiState())
@@ -279,6 +284,22 @@ class SettingsViewModel @Inject constructor(
     viewModelScope.launch {
       repository.customDnsUrl.collect { v ->
         _uiState.update { it.copy(customDnsUrl = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.warpMode.collect { v ->
+        _uiState.update { it.copy(warpMode = v) }
+      }
+    }
+    viewModelScope.launch {
+      warpManager.state.collect { state ->
+        _uiState.update {
+          it.copy(
+            warpStatus = state.detail,
+            warpError = state.error,
+            warpAvailable = state.available
+          )
+        }
       }
     }
   }
@@ -575,6 +596,14 @@ class SettingsViewModel @Inject constructor(
 
   fun setCustomDnsUrl(value: String) {
     viewModelScope.launch { repository.setCustomDnsUrl(value) }
+  }
+
+  fun setWarpMode(value: String) {
+    viewModelScope.launch { repository.setWarpMode(value) }
+  }
+
+  fun resetWarpCredentials() {
+    viewModelScope.launch { warpManager.resetCredentials() }
   }
 
   fun testNotification() {

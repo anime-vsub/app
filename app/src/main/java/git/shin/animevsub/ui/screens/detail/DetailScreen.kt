@@ -406,7 +406,7 @@ fun DetailScreen(
                 autoNextEnabled = state.autoNext,
                 onAutoNextToggle = { viewModel.setAutoNext(it) },
                 onBack = onNavigateBack,
-                onReload = { viewModel.retryPlayer() },
+                onReload = { positionMs -> viewModel.retryPlayer(positionMs) },
                 onNextEpisode = { viewModel.playNext() },
                 onVideoEnded = { viewModel.onEpisodeEnded() },
                 onPlaybackFailed = { viewModel.handlePlaybackFailure(it) },

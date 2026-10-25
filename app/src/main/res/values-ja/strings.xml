@@ -477,4 +477,14 @@
     <string name="dns_info_webview">WebView で DNS を有効にする</string>
     <string name="dns_info_desc">内部ブラウザとリクエストに選択した DoH を使用します</string>
     <string name="open_system_dns_settings">システムのプライベート DNS 設定を開く</string>
+    <string name="warp_mode">Cloudflare WARP</string>
+    <string name="warp_mode_off">オフ</string>
+    <string name="warp_mode_wireguard">WireGuard (UDP)</string>
+    <string name="warp_mode_masque_h3">MASQUE · HTTP/3 (QUIC)</string>
+    <string name="warp_mode_masque_h2">MASQUE · HTTP/2 (TCP)</string>
+    <string name="warp_status">トンネルの状態</string>
+    <string name="warp_status_connecting">接続中…</string>
+    <string name="warp_reset">デバイス登録をリセット</string>
+    <string name="warp_reset_desc">Cloudflare WARP に新しいデバイスを登録します</string>
+    <string name="stream_expired">ストリームのリンクが期限切れです。再試行をタップして再読み込みしてください。</string>
 </resources>

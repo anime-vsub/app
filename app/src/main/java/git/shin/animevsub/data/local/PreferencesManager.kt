@@ -66,6 +66,12 @@ class PreferencesManager(private val context: Context) {
     const val DEFAULT_DNS_MODE = "cloudflare"
     const val DEFAULT_CUSTOM_DNS_URL = "https://dns.google/dns-query"
 
+    const val DEFAULT_WARP_MODE = "off"
+    const val WARP_MODE_OFF = "off"
+    const val WARP_MODE_WIREGUARD = "wireguard"
+    const val WARP_MODE_MASQUE_H3 = "masque_h3"
+    const val WARP_MODE_MASQUE_H2 = "masque_h2"
+
     const val DNS_MODE_SYSTEM = "system"
     const val DNS_MODE_GOOGLE = "google"
     const val DNS_MODE_CLOUDFLARE = "cloudflare"
@@ -119,6 +125,7 @@ class PreferencesManager(private val context: Context) {
     private val PRIORITIZE_TIME_OVER_SIZE_KEY = booleanPreferencesKey("prioritize_time_over_size")
     private val DNS_MODE_KEY = stringPreferencesKey("dns_mode")
     private val CUSTOM_DNS_URL_KEY = stringPreferencesKey("custom_dns_url")
+    private val WARP_MODE_KEY = stringPreferencesKey("warp_mode")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: DEFAULT_AUTO_NEXT }
@@ -172,6 +179,7 @@ class PreferencesManager(private val context: Context) {
 
   val dnsMode: Flow<String> = context.dataStore.data.map { it[DNS_MODE_KEY] ?: DEFAULT_DNS_MODE }
   val customDnsUrl: Flow<String> = context.dataStore.data.map { it[CUSTOM_DNS_URL_KEY] ?: DEFAULT_CUSTOM_DNS_URL }
+  val warpMode: Flow<String> = context.dataStore.data.map { it[WARP_MODE_KEY] ?: DEFAULT_WARP_MODE }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -366,6 +374,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setCustomDnsUrl(value: String) {
     context.dataStore.edit { it[CUSTOM_DNS_URL_KEY] = value }
+  }
+
+  suspend fun setWarpMode(value: String) {
+    context.dataStore.edit { it[WARP_MODE_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

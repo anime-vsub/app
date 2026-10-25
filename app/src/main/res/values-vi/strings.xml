@@ -464,6 +464,16 @@
     <!-- DNS Settings -->
     <string name="network_settings">Cài đặt mạng</string>
     <string name="dns_mode">DNS qua HTTPS (DoH)</string>
+    <string name="warp_mode">Cloudflare WARP</string>
+    <string name="warp_mode_off">Tắt</string>
+    <string name="warp_mode_wireguard">WireGuard (UDP)</string>
+    <string name="warp_mode_masque_h3">MASQUE · HTTP/3 (QUIC)</string>
+    <string name="warp_mode_masque_h2">MASQUE · HTTP/2 (TCP)</string>
+    <string name="warp_status">Trạng thái tunnel</string>
+    <string name="warp_status_connecting">Đang kết nối…</string>
+    <string name="warp_reset">Đặt lại đăng ký thiết bị</string>
+    <string name="warp_reset_desc">Đăng ký thiết bị mới với Cloudflare WARP</string>
+    <string name="stream_expired">Luồng phát đã hết hạn. Nhấn Thử lại để tải lại.</string>
     <string name="dns_system">Mặc định hệ thống</string>
     <string name="dns_google">Google DNS</string>
     <string name="dns_cloudflare">Cloudflare DNS</string>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!--
+      uniffi's generated Kotlin binds java.lang.ref.Cleaner when the class is
+      present and falls back to JNA's cleaner otherwise (the lookup is done
+      with Class.forName). Cleaner only exists on Android 13+, so lint sees a
+      NewApi call that can never run on older devices.
+    -->
+    <issue id="NewApi">
+        <ignore path="src/main/java/uniffi/**" />
+    </issue>
+</lint>

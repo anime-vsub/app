@@ -31,3 +31,12 @@
 
 # Fix Ktor debug
 -dontwarn io.ktor.util.debug.**
+
+# Cloudflare WARP native library (uniffi + JNA)
+-keep class uniffi.warp_native.** { *; }
+-keep class com.sun.jna.** { *; }
+-keep class * implements com.sun.jna.** { *; }
+-keep class * extends com.sun.jna.** { *; }
+-keepclassmembers class * extends com.sun.jna.** { *; }
+-dontwarn java.awt.**
+-dontwarn com.sun.jna.**

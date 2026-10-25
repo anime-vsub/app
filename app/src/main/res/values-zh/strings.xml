@@ -477,4 +477,14 @@
     <string name="dns_info_webview">在 WebView 中启用 DNS</string>
     <string name="dns_info_desc">在内部浏览器和请求中使用所选的 DoH</string>
     <string name="open_system_dns_settings">打开系统私人 DNS 设置</string>
+    <string name="warp_mode">Cloudflare WARP</string>
+    <string name="warp_mode_off">关闭</string>
+    <string name="warp_mode_wireguard">WireGuard (UDP)</string>
+    <string name="warp_mode_masque_h3">MASQUE · HTTP/3 (QUIC)</string>
+    <string name="warp_mode_masque_h2">MASQUE · HTTP/2 (TCP)</string>
+    <string name="warp_status">隧道状态</string>
+    <string name="warp_status_connecting">连接中…</string>
+    <string name="warp_reset">重置设备注册</string>
+    <string name="warp_reset_desc">向 Cloudflare WARP 注册新设备</string>
+    <string name="stream_expired">流媒体链接已过期。点击“重试”重新加载。</string>
 </resources>
