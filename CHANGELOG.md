@@ -1,3 +1,15 @@
+# [2.13.0](https://github.com/anime-vsub/app/compare/v2.12.5...v2.13.0) (2026-10-25)
+
+
+### Bug Fixes
+
+* **player:** follow seek position and resume retries in place ([837c808](https://github.com/anime-vsub/app/commit/837c808466a6f4443945a13a71492b1c0bdf7784)), closes [#145](https://github.com/anime-vsub/app/issues/145)
+
+
+### Features
+
+* embed Cloudflare WARP and recover expired streams ([5154ca5](https://github.com/anime-vsub/app/commit/5154ca53a839ef60b149bf16a1d166f746f962b0)), closes [#144](https://github.com/anime-vsub/app/issues/144) [#145](https://github.com/anime-vsub/app/issues/145)
+
 ## [2.12.5](https://github.com/anime-vsub/app/compare/v2.12.4...v2.12.5) (2026-10-16)
 
 
