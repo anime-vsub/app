@@ -1,3 +1,10 @@
+## [2.14.1](https://github.com/anime-vsub/app/compare/v2.14.0...v2.14.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* **warp:** make WireGuard and MASQUE tunnels reliable ([435f60b](https://github.com/anime-vsub/app/commit/435f60b389531ee619844375c31a3b6b3cda6b0f))
+
 # [2.14.0](https://github.com/anime-vsub/app/compare/v2.13.0...v2.14.0) (2026-10-26)
 
 
