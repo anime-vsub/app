@@ -1,3 +1,10 @@
+# [2.14.0](https://github.com/anime-vsub/app/compare/v2.13.0...v2.14.0) (2026-10-26)
+
+
+### Features
+
+* local SQLite history and persistent detail cache ([55e166a](https://github.com/anime-vsub/app/commit/55e166a6ee5d15c59fbc92c4bf3702d13684608c))
+
 # [2.13.0](https://github.com/anime-vsub/app/compare/v2.12.5...v2.13.0) (2026-10-25)
 
 
