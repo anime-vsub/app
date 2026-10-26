@@ -10,9 +10,9 @@ use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::time::Duration;
 
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
-use tokio::sync::RwLock;
+use tokio::sync::{Mutex, RwLock};
 use warp_wireguard_gen::{get_config, register, RegistrationOptions, WarpCredentials};
 use wireguard_netstack::{DohResolver, ManagedTunnel, NetStack, TcpConnection};
 
@@ -24,10 +24,33 @@ use crate::status::StatusCell;
 const MTU: u16 = 1280;
 const CREDENTIALS_FILE: &str = "warp-wireguard.json";
 
+// `warp-wireguard-gen` and `wireguard-netstack` have no internal network
+// timeouts. Without these, one dead path leaves `start()` or a SOCKS dial
+// hanging indefinitely instead of failing fast and letting the caller retry.
+const API_TIMEOUT: Duration = Duration::from_secs(20);
+const DNS_TIMEOUT: Duration = Duration::from_secs(6);
+const DIAL_TIMEOUT: Duration = Duration::from_secs(10);
+const HANDSHAKE_TIMEOUT: Duration = Duration::from_secs(8);
+const PROBE_TIMEOUT: Duration = Duration::from_secs(15);
+
+/// Extra anycast edges to try when the registered endpoint drops the
+/// handshake. WARP hands out one edge IP, but a single edge can silently
+/// blackhole UDP for minutes while the rest of Cloudflare's network is fine.
+const FALLBACK_ENDPOINTS: [&str; 4] = [
+    "162.159.192.1",
+    "162.159.195.1",
+    "162.159.193.1",
+    "162.159.204.1",
+];
+
 pub struct WgDialer {
     inner: RwLock<Inner>,
     dir: PathBuf,
     status: Arc<StatusCell>,
+    /// Serializes rebuilds: several SOCKS dials can fail at once, and each
+    /// one rebuilding independently only produced registration/handshake
+    /// storms that made the intermittent timeouts worse.
+    rebuild: Mutex<()>,
 }
 
 struct Inner {
@@ -48,6 +71,7 @@ impl WgDialer {
             inner: RwLock::new(inner),
             dir: dir.to_path_buf(),
             status,
+            rebuild: Mutex::new(()),
         })
     }
 
@@ -66,10 +90,20 @@ async fn build(dir: &Path, status: &Arc<StatusCell>) -> Result<Inner> {
     let credentials = load_credentials(&path).await;
 
     let mut config = match credentials.as_ref() {
-        Some(credentials) => match get_config(credentials).await {
-            Ok(config) => Some(config),
-            Err(err) => {
-                log::warn!("warp: cached WireGuard registration rejected ({err:#}), re-registering");
+        Some(credentials) => match tokio::time::timeout(API_TIMEOUT, get_config(credentials)).await
+        {
+            Ok(Ok(config)) => Some(config),
+            Ok(Err(err)) => {
+                log::warn!(
+                    "warp: cached WireGuard registration rejected ({err:#}), re-registering"
+                );
+                None
+            }
+            Err(_) => {
+                log::warn!(
+                    "warp: WARP config refresh timed out after {}s, re-registering",
+                    API_TIMEOUT.as_secs()
+                );
                 None
             }
         },
@@ -78,9 +112,16 @@ async fn build(dir: &Path, status: &Arc<StatusCell>) -> Result<Inner> {
 
     if config.is_none() {
         status.set_detail("Registering with Cloudflare WARP");
-        let (fresh_config, fresh_credentials) = register(RegistrationOptions::default())
-            .await
-            .context("WARP device registration failed")?;
+        let (fresh_config, fresh_credentials) =
+            tokio::time::timeout(API_TIMEOUT, register(RegistrationOptions::default()))
+                .await
+                .map_err(|_| {
+                    anyhow!(
+                        "WARP device registration timed out after {}s",
+                        API_TIMEOUT.as_secs()
+                    )
+                })?
+                .context("WARP device registration failed")?;
         if let Err(err) = save_credentials(&path, &fresh_credentials).await {
             log::warn!("warp: cannot persist WireGuard credentials: {err:#}");
         }
@@ -95,9 +136,40 @@ async fn build(dir: &Path, status: &Arc<StatusCell>) -> Result<Inner> {
     }
 
     status.set_detail("Establishing WireGuard handshake");
-    let tunnel = ManagedTunnel::connect_with_timeout(config, Duration::from_secs(15))
-        .await
-        .context("WireGuard handshake with Cloudflare failed")?;
+    let mut endpoints = vec![config.peer_endpoint];
+    for raw in FALLBACK_ENDPOINTS {
+        if let Ok(ip) = raw.parse::<IpAddr>() {
+            let candidate = SocketAddr::new(ip, config.peer_endpoint.port());
+            if !endpoints.contains(&candidate) {
+                endpoints.push(candidate);
+            }
+        }
+    }
+
+    let mut tunnel = None;
+    for (index, endpoint) in endpoints.iter().enumerate() {
+        config.peer_endpoint = *endpoint;
+        log::info!(
+            "warp: WireGuard handshake with {endpoint} (attempt {}/{})",
+            index + 1,
+            endpoints.len()
+        );
+        match ManagedTunnel::connect_with_timeout(config.clone(), HANDSHAKE_TIMEOUT).await {
+            Ok(established) => {
+                tunnel = Some(established);
+                break;
+            }
+            Err(err) => {
+                log::warn!("warp: WireGuard handshake with {endpoint} failed: {err}");
+            }
+        }
+    }
+    let tunnel = tunnel.ok_or_else(|| {
+        anyhow!(
+            "WireGuard handshake with Cloudflare failed on all {} endpoints",
+            endpoints.len()
+        )
+    })?;
 
     let netstack = tunnel.netstack();
     let dns = DohResolver::new_tunneled(Arc::clone(&netstack));
@@ -114,18 +186,24 @@ async fn build(dir: &Path, status: &Arc<StatusCell>) -> Result<Inner> {
 }
 
 async fn probe(netstack: &Arc<NetStack>, dns: &DohResolver) -> Result<()> {
-    let addr = dns
-        .resolve_addr("cloudflare.com", 443)
-        .await
-        .context("DNS through the WireGuard tunnel failed")?;
+    let addr =
+        match tokio::time::timeout(DNS_TIMEOUT, dns.resolve_addr("cloudflare.com", 443)).await {
+            Ok(result) => result.context("DNS through the WireGuard tunnel failed")?,
+            Err(_) => {
+                return Err(anyhow!(
+                    "DNS through the WireGuard tunnel timed out after {}s",
+                    DNS_TIMEOUT.as_secs()
+                ))
+            }
+        };
     let connect = TcpConnection::connect(Arc::clone(netstack), addr);
-    match tokio::time::timeout(Duration::from_secs(12), connect).await {
+    match tokio::time::timeout(PROBE_TIMEOUT, connect).await {
         Ok(Ok(connection)) => {
             connection.shutdown();
             Ok(())
         }
-        Ok(Err(err)) => Err(anyhow::anyhow!("tunnel probe failed: {err}")),
-        Err(_) => Err(anyhow::anyhow!("tunnel probe timed out")),
+        Ok(Err(err)) => Err(anyhow!("tunnel probe failed: {err}")),
+        Err(_) => Err(anyhow!("tunnel probe timed out")),
     }
 }
 
@@ -154,11 +232,22 @@ impl Dialer for WgDialer {
             match dial_with(&guard, host, port).await {
                 Ok(stream) => return Ok(stream),
                 Err(err) => {
-                    log::warn!("warp: WireGuard dial to {host}:{port} failed ({err:#}), reconnecting");
+                    log::warn!("warp: WireGuard dial to {host}:{port} failed ({err:#})");
                 }
             }
         }
 
+        // Only one dial rebuilds at a time. While waiting, another dial may
+        // have already restored the tunnel, so retry before rebuilding again.
+        let _rebuild_guard = self.rebuild.lock().await;
+        {
+            let guard = self.inner.read().await;
+            if let Ok(stream) = dial_with(&guard, host, port).await {
+                return Ok(stream);
+            }
+        }
+
+        log::info!("warp: rebuilding WireGuard tunnel after dial failure");
         let rebuilt = self.rebuild().await?;
         *self.inner.write().await = rebuilt;
 
@@ -170,14 +259,32 @@ impl Dialer for WgDialer {
 async fn dial_with(inner: &Inner, host: &str, port: u16) -> Result<Box<dyn TunnelStream>> {
     let addr = match host.parse::<IpAddr>() {
         Ok(ip) => SocketAddr::new(ip, port),
-        Err(_) => inner
-            .dns
-            .resolve_addr(host, port)
-            .await
-            .with_context(|| format!("cannot resolve {host} through WARP"))?,
+        Err(_) => match tokio::time::timeout(DNS_TIMEOUT, inner.dns.resolve_addr(host, port)).await
+        {
+            Ok(result) => result.with_context(|| format!("cannot resolve {host} through WARP"))?,
+            Err(_) => {
+                return Err(anyhow!(
+                    "resolving {host} through WARP timed out after {}s",
+                    DNS_TIMEOUT.as_secs()
+                ))
+            }
+        },
     };
 
-    let connection = TcpConnection::connect(Arc::clone(&inner.netstack), addr).await?;
+    let connection = match tokio::time::timeout(
+        DIAL_TIMEOUT,
+        TcpConnection::connect(Arc::clone(&inner.netstack), addr),
+    )
+    .await
+    {
+        Ok(result) => result?,
+        Err(_) => {
+            return Err(anyhow!(
+                "connecting to {host}:{port} through WARP timed out after {}s",
+                DIAL_TIMEOUT.as_secs()
+            ))
+        }
+    };
     Ok(Box::new(WgStream { connection }))
 }
 

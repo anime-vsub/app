@@ -47,6 +47,21 @@ make test           # Run unit tests
 ./gradlew testDebugUnitTest
 ```
 
+WARP transports are verified from the host (no emulator needed):
+
+```bash
+cd warp-native
+cargo test --test transports -- --ignored --test-threads=1 --nocapture
+# or one transport at a time:
+cargo run --example smoke -- wg   # wireguard | h3 | h2
+```
+
+The tests bring the tunnel up and request
+`http://www.cloudflare.com/cdn-cgi/trace` through the local SOCKS5 proxy,
+asserting the response says `warp=on`. They register a WARP device on first
+run, so they are `#[ignore]`d by default. MASQUE HTTP/3 additionally needs
+UDP/443; on networks that block it, H2 (same endpoint, TCP) is used instead.
+
 ## Local Setup Requirements
 
 Create `local.properties` with:

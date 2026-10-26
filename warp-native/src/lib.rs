@@ -180,6 +180,9 @@ impl WarpTunnel {
                 Ok(port)
             }
             Err(err) => {
+                // The uniffi error reaches Kotlin, but logcat is where we
+                // diagnose transport failures on real devices.
+                log::error!("warp: {} start failed: {err:#}", mode.as_str());
                 cancel.cancel();
                 Err(err.into())
             }

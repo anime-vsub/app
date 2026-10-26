@@ -40,9 +40,20 @@ const CONFIG_FILE: &str = "warp-masque.json";
 const MTU: usize = 1400;
 const CONNECT_PORT: u16 = 443;
 
+// Every network step is bounded: an unbounded wait would leave `start()`
+// blocked forever (the UI would show "Connecting…" with no way out) and no
+// retry could ever run.
+const REGISTER_TIMEOUT: Duration = Duration::from_secs(20);
+const ENROLL_TIMEOUT: Duration = Duration::from_secs(15);
+const CONNECT_TIMEOUT: Duration = Duration::from_secs(15);
+const PROBE_TIMEOUT: Duration = Duration::from_secs(15);
+const DIAL_TIMEOUT: Duration = Duration::from_secs(12);
+const RETRY_DELAY: Duration = Duration::from_secs(2);
+
 pub struct MasqueDialer {
     stack: Arc<VirtualStack>,
     dns: DnsResolver,
+    reconnect: Arc<tokio::sync::Notify>,
     _supervisor: JoinHandle<()>,
 }
 
@@ -91,12 +102,31 @@ impl MasqueDialer {
             stack: Some(Arc::clone(&stack)),
         };
 
+        // Establish the first session before starting the supervisor. Doing the
+        // handshake here (instead of racing a background task) means `start()`
+        // only reports success when the tunnel is actually usable.
+        status.set_detail("Connecting MASQUE tunnel");
+        let session = match tokio::time::timeout(CONNECT_TIMEOUT, connect_tunnel(&options)).await {
+            Ok(Ok(session)) => session,
+            Ok(Err(err)) => return Err(err.context("MASQUE handshake failed")),
+            Err(_) => {
+                return Err(anyhow!(
+                    "MASQUE handshake timed out after {}s",
+                    CONNECT_TIMEOUT.as_secs()
+                ));
+            }
+        };
+        log::info!("warp: MASQUE tunnel established");
+
+        let reconnect = Arc::new(tokio::sync::Notify::new());
         let supervisor = tokio::spawn(supervise(
             options,
             Arc::clone(&device),
             Arc::clone(&stack),
             Arc::clone(&status),
             cancel,
+            Arc::clone(&reconnect),
+            session,
         ));
 
         probe(&stack, &dns).await?;
@@ -112,6 +142,7 @@ impl MasqueDialer {
         Ok(Self {
             stack,
             dns,
+            reconnect,
             _supervisor: supervisor,
         })
     }
@@ -120,20 +151,49 @@ impl MasqueDialer {
 #[async_trait]
 impl Dialer for MasqueDialer {
     async fn dial(&self, host: &str, port: u16) -> Result<Box<dyn TunnelStream>> {
-        let addr = match host.parse::<IpAddr>() {
-            Ok(ip) => SocketAddr::new(ip, port),
-            Err(_) => {
-                let ip = self
-                    .dns
-                    .lookup_ip(host)
-                    .await
-                    .with_context(|| format!("cannot resolve {host} through MASQUE"))?;
-                SocketAddr::new(ip, port)
-            }
+        let attempt = async {
+            let addr = match host.parse::<IpAddr>() {
+                Ok(ip) => SocketAddr::new(ip, port),
+                Err(_) => {
+                    let ip = self
+                        .resolve_v4_first(host)
+                        .await
+                        .with_context(|| format!("cannot resolve {host} through MASQUE"))?;
+                    SocketAddr::new(ip, port)
+                }
+            };
+
+            let stream = self.stack.dial_tcp(addr).await?;
+            Ok::<Box<dyn TunnelStream>, anyhow::Error>(Box::new(MasqueStream { stream }))
         };
 
-        let stream = self.stack.dial_tcp(addr).await?;
-        Ok(Box::new(MasqueStream { stream }))
+        match tokio::time::timeout(DIAL_TIMEOUT, attempt).await {
+            Ok(result) => result,
+            Err(_) => {
+                // A blackholed QUIC path never reports itself as closed (we
+                // disable the idle timeout), so a stalled dial is the only
+                // signal that the session is dead. Force a re-handshake.
+                self.reconnect.notify_one();
+                Err(anyhow!(
+                    "opening {host}:{port} through MASQUE timed out after {}s",
+                    DIAL_TIMEOUT.as_secs()
+                ))
+            }
+        }
+    }
+}
+
+impl MasqueDialer {
+    /// Prefer IPv4: the WireGuard transport (which works here) only ever uses
+    /// IPv4, and Cloudflare's IPv6 route through Connect-IP has been the less
+    /// reliable half in practice.
+    async fn resolve_v4_first(&self, host: &str) -> Result<IpAddr> {
+        let ips = self.dns.lookup_ips(host).await?;
+        ips.iter()
+            .copied()
+            .find(IpAddr::is_ipv4)
+            .or_else(|| ips.first().copied())
+            .ok_or_else(|| anyhow!("no IP address for {host}"))
     }
 }
 
@@ -164,16 +224,36 @@ async fn ensure_config(dir: &Path) -> Result<Config> {
 
     log::info!("warp: registering a new MASQUE device with Cloudflare");
     let client = CloudflareClient::new();
-    let account = register(&client, DEFAULT_MODEL, DEFAULT_LOCALE, None, true)
-        .await
-        .context("WARP registration failed")?;
+    let account = tokio::time::timeout(
+        REGISTER_TIMEOUT,
+        register(&client, DEFAULT_MODEL, DEFAULT_LOCALE, None, true),
+    )
+    .await
+    .map_err(|_| {
+        anyhow!(
+            "WARP MASQUE registration timed out after {}s",
+            REGISTER_TIMEOUT.as_secs()
+        )
+    })?
+    .context("WARP registration failed")?;
+    log::info!("warp: registered MASQUE device {}", account.id);
 
     let (private_key, public_key) = generate_ec_keypair()?;
     let access_token = account.token.clone().unwrap_or_default();
-    let enrolled = enroll_key(&client, &account.id, &access_token, &public_key, "")
-        .await
-        .map_err(|err| anyhow!("{err}"))
-        .context("WARP MASQUE enrollment failed")?;
+    let enrolled = tokio::time::timeout(
+        ENROLL_TIMEOUT,
+        enroll_key(&client, &account.id, &access_token, &public_key, ""),
+    )
+    .await
+    .map_err(|_| {
+        anyhow!(
+            "WARP MASQUE enrollment timed out after {}s",
+            ENROLL_TIMEOUT.as_secs()
+        )
+    })?
+    .map_err(|err| anyhow!("{err}"))
+    .context("WARP MASQUE enrollment failed")?;
+    log::info!("warp: enrolled MASQUE key for device {}", enrolled.id);
 
     let peer = enrolled
         .config
@@ -246,39 +326,59 @@ async fn supervise(
     stack: Arc<VirtualStack>,
     status: Arc<StatusCell>,
     cancel: CancellationToken,
+    reconnect: Arc<tokio::sync::Notify>,
+    mut session: Box<dyn PacketSession>,
 ) {
     loop {
+        status.set_connected(true);
+        status.set_error(None);
+        status.set_detail("MASQUE tunnel up");
+
+        let reason = pump(&device, session.as_mut(), &cancel, &reconnect).await;
+
+        status.set_connected(false);
+        status.set_detail(format!("MASQUE tunnel lost: {reason}"));
+        log::warn!("warp: MASQUE tunnel lost: {reason}");
+        let _ = session.close().await;
         if cancel.is_cancelled() {
             break;
         }
 
-        status.set_detail("Connecting MASQUE tunnel");
-        match connect_tunnel(&options).await {
-            Ok(mut session) => {
-                status.set_connected(true);
-                status.set_error(None);
-                status.set_detail("MASQUE tunnel up");
-                log::info!("warp: MASQUE tunnel established");
-
-                let reason = pump(&device, session.as_mut(), &cancel).await;
-
-                status.set_connected(false);
-                status.set_detail(format!("MASQUE tunnel lost: {reason}"));
-                log::warn!("warp: MASQUE tunnel lost: {reason}");
-                let _ = session.close().await;
+        // Reconnect until it succeeds or the tunnel is stopped. Each attempt
+        // is bounded so a blackholed endpoint cannot wedge this loop.
+        loop {
+            stack.wake();
+            status.set_detail("Reconnecting MASQUE tunnel");
+            match tokio::time::timeout(CONNECT_TIMEOUT, connect_tunnel(&options)).await {
+                Ok(Ok(next)) => {
+                    log::info!("warp: MASQUE tunnel re-established");
+                    session = next;
+                    break;
+                }
+                Ok(Err(err)) => {
+                    status.set_error(Some(format!("{err:#}")));
+                    status.set_detail("MASQUE connect failed, retrying");
+                    log::warn!("warp: MASQUE connect failed: {err:#}");
+                }
+                Err(_) => {
+                    let message = format!(
+                        "MASQUE connect timed out after {}s",
+                        CONNECT_TIMEOUT.as_secs()
+                    );
+                    status.set_error(Some(message.clone()));
+                    status.set_detail("MASQUE connect failed, retrying");
+                    log::warn!("warp: {message}");
+                }
             }
-            Err(err) => {
-                status.set_connected(false);
-                status.set_error(Some(format!("{err:#}")));
-                status.set_detail("MASQUE connect failed, retrying");
-                log::warn!("warp: MASQUE connect failed: {err:#}");
+
+            tokio::select! {
+                _ = cancel.cancelled() => break,
+                _ = tokio::time::sleep(RETRY_DELAY) => {}
             }
         }
 
-        stack.wake();
-        tokio::select! {
-            _ = cancel.cancelled() => break,
-            _ = tokio::time::sleep(Duration::from_secs(2)) => {}
+        if cancel.is_cancelled() {
+            break;
         }
     }
 
@@ -290,12 +390,14 @@ async fn pump(
     device: &Arc<ChannelDevice>,
     session: &mut dyn PacketSession,
     cancel: &CancellationToken,
+    reconnect: &tokio::sync::Notify,
 ) -> String {
     let mut buffer = BytesMut::with_capacity(MTU.max(2048));
 
     loop {
         tokio::select! {
             _ = cancel.cancelled() => return "cancelled".to_string(),
+            _ = reconnect.notified() => return "reconnect requested".to_string(),
             read = async {
                 buffer.clear();
                 device.read_packet(&mut buffer).await
@@ -350,10 +452,16 @@ fn is_ip_packet(packet: &[u8]) -> bool {
 /// the caller whether WARP actually works on this network.
 async fn probe(stack: &Arc<VirtualStack>, dns: &DnsResolver) -> Result<()> {
     let attempt = async {
-        let ip = dns
-            .lookup_ip("cloudflare.com")
+        let ips = dns
+            .lookup_ips("cloudflare.com")
             .await
             .context("DNS through the MASQUE tunnel failed")?;
+        let ip = ips
+            .iter()
+            .copied()
+            .find(IpAddr::is_ipv4)
+            .or_else(|| ips.first().copied())
+            .ok_or_else(|| anyhow!("no IP address for cloudflare.com through MASQUE"))?;
         let stream = stack
             .dial_tcp(SocketAddr::new(ip, CONNECT_PORT))
             .await
@@ -362,7 +470,7 @@ async fn probe(stack: &Arc<VirtualStack>, dns: &DnsResolver) -> Result<()> {
         Ok::<(), anyhow::Error>(())
     };
 
-    match tokio::time::timeout(Duration::from_secs(35), attempt).await {
+    match tokio::time::timeout(PROBE_TIMEOUT, attempt).await {
         Ok(result) => result,
         Err(_) => Err(anyhow!("MASQUE tunnel probe timed out")),
     }

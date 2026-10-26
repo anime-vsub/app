@@ -1,6 +1,7 @@
 package git.shin.animevsub.utils
 
 import android.content.Context
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import git.shin.animevsub.data.local.PreferencesManager
 import java.net.InetSocketAddress
@@ -9,6 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +43,18 @@ constructor(
   private val prefs: PreferencesManager
 ) {
   companion object {
+    private const val TAG = "WarpManager"
     private const val STATUS_POLL_MS = 3_000L
+    private const val RETRY_MIN_MS = 2_000L
+    private const val RETRY_MAX_MS = 60_000L
+
+    /**
+     * UDP/443 is blocked on many networks (corporate Wi-Fi, some mobile
+     * carriers), which makes MASQUE HTTP/3 fail while HTTP/2 works on the same
+     * endpoint. After the first H3 failure, retry over H2 instead of looping
+     * on a transport that cannot work there.
+     */
+    private const val H3_FALLBACK_AFTER = 1
 
     private val SUPPORTED_MODES = setOf(
       PreferencesManager.WARP_MODE_OFF,
@@ -69,7 +82,8 @@ constructor(
 
   private var tunnel: WarpTunnel? = null
   private var loadError: String? = null
-  private var appliedMode: String? = null
+  private var desiredMode: String = PreferencesManager.WARP_MODE_OFF
+  private var retryJob: Job? = null
 
   init {
     scope.launch {
@@ -109,21 +123,25 @@ constructor(
 
   /** Drops the cached WARP registrations and reconnects from scratch. */
   suspend fun resetCredentials() {
-    mutex.withLock {
-      val current = appliedMode
+    val mode = mutex.withLock {
+      retryJob?.cancel()
+      retryJob = null
+      val current = desiredMode
       runCatching { tunnel?.stop() }
       runCatching { tunnel?.resetCredentials() }
-      appliedMode = null
-      _state.value = State(mode = current ?: PreferencesManager.WARP_MODE_OFF)
+      _state.value = State(mode = current)
+      current
     }
-    applyMode(_state.value.mode)
+    if (mode != PreferencesManager.WARP_MODE_OFF) attemptConnect(mode, RETRY_MIN_MS)
   }
 
   private suspend fun applyMode(raw: String) {
-    mutex.withLock {
-      val mode = if (raw in SUPPORTED_MODES) raw else PreferencesManager.WARP_MODE_OFF
-      if (mode == appliedMode) return@withLock
-      appliedMode = mode
+    val mode = if (raw in SUPPORTED_MODES) raw else PreferencesManager.WARP_MODE_OFF
+    val shouldConnect = mutex.withLock {
+      if (mode == desiredMode) return@withLock false
+      desiredMode = mode
+      retryJob?.cancel()
+      retryJob = null
 
       val native = ensureTunnel()
       if (native == null) {
@@ -133,34 +151,83 @@ constructor(
           detail = "WARP is not available in this build",
           error = loadError
         )
-        return@withLock
+        return@withLock false
       }
 
       runCatching { native.stop() }
 
       if (mode == PreferencesManager.WARP_MODE_OFF) {
         _state.value = State(mode = mode)
-        return@withLock
+        false
+      } else {
+        true
+      }
+    }
+    if (shouldConnect) attemptConnect(mode, RETRY_MIN_MS)
+  }
+
+  /**
+   * A WARP handshake can fail transiently (UDP path flapping, Cloudflare rate
+   * limiting, the device registration API being slow) while the network is
+   * actually fine. Give up only when the user changes the mode, and retry with
+   * exponential backoff in the meantime.
+   */
+  private suspend fun attemptConnect(mode: String, backoffMs: Long, failures: Int = 0) {
+    val native = tunnel ?: return
+    var failed: Throwable? = null
+    val connectMode =
+      if (mode == PreferencesManager.WARP_MODE_MASQUE_H3 && failures >= H3_FALLBACK_AFTER) {
+        PreferencesManager.WARP_MODE_MASQUE_H2
+      } else {
+        mode
       }
 
+    mutex.withLock {
+      if (desiredMode != mode) return
+      // A concurrent attempt (e.g. a pending retry racing a reset) may have
+      // already brought the tunnel up.
+      if (_state.value.connected) return
       _state.value = State(mode = mode, starting = true, detail = "Connecting to Cloudflare…")
-      withContext(Dispatchers.IO) {
-        runCatching { native.start(mode.toWarpMode()) }
-          .onSuccess { port ->
-            _state.value = State(
-              mode = mode,
-              connected = true,
-              port = port.toInt(),
-              detail = "Tunnel ready"
-            )
-          }
-          .onFailure { error ->
-            _state.value = State(
-              mode = mode,
-              detail = "Cannot reach Cloudflare with this transport",
-              error = error.message ?: error.javaClass.simpleName
-            )
-          }
+
+      val result = withContext(Dispatchers.IO) {
+        runCatching { native.start(connectMode.toWarpMode()) }
+      }
+
+      if (desiredMode != mode) {
+        withContext(Dispatchers.IO) { runCatching { native.stop() } }
+        return
+      }
+
+      result
+        .onSuccess { port ->
+          _state.value = State(
+            mode = mode,
+            connected = true,
+            port = port.toInt(),
+            detail = if (connectMode == mode) {
+              "Tunnel ready"
+            } else {
+              "MASQUE HTTP/3 is blocked here, using HTTP/2"
+            }
+          )
+        }
+        .onFailure { error ->
+          Log.w(TAG, "WARP $connectMode start failed, retrying in ${backoffMs}ms", error)
+          _state.value = State(
+            mode = mode,
+            starting = true,
+            detail = "Cannot reach Cloudflare with this transport, retrying…",
+            error = error.message ?: error.javaClass.simpleName
+          )
+          failed = error
+        }
+    }
+
+    if (failed != null) {
+      retryJob?.cancel()
+      retryJob = scope.launch {
+        delay(backoffMs)
+        attemptConnect(mode, (backoffMs * 2).coerceAtMost(RETRY_MAX_MS), failures + 1)
       }
     }
   }
