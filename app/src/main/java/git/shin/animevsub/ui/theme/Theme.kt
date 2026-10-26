@@ -26,6 +26,9 @@ val GithubBlue = Color(0xFF58A6FF)
 // Popular Colors
 val MainColor = Color(0xFF00D639)
 
+// Progress color for local-only history (sync disabled while logged in)
+val LocalHistoryColor = Color(0xFFFF2D95)
+
 private val DarkColorScheme = darkColorScheme(
   primary = AccentMain,
   onPrimary = Color.White,

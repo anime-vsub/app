@@ -4,6 +4,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
 import git.shin.animevsub.data.local.ApiStorage
 import git.shin.animevsub.data.local.PreferencesManager
+import git.shin.animevsub.data.local.dao.AnimeCacheDao
+import git.shin.animevsub.data.local.entity.AnimeCacheEntity
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.model.AnimeDetail
 import git.shin.animevsub.data.model.CategoryPage
@@ -29,6 +31,7 @@ import git.shin.animevsub.data.model.VoteResponse
 import git.shin.animevsub.data.model.VoteType
 import git.shin.animevsub.data.remote.api.AnimeDataSource
 import git.shin.animevsub.utils.WarpManager
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -58,9 +61,19 @@ class AnimeRepository @Inject constructor(
   private val json: Json,
   private val analytics: FirebaseAnalytics,
   private val okHttpClient: OkHttpClient,
-  private val warpManager: WarpManager
+  private val warpManager: WarpManager,
+  private val animeCacheDao: AnimeCacheDao
 ) {
   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+  /** Like [runCatching] but keeps coroutine cancellation working. */
+  private inline fun <T> runCatchingCancellable(block: () -> T): Result<T> = try {
+    Result.success(block())
+  } catch (e: CancellationException) {
+    throw e
+  } catch (e: Throwable) {
+    Result.failure(e)
+  }
 
   private val _notifications = MutableStateFlow<NotificationData?>(null)
   val notifications = _notifications.asStateFlow()
@@ -90,7 +103,7 @@ class AnimeRepository @Inject constructor(
   suspend fun getHomePage(): Result<HomeData> = runCatching { api.getHomePage() }
 
   // Detail
-  suspend fun getAnimeDetail(animeId: String): Result<AnimeDetail> = runCatching {
+  suspend fun getAnimeDetail(animeId: String): Result<AnimeDetail> = runCatchingCancellable {
     val result = api.getAnimeDetail(animeId)
     analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM) {
       param(FirebaseAnalytics.Param.ITEM_ID, animeId)
@@ -100,12 +113,39 @@ class AnimeRepository @Inject constructor(
   }
 
   // Chapters
-  suspend fun getChapters(animeId: String): Result<ChapterData> = runCatching {
+  suspend fun getChapters(animeId: String): Result<ChapterData> = runCatchingCancellable {
     val result = api.getChapters(animeId)
     analytics.logEvent("view_chapters") {
       param(FirebaseAnalytics.Param.ITEM_ID, animeId)
     }
     result
+  }
+
+  // Detail/chapter cache (survives process death)
+  suspend fun getCachedDetail(animeId: String): AnimeDetail? {
+    val entity = animeCacheDao.get(animeId) ?: return null
+    if (entity.detailJson.isBlank()) return null
+    return runCatching { json.decodeFromString<AnimeDetail>(entity.detailJson) }.getOrNull()
+  }
+
+  suspend fun getCachedChapters(animeId: String): ChapterData? {
+    val entity = animeCacheDao.get(animeId) ?: return null
+    val payload = entity.chaptersJson ?: return null
+    return runCatching { json.decodeFromString<ChapterData>(payload) }.getOrNull()
+  }
+
+  suspend fun cacheDetail(animeId: String, detail: AnimeDetail) {
+    val payload = json.encodeToString(detail)
+    val now = System.currentTimeMillis()
+    animeCacheDao.insertIfAbsent(AnimeCacheEntity(animeId, payload, null, now))
+    animeCacheDao.updateDetail(animeId, payload, now)
+  }
+
+  suspend fun cacheChapters(animeId: String, chapters: ChapterData) {
+    val payload = json.encodeToString(chapters)
+    val now = System.currentTimeMillis()
+    animeCacheDao.insertIfAbsent(AnimeCacheEntity(animeId, "", payload, now))
+    animeCacheDao.updateChapters(animeId, payload, now)
   }
 
   // Rankings
@@ -164,11 +204,11 @@ class AnimeRepository @Inject constructor(
   }
 
   // Player
-  suspend fun getServers(chapter: ChapterInfo): Result<List<ServerInfo>> = runCatching {
+  suspend fun getServers(chapter: ChapterInfo): Result<List<ServerInfo>> = runCatchingCancellable {
     api.getServers(chapter)
   }
 
-  suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerConfig> = runCatching {
+  suspend fun getPlayerLink(chapter: ChapterInfo, server: ServerInfo): Result<PlayerConfig> = runCatchingCancellable {
     val playerData = api.getPlayerLink(server)
     analytics.logEvent("play_video") {
       param(FirebaseAnalytics.Param.ITEM_ID, chapter.id)
@@ -189,7 +229,7 @@ class AnimeRepository @Inject constructor(
     animeId: String,
     detail: AnimeDetail,
     chapter: ChapterInfo
-  ): Result<InOutroEpisode?> = runCatching {
+  ): Result<InOutroEpisode?> = runCatchingCancellable {
     api.getEpisodeSkip(animeId, detail, chapter)
   }
 
@@ -442,6 +482,9 @@ class AnimeRepository @Inject constructor(
   suspend fun getSingleProgress(seasonId: String, chapId: String) = historyRepository.getSingleProgress(seasonId, chapId)
 
   suspend fun getLastChapOfSeason(seasonId: String) = historyRepository.getLastChapOfSeason(seasonId)
+
+  suspend fun getSyncMode(animeId: String) = historyRepository.getSyncMode(animeId)
+  suspend fun setSyncMode(animeId: String, mode: Int) = historyRepository.setSyncMode(animeId, mode)
 
   suspend fun setSingleProgress(
     name: String,

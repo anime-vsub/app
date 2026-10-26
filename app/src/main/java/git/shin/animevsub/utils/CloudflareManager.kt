@@ -6,8 +6,10 @@ import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
@@ -63,15 +65,21 @@ class CloudflareManager @Inject constructor(
       }
     } ?: return false
 
-    val success = deferred.await()
-
-    mutex.withLock {
-      if (currentDeferred == deferred) {
-        _bypassUrl.value = null
-        currentDeferred = null
+    return try {
+      deferred.await()
+    } finally {
+      // Always release shared bypass state, including cancellation/timeouts,
+      // otherwise later requests await a deferred that nobody will complete.
+      withContext(NonCancellable) {
+        mutex.withLock {
+          if (currentDeferred == deferred) {
+            if (!deferred.isCompleted) deferred.complete(false)
+            _bypassUrl.value = null
+            currentDeferred = null
+          }
+        }
       }
     }
-    return success
   }
 
   private suspend fun tryHeadlessBypass(url: String): Boolean = withContext(Dispatchers.Main) {
@@ -135,6 +143,8 @@ class CloudflareManager @Inject constructor(
 
     val result = try {
       deferred.await()
+    } catch (e: CancellationException) {
+      throw e
     } catch (e: Exception) {
       print(e)
       false
@@ -178,7 +188,7 @@ class CloudflareManager @Inject constructor(
     request: Request,
     retryCount: Int = 0
   ): Response = withContext(Dispatchers.IO) {
-    val response = client.newCall(request).execute()
+    val response = client.newCall(request).await()
 
     // Check for Cloudflare Challenge by peeking the body to avoid consuming the original stream
     val peekBody = response.peekBody(1024 * 100).string() // Check within the first 100KB

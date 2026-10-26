@@ -207,6 +207,7 @@ fun VideoPlayer(
   onPlayingStateChange: (Boolean) -> Unit,
   syncMode: Int = 0,
   onSyncModeChange: (Int) -> Unit,
+  isLocalOnly: Boolean = false,
   sleepTimerMinutes: Int,
   onSleepTimerChange: (Int) -> Unit,
   pauseAfterCurrentEpisode: Boolean,
@@ -703,7 +704,7 @@ fun VideoPlayer(
       duration = 0L
       bufferedPosition = 0L
       val resumeAt = recoveryResumePosition?.takeIf { it > 0L }
-        ?: initialPosition.takeIf { it > 0L && syncMode == 0 }
+        ?: initialPosition.takeIf { it > 0L && (syncMode == 0 || isLocalOnly) }
       pendingRestorePosition = resumeAt
       recoveryResumePosition = null
 
@@ -744,7 +745,7 @@ fun VideoPlayer(
   }
 
   LaunchedEffect(currentTime, duration) {
-    if (duration > 0 && currentTime > 0 && syncMode != 2) {
+    if (duration > 0 && currentTime > 0) {
       onProgressUpdate(currentTime, duration)
     }
   }
@@ -1898,7 +1899,8 @@ fun VideoPlayer(
           chapterProgress = chapterProgress,
           isSideMenu = true,
           onClose = { showEpisodeSideMenu = false },
-          isLoading = isEpisodesLoading
+          isLoading = isEpisodesLoading,
+          isLocalProgress = isLocalOnly
         )
       }
       PlayerSideMenu(

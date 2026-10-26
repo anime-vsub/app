@@ -56,12 +56,14 @@ data class HomeData(
   val hotUpdate: List<AnimeCard>
 )
 
+@Serializable
 data class ExternalPlatform(
   val href: String,
   val name: String,
   val logo: String?
 )
 
+@Serializable
 data class AnimeDetail(
   val name: String,
   val othername: String?,
@@ -115,6 +117,7 @@ class PlayerConfig(
   val callFactory: Call.Factory? = null
 )
 
+@Serializable
 data class ChapterData(
   val chaps: List<ChapterInfo>,
   val update: Triple<Int, Int, Int>?,

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.data.model.ChapterInfo
 import git.shin.animevsub.data.model.WatchProgress
+import git.shin.animevsub.ui.theme.LocalHistoryColor
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextPrimary
 
@@ -31,7 +32,8 @@ fun EpisodeItem(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
   isLarge: Boolean = false,
-  progress: WatchProgress? = null
+  progress: WatchProgress? = null,
+  isLocalProgress: Boolean = false
 ) {
   Box(
     modifier = modifier
@@ -77,7 +79,13 @@ fun EpisodeItem(
             .fillMaxWidth(percent)
             .height(2.dp)
             .clip(RoundedCornerShape(1.dp))
-            .background(if (isSelected) Color(0xFF3B82F6) else MainColor)
+            .background(
+              when {
+                isLocalProgress -> LocalHistoryColor
+                isSelected -> Color(0xFF3B82F6)
+                else -> MainColor
+              }
+            )
         )
       }
     }

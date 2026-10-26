@@ -83,7 +83,8 @@ fun EpisodeSelectorContent(
   onClose: (() -> Unit)? = null,
   syncMode: Int = 0,
   onSyncModeToggle: (() -> Unit)? = null,
-  isLoading: Boolean = false
+  isLoading: Boolean = false,
+  isLocalProgress: Boolean = false
 ) {
   var searchQuery by remember { mutableStateOf("") }
   var showVerticalSeasons by remember { mutableStateOf(false) }
@@ -311,6 +312,7 @@ fun EpisodeSelectorContent(
                 isSelected = chap.id == currentEpisodeId,
                 progress = chapterProgress[chap.id],
                 isLarge = true,
+                isLocalProgress = isLocalProgress,
                 onClick = {
                   onChapterClick(chap, activeSeason?.realId ?: activeDisplaySeasonId)
                 }

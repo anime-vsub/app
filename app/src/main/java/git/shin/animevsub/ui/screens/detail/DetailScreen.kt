@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -431,6 +432,7 @@ fun DetailScreen(
                 },
                 syncMode = state.syncMode,
                 onSyncModeChange = { viewModel.setSyncMode(it) },
+                isLocalOnly = state.isLocalProgress,
                 onExoPlayerCreated = { exoPlayerInstance = it },
                 onAiSummary = { timestamp ->
                   summaryTimestamp = timestamp
@@ -987,6 +989,7 @@ fun DetailScreen(
                         chap = chap,
                         isSelected = isSelected,
                         progress = progress,
+                        isLocalProgress = uiState.isLocalProgress,
                         modifier = Modifier.tvFocusScale(),
                         onClick = {
                           viewModel.playChapter(
@@ -1172,7 +1175,13 @@ fun DetailScreen(
       if (isFullScreen) {
         playerArea(Modifier.fillMaxSize(), uiState)
       } else if (isLandscapeUI) {
-        Row(modifier = Modifier.fillMaxSize()) {
+        // Bound the maximum height: during rotation or sheet measurement the parent
+        // can hand an infinite constraint to this row, which crashes the vertical scroll.
+        Row(
+          modifier = Modifier
+            .fillMaxSize()
+            .heightIn(max = configuration.screenHeightDp.dp)
+        ) {
           playerArea(
             Modifier
               .weight(0.6f)

@@ -136,6 +136,10 @@ data class DetailUiState(
       if (currentChapter == null || chapterData == null) return -1
       return chapterData.chaps.indexOfFirst { it.id == currentChapter.id }
     }
+
+  /** Local-only progress (magenta) applies only when logged in with sync disabled. */
+  val isLocalProgress: Boolean
+    get() = currentUser != null && syncMode == 2
 }
 
 @HiltViewModel
@@ -157,11 +161,12 @@ class DetailViewModel @Inject constructor(
 
   companion object {
     private const val MAX_AI_CHAT_MESSAGES = 50
-    private const val DETAIL_LOAD_TIMEOUT_MS = 15_000L
-    private const val CHAPTER_LOAD_TIMEOUT_MS = 15_000L
+    private const val DETAIL_LOAD_TIMEOUT_MS = 45_000L
+    private const val CHAPTER_LOAD_TIMEOUT_MS = 45_000L
     private const val INITIAL_CHAPTER_LOOKUP_TIMEOUT_MS = 5_000L
-    private const val SERVER_LOAD_TIMEOUT_MS = 15_000L
-    private const val PLAYER_LINK_TIMEOUT_MS = 15_000L
+    private const val SERVER_LOAD_TIMEOUT_MS = 30_000L
+    private const val PLAYER_LINK_TIMEOUT_MS = 30_000L
+    private const val LOCAL_SYNC_INTERVAL_MS = 5_000L
     private const val PLAYBACK_TIMEOUT_MESSAGE = "Playback timed out"
   }
   private var bedtimeReminderJob: Job? = null
@@ -440,78 +445,133 @@ class DetailViewModel @Inject constructor(
     targetChapterId: String? = null,
     isSwitchingSeason: Boolean = false
   ) {
+    val memDetail = detailCache[animeId]
+    val memChapters = chapterCache[animeId]
     _uiState.update {
       it.copy(
         animeId = animeId,
         currentSeasonId = animeId,
-        isLoading = !detailCache.containsKey(animeId),
-        isChaptersLoading = !chapterCache.containsKey(animeId),
+        isLoading = memDetail == null,
+        isChaptersLoading = memChapters == null,
         error = null,
         chaptersError = null
       )
     }
 
-    detailCache[animeId]?.let { cachedDetail ->
-      _uiState.update { it.copy(detail = cachedDetail, isLoading = false) }
-      updateDisplaySeasons()
-      checkFollow()
-      loadComments(animeDetail = cachedDetail)
-    } ?: run {
-      viewModelScope.launch {
-        val result = withTimeoutOrNull(DETAIL_LOAD_TIMEOUT_MS) {
-          repository.getAnimeDetail(animeId)
-        } ?: Result.failure(Exception("Detail load timed out"))
-
-        result
-          .onSuccess { detail ->
-            detailCache[animeId] = detail
-            _uiState.update { it.copy(detail = detail, isLoading = false) }
-            updateDisplaySeasons()
-            checkFollow()
-            loadComments(animeDetail = detail)
-          }
-          .onFailure { e ->
-            _uiState.update { it.copy(isLoading = false, error = e.message) }
-          }
+    viewModelScope.launch {
+      val mode = repository.getSyncMode(animeId)
+      if (_uiState.value.animeId == animeId) {
+        _uiState.update { it.copy(syncMode = mode) }
       }
     }
 
-    chapterCache[animeId]?.let { cachedChapters ->
-      _uiState.update { it.copy(chapterData = cachedChapters, isChaptersLoading = false) }
-      updateChapterCount(animeId, cachedChapters.chaps.size)
-      if (!isSwitchingSeason) {
-        viewModelScope.launch {
-          handleInitialChapter(cachedChapters, targetChapterId)
-        }
-      } else if (cachedChapters.chaps.isNotEmpty()) {
-        val selectedChapter: ChapterInfo? = targetChapterId?.let { id: String ->
-          cachedChapters.chaps.find { it.id == id }
-        }
-        playChapter(selectedChapter ?: cachedChapters.chaps.first(), animeId)
-      }
-    } ?: run {
+    // Detail: render cache immediately, then revalidate in background.
+    if (memDetail != null) {
+      applyDetail(memDetail)
+    } else {
       viewModelScope.launch {
-        val result = withTimeoutOrNull(CHAPTER_LOAD_TIMEOUT_MS) {
-          repository.getChapters(animeId)
-        } ?: Result.failure(Exception("Chapter load timed out"))
+        val cached = repository.getCachedDetail(animeId) ?: return@launch
+        detailCache[animeId] = cached
+        if (_uiState.value.animeId == animeId) applyDetail(cached)
+      }
+    }
 
-        result
-          .onSuccess { chapterData ->
-            chapterCache[animeId] = chapterData
-            _uiState.update { it.copy(chapterData = chapterData, isChaptersLoading = false) }
-            updateChapterCount(animeId, chapterData.chaps.size)
-            if (!isSwitchingSeason) {
-              handleInitialChapter(chapterData, targetChapterId)
-            } else if (chapterData.chaps.isNotEmpty()) {
-              val selectedChapter: ChapterInfo? = targetChapterId?.let { id: String ->
-                chapterData.chaps.find { it.id == id }
-              }
-              playChapter(selectedChapter ?: chapterData.chaps.first(), animeId)
+    viewModelScope.launch {
+      val result = withTimeoutOrNull(DETAIL_LOAD_TIMEOUT_MS) {
+        repository.getAnimeDetail(animeId)
+      } ?: Result.failure(Exception("Detail load timed out"))
+
+      result
+        .onSuccess { detail ->
+          detailCache[animeId] = detail
+          repository.cacheDetail(animeId, detail)
+          if (_uiState.value.animeId == animeId) applyDetail(detail)
+        }
+        .onFailure { e ->
+          _uiState.update {
+            if (it.animeId == animeId && it.detail == null) {
+              it.copy(isLoading = false, error = e.message)
+            } else {
+              it.copy(isLoading = false)
             }
           }
-          .onFailure { e ->
-            _uiState.update { it.copy(isChaptersLoading = false, chaptersError = e.message) }
+        }
+    }
+
+    // Chapters: render cache immediately, then revalidate in background.
+    if (memChapters != null) {
+      seedChapters(animeId, memChapters, targetChapterId, isSwitchingSeason)
+    } else {
+      viewModelScope.launch {
+        val cached = repository.getCachedChapters(animeId) ?: return@launch
+        chapterCache[animeId] = cached
+        if (_uiState.value.animeId == animeId) {
+          seedChapters(animeId, cached, targetChapterId, isSwitchingSeason)
+        }
+      }
+    }
+
+    viewModelScope.launch {
+      val result = withTimeoutOrNull(CHAPTER_LOAD_TIMEOUT_MS) {
+        repository.getChapters(animeId)
+      } ?: Result.failure(Exception("Chapter load timed out"))
+
+      result
+        .onSuccess { chapterData ->
+          chapterCache[animeId] = chapterData
+          repository.cacheChapters(animeId, chapterData)
+          if (_uiState.value.animeId == animeId) {
+            seedChapters(animeId, chapterData, targetChapterId, isSwitchingSeason)
           }
+        }
+        .onFailure { e ->
+          _uiState.update {
+            if (it.animeId == animeId && it.chapterData == null) {
+              it.copy(isChaptersLoading = false, chaptersError = e.message)
+            } else {
+              it.copy(isChaptersLoading = false)
+            }
+          }
+        }
+    }
+  }
+
+  private fun applyDetail(detail: AnimeDetail) {
+    _uiState.update { it.copy(detail = detail, isLoading = false, error = null) }
+    updateDisplaySeasons()
+    checkFollow()
+    loadComments(animeDetail = detail)
+  }
+
+  private fun seedChapters(
+    seasonId: String,
+    data: ChapterData,
+    targetChapterId: String?,
+    isSwitchingSeason: Boolean
+  ) {
+    _uiState.update {
+      it.copy(chapterData = data, isChaptersLoading = false, chaptersError = null)
+    }
+    updateChapterCount(seasonId, data.chaps.size)
+    if (data.chaps.isEmpty()) return
+
+    // Never restart playback that is already running for this season.
+    val state = _uiState.value
+    if (state.currentChapter != null && state.currentSeasonId == seasonId) return
+
+    if (isSwitchingSeason) {
+      // Wait for the fresh list when the requested episode isn't in the stale cache.
+      if (targetChapterId != null && data.chaps.none { it.id == targetChapterId }) return
+      val selected = targetChapterId?.let { id -> data.chaps.find { it.id == id } } ?: data.chaps.first()
+      playChapter(selected, seasonId)
+    } else if (pendingChapterSeasonId != seasonId) {
+      pendingChapterSeasonId = seasonId
+      viewModelScope.launch {
+        try {
+          handleInitialChapter(data, targetChapterId)
+        } finally {
+          if (pendingChapterSeasonId == seasonId) pendingChapterSeasonId = null
+        }
       }
     }
   }
@@ -619,13 +679,14 @@ class DetailViewModel @Inject constructor(
   private var lastUpdateJob: Job? = null
   private var isInitialPlayback = true
   private var autoPlaybackRetryKey: String? = null
+  private var pendingChapterSeasonId: String? = null
 
   fun updateHistory(currentPosMs: Long, durationMs: Long) {
-    if (_uiState.value.currentUser == null) return
     val currentPos = currentPosMs / 1000.0
     val duration = durationMs / 1000.0
     val state = _uiState.value
     val chapter = state.currentChapter ?: return
+    val localOnly = state.currentUser == null || state.syncMode == 2
 
     // Update local progress map for UI consistency (immediate)
     _uiState.update {
@@ -634,13 +695,13 @@ class DetailViewModel @Inject constructor(
       it.copy(chapterProgress = newMap)
     }
 
-    // Throttle Supabase RPC calls: Only save every N seconds
+    // Throttle writes: local needs no cloud round-trip, so it can be more frequent.
     if (lastUpdateJob?.isActive == true) return
     lastUpdateJob = viewModelScope.launch {
-      if (isInitialPlayback) {
-        delay(8000) // Wait 8 seconds before first sync after restore
-        isInitialPlayback = false
+      if (!localOnly && isInitialPlayback) {
+        delay(8000) // Wait 8 seconds before first cloud sync after restore
       }
+      isInitialPlayback = false
 
       // Re-fetch latest data from state to get the most recent position
       val latestState = _uiState.value
@@ -659,8 +720,12 @@ class DetailViewModel @Inject constructor(
         dur = latestProgress.dur
       )
 
-      val interval = repository.historySyncInterval.first()
-      delay(interval * 1000L)
+      val delayMs = if (localOnly) {
+        LOCAL_SYNC_INTERVAL_MS
+      } else {
+        repository.historySyncInterval.first() * 1000L
+      }
+      delay(delayMs)
     }
   }
 
@@ -1118,10 +1183,8 @@ class DetailViewModel @Inject constructor(
       detailResult
         .onSuccess { detail ->
           detailCache[animeId] = detail
-          _uiState.update { it.copy(detail = detail) }
-          updateDisplaySeasons()
-          checkFollow()
-          loadComments()
+          repository.cacheDetail(animeId, detail)
+          if (_uiState.value.animeId == animeId) applyDetail(detail)
         }
 
       // Reload chapters for current season
@@ -1132,7 +1195,10 @@ class DetailViewModel @Inject constructor(
       chapterResult
         .onSuccess { chapterData ->
           chapterCache[currentSeasonId] = chapterData
-          _uiState.update { it.copy(chapterData = chapterData) }
+          repository.cacheChapters(currentSeasonId, chapterData)
+          _uiState.update {
+            it.copy(chapterData = chapterData, isChaptersLoading = false, chaptersError = null)
+          }
           updateChapterCount(currentSeasonId, chapterData.chaps.size)
           loadAllChapterProgress(currentSeasonId)
         }
@@ -1390,13 +1456,20 @@ class DetailViewModel @Inject constructor(
   }
 
   fun toggleSyncMode() {
-    _uiState.update {
-      it.copy(syncMode = (it.syncMode + 1) % 3)
-    }
+    setSyncMode((_uiState.value.syncMode + 1) % 3)
   }
 
   fun setSyncMode(mode: Int) {
+    val state = _uiState.value
+    if (state.syncMode == mode) return
     _uiState.update { it.copy(syncMode = mode) }
+    viewModelScope.launch {
+      repository.setSyncMode(state.animeId, mode)
+      // The source of truth may have switched between local and cloud.
+      val seasonId = _uiState.value.currentSeasonId
+      loadAllChapterProgress(seasonId)
+      _uiState.value.currentChapter?.let { loadHistory(it, seasonId) }
+    }
   }
 
   fun setSleepTimer(minutes: Int) {

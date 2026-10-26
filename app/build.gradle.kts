@@ -205,6 +205,11 @@ dependencies {
   // DataStore
   implementation("androidx.datastore:datastore-preferences:1.2.1")
 
+  // Room (local history + detail cache)
+  implementation("androidx.room:room-runtime:2.7.0")
+  implementation("androidx.room:room-ktx:2.7.0")
+  ksp("androidx.room:room-compiler:2.7.0")
+
   // Media3 ExoPlayer
   implementation("androidx.media3:media3-exoplayer:1.10.0")
   implementation("androidx.media3:media3-exoplayer-hls:1.10.0")
