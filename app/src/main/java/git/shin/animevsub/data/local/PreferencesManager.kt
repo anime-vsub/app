@@ -59,8 +59,13 @@ class PreferencesManager(private val context: Context) {
     const val DEFAULT_PREFERRED_SERVER = ""
     const val DEFAULT_MIN_BUFFER_MS = 50_000
     const val DEFAULT_MAX_BUFFER_MS = 120_000
-    const val DEFAULT_BUFFER_FOR_PLAYBACK_MS = 10_000
-    const val DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 12_000
+
+    // Startup latency is dominated by this threshold: ExoPlayer will not leave
+    // STATE_BUFFERING until this much media is buffered, so a large value means
+    // several full segments must download before the first frame is shown.
+    const val DEFAULT_BUFFER_FOR_PLAYBACK_MS = 1_500
+    const val DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 3_000
+
     const val DEFAULT_PRIORITIZE_TIME_OVER_SIZE = true
     const val DEFAULT_LAST_ACTIVE_CHECK = 0L
     const val DEFAULT_DNS_MODE = "cloudflare"

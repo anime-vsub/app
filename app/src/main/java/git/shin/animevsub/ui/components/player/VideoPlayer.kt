@@ -165,6 +165,15 @@ import kotlin.math.roundToInt
 
 private const val PLAYBACK_START_TIMEOUT_MS = 15_000L
 
+/** Buffering thresholds read once when the player is created. */
+private data class BufferConfig(
+  val minBufferMs: Int,
+  val maxBufferMs: Int,
+  val bufferForPlaybackMs: Int,
+  val bufferForPlaybackAfterRebufferMs: Int,
+  val prioritizeTimeOverSize: Boolean
+)
+
 // import androidx.mediarouter.media.MediaRouter
 // import androidx.mediarouter.app.MediaRouteChooserDialog
 // import androidx.mediarouter.app.MediaRouteControllerDialog
@@ -225,40 +234,42 @@ fun VideoPlayer(
   val focusRequester = remember(isTV) { if (isTV) FocusRequester() else null }
 
   val preferencesManager = remember { PreferencesManager(context) }
+  // DataStore emits on a background dispatcher, so the initial value must not
+  // be fetched with runBlocking: an argument expression is re-evaluated on every
+  // recomposition, and this composable recomposes on every progress/gesture
+  // update. Blocking the main thread there stalls the very first frame.
   val volumeGestureEnabled by preferencesManager.volumeGesture.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.volumeGesture.first() }
+    initial = PreferencesManager.DEFAULT_VOLUME_GESTURE
   )
   val brightnessGestureEnabled by preferencesManager.brightnessGesture.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.brightnessGesture.first() }
+    initial = PreferencesManager.DEFAULT_BRIGHTNESS_GESTURE
   )
   val autoSkipEnabled by preferencesManager.autoSkip.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.autoSkip.first() }
+    initial = PreferencesManager.DEFAULT_AUTO_SKIP
   )
   val doubleTapSkipDuration by preferencesManager.doubleTapSkip.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.doubleTapSkip.first() }
+    initial = PreferencesManager.DEFAULT_DOUBLE_TAP_SKIP
   )
   val longPressSpeedValue by preferencesManager.longPressSpeed.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.longPressSpeed.first() }
+    initial = PreferencesManager.DEFAULT_LONG_PRESS_SPEED
   )
   val flagSecureEnabled by preferencesManager.flagSecure.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.flagSecure.first() }
+    initial = PreferencesManager.DEFAULT_FLAG_SECURE
   )
 
-  val minBufferMs by preferencesManager.minBufferMs.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.minBufferMs.first() }
-  )
-  val maxBufferMs by preferencesManager.maxBufferMs.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.maxBufferMs.first() }
-  )
-  val bufferForPlaybackMs by preferencesManager.bufferForPlaybackMs.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.bufferForPlaybackMs.first() }
-  )
-  val bufferForPlaybackAfterRebufferMs by preferencesManager.bufferForPlaybackAfterRebufferMs.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.bufferForPlaybackAfterRebufferMs.first() }
-  )
-  val prioritizeTimeOverSize by preferencesManager.prioritizeTimeOverSize.collectAsState(
-    initial = kotlinx.coroutines.runBlocking { preferencesManager.prioritizeTimeOverSize.first() }
-  )
+  // The buffer values only feed the ExoPlayer that this composable creates once,
+  // so they are read once as well instead of on every recomposition.
+  val bufferConfig = remember(preferencesManager) {
+    kotlinx.coroutines.runBlocking {
+      BufferConfig(
+        minBufferMs = preferencesManager.minBufferMs.first(),
+        maxBufferMs = preferencesManager.maxBufferMs.first(),
+        bufferForPlaybackMs = preferencesManager.bufferForPlaybackMs.first(),
+        bufferForPlaybackAfterRebufferMs = preferencesManager.bufferForPlaybackAfterRebufferMs.first(),
+        prioritizeTimeOverSize = preferencesManager.prioritizeTimeOverSize.first()
+      )
+    }
+  }
 
   val playerData = playerConfig?.playerData
   val currentOnPlaybackFailed by rememberUpdatedState(onPlaybackFailed)
@@ -355,16 +366,21 @@ fun VideoPlayer(
   var dragTime by remember { mutableLongStateOf(0L) }
 
   val exoPlayer = remember {
-    val minBufferMsVal = maxOf(minBufferMs, maxOf(bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs))
+    val bufferForPlaybackMs = bufferConfig.bufferForPlaybackMs
+    val bufferForPlaybackAfterRebufferMs = bufferConfig.bufferForPlaybackAfterRebufferMs
+    val minBufferMsVal = maxOf(
+      bufferConfig.minBufferMs,
+      maxOf(bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs)
+    )
 
     val loadControl = DefaultLoadControl.Builder()
       .setBufferDurationsMs(
         minBufferMsVal,
-        maxOf(maxBufferMs, minBufferMsVal),
+        maxOf(bufferConfig.maxBufferMs, minBufferMsVal),
         bufferForPlaybackMs,
         bufferForPlaybackAfterRebufferMs
       )
-      .setPrioritizeTimeOverSizeThresholds(prioritizeTimeOverSize)
+      .setPrioritizeTimeOverSizeThresholds(bufferConfig.prioritizeTimeOverSize)
       .build()
     val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
@@ -383,6 +399,8 @@ fun VideoPlayer(
             isBuffering = playbackState == Player.STATE_BUFFERING
             isPlaying = (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) && playWhenReady
             onPlayingStateChange(isPlaying)
+
+            if (playbackState == Player.STATE_READY) PlaybackStartupClock.onStateReady()
 
             if (playbackState == Player.STATE_READY) {
               duration = this@apply.duration.coerceAtLeast(0L)
@@ -430,6 +448,7 @@ fun VideoPlayer(
             isPlaying = false
             isBuffering = false
             onPlayingStateChange(false)
+            PlaybackStartupClock.onError(error)
 
             val position = this@apply.currentPosition
             // The player drops to zero on error; keep showing (and resuming
@@ -464,6 +483,10 @@ fun VideoPlayer(
 //        override fun onRenderedFirstFrame() {
 //          isFirstFrameRendered = true
 //        }
+
+          override fun onRenderedFirstFrame() {
+            PlaybackStartupClock.onFirstFrame()
+          }
 
           override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
             playbackSpeed = playbackParameters.speed
@@ -718,6 +741,7 @@ fun VideoPlayer(
 
       exoPlayer.prepare()
 //      exoPlayer.play()
+      PlaybackStartupClock.onPrepare(playerData.type, newUri.host, playerData.isContent)
 
       loadedUri = newUri
       loadedEpisodeId = currentEpisode?.id

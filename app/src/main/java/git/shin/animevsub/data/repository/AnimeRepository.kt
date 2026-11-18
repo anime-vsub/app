@@ -48,6 +48,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -65,6 +66,23 @@ class AnimeRepository @Inject constructor(
   private val animeCacheDao: AnimeCacheDao
 ) {
   private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+  /**
+   * Media requests get their own client because the shared one is tuned for the
+   * catalogue API: it deliberately does not follow redirects (AnimeApiCore
+   * rotates domains by hand) and tolerates 30s timeouts. Segment CDNs answer
+   * with redirects, and waiting 30s for the first byte of the first segment is
+   * exactly the "slow to start / timed out" behaviour a player must not have.
+   */
+  private val playbackClient: OkHttpClient by lazy {
+    okHttpClient.newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .connectTimeout(10, TimeUnit.SECONDS)
+      .readTimeout(15, TimeUnit.SECONDS)
+      .writeTimeout(15, TimeUnit.SECONDS)
+      .build()
+  }
 
   /** Like [runCatching] but keeps coroutine cancellation working. */
   private inline fun <T> runCatchingCancellable(block: () -> T): Result<T> = try {
@@ -220,7 +238,7 @@ class AnimeRepository @Inject constructor(
       server = server,
       segmentUrlInterceptor = api.segmentUrlInterceptor,
       segmentDataInterceptor = api.segmentDataInterceptor,
-      callFactory = warpManager.forPlayback(okHttpClient)
+      callFactory = warpManager.forPlayback(playbackClient)
     )
   }
 

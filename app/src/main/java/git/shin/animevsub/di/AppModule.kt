@@ -22,7 +22,9 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.serialization.json.Json
+import okhttp3.Cache
 import okhttp3.OkHttpClient
+import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -53,9 +55,17 @@ object AppModule {
   @Provides
   @Singleton
   @Named(DNS_BOOTSTRAP_CLIENT)
-  fun provideDnsBootstrapClient(): OkHttpClient = OkHttpClient.Builder()
-    .connectTimeout(15, TimeUnit.SECONDS)
-    .readTimeout(15, TimeUnit.SECONDS)
+  fun provideDnsBootstrapClient(@ApplicationContext context: Context): OkHttpClient = OkHttpClient.Builder()
+    // Every API and media request resolves through DoH, so this client sits in
+    // front of the whole app. Keep its timeouts short: when the resolver is
+    // blocked on the current network (common on some carriers), a 15s stall
+    // here delays the first segment by 15s before DynamicDns can fall back to
+    // the system resolver. The cache keeps answers for their TTL so repeat
+    // lookups of the same CDN host are free.
+    .connectTimeout(4, TimeUnit.SECONDS)
+    .readTimeout(4, TimeUnit.SECONDS)
+    .callTimeout(6, TimeUnit.SECONDS)
+    .cache(Cache(File(context.cacheDir, "dns"), 2L * 1024 * 1024))
     .build()
 
   @Provides

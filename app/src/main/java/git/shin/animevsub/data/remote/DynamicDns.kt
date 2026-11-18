@@ -1,5 +1,6 @@
 package git.shin.animevsub.data.remote
 
+import android.util.Log
 import git.shin.animevsub.data.local.PreferencesManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.dnsoverhttps.DnsOverHttps
 import java.net.InetAddress
+import java.net.UnknownHostException
 
 class DynamicDns(
   private val prefs: PreferencesManager,
@@ -94,13 +96,22 @@ class DynamicDns(
     Dns.SYSTEM
   }
 
-  override fun lookup(hostname: String): List<InetAddress> = try {
-    delegate.lookup(hostname)
-  } catch (e: Exception) {
-    Dns.SYSTEM.lookup(hostname)
+  override fun lookup(hostname: String): List<InetAddress> {
+    val startedAt = System.nanoTime()
+    return try {
+      delegate.lookup(hostname).ifEmpty { throw UnknownHostException(hostname) }
+    } catch (e: Exception) {
+      // Falling back is correct, but make it visible: a blocked DoH endpoint
+      // shows up as a slow first request everywhere in the app.
+      val elapsedMs = (System.nanoTime() - startedAt) / 1_000_000
+      Log.w(TAG, "DoH lookup for $hostname failed after ${elapsedMs}ms, using system DNS", e)
+      Dns.SYSTEM.lookup(hostname)
+    }
   }
 
   companion object {
+    private const val TAG = "DynamicDns"
+
     const val DEFAULT_MODE = PreferencesManager.DEFAULT_DNS_MODE
     const val DEFAULT_CUSTOM_URL = PreferencesManager.DEFAULT_CUSTOM_DNS_URL
     const val MODE_SYSTEM = PreferencesManager.DNS_MODE_SYSTEM
