@@ -1,3 +1,9 @@
+## [2.14.2](https://github.com/anime-vsub/app/compare/v2.14.1...v2.14.2) (2026-11-18)
+
+### Bug Fixes
+
+* **player:** cut first-play buffering delay for m3u8 sources ([3df4079](https://github.com/anime-vsub/app/commit/3df4079ee7058305bae1957f059f6fc3e74d0069))
+
 ## [2.14.1](https://github.com/anime-vsub/app/compare/v2.14.0...v2.14.1) (2026-10-26)
 
 
