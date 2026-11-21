@@ -1,3 +1,9 @@
+# [2.15.0](https://github.com/anime-vsub/app/compare/v2.14.2...v2.15.0) (2026-11-21)
+
+### Features
+
+* **christmas:** festive theme with 3D asset pack and wreath decorations ([28eb741](https://github.com/anime-vsub/app/commit/28eb741da12c265936ececec28b9dd4938730bd8))
+
 ## [2.14.2](https://github.com/anime-vsub/app/compare/v2.14.1...v2.14.2) (2026-11-18)
 
 ### Bug Fixes
