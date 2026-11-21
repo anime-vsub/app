@@ -4,6 +4,7 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,11 +37,14 @@ import androidx.compose.ui.unit.sp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.UpdateInfo
+import git.shin.animevsub.ui.theme.ChristmasGold
+import git.shin.animevsub.ui.theme.ChristmasRed
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.GithubBlue
 import git.shin.animevsub.ui.theme.MainColor
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,12 +56,17 @@ fun UpdateDialog(
   val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val configuration = LocalConfiguration.current
   val maxHeight = configuration.screenHeightDp.dp * 0.8f
+  val christmas = isChristmasThemeActive()
 
   ModalBottomSheet(
     onDismissRequest = onDismiss,
     sheetState = sheetState,
     containerColor = DarkSurface,
-    dragHandle = { BottomSheetDefaults.DragHandle(color = TextSecondary.copy(alpha = 0.4f)) }
+    dragHandle = {
+      BottomSheetDefaults.DragHandle(
+        color = if (christmas) ChristmasGold.copy(alpha = 0.55f) else TextSecondary.copy(alpha = 0.4f)
+      )
+    }
   ) {
     Column(
       modifier = Modifier
@@ -68,7 +77,7 @@ fun UpdateDialog(
     ) {
       Text(
         text = stringResource(R.string.update_available),
-        color = TextPrimary,
+        color = if (christmas) ChristmasGold else TextPrimary,
         fontSize = 20.sp,
         fontWeight = FontWeight.Bold
       )
@@ -96,7 +105,7 @@ fun UpdateDialog(
             fontSize = 14.sp,
             lineHeight = 22.sp
           ),
-          linkColor = GithubBlue,
+          linkColor = if (christmas) ChristmasGold else GithubBlue,
           syntaxHighlightColor = Color.Transparent,
           syntaxHighlightTextColor = TextPrimary,
           beforeSetMarkdown = { _, spanned ->
@@ -131,12 +140,15 @@ fun UpdateDialog(
         Spacer(modifier = Modifier.width(8.dp))
         Button(
           onClick = onConfirm,
-          colors = ButtonDefaults.buttonColors(containerColor = MainColor),
-          shape = RoundedCornerShape(8.dp)
+          colors = ButtonDefaults.buttonColors(
+            containerColor = if (christmas) ChristmasRed else MainColor
+          ),
+          shape = RoundedCornerShape(8.dp),
+          border = if (christmas) BorderStroke(1.dp, ChristmasGold.copy(alpha = 0.6f)) else null
         ) {
           Text(
             text = stringResource(R.string.update_now),
-            color = Color.Black,
+            color = if (christmas) Color.White else Color.Black,
             fontWeight = FontWeight.Bold
           )
         }

@@ -2,6 +2,7 @@ package git.shin.animevsub.ui.components.anime
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,7 +43,10 @@ import git.shin.animevsub.R
 import git.shin.animevsub.data.model.AnimeCard
 import git.shin.animevsub.data.remote.api.AnimeDataSource
 import git.shin.animevsub.ui.components.badge.QualityBadge
+import git.shin.animevsub.ui.components.christmas.ChristmasCardWreath
 import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.ChristmasGold
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.utils.tvFocusScale
@@ -79,6 +83,17 @@ fun AnimeCardItem(
         .fillMaxWidth()
         .aspectRatio(2f / 3f)
         .clip(RoundedCornerShape(8.dp))
+        .then(
+          if (isChristmasThemeActive()) {
+            Modifier.border(
+              1.dp,
+              ChristmasGold.copy(alpha = 0.35f),
+              RoundedCornerShape(8.dp)
+            )
+          } else {
+            Modifier
+          }
+        )
     ) {
       AsyncImage(
         model = imageRequest,
@@ -99,6 +114,18 @@ fun AnimeCardItem(
             )
           )
       )
+
+      // Wreath frame cut from the wreath artwork: a bough along the bottom that
+      // curls up both sides. Bitmaps, not drawn needles, so a grid of cards
+      // still scrolls smoothly.
+      if (isChristmasThemeActive()) {
+        ChristmasCardWreath(
+          modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .fillMaxWidth()
+            .height(30.dp)
+        )
+      }
 
       @Suppress("DEPRECATION")
       val badgeTextStyle = TextStyle(

@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.SelectedFilter
+import git.shin.animevsub.ui.components.christmas.ChristmasGreetingBanner
+import git.shin.animevsub.ui.components.christmas.daysUntilChristmas
 import git.shin.animevsub.ui.components.common.SectionHeader
 import git.shin.animevsub.ui.components.home.CarouselSection
 import git.shin.animevsub.ui.components.home.HomeLoadingSkeleton
@@ -28,6 +30,7 @@ import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.list.HorizontalAnimeList
 import git.shin.animevsub.ui.components.status.ErrorScreen
 import git.shin.animevsub.utils.ResponsiveUtils
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -85,6 +88,29 @@ fun HomeScreen(
             onScheduleClick = onNavigateToSchedule,
             onRankingsClick = { onNavigateToRankings(null) }
           )
+
+          // Christmas greeting
+          if (isChristmasThemeActive()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            val daysLeft = daysUntilChristmas()
+            ChristmasGreetingBanner(
+              title = if (daysLeft == 0) {
+                stringResource(R.string.christmas_greeting_title)
+              } else {
+                stringResource(R.string.christmas_greeting_countdown_title)
+              },
+              subtitle = if (daysLeft == 0) {
+                stringResource(R.string.christmas_greeting_subtitle)
+              } else {
+                stringResource(R.string.christmas_greeting_countdown, daysLeft)
+              },
+              badge = stringResource(R.string.christmas_banner_badge),
+              action = stringResource(R.string.christmas_banner_cta),
+              onClick = {
+                onNavigateToCategory(listOf(SelectedFilter("danh-sach", "all", "Tất cả")))
+              }
+            )
+          }
 
           // This Season
           if (data.thisSeason.isNotEmpty()) {

@@ -54,6 +54,7 @@ import git.shin.animevsub.ui.components.dialogs.DonationDialog
 import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.navigation.Screen
 import git.shin.animevsub.ui.theme.AnimeVsubTheme
+import git.shin.animevsub.ui.theme.isChristmasSeason
 import git.shin.animevsub.utils.CloudflareManager
 import git.shin.animevsub.utils.UpdateManager
 import git.shin.animevsub.worker.NotificationSyncWorker
@@ -84,7 +85,8 @@ class MainActivity : ComponentActivity() {
       "vibrant" to ComponentName(this, "git.shin.animevsub.MainActivityVibrant"),
       "rainbow" to ComponentName(this, "git.shin.animevsub.MainActivityRainbow"),
       "neon" to ComponentName(this, "git.shin.animevsub.MainActivityNeon"),
-      "ai" to ComponentName(this, "git.shin.animevsub.MainActivityAi")
+      "ai" to ComponentName(this, "git.shin.animevsub.MainActivityAi"),
+      "christmas" to ComponentName(this, "git.shin.animevsub.MainActivityChristmas")
     )
 
     aliases.forEach { (name, component) ->
@@ -228,6 +230,12 @@ class MainActivity : ComponentActivity() {
 
       val appLanguage by preferencesManager.appLanguage.collectAsState(initial = null)
       val dynamicColor by preferencesManager.dynamicColor.collectAsState(initial = false)
+      val christmasSetting by preferencesManager.christmasTheme.collectAsState(initial = "auto")
+      val christmasTheme = when (christmasSetting) {
+        "on" -> true
+        "off" -> false
+        else -> isChristmasSeason()
+      }
 
       LaunchedEffect(appLanguage) {
         appLanguage?.let { lang ->
@@ -307,7 +315,7 @@ class MainActivity : ComponentActivity() {
         }
       }
 
-      AnimeVsubTheme(dynamicColor = dynamicColor) {
+      AnimeVsubTheme(dynamicColor = dynamicColor, christmas = christmasTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
           if (isAppActive) {
             val navController = rememberNavController()

@@ -72,6 +72,12 @@ class PreferencesManager(private val context: Context) {
     const val DEFAULT_CUSTOM_DNS_URL = "https://dns.google/dns-query"
 
     const val DEFAULT_WARP_MODE = "off"
+
+    // "auto" season decoration, "on" always, "off" never.
+    const val DEFAULT_CHRISTMAS_THEME = "auto"
+    const val CHRISTMAS_THEME_AUTO = "auto"
+    const val CHRISTMAS_THEME_ON = "on"
+    const val CHRISTMAS_THEME_OFF = "off"
     const val WARP_MODE_OFF = "off"
     const val WARP_MODE_WIREGUARD = "wireguard"
     const val WARP_MODE_MASQUE_H3 = "masque_h3"
@@ -131,6 +137,7 @@ class PreferencesManager(private val context: Context) {
     private val DNS_MODE_KEY = stringPreferencesKey("dns_mode")
     private val CUSTOM_DNS_URL_KEY = stringPreferencesKey("custom_dns_url")
     private val WARP_MODE_KEY = stringPreferencesKey("warp_mode")
+    private val CHRISTMAS_THEME_KEY = stringPreferencesKey("christmas_theme")
   }
 
   val autoNext: Flow<Boolean> = context.dataStore.data.map { it[AUTO_NEXT_KEY] ?: DEFAULT_AUTO_NEXT }
@@ -185,6 +192,7 @@ class PreferencesManager(private val context: Context) {
   val dnsMode: Flow<String> = context.dataStore.data.map { it[DNS_MODE_KEY] ?: DEFAULT_DNS_MODE }
   val customDnsUrl: Flow<String> = context.dataStore.data.map { it[CUSTOM_DNS_URL_KEY] ?: DEFAULT_CUSTOM_DNS_URL }
   val warpMode: Flow<String> = context.dataStore.data.map { it[WARP_MODE_KEY] ?: DEFAULT_WARP_MODE }
+  val christmasTheme: Flow<String> = context.dataStore.data.map { it[CHRISTMAS_THEME_KEY] ?: DEFAULT_CHRISTMAS_THEME }
 
   val searchHistory: Flow<List<String>> = context.dataStore.data.map { preferences ->
     val json = preferences[SEARCH_HISTORY_KEY] ?: return@map emptyList()
@@ -383,6 +391,10 @@ class PreferencesManager(private val context: Context) {
 
   suspend fun setWarpMode(value: String) {
     context.dataStore.edit { it[WARP_MODE_KEY] = value }
+  }
+
+  suspend fun setChristmasTheme(value: String) {
+    context.dataStore.edit { it[CHRISTMAS_THEME_KEY] = value }
   }
 
   suspend fun addSearchHistory(query: String) {

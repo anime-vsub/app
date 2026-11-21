@@ -13,10 +13,16 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
@@ -52,12 +58,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -90,11 +100,19 @@ import git.shin.animevsub.ui.screens.rankings.RankingsScreen
 import git.shin.animevsub.ui.screens.schedule.ScheduleScreen
 import git.shin.animevsub.ui.screens.search.SearchScreen
 import git.shin.animevsub.ui.screens.settings.SettingsScreen
+import git.shin.animevsub.ui.components.christmas.ChristmasIconRing
+import git.shin.animevsub.ui.components.christmas.ChristmasTopGarland
+import git.shin.animevsub.ui.components.christmas.SnowfallOverlay
+import git.shin.animevsub.ui.components.player.PlayerFullscreenState
 import git.shin.animevsub.ui.theme.AccentMain
-import git.shin.animevsub.ui.theme.DarkBackground
+import git.shin.animevsub.ui.theme.ChristmasGold
+import git.shin.animevsub.ui.theme.ChristmasGreen
+import git.shin.animevsub.ui.theme.ChristmasRed
+import git.shin.animevsub.ui.theme.ChristmasRose
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -179,444 +197,528 @@ fun AnimeVsubAppUI(
   val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
   val useNavRail = isLandscape || windowSize.widthSizeClass == WindowWidthSizeClass.Expanded
 
-  Row(modifier = Modifier.fillMaxSize()) {
-    AnimatedVisibility(
-      visible = useNavRail && !hideBottomBar,
-      enter = slideInHorizontally(initialOffsetX = { -it }),
-      exit = slideOutHorizontally(targetOffsetX = { -it })
-    ) {
-      NavigationRail(
-        containerColor = DarkSurface,
-        contentColor = TextPrimary,
-        modifier = Modifier.fillMaxHeight()
-      ) {
-        bottomNavItems.forEach { item ->
-          val selected = currentDestination?.hierarchy?.any {
-            it.route == item.screen.route
-          } == true
-
-          NavigationRailItem(
-            icon = {
-              BadgedBox(
-                badge = {
-                  if (item.screen == Screen.Notification && unreadCount > 0) {
-                    Badge(
-                      containerColor = Color.Red,
-                      contentColor = Color.White
-                    ) {
-                      Text(if (unreadCount > 99) "99+" else unreadCount.toString())
-                    }
-                  }
-                }
-              ) {
-                Icon(
-                  imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                  contentDescription = stringResource(item.labelRes)
-                )
-              }
-            },
-            label = {
-              Text(
-                text = stringResource(item.labelRes),
-                fontSize = 11.sp
+  Box(modifier = Modifier.fillMaxSize()) {
+    // Festive wash behind everything: a plum-to-night gradient with a faint
+    // rose bloom in the top corner, so the theme reads as a mood rather than a
+    // handful of decorated widgets.
+    if (isChristmasThemeActive()) {
+      Box(
+        modifier = Modifier
+          .fillMaxSize()
+          .background(
+            Brush.verticalGradient(
+              listOf(
+                Color(0xFF241A3C),
+                Color(0xFF191228),
+                Color(0xFF110C1A)
               )
-            },
-            selected = selected,
-            onClick = {
-              navController.navigate(item.screen.route) {
-                popUpTo(navController.graph.findStartDestination().id) {
-                  saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
-              }
-            },
-            colors = NavigationRailItemDefaults.colors(
-              selectedIconColor = AccentMain,
-              selectedTextColor = AccentMain,
-              unselectedIconColor = TextGrey,
-              unselectedTextColor = TextGrey,
-              indicatorColor = Color.Transparent
             )
           )
-        }
-      }
+      )
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(320.dp)
+          .background(
+            Brush.radialGradient(
+              colors = listOf(ChristmasRose.copy(alpha = 0.20f), Color.Transparent),
+              center = androidx.compose.ui.geometry.Offset(140f, 40f),
+              radius = 620f
+            )
+          )
+      )
     }
-
-    Scaffold(
-      containerColor = DarkBackground,
-      bottomBar = {
-        AnimatedVisibility(
-          visible = !hideBottomBar && !useNavRail,
-          enter = slideInVertically(initialOffsetY = { it }),
-          exit = slideOutVertically(targetOffsetY = { it })
+    Row(modifier = Modifier.fillMaxSize()) {
+      AnimatedVisibility(
+        visible = useNavRail && !hideBottomBar,
+        enter = slideInHorizontally(initialOffsetX = { -it }),
+        exit = slideOutHorizontally(targetOffsetX = { -it })
+      ) {
+        NavigationRail(
+          containerColor = DarkSurface,
+          contentColor = TextPrimary,
+          modifier = Modifier.fillMaxHeight()
         ) {
-          NavigationBar(
-            containerColor = DarkSurface,
-            contentColor = TextPrimary,
-            tonalElevation = 0.dp
-          ) {
-            bottomNavItems.forEach { item ->
-              val selected = currentDestination?.hierarchy?.any {
-                it.route == item.screen.route
-              } == true
+          bottomNavItems.forEach { item ->
+            val selected = currentDestination?.hierarchy?.any {
+              it.route == item.screen.route
+            } == true
 
-              NavigationBarItem(
-                icon = {
-                  BadgedBox(
-                    badge = {
-                      if (item.screen == Screen.Notification && unreadCount > 0) {
-                        Badge(
-                          containerColor = Color.Red,
-                          contentColor = Color.White
-                        ) {
-                          Text(if (unreadCount > 99) "99+" else unreadCount.toString())
-                        }
+            NavigationRailItem(
+              icon = {
+                BadgedBox(
+                  badge = {
+                    if (item.screen == Screen.Notification && unreadCount > 0) {
+                      Badge(
+                        containerColor = Color.Red,
+                        contentColor = Color.White
+                      ) {
+                        Text(if (unreadCount > 99) "99+" else unreadCount.toString())
                       }
                     }
-                  ) {
-                    Icon(
-                      imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                      contentDescription = stringResource(item.labelRes)
-                    )
                   }
-                },
-                label = {
-                  Text(
-                    text = stringResource(item.labelRes),
-                    fontSize = 11.sp
+                ) {
+                  Icon(
+                    imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                    contentDescription = stringResource(item.labelRes)
                   )
-                },
-                selected = selected,
-                onClick = {
-                  navController.navigate(item.screen.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                      saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                  }
-                },
-                colors = NavigationBarItemDefaults.colors(
-                  selectedIconColor = AccentMain,
-                  selectedTextColor = AccentMain,
-                  unselectedIconColor = TextGrey,
-                  unselectedTextColor = TextGrey,
-                  indicatorColor = Color.Transparent
+                }
+              },
+              label = {
+                Text(
+                  text = stringResource(item.labelRes),
+                  fontSize = 11.sp
                 )
+              },
+              selected = selected,
+              onClick = {
+                navController.navigate(item.screen.route) {
+                  popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                  }
+                  launchSingleTop = true
+                  restoreState = true
+                }
+              },
+              colors = NavigationRailItemDefaults.colors(
+                selectedIconColor = AccentMain,
+                selectedTextColor = AccentMain,
+                unselectedIconColor = TextGrey,
+                unselectedTextColor = TextGrey,
+                indicatorColor = Color.Transparent
               )
-            }
+            )
           }
         }
       }
-    ) { innerPadding ->
-      NavHost(
-        navController = navController,
-        startDestination = Screen.Home.route,
-        modifier = if (isInPipMode) Modifier else Modifier.padding(innerPadding),
-        enterTransition = {
-          when (transitionType) {
-            "slide" -> slideInHorizontally(
-              initialOffsetX = { it },
-              animationSpec = tween(300)
-            ) + fadeIn(animationSpec = tween(300))
 
-            "fade" -> fadeIn(animationSpec = tween(300))
-            "zoom" -> scaleIn(initialScale = 0.8f, animationSpec = tween(300)) + fadeIn(
-              animationSpec = tween(300)
-            )
+      Scaffold(
+        containerColor = Color.Transparent,
+        bottomBar = {
+          AnimatedVisibility(
+            visible = !hideBottomBar && !useNavRail,
+            enter = slideInVertically(initialOffsetY = { it }),
+            exit = slideOutVertically(targetOffsetY = { it })
+          ) {
+            Box {
+              Column {
+                if (isChristmasThemeActive()) {
+                  Box(
+                    modifier = Modifier
+                      .fillMaxWidth()
+                      .height(3.dp)
+                      .background(
+                        Brush.horizontalGradient(
+                          listOf(
+                            ChristmasRed,
+                            ChristmasGold,
+                            ChristmasGreen,
+                            ChristmasRed
+                          )
+                        )
+                      )
+                  )
+                }
+                NavigationBar(
+                  containerColor = DarkSurface,
+                  contentColor = TextPrimary,
+                  tonalElevation = 0.dp
+                ) {
+                  bottomNavItems.forEach { item ->
+                    val selected = currentDestination?.hierarchy?.any {
+                      it.route == item.screen.route
+                    } == true
 
-            "none" -> EnterTransition.None
-            else -> fadeIn(animationSpec = tween(300))
+                    NavigationBarItem(
+                      icon = {
+                        BadgedBox(
+                          badge = {
+                            if (item.screen == Screen.Notification && unreadCount > 0) {
+                              Badge(
+                                containerColor = Color.Red,
+                                contentColor = Color.White
+                              ) {
+                                Text(if (unreadCount > 99) "99+" else unreadCount.toString())
+                              }
+                            }
+                          }
+                        ) {
+                          if (isChristmasThemeActive()) {
+                            Box(contentAlignment = Alignment.Center) {
+                              ChristmasIconRing(selected = selected, size = 38.dp)
+                              Icon(
+                                imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = stringResource(item.labelRes),
+                                modifier = Modifier.size(20.dp)
+                              )
+                            }
+                          } else {
+                            Icon(
+                              imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                              contentDescription = stringResource(item.labelRes)
+                            )
+                          }
+                        }
+                      },
+                      label = {
+                        Text(
+                          text = stringResource(item.labelRes),
+                          fontSize = 11.sp
+                        )
+                      },
+                      selected = selected,
+                      onClick = {
+                        navController.navigate(item.screen.route) {
+                          popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                          }
+                          launchSingleTop = true
+                          restoreState = true
+                        }
+                      },
+                      colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = if (isChristmasThemeActive()) ChristmasRed else AccentMain,
+                        selectedTextColor = if (isChristmasThemeActive()) ChristmasRed else AccentMain,
+                        unselectedIconColor = TextGrey,
+                        unselectedTextColor = TextGrey,
+                        indicatorColor = if (isChristmasThemeActive()) {
+                          ChristmasRose.copy(alpha = 0.20f)
+                        } else {
+                          Color.Transparent
+                        }
+                      )
+                    )
+                  }
+                }
+              }
+            }
           }
-        },
-        exitTransition = {
-          when (transitionType) {
-            "slide" -> slideOutHorizontally(
-              targetOffsetX = { -it },
-              animationSpec = tween(300)
-            ) + fadeOut(animationSpec = tween(300))
+        }
+      ) { innerPadding ->
+        NavHost(
+          navController = navController,
+          startDestination = Screen.Home.route,
+          modifier = if (isInPipMode) Modifier else Modifier.padding(innerPadding),
+          enterTransition = {
+            when (transitionType) {
+              "slide" -> slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300)
+              ) + fadeIn(animationSpec = tween(300))
 
-            "fade" -> fadeOut(animationSpec = tween(300))
-            "zoom" -> scaleOut(targetScale = 1.2f, animationSpec = tween(300)) + fadeOut(
-              animationSpec = tween(300)
-            )
+              "fade" -> fadeIn(animationSpec = tween(300))
+              "zoom" -> scaleIn(initialScale = 0.8f, animationSpec = tween(300)) + fadeIn(
+                animationSpec = tween(300)
+              )
 
-            "none" -> ExitTransition.None
-            else -> fadeOut(animationSpec = tween(300))
+              "none" -> EnterTransition.None
+              else -> fadeIn(animationSpec = tween(300))
+            }
+          },
+          exitTransition = {
+            when (transitionType) {
+              "slide" -> slideOutHorizontally(
+                targetOffsetX = { -it },
+                animationSpec = tween(300)
+              ) + fadeOut(animationSpec = tween(300))
+
+              "fade" -> fadeOut(animationSpec = tween(300))
+              "zoom" -> scaleOut(targetScale = 1.2f, animationSpec = tween(300)) + fadeOut(
+                animationSpec = tween(300)
+              )
+
+              "none" -> ExitTransition.None
+              else -> fadeOut(animationSpec = tween(300))
+            }
+          },
+          popEnterTransition = {
+            when (transitionType) {
+              "slide" -> slideInHorizontally(
+                initialOffsetX = { -it },
+                animationSpec = tween(300)
+              ) + fadeIn(animationSpec = tween(300))
+
+              "fade" -> fadeIn(animationSpec = tween(300))
+              "zoom" -> scaleIn(initialScale = 1.2f, animationSpec = tween(300)) + fadeIn(
+                animationSpec = tween(300)
+              )
+
+              "none" -> EnterTransition.None
+              else -> fadeIn(animationSpec = tween(300))
+            }
+          },
+          popExitTransition = {
+            when (transitionType) {
+              "slide" -> slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(300)
+              ) + fadeOut(animationSpec = tween(300))
+
+              "fade" -> fadeOut(animationSpec = tween(300))
+              "zoom" -> scaleOut(targetScale = 0.8f, animationSpec = tween(300)) + fadeOut(
+                animationSpec = tween(300)
+              )
+
+              "none" -> ExitTransition.None
+              else -> fadeOut(animationSpec = tween(300))
+            }
           }
-        },
-        popEnterTransition = {
-          when (transitionType) {
-            "slide" -> slideInHorizontally(
-              initialOffsetX = { -it },
-              animationSpec = tween(300)
-            ) + fadeIn(animationSpec = tween(300))
-
-            "fade" -> fadeIn(animationSpec = tween(300))
-            "zoom" -> scaleIn(initialScale = 1.2f, animationSpec = tween(300)) + fadeIn(
-              animationSpec = tween(300)
+        ) {
+          // Bottom nav destinations
+          composable(Screen.Home.route) {
+            HomeScreen(
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              },
+              onNavigateToCategory = { filters ->
+                val filtersJson = Json.encodeToString(filters)
+                navController.navigate(Screen.Category.createRoute(filtersJson))
+              },
+              onNavigateToRankings = { type ->
+                navController.navigate(Screen.Rankings.createRoute(type))
+              },
+              onNavigateToSchedule = {
+                navController.navigate(Screen.Schedule.route)
+              },
+              windowSize = windowSize
             )
-
-            "none" -> EnterTransition.None
-            else -> fadeIn(animationSpec = tween(300))
           }
-        },
-        popExitTransition = {
-          when (transitionType) {
-            "slide" -> slideOutHorizontally(
-              targetOffsetX = { it },
-              animationSpec = tween(300)
-            ) + fadeOut(animationSpec = tween(300))
 
-            "fade" -> fadeOut(animationSpec = tween(300))
-            "zoom" -> scaleOut(targetScale = 0.8f, animationSpec = tween(300)) + fadeOut(
-              animationSpec = tween(300)
+          composable(Screen.Search.route) {
+            SearchScreen(
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              },
+              windowSizeClass = windowSize
             )
+          }
 
-            "none" -> ExitTransition.None
-            else -> fadeOut(animationSpec = tween(300))
+          composable(Screen.Schedule.route) {
+            val isFromBottomNav = bottomNavItems.any { it.screen == Screen.Schedule }
+            ScheduleScreen(
+              onNavigateBack = if (isFromBottomNav) {
+                null
+              } else {
+                { navController.popBackStack() }
+              },
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              }
+            )
+          }
+
+          composable(Screen.Notification.route) {
+            NotificationScreen(
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              },
+              onNavigateToLogin = {
+                navController.navigate(Screen.Login.route)
+              },
+              onNavigateToSystemSettings = {
+                navController.navigate(Screen.Settings.route)
+              },
+              onNavigateToAbout = {
+                navController.navigate(Screen.About.route)
+              }
+            )
+          }
+
+          composable(Screen.Account.route) {
+            AccountScreen(
+              onNavigateToLogin = { navController.navigate(Screen.Login.route) },
+              onNavigateToHistory = { navController.navigate(Screen.History.route) },
+              onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
+              onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
+              onNavigateToAbout = { navController.navigate(Screen.About.route) },
+              onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) },
+              onNavigateToPlaylist = { playlistId ->
+                navController.navigate(Screen.Playlist.createRoute(playlistId))
+              },
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              }
+            )
+          }
+
+          // Detail screen (Now includes Player)
+          composable(
+            route = Screen.AnimeDetail.route,
+            arguments = listOf(
+              navArgument("animeId") { type = NavType.StringType },
+              navArgument("chapterId") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+              }
+            )
+          ) {
+            DetailScreen(
+              onNavigateBack = { navController.popBackStack() },
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              },
+              onNavigateToCategory = { filters ->
+                val filtersJson = Json.encodeToString(filters)
+                navController.navigate(Screen.Category.createRoute(filtersJson))
+              },
+              onNavigateToLogin = {
+                navController.navigate(Screen.Login.route)
+              },
+              onNavigateToSettings = {
+                navController.navigate(Screen.Settings.route)
+              },
+              windowSize = windowSize,
+              isInPipMode = isInPipMode
+            )
+          }
+
+          // Rankings screen
+          composable(
+            route = Screen.Rankings.route,
+            arguments = listOf(
+              navArgument("type") {
+                type = NavType.StringType
+                defaultValue = "day"
+              }
+            )
+          ) {
+            RankingsScreen(
+              onNavigateBack = { navController.popBackStack() },
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              },
+              windowSize = windowSize
+            )
+          }
+
+          // Category screen
+          composable(
+            route = Screen.Category.route,
+            arguments = listOf(
+              navArgument("filters") { type = NavType.StringType }
+            )
+          ) {
+            CategoryScreen(
+              onNavigateBack = { navController.popBackStack() },
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              },
+              windowSize = windowSize
+            )
+          }
+
+          // Login screen
+          composable(Screen.Login.route) {
+            LoginScreen(
+              onNavigateBack = { navController.popBackStack() }
+            )
+          }
+
+          // About screen
+          composable(Screen.About.route) {
+            AboutScreen(
+              onNavigateBack = { navController.popBackStack() }
+            )
+          }
+
+          // History screen
+          composable(Screen.History.route) {
+            HistoryScreen(
+              onNavigateBack = { navController.popBackStack() },
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              }
+            )
+          }
+
+          composable(Screen.Follow.route) {
+            FollowScreen(
+              onNavigateBack = { navController.popBackStack() },
+              windowSize = windowSize,
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              }
+            )
+          }
+
+          composable(Screen.Settings.route) {
+            SettingsScreen(
+              onNavigateBack = { navController.popBackStack() }
+            )
+          }
+
+          composable(
+            route = Screen.Playlist.route,
+            arguments = listOf(
+              navArgument("playlistId") { type = NavType.StringType }
+            )
+          ) {
+            PlaylistScreen(
+              onNavigateBack = { navController.popBackStack() },
+              onNavigateToDetail = { animeId, chapterId ->
+                navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+              }
+            )
+          }
+
+          composable(Screen.Playlists.route) {
+            PlaylistsScreen(
+              onBack = { navController.popBackStack() },
+              onNavigateToPlaylist = { playlistId ->
+                navController.navigate(Screen.Playlist.createRoute(playlistId))
+              }
+            )
           }
         }
-      ) {
-        // Bottom nav destinations
-        composable(Screen.Home.route) {
-          HomeScreen(
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            },
-            onNavigateToCategory = { filters ->
-              val filtersJson = Json.encodeToString(filters)
-              navController.navigate(Screen.Category.createRoute(filtersJson))
-            },
-            onNavigateToRankings = { type ->
-              navController.navigate(Screen.Rankings.createRoute(type))
-            },
-            onNavigateToSchedule = {
-              navController.navigate(Screen.Schedule.route)
-            },
-            windowSize = windowSize
-          )
-        }
+      }
 
-        composable(Screen.Search.route) {
-          SearchScreen(
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            },
-            windowSizeClass = windowSize
-          )
-        }
-
-        composable(Screen.Schedule.route) {
-          val isFromBottomNav = bottomNavItems.any { it.screen == Screen.Schedule }
-          ScheduleScreen(
-            onNavigateBack = if (isFromBottomNav) {
-              null
-            } else {
-              { navController.popBackStack() }
-            },
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
+      if (showAuthPrompt) {
+        AlertDialog(
+          onDismissRequest = { showAuthPrompt = false },
+          title = { Text(stringResource(id = R.string.authentication_prompt_title)) },
+          text = { Text(stringResource(id = R.string.authentication_prompt_message)) },
+          confirmButton = {
+            Button(
+              onClick = {
+                showAuthPrompt = false
+                scope.launch {
+                  animeRepository.refreshUser()
+                }
+              }
+            ) {
+              Text(stringResource(id = R.string.retry))
             }
-          )
-        }
-
-        composable(Screen.Notification.route) {
-          NotificationScreen(
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            },
-            onNavigateToLogin = {
-              navController.navigate(Screen.Login.route)
-            },
-            onNavigateToSystemSettings = {
-              navController.navigate(Screen.Settings.route)
-            },
-            onNavigateToAbout = {
-              navController.navigate(Screen.About.route)
+          },
+          dismissButton = {
+            Button(
+              onClick = {
+                showAuthPrompt = false
+                scope.launch {
+                  animeRepository.logout()
+                }
+              }
+            ) {
+              Text(stringResource(id = R.string.logout))
             }
-          )
-        }
-
-        composable(Screen.Account.route) {
-          AccountScreen(
-            onNavigateToLogin = { navController.navigate(Screen.Login.route) },
-            onNavigateToHistory = { navController.navigate(Screen.History.route) },
-            onNavigateToFollow = { navController.navigate(Screen.Follow.route) },
-            onNavigateToSettings = { navController.navigate(Screen.Settings.route) },
-            onNavigateToAbout = { navController.navigate(Screen.About.route) },
-            onNavigateToPlaylists = { navController.navigate(Screen.Playlists.route) },
-            onNavigateToPlaylist = { playlistId ->
-              navController.navigate(Screen.Playlist.createRoute(playlistId))
-            },
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            }
-          )
-        }
-
-        // Detail screen (Now includes Player)
-        composable(
-          route = Screen.AnimeDetail.route,
-          arguments = listOf(
-            navArgument("animeId") { type = NavType.StringType },
-            navArgument("chapterId") {
-              type = NavType.StringType
-              nullable = true
-              defaultValue = null
-            }
-          )
-        ) {
-          DetailScreen(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            },
-            onNavigateToCategory = { filters ->
-              val filtersJson = Json.encodeToString(filters)
-              navController.navigate(Screen.Category.createRoute(filtersJson))
-            },
-            onNavigateToLogin = {
-              navController.navigate(Screen.Login.route)
-            },
-            onNavigateToSettings = {
-              navController.navigate(Screen.Settings.route)
-            },
-            windowSize = windowSize,
-            isInPipMode = isInPipMode
-          )
-        }
-
-        // Rankings screen
-        composable(
-          route = Screen.Rankings.route,
-          arguments = listOf(
-            navArgument("type") {
-              type = NavType.StringType
-              defaultValue = "day"
-            }
-          )
-        ) {
-          RankingsScreen(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            },
-            windowSize = windowSize
-          )
-        }
-
-        // Category screen
-        composable(
-          route = Screen.Category.route,
-          arguments = listOf(
-            navArgument("filters") { type = NavType.StringType }
-          )
-        ) {
-          CategoryScreen(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            },
-            windowSize = windowSize
-          )
-        }
-
-        // Login screen
-        composable(Screen.Login.route) {
-          LoginScreen(
-            onNavigateBack = { navController.popBackStack() }
-          )
-        }
-
-        // About screen
-        composable(Screen.About.route) {
-          AboutScreen(
-            onNavigateBack = { navController.popBackStack() }
-          )
-        }
-
-        // History screen
-        composable(Screen.History.route) {
-          HistoryScreen(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            }
-          )
-        }
-
-        composable(Screen.Follow.route) {
-          FollowScreen(
-            onNavigateBack = { navController.popBackStack() },
-            windowSize = windowSize,
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            }
-          )
-        }
-
-        composable(Screen.Settings.route) {
-          SettingsScreen(
-            onNavigateBack = { navController.popBackStack() }
-          )
-        }
-
-        composable(
-          route = Screen.Playlist.route,
-          arguments = listOf(
-            navArgument("playlistId") { type = NavType.StringType }
-          )
-        ) {
-          PlaylistScreen(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToDetail = { animeId, chapterId ->
-              navController.navigate(Screen.AnimeDetail.createRoute(animeId, chapterId))
-            }
-          )
-        }
-
-        composable(Screen.Playlists.route) {
-          PlaylistsScreen(
-            onBack = { navController.popBackStack() },
-            onNavigateToPlaylist = { playlistId ->
-              navController.navigate(Screen.Playlist.createRoute(playlistId))
-            }
-          )
-        }
+          }
+        )
       }
     }
 
-    if (showAuthPrompt) {
-      AlertDialog(
-        onDismissRequest = { showAuthPrompt = false },
-        title = { Text(stringResource(id = R.string.authentication_prompt_title)) },
-        text = { Text(stringResource(id = R.string.authentication_prompt_message)) },
-        confirmButton = {
-          Button(
-            onClick = {
-              showAuthPrompt = false
-              scope.launch {
-                animeRepository.refreshUser()
-              }
-            }
-          ) {
-            Text(stringResource(id = R.string.retry))
-          }
-        },
-        dismissButton = {
-          Button(
-            onClick = {
-              showAuthPrompt = false
-              scope.launch {
-                animeRepository.logout()
-              }
-            }
-          ) {
-            Text(stringResource(id = R.string.logout))
-          }
-        }
+    // Keep the snowfall running everywhere but hide it when the player takes
+    // over the whole screen (immersive full screen) or in picture-in-picture.
+    if (isChristmasThemeActive() && !isInPipMode && !PlayerFullscreenState.isFullScreen) {
+      SnowfallOverlay(modifier = Modifier.fillMaxSize())
+    }
+
+    // Festive drape across the top of every screen. Drawn last with a raised
+    // z-index so no screen surface can ever cover it.
+    if (isChristmasThemeActive() && !isInPipMode && !PlayerFullscreenState.isFullScreen) {
+      ChristmasTopGarland(
+        modifier = Modifier
+          .align(Alignment.TopCenter)
+          .zIndex(3f)
       )
     }
   }

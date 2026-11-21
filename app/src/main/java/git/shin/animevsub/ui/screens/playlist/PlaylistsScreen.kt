@@ -52,6 +52,7 @@ import git.shin.animevsub.ui.components.playlist.PlaylistPoster
 import git.shin.animevsub.ui.screens.account.AccountViewModel
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkCard
+import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
 import git.shin.animevsub.ui.utils.tvFocusScale
@@ -119,6 +120,13 @@ fun PlaylistsScreen(
             PlaylistVerticalRowSkeleton()
           }
         }
+      } else if (!uiState.isLoggedIn || uiState.playlistsNeedLogin) {
+        Text(
+          text = stringResource(R.string.no_playlists_login),
+          color = TextGrey,
+          fontSize = 13.sp,
+          modifier = Modifier.padding(16.dp)
+        )
       } else if (uiState.playlistsError != null) {
         ErrorRetrySection(onRetry = { viewModel.refreshPlaylists() })
       } else {

@@ -27,6 +27,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bedtime
@@ -122,7 +123,8 @@ fun AppIconSelector(
     "vibrant" to R.drawable.ic_launcher_foreground_vibrant,
     "rainbow" to R.drawable.ic_launcher_foreground_rainbow,
     "neon" to R.drawable.ic_launcher_foreground_neon,
-    "ai" to R.drawable.ic_launcher_foreground_ai
+    "ai" to R.drawable.ic_launcher_foreground_ai,
+    "christmas" to R.drawable.ic_launcher_foreground_christmas
   )
 
   Column(
@@ -179,6 +181,7 @@ fun AppIconSelector(
               "rainbow" -> stringResource(R.string.app_icon_rainbow)
               "neon" -> stringResource(R.string.app_icon_neon)
               "ai" -> stringResource(R.string.app_icon_ai)
+              "christmas" -> stringResource(R.string.app_icon_christmas)
               else -> id
             },
             style = MaterialTheme.typography.bodyMedium,
@@ -355,6 +358,18 @@ fun SettingsScreen(
             "none" to stringResource(R.string.transition_none)
           ),
           onOptionSelected = { viewModel.setScreenTransition(it) }
+        )
+
+        SettingsSelector(
+          label = stringResource(R.string.christmas_theme),
+          selectedOption = uiState.christmasTheme,
+          icon = Icons.Default.AcUnit,
+          options = listOf(
+            PreferencesManager.CHRISTMAS_THEME_AUTO to stringResource(R.string.christmas_theme_auto),
+            PreferencesManager.CHRISTMAS_THEME_ON to stringResource(R.string.christmas_theme_on),
+            PreferencesManager.CHRISTMAS_THEME_OFF to stringResource(R.string.christmas_theme_off)
+          ),
+          onOptionSelected = { viewModel.setChristmasTheme(it) }
         )
 
         SettingsToggle(

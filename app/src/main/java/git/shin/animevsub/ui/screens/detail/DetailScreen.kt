@@ -96,6 +96,7 @@ import git.shin.animevsub.R
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.Badge
 import git.shin.animevsub.ui.components.badge.QualityBadge
+import git.shin.animevsub.ui.components.christmas.ChristmasSticker
 import git.shin.animevsub.ui.components.common.ActionButton
 import git.shin.animevsub.ui.components.detail.AiChatBottomSheet
 import git.shin.animevsub.ui.components.detail.AiRecapBlock
@@ -107,6 +108,7 @@ import git.shin.animevsub.ui.components.list.GridAnimeList
 import git.shin.animevsub.ui.components.player.BedtimeReminderDialog
 import git.shin.animevsub.ui.components.player.BreakReminderDialog
 import git.shin.animevsub.ui.components.player.EpisodeItem
+import git.shin.animevsub.ui.components.player.PlayerFullscreenState
 import git.shin.animevsub.ui.components.player.VideoPlayer
 import git.shin.animevsub.ui.components.playlist.AddToPlaylistBottomSheet
 import git.shin.animevsub.ui.components.status.ErrorScreen
@@ -121,6 +123,7 @@ import git.shin.animevsub.ui.theme.StarColor
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 import git.shin.animevsub.ui.utils.formatNumber
 import git.shin.animevsub.ui.utils.formatScheduleUpdate
 import git.shin.animevsub.ui.utils.rememberScreenState
@@ -129,6 +132,29 @@ import git.shin.animevsub.ui.utils.tvFocusScale
 import kotlinx.coroutines.launch
 
 @SuppressLint("SetJavaScriptEnabled")
+/** Narrow festive ribbon under the player on the detail screen. */
+@Composable
+private fun ChristmasDetailRibbon() {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp, vertical = 8.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    ChristmasSticker(imageRes = R.drawable.xm_christmas_present_box)
+    Spacer(modifier = Modifier.width(10.dp))
+    Text(
+      text = stringResource(R.string.christmas_ribbon_message),
+      color = TextSecondary,
+      fontSize = 13.sp
+    )
+    Spacer(modifier = Modifier.weight(1f))
+    ChristmasSticker(imageRes = R.drawable.xm_christmas_ornament_teardrop, size = 18.dp)
+    Spacer(modifier = Modifier.width(6.dp))
+    ChristmasSticker(imageRes = R.drawable.xm_candy_cane_classic, size = 18.dp)
+  }
+}
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun DetailScreen(
@@ -298,12 +324,17 @@ fun DetailScreen(
   }
 
   LaunchedEffect(isFullScreen) {
+    PlayerFullscreenState.update(isFullScreen)
     if (isFullScreen) {
       showDetailSheet = false
       showChapterSheet = false
       showAddToPlaylistSheet = false
       scaffoldState.bottomSheetState.partialExpand()
     }
+  }
+
+  DisposableEffect(Unit) {
+    onDispose { PlayerFullscreenState.update(false) }
   }
 
   BottomSheetScaffold(
@@ -469,6 +500,10 @@ fun DetailScreen(
           } else if (uiState.isLoading && detail == null) {
             DetailSkeleton()
           } else if (detail != null) {
+            if (isChristmasThemeActive()) {
+              ChristmasDetailRibbon()
+            }
+
             // Info Block (Clickable to open sheet)
             Column(
               modifier = Modifier

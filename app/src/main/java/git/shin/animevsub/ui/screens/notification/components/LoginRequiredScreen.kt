@@ -20,7 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
+import git.shin.animevsub.ui.components.christmas.ChristmasPillButton
 import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextSecondary
 
@@ -44,12 +46,19 @@ fun LoginRequiredScreen(onNavigateToLogin: () -> Unit) {
         fontSize = 14.sp
       )
       Spacer(modifier = Modifier.height(16.dp))
-      Button(
-        onClick = onNavigateToLogin,
-        colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
-        shape = RoundedCornerShape(8.dp)
-      ) {
-        Text(stringResource(R.string.login))
+      if (isChristmasThemeActive()) {
+        ChristmasPillButton(
+          text = stringResource(R.string.login),
+          onClick = onNavigateToLogin
+        )
+      } else {
+        Button(
+          onClick = onNavigateToLogin,
+          colors = ButtonDefaults.buttonColors(containerColor = AccentMain),
+          shape = RoundedCornerShape(8.dp)
+        ) {
+          Text(stringResource(R.string.login))
+        }
       }
     }
   }

@@ -43,6 +43,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -56,10 +58,14 @@ import git.shin.animevsub.R
 import git.shin.animevsub.ui.components.account.FollowHorizontalList
 import git.shin.animevsub.ui.components.account.HistoryHorizontalList
 import git.shin.animevsub.ui.components.account.PlaylistHorizontalList
+import git.shin.animevsub.ui.components.christmas.christmasCardOutline
 import git.shin.animevsub.ui.components.dialogs.UpdateDialog
 import git.shin.animevsub.ui.components.filter.FiltersBottomSheet
 import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.ChristmasRose
+import git.shin.animevsub.ui.theme.ChristmasRoseDeep
 import git.shin.animevsub.ui.theme.DarkBackground
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.ErrorColor
@@ -100,60 +106,23 @@ fun AccountScreen(
   Scaffold(
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
     topBar = {
-      TopAppBar(
-        title = {
-          Text(
-            text = stringResource(R.string.nav_account),
-            color = TextPrimary,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold
+      AccountTopAppBar(
+        isCheckingUpdate = uiState.isCheckingUpdate,
+        onCheckUpdate = {
+          viewModel.checkForUpdate(
+            onUpdateAvailable = { showUpdateDialog = it },
+            onNoUpdate = {
+              Toast.makeText(context, R.string.no_update, Toast.LENGTH_SHORT).show()
+            },
+            onError = {
+              Toast.makeText(context, R.string.update_failed, Toast.LENGTH_SHORT).show()
+            }
           )
         },
-        actions = {
-          IconButton(
-            onClick = {
-              viewModel.checkForUpdate(
-                onUpdateAvailable = { showUpdateDialog = it },
-                onNoUpdate = {
-                  Toast.makeText(context, R.string.no_update, Toast.LENGTH_SHORT).show()
-                },
-                onError = {
-                  Toast.makeText(context, R.string.update_failed, Toast.LENGTH_SHORT).show()
-                }
-              )
-            },
-            enabled = !uiState.isCheckingUpdate
-          ) {
-            if (uiState.isCheckingUpdate) {
-              CircularProgressIndicator(
-                modifier = Modifier.size(20.dp),
-                color = AccentMain,
-                strokeWidth = 2.dp
-              )
-            } else {
-              Icon(
-                imageVector = Icons.Default.Update,
-                contentDescription = stringResource(R.string.check_update),
-                tint = TextPrimary
-              )
-            }
-          }
-          IconButton(onClick = onNavigateToSettings) {
-            Icon(
-              imageVector = Icons.Default.Settings,
-              contentDescription = stringResource(R.string.settings),
-              tint = TextPrimary
-            )
-          }
-          IconButton(onClick = onNavigateToAbout) {
-            Icon(
-              imageVector = Icons.Default.Info,
-              contentDescription = stringResource(R.string.about),
-              tint = TextPrimary
-            )
-          }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
+        onNavigateToSettings = onNavigateToSettings,
+        onNavigateToAbout = onNavigateToAbout,
+        tint = TextPrimary,
+        container = DarkBackground
       )
     },
     containerColor = DarkBackground
@@ -171,7 +140,7 @@ fun AccountScreen(
           .verticalScroll(rememberScrollState())
           .padding(bottom = 16.dp)
       ) {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Profile section
         Box(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -181,7 +150,8 @@ fun AccountScreen(
                 .fillMaxWidth()
                 .height(100.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(DarkCard),
+                .background(DarkCard)
+                .christmasCardOutline(12.dp),
               contentAlignment = Alignment.Center
             ) {
               CircularProgressIndicator(color = AccentMain)
@@ -192,8 +162,9 @@ fun AccountScreen(
               verticalAlignment = Alignment.CenterVertically,
               modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(DarkCard)
+                .clip(RoundedCornerShape(18.dp))
+                .background(SolidColor(DarkCard))
+                .christmasCardOutline(18.dp)
                 .padding(16.dp)
             ) {
               AsyncImage(
@@ -229,12 +200,18 @@ fun AccountScreen(
                 onClick = { viewModel.performLogout() },
                 modifier = Modifier
                   .clip(CircleShape)
-                  .background(ErrorColor.copy(alpha = 0.1f))
+                  .background(
+                    if (isChristmasThemeActive()) {
+                      ChristmasRose.copy(alpha = 0.18f)
+                    } else {
+                      ErrorColor.copy(alpha = 0.1f)
+                    }
+                  )
               ) {
                 Icon(
                   imageVector = Icons.AutoMirrored.Filled.Logout,
                   contentDescription = stringResource(R.string.logout),
-                  tint = ErrorColor,
+                  tint = if (isChristmasThemeActive()) ChristmasRoseDeep else ErrorColor,
                   modifier = Modifier.size(20.dp)
                 )
               }
@@ -244,8 +221,9 @@ fun AccountScreen(
             Box(
               modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(DarkCard)
+                .clip(RoundedCornerShape(18.dp))
+                .background(SolidColor(DarkCard))
+                .christmasCardOutline(18.dp)
                 .tvFocusScale()
                 .clickable(onClick = onNavigateToLogin)
                 .padding(20.dp),
@@ -310,6 +288,7 @@ fun AccountScreen(
             playlists = uiState.playlists,
             isLoading = uiState.isLoadingPlaylists,
             error = uiState.playlistsError,
+            loginRequired = !uiState.isLoggedIn || uiState.playlistsNeedLogin,
             onHeaderClick = onNavigateToPlaylists,
             onAddClick = { showCreatePlaylistDialog = true },
             onRetry = { viewModel.refreshPlaylists() },
@@ -353,4 +332,63 @@ fun AccountScreen(
       )
     }
   }
+}
+
+/**
+ * Title row of the account screen, shared by the plain and the festive header so
+ * the two variants cannot drift apart. The festive variant draws it over the
+ * pastel band, hence the caller-supplied tint and container colours.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AccountTopAppBar(
+  isCheckingUpdate: Boolean,
+  onCheckUpdate: () -> Unit,
+  onNavigateToSettings: () -> Unit,
+  onNavigateToAbout: () -> Unit,
+  tint: Color,
+  container: Color
+) {
+  TopAppBar(
+    title = {
+      Text(
+        text = stringResource(R.string.nav_account),
+        color = tint,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.SemiBold
+      )
+    },
+    actions = {
+      IconButton(onClick = onCheckUpdate, enabled = !isCheckingUpdate) {
+        if (isCheckingUpdate) {
+          CircularProgressIndicator(
+            modifier = Modifier.size(20.dp),
+            color = AccentMain,
+            strokeWidth = 2.dp
+          )
+        } else {
+          Icon(
+            imageVector = Icons.Default.Update,
+            contentDescription = stringResource(R.string.check_update),
+            tint = tint
+          )
+        }
+      }
+      IconButton(onClick = onNavigateToSettings) {
+        Icon(
+          imageVector = Icons.Default.Settings,
+          contentDescription = stringResource(R.string.settings),
+          tint = tint
+        )
+      }
+      IconButton(onClick = onNavigateToAbout) {
+        Icon(
+          imageVector = Icons.Default.Info,
+          contentDescription = stringResource(R.string.about),
+          tint = tint
+        )
+      }
+    },
+    colors = TopAppBarDefaults.topAppBarColors(containerColor = container)
+  )
 }

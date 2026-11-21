@@ -1,13 +1,17 @@
 package git.shin.animevsub.ui.components.common
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
@@ -17,12 +21,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.R
+import git.shin.animevsub.ui.components.christmas.ChristmasSticker
 import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.ChristmasGold
+import git.shin.animevsub.ui.theme.ChristmasRose
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 
@@ -50,9 +59,23 @@ fun SectionHeader(
         Modifier.weight(1f)
       }
     ) {
+      if (isChristmasThemeActive()) {
+        ChristmasSticker(imageRes = R.drawable.xm_christmas_ornament_bauble, size = 17.dp)
+        Spacer(modifier = Modifier.width(8.dp))
+        Box(
+          modifier = Modifier
+            .width(3.dp)
+            .height(16.dp)
+            .background(
+              Brush.verticalGradient(listOf(ChristmasRose, ChristmasGold)),
+              RoundedCornerShape(2.dp)
+            )
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+      }
       Text(
         text = title,
-        color = TextPrimary,
+        color = if (isChristmasThemeActive()) ChristmasGold else TextPrimary,
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold
       )
@@ -65,7 +88,7 @@ fun SectionHeader(
         Icon(
           imageVector = Icons.AutoMirrored.Filled.ArrowForward,
           contentDescription = null,
-          tint = TextGrey,
+          tint = if (isChristmasThemeActive()) ChristmasGold else TextGrey,
           modifier = Modifier.size(18.dp)
         )
         if (!compactArrow && onAddClick == null) {

@@ -33,6 +33,7 @@ data class AccountUiState(
   val historyError: String? = null,
   val followsError: String? = null,
   val playlistsError: String? = null,
+  val playlistsNeedLogin: Boolean = false,
   val isRefreshing: Boolean = false,
   val followFilterGroups: List<FilterGroup> = emptyList(),
   val followSelectedFilters: List<SelectedFilter> = emptyList(),
@@ -192,15 +193,38 @@ class AccountViewModel @Inject constructor(
   }
 
   fun refreshPlaylists() {
+    // Playlists live on the server and are scoped to an account; asking for
+    // them while signed out only produces a "login required" failure, which
+    // used to surface as a scary error row.
+    if (!_uiState.value.isLoggedIn) {
+      _uiState.value = _uiState.value.copy(
+        playlists = emptyList(),
+        isLoadingPlaylists = false,
+        playlistsError = null,
+        playlistsNeedLogin = false
+      )
+      return
+    }
     viewModelScope.launch {
-      _uiState.value = _uiState.value.copy(isLoadingPlaylists = true, playlistsError = null)
+      _uiState.value = _uiState.value.copy(
+        isLoadingPlaylists = true,
+        playlistsError = null,
+        playlistsNeedLogin = false
+      )
       playlistRepository.getPlaylists()
         .onSuccess { list ->
           _uiState.value = _uiState.value.copy(playlists = list, isLoadingPlaylists = false)
         }
         .onFailure { e ->
-          _uiState.value =
-            _uiState.value.copy(isLoadingPlaylists = false, playlistsError = e.message)
+          // A session that has lost its uid is a login problem, not a service
+          // error, and should not be reported as "something went wrong".
+          val needsLogin = e.message == LOGIN_REQUIRED
+          _uiState.value = _uiState.value.copy(
+            isLoadingPlaylists = false,
+            playlistsError = if (needsLogin) null else e.message,
+            playlistsNeedLogin = needsLogin,
+            playlists = if (needsLogin) emptyList() else _uiState.value.playlists
+          )
         }
     }
   }
@@ -278,5 +302,9 @@ class AccountViewModel @Inject constructor(
 
   fun downloadUpdate(info: git.shin.animevsub.data.model.UpdateInfo) {
     updateManager.downloadAndInstall(info.downloadUrl, "AnimeVsub_v${info.version}.apk")
+  }
+
+  companion object {
+    private const val LOGIN_REQUIRED = "Login required"
   }
 }

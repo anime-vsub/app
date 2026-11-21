@@ -20,3 +20,5 @@ tsconfig.json
 /warp-native/target
 /warp-native/generated
 /.qoder
+/tmp
+/images

@@ -219,6 +219,7 @@
 
     <!-- Notification -->
     <string name="no_playlists">No playlists found</string>
+    <string name="no_playlists_login">Login to see your playlists</string>
     <string name="no_notifications">No notifications</string>
     <string name="no_system_notifications">No system notifications</string>
     <string name="mark_read">Mark as read</string>
@@ -489,4 +490,20 @@
     <string name="dns_info_webview">Enable DNS in WebView</string>
     <string name="dns_info_desc">Use selected DoH for internal browser and requests</string>
     <string name="open_system_dns_settings">Open System Private DNS Settings</string>
+
+    <!-- Christmas Theme -->
+    <string name="christmas_theme">Christmas Theme</string>
+    <string name="christmas_theme_desc">Snowfall, festive colors and a greeting banner</string>
+    <string name="christmas_theme_auto">Auto (December)</string>
+    <string name="christmas_theme_on">Always on</string>
+    <string name="christmas_theme_off">Off</string>
+    <string name="app_icon_christmas">Christmas</string>
+    <string name="christmas_greeting_title">Merry Christmas! 🎄</string>
+    <string name="christmas_greeting_subtitle">Wishing you warm anime marathons and cozy nights. Happy holidays!</string>
+    <string name="christmas_greeting_countdown_title">Merry Christmas is coming! 🎁</string>
+    <string name="christmas_greeting_countdown">Just %1$d days left. Time to pick a festive watchlist!</string>
+    <string name="christmas_ribbon_message">Enjoy your holiday binge-watching 🎬</string>
+    <string name="christmas_banner_badge">3D COLLECTION</string>
+    <string name="christmas_banner_cta">Pick a holiday watch</string>
+    <string name="christmas_assets_credit">3D Christmas artwork: SVGApp icon set (MIT)</string>
 </resources>

@@ -14,6 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import git.shin.animevsub.ui.theme.AccentMain
+import git.shin.animevsub.ui.theme.ChristmasRed
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 
 @Composable
 fun QualityBadge(
@@ -21,13 +23,16 @@ fun QualityBadge(
   modifier: Modifier = Modifier,
   isCarousel: Boolean = false
 ) {
-  val backgroundModifier = if (isCarousel) {
-    Modifier.background(
+  val backgroundModifier = when {
+    isChristmasThemeActive() -> Modifier.background(
+      Brush.horizontalGradient(listOf(ChristmasRed, Color(0xFFB92F2F))),
+      RoundedCornerShape(4.dp)
+    )
+    isCarousel -> Modifier.background(
       AccentMain.copy(alpha = 0.85f),
       RoundedCornerShape(4.dp)
     )
-  } else {
-    Modifier.background(
+    else -> Modifier.background(
       Brush.horizontalGradient(listOf(Color(0xFF00D639), Color(0xFF00C234))),
       RoundedCornerShape(4.dp)
     )

@@ -36,6 +36,7 @@ data class SettingsUiState(
   val bedtimeReminderEndTime: Long = PreferencesManager.DEFAULT_BEDTIME_REMINDER_END_TIME,
   val bedtimeReminderWaitFinish: Boolean = PreferencesManager.DEFAULT_BEDTIME_REMINDER_WAIT_FINISH,
   val screenTransition: String = PreferencesManager.DEFAULT_SCREEN_TRANSITION,
+  val christmasTheme: String = PreferencesManager.DEFAULT_CHRISTMAS_THEME,
   val dynamicColor: Boolean = PreferencesManager.DEFAULT_DYNAMIC_COLOR,
   val historySyncInterval: Int = PreferencesManager.DEFAULT_HISTORY_SYNC_INTERVAL,
   val appIcon: String = PreferencesManager.DEFAULT_APP_ICON,
@@ -174,6 +175,11 @@ class SettingsViewModel @Inject constructor(
     viewModelScope.launch {
       repository.screenTransition.collect { v ->
         _uiState.update { it.copy(screenTransition = v) }
+      }
+    }
+    viewModelScope.launch {
+      repository.christmasTheme.collect { v ->
+        _uiState.update { it.copy(christmasTheme = v) }
       }
     }
     viewModelScope.launch {
@@ -532,6 +538,10 @@ class SettingsViewModel @Inject constructor(
 
   fun setScreenTransition(value: String) {
     viewModelScope.launch { repository.setScreenTransition(value) }
+  }
+
+  fun setChristmasTheme(value: String) {
+    viewModelScope.launch { repository.setChristmasTheme(value) }
   }
 
   fun setDynamicColor(value: Boolean) {

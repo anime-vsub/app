@@ -66,6 +66,7 @@ import git.shin.animevsub.ui.theme.DarkCard
 import git.shin.animevsub.ui.theme.TextGrey
 import git.shin.animevsub.ui.theme.TextPrimary
 import git.shin.animevsub.ui.theme.TextSecondary
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -290,6 +291,16 @@ fun AboutScreen(
         fontSize = 12.sp,
         textAlign = TextAlign.Center
       )
+
+      if (isChristmasThemeActive()) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+          text = stringResource(R.string.christmas_assets_credit),
+          color = TextGrey,
+          fontSize = 11.sp,
+          textAlign = TextAlign.Center
+        )
+      }
 
       Spacer(modifier = Modifier.height(32.dp))
     }

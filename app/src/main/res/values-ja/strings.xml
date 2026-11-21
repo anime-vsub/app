@@ -206,6 +206,7 @@
 
     <!-- Notification -->
     <string name="no_playlists">プレイリストが見つかりません</string>
+    <string name="no_playlists_login">ログインするとプレイリストを表示できます</string>
     <string name="no_notifications">通知はありません</string>
     <string name="no_system_notifications">システム通知はありません</string>
     <string name="mark_read">既読にする</string>
@@ -487,4 +488,20 @@
     <string name="warp_reset">デバイス登録をリセット</string>
     <string name="warp_reset_desc">Cloudflare WARP に新しいデバイスを登録します</string>
     <string name="stream_expired">ストリームのリンクが期限切れです。再試行をタップして再読み込みしてください。</string>
+
+    <!-- クリスマステーマ -->
+    <string name="christmas_theme">クリスマステーマ</string>
+    <string name="christmas_theme_desc">雪、フェスティブカラー、グリーティングバナー</string>
+    <string name="christmas_theme_auto">自動（12月）</string>
+    <string name="christmas_theme_on">常にオン</string>
+    <string name="christmas_theme_off">オフ</string>
+    <string name="app_icon_christmas">クリスマス</string>
+    <string name="christmas_greeting_title">メリークリスマス！🎄</string>
+    <string name="christmas_greeting_subtitle">あったかいアニメマラソンと穏やかな夜を。ハッピーホリデー！</string>
+    <string name="christmas_greeting_countdown_title">クリスマスが近づいています！🎁</string>
+    <string name="christmas_greeting_countdown">あと%1$d日。ホリデー用の視聴リストを選びましょう！</string>
+    <string name="christmas_ribbon_message">ホリデーも楽しく視聴を🎬</string>
+    <string name="christmas_banner_badge">3D コレクション</string>
+    <string name="christmas_banner_cta">ホリデー作品を選ぶ</string>
+    <string name="christmas_assets_credit">3D クリスマス素材: SVGApp アイコンセット (MIT)</string>
 </resources>

@@ -43,7 +43,8 @@ fun PlaylistHorizontalList(
   onHeaderClick: () -> Unit,
   onAddClick: (() -> Unit)? = null,
   onRetry: () -> Unit,
-  onItemClick: (Playlist) -> Unit
+  onItemClick: (Playlist) -> Unit,
+  loginRequired: Boolean = false
 ) {
   Column(modifier = Modifier.fillMaxWidth()) {
     SectionHeader(
@@ -62,6 +63,13 @@ fun PlaylistHorizontalList(
           PlaylistHorizontalItemSkeleton()
         }
       }
+    } else if (loginRequired) {
+      Text(
+        text = stringResource(R.string.no_playlists_login),
+        color = TextGrey,
+        fontSize = 13.sp,
+        modifier = Modifier.padding(horizontal = 16.dp)
+      )
     } else if (error != null) {
       ErrorRetrySection(onRetry = onRetry)
     } else if (playlists.isEmpty()) {

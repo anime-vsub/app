@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import git.shin.animevsub.R
 import git.shin.animevsub.data.model.SystemNotification
 import git.shin.animevsub.ui.components.anime.NotificationListSkeleton
+import git.shin.animevsub.ui.components.christmas.ChristmasRibbon
 import git.shin.animevsub.ui.screens.notification.components.ApiNotificationTab
 import git.shin.animevsub.ui.screens.notification.components.DbNotificationTab
 import git.shin.animevsub.ui.screens.notification.components.LoginRequiredScreen
@@ -47,6 +48,7 @@ import git.shin.animevsub.ui.theme.AccentMain
 import git.shin.animevsub.ui.theme.DarkBackground
 import git.shin.animevsub.ui.theme.DarkSurface
 import git.shin.animevsub.ui.theme.TextPrimary
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,6 +123,9 @@ fun NotificationScreen(
           },
           colors = TopAppBarDefaults.topAppBarColors(containerColor = DarkBackground)
         )
+        if (isChristmasThemeActive()) {
+          ChristmasRibbon(alpha = 0.7f)
+        }
 
         NotificationTabs(
           selectedTab = pagerState.currentPage,
@@ -159,8 +164,7 @@ fun NotificationScreen(
       } else {
         HorizontalPager(
           state = pagerState,
-          modifier = Modifier.fillMaxSize(),
-          beyondViewportPageCount = 1
+          modifier = Modifier.fillMaxSize()
         ) { page ->
           when (page) {
             0 -> if (uiState.isLoggedIn) {

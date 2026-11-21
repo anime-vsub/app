@@ -206,6 +206,7 @@
 
     <!-- Notification -->
     <string name="no_playlists">Không tìm thấy danh sách phát</string>
+    <string name="no_playlists_login">Đăng nhập để xem danh sách phát</string>
     <string name="no_notifications">Không có thông báo</string>
     <string name="no_system_notifications">Không có thông báo hệ thống</string>
     <string name="mark_read">Đánh dấu đã đọc</string>
@@ -484,4 +485,20 @@
     <string name="dns_info_webview">Bật DNS trong WebView</string>
     <string name="dns_info_desc">Sử dụng DoH đã chọn cho trình duyệt nội bộ và các yêu cầu</string>
     <string name="open_system_dns_settings">Mở cài đặt Private DNS của hệ thống</string>
+
+    <!-- Chủ đề Giáng Sinh -->
+    <string name="christmas_theme">Chủ đề Giáng Sinh</string>
+    <string name="christmas_theme_desc">Tuyết rơi, màu sắc lễ hội và banner chúc mừng</string>
+    <string name="christmas_theme_auto">Tự động (tháng 12)</string>
+    <string name="christmas_theme_on">Bật</string>
+    <string name="christmas_theme_off">Tắt</string>
+    <string name="app_icon_christmas">Giáng Sinh</string>
+    <string name="christmas_greeting_title">Chúc mừng Giáng Sinh! 🎄</string>
+    <string name="christmas_greeting_subtitle">Những đêm cày anime thật ấm áp và trọn vẹn niềm vui. Happy holidays!</string>
+    <string name="christmas_greeting_countdown_title">Giáng Sinh đang đến gần! 🎁</string>
+    <string name="christmas_greeting_countdown">Chỉ còn %1$d ngày nữa — chọn ngay phim để xem dịp lễ!</string>
+    <string name="christmas_ribbon_message">Chúc bạn xem phim ngày lễ thật vui vẻ 🎬</string>
+    <string name="christmas_banner_badge">BỘ SƯU TẬP 3D</string>
+    <string name="christmas_banner_cta">Chọn phim Giáng Sinh</string>
+    <string name="christmas_assets_credit">Hình Giáng Sinh 3D: bộ icon SVGApp (MIT)</string>
 </resources>

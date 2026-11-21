@@ -345,6 +345,7 @@ class AnimeRepository @Inject constructor(
   val dnsMode = prefs.dnsMode
   val customDnsUrl = prefs.customDnsUrl
   val warpMode = prefs.warpMode
+  val christmasTheme = prefs.christmasTheme
 
   val breakReminderEnabled = prefs.breakReminderEnabled
   val breakReminderInterval = prefs.breakReminderInterval
@@ -402,6 +403,7 @@ class AnimeRepository @Inject constructor(
   suspend fun setDnsMode(value: String) = prefs.setDnsMode(value)
   suspend fun setCustomDnsUrl(value: String) = prefs.setCustomDnsUrl(value)
   suspend fun setWarpMode(value: String) = prefs.setWarpMode(value)
+  suspend fun setChristmasTheme(value: String) = prefs.setChristmasTheme(value)
 
   // Search History
   val searchHistory = prefs.searchHistory

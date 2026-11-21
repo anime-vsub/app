@@ -43,6 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import git.shin.animevsub.data.model.AnimeCard
+import git.shin.animevsub.ui.theme.ChristmasGold
+import git.shin.animevsub.ui.theme.ChristmasRed
+import git.shin.animevsub.ui.theme.isChristmasThemeActive
 import git.shin.animevsub.data.model.SelectedFilter
 import git.shin.animevsub.ui.components.badge.QualityBadge
 import git.shin.animevsub.ui.theme.MainColor
@@ -158,7 +161,7 @@ fun CarouselSection(
               Icon(
                 imageVector = Icons.Default.Star,
                 contentDescription = null,
-                tint = StarColor,
+                tint = if (isChristmasThemeActive()) ChristmasGold else StarColor,
                 modifier = Modifier.size(14.dp)
               )
               Spacer(modifier = Modifier.width(4.dp))
@@ -197,7 +200,11 @@ fun CarouselSection(
               item.genre.forEachIndexed { index, genre ->
                 Text(
                   text = genre.name + (if (index < item.genre.size - 1) "," else ""),
-                  color = if (genre.filters.isNotEmpty()) MainColor else Color.White.copy(alpha = 0.6f),
+                  color = if (genre.filters.isNotEmpty()) {
+                    if (isChristmasThemeActive()) ChristmasGold else MainColor
+                  } else {
+                    Color.White.copy(alpha = 0.6f)
+                  },
                   fontSize = 12.sp,
                   modifier = Modifier.clickable(enabled = genre.filters.isNotEmpty()) {
                     onNavigateToCategory(genre.filters)
@@ -240,7 +247,7 @@ fun CarouselSection(
             .clip(CircleShape)
             .background(
               if (isSelected) {
-                MainColor
+                if (isChristmasThemeActive()) ChristmasRed else MainColor
               } else {
                 Color.White.copy(alpha = 0.3f)
               }

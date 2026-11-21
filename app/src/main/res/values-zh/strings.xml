@@ -219,6 +219,7 @@
 
     <!-- Notification -->
     <string name="no_playlists">未找到播放列表</string>
+    <string name="no_playlists_login">登录后即可查看播放列表</string>
     <string name="no_notifications">暂无通知</string>
     <string name="no_system_notifications">暂无系统通知</string>
     <string name="mark_read">标记为已读</string>
@@ -487,4 +488,20 @@
     <string name="warp_reset">重置设备注册</string>
     <string name="warp_reset_desc">向 Cloudflare WARP 注册新设备</string>
     <string name="stream_expired">流媒体链接已过期。点击“重试”重新加载。</string>
+
+    <!-- 圣诞主题 -->
+    <string name="christmas_theme">圣诞主题</string>
+    <string name="christmas_theme_desc">飘雪、节日配色和祝福横幅</string>
+    <string name="christmas_theme_auto">自动（12月）</string>
+    <string name="christmas_theme_on">始终开启</string>
+    <string name="christmas_theme_off">关闭</string>
+    <string name="app_icon_christmas">圣诞</string>
+    <string name="christmas_greeting_title">圣诞快乐！🎄</string>
+    <string name="christmas_greeting_subtitle">愿你度过温暖舒适的追番之夜。节日快乐！</string>
+    <string name="christmas_greeting_countdown_title">圣诞就要到了！🎁</string>
+    <string name="christmas_greeting_countdown">只剩 %1$d 天。快来挑选你的节日追番清单吧！</string>
+    <string name="christmas_ribbon_message">祝你假期追番愉快 🎬</string>
+    <string name="christmas_banner_badge">3D 合集</string>
+    <string name="christmas_banner_cta">挑选圣诞片单</string>
+    <string name="christmas_assets_credit">3D 圣诞节素材: SVGApp 图标集 (MIT)</string>
 </resources>
